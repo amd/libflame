@@ -615,13 +615,13 @@ L250:
     for(i__ = *ilo; i__ <= i__1; ++i__)
     {
         cor = alpha * work[i__ + *n];
-        if(f2c_abs(cor) > cmax)
+        if (f2c_abs(cor) > cmax)
         {
             cmax = f2c_abs(cor);
         }
         lscale[i__] += cor;
         cor = alpha * work[i__];
-        if(f2c_abs(cor) > cmax)
+        if (f2c_abs(cor) > cmax)
         {
             cmax = f2c_abs(cor);
         }
@@ -652,14 +652,14 @@ L350:
     for(i__ = *ilo; i__ <= i__1; ++i__)
     {
         i__2 = *n - *ilo + 1;
-        irab = aocl_blas_idamax(&i__2, &a[i__ + *ilo * a_dim1], lda);
+        irab = idamax_(&i__2, &a[i__ + *ilo * a_dim1], lda);
         rab = (d__1 = a[i__ + (irab + *ilo - 1) * a_dim1], f2c_abs(d__1));
         i__2 = *n - *ilo + 1;
         irab = aocl_blas_idamax(&i__2, &b[i__ + *ilo * b_dim1], ldb);
         /* Computing MAX */
         d__2 = rab;
-        d__3 = (d__1 = b[i__ + (irab + *ilo - 1) * b_dim1], f2c_abs(d__1)); // , expr subst
-        rab = fla_max(d__2, d__3);
+        d__3 = (d__1 = b[i__ + (irab + *ilo - 1) * b_dim1], f2c_abs( d__1)); // , expr subst
+        rab = max(d__2,d__3);
         d__1 = rab + sfmin;
         lrab = (integer)(d_lg10(&d__1) / basl + 1.);
         ir = (integer)(lscale[i__] + d_sign(&c_b71, &lscale[i__]));
@@ -669,13 +669,13 @@ L350:
         i__3 = lsfmax - lrab; // ; expr subst
         ir = fla_min(i__2, i__3);
         lscale[i__] = pow_di(&c_b35, &ir);
-        icab = aocl_blas_idamax(ihi, &a[i__ * a_dim1 + 1], &c__1);
+        icab = idamax_(ihi, &a[i__ * a_dim1 + 1], &c__1);
         cab = (d__1 = a[icab + i__ * a_dim1], f2c_abs(d__1));
-        icab = aocl_blas_idamax(ihi, &b[i__ * b_dim1 + 1], &c__1);
+        icab = idamax_(ihi, &b[i__ * b_dim1 + 1], &c__1);
         /* Computing MAX */
         d__2 = cab;
         d__3 = (d__1 = b[icab + i__ * b_dim1], f2c_abs(d__1)); // , expr subst
-        cab = fla_max(d__2, d__3);
+        cab = max(d__2,d__3);
         d__1 = cab + sfmin;
         lcab = (integer)(d_lg10(&d__1) / basl + 1.);
         jc = (integer)(rscale[i__] + d_sign(&c_b71, &rscale[i__]));

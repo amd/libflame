@@ -268,7 +268,7 @@ void aocl_lapack_ssptrf(char *uplo, aocl_int64_t *n, real *ap, aocl_int_t *ipiv,
         if(k > 1)
         {
             i__1 = k - 1;
-            imax = aocl_blas_isamax(&i__1, &ap[kc], &c__1);
+            imax = isamax_(&i__1, &ap[kc], &c__1);
             colmax = (r__1 = ap[kc + imax - 1], f2c_abs(r__1));
         }
         else
@@ -298,9 +298,10 @@ void aocl_lapack_ssptrf(char *uplo, aocl_int64_t *n, real *ap, aocl_int_t *ipiv,
                 i__1 = k;
                 for(j = imax + 1; j <= i__1; ++j)
                 {
-                    if((r__1 = ap[kx], f2c_abs(r__1)) > rowmax)
+                    if ((r__1 = ap[kx], f2c_abs(r__1)) > rowmax)
                     {
                         rowmax = (r__1 = ap[kx], f2c_abs(r__1));
+                        jmax = j;
                     }
                     kx += j;
                     /* L20: */
@@ -312,15 +313,15 @@ void aocl_lapack_ssptrf(char *uplo, aocl_int64_t *n, real *ap, aocl_int_t *ipiv,
                     jmax = aocl_blas_isamax(&i__1, &ap[kpc], &c__1);
                     /* Computing MAX */
                     r__2 = rowmax;
-                    r__3 = (r__1 = ap[kpc + jmax - 1], f2c_abs(r__1)); // , expr subst
-                    rowmax = fla_max(r__2, r__3);
+                    r__3 = (r__1 = ap[kpc + jmax - 1], f2c_abs( r__1)); // , expr subst
+                    rowmax = max(r__2,r__3);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
                     /* no interchange, use 1-by-1 pivot block */
                     kp = k;
                 }
-                else if((r__1 = ap[kpc + imax - 1], f2c_abs(r__1)) >= alpha * rowmax)
+                else if ((r__1 = ap[kpc + imax - 1], f2c_abs(r__1)) >= alpha * rowmax)
                 {
                     /* interchange rows and columns K and IMAX, use 1-by-1 */
                     /* pivot block */
@@ -455,7 +456,7 @@ void aocl_lapack_ssptrf(char *uplo, aocl_int64_t *n, real *ap, aocl_int_t *ipiv,
         if(k < *n)
         {
             i__1 = *n - k;
-            imax = k + aocl_blas_isamax(&i__1, &ap[kc + 1], &c__1);
+            imax = k + isamax_(&i__1, &ap[kc + 1], &c__1);
             colmax = (r__1 = ap[kc + imax - k], f2c_abs(r__1));
         }
         else
@@ -487,9 +488,10 @@ void aocl_lapack_ssptrf(char *uplo, aocl_int64_t *n, real *ap, aocl_int_t *ipiv,
                 i__1 = imax - 1;
                 for(j = k; j <= i__1; ++j)
                 {
-                    if((r__1 = ap[kx], f2c_abs(r__1)) > rowmax)
+                    if ((r__1 = ap[kx], f2c_abs(r__1)) > rowmax)
                     {
                         rowmax = (r__1 = ap[kx], f2c_abs(r__1));
+                        jmax = j;
                     }
                     kx = kx + *n - j;
                     /* L70: */
@@ -501,15 +503,15 @@ void aocl_lapack_ssptrf(char *uplo, aocl_int64_t *n, real *ap, aocl_int_t *ipiv,
                     jmax = imax + aocl_blas_isamax(&i__1, &ap[kpc + 1], &c__1);
                     /* Computing MAX */
                     r__2 = rowmax;
-                    r__3 = (r__1 = ap[kpc + jmax - imax], f2c_abs(r__1)); // , expr subst
-                    rowmax = fla_max(r__2, r__3);
+                    r__3 = (r__1 = ap[kpc + jmax - imax], f2c_abs( r__1)); // , expr subst
+                    rowmax = max(r__2,r__3);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
                     /* no interchange, use 1-by-1 pivot block */
                     kp = k;
                 }
-                else if((r__1 = ap[kpc], f2c_abs(r__1)) >= alpha * rowmax)
+                else if ((r__1 = ap[kpc], f2c_abs(r__1)) >= alpha * rowmax)
                 {
                     /* interchange rows and columns K and IMAX, use 1-by-1 */
                     /* pivot block */

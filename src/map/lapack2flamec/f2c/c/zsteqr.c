@@ -309,13 +309,12 @@ L10:
         i__1 = nm1;
         for(m = l1; m <= i__1; ++m)
         {
-            tst = (d__1 = e[m], f2c_dabs(d__1));
-            if(tst == 0.)
+            tst = (d__1 = e[m], f2c_abs(d__1));
+            if (tst == 0.)
             {
                 goto L30;
             }
-            if(tst <= sqrt((d__1 = d__[m], f2c_dabs(d__1)))
-                          * sqrt((d__2 = d__[m + 1], f2c_dabs(d__2))) * eps)
+            if (tst <= sqrt((d__1 = d__[m], f2c_abs(d__1))) * sqrt((d__2 = d__[m + 1], f2c_abs(d__2))) * eps)
             {
                 e[m] = 0.;
                 goto L30;
@@ -359,7 +358,7 @@ L30:
         aocl_lapack_dlascl("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info);
     }
     /* Choose between QL and QR iteration */
-    if((d__1 = d__[lend], f2c_dabs(d__1)) < (d__2 = d__[l], f2c_dabs(d__2)))
+    if ((d__1 = d__[lend], f2c_abs(d__1)) < (d__2 = d__[l], f2c_abs(d__2)))
     {
         lend = lsv;
         l = lendsv;
@@ -376,11 +375,9 @@ L30:
             for(m = l; m <= i__1; ++m)
             {
                 /* Computing 2nd power */
-                d__2 = (d__1 = e[m], f2c_dabs(d__1));
+                d__2 = (d__1 = e[m], f2c_abs(d__1));
                 tst = d__2 * d__2;
-                if(tst
-                   <= eps2 * (d__1 = d__[m], f2c_dabs(d__1)) * (d__2 = d__[m + 1], f2c_dabs(d__2))
-                          + safmin)
+                if (tst <= eps2 * (d__1 = d__[m], f2c_abs(d__1)) * (d__2 = d__[m + 1], f2c_abs(d__2)) + safmin)
                 {
                     goto L60;
                 }
@@ -493,11 +490,9 @@ L30:
             for(m = l; m >= i__1; --m)
             {
                 /* Computing 2nd power */
-                d__2 = (d__1 = e[m - 1], f2c_dabs(d__1));
+                d__2 = (d__1 = e[m - 1], f2c_abs(d__1));
                 tst = d__2 * d__2;
-                if(tst
-                   <= eps2 * (d__1 = d__[m], f2c_dabs(d__1)) * (d__2 = d__[m - 1], f2c_dabs(d__2))
-                          + safmin)
+                if (tst <= eps2 * (d__1 = d__[m], f2c_abs(d__1)) * (d__2 = d__[m - 1], f2c_abs(d__2)) + safmin)
                 {
                     goto L110;
                 }

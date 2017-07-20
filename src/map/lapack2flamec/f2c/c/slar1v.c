@@ -368,7 +368,7 @@ L60:
         for(i__ = *b1; i__ <= i__1; ++i__)
         {
             dplus = d__[i__] + s;
-            if(f2c_abs(dplus) < *pivmin)
+            if (f2c_abs(dplus) < *pivmin)
             {
                 dplus = -(*pivmin);
             }
@@ -389,7 +389,7 @@ L60:
         for(i__ = r1; i__ <= i__1; ++i__)
         {
             dplus = d__[i__] + s;
-            if(f2c_abs(dplus) < *pivmin)
+            if (f2c_abs(dplus) < *pivmin)
             {
                 dplus = -(*pivmin);
             }
@@ -431,7 +431,7 @@ L60:
         for(i__ = *bn - 1; i__ >= i__1; --i__)
         {
             dminus = lld[i__] + work[indp + i__];
-            if(f2c_abs(dminus) < *pivmin)
+            if (f2c_abs(dminus) < *pivmin)
             {
                 dminus = -(*pivmin);
             }
@@ -464,7 +464,7 @@ L60:
     {
         *negcnt = -1;
     }
-    if(f2c_abs(*mingma) == 0.f)
+    if (f2c_abs(*mingma) == 0.f)
     {
         *mingma = eps * work[inds + r1 - 1];
     }
@@ -477,7 +477,7 @@ L60:
         {
             tmp = eps * work[inds + i__];
         }
-        if(f2c_abs(tmp) <= f2c_abs(*mingma))
+        if (f2c_abs(tmp) <= f2c_abs(*mingma))
         {
             *mingma = tmp;
             *r__ = i__ + 1;
@@ -496,9 +496,7 @@ L60:
         for(i__ = *r__ - 1; i__ >= i__1; --i__)
         {
             z__[i__] = -(work[indlpl + i__] * z__[i__ + 1]);
-            if(((r__1 = z__[i__], f2c_abs(r__1)) + (r__2 = z__[i__ + 1], f2c_abs(r__2)))
-                   * (r__3 = ld[i__], f2c_abs(r__3))
-               < *gaptol)
+            if (((r__1 = z__[i__], f2c_abs(r__1)) + (r__2 = z__[i__ + 1], f2c_abs( r__2))) * (r__3 = ld[i__], f2c_abs(r__3)) < *gaptol)
             {
                 z__[i__] = 0.f;
                 isuppz[1] = (aocl_int_t)(i__ + 1);
@@ -523,9 +521,7 @@ L60:
             {
                 z__[i__] = -(work[indlpl + i__] * z__[i__ + 1]);
             }
-            if(((r__1 = z__[i__], f2c_abs(r__1)) + (r__2 = z__[i__ + 1], f2c_abs(r__2)))
-                   * (r__3 = ld[i__], f2c_abs(r__3))
-               < *gaptol)
+            if (((r__1 = z__[i__], f2c_abs(r__1)) + (r__2 = z__[i__ + 1], f2c_abs( r__2))) * (r__3 = ld[i__], f2c_abs(r__3)) < *gaptol)
             {
                 z__[i__] = 0.f;
                 isuppz[1] = (aocl_int_t)(i__ + 1);
@@ -543,9 +539,7 @@ L60:
         for(i__ = *r__; i__ <= i__1; ++i__)
         {
             z__[i__ + 1] = -(work[indumn + i__] * z__[i__]);
-            if(((r__1 = z__[i__], f2c_abs(r__1)) + (r__2 = z__[i__ + 1], f2c_abs(r__2)))
-                   * (r__3 = ld[i__], f2c_abs(r__3))
-               < *gaptol)
+            if (((r__1 = z__[i__], f2c_abs(r__1)) + (r__2 = z__[i__ + 1], f2c_abs( r__2))) * (r__3 = ld[i__], f2c_abs(r__3)) < *gaptol)
             {
                 z__[i__ + 1] = 0.f;
                 isuppz[2] = (aocl_int_t)(i__);
@@ -570,9 +564,7 @@ L60:
             {
                 z__[i__ + 1] = -(work[indumn + i__] * z__[i__]);
             }
-            if(((r__1 = z__[i__], f2c_abs(r__1)) + (r__2 = z__[i__ + 1], f2c_abs(r__2)))
-                   * (r__3 = ld[i__], f2c_abs(r__3))
-               < *gaptol)
+            if (((r__1 = z__[i__], f2c_abs(r__1)) + (r__2 = z__[i__ + 1], f2c_abs( r__2))) * (r__3 = ld[i__], f2c_abs(r__3)) < *gaptol)
             {
                 z__[i__ + 1] = 0.f;
                 isuppz[2] = (aocl_int_t)(i__);

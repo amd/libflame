@@ -221,7 +221,7 @@ L20:
     if(*n == 1)
     {
         v[1] = x[1];
-        *est = f2c_dabs(v[1]);
+        *est = f2c_abs(v[1]);
         /* ... QUIT */
         goto L150;
     }
@@ -314,8 +314,8 @@ L90: /* TEST FOR CYCLING. */
     /* X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L110:
     jlast = isave[2];
-    isave[2] = aocl_blas_idamax(n, &x[1], &c__1);
-    if(x[jlast] != (d__1 = x[isave[2]], f2c_dabs(d__1)) && isave[3] < 5)
+    isave[2] = idamax_(n, &x[1], &c__1);
+    if (x[jlast] != (d__1 = x[isave[2]], f2c_abs(d__1)) && isave[3] < 5)
     {
         ++isave[3];
         goto L50;

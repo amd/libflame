@@ -332,11 +332,10 @@ void aocl_lapack_chgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, ao
     real r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8;
     scomplex q__1, q__2, q__3, q__4, q__5, q__6, q__7;
     /* Builtin functions */
-    double c_abs(scomplex *);
-    void r_cnjg(scomplex *, scomplex *);
-    double r_imag(scomplex *);
-    void c_div(scomplex *, scomplex *, scomplex *), c_sqrt(scomplex *, scomplex *),
-        pow_ci(scomplex *, scomplex *, aocl_int64_t *);
+    double c_f2c_abs(complex *);
+    void r_cnjg(complex *, complex *);
+    double r_imag(complex *);
+    void c_div(complex *, complex *, complex *), pow_ci(complex *, complex *, integer *), c_sqrt(complex *, complex *);
     /* Local variables */
     real c__;
     aocl_int64_t j;
@@ -570,8 +569,8 @@ void aocl_lapack_chgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, ao
     i__1 = *n;
     for(j = *ihi + 1; j <= i__1; ++j)
     {
-        absb = c_abs(&t[j + j * t_dim1]);
-        if(absb > safmin)
+        absb = c_f2c_abs(&t[j + j * t_dim1]);
+        if (absb > safmin)
         {
             i__2 = j + j * t_dim1;
             q__2.real = t[i__2].real / absb;
@@ -665,19 +664,7 @@ void aocl_lapack_chgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, ao
         else
         {
             i__2 = ilast + (ilast - 1) * h_dim1;
-            /* Computing MAX */
-            i__3 = ilast + ilast * h_dim1;
-            i__4 = ilast - 1 + (ilast - 1) * h_dim1;
-            r__7 = safmin;
-            r__8 = ulp
-                   * ((r__1 = h__[i__3].real, f2c_abs(r__1))
-                      + (r__2 = r_imag(&h__[ilast + ilast * h_dim1]), f2c_abs(r__2))
-                      + ((r__3 = h__[i__4].real, f2c_abs(r__3))
-                         + (r__4 = r_imag(&h__[ilast - 1 + (ilast - 1) * h_dim1]),
-                            f2c_abs(r__4)))); // , expr subst
-            if((r__5 = h__[i__2].real, f2c_abs(r__5))
-                   + (r__6 = r_imag(&h__[ilast + (ilast - 1) * h_dim1]), f2c_abs(r__6))
-               <= fla_max(r__7, r__8))
+            if ((r__1 = h__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[ilast + (ilast - 1) * h_dim1]), f2c_abs(r__2)) <= atol)
             {
                 i__2 = ilast + (ilast - 1) * h_dim1;
                 h__[i__2].real = 0.f;
@@ -685,7 +672,7 @@ void aocl_lapack_chgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, ao
                 goto L60;
             }
         }
-        if(c_abs(&t[ilast + ilast * t_dim1]) <= btol)
+        if (c_f2c_abs(&t[ilast + ilast * t_dim1]) <= btol)
         {
             i__2 = ilast + ilast * t_dim1;
             t[i__2].real = 0.f;
@@ -704,19 +691,7 @@ void aocl_lapack_chgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, ao
             else
             {
                 i__3 = j + (j - 1) * h_dim1;
-                /* Computing MAX */
-                i__4 = j + j * h_dim1;
-                i__5 = j - 1 + (j - 1) * h_dim1;
-                r__7 = safmin;
-                r__8 = ulp
-                       * ((r__1 = h__[i__4].real, f2c_abs(r__1))
-                          + (r__2 = r_imag(&h__[j + j * h_dim1]), f2c_abs(r__2))
-                          + ((r__3 = h__[i__5].real, f2c_abs(r__3))
-                             + (r__4 = r_imag(&h__[j - 1 + (j - 1) * h_dim1]),
-                                f2c_abs(r__4)))); // , expr subst
-                if((r__5 = h__[i__3].real, f2c_abs(r__5))
-                       + (r__6 = r_imag(&h__[j + (j - 1) * h_dim1]), f2c_abs(r__6))
-                   <= fla_max(r__7, r__8))
+                if ((r__1 = h__[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[j + (j - 1) * h_dim1]), f2c_abs(r__2)) <= atol)
                 {
                     i__3 = j + (j - 1) * h_dim1;
                     h__[i__3].real = 0.f;
@@ -729,7 +704,7 @@ void aocl_lapack_chgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, ao
                 }
             }
             /* Test 2: for T(j,j)=0 */
-            if(c_abs(&t[j + j * t_dim1]) < btol)
+            if (c_f2c_abs(&t[j + j * t_dim1]) < btol)
             {
                 i__3 = j + j * t_dim1;
                 t[i__3].real = 0.f;
@@ -741,14 +716,7 @@ void aocl_lapack_chgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, ao
                     i__3 = j + (j - 1) * h_dim1;
                     i__4 = j + 1 + j * h_dim1;
                     i__5 = j + j * h_dim1;
-                    if(((r__1 = h__[i__3].real, f2c_abs(r__1))
-                        + (r__2 = r_imag(&h__[j + (j - 1) * h_dim1]), f2c_abs(r__2)))
-                           * (ascale
-                              * ((r__3 = h__[i__4].real, f2c_abs(r__3))
-                                 + (r__4 = r_imag(&h__[j + 1 + j * h_dim1]), f2c_abs(r__4))))
-                       <= ((r__5 = h__[i__5].real, f2c_abs(r__5))
-                           + (r__6 = r_imag(&h__[j + j * h_dim1]), f2c_abs(r__6)))
-                              * (ascale * atol))
+                    if (((r__1 = h__[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(& h__[j + (j - 1) * h_dim1]), f2c_abs(r__2))) * (ascale * ((r__3 = h__[i__4].r, f2c_abs(r__3)) + (r__4 = r_imag(&h__[j + 1 + j * h_dim1]), f2c_abs(r__4)))) <= ((r__5 = h__[i__5].r, f2c_abs(r__5)) + (r__6 = r_imag( &h__[j + j * h_dim1]), f2c_abs(r__6))) * (ascale * atol))
                     {
                         ilazr2 = TRUE_;
                     }
@@ -794,9 +762,7 @@ void aocl_lapack_chgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, ao
                         }
                         ilazr2 = FALSE_;
                         i__4 = jch + 1 + (jch + 1) * t_dim1;
-                        if((r__1 = t[i__4].real, f2c_abs(r__1))
-                               + (r__2 = r_imag(&t[jch + 1 + (jch + 1) * t_dim1]), f2c_abs(r__2))
-                           >= btol)
+                        if ((r__1 = t[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&t[ jch + 1 + (jch + 1) * t_dim1]), f2c_abs(r__2)) >= btol)
                         {
                             if(jch + 1 >= ilast)
                             {
@@ -903,9 +869,9 @@ void aocl_lapack_chgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, ao
                              &c__1, &c__, &s);
         }
         /* H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHA and BETA */
-    L60:
-        absb = c_abs(&t[ilast + ilast * t_dim1]);
-        if(absb > safmin)
+L60:
+        absb = c_f2c_abs(&t[ilast + ilast * t_dim1]);
+        if (absb > safmin)
         {
             i__2 = ilast + ilast * t_dim1;
             q__2.real = t[i__2].real / absb;
@@ -1151,30 +1117,25 @@ void aocl_lapack_chgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, ao
             q__2.real = ascale * h__[i__3].real;
             q__2.imag = ascale * h__[i__3].imag; // , expr subst
             i__4 = j + j * t_dim1;
-            q__4.real = bscale * t[i__4].real;
-            q__4.imag = bscale * t[i__4].imag; // , expr subst
-            q__3.real = shift.real * q__4.real - shift.imag * q__4.imag;
-            q__3.imag = shift.real * q__4.imag + shift.imag * q__4.real; // , expr subst
-            q__1.real = q__2.real - q__3.real;
-            q__1.imag = q__2.imag - q__3.imag; // , expr subst
-            ctemp.real = q__1.real;
-            ctemp.imag = q__1.imag; // , expr subst
-            temp = (r__1 = ctemp.real, f2c_abs(r__1)) + (r__2 = r_imag(&ctemp), f2c_abs(r__2));
+            q__4.r = bscale * t[i__4].r;
+            q__4.i = bscale * t[i__4].i; // , expr subst
+            q__3.r = shift.r * q__4.r - shift.i * q__4.i;
+            q__3.i = shift.r * q__4.i + shift.i * q__4.r; // , expr subst
+            q__1.r = q__2.r - q__3.r;
+            q__1.i = q__2.i - q__3.i; // , expr subst
+            ctemp.r = q__1.r;
+            ctemp.i = q__1.i; // , expr subst
+            temp = (r__1 = ctemp.r, f2c_abs(r__1)) + (r__2 = r_imag(&ctemp), f2c_abs( r__2));
             i__3 = j + 1 + j * h_dim1;
-            temp2 = ascale
-                    * ((r__1 = h__[i__3].real, f2c_abs(r__1))
-                       + (r__2 = r_imag(&h__[j + 1 + j * h_dim1]), f2c_abs(r__2)));
-            tempr = fla_max(temp, temp2);
-            if(tempr < 1.f && tempr != 0.f)
+            temp2 = ascale * ((r__1 = h__[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[j + 1 + j * h_dim1]), f2c_abs(r__2)));
+            tempr = max(temp,temp2);
+            if (tempr < 1.f && tempr != 0.f)
             {
                 temp /= tempr;
                 temp2 /= tempr;
             }
             i__3 = j + (j - 1) * h_dim1;
-            if(((r__1 = h__[i__3].real, f2c_abs(r__1))
-                + (r__2 = r_imag(&h__[j + (j - 1) * h_dim1]), f2c_abs(r__2)))
-                   * temp2
-               <= temp * atol)
+            if (((r__1 = h__[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[j + (j - 1) * h_dim1]), f2c_abs(r__2))) * temp2 <= temp * atol)
             {
                 goto L90;
             }
@@ -1432,8 +1393,8 @@ L190: /* Set Eigenvalues 1:ILO-1 */
     i__1 = *ilo - 1;
     for(j = 1; j <= i__1; ++j)
     {
-        absb = c_abs(&t[j + j * t_dim1]);
-        if(absb > safmin)
+        absb = c_f2c_abs(&t[j + j * t_dim1]);
+        if (absb > safmin)
         {
             i__2 = j + j * t_dim1;
             q__2.real = t[i__2].real / absb;

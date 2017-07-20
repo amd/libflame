@@ -391,7 +391,7 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
         indx[j] = (aocl_int_t)(j);
         /* L10: */
     }
-    aocl_blas_sscal(n, &t, &z__[1], &c__1);
+    sscal_(n, &t, &z__[1], &c__1);
     *rho = (r__1 = *rho * 2.f, f2c_abs(r__1));
     /* Sort the eigenvalues into increasing order */
     i__1 = *n;
@@ -425,7 +425,7 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
     /* If the rank-1 modifier is small enough, no more needs to be done */
     /* except to reorganize Q so that its columns correspond with the */
     /* elements in D. */
-    if(*rho * (r__1 = z__[imax], f2c_abs(r__1)) <= tol)
+    if (*rho * (r__1 = z__[imax], f2c_abs(r__1)) <= tol)
     {
         *k = 0;
         if(*icompq == 0)
@@ -461,7 +461,7 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
-        if(*rho * (r__1 = z__[j], f2c_abs(r__1)) <= tol)
+        if (*rho * (r__1 = z__[j], f2c_abs(r__1)) <= tol)
         {
             /* Deflate due to small z component. */
             --k2;
@@ -484,7 +484,7 @@ L80:
     {
         goto L100;
     }
-    if(*rho * (r__1 = z__[j], f2c_abs(r__1)) <= tol)
+    if (*rho * (r__1 = z__[j], f2c_abs(r__1)) <= tol)
     {
         /* Deflate due to small z component. */
         --k2;
@@ -501,7 +501,7 @@ L80:
         t = d__[j] - d__[jlam];
         c__ /= tau;
         s = -s / tau;
-        if((r__1 = t * c__ * s, f2c_abs(r__1)) <= tol)
+        if ((r__1 = t * c__ * s, f2c_abs(r__1)) <= tol)
         {
             /* Deflation is possible. */
             z__[j] = tau;

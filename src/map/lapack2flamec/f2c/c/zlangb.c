@@ -50,7 +50,7 @@ static aocl_int64_t c__1 = 1;
 /* > \return ZLANGB */
 /* > \verbatim */
 /* > */
-/* > ZLANGB = ( fla_max(abs(A(i,j))), NORM = 'M' or 'm' */
+/* > ZLANGB = ( max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
 /* > ( */
 /* > ( norm1(A), NORM = '1', 'O' or 'o' */
 /* > ( */
@@ -61,7 +61,7 @@ static aocl_int64_t c__1 = 1;
 /* > where norm1 denotes the one norm of a matrix (maximum column sum), */
 /* > normI denotes the infinity norm of a matrix (maximum row sum) and */
 /* > normF denotes the Frobenius norm of a matrix (square root of sum of */
-/* > squares). Note that fla_max(abs(A(i,j))) is not a consistent matrix norm. */
+/* > squares). Note that max(f2c_abs(A(i,j))) is not a consistent matrix norm. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -148,7 +148,7 @@ doublereal aocl_lapack_zlangb(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aoc
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal ret_val;
     /* Builtin functions */
-    double z_abs(dcomplex *), sqrt(doublereal);
+    double z_f2c_abs(doublecomplex *), sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__, j, k, l;
     doublereal sum, temp, scale;
@@ -187,7 +187,7 @@ doublereal aocl_lapack_zlangb(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aoc
     }
     else if(lsame_(norm, "M", 1, 1))
     {
-        /* Find fla_max(abs(A(i,j))). */
+        /* Find max(f2c_abs(A(i,j))). */
         value = 0.;
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
@@ -200,8 +200,8 @@ doublereal aocl_lapack_zlangb(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aoc
             i__3 = fla_min(i__4, i__5);
             for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
             {
-                temp = z_abs(&ab[i__ + j * ab_dim1]);
-                if(value < temp || disnan_(&temp))
+                temp = z_f2c_abs(&ab[i__ + j * ab_dim1]);
+                if (value < temp || disnan_(&temp))
                 {
                     value = temp;
                 }
@@ -226,7 +226,7 @@ doublereal aocl_lapack_zlangb(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aoc
             i__2 = fla_min(i__4, i__5);
             for(i__ = fla_max(i__3, 1); i__ <= i__2; ++i__)
             {
-                sum += z_abs(&ab[i__ + j * ab_dim1]);
+                sum += z_f2c_abs(&ab[i__ + j * ab_dim1]);
                 /* L30: */
             }
             if(value < sum || disnan_(&sum))
@@ -258,7 +258,7 @@ doublereal aocl_lapack_zlangb(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aoc
             i__4 = fla_min(i__5, i__6);
             for(i__ = fla_max(i__2, i__3); i__ <= i__4; ++i__)
             {
-                work[i__] += z_abs(&ab[k + i__ + j * ab_dim1]);
+                work[i__] += z_f2c_abs(&ab[k + i__ + j * ab_dim1]);
                 /* L60: */
             }
             /* L70: */

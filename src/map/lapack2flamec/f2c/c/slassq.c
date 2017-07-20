@@ -42,7 +42,9 @@
 /* > (scale_out**2)*sumsq_out = x( 1 )**2 +...+ x( n )**2 + (scale**2)*sumsq, */
 /* > */
 /* > where x( i ) = X( 1 + ( i - 1 )*INCX ). The value of sumsq is */
-/* > assumed to be non-negative. */
+/* > assumed to be non-negative and scl returns the value */
+/* > */
+/* > scl = max( scale, f2c_abs( x( i ) ) ). */
 /* > */
 /* > scale and sumsq must be supplied in SCALE and SUMSQ and */
 /* > scale_out and sumsq_out are overwritten on SCALE and SUMSQ respectively. */
@@ -200,14 +202,8 @@ void aocl_lapack_slassq(aocl_int64_t *n, real *x, aocl_int64_t *incx, real *scal
         ax = (r__1 = x[ix], f2c_abs(r__1));
         if(ax > tbig)
         {
-            /* Computing 2nd power */
-            r__1 = ax * sbig;
-            abig += r__1 * r__1;
-            notbig = FALSE_;
-        }
-        else if(ax < tsml)
-        {
-            if(notbig)
+            absxi = (r__1 = x[ix], f2c_abs(r__1));
+            if (absxi > 0.f || sisnan_(&absxi))
             {
                 /* Computing 2nd power */
                 r__1 = ax * ssml;

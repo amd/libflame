@@ -755,7 +755,7 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
                         /* Computing MAX */
                         r__2 = temp;
                         r__3 = (r__1 = vl[jr + jc * vl_dim1], f2c_abs(r__1)); // , expr subst
-                        temp = fla_max(r__2, r__3);
+                        temp = max(r__2,r__3);
                         /* L10: */
                     }
                 }
@@ -766,10 +766,8 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
                     {
                         /* Computing MAX */
                         r__3 = temp;
-                        r__4
-                            = (r__1 = vl[jr + jc * vl_dim1], f2c_abs(r__1))
-                              + (r__2 = vl[jr + (jc + 1) * vl_dim1], f2c_abs(r__2)); // , expr subst
-                        temp = fla_max(r__3, r__4);
+                        r__4 = (r__1 = vl[jr + jc * vl_dim1], f2c_abs(r__1)) + (r__2 = vl[jr + (jc + 1) * vl_dim1], f2c_abs(r__2)); // , expr subst
+                        temp = max(r__3,r__4);
                         /* L20: */
                     }
                 }
@@ -825,7 +823,7 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
                         /* Computing MAX */
                         r__2 = temp;
                         r__3 = (r__1 = vr[jr + jc * vr_dim1], f2c_abs(r__1)); // , expr subst
-                        temp = fla_max(r__2, r__3);
+                        temp = max(r__2,r__3);
                         /* L60: */
                     }
                 }
@@ -836,10 +834,8 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
                     {
                         /* Computing MAX */
                         r__3 = temp;
-                        r__4
-                            = (r__1 = vr[jr + jc * vr_dim1], f2c_abs(r__1))
-                              + (r__2 = vr[jr + (jc + 1) * vr_dim1], f2c_abs(r__2)); // , expr subst
-                        temp = fla_max(r__3, r__4);
+                        r__4 = (r__1 = vr[jr + jc * vr_dim1], f2c_abs(r__1)) + (r__2 = vr[jr + (jc + 1) * vr_dim1], f2c_abs(r__2)); // , expr subst
+                        temp = max(r__3,r__4);
                         /* L70: */
                     }
                 }
@@ -893,7 +889,7 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
         r__1 = safmin, r__2 = eps * absar;
         r__1 = fla_max(r__1, r__2);
         r__2 = eps * absb; // ; expr subst
-        if(f2c_abs(salfai) < safmin && absai >= fla_max(r__1, r__2))
+        if (f2c_abs(salfai) < safmin && absai >= max(r__1,r__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
@@ -919,7 +915,7 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
         r__1 = safmin, r__2 = eps * absai;
         r__1 = fla_max(r__1, r__2);
         r__2 = eps * absb; // ; expr subst
-        if(f2c_abs(salfar) < safmin && absar >= fla_max(r__1, r__2))
+        if (f2c_abs(salfar) < safmin && absar >= max(r__1,r__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
@@ -935,7 +931,7 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
         r__1 = safmin, r__2 = eps * absar;
         r__1 = fla_max(r__1, r__2);
         r__2 = eps * absai; // ; expr subst
-        if(f2c_abs(sbeta) < safmin && absb >= fla_max(r__1, r__2))
+        if (f2c_abs(sbeta) < safmin && absb >= max(r__1,r__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
@@ -951,10 +947,10 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
         {
             /* Computing MAX */
             r__1 = f2c_abs(salfar), r__2 = f2c_abs(salfai);
-            r__1 = fla_max(r__1, r__2);
+            r__1 = max(r__1,r__2);
             r__2 = f2c_abs(sbeta); // ; expr subst
-            temp = scale * safmin * fla_max(r__1, r__2);
-            if(temp > 1.f)
+            temp = scale * safmin * max(r__1,r__2);
+            if (temp > 1.f)
             {
                 scale /= temp;
             }

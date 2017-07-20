@@ -181,8 +181,8 @@ void aocl_lapack_cgeqpf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
     scomplex q__1;
     /* Builtin functions */
     double sqrt(doublereal);
-    void r_cnjg(scomplex *, scomplex *);
-    double c_abs(scomplex *);
+    void r_cnjg(complex *, complex *);
+    double c_f2c_abs(complex *);
     /* Local variables */
     aocl_int64_t i__, j, ma, mn;
     scomplex aii;
@@ -345,7 +345,7 @@ void aocl_lapack_cgeqpf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
                 {
                     /* NOTE: The following 4 lines follow from the analysis in */
                     /* Lapack Working Note 176. */
-                    temp = c_abs(&a[i__ + j * a_dim1]) / rwork[j];
+                    temp = c_f2c_abs(&a[i__ + j * a_dim1]) / rwork[j];
                     /* Computing MAX */
                     r__1 = 0.f;
                     r__2 = (temp + 1.f) * (1.f - temp); // , expr subst

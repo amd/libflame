@@ -293,9 +293,7 @@ void aocl_lapack_zlaein(logical *rightv, logical *noinit, aocl_int64_t *n, dcomp
             ei.real = h__[i__2].real;
             ei.imag = h__[i__2].imag; // , expr subst
             i__2 = i__ + i__ * b_dim1;
-            if((d__1 = b[i__2].real, f2c_dabs(d__1))
-                   + (d__2 = d_imag(&b[i__ + i__ * b_dim1]), f2c_dabs(d__2))
-               < (d__3 = ei.real, f2c_dabs(d__3)) + (d__4 = d_imag(&ei), f2c_dabs(d__4)))
+            if ((d__1 = b[i__2].r, f2c_abs(d__1)) + (d__2 = d_imag(&b[i__ + i__ * b_dim1]), f2c_abs(d__2)) < (d__3 = ei.r, f2c_abs(d__3)) + (d__4 = d_imag(&ei), f2c_abs(d__4)))
             {
                 /* Interchange rows and eliminate. */
                 zladiv_f2c_(&z__1, &b[i__ + i__ * b_dim1], &ei);
@@ -376,9 +374,7 @@ void aocl_lapack_zlaein(logical *rightv, logical *noinit, aocl_int64_t *n, dcomp
             ej.real = h__[i__1].real;
             ej.imag = h__[i__1].imag; // , expr subst
             i__1 = j + j * b_dim1;
-            if((d__1 = b[i__1].real, f2c_dabs(d__1))
-                   + (d__2 = d_imag(&b[j + j * b_dim1]), f2c_dabs(d__2))
-               < (d__3 = ej.real, f2c_dabs(d__3)) + (d__4 = d_imag(&ej), f2c_dabs(d__4)))
+            if ((d__1 = b[i__1].r, f2c_abs(d__1)) + (d__2 = d_imag(&b[j + j * b_dim1]), f2c_abs(d__2)) < (d__3 = ej.r, f2c_abs(d__3)) + (d__4 = d_imag(&ej), f2c_abs(d__4)))
             {
                 /* Interchange columns and eliminate. */
                 zladiv_f2c_(&z__1, &b[j + j * b_dim1], &ej);
@@ -491,10 +487,9 @@ void aocl_lapack_zlaein(logical *rightv, logical *noinit, aocl_int64_t *n, dcomp
 L120: /* Normalize eigenvector. */
     i__ = aocl_blas_izamax(n, &v[1], &c__1);
     i__1 = i__;
-    d__3 = 1. / ((d__1 = v[i__1].real, f2c_dabs(d__1)) + (d__2 = d_imag(&v[i__]), f2c_dabs(d__2)));
-    aocl_blas_zdscal(n, &d__3, &v[1], &c__1);
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    d__3 = 1. / ((d__1 = v[i__1].r, f2c_abs(d__1)) + (d__2 = d_imag(&v[i__]), f2c_abs( d__2)));
+    zdscal_(n, &d__3, &v[1], &c__1);
+    return 0;
     /* End of ZLAEIN */
 }
 /* zlaein_ */

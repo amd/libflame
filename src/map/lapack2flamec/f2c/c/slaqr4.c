@@ -552,8 +552,7 @@ void aocl_lapack_slaqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
                 else
                 {
                     kwtop = kbot - nw + 1;
-                    if((r__1 = h__[kwtop + (kwtop - 1) * h_dim1], f2c_abs(r__1))
-                       > (r__2 = h__[kwtop - 1 + (kwtop - 2) * h_dim1], f2c_abs(r__2)))
+                    if ((r__1 = h__[kwtop + (kwtop - 1) * h_dim1], f2c_abs(r__1)) > (r__2 = h__[kwtop - 1 + (kwtop - 2) * h_dim1], f2c_abs(r__2)))
                     {
                         ++nw;
                     }
@@ -629,8 +628,7 @@ void aocl_lapack_slaqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
                     i__2 = fla_max(i__3, i__4);
                     for(i__ = kbot; i__ >= i__2; i__ += -2)
                     {
-                        ss = (r__1 = h__[i__ + (i__ - 1) * h_dim1], f2c_abs(r__1))
-                             + (r__2 = h__[i__ - 1 + (i__ - 2) * h_dim1], f2c_abs(r__2));
+                        ss = (r__1 = h__[i__ + (i__ - 1) * h_dim1], f2c_abs(r__1)) + (r__2 = h__[i__ - 1 + (i__ - 2) * h_dim1], f2c_abs(r__2));
                         aa = ss * .75f + h__[i__ + i__ * h_dim1];
                         bb = ss;
                         cc = ss * -.4375f;
@@ -694,9 +692,7 @@ void aocl_lapack_slaqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
                             i__3 = k - 1;
                             for(i__ = ks; i__ <= i__3; ++i__)
                             {
-                                if((r__1 = wr[i__], f2c_abs(r__1)) + (r__2 = wi[i__], f2c_abs(r__2))
-                                   < (r__3 = wr[i__ + 1], f2c_abs(r__3))
-                                         + (r__4 = wi[i__ + 1], f2c_abs(r__4)))
+                                if ((r__1 = wr[i__], f2c_abs(r__1)) + (r__2 = wi[ i__], f2c_abs(r__2)) < (r__3 = wr[i__ + 1] , f2c_abs(r__3)) + (r__4 = wi[i__ + 1], f2c_abs(r__4)))
                                 {
                                     sorted = FALSE_;
                                     swap = wr[i__];
@@ -740,8 +736,7 @@ void aocl_lapack_slaqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
                 {
                     if(wi[kbot] == 0.f)
                     {
-                        if((r__1 = wr[kbot] - h__[kbot + kbot * h_dim1], f2c_abs(r__1))
-                           < (r__2 = wr[kbot - 1] - h__[kbot + kbot * h_dim1], f2c_abs(r__2)))
+                        if ((r__1 = wr[kbot] - h__[kbot + kbot * h_dim1], f2c_abs( r__1)) < (r__2 = wr[kbot - 1] - h__[kbot + kbot * h_dim1], f2c_abs(r__2)))
                         {
                             wr[kbot - 1] = wr[kbot];
                         }

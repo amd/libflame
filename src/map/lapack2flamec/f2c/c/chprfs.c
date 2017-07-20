@@ -341,7 +341,7 @@ void aocl_lapack_chprfs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomple
         q__1.imag = -0.f; // , expr subst
         aocl_blas_chpmv(uplo, n, &q__1, &ap[1], &x[j * x_dim1 + 1], &c__1, &c_b1, &work[1], &c__1);
         /* Compute componentwise relative backward error from formula */
-        /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(A)*f2c_abs(X) + f2c_abs(B) )(i) ) */
+        /* max(i) ( f2c_abs(R(i)) / ( f2c_abs(A)*f2c_abs(X) + f2c_abs(B) )(i) ) */
         /* where f2c_abs(Z) is the componentwise absolute value of the matrix */
         /* or vector Z. If the i-th component of the denominator is less */
         /* than SAFE2, then SAFE1 is added to the i-th components of the */
@@ -350,8 +350,7 @@ void aocl_lapack_chprfs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomple
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            rwork[i__] = (r__1 = b[i__3].real, f2c_abs(r__1))
-                         + (r__2 = r_imag(&b[i__ + j * b_dim1]), f2c_abs(r__2));
+            rwork[i__] = (r__1 = b[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&b[ i__ + j * b_dim1]), f2c_abs(r__2));
             /* L30: */
         }
         /* Compute f2c_abs(A)*f2c_abs(X) + f2c_abs(B). */
@@ -363,27 +362,21 @@ void aocl_lapack_chprfs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomple
             {
                 s = 0.f;
                 i__3 = k + j * x_dim1;
-                xk = (r__1 = x[i__3].real, f2c_abs(r__1))
-                     + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
+                xk = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
                 ik = kk;
                 i__3 = k - 1;
                 for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     i__4 = ik;
-                    rwork[i__] += ((r__1 = ap[i__4].real, f2c_abs(r__1))
-                                   + (r__2 = r_imag(&ap[ik]), f2c_abs(r__2)))
-                                  * xk;
+                    rwork[i__] += ((r__1 = ap[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[ik]), f2c_abs(r__2))) * xk;
                     i__4 = ik;
                     i__5 = i__ + j * x_dim1;
-                    s += ((r__1 = ap[i__4].real, f2c_abs(r__1))
-                          + (r__2 = r_imag(&ap[ik]), f2c_abs(r__2)))
-                         * ((r__3 = x[i__5].real, f2c_abs(r__3))
-                            + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4)));
+                    s += ((r__1 = ap[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[ ik]), f2c_abs(r__2))) * ((r__3 = x[i__5].r, f2c_abs(r__3)) + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4) ));
                     ++ik;
                     /* L40: */
                 }
                 i__3 = kk + k - 1;
-                rwork[k] = rwork[k] + (r__1 = ap[i__3].real, f2c_abs(r__1)) * xk + s;
+                rwork[k] = rwork[k] + (r__1 = ap[i__3].r, f2c_abs(r__1)) * xk + s;
                 kk += k;
                 /* L50: */
             }
@@ -395,24 +388,18 @@ void aocl_lapack_chprfs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomple
             {
                 s = 0.f;
                 i__3 = k + j * x_dim1;
-                xk = (r__1 = x[i__3].real, f2c_abs(r__1))
-                     + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
+                xk = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
                 i__3 = kk;
-                rwork[k] += (r__1 = ap[i__3].real, f2c_abs(r__1)) * xk;
+                rwork[k] += (r__1 = ap[i__3].r, f2c_abs(r__1)) * xk;
                 ik = kk + 1;
                 i__3 = *n;
                 for(i__ = k + 1; i__ <= i__3; ++i__)
                 {
                     i__4 = ik;
-                    rwork[i__] += ((r__1 = ap[i__4].real, f2c_abs(r__1))
-                                   + (r__2 = r_imag(&ap[ik]), f2c_abs(r__2)))
-                                  * xk;
+                    rwork[i__] += ((r__1 = ap[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[ik]), f2c_abs(r__2))) * xk;
                     i__4 = ik;
                     i__5 = i__ + j * x_dim1;
-                    s += ((r__1 = ap[i__4].real, f2c_abs(r__1))
-                          + (r__2 = r_imag(&ap[ik]), f2c_abs(r__2)))
-                         * ((r__3 = x[i__5].real, f2c_abs(r__3))
-                            + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4)));
+                    s += ((r__1 = ap[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[ ik]), f2c_abs(r__2))) * ((r__3 = x[i__5].r, f2c_abs(r__3)) + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4) ));
                     ++ik;
                     /* L60: */
                 }
@@ -430,20 +417,16 @@ void aocl_lapack_chprfs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomple
                 /* Computing MAX */
                 i__3 = i__;
                 r__3 = s;
-                r__4 = ((r__1 = work[i__3].real, f2c_abs(r__1))
-                        + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)))
-                       / rwork[i__]; // , expr subst
-                s = fla_max(r__3, r__4);
+                r__4 = ((r__1 = work[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2))) / rwork[i__]; // , expr subst
+                s = max(r__3,r__4);
             }
             else
             {
                 /* Computing MAX */
                 i__3 = i__;
                 r__3 = s;
-                r__4 = ((r__1 = work[i__3].real, f2c_abs(r__1))
-                        + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + safe1)
-                       / (rwork[i__] + safe1); // , expr subst
-                s = fla_max(r__3, r__4);
+                r__4 = ((r__1 = work[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + safe1) / (rwork[i__] + safe1); // , expr subst
+                s = max(r__3,r__4);
             }
             /* L80: */
         }
@@ -485,15 +468,12 @@ void aocl_lapack_chprfs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomple
             if(rwork[i__] > safe2)
             {
                 i__3 = i__;
-                rwork[i__] = (r__1 = work[i__3].real, f2c_abs(r__1))
-                             + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__];
+                rwork[i__] = (r__1 = work[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__] ;
             }
             else
             {
                 i__3 = i__;
-                rwork[i__] = (r__1 = work[i__3].real, f2c_abs(r__1))
-                             + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__]
-                             + safe1;
+                rwork[i__] = (r__1 = work[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__] + safe1;
             }
             /* L90: */
         }
@@ -546,9 +526,8 @@ void aocl_lapack_chprfs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomple
             /* Computing MAX */
             i__3 = i__ + j * x_dim1;
             r__3 = lstres;
-            r__4 = (r__1 = x[i__3].real, f2c_abs(r__1))
-                   + (r__2 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__2)); // , expr subst
-            lstres = fla_max(r__3, r__4);
+            r__4 = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__2)); // , expr subst
+            lstres = max(r__3,r__4);
             /* L130: */
         }
         if(lstres != 0.f)

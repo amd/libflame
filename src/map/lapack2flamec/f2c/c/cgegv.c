@@ -744,9 +744,8 @@ void aocl_lapack_cgegv(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
                     /* Computing MAX */
                     i__3 = jr + jc * vl_dim1;
                     r__3 = temp;
-                    r__4 = (r__1 = vl[i__3].real, f2c_abs(r__1))
-                           + (r__2 = r_imag(&vl[jr + jc * vl_dim1]), f2c_abs(r__2)); // , expr subst
-                    temp = fla_max(r__3, r__4);
+                    r__4 = (r__1 = vl[i__3].r, f2c_abs(r__1)) + ( r__2 = r_imag(&vl[jr + jc * vl_dim1]), f2c_abs(r__2)); // , expr subst
+                    temp = max(r__3,r__4);
                     /* L10: */
                 }
                 if(temp < safmin)
@@ -787,9 +786,8 @@ void aocl_lapack_cgegv(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
                     /* Computing MAX */
                     i__3 = jr + jc * vr_dim1;
                     r__3 = temp;
-                    r__4 = (r__1 = vr[i__3].real, f2c_abs(r__1))
-                           + (r__2 = r_imag(&vr[jr + jc * vr_dim1]), f2c_abs(r__2)); // , expr subst
-                    temp = fla_max(r__3, r__4);
+                    r__4 = (r__1 = vr[i__3].r, f2c_abs(r__1)) + ( r__2 = r_imag(&vr[jr + jc * vr_dim1]), f2c_abs(r__2)); // , expr subst
+                    temp = max(r__3,r__4);
                     /* L40: */
                 }
                 if(temp < safmin)
@@ -822,10 +820,10 @@ void aocl_lapack_cgegv(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
     for(jc = 1; jc <= i__1; ++jc)
     {
         i__2 = jc;
-        absar = (r__1 = alpha[i__2].real, f2c_abs(r__1));
+        absar = (r__1 = alpha[i__2].r, f2c_abs(r__1));
         absai = (r__1 = r_imag(&alpha[jc]), f2c_abs(r__1));
         i__2 = jc;
-        absb = (r__1 = beta[i__2].real, f2c_abs(r__1));
+        absb = (r__1 = beta[i__2].r, f2c_abs(r__1));
         i__2 = jc;
         salfar = anrm * alpha[i__2].real;
         salfai = anrm * r_imag(&alpha[jc]);
@@ -838,7 +836,7 @@ void aocl_lapack_cgegv(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
         r__1 = safmin, r__2 = eps * absar;
         r__1 = fla_max(r__1, r__2);
         r__2 = eps * absb; // ; expr subst
-        if(f2c_abs(salfai) < safmin && absai >= fla_max(r__1, r__2))
+        if (f2c_abs(salfai) < safmin && absai >= max(r__1,r__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
@@ -851,7 +849,7 @@ void aocl_lapack_cgegv(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
         r__1 = safmin, r__2 = eps * absai;
         r__1 = fla_max(r__1, r__2);
         r__2 = eps * absb; // ; expr subst
-        if(f2c_abs(salfar) < safmin && absar >= fla_max(r__1, r__2))
+        if (f2c_abs(salfar) < safmin && absar >= max(r__1,r__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
@@ -867,7 +865,7 @@ void aocl_lapack_cgegv(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
         r__1 = safmin, r__2 = eps * absar;
         r__1 = fla_max(r__1, r__2);
         r__2 = eps * absai; // ; expr subst
-        if(f2c_abs(sbeta) < safmin && absb >= fla_max(r__1, r__2))
+        if (f2c_abs(sbeta) < safmin && absb >= max(r__1,r__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
@@ -883,10 +881,10 @@ void aocl_lapack_cgegv(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
         {
             /* Computing MAX */
             r__1 = f2c_abs(salfar), r__2 = f2c_abs(salfai);
-            r__1 = fla_max(r__1, r__2);
+            r__1 = max(r__1,r__2);
             r__2 = f2c_abs(sbeta); // ; expr subst
-            temp = scale * safmin * fla_max(r__1, r__2);
-            if(temp > 1.f)
+            temp = scale * safmin * max(r__1,r__2);
+            if (temp > 1.f)
             {
                 scale /= temp;
             }

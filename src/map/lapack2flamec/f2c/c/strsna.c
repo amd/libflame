@@ -549,10 +549,9 @@ void aocl_lapack_strsna(char *job, char *howmny, logical *select, aocl_int64_t *
             if(!pair)
             {
                 /* Real eigenvalue. */
-                prod
-                    = aocl_blas_sdot(n, &vr[ks * vr_dim1 + 1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
-                rnrm = aocl_blas_snrm2(n, &vr[ks * vr_dim1 + 1], &c__1);
-                lnrm = aocl_blas_snrm2(n, &vl[ks * vl_dim1 + 1], &c__1);
+                prod = sdot_(n, &vr[ks * vr_dim1 + 1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
+                rnrm = snrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
+                lnrm = snrm2_(n, &vl[ks * vl_dim1 + 1], &c__1);
                 s[ks] = f2c_abs(prod) / (rnrm * lnrm);
             }
             else
@@ -618,8 +617,7 @@ void aocl_lapack_strsna(char *job, char *howmny, logical *select, aocl_int64_t *
                     /* eigenvalue lambda with positive imaginary part. (2,2) */
                     /* position of WORK is the scomplex eigenvalue lambda */
                     /* with negative imaginary part. */
-                    mu = sqrt((r__1 = work[(work_dim1 << 1) + 1], f2c_abs(r__1)))
-                         * sqrt((r__2 = work[work_dim1 + 2], f2c_abs(r__2)));
+                    mu = sqrt((r__1 = work[(work_dim1 << 1) + 1], f2c_abs(r__1))) * sqrt((r__2 = work[work_dim1 + 2], f2c_abs(r__2)));
                     delta = slapy2_(&mu, &work[work_dim1 + 2]);
                     cs = mu / delta;
                     sn = -work[work_dim1 + 2] / delta;

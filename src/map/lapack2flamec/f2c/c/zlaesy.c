@@ -123,10 +123,8 @@ void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
     doublereal d__1, d__2;
     dcomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7;
     /* Builtin functions */
-    double z_abs(dcomplex *);
-    void pow_zi(dcomplex *, dcomplex *, aocl_int64_t *),
-        z_sqrt(dcomplex *, dcomplex *),
-        z_div(dcomplex *, dcomplex *, dcomplex *);
+    double z_f2c_abs(doublecomplex *);
+    void pow_zi(doublecomplex *, doublecomplex *, integer *), z_sqrt( doublecomplex *, doublecomplex *), z_div(doublecomplex *, doublecomplex *, doublecomplex *);
     /* Local variables */
     dcomplex s, t;
     doublereal z__;
@@ -148,11 +146,11 @@ void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
     /* .. Executable Statements .. */
     /* Special case: The matrix is actually diagonal. */
     /* To avoid divide by zero later, we treat this case separately. */
-    if(z_abs(b) == 0.)
+    if (z_f2c_abs(b) == 0.)
     {
-        rt1->real = a->real, rt1->imag = a->imag;
-        rt2->real = c__->real, rt2->imag = c__->imag;
-        if(z_abs(rt1) < z_abs(rt2))
+        rt1->r = a->r, rt1->i = a->i;
+        rt2->r = c__->r, rt2->i = c__->i;
+        if (z_f2c_abs(rt1) < z_f2c_abs(rt2))
         {
             tmp.real = rt1->real;
             tmp.imag = rt1->imag; // , expr subst
@@ -186,10 +184,10 @@ void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
         t.real = z__1.real;
         t.imag = z__1.imag; // , expr subst
         /* Take the square root carefully to avoid over/under flow. */
-        babs = z_abs(b);
-        tabs = z_abs(&t);
-        z__ = fla_max(babs, tabs);
-        if(z__ > 0.)
+        babs = z_f2c_abs(b);
+        tabs = z_f2c_abs(&t);
+        z__ = max(babs,tabs);
+        if (z__ > 0.)
         {
             z__5.real = t.real / z__;
             z__5.imag = t.imag / z__; // , expr subst
@@ -207,13 +205,13 @@ void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
         }
         /* Compute the two eigenvalues. RT1 and RT2 are exchanged */
         /* if necessary so that RT1 will have the greater magnitude. */
-        z__1.real = s.real + t.real;
-        z__1.imag = s.imag + t.imag; // , expr subst
-        rt1->real = z__1.real, rt1->imag = z__1.imag;
-        z__1.real = s.real - t.real;
-        z__1.imag = s.imag - t.imag; // , expr subst
-        rt2->real = z__1.real, rt2->imag = z__1.imag;
-        if(z_abs(rt1) < z_abs(rt2))
+        z__1.r = s.r + t.r;
+        z__1.i = s.i + t.i; // , expr subst
+        rt1->r = z__1.r, rt1->i = z__1.i;
+        z__1.r = s.r - t.r;
+        z__1.i = s.i - t.i; // , expr subst
+        rt2->r = z__1.r, rt2->i = z__1.i;
+        if (z_f2c_abs(rt1) < z_f2c_abs(rt2))
         {
             tmp.real = rt1->real;
             tmp.imag = rt1->imag; // , expr subst
@@ -227,9 +225,9 @@ void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
         z__2.real = rt1->real - a->real;
         z__2.imag = rt1->imag - a->imag; // , expr subst
         z_div(&z__1, &z__2, b);
-        sn1->real = z__1.real, sn1->imag = z__1.imag;
-        tabs = z_abs(sn1);
-        if(tabs > 1.)
+        sn1->r = z__1.r, sn1->i = z__1.i;
+        tabs = z_f2c_abs(sn1);
+        if (tabs > 1.)
         {
             /* Computing 2nd power */
             d__2 = 1. / tabs;
@@ -255,8 +253,8 @@ void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
             t.real = z__1.real;
             t.imag = z__1.imag; // , expr subst
         }
-        evnorm = z_abs(&t);
-        if(evnorm >= .1)
+        evnorm = z_f2c_abs(&t);
+        if (evnorm >= .1)
         {
             z_div(&z__1, &c_b1, &t);
             evscal->real = z__1.real, evscal->imag = z__1.imag;

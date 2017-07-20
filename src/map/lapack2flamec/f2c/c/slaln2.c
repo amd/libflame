@@ -340,7 +340,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             }
             /* Check scaling for X = B / C */
             bnorm = (r__1 = b[b_dim1 + 1], f2c_abs(r__1));
-            if(cnorm < 1.f && bnorm > 1.f)
+            if (cnorm < 1.f && bnorm > 1.f)
             {
                 if(bnorm > bignum * cnorm)
                 {
@@ -367,9 +367,8 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
                 *info = 1;
             }
             /* Check scaling for X = B / C */
-            bnorm = (r__1 = b[b_dim1 + 1], f2c_abs(r__1))
-                    + (r__2 = b[(b_dim1 << 1) + 1], f2c_abs(r__2));
-            if(cnorm < 1.f && bnorm > 1.f)
+            bnorm = (r__1 = b[b_dim1 + 1], f2c_abs(r__1)) + (r__2 = b[(b_dim1 << 1) + 1], f2c_abs(r__2));
+            if (cnorm < 1.f && bnorm > 1.f)
             {
                 if(bnorm > bignum * cnorm)
                 {
@@ -380,8 +379,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             r__1 = *scale * b[b_dim1 + 1];
             r__2 = *scale * b[(b_dim1 << 1) + 1];
             sladiv_(&r__1, &r__2, &csr, &csi, &x[x_dim1 + 1], &x[(x_dim1 << 1) + 1]);
-            *xnorm = (r__1 = x[x_dim1 + 1], f2c_abs(r__1))
-                     + (r__2 = x[(x_dim1 << 1) + 1], f2c_abs(r__2));
+            *xnorm = (r__1 = x[x_dim1 + 1], f2c_abs(r__1)) + (r__2 = x[(x_dim1 << 1) + 1], f2c_abs(r__2));
         }
     }
     else
@@ -408,7 +406,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             icmax = 0;
             for(j = 1; j <= 4; ++j)
             {
-                if((r__1 = crv[j - 1], f2c_abs(r__1)) > cmax)
+                if ((r__1 = crv[j - 1], f2c_abs(r__1)) > cmax)
                 {
                     cmax = (r__1 = crv[j - 1], f2c_abs(r__1));
                     icmax = j;
@@ -420,9 +418,9 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             {
                 /* Computing MAX */
                 r__3 = (r__1 = b[b_dim1 + 1], f2c_abs(r__1));
-                r__4 = (r__2 = b[b_dim1 + 2], f2c_abs(r__2)); // , expr subst
-                bnorm = fla_max(r__3, r__4);
-                if(smini < 1.f && bnorm > 1.f)
+                r__4 = (r__2 = b[ b_dim1 + 2], f2c_abs(r__2)); // , expr subst
+                bnorm = max(r__3,r__4);
+                if (smini < 1.f && bnorm > 1.f)
                 {
                     if(bnorm > bignum * smini)
                     {
@@ -446,7 +444,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             lr21 = ur11r * cr21;
             ur22 = cr22 - ur12 * lr21;
             /* If smaller pivot < SMINI, use SMINI */
-            if(f2c_abs(ur22) < smini)
+            if (f2c_abs(ur22) < smini)
             {
                 ur22 = smini;
                 *info = 1;
@@ -465,10 +463,10 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             /* Computing MAX */
             r__2 = (r__1 = br1 * (ur22 * ur11r), f2c_abs(r__1));
             r__3 = f2c_abs(br2); // , expr subst
-            bbnd = fla_max(r__2, r__3);
-            if(bbnd > 1.f && f2c_abs(ur22) < 1.f)
+            bbnd = max(r__2,r__3);
+            if (bbnd > 1.f && f2c_abs(ur22) < 1.f)
             {
-                if(bbnd >= bignum * f2c_abs(ur22))
+                if (bbnd >= bignum * f2c_abs(ur22))
                 {
                     *scale = 1.f / bbnd;
                 }
@@ -488,7 +486,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             /* Computing MAX */
             r__1 = f2c_abs(xr1);
             r__2 = f2c_abs(xr2); // , expr subst
-            *xnorm = fla_max(r__1, r__2);
+            *xnorm = max(r__1,r__2);
             /* Further scaling if norm(A) norm(X) > overflow */
             if(*xnorm > 1.f && cmax > 1.f)
             {
@@ -514,9 +512,9 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             icmax = 0;
             for(j = 1; j <= 4; ++j)
             {
-                if((r__1 = crv[j - 1], f2c_abs(r__1)) + (r__2 = civ[j - 1], f2c_abs(r__2)) > cmax)
+                if ((r__1 = crv[j - 1], f2c_abs(r__1)) + (r__2 = civ[j - 1], f2c_abs( r__2)) > cmax)
                 {
-                    cmax = (r__1 = crv[j - 1], f2c_abs(r__1)) + (r__2 = civ[j - 1], f2c_abs(r__2));
+                    cmax = (r__1 = crv[j - 1], f2c_abs(r__1)) + (r__2 = civ[j - 1] , f2c_abs(r__2));
                     icmax = j;
                 }
                 /* L20: */
@@ -525,12 +523,10 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             if(cmax < smini)
             {
                 /* Computing MAX */
-                r__5 = (r__1 = b[b_dim1 + 1], f2c_abs(r__1))
-                       + (r__2 = b[(b_dim1 << 1) + 1], f2c_abs(r__2));
-                r__6 = (r__3 = b[b_dim1 + 2], f2c_abs(r__3))
-                       + (r__4 = b[(b_dim1 << 1) + 2], f2c_abs(r__4)); // , expr subst
-                bnorm = fla_max(r__5, r__6);
-                if(smini < 1.f && bnorm > 1.f)
+                r__5 = (r__1 = b[b_dim1 + 1], f2c_abs(r__1)) + (r__2 = b[(b_dim1 << 1) + 1], f2c_abs(r__2));
+                r__6 = (r__3 = b[b_dim1 + 2], f2c_abs(r__3)) + (r__4 = b[(b_dim1 << 1) + 2], f2c_abs(r__4)); // , expr subst
+                bnorm = max(r__5,r__6);
+                if (smini < 1.f && bnorm > 1.f)
                 {
                     if(bnorm > bignum * smini)
                     {
@@ -559,7 +555,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             if(icmax == 1 || icmax == 4)
             {
                 /* Code when off-diagonals of pivoted C are real */
-                if(f2c_abs(ur11) > f2c_abs(ui11))
+                if (f2c_abs(ur11) > f2c_abs(ui11))
                 {
                     temp = ui11 / ur11;
                     /* Computing 2nd power */
@@ -619,10 +615,10 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             br2 = br2 - lr21 * br1 + li21 * bi1;
             bi2 = bi2 - li21 * br1 - lr21 * bi1;
             /* Computing MAX */
-            r__1 = (f2c_abs(br1) + f2c_abs(bi1)) * (u22abs * (f2c_abs(ur11r) + f2c_abs(ui11r)));
+            r__1 = (f2c_abs(br1) + f2c_abs(bi1)) * (u22abs * (f2c_abs(ur11r) + f2c_abs(ui11r)) );
             r__2 = f2c_abs(br2) + f2c_abs(bi2); // , expr subst
-            bbnd = fla_max(r__1, r__2);
-            if(bbnd > 1.f && u22abs < 1.f)
+            bbnd = max(r__1,r__2);
+            if (bbnd > 1.f && u22abs < 1.f)
             {
                 if(bbnd >= bignum * u22abs)
                 {
@@ -653,7 +649,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             /* Computing MAX */
             r__1 = f2c_abs(xr1) + f2c_abs(xi1);
             r__2 = f2c_abs(xr2) + f2c_abs(xi2); // , expr subst
-            *xnorm = fla_max(r__1, r__2);
+            *xnorm = max(r__1,r__2);
             /* Further scaling if norm(A) norm(X) > overflow */
             if(*xnorm > 1.f && cmax > 1.f)
             {

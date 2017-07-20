@@ -346,7 +346,7 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     work[ismax] = 1.f;
     smax = (r__1 = a[a_dim1 + 1], f2c_abs(r__1));
     smin = smax;
-    if((r__1 = a[a_dim1 + 1], f2c_abs(r__1)) == 0.f)
+    if ((r__1 = a[a_dim1 + 1], f2c_abs(r__1)) == 0.f)
     {
         *rank = 0;
         i__1 = fla_max(*m, *n);

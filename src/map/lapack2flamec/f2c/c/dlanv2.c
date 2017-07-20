@@ -124,7 +124,7 @@ static doublereal c_b6 = 1.;
 /* > Modified by V. Sima, Research Institute for Informatics, Bucharest, */
 /* > Romania, to reduce the risk of cancellation errors, */
 /* > when computing real eigenvalues, and to ensure, if possible, that */
-/* > f2c_dabs(RT1R) >= f2c_dabs(RT2R). */
+/* > f2c_abs(RT1R) >= f2c_abs(RT2R). */
 /* > \endverbatim */
 /* > */
 /* ===================================================================== */
@@ -193,16 +193,16 @@ void dlanv2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, dou
         temp = *a - *d__;
         p = temp * .5;
         /* Computing MAX */
-        d__1 = f2c_dabs(*b);
-        d__2 = f2c_dabs(*c__); // , expr subst
-        bcmax = fla_max(d__1, d__2);
+        d__1 = f2c_abs(*b);
+        d__2 = f2c_abs(*c__); // , expr subst
+        bcmax = max(d__1,d__2);
         /* Computing MIN */
-        d__1 = f2c_dabs(*b);
-        d__2 = f2c_dabs(*c__); // , expr subst
-        bcmis = fla_min(d__1, d__2) * d_sign(&c_b6, b) * d_sign(&c_b6, c__);
+        d__1 = f2c_abs(*b);
+        d__2 = f2c_abs(*c__); // , expr subst
+        bcmis = min(d__1,d__2) * d_sign(&c_b4, b) * d_sign(&c_b4, c__);
         /* Computing MAX */
-        d__1 = f2c_dabs(p);
-        scale = fla_max(d__1, bcmax);
+        d__1 = f2c_abs(p);
+        scale = max(d__1,bcmax);
         z__ = p / scale * p + bcmax / scale * bcmis;
         /* If Z is of the order of the machine accuracy, postpone the */
         /* decision on the nature of eigenvalues */
@@ -252,8 +252,8 @@ void dlanv2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, dou
             }
             p = temp * .5;
             tau = dlapy2_(&sigma, &temp);
-            *cs = sqrt((f2c_dabs(sigma) / tau + 1.) * .5);
-            *sn = -(p / (tau * *cs)) * d_sign(&c_b6, &sigma);
+            *cs = sqrt((f2c_abs(sigma) / tau + 1.) * .5);
+            *sn = -(p / (tau * *cs)) * d_sign(&c_b4, &sigma);
             /* Compute [ AA BB ] = [ A B ] [ CS -SN ] */
             /* [ CC DD ] [ C D ] [ SN CS ] */
             /* Separate multiply operations, Each multiply result is rounded once
@@ -296,11 +296,11 @@ void dlanv2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, dou
                     if(d_sign(&c_b6, b) == d_sign(&c_b6, c__))
                     {
                         /* Real eigenvalues: reduce to upper triangular form */
-                        sab = sqrt((f2c_dabs(*b)));
-                        sac = sqrt((f2c_dabs(*c__)));
+                        sab = sqrt((f2c_abs(*b)));
+                        sac = sqrt((f2c_abs(*c__)));
                         d__1 = sab * sac;
                         p = d_sign(&d__1, c__);
-                        tau = 1. / sqrt((d__1 = *b + *c__, f2c_dabs(d__1)));
+                        tau = 1. / sqrt((d__1 = *b + *c__, f2c_abs(d__1)));
                         *a = temp + p;
                         *d__ = temp - p;
                         *b -= *c__;
@@ -333,7 +333,7 @@ void dlanv2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, dou
     }
     else
     {
-        *rt1i = sqrt((f2c_dabs(*b))) * sqrt((f2c_dabs(*c__)));
+        *rt1i = sqrt((f2c_abs(*b))) * sqrt((f2c_abs(*c__)));
         *rt2i = -(*rt1i);
     }
     AOCL_DTL_TRACE_EXIT_INDENT

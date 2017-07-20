@@ -39,8 +39,8 @@
 /* > */
 /* > DLA_LIN_BERR computes component-wise relative backward error from */
 /* > the formula */
-/* > fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(op(A_s))*f2c_dabs(Y) + f2c_dabs(B_s) )(i) ) */
-/* > where f2c_dabs(Z) is the component-wise absolute value of the matrix */
+/* > max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s) )(i) ) */
+/* > where f2c_abs(Z) is the component-wise absolute value of the matrix */
 /* > or vector Z. */
 /* > \endverbatim */
 /* Arguments: */
@@ -77,7 +77,7 @@
 /* > \verbatim */
 /* > AYB is DOUBLE PRECISION array, dimension (N, NRHS) */
 /* > The denominator in the relative backward error formula above, i.e., */
-/* > the matrix f2c_dabs(op(A_s))*f2c_dabs(Y) + f2c_dabs(B_s). The matrices A, Y, and B */
+/* > the matrix f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s). The matrices A, Y, and B */
 /* > are from iterative refinement (see dla_gerfsx_extended.f). */
 /* > \endverbatim */
 /* > */
@@ -163,8 +163,7 @@ void aocl_lapack_dla_lin_berr(aocl_int64_t *n, aocl_int64_t *nz, aocl_int64_t *n
         {
             if(ayb[i__ + j * ayb_dim1] != 0.)
             {
-                tmp = (safe1 + (d__1 = res[i__ + j * res_dim1], f2c_dabs(d__1)))
-                      / ayb[i__ + j * ayb_dim1];
+                tmp = (safe1 + (d__1 = res[i__ + j * res_dim1], f2c_abs(d__1))) / ayb[i__ + j * ayb_dim1];
                 /* Computing MAX */
                 d__1 = berr[j];
                 berr[j] = fla_max(d__1, tmp);

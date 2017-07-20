@@ -186,9 +186,8 @@ doublereal aocl_lapack_zla_gbrpvgrw(aocl_int64_t *n, aocl_int64_t *kl, aocl_int6
         {
             /* Computing MAX */
             i__2 = kd + i__ - j + j * ab_dim1;
-            d__3 = (d__1 = ab[i__2].real, f2c_dabs(d__1))
-                   + (d__2 = d_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_dabs(d__2));
-            amax = fla_max(d__3, amax);
+            d__3 = (d__1 = ab[i__2].r, f2c_abs(d__1)) + (d__2 = d_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_abs(d__2));
+            amax = max(d__3,amax);
         }
         /* Computing MAX */
         i__3 = j - *ku;
@@ -197,9 +196,8 @@ doublereal aocl_lapack_zla_gbrpvgrw(aocl_int64_t *n, aocl_int64_t *kl, aocl_int6
         {
             /* Computing MAX */
             i__3 = kd + i__ - j + j * afb_dim1;
-            d__3 = (d__1 = afb[i__3].real, f2c_dabs(d__1))
-                   + (d__2 = d_imag(&afb[kd + i__ - j + j * afb_dim1]), f2c_dabs(d__2));
-            umax = fla_max(d__3, umax);
+            d__3 = (d__1 = afb[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&afb[kd + i__ - j + j * afb_dim1]), f2c_abs(d__2));
+            umax = max(d__3,umax);
         }
         if(umax != 0.)
         {

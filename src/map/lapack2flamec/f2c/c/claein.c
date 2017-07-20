@@ -298,9 +298,7 @@ void aocl_lapack_claein(logical *rightv, logical *noinit, aocl_int64_t *n, scomp
             ei.real = h__[i__2].real;
             ei.imag = h__[i__2].imag; // , expr subst
             i__2 = i__ + i__ * b_dim1;
-            if((r__1 = b[i__2].real, f2c_abs(r__1))
-                   + (r__2 = r_imag(&b[i__ + i__ * b_dim1]), f2c_abs(r__2))
-               < (r__3 = ei.real, f2c_abs(r__3)) + (r__4 = r_imag(&ei), f2c_abs(r__4)))
+            if ((r__1 = b[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&b[i__ + i__ * b_dim1]), f2c_abs(r__2)) < (r__3 = ei.r, f2c_abs(r__3)) + (r__4 = r_imag(&ei), f2c_abs(r__4)))
             {
                 /* Interchange rows and eliminate. */
                 cladiv_f2c_(&q__1, &b[i__ + i__ * b_dim1], &ei);
@@ -381,9 +379,7 @@ void aocl_lapack_claein(logical *rightv, logical *noinit, aocl_int64_t *n, scomp
             ej.real = h__[i__1].real;
             ej.imag = h__[i__1].imag; // , expr subst
             i__1 = j + j * b_dim1;
-            if((r__1 = b[i__1].real, f2c_abs(r__1))
-                   + (r__2 = r_imag(&b[j + j * b_dim1]), f2c_abs(r__2))
-               < (r__3 = ej.real, f2c_abs(r__3)) + (r__4 = r_imag(&ej), f2c_abs(r__4)))
+            if ((r__1 = b[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&b[j + j * b_dim1]), f2c_abs(r__2)) < (r__3 = ej.r, f2c_abs(r__3)) + (r__4 = r_imag(&ej), f2c_abs(r__4)))
             {
                 /* Interchange columns and eliminate. */
                 cladiv_f2c_(&q__1, &b[j + j * b_dim1], &ej);
@@ -496,10 +492,9 @@ void aocl_lapack_claein(logical *rightv, logical *noinit, aocl_int64_t *n, scomp
 L120: /* Normalize eigenvector. */
     i__ = aocl_blas_icamax(n, &v[1], &c__1);
     i__1 = i__;
-    r__3 = 1.f / ((r__1 = v[i__1].real, f2c_abs(r__1)) + (r__2 = r_imag(&v[i__]), f2c_abs(r__2)));
-    aocl_blas_csscal(n, &r__3, &v[1], &c__1);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    r__3 = 1.f / ((r__1 = v[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&v[i__]), f2c_abs(r__2)));
+    csscal_(n, &r__3, &v[1], &c__1);
+    return 0;
     /* End of CLAEIN */
 }
 /* claein_ */

@@ -165,14 +165,8 @@ void aocl_lapack_slaqr1(aocl_int64_t *n, real *h__, aocl_int64_t *ldh, real *sr1
     /* Function Body */
     if(*n != 2 && *n != 3)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
-    }
-    if(*n == 2)
-    {
-        s = (r__1 = h__[h_dim1 + 1] - *sr2, f2c_abs(r__1)) + f2c_abs(*si2)
-            + (r__2 = h__[h_dim1 + 2], f2c_abs(r__2));
-        if(s == 0.f)
+        s = (r__1 = h__[h_dim1 + 1] - *sr2, f2c_abs(r__1)) + f2c_abs(*si2) + (r__2 = h__[h_dim1 + 2], f2c_abs(r__2));
+        if (s == 0.f)
         {
             v[1] = 0.f;
             v[2] = 0.f;
@@ -187,9 +181,8 @@ void aocl_lapack_slaqr1(aocl_int64_t *n, real *h__, aocl_int64_t *ldh, real *sr1
     }
     else
     {
-        s = (r__1 = h__[h_dim1 + 1] - *sr2, f2c_abs(r__1)) + f2c_abs(*si2)
-            + (r__2 = h__[h_dim1 + 2], f2c_abs(r__2)) + (r__3 = h__[h_dim1 + 3], f2c_abs(r__3));
-        if(s == 0.f)
+        s = (r__1 = h__[h_dim1 + 1] - *sr2, f2c_abs(r__1)) + f2c_abs(*si2) + (r__2 = h__[h_dim1 + 2], f2c_abs(r__2)) + (r__3 = h__[h_dim1 + 3], f2c_abs( r__3));
+        if (s == 0.f)
         {
             v[1] = 0.f;
             v[2] = 0.f;

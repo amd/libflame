@@ -369,9 +369,49 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     noconv = TRUE_;
     while(noconv)
     {
-        noconv = FALSE_;
-        i__1 = l;
-        for(i__ = k; i__ <= i__1; ++i__)
+        i__2 = l - k + 1;
+        c__ = snrm2_(&i__2, &a[k + i__ * a_dim1], &c__1);
+        i__2 = l - k + 1;
+        r__ = snrm2_(&i__2, &a[i__ + k * a_dim1], lda);
+        ica = isamax_(&l, &a[i__ * a_dim1 + 1], &c__1);
+        ca = (r__1 = a[ica + i__ * a_dim1], f2c_abs(r__1));
+        i__2 = *n - k + 1;
+        ira = isamax_(&i__2, &a[i__ + k * a_dim1], lda);
+        ra = (r__1 = a[i__ + (ira + k - 1) * a_dim1], f2c_abs(r__1));
+        /* Guard against zero C or R due to underflow. */
+        if (c__ == 0.f || r__ == 0.f)
+        {
+            goto L200;
+        }
+        g = r__ / 2.f;
+        f = 1.f;
+        s = c__ + r__;
+L160: /* Computing MAX */
+        r__1 = max(f,c__);
+        /* Computing MIN */
+        r__2 = min(r__,g);
+        if (c__ >= g || max(r__1,ca) >= sfmax2 || min(r__2,ra) <= sfmin2)
+        {
+            goto L170;
+        }
+        f *= 2.f;
+        c__ *= 2.f;
+        ca *= 2.f;
+        r__ /= 2.f;
+        g /= 2.f;
+        ra /= 2.f;
+        goto L160;
+L170:
+        g = c__ / 2.f;
+L180: /* Computing MIN */
+        r__1 = min(f,c__);
+        r__1 = min(r__1,g); // , expr subst
+        if (g < r__ || max(r__,ra) >= sfmax2 || min(r__1,ca) <= sfmin2)
+        {
+            goto L190;
+        }
+        r__1 = c__ + f + ca + r__ + g + ra;
+        if (sisnan_(&r__1))
         {
             i__2 = l - k + 1;
             c__ = aocl_blas_snrm2(&i__2, &a[k + i__ * a_dim1], &c__1);

@@ -121,8 +121,8 @@ void aocl_lapack_zlapll(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, dcompl
     doublereal d__1, d__2, d__3;
     dcomplex z__1, z__2, z__3, z__4;
     /* Builtin functions */
-    void d_cnjg(dcomplex *, dcomplex *);
-    double z_abs(dcomplex *);
+    void d_cnjg(doublecomplex *, doublecomplex *);
+    double z_f2c_abs(doublecomplex *);
     /* Local variables */
     dcomplex c__, a11, a12, a22, tau;
     extern /* Subroutine */
@@ -183,9 +183,9 @@ void aocl_lapack_zlapll(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, dcompl
     a22.real = y[i__1].real;
     a22.imag = y[i__1].imag; // , expr subst
     /* Compute the SVD of 2-by-2 Upper triangular matrix. */
-    d__1 = z_abs(&a11);
-    d__2 = z_abs(&a12);
-    d__3 = z_abs(&a22);
+    d__1 = z_f2c_abs(&a11);
+    d__2 = z_f2c_abs(&a12);
+    d__3 = z_f2c_abs(&a22);
     dlas2_(&d__1, &d__2, &d__3, ssmin, &ssmax);
     AOCL_DTL_TRACE_LOG_EXIT
     return;

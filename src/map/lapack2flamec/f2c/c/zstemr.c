@@ -856,8 +856,7 @@ void aocl_lapack_zstemr(char *jobz, char *range, aocl_int64_t *n, doublereal *d_
         if(iinfo != 0)
         {
             *info = f2c_abs(iinfo) + 10;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            return 0;
         }
         /* Note that if RANGE .NE. 'V', DLARRE computes bounds on the desired */
         /* part of the spectrum. All desired eigenvalues are contained in */
@@ -873,8 +872,7 @@ void aocl_lapack_zstemr(char *jobz, char *range, aocl_int64_t *n, doublereal *d_
             if(iinfo != 0)
             {
                 *info = f2c_abs(iinfo) + 20;
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                return 0;
             }
         }
         else

@@ -221,18 +221,18 @@ void aocl_lapack_clargv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
         /* Use identical algorithm as in CLARTG */
         /* Computing MAX */
         /* Computing MAX */
-        r__7 = (r__1 = f.real, f2c_abs(r__1));
+        r__7 = (r__1 = f.r, f2c_abs(r__1));
         r__8 = (r__2 = r_imag(&f), f2c_abs(r__2)); // , expr subst
         /* Computing MAX */
-        r__9 = (r__3 = g.real, f2c_abs(r__3));
-        r__10 = (r__4 = r_imag(&g), f2c_abs(r__4)); // , expr subst
-        r__5 = fla_max(r__7, r__8);
-        r__6 = fla_max(r__9, r__10); // , expr subst
-        scale = fla_max(r__5, r__6);
-        fs.real = f.real;
-        fs.imag = f.imag; // , expr subst
-        gs.real = g.real;
-        gs.imag = g.imag; // , expr subst
+        r__9 = (r__3 = g.r, f2c_abs(r__3));
+        r__10 = (r__4 = r_imag(&g), f2c_abs(r__4)) ; // , expr subst
+        r__5 = max(r__7,r__8);
+        r__6 = max(r__9,r__10); // , expr subst
+        scale = max(r__5,r__6);
+        fs.r = f.r;
+        fs.i = f.i; // , expr subst
+        gs.r = g.r;
+        gs.i = g.i; // , expr subst
         count = 0;
         if(scale >= safmx2)
         {
@@ -328,11 +328,11 @@ void aocl_lapack_clargv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
             /* Therefore, CS = F2S/G2S / sqrt( 1 + (F2S/G2S)**2 ) = F2S/G2S */
             cs = f2s / g2s;
             /* Make sure f2c_abs(FF) = 1 */
-            /* Do scomplex/real division explicitly with 2 real divisions */
+            /* Do complex/real division explicitly with 2 real divisions */
             /* Computing MAX */
-            r__3 = (r__1 = f.real, f2c_abs(r__1));
-            r__4 = (r__2 = r_imag(&f), f2c_abs(r__2)); // , expr subst
-            if(fla_max(r__3, r__4) > 1.f)
+            r__3 = (r__1 = f.r, f2c_abs(r__1));
+            r__4 = (r__2 = r_imag(&f), f2c_abs( r__2)); // , expr subst
+            if (max(r__3,r__4) > 1.f)
             {
                 r__1 = f.real;
                 r__2 = r_imag(&f);

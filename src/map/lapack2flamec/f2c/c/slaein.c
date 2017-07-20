@@ -310,7 +310,7 @@ void aocl_lapack_slaein(logical *rightv, logical *noinit, aocl_int64_t *n, real 
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 ei = h__[i__ + 1 + i__ * h_dim1];
-                if((r__1 = b[i__ + i__ * b_dim1], f2c_abs(r__1)) < f2c_abs(ei))
+                if ((r__1 = b[i__ + i__ * b_dim1], f2c_abs(r__1)) < f2c_abs(ei))
                 {
                     /* Interchange rows and eliminate. */
                     x = b[i__ + i__ * b_dim1] / ei;
@@ -357,7 +357,7 @@ void aocl_lapack_slaein(logical *rightv, logical *noinit, aocl_int64_t *n, real 
             for(j = *n; j >= 2; --j)
             {
                 ej = h__[j + (j - 1) * h_dim1];
-                if((r__1 = b[j + j * b_dim1], f2c_abs(r__1)) < f2c_abs(ej))
+                if ((r__1 = b[j + j * b_dim1], f2c_abs(r__1)) < f2c_abs(ej))
                 {
                     /* Interchange columns and eliminate. */
                     x = b[j + j * b_dim1] / ej;
@@ -427,10 +427,10 @@ void aocl_lapack_slaein(logical *rightv, logical *noinit, aocl_int64_t *n, real 
         }
         /* Failure to find eigenvector in N iterations. */
         *info = 1;
-    L120: /* Normalize eigenvector. */
-        i__ = aocl_blas_isamax(n, &vr[1], &c__1);
+L120: /* Normalize eigenvector. */
+        i__ = isamax_(n, &vr[1], &c__1);
         r__2 = 1.f / (r__1 = vr[i__], f2c_abs(r__1));
-        aocl_blas_sscal(n, &r__2, &vr[1], &c__1);
+        sscal_(n, &r__2, &vr[1], &c__1);
     }
     else
     {
@@ -474,7 +474,7 @@ void aocl_lapack_slaein(logical *rightv, logical *noinit, aocl_int64_t *n, real 
             {
                 absbii = slapy2_(&b[i__ + i__ * b_dim1], &b[i__ + 1 + i__ * b_dim1]);
                 ei = h__[i__ + 1 + i__ * h_dim1];
-                if(absbii < f2c_abs(ei))
+                if (absbii < f2c_abs(ei))
                 {
                     /* Interchange rows and eliminate. */
                     xr = b[i__ + i__ * b_dim1] / ei;
@@ -551,7 +551,7 @@ void aocl_lapack_slaein(logical *rightv, logical *noinit, aocl_int64_t *n, real 
             {
                 ej = h__[j + (j - 1) * h_dim1];
                 absbjj = slapy2_(&b[j + j * b_dim1], &b[j + 1 + j * b_dim1]);
-                if(absbjj < f2c_abs(ej))
+                if (absbjj < f2c_abs(ej))
                 {
                     /* Interchange columns and eliminate */
                     xr = b[j + j * b_dim1] / ej;
@@ -656,14 +656,13 @@ void aocl_lapack_slaein(logical *rightv, logical *noinit, aocl_int64_t *n, real 
                         /* L230: */
                     }
                 }
-                w = (r__1 = b[i__ + i__ * b_dim1], f2c_abs(r__1))
-                    + (r__2 = b[i__ + 1 + i__ * b_dim1], f2c_abs(r__2));
-                if(w > *smlnum)
+                w = (r__1 = b[i__ + i__ * b_dim1], f2c_abs(r__1)) + (r__2 = b[i__ + 1 + i__ * b_dim1], f2c_abs(r__2));
+                if (w > *smlnum)
                 {
                     if(w < 1.f)
                     {
                         w1 = f2c_abs(xr) + f2c_abs(xi);
-                        if(w1 > w * *bignum)
+                        if (w1 > w * *bignum)
                         {
                             rec = 1.f / w1;
                             aocl_blas_sscal(n, &rec, &vr[1], &c__1);
@@ -678,8 +677,8 @@ void aocl_lapack_slaein(logical *rightv, logical *noinit, aocl_int64_t *n, real 
                     sladiv_(&xr, &xi, &b[i__ + i__ * b_dim1], &b[i__ + 1 + i__ * b_dim1], &vr[i__],
                             &vi[i__]);
                     /* Computing MAX */
-                    r__3 = (r__1 = vr[i__], f2c_abs(r__1)) + (r__2 = vi[i__], f2c_abs(r__2));
-                    vmax = fla_max(r__3, vmax);
+                    r__3 = (r__1 = vr[i__], f2c_abs(r__1)) + (r__2 = vi[i__], f2c_abs( r__2));
+                    vmax = max(r__3,vmax);
                     vcrit = *bignum / vmax;
                 }
                 else
@@ -728,9 +727,8 @@ void aocl_lapack_slaein(logical *rightv, logical *noinit, aocl_int64_t *n, real 
         {
             /* Computing MAX */
             r__3 = vnorm;
-            r__4
-                = (r__1 = vr[i__], f2c_abs(r__1)) + (r__2 = vi[i__], f2c_abs(r__2)); // , expr subst
-            vnorm = fla_max(r__3, r__4);
+            r__4 = (r__1 = vr[i__], f2c_abs(r__1)) + (r__2 = vi[i__] , f2c_abs(r__2)); // , expr subst
+            vnorm = max(r__3,r__4);
             /* L290: */
         }
         r__1 = 1.f / vnorm;

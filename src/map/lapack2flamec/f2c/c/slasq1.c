@@ -185,8 +185,7 @@ void aocl_lapack_slasq1(aocl_int64_t *n, real *d__, real *e, real *work, aocl_in
     else if(*n == 1)
     {
         d__[1] = f2c_abs(d__[1]);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     else if(*n == 2)
     {
@@ -205,7 +204,7 @@ void aocl_lapack_slasq1(aocl_int64_t *n, real *d__, real *e, real *work, aocl_in
         /* Computing MAX */
         r__2 = sigmx;
         r__3 = (r__1 = e[i__], f2c_abs(r__1)); // , expr subst
-        sigmx = fla_max(r__2, r__3);
+        sigmx = max(r__2,r__3);
         /* L10: */
     }
     d__[*n] = (r__1 = d__[*n], f2c_abs(r__1));

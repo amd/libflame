@@ -152,9 +152,8 @@ void aocl_lapack_zhetri2x(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t
     doublereal d__1;
     dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    double z_abs(dcomplex *);
-    void z_div(dcomplex *, dcomplex *, dcomplex *),
-        d_cnjg(dcomplex *, dcomplex *);
+    double z_f2c_abs(doublecomplex *);
+    void z_div(doublecomplex *, doublecomplex *, doublecomplex *), d_cnjg( doublecomplex *, doublecomplex *);
     /* Local variables */
     dcomplex d__;
     aocl_int64_t i__, j, k;
@@ -291,9 +290,9 @@ void aocl_lapack_zhetri2x(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t
             else
             {
                 /* 2 x 2 diagonal NNB */
-                d__1 = z_abs(&work[k + 1 + work_dim1]);
-                t.real = d__1;
-                t.imag = 0.; // , expr subst
+                d__1 = z_f2c_abs(&work[k + 1 + work_dim1]);
+                t.r = d__1;
+                t.i = 0.; // , expr subst
                 i__1 = k + k * a_dim1;
                 d__1 = a[i__1].real;
                 z__2.real = d__1;
@@ -644,9 +643,9 @@ void aocl_lapack_zhetri2x(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t
             else
             {
                 /* 2 x 2 diagonal NNB */
-                d__1 = z_abs(&work[k - 1 + work_dim1]);
-                t.real = d__1;
-                t.imag = 0.; // , expr subst
+                d__1 = z_f2c_abs(&work[k - 1 + work_dim1]);
+                t.r = d__1;
+                t.i = 0.; // , expr subst
                 i__1 = k - 1 + (k - 1) * a_dim1;
                 d__1 = a[i__1].real;
                 z__2.real = d__1;

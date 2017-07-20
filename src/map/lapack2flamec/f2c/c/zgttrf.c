@@ -217,13 +217,11 @@ void aocl_lapack_zgttrf(aocl_int64_t *n, dcomplex *dl, dcomplex *d__, dcomplex *
     {
         i__2 = i__;
         i__3 = i__;
-        if((d__1 = d__[i__2].real, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
-           >= (d__3 = dl[i__3].real, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[i__]), f2c_dabs(d__4)))
+        if ((d__1 = d__[i__2].r, f2c_abs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_abs( d__2)) >= (d__3 = dl[i__3].r, f2c_abs(d__3)) + (d__4 = d_imag(&dl[ i__]), f2c_abs(d__4)))
         {
             /* No row interchange required, eliminate DL(I) */
             i__2 = i__;
-            if((d__1 = d__[i__2].real, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
-               != 0.)
+            if ((d__1 = d__[i__2].r, f2c_abs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_abs(d__2)) != 0.)
             {
                 z_div(&z__1, &dl[i__], &d__[i__]);
                 fact.real = z__1.real;
@@ -291,12 +289,10 @@ void aocl_lapack_zgttrf(aocl_int64_t *n, dcomplex *dl, dcomplex *d__, dcomplex *
         i__ = *n - 1;
         i__1 = i__;
         i__2 = i__;
-        if((d__1 = d__[i__1].real, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
-           >= (d__3 = dl[i__2].real, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[i__]), f2c_dabs(d__4)))
+        if ((d__1 = d__[i__1].r, f2c_abs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_abs( d__2)) >= (d__3 = dl[i__2].r, f2c_abs(d__3)) + (d__4 = d_imag(&dl[ i__]), f2c_abs(d__4)))
         {
             i__1 = i__;
-            if((d__1 = d__[i__1].real, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
-               != 0.)
+            if ((d__1 = d__[i__1].r, f2c_abs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_abs(d__2)) != 0.)
             {
                 z_div(&z__1, &dl[i__], &d__[i__]);
                 fact.real = z__1.real;
@@ -350,7 +346,7 @@ void aocl_lapack_zgttrf(aocl_int64_t *n, dcomplex *dl, dcomplex *d__, dcomplex *
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        if((d__1 = d__[i__2].real, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2)) == 0.)
+        if ((d__1 = d__[i__2].r, f2c_abs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_abs( d__2)) == 0.)
         {
             *info = i__;
             goto L50;

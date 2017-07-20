@@ -95,7 +95,7 @@ real aocl_lapack_scsum1(aocl_int64_t *n, scomplex *cx, aocl_int64_t *incx)
     aocl_int64_t i__1, i__2;
     real ret_val;
     /* Builtin functions */
-    double c_abs(scomplex *);
+    double c_f2c_abs(complex *);
     /* Local variables */
     aocl_int64_t i__, nincx;
     real stemp;
@@ -134,7 +134,7 @@ real aocl_lapack_scsum1(aocl_int64_t *n, scomplex *cx, aocl_int64_t *incx)
     for(i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
     {
         /* NEXT LINE MODIFIED. */
-        stemp += c_abs(&cx[i__]);
+        stemp += c_f2c_abs(&cx[i__]);
         /* L10: */
     }
     ret_val = stemp;
@@ -146,7 +146,7 @@ L20:
     for(i__ = 1; i__ <= i__2; ++i__)
     {
         /* NEXT LINE MODIFIED. */
-        stemp += c_abs(&cx[i__]);
+        stemp += c_f2c_abs(&cx[i__]);
         /* L30: */
     }
     ret_val = stemp;

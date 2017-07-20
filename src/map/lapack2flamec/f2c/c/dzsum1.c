@@ -93,7 +93,7 @@ doublereal aocl_lapack_dzsum1(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx)
     aocl_int64_t i__1, i__2;
     doublereal ret_val;
     /* Builtin functions */
-    double z_abs(dcomplex *);
+    double z_f2c_abs(doublecomplex *);
     /* Local variables */
     aocl_int64_t i__, nincx;
     doublereal stemp;
@@ -136,7 +136,7 @@ doublereal aocl_lapack_dzsum1(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx)
     for(i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
     {
         /* NEXT LINE MODIFIED. */
-        stemp += z_abs(&cx[i__]);
+        stemp += z_f2c_abs(&cx[i__]);
         /* L10: */
     }
     ret_val = stemp;
@@ -148,7 +148,7 @@ L20:
     for(i__ = 1; i__ <= i__2; ++i__)
     {
         /* NEXT LINE MODIFIED. */
-        stemp += z_abs(&cx[i__]);
+        stemp += z_f2c_abs(&cx[i__]);
         /* L30: */
     }
     ret_val = stemp;

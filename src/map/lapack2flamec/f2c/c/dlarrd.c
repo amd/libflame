@@ -547,7 +547,7 @@ void aocl_lapack_dlarrd(char *range, char *order, aocl_int64_t *n, doublereal *v
     /* Computing MAX */
     d__1 = f2c_abs(gl);
     d__2 = f2c_abs(gu); // , expr subst
-    tnorm = fla_max(d__1, d__2);
+    tnorm = max(d__1,d__2);
     gl = gl - tnorm * 2. * eps * *n - *pivmin * 4.;
     gu = gu + tnorm * 2. * eps * *n + *pivmin * 4.;
     /* [JAN/28/2009] remove the line below since SPDIAM variable not use */
@@ -796,7 +796,7 @@ void aocl_lapack_dlarrd(char *range, char *order, aocl_int64_t *n, doublereal *v
                 tmp1 = (work[j + *n] + work[j + in + *n]) * .5;
                 /* semi length of error interval */
                 tmp2 = (d__1 = work[j + *n] - work[j + in + *n], f2c_abs(d__1)) * .5;
-                if(j > iout - iinfo)
+                if (j > iout - iinfo)
                 {
                     /* Flag non-convergence. */
                     ncnvrg = TRUE_;

@@ -509,13 +509,11 @@ void aocl_lapack_zhsein(char *side, char *eigsrc, char *initv, logical *select, 
             for(i__ = k - 1; i__ >= i__2; --i__)
             {
                 i__3 = i__;
-                z__2.real = w[i__3].real - wk.real;
-                z__2.imag = w[i__3].imag - wk.imag; // , expr subst
-                z__1.real = z__2.real;
-                z__1.imag = z__2.imag; // , expr subst
-                if(select[i__]
-                   && (d__1 = z__1.real, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2))
-                          < eps3)
+                z__2.r = w[i__3].r - wk.r;
+                z__2.i = w[i__3].i - wk.i; // , expr subst
+                z__1.r = z__2.r;
+                z__1.i = z__2.i; // , expr subst
+                if (select[i__] && (d__1 = z__1.r, f2c_abs(d__1)) + (d__2 = d_imag(&z__1), f2c_abs(d__2)) < eps3)
                 {
                     z__1.real = wk.real + eps3;
                     z__1.imag = wk.imag; // , expr subst

@@ -162,7 +162,7 @@ static doublereal c_b29 = 1.;
 /* > If JOBVL = 'V', the left eigenvectors u(j) are stored */
 /* > in the columns of VL, in the same order as their eigenvalues. */
 /* > Each eigenvector is scaled so that its largest component has */
-/* > f2c_dabs(real part) + f2c_dabs(imag. part) = 1, except for eigenvectors */
+/* > f2c_abs(real part) + f2c_abs(imag. part) = 1, except for eigenvectors */
 /* > corresponding to an eigenvalue with alpha = beta = 0, which */
 /* > are set to zero. */
 /* > Not referenced if JOBVL = 'N'. */
@@ -181,7 +181,7 @@ static doublereal c_b29 = 1.;
 /* > If JOBVR = 'V', the right eigenvectors x(j) are stored */
 /* > in the columns of VR, in the same order as their eigenvalues. */
 /* > Each eigenvector is scaled so that its largest component has */
-/* > f2c_dabs(real part) + f2c_dabs(imag. part) = 1, except for eigenvectors */
+/* > f2c_abs(real part) + f2c_abs(imag. part) = 1, except for eigenvectors */
 /* > corresponding to an eigenvalue with alpha = beta = 0, which */
 /* > are set to zero. */
 /* > Not referenced if JOBVR = 'N'. */
@@ -732,10 +732,8 @@ void aocl_lapack_zgegv(char *jobvl, char *jobvr, aocl_int64_t *n, dcomplex *a, a
                     /* Computing MAX */
                     i__3 = jr + jc * vl_dim1;
                     d__3 = temp;
-                    d__4
-                        = (d__1 = vl[i__3].real, f2c_dabs(d__1))
-                          + (d__2 = d_imag(&vl[jr + jc * vl_dim1]), f2c_dabs(d__2)); // , expr subst
-                    temp = fla_max(d__3, d__4);
+                    d__4 = (d__1 = vl[i__3].r, f2c_abs(d__1)) + ( d__2 = d_imag(&vl[jr + jc * vl_dim1]), f2c_abs(d__2)); // , expr subst
+                    temp = max(d__3,d__4);
                     /* L10: */
                 }
                 if(temp < safmin)
@@ -776,10 +774,8 @@ void aocl_lapack_zgegv(char *jobvl, char *jobvr, aocl_int64_t *n, dcomplex *a, a
                     /* Computing MAX */
                     i__3 = jr + jc * vr_dim1;
                     d__3 = temp;
-                    d__4
-                        = (d__1 = vr[i__3].real, f2c_dabs(d__1))
-                          + (d__2 = d_imag(&vr[jr + jc * vr_dim1]), f2c_dabs(d__2)); // , expr subst
-                    temp = fla_max(d__3, d__4);
+                    d__4 = (d__1 = vr[i__3].r, f2c_abs(d__1)) + ( d__2 = d_imag(&vr[jr + jc * vr_dim1]), f2c_abs(d__2)); // , expr subst
+                    temp = max(d__3,d__4);
                     /* L40: */
                 }
                 if(temp < safmin)
@@ -812,10 +808,10 @@ void aocl_lapack_zgegv(char *jobvl, char *jobvr, aocl_int64_t *n, dcomplex *a, a
     for(jc = 1; jc <= i__1; ++jc)
     {
         i__2 = jc;
-        absar = (d__1 = alpha[i__2].real, f2c_dabs(d__1));
-        absai = (d__1 = d_imag(&alpha[jc]), f2c_dabs(d__1));
+        absar = (d__1 = alpha[i__2].r, f2c_abs(d__1));
+        absai = (d__1 = d_imag(&alpha[jc]), f2c_abs(d__1));
         i__2 = jc;
-        absb = (d__1 = beta[i__2].real, f2c_dabs(d__1));
+        absb = (d__1 = beta[i__2].r, f2c_abs(d__1));
         i__2 = jc;
         salfar = anrm * alpha[i__2].real;
         salfai = anrm * d_imag(&alpha[jc]);
@@ -828,7 +824,7 @@ void aocl_lapack_zgegv(char *jobvl, char *jobvr, aocl_int64_t *n, dcomplex *a, a
         d__1 = safmin, d__2 = eps * absar;
         d__1 = fla_max(d__1, d__2);
         d__2 = eps * absb; // ; expr subst
-        if(f2c_dabs(salfai) < safmin && absai >= fla_max(d__1, d__2))
+        if (f2c_abs(salfai) < safmin && absai >= max(d__1,d__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
@@ -841,7 +837,7 @@ void aocl_lapack_zgegv(char *jobvl, char *jobvr, aocl_int64_t *n, dcomplex *a, a
         d__1 = safmin, d__2 = eps * absai;
         d__1 = fla_max(d__1, d__2);
         d__2 = eps * absb; // ; expr subst
-        if(f2c_dabs(salfar) < safmin && absar >= fla_max(d__1, d__2))
+        if (f2c_abs(salfar) < safmin && absar >= max(d__1,d__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
@@ -857,7 +853,7 @@ void aocl_lapack_zgegv(char *jobvl, char *jobvr, aocl_int64_t *n, dcomplex *a, a
         d__1 = safmin, d__2 = eps * absar;
         d__1 = fla_max(d__1, d__2);
         d__2 = eps * absai; // ; expr subst
-        if(f2c_dabs(sbeta) < safmin && absb >= fla_max(d__1, d__2))
+        if (f2c_abs(sbeta) < safmin && absb >= max(d__1,d__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
@@ -872,11 +868,11 @@ void aocl_lapack_zgegv(char *jobvl, char *jobvr, aocl_int64_t *n, dcomplex *a, a
         if(ilimit)
         {
             /* Computing MAX */
-            d__1 = f2c_dabs(salfar), d__2 = f2c_dabs(salfai);
-            d__1 = fla_max(d__1, d__2);
-            d__2 = f2c_dabs(sbeta); // ; expr subst
-            temp = scale * safmin * fla_max(d__1, d__2);
-            if(temp > 1.)
+            d__1 = f2c_abs(salfar), d__2 = f2c_abs(salfai);
+            d__1 = max(d__1,d__2);
+            d__2 = f2c_abs(sbeta); // ; expr subst
+            temp = scale * safmin * max(d__1,d__2);
+            if (temp > 1.)
             {
                 scale /= temp;
             }

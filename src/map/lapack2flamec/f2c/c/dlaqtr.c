@@ -261,10 +261,10 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
     if(!(*lreal))
     {
         /* Computing MAX */
-        d__1 = xnorm, d__2 = f2c_dabs(*w);
-        d__1 = fla_max(d__1, d__2);
-        d__2 = aocl_lapack_dlange("M", n, &c__1, &b[1], n, d__); // ; expr subst
-        xnorm = fla_max(d__1, d__2);
+        d__1 = xnorm, d__2 = f2c_abs(*w);
+        d__1 = max(d__1,d__2);
+        d__2 = dlange_( "M", n, &c__1, &b[1], n, d__); // ; expr subst
+        xnorm = max(d__1,d__2);
     }
     /* Computing MAX */
     d__1 = smlnum;
@@ -285,7 +285,7 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
         i__1 = *n;
         for(i__ = 2; i__ <= i__1; ++i__)
         {
-            work[i__] += (d__1 = b[i__], f2c_dabs(d__1));
+            work[i__] += (d__1 = b[i__], f2c_abs(d__1));
             /* L20: */
         }
     }
@@ -295,8 +295,8 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
     {
         n1 = n2;
     }
-    k = aocl_blas_idamax(&n1, &x[1], &c__1);
-    xmax = (d__1 = x[k], f2c_dabs(d__1));
+    k = idamax_(&n1, &x[1], &c__1);
+    xmax = (d__1 = x[k], f2c_abs(d__1));
     *scale = 1.;
     if(xmax > bignum)
     {
@@ -332,8 +332,8 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                     /* Meet 1 by 1 diagonal block */
                     /* Scale to avoid overflow when computing */
                     /* x(j) = b(j)/T(j,j) */
-                    xj = (d__1 = x[j1], f2c_dabs(d__1));
-                    tjj = (d__1 = t[j1 + j1 * t_dim1], f2c_dabs(d__1));
+                    xj = (d__1 = x[j1], f2c_abs(d__1));
+                    tjj = (d__1 = t[j1 + j1 * t_dim1], f2c_abs(d__1));
                     tmp = t[j1 + j1 * t_dim1];
                     if(tjj < smin)
                     {
@@ -356,7 +356,7 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                         }
                     }
                     x[j1] /= tmp;
-                    xj = (d__1 = x[j1], f2c_dabs(d__1));
+                    xj = (d__1 = x[j1], f2c_abs(d__1));
                     /* Scale x if necessary to avoid overflow when adding a */
                     /* multiple of column j1 of T. */
                     if(xj > 1.)
@@ -374,8 +374,8 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                         d__1 = -x[j1];
                         aocl_blas_daxpy(&i__1, &d__1, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
                         i__1 = j1 - 1;
-                        k = aocl_blas_idamax(&i__1, &x[1], &c__1);
-                        xmax = (d__1 = x[k], f2c_dabs(d__1));
+                        k = idamax_(&i__1, &x[1], &c__1);
+                        xmax = (d__1 = x[k], f2c_abs(d__1));
                     }
                 }
                 else
@@ -402,10 +402,10 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                     /* Scale V(1,1) (= X(J1)) and/or V(2,1) (=X(J2)) */
                     /* to avoid overflow in updating right-hand side. */
                     /* Computing MAX */
-                    d__1 = f2c_dabs(v[0]);
-                    d__2 = f2c_dabs(v[1]); // , expr subst
-                    xj = fla_max(d__1, d__2);
-                    if(xj > 1.)
+                    d__1 = f2c_abs(v[0]);
+                    d__2 = f2c_abs(v[1]); // , expr subst
+                    xj = max(d__1,d__2);
+                    if (xj > 1.)
                     {
                         rec = 1. / xj;
                         /* Computing MAX */
@@ -427,8 +427,8 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                         d__1 = -x[j2];
                         aocl_blas_daxpy(&i__1, &d__1, &t[j2 * t_dim1 + 1], &c__1, &x[1], &c__1);
                         i__1 = j1 - 1;
-                        k = aocl_blas_idamax(&i__1, &x[1], &c__1);
-                        xmax = (d__1 = x[k], f2c_dabs(d__1));
+                        k = idamax_(&i__1, &x[1], &c__1);
+                        xmax = (d__1 = x[k], f2c_abs(d__1));
                     }
                 }
             L30:;
@@ -461,8 +461,8 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                     /* 1 by 1 diagonal block */
                     /* Scale if necessary to avoid overflow in forming the */
                     /* right-hand side element by inner product. */
-                    xj = (d__1 = x[j1], f2c_dabs(d__1));
-                    if(xmax > 1.)
+                    xj = (d__1 = x[j1], f2c_abs(d__1));
+                    if (xmax > 1.)
                     {
                         rec = 1. / xmax;
                         if(work[j1] > (bignum - xj) * rec)
@@ -473,9 +473,9 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                         }
                     }
                     i__2 = j1 - 1;
-                    x[j1] -= aocl_blas_ddot(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
-                    xj = (d__1 = x[j1], f2c_dabs(d__1));
-                    tjj = (d__1 = t[j1 + j1 * t_dim1], f2c_dabs(d__1));
+                    x[j1] -= ddot_(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[1], & c__1);
+                    xj = (d__1 = x[j1], f2c_abs(d__1));
+                    tjj = (d__1 = t[j1 + j1 * t_dim1], f2c_abs(d__1));
                     tmp = t[j1 + j1 * t_dim1];
                     if(tjj < smin)
                     {
@@ -496,8 +496,8 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                     x[j1] /= tmp;
                     /* Computing MAX */
                     d__2 = xmax;
-                    d__3 = (d__1 = x[j1], f2c_dabs(d__1)); // , expr subst
-                    xmax = fla_max(d__2, d__3);
+                    d__3 = (d__1 = x[j1], f2c_abs(d__1)); // , expr subst
+                    xmax = max(d__2,d__3);
                 }
                 else
                 {
@@ -505,10 +505,10 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                     /* Scale if necessary to avoid overflow in forming the */
                     /* right-hand side elements by inner product. */
                     /* Computing MAX */
-                    d__3 = (d__1 = x[j1], f2c_dabs(d__1));
-                    d__4 = (d__2 = x[j2], f2c_dabs(d__2)); // , expr subst
-                    xj = fla_max(d__3, d__4);
-                    if(xmax > 1.)
+                    d__3 = (d__1 = x[j1], f2c_abs(d__1));
+                    d__4 = (d__2 = x[j2], f2c_abs(d__2)); // , expr subst
+                    xj = max(d__3,d__4);
+                    if (xmax > 1.)
                     {
                         rec = 1. / xmax;
                         /* Computing MAX */
@@ -542,10 +542,10 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                     x[j1] = v[0];
                     x[j2] = v[1];
                     /* Computing MAX */
-                    d__3 = (d__1 = x[j1], f2c_dabs(d__1));
-                    d__4 = (d__2 = x[j2], f2c_dabs(d__2));
-                    d__3 = fla_max(d__3, d__4); // ; expr subst
-                    xmax = fla_max(d__3, xmax);
+                    d__3 = (d__1 = x[j1], f2c_abs(d__1));
+                    d__4 = (d__2 = x[j2], f2c_abs(d__2));
+                    d__3 = max(d__3,d__4); // ; expr subst
+                    xmax = max(d__3,xmax);
                 }
             L40:;
             }
@@ -554,9 +554,9 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
     else
     {
         /* Computing MAX */
-        d__1 = eps * f2c_dabs(*w);
-        sminw = fla_max(d__1, smin);
-        if(notran)
+        d__1 = eps * f2c_abs(*w);
+        sminw = max(d__1,smin);
+        if (notran)
         {
             /* Solve (T + iB)*(p+iq) = c+id */
             jnext = *n;
@@ -586,8 +586,8 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                     {
                         z__ = b[1];
                     }
-                    xj = (d__1 = x[j1], f2c_dabs(d__1)) + (d__2 = x[*n + j1], f2c_dabs(d__2));
-                    tjj = (d__1 = t[j1 + j1 * t_dim1], f2c_dabs(d__1)) + f2c_dabs(z__);
+                    xj = (d__1 = x[j1], f2c_abs(d__1)) + (d__2 = x[*n + j1], f2c_abs( d__2));
+                    tjj = (d__1 = t[j1 + j1 * t_dim1], f2c_abs(d__1)) + f2c_abs(z__);
                     tmp = t[j1 + j1 * t_dim1];
                     if(tjj < sminw)
                     {
@@ -612,7 +612,7 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                     dladiv_(&x[j1], &x[*n + j1], &tmp, &z__, &sr, &si);
                     x[j1] = sr;
                     x[*n + j1] = si;
-                    xj = (d__1 = x[j1], f2c_dabs(d__1)) + (d__2 = x[*n + j1], f2c_dabs(d__2));
+                    xj = (d__1 = x[j1], f2c_abs(d__1)) + (d__2 = x[*n + j1], f2c_abs( d__2));
                     /* Scale x if necessary to avoid overflow when adding a */
                     /* multiple of column j1 of T. */
                     if(xj > 1.)
@@ -641,9 +641,8 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                         {
                             /* Computing MAX */
                             d__3 = xmax;
-                            d__4 = (d__1 = x[k], f2c_dabs(d__1))
-                                   + (d__2 = x[k + *n], f2c_dabs(d__2)); // , expr subst
-                            xmax = fla_max(d__3, d__4);
+                            d__4 = (d__1 = x[k], f2c_abs(d__1)) + ( d__2 = x[k + *n], f2c_abs(d__2)); // , expr subst
+                            xmax = max(d__3,d__4);
                             /* L50: */
                         }
                     }
@@ -676,10 +675,10 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                     /* Scale X(J1), .... to avoid overflow in */
                     /* updating right hand side. */
                     /* Computing MAX */
-                    d__1 = f2c_dabs(v[0]) + f2c_dabs(v[2]);
-                    d__2 = f2c_dabs(v[1]) + f2c_dabs(v[3]); // , expr subst
-                    xj = fla_max(d__1, d__2);
-                    if(xj > 1.)
+                    d__1 = f2c_abs(v[0]) + f2c_abs(v[2]);
+                    d__2 = f2c_abs(v[1]) + f2c_abs(v[3]) ; // , expr subst
+                    xj = max(d__1,d__2);
+                    if (xj > 1.)
                     {
                         rec = 1. / xj;
                         /* Computing MAX */
@@ -715,9 +714,8 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                         for(k = 1; k <= i__1; ++k)
                         {
                             /* Computing MAX */
-                            d__3 = (d__1 = x[k], f2c_dabs(d__1))
-                                   + (d__2 = x[k + *n], f2c_dabs(d__2));
-                            xmax = fla_max(d__3, xmax);
+                            d__3 = (d__1 = x[k], f2c_abs(d__1)) + (d__2 = x[k + * n], f2c_abs(d__2));
+                            xmax = max(d__3,xmax);
                             /* L60: */
                         }
                     }
@@ -752,8 +750,8 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                     /* 1 by 1 diagonal block */
                     /* Scale if necessary to avoid overflow in forming the */
                     /* right-hand side element by inner product. */
-                    xj = (d__1 = x[j1], f2c_dabs(d__1)) + (d__2 = x[j1 + *n], f2c_dabs(d__2));
-                    if(xmax > 1.)
+                    xj = (d__1 = x[j1], f2c_abs(d__1)) + (d__2 = x[j1 + *n], f2c_abs( d__2));
+                    if (xmax > 1.)
                     {
                         rec = 1. / xmax;
                         if(work[j1] > (bignum - xj) * rec)
@@ -773,15 +771,15 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                         x[j1] -= b[j1] * x[*n + 1];
                         x[*n + j1] += b[j1] * x[1];
                     }
-                    xj = (d__1 = x[j1], f2c_dabs(d__1)) + (d__2 = x[j1 + *n], f2c_dabs(d__2));
+                    xj = (d__1 = x[j1], f2c_abs(d__1)) + (d__2 = x[j1 + *n], f2c_abs( d__2));
                     z__ = *w;
                     if(j1 == 1)
                     {
                         z__ = b[1];
                     }
                     /* Scale if necessary to avoid overflow in */
-                    /* scomplex division */
-                    tjj = (d__1 = t[j1 + j1 * t_dim1], f2c_dabs(d__1)) + f2c_dabs(z__);
+                    /* complex division */
+                    tjj = (d__1 = t[j1 + j1 * t_dim1], f2c_abs(d__1)) + f2c_abs(z__);
                     tmp = t[j1 + j1 * t_dim1];
                     if(tjj < sminw)
                     {
@@ -804,8 +802,8 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                     x[j1] = sr;
                     x[j1 + *n] = si;
                     /* Computing MAX */
-                    d__3 = (d__1 = x[j1], f2c_dabs(d__1)) + (d__2 = x[j1 + *n], f2c_dabs(d__2));
-                    xmax = fla_max(d__3, xmax);
+                    d__3 = (d__1 = x[j1], f2c_abs(d__1)) + (d__2 = x[j1 + *n], f2c_abs(d__2));
+                    xmax = max(d__3,xmax);
                 }
                 else
                 {
@@ -813,11 +811,10 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                     /* Scale if necessary to avoid overflow in forming the */
                     /* right-hand side element by inner product. */
                     /* Computing MAX */
-                    d__5 = (d__1 = x[j1], f2c_dabs(d__1)) + (d__2 = x[*n + j1], f2c_dabs(d__2));
-                    d__6 = (d__3 = x[j2], f2c_dabs(d__3))
-                           + (d__4 = x[*n + j2], f2c_dabs(d__4)); // , expr subst
-                    xj = fla_max(d__5, d__6);
-                    if(xmax > 1.)
+                    d__5 = (d__1 = x[j1], f2c_abs(d__1)) + (d__2 = x[*n + j1], f2c_abs(d__2));
+                    d__6 = (d__3 = x[j2], f2c_abs(d__3)) + ( d__4 = x[*n + j2], f2c_abs(d__4)); // , expr subst
+                    xj = max(d__5,d__6);
+                    if (xmax > 1.)
                     {
                         rec = 1. / xmax;
                         /* Computing MAX */
@@ -863,10 +860,10 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
                     x[*n + j1] = v[2];
                     x[*n + j2] = v[3];
                     /* Computing MAX */
-                    d__5 = (d__1 = x[j1], f2c_dabs(d__1)) + (d__2 = x[*n + j1], f2c_dabs(d__2));
-                    d__6 = (d__3 = x[j2], f2c_dabs(d__3)) + (d__4 = x[*n + j2], f2c_dabs(d__4));
-                    d__5 = fla_max(d__5, d__6); // ; expr subst
-                    xmax = fla_max(d__5, xmax);
+                    d__5 = (d__1 = x[j1], f2c_abs(d__1)) + (d__2 = x[*n + j1], f2c_abs(d__2));
+                    d__6 = (d__3 = x[j2], f2c_abs(d__3)) + ( d__4 = x[*n + j2], f2c_abs(d__4));
+                    d__5 = max(d__5, d__6); // ; expr subst
+                    xmax = max(d__5,xmax);
                 }
             L80:;
             }

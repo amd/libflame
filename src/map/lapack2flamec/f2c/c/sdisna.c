@@ -48,7 +48,7 @@
 /* > */
 /* > SLAMCH( 'E' ) * ( ANORM / SEP( I ) ) */
 /* > */
-/* > where ANORM = 2-norm(A) = fla_max( f2c_abs( D(j) ) ). SEP(I) is not allowed */
+/* > where ANORM = 2-norm(A) = max( f2c_abs( D(j) ) ). SEP(I) is not allowed */
 /* > to be smaller than SLAMCH( 'E' )*ANORM in order to limit the size of */
 /* > the error bound. */
 /* > */
@@ -258,7 +258,7 @@ void aocl_lapack_sdisna(char *job, aocl_int64_t *m, aocl_int64_t *n, real *d__, 
         for(i__ = 2; i__ <= i__1; ++i__)
         {
             newgap = (r__1 = d__[i__ + 1] - d__[i__], f2c_abs(r__1));
-            sep[i__] = fla_min(oldgap, newgap);
+            sep[i__] = min(oldgap,newgap);
             oldgap = newgap;
             /* L20: */
         }
@@ -288,8 +288,8 @@ void aocl_lapack_sdisna(char *job, aocl_int64_t *m, aocl_int64_t *n, real *d__, 
     /* Computing MAX */
     r__2 = f2c_abs(d__[1]);
     r__3 = (r__1 = d__[k], f2c_abs(r__1)); // , expr subst
-    anorm = fla_max(r__2, r__3);
-    if(anorm == 0.f)
+    anorm = max(r__2,r__3);
+    if (anorm == 0.f)
     {
         thresh = eps;
     }

@@ -76,7 +76,7 @@ static dcomplex c_b6 = {1., 0.};
 /* > \param[in,out] X */
 /* > \verbatim */
 /* > X is COMPLEX*16 array, dimension */
-/* > (1+(N-2)*abs(INCX)) */
+/* > (1+(N-2)*f2c_abs(INCX)) */
 /* > On entry, the vector x. */
 /* > On exit, it is overwritten with the vector v. */
 /* > \endverbatim */
@@ -125,7 +125,7 @@ void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
     doublereal d__1, d__2;
     dcomplex z__1, z__2;
     /* Builtin functions */
-    double d_imag(dcomplex *), z_abs(dcomplex *), d_sign(doublereal *, doublereal *);
+    double d_imag(doublecomplex *), d_sign(doublereal *, doublereal *), z_f2c_abs( doublecomplex *);
     /* Local variables */
     aocl_int64_t j;
     dcomplex savealpha;
@@ -174,7 +174,7 @@ void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
     alphi = d_imag(alpha);
     if(xnorm <= eps * z_abs(alpha))
     {
-        /* H = [1-alpha/abs(alpha) 0;
+        /* H = [1-alpha/f2c_abs(alpha) 0;
         0 I], sign chosen so ALPHA >= 0. */
         if(alphi == 0.)
         {
@@ -229,7 +229,7 @@ void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
         smlnum = dlamch_("S") / dlamch_("E");
         bignum = 1. / smlnum;
         knt = 0;
-        if(f2c_abs(beta) < smlnum)
+        if (f2c_abs(beta) < smlnum)
         {
         /* XNORM, BETA may be inaccurate;
         scale X and recompute them */
@@ -240,7 +240,7 @@ void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
             beta *= bignum;
             alphi *= bignum;
             alphr *= bignum;
-            if(f2c_abs(beta) < smlnum && knt < 20)
+            if (f2c_abs(beta) < smlnum)
             {
                 goto L10;
             }
@@ -281,9 +281,9 @@ void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
             z__1.imag = alphi; // , expr subst
             alpha->real = z__1.real, alpha->imag = z__1.imag;
         }
-        zladiv_f2c_(&z__1, &c_b6, alpha);
-        alpha->real = z__1.real, alpha->imag = z__1.imag;
-        if(z_abs(tau) <= smlnum)
+        zladiv_(&z__1, &c_b5, alpha);
+        alpha->r = z__1.r, alpha->i = z__1.i;
+        if (z_f2c_abs(tau) <= smlnum)
         {
             /* In the case where the computed TAU ends up being a denormalized number, */
             /* it loses relative accuracy. This is a BIG problem. Solution: flush TAU */

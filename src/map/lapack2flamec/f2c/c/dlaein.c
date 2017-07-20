@@ -307,7 +307,7 @@ void aocl_lapack_dlaein(logical *rightv, logical *noinit, aocl_int64_t *n, doubl
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 ei = h__[i__ + 1 + i__ * h_dim1];
-                if((d__1 = b[i__ + i__ * b_dim1], f2c_dabs(d__1)) < f2c_dabs(ei))
+                if ((d__1 = b[i__ + i__ * b_dim1], f2c_abs(d__1)) < f2c_abs(ei))
                 {
                     /* Interchange rows and eliminate. */
                     x = b[i__ + i__ * b_dim1] / ei;
@@ -354,7 +354,7 @@ void aocl_lapack_dlaein(logical *rightv, logical *noinit, aocl_int64_t *n, doubl
             for(j = *n; j >= 2; --j)
             {
                 ej = h__[j + (j - 1) * h_dim1];
-                if((d__1 = b[j + j * b_dim1], f2c_dabs(d__1)) < f2c_dabs(ej))
+                if ((d__1 = b[j + j * b_dim1], f2c_abs(d__1)) < f2c_abs(ej))
                 {
                     /* Interchange columns and eliminate. */
                     x = b[j + j * b_dim1] / ej;
@@ -424,10 +424,10 @@ void aocl_lapack_dlaein(logical *rightv, logical *noinit, aocl_int64_t *n, doubl
         }
         /* Failure to find eigenvector in N iterations. */
         *info = 1;
-    L120: /* Normalize eigenvector. */
-        i__ = aocl_blas_idamax(n, &vr[1], &c__1);
-        d__2 = 1. / (d__1 = vr[i__], f2c_dabs(d__1));
-        aocl_blas_dscal(n, &d__2, &vr[1], &c__1);
+L120: /* Normalize eigenvector. */
+        i__ = idamax_(n, &vr[1], &c__1);
+        d__2 = 1. / (d__1 = vr[i__], f2c_abs(d__1));
+        dscal_(n, &d__2, &vr[1], &c__1);
     }
     else
     {
@@ -471,7 +471,7 @@ void aocl_lapack_dlaein(logical *rightv, logical *noinit, aocl_int64_t *n, doubl
             {
                 absbii = dlapy2_(&b[i__ + i__ * b_dim1], &b[i__ + 1 + i__ * b_dim1]);
                 ei = h__[i__ + 1 + i__ * h_dim1];
-                if(absbii < f2c_dabs(ei))
+                if (absbii < f2c_abs(ei))
                 {
                     /* Interchange rows and eliminate. */
                     xr = b[i__ + i__ * b_dim1] / ei;
@@ -548,7 +548,7 @@ void aocl_lapack_dlaein(logical *rightv, logical *noinit, aocl_int64_t *n, doubl
             {
                 ej = h__[j + (j - 1) * h_dim1];
                 absbjj = dlapy2_(&b[j + j * b_dim1], &b[j + 1 + j * b_dim1]);
-                if(absbjj < f2c_dabs(ej))
+                if (absbjj < f2c_abs(ej))
                 {
                     /* Interchange columns and eliminate */
                     xr = b[j + j * b_dim1] / ej;
@@ -653,14 +653,13 @@ void aocl_lapack_dlaein(logical *rightv, logical *noinit, aocl_int64_t *n, doubl
                         /* L230: */
                     }
                 }
-                w = (d__1 = b[i__ + i__ * b_dim1], f2c_dabs(d__1))
-                    + (d__2 = b[i__ + 1 + i__ * b_dim1], f2c_dabs(d__2));
-                if(w > *smlnum)
+                w = (d__1 = b[i__ + i__ * b_dim1], f2c_abs(d__1)) + (d__2 = b[i__ + 1 + i__ * b_dim1], f2c_abs(d__2));
+                if (w > *smlnum)
                 {
                     if(w < 1.)
                     {
-                        w1 = f2c_dabs(xr) + f2c_dabs(xi);
-                        if(w1 > w * *bignum)
+                        w1 = f2c_abs(xr) + f2c_abs(xi);
+                        if (w1 > w * *bignum)
                         {
                             rec = 1. / w1;
                             aocl_blas_dscal(n, &rec, &vr[1], &c__1);
@@ -675,8 +674,8 @@ void aocl_lapack_dlaein(logical *rightv, logical *noinit, aocl_int64_t *n, doubl
                     dladiv_(&xr, &xi, &b[i__ + i__ * b_dim1], &b[i__ + 1 + i__ * b_dim1], &vr[i__],
                             &vi[i__]);
                     /* Computing MAX */
-                    d__3 = (d__1 = vr[i__], f2c_dabs(d__1)) + (d__2 = vi[i__], f2c_dabs(d__2));
-                    vmax = fla_max(d__3, vmax);
+                    d__3 = (d__1 = vr[i__], f2c_abs(d__1)) + (d__2 = vi[i__], f2c_abs( d__2));
+                    vmax = max(d__3,vmax);
                     vcrit = *bignum / vmax;
                 }
                 else
@@ -725,9 +724,8 @@ void aocl_lapack_dlaein(logical *rightv, logical *noinit, aocl_int64_t *n, doubl
         {
             /* Computing MAX */
             d__3 = vnorm;
-            d__4 = (d__1 = vr[i__], f2c_dabs(d__1))
-                   + (d__2 = vi[i__], f2c_dabs(d__2)); // , expr subst
-            vnorm = fla_max(d__3, d__4);
+            d__4 = (d__1 = vr[i__], f2c_abs(d__1)) + (d__2 = vi[i__] , f2c_abs(d__2)); // , expr subst
+            vnorm = max(d__3,d__4);
             /* L290: */
         }
         d__1 = 1. / vnorm;

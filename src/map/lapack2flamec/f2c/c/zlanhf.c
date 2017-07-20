@@ -49,7 +49,7 @@ static aocl_int64_t c__1 = 1;
 /* > \return ZLANHF */
 /* > \verbatim */
 /* > */
-/* > ZLANHF = ( fla_max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
+/* > ZLANHF = ( max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
 /* > ( */
 /* > ( norm1(A), NORM = '1', 'O' or 'o' */
 /* > ( */
@@ -60,7 +60,7 @@ static aocl_int64_t c__1 = 1;
 /* > where norm1 denotes the one norm of a matrix (maximum column sum), */
 /* > normI denotes the infinity norm of a matrix (maximum row sum) and */
 /* > normF denotes the Frobenius norm of a matrix (square root of sum of */
-/* > squares). Note that fla_max(f2c_abs(A(i,j))) is not a matrix norm. */
+/* > squares). Note that max(f2c_abs(A(i,j))) is not a matrix norm. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -270,7 +270,7 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
     aocl_int64_t i__1, i__2;
     doublereal ret_val, d__1;
     /* Builtin functions */
-    double z_abs(dcomplex *), sqrt(doublereal);
+    double z_f2c_abs(doublecomplex *), sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__, j, k, l;
     doublereal s;
@@ -310,8 +310,7 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
     }
     else if(*n == 1)
     {
-        ret_val = (d__1 = a[0].real, f2c_abs(d__1));
-        AOCL_DTL_TRACE_LOG_EXIT
+        ret_val = z_f2c_abs(a);
         return ret_val;
     }
     /* set noe = 1 if n is odd. if n is even set noe=0 */
@@ -354,7 +353,7 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
     }
     if(lsame_(norm, "M", 1, 1))
     {
-        /* Find fla_max(f2c_abs(A(i,j))). */
+        /* Find max(f2c_abs(A(i,j))). */
         k = (*n + 1) / 2;
         value = 0.;
         if(noe == 1)
@@ -369,16 +368,16 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     j = 0;
                     /* -> L(0,0) */
                     i__1 = j + j * lda;
-                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
-                    if(value < temp || disnan_(&temp))
+                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    if (value < temp || disnan_(&temp))
                     {
                         value = temp;
                     }
                     i__1 = *n - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
                     {
-                        temp = z_abs(&a[i__ + j * lda]);
-                        if(value < temp || disnan_(&temp))
+                        temp = z_f2c_abs(&a[i__ + j * lda]);
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -389,8 +388,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = j - 2;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -398,24 +397,24 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__ = j - 1;
                         /* L(k+j,k+j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
                         i__ = j;
                         /* -> L(j,j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
                         i__2 = *n - 1;
                         for(i__ = j + 1; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -431,8 +430,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = k + j - 2;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -440,8 +439,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__ = k + j - 1;
                         /* -> U(i,i) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -449,16 +448,16 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         /* =k+j;
                         i -> U(j,j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
                         i__2 = *n - 1;
                         for(i__ = k + j + 1; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -467,8 +466,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     i__1 = *n - 2;
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
-                        temp = z_abs(&a[i__ + j * lda]);
-                        if(value < temp || disnan_(&temp))
+                        temp = z_f2c_abs(&a[i__ + j * lda]);
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -476,8 +475,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     }
                     /* i=n-1 -> U(n-1,n-1) */
                     i__1 = i__ + j * lda;
-                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
-                    if(value < temp || disnan_(&temp))
+                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    if (value < temp || disnan_(&temp))
                     {
                         value = temp;
                     }
@@ -496,8 +495,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = j - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -505,24 +504,24 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__ = j;
                         /* L(i,i) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
                         i__ = j + 1;
                         /* L(j+k,j+k) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
                         i__2 = k - 1;
                         for(i__ = j + 2; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -532,8 +531,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     i__1 = k - 2;
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
-                        temp = z_abs(&a[i__ + j * lda]);
-                        if(value < temp || disnan_(&temp))
+                        temp = z_f2c_abs(&a[i__ + j * lda]);
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -541,8 +540,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     i__ = k - 1;
                     /* -> L(i,i) is at A(i,j) */
                     i__1 = i__ + j * lda;
-                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
-                    if(value < temp || disnan_(&temp))
+                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    if (value < temp || disnan_(&temp))
                     {
                         value = temp;
                     }
@@ -552,8 +551,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -569,8 +568,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -579,16 +578,16 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     j = k - 1;
                     /* -> U(j,j) is at A(0,j) */
                     i__1 = j * lda;
-                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
-                    if(value < temp || disnan_(&temp))
+                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    if (value < temp || disnan_(&temp))
                     {
                         value = temp;
                     }
                     i__1 = k - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
                     {
-                        temp = z_abs(&a[i__ + j * lda]);
-                        if(value < temp || disnan_(&temp))
+                        temp = z_f2c_abs(&a[i__ + j * lda]);
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -599,8 +598,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = j - k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -608,24 +607,24 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__ = j - k;
                         /* -> U(i,i) at A(i,j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
                         i__ = j - k + 1;
                         /* U(j,j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
                         i__2 = k - 1;
                         for(i__ = j - k + 2; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -646,22 +645,22 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     j = 0;
                     /* -> L(k,k) & j=1 -> L(0,0) */
                     i__1 = j + j * lda;
-                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
-                    if(value < temp || disnan_(&temp))
+                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    if (value < temp || disnan_(&temp))
                     {
                         value = temp;
                     }
                     i__1 = j + 1 + j * lda;
-                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
-                    if(value < temp || disnan_(&temp))
+                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    if (value < temp || disnan_(&temp))
                     {
                         value = temp;
                     }
                     i__1 = *n;
                     for(i__ = 2; i__ <= i__1; ++i__)
                     {
-                        temp = z_abs(&a[i__ + j * lda]);
-                        if(value < temp || disnan_(&temp))
+                        temp = z_f2c_abs(&a[i__ + j * lda]);
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -672,8 +671,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = j - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -681,24 +680,24 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__ = j;
                         /* L(k+j,k+j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
                         i__ = j + 1;
                         /* -> L(j,j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
                         i__2 = *n;
                         for(i__ = j + 2; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -714,8 +713,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = k + j - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -723,8 +722,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__ = k + j;
                         /* -> U(i,i) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -732,16 +731,16 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         /* =k+j+1;
                         i -> U(j,j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
                         i__2 = *n;
                         for(i__ = k + j + 2; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -750,8 +749,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     i__1 = *n - 2;
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
-                        temp = z_abs(&a[i__ + j * lda]);
-                        if(value < temp || disnan_(&temp))
+                        temp = z_f2c_abs(&a[i__ + j * lda]);
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -759,16 +758,16 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     }
                     /* i=n-1 -> U(n-1,n-1) */
                     i__1 = i__ + j * lda;
-                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
-                    if(value < temp || disnan_(&temp))
+                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    if (value < temp || disnan_(&temp))
                     {
                         value = temp;
                     }
                     i__ = *n;
                     /* -> U(k-1,k-1) */
                     i__1 = i__ + j * lda;
-                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
-                    if(value < temp || disnan_(&temp))
+                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    if (value < temp || disnan_(&temp))
                     {
                         value = temp;
                     }
@@ -784,16 +783,16 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     j = 0;
                     /* -> L(k,k) at A(0,0) */
                     i__1 = j + j * lda;
-                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
-                    if(value < temp || disnan_(&temp))
+                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    if (value < temp || disnan_(&temp))
                     {
                         value = temp;
                     }
                     i__1 = k - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
                     {
-                        temp = z_abs(&a[i__ + j * lda]);
-                        if(value < temp || disnan_(&temp))
+                        temp = z_f2c_abs(&a[i__ + j * lda]);
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -804,8 +803,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = j - 2;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -813,24 +812,24 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__ = j - 1;
                         /* L(i,i) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
                         i__ = j;
                         /* L(j+k,j+k) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
                         i__2 = k - 1;
                         for(i__ = j + 1; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -840,8 +839,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     i__1 = k - 2;
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
-                        temp = z_abs(&a[i__ + j * lda]);
-                        if(value < temp || disnan_(&temp))
+                        temp = z_f2c_abs(&a[i__ + j * lda]);
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -849,8 +848,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     i__ = k - 1;
                     /* -> L(i,i) is at A(i,j) */
                     i__1 = i__ + j * lda;
-                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
-                    if(value < temp || disnan_(&temp))
+                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    if (value < temp || disnan_(&temp))
                     {
                         value = temp;
                     }
@@ -860,8 +859,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -877,8 +876,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -887,16 +886,16 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     j = k;
                     /* -> U(j,j) is at A(0,j) */
                     i__1 = j * lda;
-                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
-                    if(value < temp || disnan_(&temp))
+                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    if (value < temp || disnan_(&temp))
                     {
                         value = temp;
                     }
                     i__1 = k - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
                     {
-                        temp = z_abs(&a[i__ + j * lda]);
-                        if(value < temp || disnan_(&temp))
+                        temp = z_f2c_abs(&a[i__ + j * lda]);
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -907,8 +906,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = j - k - 2;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -916,24 +915,24 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__ = j - k - 1;
                         /* -> U(i,i) at A(i,j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
                         i__ = j - k;
                         /* U(j,j) */
                         i__2 = i__ + j * lda;
-                        temp = (d__1 = a[i__2].real, f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        temp = (d__1 = a[i__2].r, f2c_abs(d__1));
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
                         i__2 = k - 1;
                         for(i__ = j - k + 1; i__ <= i__2; ++i__)
                         {
-                            temp = z_abs(&a[i__ + j * lda]);
-                            if(value < temp || disnan_(&temp))
+                            temp = z_f2c_abs(&a[i__ + j * lda]);
+                            if (value < temp || disnan_(&temp))
                             {
                                 value = temp;
                             }
@@ -943,8 +942,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     i__1 = k - 2;
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
-                        temp = z_abs(&a[i__ + j * lda]);
-                        if(value < temp || disnan_(&temp))
+                        temp = z_f2c_abs(&a[i__ + j * lda]);
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -952,8 +951,8 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     i__ = k - 1;
                     /* U(k,k) at A(i,j) */
                     i__1 = i__ + j * lda;
-                    temp = (d__1 = a[i__1].real, f2c_abs(d__1));
-                    if(value < temp || disnan_(&temp))
+                    temp = (d__1 = a[i__1].r, f2c_abs(d__1));
+                    if (value < temp || disnan_(&temp))
                     {
                         value = temp;
                     }
@@ -986,13 +985,13 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = k + j - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* -> A(i,j+k) */
                             s += aa;
                             work[i__] += aa;
                         }
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
                         /* -> A(j+k,j+k) */
                         work[j + k] = s + aa;
                         if(i__ == k + k)
@@ -1001,7 +1000,7 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         }
                         ++i__;
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
                         /* -> A(j,j) */
                         work[j] += aa;
                         s = 0.;
@@ -1009,7 +1008,7 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         for(l = j + 1; l <= i__2; ++l)
                         {
                             ++i__;
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* -> A(l,j) */
                             s += aa;
                             work[l] += aa;
@@ -1044,7 +1043,7 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__1 = j - 2;
                         for(i__ = 0; i__ <= i__1; ++i__)
                         {
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* -> A(j+k,i+k) */
                             s += aa;
                             work[i__ + k] += aa;
@@ -1052,7 +1051,7 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         if(j > 0)
                         {
                             i__1 = i__ + j * lda;
-                            aa = (d__1 = a[i__1].real, f2c_abs(d__1));
+                            aa = (d__1 = a[i__1].r, f2c_abs(d__1));
                             /* -> A(j+k,j+k) */
                             s += aa;
                             work[i__ + k] += s;
@@ -1060,7 +1059,7 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                             ++i__;
                         }
                         i__1 = i__ + j * lda;
-                        aa = (d__1 = a[i__1].real, f2c_abs(d__1));
+                        aa = (d__1 = a[i__1].r, f2c_abs(d__1));
                         /* -> A(j,j) */
                         work[j] = aa;
                         s = 0.;
@@ -1068,7 +1067,7 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         for(l = j + 1; l <= i__1; ++l)
                         {
                             ++i__;
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* -> A(l,j) */
                             s += aa;
                             work[l] += aa;
@@ -1105,18 +1104,18 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = k + j - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* -> A(i,j+k) */
                             s += aa;
                             work[i__] += aa;
                         }
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
                         /* -> A(j+k,j+k) */
                         work[j + k] = s + aa;
                         ++i__;
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
                         /* -> A(j,j) */
                         work[j] += aa;
                         s = 0.;
@@ -1124,7 +1123,7 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         for(l = j + 1; l <= i__2; ++l)
                         {
                             ++i__;
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* -> A(l,j) */
                             s += aa;
                             work[l] += aa;
@@ -1156,20 +1155,20 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__1 = j - 1;
                         for(i__ = 0; i__ <= i__1; ++i__)
                         {
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* -> A(j+k,i+k) */
                             s += aa;
                             work[i__ + k] += aa;
                         }
                         i__1 = i__ + j * lda;
-                        aa = (d__1 = a[i__1].real, f2c_abs(d__1));
+                        aa = (d__1 = a[i__1].r, f2c_abs(d__1));
                         /* -> A(j+k,j+k) */
                         s += aa;
                         work[i__ + k] += s;
                         /* i=j */
                         ++i__;
                         i__1 = i__ + j * lda;
-                        aa = (d__1 = a[i__1].real, f2c_abs(d__1));
+                        aa = (d__1 = a[i__1].r, f2c_abs(d__1));
                         /* -> A(j,j) */
                         work[j] = aa;
                         s = 0.;
@@ -1177,7 +1176,7 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         for(l = j + 1; l <= i__1; ++l)
                         {
                             ++i__;
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* -> A(l,j) */
                             s += aa;
                             work[l] += aa;
@@ -1223,7 +1222,7 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* A(j,n1+i) */
                             work[i__ + n1] += aa;
                             s += aa;
@@ -1232,12 +1231,12 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     }
                     /* j=n1=k-1 is special */
                     i__1 = j * lda;
-                    s = (d__1 = a[i__1].real, f2c_abs(d__1));
+                    s = (d__1 = a[i__1].r, f2c_abs(d__1));
                     /* A(k-1,k-1) */
                     i__1 = k - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
                     {
-                        aa = z_abs(&a[i__ + j * lda]);
+                        aa = z_f2c_abs(&a[i__ + j * lda]);
                         /* A(k-1,i+n1) */
                         work[i__ + n1] += aa;
                         s += aa;
@@ -1250,26 +1249,26 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = j - k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* A(i,j-k) */
                             work[i__] += aa;
                             s += aa;
                         }
                         /* i=j-k */
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
                         /* A(j-k,j-k) */
                         s += aa;
                         work[j - k] += s;
                         ++i__;
                         i__2 = i__ + j * lda;
-                        s = (d__1 = a[i__2].real, f2c_abs(d__1));
+                        s = (d__1 = a[i__2].r, f2c_abs(d__1));
                         /* A(j,j) */
                         i__2 = *n - 1;
                         for(l = j + 1; l <= i__2; ++l)
                         {
                             ++i__;
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* A(j,l) */
                             work[l] += aa;
                             s += aa;
@@ -1305,13 +1304,13 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = j - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* A(j,i) */
                             work[i__] += aa;
                             s += aa;
                         }
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
                         /* i=j so process of A(j,j) */
                         s += aa;
                         work[j] = s;
@@ -1319,13 +1318,13 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         ++i__;
                         /* i=j process A(j+k,j+k) */
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
                         s = aa;
                         i__2 = *n - 1;
                         for(l = k + j + 1; l <= i__2; ++l)
                         {
                             ++i__;
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* A(l,k+j) */
                             s += aa;
                             work[l] += aa;
@@ -1337,14 +1336,14 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     i__1 = k - 2;
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
-                        aa = z_abs(&a[i__ + j * lda]);
+                        aa = z_f2c_abs(&a[i__ + j * lda]);
                         /* A(k,i) */
                         work[i__] += aa;
                         s += aa;
                     }
                     /* i=k-1 */
                     i__1 = i__ + j * lda;
-                    aa = (d__1 = a[i__1].real, f2c_abs(d__1));
+                    aa = (d__1 = a[i__1].r, f2c_abs(d__1));
                     /* A(k-1,k-1) */
                     s += aa;
                     work[i__] = s;
@@ -1357,7 +1356,7 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* A(j,i) */
                             work[i__] += aa;
                             s += aa;
@@ -1394,7 +1393,7 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* A(j,i+k) */
                             work[i__ + k] += aa;
                             s += aa;
@@ -1403,13 +1402,13 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     }
                     /* j=k */
                     i__1 = j * lda;
-                    aa = (d__1 = a[i__1].real, f2c_abs(d__1));
+                    aa = (d__1 = a[i__1].r, f2c_abs(d__1));
                     /* A(k,k) */
                     s = aa;
                     i__1 = k - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
                     {
-                        aa = z_abs(&a[i__ + j * lda]);
+                        aa = z_f2c_abs(&a[i__ + j * lda]);
                         /* A(k,k+i) */
                         work[i__ + k] += aa;
                         s += aa;
@@ -1422,27 +1421,27 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = j - 2 - k;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* A(i,j-k-1) */
                             work[i__] += aa;
                             s += aa;
                         }
                         /* i=j-1-k */
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
                         /* A(j-k-1,j-k-1) */
                         s += aa;
                         work[j - k - 1] += s;
                         ++i__;
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
                         /* A(j,j) */
                         s = aa;
                         i__2 = *n - 1;
                         for(l = j + 1; l <= i__2; ++l)
                         {
                             ++i__;
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* A(j,l) */
                             work[l] += aa;
                             s += aa;
@@ -1454,14 +1453,14 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     i__1 = k - 2;
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
-                        aa = z_abs(&a[i__ + j * lda]);
+                        aa = z_f2c_abs(&a[i__ + j * lda]);
                         /* A(i,k-1) */
                         work[i__] += aa;
                         s += aa;
                     }
                     /* i=k-1 */
                     i__1 = i__ + j * lda;
-                    aa = (d__1 = a[i__1].real, f2c_abs(d__1));
+                    aa = (d__1 = a[i__1].r, f2c_abs(d__1));
                     /* A(k-1,k-1) */
                     s += aa;
                     work[i__] += s;
@@ -1485,12 +1484,12 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         work[i__] = 0.;
                     }
                     /* j=0 is special :process col A(k:n-1,k) */
-                    s = (d__1 = a[0].real, f2c_abs(d__1));
+                    s = (d__1 = a[0].r, f2c_abs(d__1));
                     /* A(k,k) */
                     i__1 = k - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
                     {
-                        aa = z_abs(&a[i__]);
+                        aa = z_f2c_abs(&a[i__]);
                         /* A(k+i,k) */
                         work[i__ + k] += aa;
                         s += aa;
@@ -1504,13 +1503,13 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = j - 2;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* A(j-1,i) */
                             work[i__] += aa;
                             s += aa;
                         }
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
                         /* i=j-1 so process of A(j-1,j-1) */
                         s += aa;
                         work[j - 1] = s;
@@ -1518,13 +1517,13 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         ++i__;
                         /* i=j process A(j+k,j+k) */
                         i__2 = i__ + j * lda;
-                        aa = (d__1 = a[i__2].real, f2c_abs(d__1));
+                        aa = (d__1 = a[i__2].r, f2c_abs(d__1));
                         s = aa;
                         i__2 = *n - 1;
                         for(l = k + j + 1; l <= i__2; ++l)
                         {
                             ++i__;
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* A(l,k+j) */
                             s += aa;
                             work[l] += aa;
@@ -1536,14 +1535,14 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                     i__1 = k - 2;
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
-                        aa = z_abs(&a[i__ + j * lda]);
+                        aa = z_f2c_abs(&a[i__ + j * lda]);
                         /* A(k,i) */
                         work[i__] += aa;
                         s += aa;
                     }
                     /* i=k-1 */
                     i__1 = i__ + j * lda;
-                    aa = (d__1 = a[i__1].real, f2c_abs(d__1));
+                    aa = (d__1 = a[i__1].r, f2c_abs(d__1));
                     /* A(k-1,k-1) */
                     s += aa;
                     work[i__] = s;
@@ -1556,7 +1555,7 @@ doublereal aocl_lapack_zlanhf(char *norm, char *transr, char *uplo, aocl_int64_t
                         i__2 = k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = z_abs(&a[i__ + j * lda]);
+                            aa = z_f2c_abs(&a[i__ + j * lda]);
                             /* A(j-1,i) */
                             work[i__] += aa;
                             s += aa;

@@ -171,7 +171,7 @@ void aocl_lapack_slargv(aocl_int64_t *n, real *x, aocl_int64_t *incx, real *y, a
             y[iy] = 1.f;
             x[ix] = g;
         }
-        else if(f2c_abs(f) > f2c_abs(g))
+        else if (f2c_abs(f) > f2c_abs(g))
         {
             t = g / f;
             tt = sqrt(t * t + 1.f);

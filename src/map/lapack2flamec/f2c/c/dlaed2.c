@@ -369,12 +369,12 @@ void aocl_lapack_dlaed2(aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *n1, doub
     eps = dlamch_("Epsilon");
     /* Computing MAX */
     d__3 = (d__1 = d__[jmax], f2c_abs(d__1));
-    d__4 = (d__2 = z__[imax], f2c_abs(d__2)); // , expr subst
-    tol = eps * 8. * fla_max(d__3, d__4);
+    d__4 = (d__2 = z__[imax], f2c_abs(d__2)) ; // , expr subst
+    tol = eps * 8. * max(d__3,d__4);
     /* If the rank-1 modifier is small enough, no more needs to be done */
     /* except to reorganize Q so that its columns correspond with the */
     /* elements in D. */
-    if(*rho * (d__1 = z__[imax], f2c_abs(d__1)) <= tol)
+    if (*rho * (d__1 = z__[imax], f2c_abs(d__1)) <= tol)
     {
         *k = 0;
         iq2 = 1;
@@ -414,7 +414,7 @@ void aocl_lapack_dlaed2(aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *n1, doub
     for(j = 1; j <= i__1; ++j)
     {
         nj = indx[j];
-        if(*rho * (d__1 = z__[nj], f2c_abs(d__1)) <= tol)
+        if (*rho * (d__1 = z__[nj], f2c_abs(d__1)) <= tol)
         {
             /* Deflate due to small z component. */
             --k2;
@@ -439,7 +439,7 @@ L80:
     {
         goto L100;
     }
-    if(*rho * (d__1 = z__[nj], f2c_abs(d__1)) <= tol)
+    if (*rho * (d__1 = z__[nj], f2c_abs(d__1)) <= tol)
     {
         /* Deflate due to small z component. */
         --k2;
@@ -457,7 +457,7 @@ L80:
         t = d__[nj] - d__[pj];
         c__ /= tau;
         s = -s / tau;
-        if((d__1 = t * c__ * s, f2c_abs(d__1)) <= tol)
+        if ((d__1 = t * c__ * s, f2c_abs(d__1)) <= tol)
         {
             /* Deflation is possible. */
             z__[nj] = tau;

@@ -183,11 +183,11 @@ void aocl_lapack_slaic1(aocl_int64_t *job, aocl_int64_t *j, real *x, real *sest,
     --x;
     /* Function Body */
     eps = slamch_("Epsilon");
-    alpha = aocl_blas_sdot(j, &x[1], &c__1, &w[1], &c__1);
+    alpha = sdot_(j, &x[1], &c__1, &w[1], &c__1);
     absalp = f2c_abs(alpha);
     absgam = f2c_abs(*gamma);
     absest = f2c_abs(*sest);
-    if(*job == 1)
+    if (*job == 1)
     {
         /* Estimating largest singular value */
         /* special cases */
@@ -310,7 +310,7 @@ void aocl_lapack_slaic1(aocl_int64_t *job, aocl_int64_t *j, real *x, real *sest,
             /* Computing MAX */
             r__1 = f2c_abs(sine);
             r__2 = f2c_abs(cosine); // , expr subst
-            s1 = fla_max(r__1, r__2);
+            s1 = max(r__1,r__2);
             *s = sine / s1;
             *c__ = cosine / s1;
             tmp = sqrt(*s * *s + *c__ * *c__);
@@ -377,7 +377,7 @@ void aocl_lapack_slaic1(aocl_int64_t *job, aocl_int64_t *j, real *x, real *sest,
             /* Computing MAX */
             r__3 = zeta1 * zeta1 + 1.f + (r__1 = zeta1 * zeta2, f2c_abs(r__1));
             r__4 = (r__2 = zeta1 * zeta2, f2c_abs(r__2)) + zeta2 * zeta2; // , expr subst
-            norma = fla_max(r__3, r__4);
+            norma = max(r__3,r__4);
             /* See if root is closer to zero or to ONE */
             test = (zeta1 - zeta2) * 2.f * (zeta1 + zeta2) + 1.f;
             if(test >= 0.f)

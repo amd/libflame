@@ -143,23 +143,23 @@ void dlartgp_(doublereal *f, doublereal *g, doublereal *cs, doublereal *sn, doub
     {
         *cs = d_sign(&c_b6, f);
         *sn = 0.;
-        *r__ = f2c_dabs(*f);
+        *r__ = f2c_abs(*f);
     }
     else if(*f == 0.)
     {
         *cs = 0.;
         *sn = d_sign(&c_b6, g);
-        *r__ = f2c_dabs(*g);
+        *r__ = f2c_abs(*g);
     }
     else
     {
         f1 = *f;
         g1 = *g;
         /* Computing MAX */
-        d__1 = f2c_dabs(f1);
-        d__2 = f2c_dabs(g1); // , expr subst
-        scale = fla_max(d__1, d__2);
-        if(scale >= safmx2)
+        d__1 = f2c_abs(f1);
+        d__2 = f2c_abs(g1); // , expr subst
+        scale = max(d__1,d__2);
+        if (scale >= safmx2)
         {
             count = 0;
         L10:
@@ -167,10 +167,10 @@ void dlartgp_(doublereal *f, doublereal *g, doublereal *cs, doublereal *sn, doub
             f1 *= safmn2;
             g1 *= safmn2;
             /* Computing MAX */
-            d__1 = f2c_dabs(f1);
-            d__2 = f2c_dabs(g1); // , expr subst
-            scale = fla_max(d__1, d__2);
-            if(scale >= safmx2 && count < 20)
+            d__1 = f2c_abs(f1);
+            d__2 = f2c_abs(g1); // , expr subst
+            scale = max(d__1,d__2);
+            if (scale >= safmx2)
             {
                 goto L10;
             }
@@ -196,10 +196,10 @@ void dlartgp_(doublereal *f, doublereal *g, doublereal *cs, doublereal *sn, doub
             f1 *= safmx2;
             g1 *= safmx2;
             /* Computing MAX */
-            d__1 = f2c_dabs(f1);
-            d__2 = f2c_dabs(g1); // , expr subst
-            scale = fla_max(d__1, d__2);
-            if(scale <= safmn2)
+            d__1 = f2c_abs(f1);
+            d__2 = f2c_abs(g1); // , expr subst
+            scale = max(d__1,d__2);
+            if (scale <= safmn2)
             {
                 goto L30;
             }

@@ -370,11 +370,10 @@ void fla_zhgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64
     doublereal d__1, d__2, d__3, d__4, d__5, d__6, d__7, d__8;
     dcomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7;
     /* Builtin functions */
-    doublereal z_abs(dcomplex *);
-    doublereal d_imag(dcomplex *);
-    void z_div(dcomplex *, dcomplex *, dcomplex *),
-        z_sqrt(dcomplex *, dcomplex *),
-        pow_zi(dcomplex *, dcomplex *, aocl_int64_t *);
+    double z_f2c_abs(doublecomplex *);
+    void d_cnjg(doublecomplex *, doublecomplex *);
+    double d_imag(doublecomplex *);
+    void z_div(doublecomplex *, doublecomplex *, doublecomplex *), pow_zi( doublecomplex *, doublecomplex *, integer *), z_sqrt( doublecomplex *, doublecomplex *);
     /* Local variables */
 #ifdef FLA_OPENMP_MULTITHREADING
     extern /* Function */
@@ -663,8 +662,8 @@ void fla_zhgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64
     i__1 = *n;
     for(j = *ihi + 1; j <= i__1; ++j)
     {
-        absb = z_abs(&t[j + j * t_dim1]);
-        if(absb > safmin)
+        absb = z_f2c_abs(&t[j + j * t_dim1]);
+        if (absb > safmin)
         {
             i__2 = j + j * t_dim1;
             z__2.real = t[i__2].real / absb;
@@ -874,19 +873,7 @@ void fla_zhgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64
         else
         {
             i__2 = ilast + (ilast - 1) * h_dim1;
-            /* Computing MAX */
-            i__3 = ilast + ilast * h_dim1;
-            i__4 = ilast - 1 + (ilast - 1) * h_dim1;
-            d__7 = safmin;
-            d__8 = ulp
-                   * ((d__1 = h__[i__3].real, f2c_abs(d__1))
-                      + (d__2 = d_imag(&h__[ilast + ilast * h_dim1]), f2c_abs(d__2))
-                      + ((d__3 = h__[i__4].real, f2c_abs(d__3))
-                         + (d__4 = d_imag(&h__[ilast - 1 + (ilast - 1) * h_dim1]),
-                            f2c_abs(d__4)))); // , expr subst
-            if((d__5 = h__[i__2].real, f2c_abs(d__5))
-                   + (d__6 = d_imag(&h__[ilast + (ilast - 1) * h_dim1]), f2c_abs(d__6))
-               <= fla_max(d__7, d__8))
+            if ((d__1 = h__[i__2].r, f2c_abs(d__1)) + (d__2 = d_imag(&h__[ilast + (ilast - 1) * h_dim1]), f2c_abs(d__2)) <= atol)
             {
                 i__2 = ilast + (ilast - 1) * h_dim1;
                 h__[i__2].real = 0.;
@@ -894,12 +881,7 @@ void fla_zhgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64
                 goto L60;
             }
         }
-        /* Computing MAX */
-        d__1 = safmin;
-        d__2 = ulp
-               * (z_abs(&t[ilast - 1 + ilast * t_dim1])
-                  + z_abs(&t[ilast - 1 + (ilast - 1) * t_dim1])); // , expr subst
-        if(z_abs(&t[ilast + ilast * t_dim1]) <= fla_max(d__1, d__2))
+        if (z_f2c_abs(&t[ilast + ilast * t_dim1]) <= btol)
         {
 #ifdef FLA_ENABLE_AMD_OPT
             if(enable_opt)
@@ -937,19 +919,7 @@ void fla_zhgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64
             else
             {
                 i__3 = j + (j - 1) * h_dim1;
-                /* Computing MAX */
-                i__4 = j + j * h_dim1;
-                i__5 = j - 1 + (j - 1) * h_dim1;
-                d__7 = safmin;
-                d__8 = ulp
-                       * ((d__1 = h__[i__4].real, f2c_abs(d__1))
-                          + (d__2 = d_imag(&h__[j + j * h_dim1]), f2c_abs(d__2))
-                          + ((d__3 = h__[i__5].real, f2c_abs(d__3))
-                             + (d__4 = d_imag(&h__[j - 1 + (j - 1) * h_dim1]),
-                                f2c_abs(d__4)))); // , expr subst
-                if((d__5 = h__[i__3].real, f2c_abs(d__5))
-                       + (d__6 = d_imag(&h__[j + (j - 1) * h_dim1]), f2c_abs(d__6))
-                   <= fla_max(d__7, d__8))
+                if ((d__1 = h__[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&h__[j + (j - 1) * h_dim1]), f2c_abs(d__2)) <= atol)
                 {
                     i__3 = j + (j - 1) * h_dim1;
                     h__[i__3].real = 0.;
@@ -962,15 +932,7 @@ void fla_zhgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64
                 }
             }
             /* Test 2: for T(j,j)=0 */
-            temp = z_abs(&t[j + (j + 1) * t_dim1]);
-            if(j > *ilo)
-            {
-                temp += z_abs(&t[j - 1 + j * t_dim1]);
-            }
-            /* Computing MAX */
-            d__1 = safmin;
-            d__2 = ulp * temp; // , expr subst
-            if(z_abs(&t[j + j * t_dim1]) < fla_max(d__1, d__2))
+            if (z_f2c_abs(&t[j + j * t_dim1]) < btol)
             {
                 i__3 = j + j * t_dim1;
                 t[i__3].real = 0.;
@@ -982,14 +944,7 @@ void fla_zhgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64
                     i__3 = j + (j - 1) * h_dim1;
                     i__4 = j + 1 + j * h_dim1;
                     i__5 = j + j * h_dim1;
-                    if(((d__1 = h__[i__3].real, f2c_abs(d__1))
-                        + (d__2 = d_imag(&h__[j + (j - 1) * h_dim1]), f2c_abs(d__2)))
-                           * (ascale
-                              * ((d__3 = h__[i__4].real, f2c_abs(d__3))
-                                 + (d__4 = d_imag(&h__[j + 1 + j * h_dim1]), f2c_abs(d__4))))
-                       <= ((d__5 = h__[i__5].real, f2c_abs(d__5))
-                           + (d__6 = d_imag(&h__[j + j * h_dim1]), f2c_abs(d__6)))
-                              * (ascale * atol))
+                    if (((d__1 = h__[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(& h__[j + (j - 1) * h_dim1]), f2c_abs(d__2))) * (ascale * ((d__3 = h__[i__4].r, f2c_abs(d__3)) + (d__4 = d_imag(&h__[j + 1 + j * h_dim1]), f2c_abs(d__4)))) <= ((d__5 = h__[i__5].r, f2c_abs(d__5)) + (d__6 = d_imag( &h__[j + j * h_dim1]), f2c_abs(d__6))) * (ascale * atol))
                     {
                         ilazr2 = TRUE_;
                     }
@@ -1055,9 +1010,7 @@ void fla_zhgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64
                         }
                         ilazr2 = FALSE_;
                         i__4 = jch + 1 + (jch + 1) * t_dim1;
-                        if((d__1 = t[i__4].real, f2c_abs(d__1))
-                               + (d__2 = d_imag(&t[jch + 1 + (jch + 1) * t_dim1]), f2c_abs(d__2))
-                           >= btol)
+                        if ((d__1 = t[i__4].r, f2c_abs(d__1)) + (d__2 = d_imag(&t[ jch + 1 + (jch + 1) * t_dim1]), f2c_abs(d__2)) >= btol)
                         {
                             if(jch + 1 >= ilast)
                             {
@@ -1165,9 +1118,9 @@ void fla_zhgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64
                              &c__1, &c__, &s);
         }
         /* H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHA and BETA */
-    L60:
-        absb = z_abs(&t[ilast + ilast * t_dim1]);
-        if(absb > safmin)
+L60:
+        absb = z_f2c_abs(&t[ilast + ilast * t_dim1]);
+        if (absb > safmin)
         {
             i__2 = ilast + ilast * t_dim1;
             z__2.real = t[i__2].real / absb;
@@ -1426,30 +1379,25 @@ void fla_zhgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64
             z__2.real = ascale * h__[i__3].real;
             z__2.imag = ascale * h__[i__3].imag; // , expr subst
             i__4 = j + j * t_dim1;
-            z__4.real = bscale * t[i__4].real;
-            z__4.imag = bscale * t[i__4].imag; // , expr subst
-            z__3.real = shift.real * z__4.real - shift.imag * z__4.imag;
-            z__3.imag = shift.real * z__4.imag + shift.imag * z__4.real; // , expr subst
-            z__1.real = z__2.real - z__3.real;
-            z__1.imag = z__2.imag - z__3.imag; // , expr subst
-            ctemp.real = z__1.real;
-            ctemp.imag = z__1.imag; // , expr subst
-            temp = (d__1 = ctemp.real, f2c_abs(d__1)) + (d__2 = d_imag(&ctemp), f2c_abs(d__2));
+            z__4.r = bscale * t[i__4].r;
+            z__4.i = bscale * t[i__4].i; // , expr subst
+            z__3.r = shift.r * z__4.r - shift.i * z__4.i;
+            z__3.i = shift.r * z__4.i + shift.i * z__4.r; // , expr subst
+            z__1.r = z__2.r - z__3.r;
+            z__1.i = z__2.i - z__3.i; // , expr subst
+            ctemp.r = z__1.r;
+            ctemp.i = z__1.i; // , expr subst
+            temp = (d__1 = ctemp.r, f2c_abs(d__1)) + (d__2 = d_imag(&ctemp), f2c_abs( d__2));
             i__3 = j + 1 + j * h_dim1;
-            temp2 = ascale
-                    * ((d__1 = h__[i__3].real, f2c_abs(d__1))
-                       + (d__2 = d_imag(&h__[j + 1 + j * h_dim1]), f2c_abs(d__2)));
-            tempr = fla_max(temp, temp2);
-            if(tempr < 1. && tempr != 0.)
+            temp2 = ascale * ((d__1 = h__[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&h__[j + 1 + j * h_dim1]), f2c_abs(d__2)));
+            tempr = max(temp,temp2);
+            if (tempr < 1. && tempr != 0.)
             {
                 temp /= tempr;
                 temp2 /= tempr;
             }
             i__3 = j + (j - 1) * h_dim1;
-            if(((d__1 = h__[i__3].real, f2c_abs(d__1))
-                + (d__2 = d_imag(&h__[j + (j - 1) * h_dim1]), f2c_abs(d__2)))
-                   * temp2
-               <= temp * atol)
+            if (((d__1 = h__[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&h__[j + (j - 1) * h_dim1]), f2c_abs(d__2))) * temp2 <= temp * atol)
             {
                 goto L90;
             }
@@ -1898,8 +1846,8 @@ L190: /* Set Eigenvalues 1:ILO-1 */
     i__1 = *ilo - 1;
     for(j = 1; j <= i__1; ++j)
     {
-        absb = z_abs(&t[j + j * t_dim1]);
-        if(absb > safmin)
+        absb = z_f2c_abs(&t[j + j * t_dim1]);
+        if (absb > safmin)
         {
             i__2 = j + j * t_dim1;
             z__2.real = t[i__2].real / absb;

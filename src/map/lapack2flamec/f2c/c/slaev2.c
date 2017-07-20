@@ -146,7 +146,7 @@ void slaev2_(real *a, real *b, real *c__, real *rt1, real *rt2, real *cs1, real 
     adf = f2c_abs(df);
     tb = *b + *b;
     ab = f2c_abs(tb);
-    if(f2c_abs(*a) > f2c_abs(*c__))
+    if (f2c_abs(*a) > f2c_abs(*c__))
     {
         acmx = *a;
         acmn = *c__;
@@ -210,7 +210,7 @@ void slaev2_(real *a, real *b, real *c__, real *rt1, real *rt2, real *cs1, real 
         sgn2 = -1;
     }
     acs = f2c_abs(cs);
-    if(acs > ab)
+    if (acs > ab)
     {
         ct = -tb / cs;
         *sn1 = 1.f / sqrt(ct * ct + 1.f);

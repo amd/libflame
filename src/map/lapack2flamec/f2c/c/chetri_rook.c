@@ -164,8 +164,8 @@ void aocl_lapack_chetri_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
     real r__1;
     scomplex q__1, q__2;
     /* Builtin functions */
-    double c_abs(scomplex *);
-    void r_cnjg(scomplex *, scomplex *);
+    double c_f2c_abs(complex *);
+    void r_cnjg(complex *, complex *);
     /* Local variables */
     real d__;
     aocl_int64_t j, k;
@@ -308,7 +308,7 @@ void aocl_lapack_chetri_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
         {
             /* 2 x 2 diagonal block */
             /* Invert the diagonal block. */
-            t = c_abs(&a[k + (k + 1) * a_dim1]);
+            t = c_f2c_abs(&a[k + (k + 1) * a_dim1]);
             i__1 = k + k * a_dim1;
             ak = a[i__1].real / t;
             i__1 = k + 1 + (k + 1) * a_dim1;
@@ -568,7 +568,7 @@ void aocl_lapack_chetri_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
         {
             /* 2 x 2 diagonal block */
             /* Invert the diagonal block. */
-            t = c_abs(&a[k + (k - 1) * a_dim1]);
+            t = c_f2c_abs(&a[k + (k - 1) * a_dim1]);
             i__1 = k - 1 + (k - 1) * a_dim1;
             ak = a[i__1].real / t;
             i__1 = k + k * a_dim1;

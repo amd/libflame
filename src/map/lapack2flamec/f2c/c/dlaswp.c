@@ -81,7 +81,7 @@
 /* > */
 /* > \param[in] IPIV */
 /* > \verbatim */
-/* > IPIV is INTEGER array, dimension (K1+(K2-K1)*f2c_abs(INCX)) */
+/* > IPIV is INTEGER array, dimension (K2*f2c_abs(INCX)) */
 /* > The vector of pivot indices. Only the elements in positions */
 /* > K1 through K1+(K2-K1)*f2c_abs(INCX) of IPIV are accessed. */
 /* > IPIV(K1+(K-K1)*f2c_abs(INCX)) = L implies rows K and L are to be */

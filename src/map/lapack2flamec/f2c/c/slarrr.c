@@ -171,7 +171,7 @@ void aocl_lapack_slarrr(aocl_int64_t *n, real *d__, real *e, aocl_int64_t *info)
     yesrel = TRUE_;
     offdig = 0.f;
     tmp = sqrt((f2c_abs(d__[1])));
-    if(tmp < rmin)
+    if (tmp < rmin)
     {
         yesrel = FALSE_;
     }
@@ -183,7 +183,7 @@ void aocl_lapack_slarrr(aocl_int64_t *n, real *d__, real *e, aocl_int64_t *info)
     for(i__ = 2; i__ <= i__1; ++i__)
     {
         tmp2 = sqrt((r__1 = d__[i__], f2c_abs(r__1)));
-        if(tmp2 < rmin)
+        if (tmp2 < rmin)
         {
             yesrel = FALSE_;
         }
@@ -192,7 +192,7 @@ void aocl_lapack_slarrr(aocl_int64_t *n, real *d__, real *e, aocl_int64_t *info)
             goto L11;
         }
         offdig2 = (r__1 = e[i__ - 1], f2c_abs(r__1)) / (tmp * tmp2);
-        if(offdig + offdig2 >= .999f)
+        if (offdig + offdig2 >= .999f)
         {
             yesrel = FALSE_;
         }

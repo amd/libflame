@@ -411,8 +411,8 @@ void aocl_lapack_dtgex2(logical *wantq, logical *wantz, aocl_int64_t *n, doubler
         /* using Givens rotations and perform the swap tentatively. */
         f = s[5] * t[0] - t[5] * s[0];
         g = s[5] * t[4] - t[5] * s[4];
-        sa = f2c_dabs(s[5]) * f2c_dabs(t[0]);
-        sb = f2c_dabs(s[0]) * f2c_dabs(t[5]);
+        sb = f2c_abs(t[5]);
+        sa = f2c_abs(s[5]);
         dlartg_(&f, &g, &ir[4], ir, &ddum);
         ir[1] = -ir[4];
         ir[5] = ir[0];
@@ -430,10 +430,11 @@ void aocl_lapack_dtgex2(logical *wantq, logical *wantz, aocl_int64_t *n, doubler
         aocl_blas_drot(&c__2, t, &c__4, &t[1], &c__4, li, &li[1]);
         li[5] = li[0];
         li[4] = -li[1];
-        /* Weak stability test: |S21| <= O(EPS F-norm((A))) */
-        /* and |T21| <= O(EPS F-norm((B))) */
-        weak = f2c_dabs(s[1]) <= thresha && f2c_dabs(t[1]) <= threshb;
-        if(!weak)
+        /* Weak stability test: */
+        /* |S21| + |T21| <= O(EPS * F-norm((S, T))) */
+        ws = f2c_abs(s[1]) + f2c_abs(t[1]);
+        weak = ws <= thresh;
+        if (! weak)
         {
             goto L70;
         }

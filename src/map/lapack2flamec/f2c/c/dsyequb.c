@@ -244,24 +244,24 @@ void aocl_lapack_dsyequb(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_
                 /* Computing MAX */
                 d__2 = s[i__];
                 d__3 = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1)); // , expr subst
-                s[i__] = fla_max(d__2, d__3);
+                s[i__] = max(d__2,d__3);
                 /* Computing MAX */
                 d__2 = s[j];
                 d__3 = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1)); // , expr subst
-                s[j] = fla_max(d__2, d__3);
+                s[j] = max(d__2,d__3);
                 /* Computing MAX */
                 d__2 = *amax;
                 d__3 = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1)); // , expr subst
-                *amax = fla_max(d__2, d__3);
+                *amax = max(d__2,d__3);
             }
             /* Computing MAX */
             d__2 = s[j];
             d__3 = (d__1 = a[j + j * a_dim1], f2c_abs(d__1)); // , expr subst
-            s[j] = fla_max(d__2, d__3);
+            s[j] = max(d__2,d__3);
             /* Computing MAX */
             d__2 = *amax;
             d__3 = (d__1 = a[j + j * a_dim1], f2c_abs(d__1)); // , expr subst
-            *amax = fla_max(d__2, d__3);
+            *amax = max(d__2,d__3);
         }
     }
     else
@@ -272,26 +272,26 @@ void aocl_lapack_dsyequb(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_
             /* Computing MAX */
             d__2 = s[j];
             d__3 = (d__1 = a[j + j * a_dim1], f2c_abs(d__1)); // , expr subst
-            s[j] = fla_max(d__2, d__3);
+            s[j] = max(d__2,d__3);
             /* Computing MAX */
             d__2 = *amax;
             d__3 = (d__1 = a[j + j * a_dim1], f2c_abs(d__1)); // , expr subst
-            *amax = fla_max(d__2, d__3);
+            *amax = max(d__2,d__3);
             i__2 = *n;
             for(i__ = j + 1; i__ <= i__2; ++i__)
             {
                 /* Computing MAX */
                 d__2 = s[i__];
                 d__3 = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1)); // , expr subst
-                s[i__] = fla_max(d__2, d__3);
+                s[i__] = max(d__2,d__3);
                 /* Computing MAX */
                 d__2 = s[j];
                 d__3 = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1)); // , expr subst
-                s[j] = fla_max(d__2, d__3);
+                s[j] = max(d__2,d__3);
                 /* Computing MAX */
                 d__2 = *amax;
                 d__3 = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1)); // , expr subst
-                *amax = fla_max(d__2, d__3);
+                *amax = max(d__2,d__3);
             }
         }
     }
@@ -319,8 +319,9 @@ void aocl_lapack_dsyequb(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_
                 i__2 = j - 1;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
-                    work[i__] += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1)) * s[j];
-                    work[j] += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1)) * s[i__];
+                    t = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
+                    work[i__] += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1)) * s[ j];
+                    work[j] += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1)) * s[ i__];
                 }
                 work[j] += (d__1 = a[j + j * a_dim1], f2c_abs(d__1)) * s[j];
             }
@@ -334,8 +335,9 @@ void aocl_lapack_dsyequb(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_
                 i__2 = *n;
                 for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
-                    work[i__] += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1)) * s[j];
-                    work[j] += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1)) * s[i__];
+                    t = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
+                    work[i__] += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1)) * s[ j];
+                    work[j] += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1)) * s[ i__];
                 }
             }
         }

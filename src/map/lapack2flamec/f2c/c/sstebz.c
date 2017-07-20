@@ -488,7 +488,7 @@ void aocl_lapack_sstebz(char *range, char *order, aocl_int64_t *n, real *vl, rea
         tmp1 = r__1 * r__1;
         /* Computing 2nd power */
         r__2 = ulp;
-        if((r__1 = d__[j] * d__[j - 1], f2c_abs(r__1)) * (r__2 * r__2) + safemn > tmp1)
+        if ((r__1 = d__[j] * d__[j - 1], f2c_abs(r__1)) * (r__2 * r__2) + safemn > tmp1)
         {
             isplit[*nsplit] = (aocl_int_t)(j - 1);
             ++(*nsplit);
@@ -539,7 +539,7 @@ void aocl_lapack_sstebz(char *range, char *order, aocl_int64_t *n, real *vl, rea
         /* Computing MAX */
         r__1 = f2c_abs(gl);
         r__2 = f2c_abs(gu); // , expr subst
-        tnorm = fla_max(r__1, r__2);
+        tnorm = max(r__1,r__2);
         gl = gl - tnorm * 2.1f * ulp * *n - pivmin * 4.2000000000000002f;
         gu = gu + tnorm * 2.1f * ulp * *n + pivmin * 2.1f;
         /* Compute Iteration parameters */
@@ -597,16 +597,15 @@ void aocl_lapack_sstebz(char *range, char *order, aocl_int64_t *n, real *vl, rea
         /* RANGE='A' or 'V' -- Set ATOLI */
         /* Computing MAX */
         r__3 = f2c_abs(d__[1]) + f2c_abs(e[1]);
-        r__4 = (r__1 = d__[*n], f2c_abs(r__1)) + (r__2 = e[*n - 1], f2c_abs(r__2)); // , expr subst
-        tnorm = fla_max(r__3, r__4);
+        r__4 = (r__1 = d__[*n], f2c_abs(r__1)) + ( r__2 = e[*n - 1], f2c_abs(r__2)); // , expr subst
+        tnorm = max(r__3,r__4);
         i__1 = *n - 1;
         for(j = 2; j <= i__1; ++j)
         {
             /* Computing MAX */
             r__4 = tnorm;
-            r__5 = (r__1 = d__[j], f2c_abs(r__1)) + (r__2 = e[j - 1], f2c_abs(r__2))
-                   + (r__3 = e[j], f2c_abs(r__3)); // , expr subst
-            tnorm = fla_max(r__4, r__5);
+            r__5 = (r__1 = d__[j], f2c_abs(r__1)) + (r__2 = e[j - 1] , f2c_abs(r__2)) + (r__3 = e[j], f2c_abs(r__3)); // , expr subst
+            tnorm = max(r__4,r__5);
             /* L30: */
         }
         if(*abstol <= 0.f)
@@ -695,7 +694,7 @@ void aocl_lapack_sstebz(char *range, char *order, aocl_int64_t *n, real *vl, rea
             /* Computing MAX */
             r__1 = f2c_abs(gl);
             r__2 = f2c_abs(gu); // , expr subst
-            bnorm = fla_max(r__1, r__2);
+            bnorm = max(r__1,r__2);
             gl = gl - bnorm * 2.1f * ulp * in - pivmin * 2.1f;
             gu = gu + bnorm * 2.1f * ulp * in + pivmin * 2.1f;
             /* Compute ATOLI for the current submatrix */
@@ -704,7 +703,7 @@ void aocl_lapack_sstebz(char *range, char *order, aocl_int64_t *n, real *vl, rea
                 /* Computing MAX */
                 r__1 = f2c_abs(gl);
                 r__2 = f2c_abs(gu); // , expr subst
-                atoli = ulp * fla_max(r__1, r__2);
+                atoli = ulp * max(r__1,r__2);
             }
             else
             {

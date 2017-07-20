@@ -438,9 +438,8 @@ void aocl_lapack_dstedc(char *compz, aocl_int64_t *n, doublereal *d__, doublerea
         L20:
             if(finish < *n)
             {
-                tiny = eps * sqrt((d__1 = d__[finish], f2c_abs(d__1)))
-                       * sqrt((d__2 = d__[finish + 1], f2c_abs(d__2)));
-                if((d__1 = e[finish], f2c_abs(d__1)) > tiny)
+                tiny = eps * sqrt((d__1 = d__[finish], f2c_abs(d__1))) * sqrt(( d__2 = d__[finish + 1], f2c_abs(d__2)));
+                if ((d__1 = e[finish], f2c_abs(d__1)) > tiny)
                 {
                     ++finish;
                     goto L20;

@@ -433,12 +433,10 @@ void aocl_lapack_ctrevc(char *side, char *howmny, logical *select, aocl_int64_t 
             }
             /* Computing MAX */
             i__1 = ki + ki * t_dim1;
-            r__3 = ulp
-                   * ((r__1 = t[i__1].real, f2c_abs(r__1))
-                      + (r__2 = r_imag(&t[ki + ki * t_dim1]), f2c_abs(r__2)));
-            smin = fla_max(r__3, smlnum);
-            work[1].real = 1.f;
-            work[1].imag = 0.f; // , expr subst
+            r__3 = ulp * ((r__1 = t[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&t[ ki + ki * t_dim1]), f2c_abs(r__2)));
+            smin = max(r__3,smlnum);
+            work[1].r = 1.f;
+            work[1].i = 0.f; // , expr subst
             /* Form right-hand side. */
             i__1 = ki - 1;
             for(k = 1; k <= i__1; ++k)
@@ -464,9 +462,7 @@ void aocl_lapack_ctrevc(char *side, char *howmny, logical *select, aocl_int64_t 
                 t[i__2].real = q__1.real;
                 t[i__2].imag = q__1.imag; // , expr subst
                 i__2 = k + k * t_dim1;
-                if((r__1 = t[i__2].real, f2c_abs(r__1))
-                       + (r__2 = r_imag(&t[k + k * t_dim1]), f2c_abs(r__2))
-                   < smin)
+                if ((r__1 = t[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&t[k + k * t_dim1]), f2c_abs(r__2)) < smin)
                 {
                     i__3 = k + k * t_dim1;
                     t[i__3].real = smin;
@@ -489,10 +485,8 @@ void aocl_lapack_ctrevc(char *side, char *howmny, logical *select, aocl_int64_t 
                 aocl_blas_ccopy(&ki, &work[1], &c__1, &vr[is * vr_dim1 + 1], &c__1);
                 ii = aocl_blas_icamax(&ki, &vr[is * vr_dim1 + 1], &c__1);
                 i__1 = ii + is * vr_dim1;
-                remax = 1.f
-                        / ((r__1 = vr[i__1].real, f2c_abs(r__1))
-                           + (r__2 = r_imag(&vr[ii + is * vr_dim1]), f2c_abs(r__2)));
-                aocl_blas_csscal(&ki, &remax, &vr[is * vr_dim1 + 1], &c__1);
+                remax = 1.f / ((r__1 = vr[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&vr[ii + is * vr_dim1]), f2c_abs(r__2)));
+                csscal_(&ki, &remax, &vr[is * vr_dim1 + 1], &c__1);
                 i__1 = *n;
                 for(k = ki + 1; k <= i__1; ++k)
                 {
@@ -514,10 +508,8 @@ void aocl_lapack_ctrevc(char *side, char *howmny, logical *select, aocl_int64_t 
                 }
                 ii = aocl_blas_icamax(n, &vr[ki * vr_dim1 + 1], &c__1);
                 i__1 = ii + ki * vr_dim1;
-                remax = 1.f
-                        / ((r__1 = vr[i__1].real, f2c_abs(r__1))
-                           + (r__2 = r_imag(&vr[ii + ki * vr_dim1]), f2c_abs(r__2)));
-                aocl_blas_csscal(n, &remax, &vr[ki * vr_dim1 + 1], &c__1);
+                remax = 1.f / ((r__1 = vr[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&vr[ii + ki * vr_dim1]), f2c_abs(r__2)));
+                csscal_(n, &remax, &vr[ki * vr_dim1 + 1], &c__1);
             }
             /* Set back the original diagonal elements of T. */
             i__1 = ki - 1;
@@ -549,10 +541,8 @@ void aocl_lapack_ctrevc(char *side, char *howmny, logical *select, aocl_int64_t 
             }
             /* Computing MAX */
             i__2 = ki + ki * t_dim1;
-            r__3 = ulp
-                   * ((r__1 = t[i__2].real, f2c_abs(r__1))
-                      + (r__2 = r_imag(&t[ki + ki * t_dim1]), f2c_abs(r__2)));
-            smin = fla_max(r__3, smlnum);
+            r__3 = ulp * ((r__1 = t[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&t[ ki + ki * t_dim1]), f2c_abs(r__2)));
+            smin = max(r__3,smlnum);
             i__2 = *n;
             work[i__2].real = 1.f;
             work[i__2].imag = 0.f; // , expr subst
@@ -581,9 +571,7 @@ void aocl_lapack_ctrevc(char *side, char *howmny, logical *select, aocl_int64_t 
                 t[i__3].real = q__1.real;
                 t[i__3].imag = q__1.imag; // , expr subst
                 i__3 = k + k * t_dim1;
-                if((r__1 = t[i__3].real, f2c_abs(r__1))
-                       + (r__2 = r_imag(&t[k + k * t_dim1]), f2c_abs(r__2))
-                   < smin)
+                if ((r__1 = t[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&t[k + k * t_dim1]), f2c_abs(r__2)) < smin)
                 {
                     i__4 = k + k * t_dim1;
                     t[i__4].real = smin;
@@ -609,9 +597,7 @@ void aocl_lapack_ctrevc(char *side, char *howmny, logical *select, aocl_int64_t 
                 i__2 = *n - ki + 1;
                 ii = aocl_blas_icamax(&i__2, &vl[ki + is * vl_dim1], &c__1) + ki - 1;
                 i__2 = ii + is * vl_dim1;
-                remax = 1.f
-                        / ((r__1 = vl[i__2].real, f2c_abs(r__1))
-                           + (r__2 = r_imag(&vl[ii + is * vl_dim1]), f2c_abs(r__2)));
+                remax = 1.f / ((r__1 = vl[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&vl[ii + is * vl_dim1]), f2c_abs(r__2)));
                 i__2 = *n - ki + 1;
                 aocl_blas_csscal(&i__2, &remax, &vl[ki + is * vl_dim1], &c__1);
                 i__2 = ki - 1;
@@ -635,10 +621,8 @@ void aocl_lapack_ctrevc(char *side, char *howmny, logical *select, aocl_int64_t 
                 }
                 ii = aocl_blas_icamax(n, &vl[ki * vl_dim1 + 1], &c__1);
                 i__2 = ii + ki * vl_dim1;
-                remax = 1.f
-                        / ((r__1 = vl[i__2].real, f2c_abs(r__1))
-                           + (r__2 = r_imag(&vl[ii + ki * vl_dim1]), f2c_abs(r__2)));
-                aocl_blas_csscal(n, &remax, &vl[ki * vl_dim1 + 1], &c__1);
+                remax = 1.f / ((r__1 = vl[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&vl[ii + ki * vl_dim1]), f2c_abs(r__2)));
+                csscal_(n, &remax, &vl[ki * vl_dim1 + 1], &c__1);
             }
             /* Set back the original diagonal elements of T. */
             i__2 = *n;

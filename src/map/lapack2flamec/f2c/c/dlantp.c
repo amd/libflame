@@ -48,7 +48,7 @@ static aocl_int64_t c__1 = 1;
 /* > \return DLANTP */
 /* > \verbatim */
 /* > */
-/* > DLANTP = ( fla_max(abs(A(i,j))), NORM = 'M' or 'm' */
+/* > DLANTP = ( max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
 /* > ( */
 /* > ( norm1(A), NORM = '1', 'O' or 'o' */
 /* > ( */
@@ -59,7 +59,7 @@ static aocl_int64_t c__1 = 1;
 /* > where norm1 denotes the one norm of a matrix (maximum column sum), */
 /* > normI denotes the infinity norm of a matrix (maximum row sum) and */
 /* > normF denotes the Frobenius norm of a matrix (square root of sum of */
-/* > squares). Note that fla_max(abs(A(i,j))) is not a consistent matrix norm. */
+/* > squares). Note that max(f2c_abs(A(i,j))) is not a consistent matrix norm. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -182,7 +182,7 @@ doublereal aocl_lapack_dlantp(char *norm, char *uplo, char *diag, aocl_int64_t *
     }
     else if(lsame_(norm, "M", 1, 1))
     {
-        /* Find fla_max(abs(A(i,j))). */
+        /* Find max(f2c_abs(A(i,j))). */
         k = 1;
         if(lsame_(diag, "U", 1, 1))
         {
@@ -196,7 +196,7 @@ doublereal aocl_lapack_dlantp(char *norm, char *uplo, char *diag, aocl_int64_t *
                     for(i__ = k; i__ <= i__2; ++i__)
                     {
                         sum = (d__1 = ap[i__], f2c_abs(d__1));
-                        if(value < sum || sum != sum)
+                        if (value < sum || disnan_(&sum))
                         {
                             value = sum;
                         }
@@ -215,7 +215,7 @@ doublereal aocl_lapack_dlantp(char *norm, char *uplo, char *diag, aocl_int64_t *
                     for(i__ = k + 1; i__ <= i__2; ++i__)
                     {
                         sum = (d__1 = ap[i__], f2c_abs(d__1));
-                        if(value < sum || sum != sum)
+                        if (value < sum || disnan_(&sum))
                         {
                             value = sum;
                         }
@@ -238,7 +238,7 @@ doublereal aocl_lapack_dlantp(char *norm, char *uplo, char *diag, aocl_int64_t *
                     for(i__ = k; i__ <= i__2; ++i__)
                     {
                         sum = (d__1 = ap[i__], f2c_abs(d__1));
-                        if(value < sum || sum != sum)
+                        if (value < sum || disnan_(&sum))
                         {
                             value = sum;
                         }
@@ -257,7 +257,7 @@ doublereal aocl_lapack_dlantp(char *norm, char *uplo, char *diag, aocl_int64_t *
                     for(i__ = k; i__ <= i__2; ++i__)
                     {
                         sum = (d__1 = ap[i__], f2c_abs(d__1));
-                        if(value < sum || sum != sum)
+                        if (value < sum || disnan_(&sum))
                         {
                             value = sum;
                         }

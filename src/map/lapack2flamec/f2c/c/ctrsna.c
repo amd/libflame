@@ -303,7 +303,7 @@ void aocl_lapack_ctrsna(char *job, char *howmny, logical *select, aocl_int64_t *
     real r__1, r__2;
     scomplex q__1;
     /* Builtin functions */
-    double c_abs(scomplex *), r_imag(scomplex *);
+    double c_f2c_abs(complex *), r_imag(complex *);
     /* Local variables */
     aocl_int64_t i__, j, k, ks, ix;
     real eps, est;
@@ -450,7 +450,7 @@ void aocl_lapack_ctrsna(char *job, char *howmny, logical *select, aocl_int64_t *
         }
         if(wantsp)
         {
-            sep[1] = c_abs(&t[t_dim1 + 1]);
+            sep[1] = c_f2c_abs(&t[t_dim1 + 1]);
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -473,12 +473,12 @@ void aocl_lapack_ctrsna(char *job, char *howmny, logical *select, aocl_int64_t *
         {
             /* Compute the reciprocal condition number of the k-th */
             /* eigenvalue. */
-            aocl_lapack_cdotc_f2c(&q__1, n, &vr[ks * vr_dim1 + 1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
-            prod.real = q__1.real;
-            prod.imag = q__1.imag; // , expr subst
-            rnrm = aocl_blas_scnrm2(n, &vr[ks * vr_dim1 + 1], &c__1);
-            lnrm = aocl_blas_scnrm2(n, &vl[ks * vl_dim1 + 1], &c__1);
-            s[ks] = c_abs(&prod) / (rnrm * lnrm);
+            cdotc_f2c_(&q__1, n, &vr[ks * vr_dim1 + 1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
+            prod.r = q__1.r;
+            prod.i = q__1.i; // , expr subst
+            rnrm = scnrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
+            lnrm = scnrm2_(n, &vl[ks * vl_dim1 + 1], &c__1);
+            s[ks] = c_f2c_abs(&prod) / (rnrm * lnrm);
         }
         if(wantsp)
         {
@@ -538,9 +538,8 @@ void aocl_lapack_ctrsna(char *job, char *howmny, logical *select, aocl_int64_t *
                     i__2 = *n - 1;
                     ix = aocl_blas_icamax(&i__2, &work[work_offset], &c__1);
                     i__2 = ix + work_dim1;
-                    xnorm = (r__1 = work[i__2].real, f2c_abs(r__1))
-                            + (r__2 = r_imag(&work[ix + work_dim1]), f2c_abs(r__2));
-                    if(scale < xnorm * smlnum || scale == 0.f)
+                    xnorm = (r__1 = work[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag( &work[ix + work_dim1]), f2c_abs(r__2));
+                    if (scale < xnorm * smlnum || scale == 0.f)
                     {
                         goto L40;
                     }

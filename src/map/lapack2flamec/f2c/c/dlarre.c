@@ -483,7 +483,7 @@ void aocl_lapack_dlarre(char *range, aocl_int64_t *n, doublereal *vl, doublereal
         werr[i__] = 0.;
         wgap[i__] = 0.;
         eabs = (d__1 = e[i__], f2c_abs(d__1));
-        if(eabs >= emax)
+        if (eabs >= emax)
         {
             emax = eabs;
         }
@@ -669,10 +669,9 @@ void aocl_lapack_dlarre(char *range, aocl_int64_t *n, doublereal *vl, doublereal
             /* Computing MAX */
             d__2 = gl;
             d__3 = tmp - tmp1 - eps * 100. * (d__1 = tmp - tmp1, f2c_abs(d__1)); // , expr subst
-            isleft = fla_max(d__2, d__3);
-            aocl_lapack_dlarrk(&in, &in, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &rtl, &tmp,
-                               &tmp1, &iinfo);
-            if(iinfo != 0)
+            isleft = max(d__2,d__3);
+            dlarrk_(&in, &in, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, & rtl, &tmp, &tmp1, &iinfo);
+            if (iinfo != 0)
             {
                 *info = -1;
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -681,7 +680,7 @@ void aocl_lapack_dlarre(char *range, aocl_int64_t *n, doublereal *vl, doublereal
             /* Computing MIN */
             d__2 = gu;
             d__3 = tmp + tmp1 + eps * 100. * (d__1 = tmp + tmp1, f2c_abs(d__1)); // , expr subst
-            isrght = fla_min(d__2, d__3);
+            isrght = min(d__2,d__3);
             /* Improve the estimate of the spectral diameter */
             spdiam = isrght - isleft;
         }
@@ -691,14 +690,12 @@ void aocl_lapack_dlarre(char *range, aocl_int64_t *n, doublereal *vl, doublereal
             /* Find approximations to the wanted extremal eigenvalues */
             /* Computing MAX */
             d__2 = gl;
-            d__3 = w[wbegin] - werr[wbegin]
-                   - eps * 100. * (d__1 = w[wbegin] - werr[wbegin], f2c_abs(d__1)); // , expr subst
-            isleft = fla_max(d__2, d__3);
+            d__3 = w[wbegin] - werr[wbegin] - eps * 100. * (d__1 = w[wbegin] - werr[wbegin], f2c_abs(d__1)); // , expr subst
+            isleft = max(d__2,d__3);
             /* Computing MIN */
             d__2 = gu;
-            d__3 = w[wend] + werr[wend]
-                   + eps * 100. * (d__1 = w[wend] + werr[wend], f2c_abs(d__1)); // , expr subst
-            isrght = fla_min(d__2, d__3);
+            d__3 = w[wend] + werr[wend] + eps * 100. * (d__1 = w[ wend] + werr[wend], f2c_abs(d__1)); // , expr subst
+            isrght = min(d__2,d__3);
         }
         /* Decide whether the base representation for the current block */
         /* L_JBLK D_JBLK L_JBLK^T = T_JBLK - sigma_JBLK I */
@@ -803,15 +800,15 @@ void aocl_lapack_dlarre(char *range, aocl_int64_t *n, doublereal *vl, doublereal
             /* Computing MAX */
             d__1 = tau;
             d__2 = eps * 2. * f2c_abs(sigma); // , expr subst
-            tau = fla_max(d__1, d__2);
+            tau = max(d__1,d__2);
         }
         else
         {
             if(mb > 1)
             {
                 clwdth = w[wend] + werr[wend] - w[wbegin] - werr[wbegin];
-                avgap = (d__1 = clwdth / (doublereal)(wend - wbegin), f2c_abs(d__1));
-                if(sgndef == 1.)
+                avgap = (d__1 = clwdth / (doublereal) (wend - wbegin), f2c_abs( d__1));
+                if (sgndef == 1.)
                 {
                     /* Computing MAX */
                     d__1 = wgap[wbegin];
@@ -857,7 +854,7 @@ void aocl_lapack_dlarre(char *range, aocl_int64_t *n, doublereal *vl, doublereal
                 /* Computing MAX */
                 d__1 = dmax__;
                 d__2 = f2c_abs(dpivot); // , expr subst
-                dmax__ = fla_max(d__1, d__2);
+                dmax__ = max(d__1,d__2);
                 ++j;
                 /* L70: */
             }

@@ -310,8 +310,7 @@ void aocl_lapack_csytf2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
         /* Determine rows and columns to be interchanged and whether */
         /* a 1-by-1 or 2-by-2 pivot block will be used */
         i__1 = k + k * a_dim1;
-        absakk = (r__1 = a[i__1].real, f2c_abs(r__1))
-                 + (r__2 = r_imag(&a[k + k * a_dim1]), f2c_abs(r__2));
+        absakk = (r__1 = a[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[k + k * a_dim1]), f2c_abs(r__2));
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value. */
         /* Determine both COLMAX and IMAX. */
@@ -320,8 +319,7 @@ void aocl_lapack_csytf2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
             i__1 = k - 1;
             imax = aocl_blas_icamax(&i__1, &a[k * a_dim1 + 1], &c__1);
             i__1 = imax + k * a_dim1;
-            colmax = (r__1 = a[i__1].real, f2c_abs(r__1))
-                     + (r__2 = r_imag(&a[imax + k * a_dim1]), f2c_abs(r__2));
+            colmax = (r__1 = a[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[imax + k * a_dim1]), f2c_abs(r__2));
         }
         else
         {
@@ -351,19 +349,16 @@ void aocl_lapack_csytf2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                 i__1 = k - imax;
                 jmax = imax + aocl_blas_icamax(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
                 i__1 = imax + jmax * a_dim1;
-                rowmax = (r__1 = a[i__1].real, f2c_abs(r__1))
-                         + (r__2 = r_imag(&a[imax + jmax * a_dim1]), f2c_abs(r__2));
-                if(imax > 1)
+                rowmax = (r__1 = a[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ imax + jmax * a_dim1]), f2c_abs(r__2));
+                if (imax > 1)
                 {
                     i__1 = imax - 1;
                     jmax = aocl_blas_icamax(&i__1, &a[imax * a_dim1 + 1], &c__1);
                     /* Computing MAX */
                     i__1 = jmax + imax * a_dim1;
                     r__3 = rowmax;
-                    r__4 = (r__1 = a[i__1].real, f2c_abs(r__1))
-                           + (r__2 = r_imag(&a[jmax + imax * a_dim1]),
-                              f2c_abs(r__2)); // , expr subst
-                    rowmax = fla_max(r__3, r__4);
+                    r__4 = (r__1 = a[i__1].r, f2c_abs(r__1)) + ( r__2 = r_imag(&a[jmax + imax * a_dim1]), f2c_abs(r__2) ); // , expr subst
+                    rowmax = max(r__3,r__4);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
@@ -373,9 +368,7 @@ void aocl_lapack_csytf2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                 else /* if(complicated condition) */
                 {
                     i__1 = imax + imax * a_dim1;
-                    if((r__1 = a[i__1].real, f2c_abs(r__1))
-                           + (r__2 = r_imag(&a[imax + imax * a_dim1]), f2c_abs(r__2))
-                       >= alpha * rowmax)
+                    if ((r__1 = a[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ imax + imax * a_dim1]), f2c_abs(r__2)) >= alpha * rowmax)
                     {
                         /* interchange rows and columns K and IMAX, use 1-by-1 */
                         /* pivot block */
@@ -553,8 +546,7 @@ void aocl_lapack_csytf2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
         /* Determine rows and columns to be interchanged and whether */
         /* a 1-by-1 or 2-by-2 pivot block will be used */
         i__1 = k + k * a_dim1;
-        absakk = (r__1 = a[i__1].real, f2c_abs(r__1))
-                 + (r__2 = r_imag(&a[k + k * a_dim1]), f2c_abs(r__2));
+        absakk = (r__1 = a[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[k + k * a_dim1]), f2c_abs(r__2));
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value. */
         /* Determine both COLMAX and IMAX. */
@@ -563,8 +555,7 @@ void aocl_lapack_csytf2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
             i__1 = *n - k;
             imax = k + aocl_blas_icamax(&i__1, &a[k + 1 + k * a_dim1], &c__1);
             i__1 = imax + k * a_dim1;
-            colmax = (r__1 = a[i__1].real, f2c_abs(r__1))
-                     + (r__2 = r_imag(&a[imax + k * a_dim1]), f2c_abs(r__2));
+            colmax = (r__1 = a[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[imax + k * a_dim1]), f2c_abs(r__2));
         }
         else
         {
@@ -594,19 +585,16 @@ void aocl_lapack_csytf2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                 i__1 = imax - k;
                 jmax = k - 1 + aocl_blas_icamax(&i__1, &a[imax + k * a_dim1], lda);
                 i__1 = imax + jmax * a_dim1;
-                rowmax = (r__1 = a[i__1].real, f2c_abs(r__1))
-                         + (r__2 = r_imag(&a[imax + jmax * a_dim1]), f2c_abs(r__2));
-                if(imax < *n)
+                rowmax = (r__1 = a[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ imax + jmax * a_dim1]), f2c_abs(r__2));
+                if (imax < *n)
                 {
                     i__1 = *n - imax;
                     jmax = imax + aocl_blas_icamax(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     /* Computing MAX */
                     i__1 = jmax + imax * a_dim1;
                     r__3 = rowmax;
-                    r__4 = (r__1 = a[i__1].real, f2c_abs(r__1))
-                           + (r__2 = r_imag(&a[jmax + imax * a_dim1]),
-                              f2c_abs(r__2)); // , expr subst
-                    rowmax = fla_max(r__3, r__4);
+                    r__4 = (r__1 = a[i__1].r, f2c_abs(r__1)) + ( r__2 = r_imag(&a[jmax + imax * a_dim1]), f2c_abs(r__2) ); // , expr subst
+                    rowmax = max(r__3,r__4);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
@@ -616,9 +604,7 @@ void aocl_lapack_csytf2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                 else /* if(complicated condition) */
                 {
                     i__1 = imax + imax * a_dim1;
-                    if((r__1 = a[i__1].real, f2c_abs(r__1))
-                           + (r__2 = r_imag(&a[imax + imax * a_dim1]), f2c_abs(r__2))
-                       >= alpha * rowmax)
+                    if ((r__1 = a[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ imax + imax * a_dim1]), f2c_abs(r__2)) >= alpha * rowmax)
                     {
                         /* interchange rows and columns K and IMAX, use 1-by-1 */
                         /* pivot block */

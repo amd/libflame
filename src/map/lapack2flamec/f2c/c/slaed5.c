@@ -153,7 +153,7 @@ void aocl_lapack_slaed5(aocl_int64_t *i__, real *d__, real *z__, real *delta, re
             b = del + *rho * (z__[1] * z__[1] + z__[2] * z__[2]);
             c__ = *rho * z__[1] * z__[1] * del;
             /* B > ZERO, always */
-            tau = c__ * 2.f / (b + sqrt((r__1 = b * b - c__ * 4.f, f2c_abs(r__1))));
+            tau = c__ * 2.f / (b + sqrt((r__1 = b * b - c__ * 4.f, f2c_abs(r__1))) );
             *dlam = d__[1] + tau;
             delta[1] = -z__[1] / tau;
             delta[2] = z__[2] / (del - tau);

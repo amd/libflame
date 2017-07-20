@@ -59,7 +59,7 @@
 /* > \param[in,out] SX */
 /* > \verbatim */
 /* > SX is COMPLEX array, dimension */
-/* > (1+(N-1)*abs(INCX)) */
+/* > (1+(N-1)*f2c_abs(INCX)) */
 /* > The n-element vector x. */
 /* > \endverbatim */
 /* > */
@@ -145,14 +145,14 @@ void aocl_lapack_csrscl(aocl_int64_t *n, real *sa, scomplex *sx, aocl_int64_t *i
 L10:
     cden1 = cden * smlnum;
     cnum1 = cnum / bignum;
-    if(f2c_abs(cden1) > f2c_abs(cnum) && cnum != 0.f)
+    if (f2c_abs(cden1) > f2c_abs(cnum) && cnum != 0.f)
     {
         /* Pre-multiply X by SMLNUM if CDEN is large compared to CNUM. */
         mul = smlnum;
         done = FALSE_;
         cden = cden1;
     }
-    else if(f2c_abs(cnum1) > f2c_abs(cden))
+    else if (f2c_abs(cnum1) > f2c_abs(cden))
     {
         /* Pre-multiply X by BIGNUM if CDEN is small compared to CNUM. */
         mul = bignum;

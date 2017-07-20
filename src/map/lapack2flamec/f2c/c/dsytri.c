@@ -269,7 +269,7 @@ void aocl_lapack_dsytri(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t
         {
             /* 2 x 2 diagonal block */
             /* Invert the diagonal block. */
-            t = (d__1 = a[k + (k + 1) * a_dim1], f2c_dabs(d__1));
+            t = (d__1 = a[k + (k + 1) * a_dim1], f2c_abs(d__1));
             ak = a[k + k * a_dim1] / t;
             akp1 = a[k + 1 + (k + 1) * a_dim1] / t;
             akkp1 = a[k + (k + 1) * a_dim1] / t;
@@ -302,8 +302,8 @@ void aocl_lapack_dsytri(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t
             }
             kstep = 2;
         }
-        kp = (i__1 = ipiv[k], f2c_dabs(i__1));
-        if(kp != k)
+        kp = (i__1 = ipiv[k], f2c_abs(i__1));
+        if (kp != k)
         {
             /* Interchange rows and columns K and KP in the leading */
             /* submatrix A(1:k+1,1:k+1) */
@@ -359,7 +359,7 @@ void aocl_lapack_dsytri(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t
         {
             /* 2 x 2 diagonal block */
             /* Invert the diagonal block. */
-            t = (d__1 = a[k + (k - 1) * a_dim1], f2c_dabs(d__1));
+            t = (d__1 = a[k + (k - 1) * a_dim1], f2c_abs(d__1));
             ak = a[k - 1 + (k - 1) * a_dim1] / t;
             akp1 = a[k + k * a_dim1] / t;
             akkp1 = a[k + (k - 1) * a_dim1] / t;
@@ -392,8 +392,8 @@ void aocl_lapack_dsytri(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t
             }
             kstep = 2;
         }
-        kp = (i__1 = ipiv[k], f2c_dabs(i__1));
-        if(kp != k)
+        kp = (i__1 = ipiv[k], f2c_abs(i__1));
+        if (kp != k)
         {
             /* Interchange rows and columns K and KP in the trailing */
             /* submatrix A(k-1:n,k-1:n) */

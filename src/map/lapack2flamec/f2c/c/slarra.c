@@ -199,7 +199,7 @@ void aocl_lapack_slarra(aocl_int64_t *n, real *d__, real *e, real *e2, real *spl
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             eabs = (r__1 = e[i__], f2c_abs(r__1));
-            if(eabs <= tmp1)
+            if (eabs <= tmp1)
             {
                 e[i__] = 0.f;
                 e2[i__] = 0.f;
@@ -216,8 +216,7 @@ void aocl_lapack_slarra(aocl_int64_t *n, real *d__, real *e, real *e2, real *spl
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             eabs = (r__1 = e[i__], f2c_abs(r__1));
-            if(eabs <= *spltol * sqrt((r__1 = d__[i__], f2c_abs(r__1)))
-                           * sqrt((r__2 = d__[i__ + 1], f2c_abs(r__2))))
+            if (eabs <= *spltol * sqrt((r__1 = d__[i__], f2c_abs(r__1))) * sqrt(( r__2 = d__[i__ + 1], f2c_abs(r__2))))
             {
                 e[i__] = 0.f;
                 e2[i__] = 0.f;

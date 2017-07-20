@@ -152,17 +152,87 @@ void dlartg_(doublereal *f, doublereal *g, doublereal *c__, doublereal *s, doubl
     {
         /* Computing MIN */
         /* Computing MAX */
-        d__3 = fla_max(safmin, f1);
-        d__1 = safmax;
-        d__2 = fla_max(d__3, g1); // , expr subst
-        u = fla_min(d__1, d__2);
-        fs = f__t / u;
-        gs = g__t / u;
-        d__ = sqrt(fs * fs + gs * gs);
-        *c__ = f2c_dabs(fs) / d__;
-        *r__ = d_sign(&d__, &f__t);
-        *s = gs / *r__;
-        *r__ *= u;
+        d__1 = f2c_abs(f1);
+        d__2 = f2c_abs(g1); // , expr subst
+        scale = max(d__1,d__2);
+        if (scale >= safmx2)
+        {
+            count = 0;
+L10:
+            ++count;
+            f1 *= safmn2;
+            g1 *= safmn2;
+            /* Computing MAX */
+            d__1 = f2c_abs(f1);
+            d__2 = f2c_abs(g1); // , expr subst
+            scale = max(d__1,d__2);
+            if (scale >= safmx2)
+            {
+                goto L10;
+            }
+            /* Computing 2nd power */
+            d__1 = f1;
+            /* Computing 2nd power */
+            d__2 = g1;
+            *r__ = sqrt(d__1 * d__1 + d__2 * d__2);
+            *cs = f1 / *r__;
+            *sn = g1 / *r__;
+            i__1 = count;
+            for (i__ = 1;
+                    i__ <= i__1;
+                    ++i__)
+            {
+                *r__ *= safmx2;
+                /* L20: */
+            }
+        }
+        else if (scale <= safmn2)
+        {
+            count = 0;
+L30:
+            ++count;
+            f1 *= safmx2;
+            g1 *= safmx2;
+            /* Computing MAX */
+            d__1 = f2c_abs(f1);
+            d__2 = f2c_abs(g1); // , expr subst
+            scale = max(d__1,d__2);
+            if (scale <= safmn2)
+            {
+                goto L30;
+            }
+            /* Computing 2nd power */
+            d__1 = f1;
+            /* Computing 2nd power */
+            d__2 = g1;
+            *r__ = sqrt(d__1 * d__1 + d__2 * d__2);
+            *cs = f1 / *r__;
+            *sn = g1 / *r__;
+            i__1 = count;
+            for (i__ = 1;
+                    i__ <= i__1;
+                    ++i__)
+            {
+                *r__ *= safmn2;
+                /* L40: */
+            }
+        }
+        else
+        {
+            /* Computing 2nd power */
+            d__1 = f1;
+            /* Computing 2nd power */
+            d__2 = g1;
+            *r__ = sqrt(d__1 * d__1 + d__2 * d__2);
+            *cs = f1 / *r__;
+            *sn = g1 / *r__;
+        }
+        if (f2c_abs(*f) > f2c_abs(*g) && *cs < 0.)
+        {
+            *cs = -(*cs);
+            *sn = -(*sn);
+            *r__ = -(*r__);
+        }
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

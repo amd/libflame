@@ -48,7 +48,7 @@ static aocl_int64_t c__1 = 1;
 /* > \return SLANHS */
 /* > \verbatim */
 /* > */
-/* > SLANHS = ( fla_max(abs(A(i,j))), NORM = 'M' or 'm' */
+/* > SLANHS = ( max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
 /* > ( */
 /* > ( norm1(A), NORM = '1', 'O' or 'o' */
 /* > ( */
@@ -59,7 +59,7 @@ static aocl_int64_t c__1 = 1;
 /* > where norm1 denotes the one norm of a matrix (maximum column sum), */
 /* > normI denotes the infinity norm of a matrix (maximum row sum) and */
 /* > normF denotes the Frobenius norm of a matrix (square root of sum of */
-/* > squares). Note that fla_max(abs(A(i,j))) is not a consistent matrix norm. */
+/* > squares). Note that max(f2c_abs(A(i,j))) is not a consistent matrix norm. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -165,7 +165,7 @@ real aocl_lapack_slanhs(char *norm, aocl_int64_t *n, real *a, aocl_int64_t *lda,
     }
     else if(lsame_(norm, "M", 1, 1))
     {
-        /* Find fla_max(abs(A(i,j))). */
+        /* Find max(f2c_abs(A(i,j))). */
         value = 0.f;
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
@@ -177,7 +177,7 @@ real aocl_lapack_slanhs(char *norm, aocl_int64_t *n, real *a, aocl_int64_t *lda,
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 sum = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
-                if(value < sum || sum != sum)
+                if (value < sum || sisnan_(&sum))
                 {
                     value = sum;
                 }

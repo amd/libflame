@@ -237,9 +237,9 @@ void aocl_lapack_slaed6(aocl_int64_t *kniter, logical *orgati, real *rho, real *
         }
         /* Computing MAX */
         r__1 = f2c_abs(a), r__2 = f2c_abs(b);
-        r__1 = fla_max(r__1, r__2);
+        r__1 = max(r__1,r__2);
         r__2 = f2c_abs(c__); // ; expr subst
-        temp = fla_max(r__1, r__2);
+        temp = max(r__1,r__2);
         a /= temp;
         b /= temp;
         c__ /= temp;
@@ -249,11 +249,11 @@ void aocl_lapack_slaed6(aocl_int64_t *kniter, logical *orgati, real *rho, real *
         }
         else if(a <= 0.f)
         {
-            *tau = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / (c__ * 2.f);
+            *tau = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / ( c__ * 2.f);
         }
         else
         {
-            *tau = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))));
+            *tau = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs( r__1))));
         }
         if(*tau < lbd || *tau > ubd)
         {
@@ -276,7 +276,7 @@ void aocl_lapack_slaed6(aocl_int64_t *kniter, logical *orgati, real *rho, real *
             {
                 ubd = *tau;
             }
-            if(f2c_abs(*finit) <= f2c_abs(temp))
+            if (f2c_abs(*finit) <= f2c_abs(temp))
             {
                 *tau = 0.f;
             }
@@ -299,15 +299,15 @@ void aocl_lapack_slaed6(aocl_int64_t *kniter, logical *orgati, real *rho, real *
     {
         /* Computing MIN */
         r__3 = (r__1 = d__[2] - *tau, f2c_abs(r__1));
-        r__4 = (r__2 = d__[3] - *tau, f2c_abs(r__2)); // , expr subst
-        temp = fla_min(r__3, r__4);
+        r__4 = (r__2 = d__[3] - * tau, f2c_abs(r__2)); // , expr subst
+        temp = min(r__3,r__4);
     }
     else
     {
         /* Computing MIN */
         r__3 = (r__1 = d__[1] - *tau, f2c_abs(r__1));
-        r__4 = (r__2 = d__[2] - *tau, f2c_abs(r__2)); // , expr subst
-        temp = fla_min(r__3, r__4);
+        r__4 = (r__2 = d__[2] - * tau, f2c_abs(r__2)); // , expr subst
+        temp = min(r__3,r__4);
     }
     scale = FALSE_;
     if(temp <= small1)
@@ -361,7 +361,7 @@ void aocl_lapack_slaed6(aocl_int64_t *kniter, logical *orgati, real *rho, real *
         /* L30: */
     }
     f = *finit + *tau * fc;
-    if(f2c_abs(f) <= 0.f)
+    if (f2c_abs(f) <= 0.f)
     {
         goto L60;
     }
@@ -399,9 +399,9 @@ void aocl_lapack_slaed6(aocl_int64_t *kniter, logical *orgati, real *rho, real *
         c__ = f - (temp1 + temp2) * df + temp1 * temp2 * ddf;
         /* Computing MAX */
         r__1 = f2c_abs(a), r__2 = f2c_abs(b);
-        r__1 = fla_max(r__1, r__2);
+        r__1 = max(r__1,r__2);
         r__2 = f2c_abs(c__); // ; expr subst
-        temp = fla_max(r__1, r__2);
+        temp = max(r__1,r__2);
         a /= temp;
         b /= temp;
         c__ /= temp;
@@ -411,11 +411,11 @@ void aocl_lapack_slaed6(aocl_int64_t *kniter, logical *orgati, real *rho, real *
         }
         else if(a <= 0.f)
         {
-            eta = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / (c__ * 2.f);
+            eta = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / ( c__ * 2.f);
         }
         else
         {
-            eta = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))));
+            eta = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1) )));
         }
         if(f * eta >= 0.f)
         {
@@ -452,7 +452,7 @@ void aocl_lapack_slaed6(aocl_int64_t *kniter, logical *orgati, real *rho, real *
         }
         f = *finit + *tau * fc;
         erretm = (f2c_abs(*finit) + f2c_abs(*tau) * erretm) * 8.f + f2c_abs(*tau) * df;
-        if(f2c_abs(f) <= eps * 4.f * erretm || ubd - lbd <= eps * 4.f * f2c_abs(*tau))
+        if (f2c_abs(f) <= eps * erretm)
         {
             goto L60;
         }

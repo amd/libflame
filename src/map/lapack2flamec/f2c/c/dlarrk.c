@@ -209,7 +209,7 @@ void aocl_lapack_dlarrk(aocl_int64_t *n, aocl_int64_t *iw, doublereal *gl, doubl
     /* Computing MAX */
     d__1 = f2c_abs(*gl);
     d__2 = f2c_abs(*gu); // , expr subst
-    tnorm = fla_max(d__1, d__2);
+    tnorm = max(d__1,d__2);
     rtoli = *reltol;
     atoli = *pivmin * 4.;
     itmax = (integer)((log(tnorm + *pivmin) - log(*pivmin)) / log(2.)) + 2;
@@ -222,7 +222,7 @@ L10: /* Check if interval converged or maximum number of iterations reached */
     /* Computing MAX */
     d__1 = f2c_abs(right);
     d__2 = f2c_abs(left); // , expr subst
-    tmp2 = fla_max(d__1, d__2);
+    tmp2 = max(d__1,d__2);
     /* Computing MAX */
     d__1 = fla_max(atoli, *pivmin);
     d__2 = rtoli * tmp2; // , expr subst
@@ -240,7 +240,7 @@ L10: /* Check if interval converged or maximum number of iterations reached */
     mid = (left + right) * .5;
     negcnt = 0;
     tmp1 = d__[1] - mid;
-    if(f2c_abs(tmp1) < *pivmin)
+    if (f2c_abs(tmp1) < *pivmin)
     {
         tmp1 = -(*pivmin);
     }
@@ -252,7 +252,7 @@ L10: /* Check if interval converged or maximum number of iterations reached */
     for(i__ = 2; i__ <= i__1; ++i__)
     {
         tmp1 = d__[i__] - e2[i__ - 1] / tmp1 - mid;
-        if(f2c_abs(tmp1) < *pivmin)
+        if (f2c_abs(tmp1) < *pivmin)
         {
             tmp1 = -(*pivmin);
         }
@@ -274,8 +274,7 @@ L10: /* Check if interval converged or maximum number of iterations reached */
 L30: /* Converged or maximum number of iterations reached */
     *w = (left + right) * .5;
     *werr = (d__1 = right - left, f2c_abs(d__1)) * .5;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of DLARRK */
 }
 /* dlarrk_ */

@@ -310,7 +310,7 @@ void aocl_lapack_ssytf2_rook(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t 
         if(k > 1)
         {
             i__1 = k - 1;
-            imax = aocl_blas_isamax(&i__1, &a[k * a_dim1 + 1], &c__1);
+            imax = isamax_(&i__1, &a[k * a_dim1 + 1], &c__1);
             colmax = (r__1 = a[imax + k * a_dim1], f2c_abs(r__1));
         }
         else
@@ -348,7 +348,7 @@ void aocl_lapack_ssytf2_rook(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t 
                 if(imax != k)
                 {
                     i__1 = k - imax;
-                    jmax = imax + aocl_blas_isamax(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
+                    jmax = imax + isamax_(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
                     rowmax = (r__1 = a[imax + jmax * a_dim1], f2c_abs(r__1));
                 }
                 else
@@ -358,9 +358,9 @@ void aocl_lapack_ssytf2_rook(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t 
                 if(imax > 1)
                 {
                     i__1 = imax - 1;
-                    itemp = aocl_blas_isamax(&i__1, &a[imax * a_dim1 + 1], &c__1);
+                    itemp = isamax_(&i__1, &a[imax * a_dim1 + 1], &c__1);
                     stemp = (r__1 = a[itemp + imax * a_dim1], f2c_abs(r__1));
-                    if(stemp > rowmax)
+                    if (stemp > rowmax)
                     {
                         rowmax = stemp;
                         jmax = itemp;
@@ -368,7 +368,7 @@ void aocl_lapack_ssytf2_rook(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t 
                 }
                 /* Equivalent to testing for (used to handle NaN and Inf) */
                 /* ABS( A( IMAX, IMAX ) ).GE.ALPHA*ROWMAX */
-                if(!((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) < alpha * rowmax))
+                if (! ((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) < alpha * rowmax))
                 {
                     /* interchange rows and columns K and IMAX, */
                     /* use 1-by-1 pivot block */
@@ -456,7 +456,7 @@ void aocl_lapack_ssytf2_rook(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t 
                 {
                     /* Perform a rank-1 update of A(1:k-1,1:k-1) and */
                     /* store U(k) in column k */
-                    if((r__1 = a[k + k * a_dim1], f2c_abs(r__1)) >= sfmin)
+                    if ((r__1 = a[k + k * a_dim1], f2c_abs(r__1)) >= sfmin)
                     {
                         /* Perform a rank-1 update of A(1:k-1,1:k-1) as */
                         /* A := A - U(k)*D(k)*U(k)**T */
@@ -562,7 +562,7 @@ void aocl_lapack_ssytf2_rook(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t 
         if(k < *n)
         {
             i__1 = *n - k;
-            imax = k + aocl_blas_isamax(&i__1, &a[k + 1 + k * a_dim1], &c__1);
+            imax = k + isamax_(&i__1, &a[k + 1 + k * a_dim1], &c__1);
             colmax = (r__1 = a[imax + k * a_dim1], f2c_abs(r__1));
         }
         else
@@ -599,7 +599,7 @@ void aocl_lapack_ssytf2_rook(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t 
                 if(imax != k)
                 {
                     i__1 = imax - k;
-                    jmax = k - 1 + aocl_blas_isamax(&i__1, &a[imax + k * a_dim1], lda);
+                    jmax = k - 1 + isamax_(&i__1, &a[imax + k * a_dim1], lda);
                     rowmax = (r__1 = a[imax + jmax * a_dim1], f2c_abs(r__1));
                 }
                 else
@@ -609,9 +609,9 @@ void aocl_lapack_ssytf2_rook(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t 
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    itemp = imax + aocl_blas_isamax(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
+                    itemp = imax + isamax_(&i__1, &a[imax + 1 + imax * a_dim1] , &c__1);
                     stemp = (r__1 = a[itemp + imax * a_dim1], f2c_abs(r__1));
-                    if(stemp > rowmax)
+                    if (stemp > rowmax)
                     {
                         rowmax = stemp;
                         jmax = itemp;
@@ -619,7 +619,7 @@ void aocl_lapack_ssytf2_rook(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t 
                 }
                 /* Equivalent to testing for (used to handle NaN and Inf) */
                 /* ABS( A( IMAX, IMAX ) ).GE.ALPHA*ROWMAX */
-                if(!((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) < alpha * rowmax))
+                if (! ((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) < alpha * rowmax))
                 {
                     /* interchange rows and columns K and IMAX, */
                     /* use 1-by-1 pivot block */
@@ -709,7 +709,7 @@ void aocl_lapack_ssytf2_rook(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t 
                 {
                     /* Perform a rank-1 update of A(k+1:n,k+1:n) and */
                     /* store L(k) in column k */
-                    if((r__1 = a[k + k * a_dim1], f2c_abs(r__1)) >= sfmin)
+                    if ((r__1 = a[k + k * a_dim1], f2c_abs(r__1)) >= sfmin)
                     {
                         /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
                         /* A := A - L(k)*D(k)*L(k)**T */

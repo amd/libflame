@@ -117,8 +117,8 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
     real r__1, r__2, r__3, r__4;
     scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    double sqrt(doublereal), r_imag(scomplex *);
-    void r_cnjg(scomplex *, scomplex *), c_div(scomplex *, scomplex *, scomplex *);
+    double log(doublereal), pow_ri(real *, integer *), r_imag(complex *), c_f2c_abs(complex *), sqrt(doublereal);
+    void r_cnjg(complex *, complex *);
     /* Local variables */
     real d__, u, v, w, f1, f2, g1, g2, h2;
     scomplex fs, gs, f__t, g__t;
@@ -140,9 +140,28 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
     rtmin = sqrt(safmin);
     /* .. */
     /* .. Executable Statements .. */
-    f__t = *f;
-    g__t = *g;
-    if(g__t.real == 0.f && g__t.imag == 0.f)
+    safmin = slamch_("S");
+    eps = slamch_("E");
+    r__1 = slamch_("B");
+    i__1 = (integer) (log(safmin / eps) / log(slamch_("B")) / 2.f);
+    safmn2 = pow_ri(&r__1, &i__1);
+    safmx2 = 1.f / safmn2;
+    /* Computing MAX */
+    /* Computing MAX */
+    r__7 = (r__1 = f->r, f2c_abs(r__1));
+    r__8 = (r__2 = r_imag(f), f2c_abs(r__2)); // , expr subst
+    /* Computing MAX */
+    r__9 = (r__3 = g->r, f2c_abs(r__3));
+    r__10 = (r__4 = r_imag(g), f2c_abs(r__4)); // , expr subst
+    r__5 = max(r__7,r__8);
+    r__6 = max(r__9,r__10); // , expr subst
+    scale = max(r__5,r__6);
+    fs.r = f->r;
+    fs.i = f->i; // , expr subst
+    gs.r = g->r;
+    gs.i = g->i; // , expr subst
+    count = 0;
+    if (scale >= safmx2)
     {
         *c__ = 1.f;
         s->real = 0.f, s->imag = 0.f;
@@ -150,8 +169,8 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
     }
     else if(f__t.real == 0.f && f__t.imag == 0.f)
     {
-        *c__ = 0.f;
-        if(g__t.real == 0.f)
+        r__1 = c_f2c_abs(g);
+        if (g->r == 0.f && g->i == 0.f || sisnan_(&r__1))
         {
             r__2 = (r__1 = r_imag(&g__t), f2c_abs(r__1));
             r__->real = r__2, r__->imag = 0.f;
@@ -161,11 +180,70 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
         }
         else if(r_imag(&g__t) == 0.f)
         {
-            r__2 = (r__1 = g__t.real, f2c_abs(r__1));
-            r__->real = r__2, r__->imag = 0.f;
-            r_cnjg(&q__2, &g__t);
-            c_div(&q__1, &q__2, r__);
-            s->real = q__1.real, s->imag = q__1.imag;
+            goto L20;
+        }
+    }
+    /* Computing 2nd power */
+    r__1 = fs.r;
+    /* Computing 2nd power */
+    r__2 = r_imag(&fs);
+    f2 = r__1 * r__1 + r__2 * r__2;
+    /* Computing 2nd power */
+    r__1 = gs.r;
+    /* Computing 2nd power */
+    r__2 = r_imag(&gs);
+    g2 = r__1 * r__1 + r__2 * r__2;
+    if (f2 <= max(g2,1.f) * safmin)
+    {
+        /* This is a rare case: F is very small. */
+        if (f->r == 0.f && f->i == 0.f)
+        {
+            *cs = 0.f;
+            r__2 = g->r;
+            r__3 = r_imag(g);
+            r__1 = slapy2_(&r__2, &r__3);
+            r__->r = r__1, r__->i = 0.f;
+            /* Do complex/real division explicitly with two real divisions */
+            r__1 = gs.r;
+            r__2 = r_imag(&gs);
+            d__ = slapy2_(&r__1, &r__2);
+            r__1 = gs.r / d__;
+            r__2 = -r_imag(&gs) / d__;
+            q__1.r = r__1;
+            q__1.i = r__2; // , expr subst
+            sn->r = q__1.r, sn->i = q__1.i;
+            return 0;
+        }
+        r__1 = fs.r;
+        r__2 = r_imag(&fs);
+        f2s = slapy2_(&r__1, &r__2);
+        /* G2 and G2S are accurate */
+        /* G2 is at least SAFMIN, and G2S is at least SAFMN2 */
+        g2s = sqrt(g2);
+        /* Error in CS from underflow in F2S is at most */
+        /* UNFL / SAFMN2 .lt. sqrt(UNFL*EPS) .lt. EPS */
+        /* If MAX(G2,ONE)=G2, then F2 .lt. G2*SAFMIN, */
+        /* and so CS .lt. sqrt(SAFMIN) */
+        /* If MAX(G2,ONE)=ONE, then F2 .lt. SAFMIN */
+        /* and so CS .lt. sqrt(SAFMIN)/SAFMN2 = sqrt(EPS) */
+        /* Therefore, CS = F2S/G2S / sqrt( 1 + (F2S/G2S)**2 ) = F2S/G2S */
+        *cs = f2s / g2s;
+        /* Make sure f2c_abs(FF) = 1 */
+        /* Do complex/real division explicitly with 2 real divisions */
+        /* Computing MAX */
+        r__3 = (r__1 = f->r, f2c_abs(r__1));
+        r__4 = (r__2 = r_imag(f), f2c_abs(r__2)); // , expr subst
+        if (max(r__3,r__4) > 1.f)
+        {
+            r__1 = f->r;
+            r__2 = r_imag(f);
+            d__ = slapy2_(&r__1, &r__2);
+            r__1 = f->r / d__;
+            r__2 = r_imag(f) / d__;
+            q__1.r = r__1;
+            q__1.i = r__2; // , expr subst
+            ff.r = q__1.r;
+            ff.i = q__1.i; // , expr subst
         }
         else
         {

@@ -304,7 +304,7 @@ void aocl_lapack_ssytf2(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
         if(k > 1)
         {
             i__1 = k - 1;
-            imax = aocl_blas_isamax(&i__1, &a[k * a_dim1 + 1], &c__1);
+            imax = isamax_(&i__1, &a[k * a_dim1 + 1], &c__1);
             colmax = (r__1 = a[imax + k * a_dim1], f2c_abs(r__1));
         }
         else
@@ -333,23 +333,23 @@ void aocl_lapack_ssytf2(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value */
                 i__1 = k - imax;
-                jmax = imax + aocl_blas_isamax(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
+                jmax = imax + isamax_(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
                 rowmax = (r__1 = a[imax + jmax * a_dim1], f2c_abs(r__1));
-                if(imax > 1)
+                if (imax > 1)
                 {
                     i__1 = imax - 1;
                     jmax = aocl_blas_isamax(&i__1, &a[imax * a_dim1 + 1], &c__1);
                     /* Computing MAX */
                     r__2 = rowmax;
                     r__3 = (r__1 = a[jmax + imax * a_dim1], f2c_abs(r__1)); // , expr subst
-                    rowmax = fla_max(r__2, r__3);
+                    rowmax = max(r__2,r__3);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
                     /* no interchange, use 1-by-1 pivot block */
                     kp = k;
                 }
-                else if((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) >= alpha * rowmax)
+                else if ((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) >= alpha * rowmax)
                 {
                     /* interchange rows and columns K and IMAX, use 1-by-1 */
                     /* pivot block */
@@ -467,7 +467,7 @@ void aocl_lapack_ssytf2(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
         if(k < *n)
         {
             i__1 = *n - k;
-            imax = k + aocl_blas_isamax(&i__1, &a[k + 1 + k * a_dim1], &c__1);
+            imax = k + isamax_(&i__1, &a[k + 1 + k * a_dim1], &c__1);
             colmax = (r__1 = a[imax + k * a_dim1], f2c_abs(r__1));
         }
         else
@@ -496,23 +496,23 @@ void aocl_lapack_ssytf2(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value */
                 i__1 = imax - k;
-                jmax = k - 1 + aocl_blas_isamax(&i__1, &a[imax + k * a_dim1], lda);
+                jmax = k - 1 + isamax_(&i__1, &a[imax + k * a_dim1], lda);
                 rowmax = (r__1 = a[imax + jmax * a_dim1], f2c_abs(r__1));
-                if(imax < *n)
+                if (imax < *n)
                 {
                     i__1 = *n - imax;
                     jmax = imax + aocl_blas_isamax(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     /* Computing MAX */
                     r__2 = rowmax;
                     r__3 = (r__1 = a[jmax + imax * a_dim1], f2c_abs(r__1)); // , expr subst
-                    rowmax = fla_max(r__2, r__3);
+                    rowmax = max(r__2,r__3);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
                     /* no interchange, use 1-by-1 pivot block */
                     kp = k;
                 }
-                else if((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) >= alpha * rowmax)
+                else if ((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) >= alpha * rowmax)
                 {
                     /* interchange rows and columns K and IMAX, use 1-by-1 */
                     /* pivot block */

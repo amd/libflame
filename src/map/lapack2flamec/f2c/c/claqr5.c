@@ -487,6 +487,137 @@ void aocl_lapack_claqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, ao
                 k = krcol + (m22 - 1 << 1);
                 if(k == *ktop - 1)
                 {
+                    claqr1_(&c__3, &h__[*ktop + *ktop * h_dim1], ldh, &s[(m << 1) - 1], &s[m * 2], &v[m * v_dim1 + 1]);
+                    i__5 = m * v_dim1 + 1;
+                    alpha.r = v[i__5].r;
+                    alpha.i = v[i__5].i; // , expr subst
+                    clarfg_(&c__3, &alpha, &v[m * v_dim1 + 2], &c__1, &v[m * v_dim1 + 1]);
+                }
+                else
+                {
+                    i__5 = k + 1 + k * h_dim1;
+                    beta.r = h__[i__5].r;
+                    beta.i = h__[i__5].i; // , expr subst
+                    i__5 = m * v_dim1 + 2;
+                    i__6 = k + 2 + k * h_dim1;
+                    v[i__5].r = h__[i__6].r;
+                    v[i__5].i = h__[i__6].i; // , expr subst
+                    i__5 = m * v_dim1 + 3;
+                    i__6 = k + 3 + k * h_dim1;
+                    v[i__5].r = h__[i__6].r;
+                    v[i__5].i = h__[i__6].i; // , expr subst
+                    clarfg_(&c__3, &beta, &v[m * v_dim1 + 2], &c__1, &v[m * v_dim1 + 1]);
+                    /* ==== A Bulge may collapse because of vigilant */
+                    /* . deflation or destructive underflow. In the */
+                    /* . underflow case, try the two-small-subdiagonals */
+                    /* . trick to try to reinflate the bulge. ==== */
+                    i__5 = k + 3 + k * h_dim1;
+                    i__6 = k + 3 + (k + 1) * h_dim1;
+                    i__7 = k + 3 + (k + 2) * h_dim1;
+                    if (h__[i__5].r != 0.f || h__[i__5].i != 0.f || (h__[i__6] .r != 0.f || h__[i__6].i != 0.f) || h__[i__7].r == 0.f && h__[i__7].i == 0.f)
+                    {
+                        /* ==== Typical case: not collapsed (yet). ==== */
+                        i__5 = k + 1 + k * h_dim1;
+                        h__[i__5].r = beta.r;
+                        h__[i__5].i = beta.i; // , expr subst
+                        i__5 = k + 2 + k * h_dim1;
+                        h__[i__5].r = 0.f;
+                        h__[i__5].i = 0.f; // , expr subst
+                        i__5 = k + 3 + k * h_dim1;
+                        h__[i__5].r = 0.f;
+                        h__[i__5].i = 0.f; // , expr subst
+                    }
+                    else
+                    {
+                        /* ==== Atypical case: collapsed. Attempt to */
+                        /* . reintroduce ignoring H(K+1,K) and H(K+2,K). */
+                        /* . If the fill resulting from the new */
+                        /* . reflector is too large, then abandon it. */
+                        /* . Otherwise, use the new one. ==== */
+                        claqr1_(&c__3, &h__[k + 1 + (k + 1) * h_dim1], ldh, & s[(m << 1) - 1], &s[m * 2], vt);
+                        alpha.r = vt[0].r;
+                        alpha.i = vt[0].i; // , expr subst
+                        clarfg_(&c__3, &alpha, &vt[1], &c__1, vt);
+                        r_cnjg(&q__2, vt);
+                        i__5 = k + 1 + k * h_dim1;
+                        r_cnjg(&q__5, &vt[1]);
+                        i__6 = k + 2 + k * h_dim1;
+                        q__4.r = q__5.r * h__[i__6].r - q__5.i * h__[i__6].i;
+                        q__4.i = q__5.r * h__[i__6].i + q__5.i * h__[ i__6].r; // , expr subst
+                        q__3.r = h__[i__5].r + q__4.r;
+                        q__3.i = h__[i__5].i + q__4.i; // , expr subst
+                        q__1.r = q__2.r * q__3.r - q__2.i * q__3.i;
+                        q__1.i = q__2.r * q__3.i + q__2.i * q__3.r; // , expr subst
+                        refsum.r = q__1.r;
+                        refsum.i = q__1.i; // , expr subst
+                        i__5 = k + 2 + k * h_dim1;
+                        q__3.r = refsum.r * vt[1].r - refsum.i * vt[1].i;
+                        q__3.i = refsum.r * vt[1].i + refsum.i * vt[1] .r; // , expr subst
+                        q__2.r = h__[i__5].r - q__3.r;
+                        q__2.i = h__[i__5].i - q__3.i; // , expr subst
+                        q__1.r = q__2.r;
+                        q__1.i = q__2.i; // , expr subst
+                        q__5.r = refsum.r * vt[2].r - refsum.i * vt[2].i;
+                        q__5.i = refsum.r * vt[2].i + refsum.i * vt[2] .r; // , expr subst
+                        q__4.r = q__5.r;
+                        q__4.i = q__5.i; // , expr subst
+                        i__6 = k + k * h_dim1;
+                        i__7 = k + 1 + (k + 1) * h_dim1;
+                        i__8 = k + 2 + (k + 2) * h_dim1;
+                        if ((r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1) , f2c_abs(r__2)) + ((r__3 = q__4.r, f2c_abs(r__3)) + ( r__4 = r_imag(&q__4), f2c_abs(r__4))) > ulp * (( r__5 = h__[i__6].r, f2c_abs(r__5)) + (r__6 = r_imag(&h__[k + k * h_dim1]), f2c_abs(r__6)) + (( r__7 = h__[i__7].r, f2c_abs(r__7)) + (r__8 = r_imag(&h__[k + 1 + (k + 1) * h_dim1]), f2c_abs( r__8))) + ((r__9 = h__[i__8].r, f2c_abs(r__9)) + ( r__10 = r_imag(&h__[k + 2 + (k + 2) * h_dim1]) , f2c_abs(r__10)))))
+                        {
+                            /* ==== Starting a new bulge here would */
+                            /* . create non-negligible fill. Use */
+                            /* . the old one with trepidation. ==== */
+                            i__5 = k + 1 + k * h_dim1;
+                            h__[i__5].r = beta.r;
+                            h__[i__5].i = beta.i; // , expr subst
+                            i__5 = k + 2 + k * h_dim1;
+                            h__[i__5].r = 0.f;
+                            h__[i__5].i = 0.f; // , expr subst
+                            i__5 = k + 3 + k * h_dim1;
+                            h__[i__5].r = 0.f;
+                            h__[i__5].i = 0.f; // , expr subst
+                        }
+                        else
+                        {
+                            /* ==== Stating a new bulge here would */
+                            /* . create only negligible fill. */
+                            /* . Replace the old reflector with */
+                            /* . the new one. ==== */
+                            i__5 = k + 1 + k * h_dim1;
+                            i__6 = k + 1 + k * h_dim1;
+                            q__1.r = h__[i__6].r - refsum.r;
+                            q__1.i = h__[ i__6].i - refsum.i; // , expr subst
+                            h__[i__5].r = q__1.r;
+                            h__[i__5].i = q__1.i; // , expr subst
+                            i__5 = k + 2 + k * h_dim1;
+                            h__[i__5].r = 0.f;
+                            h__[i__5].i = 0.f; // , expr subst
+                            i__5 = k + 3 + k * h_dim1;
+                            h__[i__5].r = 0.f;
+                            h__[i__5].i = 0.f; // , expr subst
+                            i__5 = m * v_dim1 + 1;
+                            v[i__5].r = vt[0].r;
+                            v[i__5].i = vt[0].i; // , expr subst
+                            i__5 = m * v_dim1 + 2;
+                            v[i__5].r = vt[1].r;
+                            v[i__5].i = vt[1].i; // , expr subst
+                            i__5 = m * v_dim1 + 3;
+                            v[i__5].r = vt[2].r;
+                            v[i__5].i = vt[2].i; // , expr subst
+                        }
+                    }
+                }
+                /* L10: */
+            }
+            /* ==== Generate a 2-by-2 reflection, if needed. ==== */
+            k = krcol + (m22 - 1) * 3;
+            if (bmp22)
+            {
+                if (k == *ktop - 1)
+                {
+                    claqr1_(&c__2, &h__[k + 1 + (k + 1) * h_dim1], ldh, &s[( m22 << 1) - 1], &s[m22 * 2], &v[m22 * v_dim1 + 1]) ;
                     i__4 = m22 * v_dim1 + 1;
                     aocl_lapack_claqr1(&c__2, &h__[k + 1 + (k + 1) * h_dim1], ldh,
                                        &s[(m22 << 1) - 1], &s[m22 * 2], &v[i__4]);
@@ -606,57 +737,17 @@ void aocl_lapack_claqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, ao
                 /* . unnecessary. ==== */
                 if(k >= *ktop)
                 {
-                    i__4 = k + 1 + k * h_dim1;
-                    u1r = h__[i__4].real;
-                    u1i = h__[i__4].imag;
-                    u2r = h__[k + (k + 1) * h_dim1].real;
-                    u2i = h__[k + (k + 1) * h_dim1].imag;
-                    u3r = h__[k + k * h_dim1].real;
-                    u3i = h__[k + k * h_dim1].imag;
-                    u4r = h__[k + 1 + (k + 1) * h_dim1].real;
-                    u4i = h__[k + 1 + (k + 1) * h_dim1].imag;
-                    if(u1r != 0.f || u1i != 0.f)
+                    i__5 = k + k * h_dim1;
+                    i__7 = k + 1 + (k + 1) * h_dim1;
+                    tst1 = (r__1 = h__[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(& h__[k + k * h_dim1]), f2c_abs(r__2)) + ((r__3 = h__[ i__7].r, f2c_abs(r__3)) + (r__4 = r_imag(&h__[k + 1 + (k + 1) * h_dim1]), f2c_abs(r__4)));
+                    if (tst1 == 0.f)
                     {
                         tst1 = (r__1 = u3r, f2c_abs(r__1)) + (r__2 = u3i, f2c_abs(r__2))
                                + ((r__3 = u4r, f2c_abs(r__3)) + (r__4 = u4i, f2c_abs(r__4)));
                         if(tst1 == 0.f)
                         {
-                            if(k >= *ktop + 1)
-                            {
-                                i__4 = k + (k - 1) * h_dim1;
-                                tst1 += (r__1 = h__[i__4].real, f2c_abs(r__1))
-                                        + (r__2 = h__[k + (k - 1) * h_dim1].imag, f2c_abs(r__2));
-                            }
-                            if(k >= *ktop + 2)
-                            {
-                                i__4 = k + (k - 2) * h_dim1;
-                                tst1 += (r__1 = h__[i__4].real, f2c_abs(r__1))
-                                        + (r__2 = h__[k + (k - 2) * h_dim1].imag, f2c_abs(r__2));
-                            }
-                            if(k >= *ktop + 3)
-                            {
-                                i__4 = k + (k - 3) * h_dim1;
-                                tst1 += (r__1 = h__[i__4].real, f2c_abs(r__1))
-                                        + (r__2 = h__[k + (k - 3) * h_dim1].imag, f2c_abs(r__2));
-                            }
-                            if(k <= *kbot - 2)
-                            {
-                                i__4 = k + 2 + (k + 1) * h_dim1;
-                                tst1 += (r__1 = h__[i__4].real, f2c_abs(r__1))
-                                        + (r__2 = h__[k + 2 + (k + 1) * h_dim1].imag, f2c_abs(r__2));
-                            }
-                            if(k <= *kbot - 3)
-                            {
-                                i__4 = k + 3 + (k + 1) * h_dim1;
-                                tst1 += (r__1 = h__[i__4].real, f2c_abs(r__1))
-                                        + (r__2 = h__[k + 3 + (k + 1) * h_dim1].imag, f2c_abs(r__2));
-                            }
-                            if(k <= *kbot - 4)
-                            {
-                                i__4 = k + 4 + (k + 1) * h_dim1;
-                                tst1 += (r__1 = h__[i__4].real, f2c_abs(r__1))
-                                        + (r__2 = h__[k + 4 + (k + 1) * h_dim1].imag, f2c_abs(r__2));
-                            }
+                            i__5 = k + (k - 1) * h_dim1;
+                            tst1 += (r__1 = h__[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[k + (k - 1) * h_dim1]), f2c_abs( r__2));
                         }
                         /* Computing MAX */
                         r__3 = smlnum;
@@ -664,45 +755,28 @@ void aocl_lapack_claqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, ao
                         if((r__1 = u1r, f2c_abs(r__1)) + (r__2 = u1i, f2c_abs(r__2))
                            <= fla_max(r__3, r__4))
                         {
-                            /* Computing MAX */
-                            r__5 = (r__1 = u1r, f2c_abs(r__1)) + (r__2 = u1i, f2c_abs(r__2));
-                            r__6 = (r__3 = u2r, f2c_abs(r__3))
-                                   + (r__4 = u2i, f2c_abs(r__4)); // , expr subst
-                            h12 = fla_max(r__5, r__6);
-                            /* Computing MIN */
-                            r__5 = (r__1 = u1r, f2c_abs(r__1)) + (r__2 = u1i, f2c_abs(r__2));
-                            r__6 = (r__3 = u2r, f2c_abs(r__3))
-                                   + (r__4 = u2i, f2c_abs(r__4)); // , expr subst
-                            h21 = fla_min(r__5, r__6);
-                            q__2.real = u3r - u4r;
-                            q__2.imag = u3i - u4i; // , expr subst
-                            q__1.real = q__2.real;
-                            q__1.imag = q__2.imag; // , expr subst
-                            /* Computing MAX */
-                            r__5 = (r__1 = u4r, f2c_abs(r__1)) + (r__2 = u4i, f2c_abs(r__2));
-                            r__6 = (r__3 = q__1.real, f2c_abs(r__3))
-                                   + (r__4 = q__1.imag, f2c_abs(r__4)); // , expr subst
-                            h11 = fla_max(r__5, r__6);
-                            q__2.real = u3r - u4r;
-                            q__2.imag = u3i - u4i; // , expr subst
-                            q__1.real = q__2.real;
-                            q__1.imag = q__2.imag; // , expr subst
-                            /* Computing MIN */
-                            r__5 = (r__1 = u4r, f2c_abs(r__1)) + (r__2 = u4i, f2c_abs(r__2));
-                            r__6 = (r__3 = q__1.real, f2c_abs(r__3))
-                                   + (r__4 = q__1.imag, f2c_abs(r__4)); // , expr subst
-                            h22 = fla_min(r__5, r__6);
-                            scl = h11 + h12;
-                            tst2 = h22 * (h11 / scl);
-                            /* Computing MAX */
-                            r__1 = smlnum;
-                            r__2 = ulp * tst2; // , expr subst
-                            if(tst2 == 0.f || h21 * (h12 / scl) <= fla_max(r__1, r__2))
-                            {
-                                i__4 = k + 1 + k * h_dim1;
-                                h__[i__4].real = 0.f;
-                                h__[i__4].imag = 0.f; // , expr subst
-                            }
+                            i__5 = k + (k - 2) * h_dim1;
+                            tst1 += (r__1 = h__[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[k + (k - 2) * h_dim1]), f2c_abs( r__2));
+                        }
+                        if (k >= *ktop + 3)
+                        {
+                            i__5 = k + (k - 3) * h_dim1;
+                            tst1 += (r__1 = h__[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[k + (k - 3) * h_dim1]), f2c_abs( r__2));
+                        }
+                        if (k <= *kbot - 2)
+                        {
+                            i__5 = k + 2 + (k + 1) * h_dim1;
+                            tst1 += (r__1 = h__[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[k + 2 + (k + 1) * h_dim1]), f2c_abs(r__2));
+                        }
+                        if (k <= *kbot - 3)
+                        {
+                            i__5 = k + 3 + (k + 1) * h_dim1;
+                            tst1 += (r__1 = h__[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[k + 3 + (k + 1) * h_dim1]), f2c_abs(r__2));
+                        }
+                        if (k <= *kbot - 4)
+                        {
+                            i__5 = k + 4 + (k + 1) * h_dim1;
+                            tst1 += (r__1 = h__[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[k + 4 + (k + 1) * h_dim1]), f2c_abs(r__2));
                         }
                     }
                 }
@@ -1149,43 +1223,42 @@ void aocl_lapack_claqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, ao
                     /* Computing MAX */
                     r__3 = smlnum;
                     r__4 = ulp * tst1; // , expr subst
-                    if((r__1 = u1r, f2c_abs(r__1)) + (r__2 = u1i, f2c_abs(r__2))
-                       <= fla_max(r__3, r__4))
+                    if ((r__1 = h__[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[ k + 1 + k * h_dim1]), f2c_abs(r__2)) <= max(r__3,r__4) )
                     {
                         /* Computing MAX */
-                        r__5 = (r__1 = u1r, f2c_abs(r__1)) + (r__2 = u1i, f2c_abs(r__2));
-                        r__6 = (r__3 = u2r, f2c_abs(r__3))
-                               + (r__4 = u2i, f2c_abs(r__4)); // , expr subst
-                        h12 = fla_max(r__5, r__6);
+                        i__5 = k + 1 + k * h_dim1;
+                        i__7 = k + (k + 1) * h_dim1;
+                        r__5 = (r__1 = h__[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[k + 1 + k * h_dim1]), f2c_abs(r__2));
+                        r__6 = (r__3 = h__[i__7].r, f2c_abs(r__3)) + ( r__4 = r_imag(&h__[k + (k + 1) * h_dim1]), f2c_abs(r__4)); // , expr subst
+                        h12 = max(r__5,r__6);
                         /* Computing MIN */
-                        r__5 = (r__1 = u1r, f2c_abs(r__1)) + (r__2 = u1i, f2c_abs(r__2));
-                        r__6 = (r__3 = u2r, f2c_abs(r__3))
-                               + (r__4 = u2i, f2c_abs(r__4)); // , expr subst
-                        h21 = fla_min(r__5, r__6);
-                        i__4 = k + k * h_dim1;
-                        i__5 = k + 1 + (k + 1) * h_dim1;
-                        u1r = h__[i__4].real;
-                        u1i = h__[i__4].imag;
-                        u2r = h__[i__5].real;
-                        u2i = h__[i__5].imag;
-                        q__2.real = u1r - u2r;
-                        q__2.imag = u1i - u2i; // , expr subst
-                        q__1.real = q__2.real;
-                        q__1.imag = q__2.imag; // , expr subst
+                        i__5 = k + 1 + k * h_dim1;
+                        i__7 = k + (k + 1) * h_dim1;
+                        r__5 = (r__1 = h__[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[k + 1 + k * h_dim1]), f2c_abs(r__2));
+                        r__6 = (r__3 = h__[i__7].r, f2c_abs(r__3)) + ( r__4 = r_imag(&h__[k + (k + 1) * h_dim1]), f2c_abs(r__4)); // , expr subst
+                        h21 = min(r__5,r__6);
+                        i__5 = k + k * h_dim1;
+                        i__7 = k + 1 + (k + 1) * h_dim1;
+                        q__2.r = h__[i__5].r - h__[i__7].r;
+                        q__2.i = h__[i__5] .i - h__[i__7].i; // , expr subst
+                        q__1.r = q__2.r;
+                        q__1.i = q__2.i; // , expr subst
                         /* Computing MAX */
-                        r__5 = (r__1 = u2r, f2c_abs(r__1)) + (r__2 = u2i, f2c_abs(r__2));
-                        r__6 = (r__3 = q__1.real, f2c_abs(r__3))
-                               + (r__4 = q__1.imag, f2c_abs(r__4)); // , expr subst
-                        h11 = fla_max(r__5, r__6);
-                        q__2.real = u1r - u2r;
-                        q__2.imag = u1i - u2i; // , expr subst
-                        q__1.real = q__2.real;
-                        q__1.imag = q__2.imag; // , expr subst
+                        i__6 = k + 1 + (k + 1) * h_dim1;
+                        r__5 = (r__1 = h__[i__6].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[k + 1 + (k + 1) * h_dim1]), f2c_abs( r__2));
+                        r__6 = (r__3 = q__1.r, f2c_abs(r__3)) + ( r__4 = r_imag(&q__1), f2c_abs(r__4)); // , expr subst
+                        h11 = max(r__5,r__6);
+                        i__5 = k + k * h_dim1;
+                        i__7 = k + 1 + (k + 1) * h_dim1;
+                        q__2.r = h__[i__5].r - h__[i__7].r;
+                        q__2.i = h__[i__5] .i - h__[i__7].i; // , expr subst
+                        q__1.r = q__2.r;
+                        q__1.i = q__2.i; // , expr subst
                         /* Computing MIN */
-                        r__5 = (r__1 = u2r, f2c_abs(r__1)) + (r__2 = u2i, f2c_abs(r__2));
-                        r__6 = (r__3 = q__1.real, f2c_abs(r__3))
-                               + (r__4 = q__1.imag, f2c_abs(r__4)); // , expr subst
-                        h22 = fla_min(r__5, r__6);
+                        i__6 = k + 1 + (k + 1) * h_dim1;
+                        r__5 = (r__1 = h__[i__6].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[k + 1 + (k + 1) * h_dim1]), f2c_abs( r__2));
+                        r__6 = (r__3 = q__1.r, f2c_abs(r__3)) + ( r__4 = r_imag(&q__1), f2c_abs(r__4)); // , expr subst
+                        h22 = min(r__5,r__6);
                         scl = h11 + h12;
                         tst2 = h22 * (h11 / scl);
                         /* Computing MAX */

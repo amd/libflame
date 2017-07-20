@@ -369,12 +369,9 @@ void aocl_lapack_dsposv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, doubler
     i__1 = *nrhs;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        xnrm = (d__1 = x[aocl_blas_idamax(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1],
-                f2c_abs(d__1));
-        rnrm = (d__1
-                = work[aocl_blas_idamax(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1],
-                f2c_abs(d__1));
-        if(rnrm > xnrm * cte)
+        xnrm = (d__1 = x[idamax_(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1], f2c_abs(d__1));
+        rnrm = (d__1 = work[idamax_(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1], f2c_abs(d__1));
+        if (rnrm > xnrm * cte)
         {
             goto L10;
         }
@@ -415,13 +412,9 @@ L10:
         i__1 = *nrhs;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            xnrm = (d__1 = x[aocl_blas_idamax(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1],
-                    f2c_abs(d__1));
-            rnrm
-                = (d__1
-                   = work[aocl_blas_idamax(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1],
-                   f2c_abs(d__1));
-            if(rnrm > xnrm * cte)
+            xnrm = (d__1 = x[idamax_(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1], f2c_abs(d__1));
+            rnrm = (d__1 = work[idamax_(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1], f2c_abs(d__1));
+            if (rnrm > xnrm * cte)
             {
                 goto L20;
             }

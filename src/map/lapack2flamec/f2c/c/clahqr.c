@@ -245,10 +245,10 @@ void aocl_lapack_clahqr(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     real r__1, r__2, r__3, r__4, r__5, r__6;
     scomplex q__1, q__2, q__3, q__4, q__5, q__6, q__7;
     /* Builtin functions */
-    double r_imag(scomplex *);
-    void r_cnjg(scomplex *, scomplex *);
-    double c_abs(scomplex *);
-    void c_sqrt(scomplex *, scomplex *), pow_ci(scomplex *, scomplex *, aocl_int64_t *);
+    double r_imag(complex *);
+    void r_cnjg(complex *, complex *);
+    double c_f2c_abs(complex *);
+    void c_sqrt(complex *, complex *), pow_ci(complex *, complex *, integer *) ;
     /* Local variables */
     aocl_int64_t i__, j, k, l, m;
     real s;
@@ -368,22 +368,21 @@ void aocl_lapack_clahqr(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
             /* . sudden underflow in ABS(H(I,I-1)) ==== */
             i__2 = i__ + (i__ - 1) * h_dim1;
             i__3 = i__ + (i__ - 1) * h_dim1;
-            r__3 = (r__1 = h__[i__3].real, f2c_abs(r__1))
-                   + (r__2 = r_imag(&h__[i__ + (i__ - 1) * h_dim1]), f2c_abs(r__2));
-            q__1.real = h__[i__2].real / r__3;
-            q__1.imag = h__[i__2].imag / r__3; // , expr subst
-            sc.real = q__1.real;
-            sc.imag = q__1.imag; // , expr subst
+            r__3 = (r__1 = h__[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[i__ + (i__ - 1) * h_dim1]), f2c_abs(r__2));
+            q__1.r = h__[i__2].r / r__3;
+            q__1.i = h__[i__2].i / r__3; // , expr subst
+            sc.r = q__1.r;
+            sc.i = q__1.i; // , expr subst
             r_cnjg(&q__2, &sc);
-            r__1 = c_abs(&sc);
-            q__1.real = q__2.real / r__1;
-            q__1.imag = q__2.imag / r__1; // , expr subst
-            sc.real = q__1.real;
-            sc.imag = q__1.imag; // , expr subst
+            r__1 = c_f2c_abs(&sc);
+            q__1.r = q__2.r / r__1;
+            q__1.i = q__2.i / r__1; // , expr subst
+            sc.r = q__1.r;
+            sc.i = q__1.i; // , expr subst
             i__2 = i__ + (i__ - 1) * h_dim1;
-            r__1 = c_abs(&h__[i__ + (i__ - 1) * h_dim1]);
-            h__[i__2].real = r__1;
-            h__[i__2].imag = 0.f; // , expr subst
+            r__1 = c_f2c_abs(&h__[i__ + (i__ - 1) * h_dim1]);
+            h__[i__2].r = r__1;
+            h__[i__2].i = 0.f; // , expr subst
             i__2 = jhi - i__ + 1;
             aocl_blas_cscal(&i__2, &sc, &h__[i__ + i__ * h_dim1], ldh);
             /* Computing MIN */
@@ -441,61 +440,52 @@ L30:
         i__2 = l + 1;
         for(k = i__; k >= i__2; --k)
         {
-            i__3 = k + (k - 1) * h_dim1;
-            if((r__1 = h__[i__3].real, f2c_abs(r__1))
-                   + (r__2 = r_imag(&h__[k + (k - 1) * h_dim1]), f2c_abs(r__2))
-               <= smlnum)
+            i__2 = k + (k - 1) * h_dim1;
+            if ((r__1 = h__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[k + (k - 1) * h_dim1]), f2c_abs(r__2)) <= smlnum)
             {
                 goto L50;
             }
-            i__3 = k - 1 + (k - 1) * h_dim1;
-            i__4 = k + k * h_dim1;
-            tst = (r__1 = h__[i__3].real, f2c_abs(r__1))
-                  + (r__2 = r_imag(&h__[k - 1 + (k - 1) * h_dim1]), f2c_abs(r__2))
-                  + ((r__3 = h__[i__4].real, f2c_abs(r__3))
-                     + (r__4 = r_imag(&h__[k + k * h_dim1]), f2c_abs(r__4)));
-            if(tst == 0.f)
+            i__2 = k - 1 + (k - 1) * h_dim1;
+            i__3 = k + k * h_dim1;
+            tst = (r__1 = h__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[k - 1 + (k - 1) * h_dim1]), f2c_abs(r__2)) + ((r__3 = h__[i__3].r, f2c_abs(r__3)) + (r__4 = r_imag(&h__[k + k * h_dim1]), f2c_abs( r__4)));
+            if (tst == 0.f)
             {
                 if(k - 2 >= *ilo)
                 {
-                    i__3 = k - 1 + (k - 2) * h_dim1;
-                    tst += (r__1 = h__[i__3].real, f2c_abs(r__1));
+                    i__2 = k - 1 + (k - 2) * h_dim1;
+                    tst += (r__1 = h__[i__2].r, f2c_abs(r__1));
                 }
                 if(k + 1 <= *ihi)
                 {
-                    i__3 = k + 1 + k * h_dim1;
-                    tst += (r__1 = h__[i__3].real, f2c_abs(r__1));
+                    i__2 = k + 1 + k * h_dim1;
+                    tst += (r__1 = h__[i__2].r, f2c_abs(r__1));
                 }
             }
             /* ==== The following is a conservative small subdiagonal */
             /* . deflation criterion due to Ahues & Tisseur (LAWN 122, */
             /* . 1997). It has better mathematical foundation and */
             /* . improves accuracy in some examples. ==== */
-            i__3 = k + (k - 1) * h_dim1;
-            if((r__1 = h__[i__3].real, f2c_abs(r__1)) <= ulp * tst)
+            i__2 = k + (k - 1) * h_dim1;
+            if ((r__1 = h__[i__2].r, f2c_abs(r__1)) <= ulp * tst)
             {
                 /* Computing MAX */
-                i__3 = k + (k - 1) * h_dim1;
-                i__4 = k - 1 + k * h_dim1;
-                r__5 = (r__1 = h__[i__3].real, f2c_abs(r__1))
-                       + (r__2 = r_imag(&h__[k + (k - 1) * h_dim1]), f2c_abs(r__2));
-                r__6 = (r__3 = h__[i__4].real, f2c_abs(r__3))
-                       + (r__4 = r_imag(&h__[k - 1 + k * h_dim1]), f2c_abs(r__4)); // , expr subst
-                ab = fla_max(r__5, r__6);
+                i__2 = k + (k - 1) * h_dim1;
+                i__3 = k - 1 + k * h_dim1;
+                r__5 = (r__1 = h__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[ k + (k - 1) * h_dim1]), f2c_abs(r__2));
+                r__6 = (r__3 = h__[i__3].r, f2c_abs(r__3)) + (r__4 = r_imag(&h__[k - 1 + k * h_dim1]), f2c_abs(r__4)); // , expr subst
+                ab = max(r__5,r__6);
                 /* Computing MIN */
-                i__3 = k + (k - 1) * h_dim1;
-                i__4 = k - 1 + k * h_dim1;
-                r__5 = (r__1 = h__[i__3].real, f2c_abs(r__1))
-                       + (r__2 = r_imag(&h__[k + (k - 1) * h_dim1]), f2c_abs(r__2));
-                r__6 = (r__3 = h__[i__4].real, f2c_abs(r__3))
-                       + (r__4 = r_imag(&h__[k - 1 + k * h_dim1]), f2c_abs(r__4)); // , expr subst
-                ba = fla_min(r__5, r__6);
-                i__3 = k - 1 + (k - 1) * h_dim1;
-                i__4 = k + k * h_dim1;
-                q__2.real = h__[i__3].real - h__[i__4].real;
-                q__2.imag = h__[i__3].imag - h__[i__4].imag; // , expr subst
-                q__1.real = q__2.real;
-                q__1.imag = q__2.imag; // , expr subst
+                i__2 = k + (k - 1) * h_dim1;
+                i__3 = k - 1 + k * h_dim1;
+                r__5 = (r__1 = h__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[ k + (k - 1) * h_dim1]), f2c_abs(r__2));
+                r__6 = (r__3 = h__[i__3].r, f2c_abs(r__3)) + (r__4 = r_imag(&h__[k - 1 + k * h_dim1]), f2c_abs(r__4)); // , expr subst
+                ba = min(r__5,r__6);
+                i__2 = k - 1 + (k - 1) * h_dim1;
+                i__3 = k + k * h_dim1;
+                q__2.r = h__[i__2].r - h__[i__3].r;
+                q__2.i = h__[i__2].i - h__[i__3].i; // , expr subst
+                q__1.r = q__2.r;
+                q__1.i = q__2.i; // , expr subst
                 /* Computing MAX */
                 i__5 = k + k * h_dim1;
                 r__5 = (r__1 = h__[i__5].real, f2c_abs(r__1))
@@ -505,17 +495,20 @@ L30:
                 aa = fla_max(r__5, r__6);
                 i__3 = k - 1 + (k - 1) * h_dim1;
                 i__4 = k + k * h_dim1;
-                q__2.real = h__[i__3].real - h__[i__4].real;
-                q__2.imag = h__[i__3].imag - h__[i__4].imag; // , expr subst
-                q__1.real = q__2.real;
-                q__1.imag = q__2.imag; // , expr subst
+                r__5 = (r__1 = h__[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[ k + k * h_dim1]), f2c_abs(r__2));
+                r__6 = (r__3 = q__1.r, f2c_abs(r__3)) + (r__4 = r_imag(&q__1), f2c_abs(r__4)); // , expr subst
+                aa = max(r__5,r__6);
+                i__2 = k - 1 + (k - 1) * h_dim1;
+                i__3 = k + k * h_dim1;
+                q__2.r = h__[i__2].r - h__[i__3].r;
+                q__2.i = h__[i__2].i - h__[i__3].i; // , expr subst
+                q__1.r = q__2.r;
+                q__1.i = q__2.i; // , expr subst
                 /* Computing MIN */
-                i__5 = k + k * h_dim1;
-                r__5 = (r__1 = h__[i__5].real, f2c_abs(r__1))
-                       + (r__2 = r_imag(&h__[k + k * h_dim1]), f2c_abs(r__2));
-                r__6 = (r__3 = q__1.real, f2c_abs(r__3))
-                       + (r__4 = r_imag(&q__1), f2c_abs(r__4)); // , expr subst
-                bb = fla_min(r__5, r__6);
+                i__4 = k + k * h_dim1;
+                r__5 = (r__1 = h__[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[ k + k * h_dim1]), f2c_abs(r__2));
+                r__6 = (r__3 = q__1.r, f2c_abs(r__3)) + (r__4 = r_imag(&q__1), f2c_abs(r__4)); // , expr subst
+                bb = min(r__5,r__6);
                 s = aa + ab;
                 /* Computing MAX */
                 r__1 = smlnum;
@@ -553,24 +546,24 @@ L30:
         if(kdefl % 20 == 0)
         {
             /* Exceptional shift. */
-            i__2 = i__ + (i__ - 1) * h_dim1;
-            s = (r__1 = h__[i__2].real, f2c_abs(r__1)) * .75f;
-            i__2 = i__ + i__ * h_dim1;
-            q__1.real = s + h__[i__2].real;
-            q__1.imag = h__[i__2].imag; // , expr subst
-            t.real = q__1.real;
-            t.imag = q__1.imag; // , expr subst
+            i__1 = l + 1 + l * h_dim1;
+            s = (r__1 = h__[i__1].r, f2c_abs(r__1)) * .75f;
+            i__1 = l + l * h_dim1;
+            q__1.r = s + h__[i__1].r;
+            q__1.i = h__[i__1].i; // , expr subst
+            t.r = q__1.r;
+            t.i = q__1.i; // , expr subst
         }
         else if(kdefl % 10 == 0)
         {
             /* Exceptional shift. */
-            i__2 = l + 1 + l * h_dim1;
-            s = (r__1 = h__[i__2].real, f2c_abs(r__1)) * .75f;
-            i__2 = l + l * h_dim1;
-            q__1.real = s + h__[i__2].real;
-            q__1.imag = h__[i__2].imag; // , expr subst
-            t.real = q__1.real;
-            t.imag = q__1.imag; // , expr subst
+            i__1 = i__ + (i__ - 1) * h_dim1;
+            s = (r__1 = h__[i__1].r, f2c_abs(r__1)) * .75f;
+            i__1 = i__ + i__ * h_dim1;
+            q__1.r = s + h__[i__1].r;
+            q__1.i = h__[i__1].i; // , expr subst
+            t.r = q__1.r;
+            t.i = q__1.i; // , expr subst
         }
         else
         {
@@ -580,28 +573,27 @@ L30:
             t.imag = h__[i__2].imag; // , expr subst
             c_sqrt(&q__2, &h__[i__ - 1 + i__ * h_dim1]);
             c_sqrt(&q__3, &h__[i__ + (i__ - 1) * h_dim1]);
-            q__1.real = q__2.real * q__3.real - q__2.imag * q__3.imag;
-            q__1.imag = q__2.real * q__3.imag + q__2.imag * q__3.real; // , expr subst
-            u.real = q__1.real;
-            u.imag = q__1.imag; // , expr subst
-            s = (r__1 = u.real, f2c_abs(r__1)) + (r__2 = r_imag(&u), f2c_abs(r__2));
-            if(s != 0.f)
+            q__1.r = q__2.r * q__3.r - q__2.i * q__3.i;
+            q__1.i = q__2.r * q__3.i + q__2.i * q__3.r; // , expr subst
+            u.r = q__1.r;
+            u.i = q__1.i; // , expr subst
+            s = (r__1 = u.r, f2c_abs(r__1)) + (r__2 = r_imag(&u), f2c_abs(r__2));
+            if (s != 0.f)
             {
-                i__2 = i__ - 1 + (i__ - 1) * h_dim1;
-                q__2.real = h__[i__2].real - t.real;
-                q__2.imag = h__[i__2].imag - t.imag; // , expr subst
-                q__1.real = q__2.real * .5f;
-                q__1.imag = q__2.imag * .5f; // , expr subst
-                x.real = q__1.real;
-                x.imag = q__1.imag; // , expr subst
-                sx = (r__1 = x.real, f2c_abs(r__1)) + (r__2 = r_imag(&x), f2c_abs(r__2));
+                i__1 = i__ - 1 + (i__ - 1) * h_dim1;
+                q__2.r = h__[i__1].r - t.r;
+                q__2.i = h__[i__1].i - t.i; // , expr subst
+                q__1.r = q__2.r * .5f;
+                q__1.i = q__2.i * .5f; // , expr subst
+                x.r = q__1.r;
+                x.i = q__1.i; // , expr subst
+                sx = (r__1 = x.r, f2c_abs(r__1)) + (r__2 = r_imag(&x), f2c_abs(r__2));
                 /* Computing MAX */
                 r__3 = s;
-                r__4 = (r__1 = x.real, f2c_abs(r__1))
-                       + (r__2 = r_imag(&x), f2c_abs(r__2)); // , expr subst
-                s = fla_max(r__3, r__4);
-                q__5.real = x.real / s;
-                q__5.imag = x.imag / s; // , expr subst
+                r__4 = (r__1 = x.r, f2c_abs(r__1)) + (r__2 = r_imag(&x), f2c_abs(r__2)); // , expr subst
+                s = max(r__3,r__4);
+                q__5.r = x.r / s;
+                q__5.i = x.i / s; // , expr subst
                 pow_ci(&q__4, &q__5, &c__2);
                 q__7.real = u.real / s;
                 q__7.imag = u.imag / s; // , expr subst
@@ -645,59 +637,53 @@ L30:
             /* Determine the effect of starting the single-shift QR */
             /* iteration at row M, and see if this would make H(M,M-1) */
             /* negligible. */
-            i__3 = m + m * h_dim1;
-            h11.real = h__[i__3].real;
-            h11.imag = h__[i__3].imag; // , expr subst
-            i__3 = m + 1 + (m + 1) * h_dim1;
-            h22.real = h__[i__3].real;
-            h22.imag = h__[i__3].imag; // , expr subst
-            q__1.real = h11.real - t.real;
-            q__1.imag = h11.imag - t.imag; // , expr subst
-            h11s.real = q__1.real;
-            h11s.imag = q__1.imag; // , expr subst
-            i__3 = m + 1 + m * h_dim1;
-            h21 = h__[i__3].real;
-            s = (r__1 = h11s.real, f2c_abs(r__1)) + (r__2 = r_imag(&h11s), f2c_abs(r__2))
-                + f2c_abs(h21);
-            q__1.real = h11s.real / s;
-            q__1.imag = h11s.imag / s; // , expr subst
-            h11s.real = q__1.real;
-            h11s.imag = q__1.imag; // , expr subst
+            i__2 = m + m * h_dim1;
+            h11.r = h__[i__2].r;
+            h11.i = h__[i__2].i; // , expr subst
+            i__2 = m + 1 + (m + 1) * h_dim1;
+            h22.r = h__[i__2].r;
+            h22.i = h__[i__2].i; // , expr subst
+            q__1.r = h11.r - t.r;
+            q__1.i = h11.i - t.i; // , expr subst
+            h11s.r = q__1.r;
+            h11s.i = q__1.i; // , expr subst
+            i__2 = m + 1 + m * h_dim1;
+            h21 = h__[i__2].r;
+            s = (r__1 = h11s.r, f2c_abs(r__1)) + (r__2 = r_imag(&h11s), f2c_abs(r__2)) + f2c_abs(h21);
+            q__1.r = h11s.r / s;
+            q__1.i = h11s.i / s; // , expr subst
+            h11s.r = q__1.r;
+            h11s.i = q__1.i; // , expr subst
             h21 /= s;
-            v[0].real = h11s.real;
-            v[0].imag = h11s.imag; // , expr subst
-            v[1].real = h21;
-            v[1].imag = 0.f; // , expr subst
-            i__3 = m + (m - 1) * h_dim1;
-            h10 = h__[i__3].real;
-            if(f2c_abs(h10) * f2c_abs(h21)
-               <= ulp
-                      * (((r__1 = h11s.real, f2c_abs(r__1)) + (r__2 = r_imag(&h11s), f2c_abs(r__2)))
-                         * ((r__3 = h11.real, f2c_abs(r__3)) + (r__4 = r_imag(&h11), f2c_abs(r__4))
-                            + ((r__5 = h22.real, f2c_abs(r__5))
-                               + (r__6 = r_imag(&h22), f2c_abs(r__6))))))
+            v[0].r = h11s.r;
+            v[0].i = h11s.i; // , expr subst
+            v[1].r = h21;
+            v[1].i = 0.f; // , expr subst
+            i__2 = m + (m - 1) * h_dim1;
+            h10 = h__[i__2].r;
+            if (f2c_abs(h10) * f2c_abs(h21) <= ulp * (((r__1 = h11s.r, f2c_abs(r__1)) + ( r__2 = r_imag(&h11s), f2c_abs(r__2))) * ((r__3 = h11.r, f2c_abs( r__3)) + (r__4 = r_imag(&h11), f2c_abs(r__4)) + ((r__5 = h22.r, f2c_abs(r__5)) + (r__6 = r_imag(&h22), f2c_abs(r__6))))))
             {
                 goto L70;
             }
             /* L60: */
         }
-        i__2 = l + l * h_dim1;
-        h11.real = h__[i__2].real;
-        h11.imag = h__[i__2].imag; // , expr subst
-        i__2 = l + 1 + (l + 1) * h_dim1;
-        h22.real = h__[i__2].real;
-        h22.imag = h__[i__2].imag; // , expr subst
-        q__1.real = h11.real - t.real;
-        q__1.imag = h11.imag - t.imag; // , expr subst
-        h11s.real = q__1.real;
-        h11s.imag = q__1.imag; // , expr subst
-        i__2 = l + 1 + l * h_dim1;
-        h21 = h__[i__2].real;
-        s = (r__1 = h11s.real, f2c_abs(r__1)) + (r__2 = r_imag(&h11s), f2c_abs(r__2)) + f2c_abs(h21);
-        q__1.real = h11s.real / s;
-        q__1.imag = h11s.imag / s; // , expr subst
-        h11s.real = q__1.real;
-        h11s.imag = q__1.imag; // , expr subst
+        i__1 = l + l * h_dim1;
+        h11.r = h__[i__1].r;
+        h11.i = h__[i__1].i; // , expr subst
+        i__1 = l + 1 + (l + 1) * h_dim1;
+        h22.r = h__[i__1].r;
+        h22.i = h__[i__1].i; // , expr subst
+        q__1.r = h11.r - t.r;
+        q__1.i = h11.i - t.i; // , expr subst
+        h11s.r = q__1.r;
+        h11s.i = q__1.i; // , expr subst
+        i__1 = l + 1 + l * h_dim1;
+        h21 = h__[i__1].r;
+        s = (r__1 = h11s.r, f2c_abs(r__1)) + (r__2 = r_imag(&h11s), f2c_abs(r__2)) + f2c_abs(h21);
+        q__1.r = h11s.r / s;
+        q__1.i = h11s.i / s; // , expr subst
+        h11s.r = q__1.r;
+        h11s.i = q__1.i; // , expr subst
         h21 /= s;
         v[0].real = h11s.real;
         v[0].imag = h11s.imag; // , expr subst
@@ -841,15 +827,16 @@ L30:
                 /* consecutive small subdiagonals were found, then extra */
                 /* scaling must be performed to ensure that H(M,M-1) remains */
                 /* real. */
-                q__1.real = 1.f - t1.real;
-                q__1.imag = 0.f - t1.imag; // , expr subst
-                temp.real = q__1.real;
-                temp.imag = q__1.imag; // , expr subst
-                r__1 = c_abs(&temp);
-                q__1.real = temp.real / r__1;
-                q__1.imag = temp.imag / r__1; // , expr subst
-                temp.real = q__1.real;
-                temp.imag = q__1.imag; // , expr subst
+                q__1.r = 1.f - t1.r;
+                q__1.i = 0.f - t1.i; // , expr subst
+                temp.r = q__1.r;
+                temp.i = q__1.i; // , expr subst
+                r__1 = c_f2c_abs(&temp);
+                q__1.r = temp.r / r__1;
+                q__1.i = temp.i / r__1; // , expr subst
+                temp.r = q__1.r;
+                temp.i = q__1.i; // , expr subst
+                i__2 = m + 1 + m * h_dim1;
                 i__3 = m + 1 + m * h_dim1;
                 i__4 = m + 1 + m * h_dim1;
                 r_cnjg(&q__2, &temp);
@@ -896,15 +883,15 @@ L30:
         temp.imag = h__[i__2].imag; // , expr subst
         if(r_imag(&temp) != 0.f)
         {
-            rtemp = c_abs(&temp);
-            i__2 = i__ + (i__ - 1) * h_dim1;
-            h__[i__2].real = rtemp;
-            h__[i__2].imag = 0.f; // , expr subst
-            q__1.real = temp.real / rtemp;
-            q__1.imag = temp.imag / rtemp; // , expr subst
-            temp.real = q__1.real;
-            temp.imag = q__1.imag; // , expr subst
-            if(i2 > i__)
+            rtemp = c_f2c_abs(&temp);
+            i__1 = i__ + (i__ - 1) * h_dim1;
+            h__[i__1].r = rtemp;
+            h__[i__1].i = 0.f; // , expr subst
+            q__1.r = temp.r / rtemp;
+            q__1.i = temp.i / rtemp; // , expr subst
+            temp.r = q__1.r;
+            temp.i = q__1.i; // , expr subst
+            if (i2 > i__)
             {
                 i__2 = i2 - i__;
                 r_cnjg(&q__1, &temp);

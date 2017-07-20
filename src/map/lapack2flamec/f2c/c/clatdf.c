@@ -200,9 +200,9 @@ void aocl_lapack_clatdf(aocl_int64_t *ijob, aocl_int64_t *n, scomplex *z__, aocl
     aocl_int64_t z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
     scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    void c_div(scomplex *, scomplex *, scomplex *);
-    double c_abs(scomplex *);
-    void c_sqrt(scomplex *, scomplex *);
+    void c_div(complex *, complex *, complex *);
+    double c_f2c_abs(complex *);
+    void c_sqrt(complex *, complex *);
     /* Local variables */
     aocl_int64_t i__, j, k;
     scomplex bm, bp, xm[2], xp[2];
@@ -380,8 +380,8 @@ void aocl_lapack_clatdf(aocl_int64_t *ijob, aocl_int64_t *n, scomplex *z__, aocl
                 rhs[i__2].imag = q__1.imag; // , expr subst
                 /* L20: */
             }
-            splus += c_abs(&work[i__ - 1]);
-            sminu += c_abs(&rhs[i__]);
+            splus += c_f2c_abs(&work[i__ - 1]);
+            sminu += c_f2c_abs(&rhs[i__]);
             /* L30: */
         }
         if(splus > sminu)

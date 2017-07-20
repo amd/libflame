@@ -947,8 +947,8 @@ void aocl_lapack_dggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
                 {
                     /* Computing MAX */
                     d__2 = temp;
-                    d__3 = (d__1 = vl[jr + jc * vl_dim1], f2c_abs(d__1)); // , expr subst
-                    temp = fla_max(d__2, d__3);
+                    d__3 = (d__1 = vl[jr + jc * vl_dim1], f2c_abs( d__1)); // , expr subst
+                    temp = max(d__2,d__3);
                     /* L30: */
                 }
             }
@@ -959,9 +959,8 @@ void aocl_lapack_dggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
                 {
                     /* Computing MAX */
                     d__3 = temp;
-                    d__4 = (d__1 = vl[jr + jc * vl_dim1], f2c_abs(d__1))
-                           + (d__2 = vl[jr + (jc + 1) * vl_dim1], f2c_abs(d__2)); // , expr subst
-                    temp = fla_max(d__3, d__4);
+                    d__4 = (d__1 = vl[jr + jc * vl_dim1], f2c_abs( d__1)) + (d__2 = vl[jr + (jc + 1) * vl_dim1], f2c_abs( d__2)); // , expr subst
+                    temp = max(d__3,d__4);
                     /* L40: */
                 }
             }
@@ -1011,8 +1010,8 @@ void aocl_lapack_dggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
                 {
                     /* Computing MAX */
                     d__2 = temp;
-                    d__3 = (d__1 = vr[jr + jc * vr_dim1], f2c_abs(d__1)); // , expr subst
-                    temp = fla_max(d__2, d__3);
+                    d__3 = (d__1 = vr[jr + jc * vr_dim1], f2c_abs( d__1)); // , expr subst
+                    temp = max(d__2,d__3);
                     /* L80: */
                 }
             }
@@ -1023,9 +1022,8 @@ void aocl_lapack_dggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
                 {
                     /* Computing MAX */
                     d__3 = temp;
-                    d__4 = (d__1 = vr[jr + jc * vr_dim1], f2c_abs(d__1))
-                           + (d__2 = vr[jr + (jc + 1) * vr_dim1], f2c_abs(d__2)); // , expr subst
-                    temp = fla_max(d__3, d__4);
+                    d__4 = (d__1 = vr[jr + jc * vr_dim1], f2c_abs( d__1)) + (d__2 = vr[jr + (jc + 1) * vr_dim1], f2c_abs( d__2)); // , expr subst
+                    temp = max(d__3,d__4);
                     /* L90: */
                 }
             }

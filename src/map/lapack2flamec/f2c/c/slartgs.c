@@ -111,7 +111,7 @@ void slartgs_(real *x, real *y, real *sigma, real *cs, real *sn)
     thresh = slamch_("E");
     /* Compute the first column of B**T*B - SIGMA^2*I, up to a scale */
     /* factor. */
-    if(*sigma == 0.f && f2c_abs(*x) < thresh || f2c_abs(*x) == *sigma && *y == 0.f)
+    if (*sigma == 0.f && f2c_abs(*x) < thresh || f2c_abs(*x) == *sigma && *y == 0.f)
     {
         z__ = 0.f;
         w = 0.f;
@@ -129,7 +129,7 @@ void slartgs_(real *x, real *y, real *sigma, real *cs, real *sn)
             w = -(*y);
         }
     }
-    else if(f2c_abs(*x) < thresh)
+    else if (f2c_abs(*x) < thresh)
     {
         z__ = -(*sigma) * *sigma;
         w = 0.f;

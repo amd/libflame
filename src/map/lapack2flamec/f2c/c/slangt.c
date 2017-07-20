@@ -48,7 +48,7 @@ static aocl_int64_t c__1 = 1;
 /* > \return SLANGT */
 /* > \verbatim */
 /* > */
-/* > SLANGT = ( fla_max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
+/* > SLANGT = ( max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
 /* > ( */
 /* > ( norm1(A), NORM = '1', 'O' or 'o' */
 /* > ( */
@@ -59,7 +59,7 @@ static aocl_int64_t c__1 = 1;
 /* > where norm1 denotes the one norm of a matrix (maximum column sum), */
 /* > normI denotes the infinity norm of a matrix (maximum row sum) and */
 /* > normF denotes the Frobenius norm of a matrix (square root of sum of */
-/* > squares). Note that fla_max(f2c_abs(A(i,j))) is not a consistent matrix norm. */
+/* > squares). Note that max(f2c_abs(A(i,j))) is not a consistent matrix norm. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -162,23 +162,23 @@ real aocl_lapack_slangt(char *norm, aocl_int64_t *n, real *dl, real *d__, real *
     }
     else if(lsame_(norm, "M", 1, 1))
     {
-        /* Find fla_max(f2c_abs(A(i,j))). */
+        /* Find max(f2c_abs(A(i,j))). */
         anorm = (r__1 = d__[*n], f2c_abs(r__1));
         i__1 = *n - 1;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             r__3 = (r__2 = dl[i__], f2c_abs(r__2));
-            if(anorm < (r__1 = dl[i__], f2c_abs(r__1)) || sisnan_(&r__3))
+            if (anorm < (r__1 = dl[i__], f2c_abs(r__1)) || sisnan_(&r__3))
             {
                 anorm = (r__4 = dl[i__], f2c_abs(r__4));
             }
             r__3 = (r__2 = d__[i__], f2c_abs(r__2));
-            if(anorm < (r__1 = d__[i__], f2c_abs(r__1)) || sisnan_(&r__3))
+            if (anorm < (r__1 = d__[i__], f2c_abs(r__1)) || sisnan_(&r__3))
             {
                 anorm = (r__4 = d__[i__], f2c_abs(r__4));
             }
             r__3 = (r__2 = du[i__], f2c_abs(r__2));
-            if(anorm < (r__1 = du[i__], f2c_abs(r__1)) || sisnan_(&r__3))
+            if (anorm < (r__1 = du[i__], f2c_abs(r__1)) || sisnan_(&r__3))
             {
                 anorm = (r__4 = du[i__], f2c_abs(r__4));
             }
@@ -195,17 +195,16 @@ real aocl_lapack_slangt(char *norm, aocl_int64_t *n, real *dl, real *d__, real *
         else
         {
             anorm = f2c_abs(d__[1]) + f2c_abs(dl[1]);
-            temp = (r__1 = d__[*n], f2c_abs(r__1)) + (r__2 = du[*n - 1], f2c_abs(r__2));
-            if(anorm < temp || sisnan_(&temp))
+            temp = (r__1 = d__[*n], f2c_abs(r__1)) + (r__2 = du[*n - 1], f2c_abs(r__2) );
+            if (anorm < temp || sisnan_(&temp))
             {
                 anorm = temp;
             }
             i__1 = *n - 1;
             for(i__ = 2; i__ <= i__1; ++i__)
             {
-                temp = (r__1 = d__[i__], f2c_abs(r__1)) + (r__2 = dl[i__], f2c_abs(r__2))
-                       + (r__3 = du[i__ - 1], f2c_abs(r__3));
-                if(anorm < temp || sisnan_(&temp))
+                temp = (r__1 = d__[i__], f2c_abs(r__1)) + (r__2 = dl[i__], f2c_abs( r__2)) + (r__3 = du[i__ - 1], f2c_abs(r__3));
+                if (anorm < temp || sisnan_(&temp))
                 {
                     anorm = temp;
                 }
@@ -223,17 +222,16 @@ real aocl_lapack_slangt(char *norm, aocl_int64_t *n, real *dl, real *d__, real *
         else
         {
             anorm = f2c_abs(d__[1]) + f2c_abs(du[1]);
-            temp = (r__1 = d__[*n], f2c_abs(r__1)) + (r__2 = dl[*n - 1], f2c_abs(r__2));
-            if(anorm < temp || sisnan_(&temp))
+            temp = (r__1 = d__[*n], f2c_abs(r__1)) + (r__2 = dl[*n - 1], f2c_abs(r__2) );
+            if (anorm < temp || sisnan_(&temp))
             {
                 anorm = temp;
             }
             i__1 = *n - 1;
             for(i__ = 2; i__ <= i__1; ++i__)
             {
-                temp = (r__1 = d__[i__], f2c_abs(r__1)) + (r__2 = du[i__], f2c_abs(r__2))
-                       + (r__3 = dl[i__ - 1], f2c_abs(r__3));
-                if(anorm < temp || sisnan_(&temp))
+                temp = (r__1 = d__[i__], f2c_abs(r__1)) + (r__2 = du[i__], f2c_abs( r__2)) + (r__3 = dl[i__ - 1], f2c_abs(r__3));
+                if (anorm < temp || sisnan_(&temp))
                 {
                     anorm = temp;
                 }

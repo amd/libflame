@@ -305,11 +305,11 @@ struct Namelist {
 	};
 typedef struct Namelist Namelist;
 
-#ifndef ceiling_f90_
-  #define ceiling_f90_(x) ((fla_dim_t)(x) + ((x) > 0 && (x) != (fla_dim_t)(x)))
+#ifndef f2c_abs
+  #define f2c_abs(x) ((x) >= 0 ? (x) : -(x))
 #endif
-#ifndef floor_f90_
-  #define floor_f90_(x) ((fla_dim_t)(x) - ((x) < 0 && (x) != (fla_dim_t)(x)))
+#ifndef f2c_dabs
+  #define f2c_dabs(x) (doublereal)f2c_abs(x)
 #endif
 #ifndef f2c_abs
   #define f2c_abs(x) ((x) >= 0 ? (x) : -(x))

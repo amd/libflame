@@ -49,7 +49,7 @@ doublereal dznrm2_(integer *n, dcomplex *x, integer *incx)
             if (x[i__3].real != 0.)
             {
                 i__3 = ix;
-                temp = (d__1 = x[i__3].real, f2c_abs(d__1));
+                temp = (d__1 = x[i__3].r, f2c_abs(d__1));
                 if (scale < temp)
                 {
                     /* Computing 2nd power */

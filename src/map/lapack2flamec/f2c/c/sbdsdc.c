@@ -380,8 +380,7 @@ void aocl_lapack_sbdsdc(char *uplo, char *compq, aocl_int64_t *n, real *d__, rea
             vt[vt_dim1 + 1] = 1.f;
         }
         d__[1] = f2c_abs(d__[1]);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     nm1 = *n - 1;
     /* If matrix lower bidiagonal, rotate to be upper bidiagonal */
@@ -490,7 +489,7 @@ void aocl_lapack_sbdsdc(char *uplo, char *compq, aocl_int64_t *n, real *d__, rea
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if((r__1 = d__[i__], f2c_abs(r__1)) < eps)
+        if ((r__1 = d__[i__], f2c_abs(r__1)) < eps)
         {
             d__[i__] = r_sign(&eps, &d__[i__]);
         }
@@ -501,7 +500,7 @@ void aocl_lapack_sbdsdc(char *uplo, char *compq, aocl_int64_t *n, real *d__, rea
     i__1 = nm1;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if((r__1 = e[i__], f2c_abs(r__1)) < eps || i__ == nm1)
+        if ((r__1 = e[i__], f2c_abs(r__1)) < eps || i__ == nm1)
         {
             /* Subproblem found. First determine its size and then */
             /* apply divide and conquer on it. */
@@ -510,7 +509,7 @@ void aocl_lapack_sbdsdc(char *uplo, char *compq, aocl_int64_t *n, real *d__, rea
                 /* A subproblem with E(I) small for I < NM1. */
                 nsize = i__ - start + 1;
             }
-            else if((r__1 = e[i__], f2c_abs(r__1)) >= eps)
+            else if ((r__1 = e[i__], f2c_abs(r__1)) >= eps)
             {
                 /* A subproblem with E(NM1) not too small but I = NM1. */
                 nsize = *n - start + 1;

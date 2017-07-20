@@ -486,8 +486,8 @@ void aocl_lapack_ztgsen(aocl_int64_t *ijob, logical *wantq, logical *wantz, logi
         i__3;
     dcomplex z__1, z__2;
     /* Builtin functions */
-    double sqrt(doublereal), z_abs(dcomplex *);
-    void d_cnjg(dcomplex *, dcomplex *);
+    double sqrt(doublereal), z_f2c_abs(doublecomplex *);
+    void d_cnjg(doublecomplex *, doublecomplex *);
     /* Local variables */
     aocl_int64_t i__, k, n1, n2, ks, mn2, ijb, kase, ierr;
     doublereal dsum;
@@ -870,8 +870,8 @@ void aocl_lapack_ztgsen(aocl_int64_t *ijob, logical *wantq, logical *wantz, logi
     i__1 = *n;
     for(k = 1; k <= i__1; ++k)
     {
-        dscale = z_abs(&b[k + k * b_dim1]);
-        if(dscale > safmin)
+        dscale = z_f2c_abs(&b[k + k * b_dim1]);
+        if (dscale > safmin)
         {
             i__2 = k + k * b_dim1;
             z__2.real = b[i__2].real / dscale;

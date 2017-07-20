@@ -7,8 +7,8 @@ int crotg_(scomplex *ca, scomplex *cb, real *c__, scomplex *s)
     real r__1, r__2;
     scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    double c_f2c_abs(scomplex *), sqrt(doublereal);
-    void r_cnjg(scomplex *, scomplex *);
+    double c_f2c_abs(complex *), sqrt(doublereal);
+    void r_cnjg(complex *, complex *);
     /* Local variables */
     real norm;
     scomplex alpha;
@@ -23,16 +23,16 @@ int crotg_(scomplex *ca, scomplex *cb, real *c__, scomplex *s)
     goto L20;
 L10:
     scale = c_f2c_abs(ca) + c_f2c_abs(cb);
-    q__1.real = ca->real / scale, q__1.imag = ca->imag / scale;
+    q__1.r = ca->r / scale, q__1.i = ca->i / scale;
     /* Computing 2nd power */
     r__1 = c_f2c_abs(&q__1);
-    q__2.real = cb->real / scale, q__2.imag = cb->imag / scale;
+    q__2.r = cb->r / scale, q__2.i = cb->i / scale;
     /* Computing 2nd power */
     r__2 = c_f2c_abs(&q__2);
     norm = scale * sqrt(r__1 * r__1 + r__2 * r__2);
     r__1 = c_f2c_abs(ca);
-    q__1.real = ca->real / r__1, q__1.imag = ca->imag / r__1;
-    alpha.real = q__1.real, alpha.imag = q__1.imag;
+    q__1.r = ca->r / r__1, q__1.i = ca->i / r__1;
+    alpha.r = q__1.r, alpha.i = q__1.i;
     *c__ = c_f2c_abs(ca) / norm;
     r_cnjg(&q__3, cb);
     q__2.real = alpha.real * q__3.real - alpha.imag * q__3.imag, q__2.imag = alpha.real * q__3.imag + alpha.imag * q__3.real;

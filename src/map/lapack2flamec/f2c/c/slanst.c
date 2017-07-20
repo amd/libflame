@@ -48,7 +48,7 @@ static aocl_int64_t c__1 = 1;
 /* > \return SLANST */
 /* > \verbatim */
 /* > */
-/* > SLANST = ( fla_max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
+/* > SLANST = ( max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
 /* > ( */
 /* > ( norm1(A), NORM = '1', 'O' or 'o' */
 /* > ( */
@@ -59,7 +59,7 @@ static aocl_int64_t c__1 = 1;
 /* > where norm1 denotes the one norm of a matrix (maximum column sum), */
 /* > normI denotes the infinity norm of a matrix (maximum row sum) and */
 /* > normF denotes the Frobenius norm of a matrix (square root of sum of */
-/* > squares). Note that fla_max(f2c_abs(A(i,j))) is not a consistent matrix norm. */
+/* > squares). Note that max(f2c_abs(A(i,j))) is not a consistent matrix norm. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -155,18 +155,18 @@ real aocl_lapack_slanst(char *norm, aocl_int64_t *n, real *d__, real *e)
     }
     else if(lsame_(norm, "M", 1, 1))
     {
-        /* Find fla_max(f2c_abs(A(i,j))). */
+        /* Find max(f2c_abs(A(i,j))). */
         anorm = (r__1 = d__[*n], f2c_abs(r__1));
         i__1 = *n - 1;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             sum = (r__1 = d__[i__], f2c_abs(r__1));
-            if(anorm < sum || sisnan_(&sum))
+            if (anorm < sum || sisnan_(&sum))
             {
                 anorm = sum;
             }
             sum = (r__1 = e[i__], f2c_abs(r__1));
-            if(anorm < sum || sisnan_(&sum))
+            if (anorm < sum || sisnan_(&sum))
             {
                 anorm = sum;
             }
@@ -184,16 +184,15 @@ real aocl_lapack_slanst(char *norm, aocl_int64_t *n, real *d__, real *e)
         {
             anorm = f2c_abs(d__[1]) + f2c_abs(e[1]);
             sum = (r__1 = e[*n - 1], f2c_abs(r__1)) + (r__2 = d__[*n], f2c_abs(r__2));
-            if(anorm < sum || sisnan_(&sum))
+            if (anorm < sum || sisnan_(&sum))
             {
                 anorm = sum;
             }
             i__1 = *n - 1;
             for(i__ = 2; i__ <= i__1; ++i__)
             {
-                sum = (r__1 = d__[i__], f2c_abs(r__1)) + (r__2 = e[i__], f2c_abs(r__2))
-                      + (r__3 = e[i__ - 1], f2c_abs(r__3));
-                if(anorm < sum || sisnan_(&sum))
+                sum = (r__1 = d__[i__], f2c_abs(r__1)) + (r__2 = e[i__], f2c_abs(r__2) ) + (r__3 = e[i__ - 1], f2c_abs(r__3));
+                if (anorm < sum || sisnan_(&sum))
                 {
                     anorm = sum;
                 }

@@ -743,7 +743,7 @@ void aocl_lapack_ctgsja(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
                 error = fla_max(error, ssmin);
                 /* L30: */
             }
-            if(f2c_abs(error) <= fla_min(*tola, *tolb))
+            if (f2c_abs(error) <= min(*tola,*tolb))
             {
                 goto L50;
             }

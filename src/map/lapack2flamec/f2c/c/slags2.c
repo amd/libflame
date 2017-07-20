@@ -186,7 +186,7 @@ void slags2_(logical *upper, real *a1, real *a2, real *a3, real *b1, real *b2, r
         /* ( CSL -SNL )*( A B )*( CSR SNR ) = ( R 0 ) */
         /* ( SNL CSL ) ( 0 D ) ( -SNR CSR ) ( 0 T ) */
         slasv2_(&a, &b, &d__, &s1, &s2, &snr, &csr, &snl, &csl);
-        if(f2c_abs(csl) >= f2c_abs(snl) || f2c_abs(csr) >= f2c_abs(snr))
+        if (f2c_abs(csl) >= f2c_abs(snl) || f2c_abs(csr) >= f2c_abs(snr))
         {
             /* Compute the (1,1) and (1,2) elements of U**T *A and V**T *B, */
             /* and (1,2) element of |U|**T *|A| and |V|**T *|B|. */
@@ -197,10 +197,9 @@ void slags2_(logical *upper, real *a1, real *a2, real *a3, real *b1, real *b2, r
             aua12 = f2c_abs(csl) * f2c_abs(*a2) + f2c_abs(snl) * f2c_abs(*a3);
             avb12 = f2c_abs(csr) * f2c_abs(*b2) + f2c_abs(snr) * f2c_abs(*b3);
             /* zero (1,2) elements of U**T *A and V**T *B */
-            if(f2c_abs(ua11r) + f2c_abs(ua12) != 0.f)
+            if (f2c_abs(ua11r) + f2c_abs(ua12) != 0.f)
             {
-                if(aua12 / (f2c_abs(ua11r) + f2c_abs(ua12))
-                   <= avb12 / (f2c_abs(vb11r) + f2c_abs(vb12)))
+                if (aua12 / (f2c_abs(ua11r) + f2c_abs(ua12)) <= avb12 / (f2c_abs(vb11r) + f2c_abs(vb12)))
                 {
                     r__1 = -ua11r;
                     slartg_(&r__1, &ua12, csq, snq, &r__);
@@ -232,10 +231,9 @@ void slags2_(logical *upper, real *a1, real *a2, real *a3, real *b1, real *b2, r
             aua22 = f2c_abs(snl) * f2c_abs(*a2) + f2c_abs(csl) * f2c_abs(*a3);
             avb22 = f2c_abs(snr) * f2c_abs(*b2) + f2c_abs(csr) * f2c_abs(*b3);
             /* zero (2,2) elements of U**T*A and V**T*B, and then swap. */
-            if(f2c_abs(ua21) + f2c_abs(ua22) != 0.f)
+            if (f2c_abs(ua21) + f2c_abs(ua22) != 0.f)
             {
-                if(aua22 / (f2c_abs(ua21) + f2c_abs(ua22))
-                   <= avb22 / (f2c_abs(vb21) + f2c_abs(vb22)))
+                if (aua22 / (f2c_abs(ua21) + f2c_abs(ua22)) <= avb22 / (f2c_abs(vb21) + f2c_abs(vb22)))
                 {
                     r__1 = -ua21;
                     slartg_(&r__1, &ua22, csq, snq, &r__);
@@ -269,7 +267,7 @@ void slags2_(logical *upper, real *a1, real *a2, real *a3, real *b1, real *b2, r
         /* ( CSL -SNL )*( A 0 )*( CSR SNR ) = ( R 0 ) */
         /* ( SNL CSL ) ( C D ) ( -SNR CSR ) ( 0 T ) */
         slasv2_(&a, &c__, &d__, &s1, &s2, &snr, &csr, &snl, &csl);
-        if(f2c_abs(csr) >= f2c_abs(snr) || f2c_abs(csl) >= f2c_abs(snl))
+        if (f2c_abs(csr) >= f2c_abs(snr) || f2c_abs(csl) >= f2c_abs(snl))
         {
             /* Compute the (2,1) and (2,2) elements of U**T *A and V**T *B, */
             /* and (2,1) element of |U|**T *|A| and |V|**T *|B|. */
@@ -280,10 +278,9 @@ void slags2_(logical *upper, real *a1, real *a2, real *a3, real *b1, real *b2, r
             aua21 = f2c_abs(snr) * f2c_abs(*a1) + f2c_abs(csr) * f2c_abs(*a2);
             avb21 = f2c_abs(snl) * f2c_abs(*b1) + f2c_abs(csl) * f2c_abs(*b2);
             /* zero (2,1) elements of U**T *A and V**T *B. */
-            if(f2c_abs(ua21) + f2c_abs(ua22r) != 0.f)
+            if (f2c_abs(ua21) + f2c_abs(ua22r) != 0.f)
             {
-                if(aua21 / (f2c_abs(ua21) + f2c_abs(ua22r))
-                   <= avb21 / (f2c_abs(vb21) + f2c_abs(vb22r)))
+                if (aua21 / (f2c_abs(ua21) + f2c_abs(ua22r)) <= avb21 / (f2c_abs(vb21) + f2c_abs(vb22r)))
                 {
                     slartg_(&ua22r, &ua21, csq, snq, &r__);
                 }
@@ -312,10 +309,9 @@ void slags2_(logical *upper, real *a1, real *a2, real *a3, real *b1, real *b2, r
             aua11 = f2c_abs(csr) * f2c_abs(*a1) + f2c_abs(snr) * f2c_abs(*a2);
             avb11 = f2c_abs(csl) * f2c_abs(*b1) + f2c_abs(snl) * f2c_abs(*b2);
             /* zero (1,1) elements of U**T*A and V**T*B, and then swap. */
-            if(f2c_abs(ua11) + f2c_abs(ua12) != 0.f)
+            if (f2c_abs(ua11) + f2c_abs(ua12) != 0.f)
             {
-                if(aua11 / (f2c_abs(ua11) + f2c_abs(ua12))
-                   <= avb11 / (f2c_abs(vb11) + f2c_abs(vb12)))
+                if (aua11 / (f2c_abs(ua11) + f2c_abs(ua12)) <= avb11 / (f2c_abs(vb11) + f2c_abs(vb12)))
                 {
                     slartg_(&ua12, &ua11, csq, snq, &r__);
                 }

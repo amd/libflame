@@ -188,7 +188,7 @@ row i of the matrix was interchanged */
 /* > BERR_OUT is DOUBLE PRECISION array, dimension (NRHS) */
 /* > On exit, BERR_OUT(j) contains the componentwise relative backward */
 /* > error for right-hand-side j from the formula */
-/* > fla_max(i) ( f2c_abs(RES(i)) / ( f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s) )(i) ) */
+/* > max(i) ( f2c_abs(RES(i)) / ( f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s) )(i) ) */
 /* > where f2c_abs(Z) is the componentwise absolute value of the matrix */
 /* > or vector Z. This is computed by DLA_LIN_BERR. */
 /* > \endverbatim */
@@ -587,7 +587,7 @@ void dla_gerfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
             {
                 yk = (d__1 = y[i__ + j * y_dim1], f2c_abs(d__1));
                 dyk = (d__1 = dy[i__], f2c_abs(d__1));
-                if(yk != 0.)
+                if (yk != 0.)
                 {
                     /* Computing MAX */
                     d__1 = dz_z__;
@@ -772,7 +772,7 @@ void dla_gerfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
             errs_c__[j + (errs_c_dim1 << 1)] = final_dz_z__ / (1 - dzratmax);
         }
         /* Compute componentwise relative backward error from formula */
-        /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s) )(i) ) */
+        /* max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s) )(i) ) */
         /* where f2c_abs(Z) is the componentwise absolute value of the matrix */
         /* or vector Z. */
         /* Compute residual RES = B_s - op(A_s) * Y, */
@@ -786,8 +786,7 @@ void dla_gerfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
             ayb[i__] = (d__1 = b[i__ + j * b_dim1], f2c_abs(d__1));
         }
         /* Compute f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s). */
-        dla_geamv_(trans_type__, n, n, &c_b8, &a[a_offset], lda, &y[j * y_dim1 + 1], &c__1, &c_b8,
-                   &ayb[1], &c__1);
+        dla_geamv_(trans_type__, n, n, &c_b8, &a[a_offset], lda, &y[j * y_dim1 + 1], &c__1, &c_b8, &ayb[1], &c__1);
         dla_lin_berr_(n, n, &c__1, &res[1], &ayb[1], &berr_out__[j]);
         /* End of loop for each RHS. */
     }

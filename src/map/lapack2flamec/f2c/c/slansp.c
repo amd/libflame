@@ -48,7 +48,7 @@ static aocl_int64_t c__1 = 1;
 /* > \return SLANSP */
 /* > \verbatim */
 /* > */
-/* > SLANSP = ( fla_max(abs(A(i,j))), NORM = 'M' or 'm' */
+/* > SLANSP = ( max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
 /* > ( */
 /* > ( norm1(A), NORM = '1', 'O' or 'o' */
 /* > ( */
@@ -59,7 +59,7 @@ static aocl_int64_t c__1 = 1;
 /* > where norm1 denotes the one norm of a matrix (maximum column sum), */
 /* > normI denotes the infinity norm of a matrix (maximum row sum) and */
 /* > normF denotes the Frobenius norm of a matrix (square root of sum of */
-/* > squares). Note that fla_max(abs(A(i,j))) is not a consistent matrix norm. */
+/* > squares). Note that max(f2c_abs(A(i,j))) is not a consistent matrix norm. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -168,7 +168,7 @@ real aocl_lapack_slansp(char *norm, char *uplo, aocl_int64_t *n, real *ap, real 
     }
     else if(lsame_(norm, "M", 1, 1))
     {
-        /* Find fla_max(abs(A(i,j))). */
+        /* Find max(f2c_abs(A(i,j))). */
         value = 0.f;
         if(lsame_(uplo, "U", 1, 1))
         {
@@ -180,7 +180,7 @@ real aocl_lapack_slansp(char *norm, char *uplo, aocl_int64_t *n, real *ap, real 
                 for(i__ = k; i__ <= i__2; ++i__)
                 {
                     sum = (r__1 = ap[i__], f2c_abs(r__1));
-                    if(value < sum || sum != sum)
+                    if (value < sum || sisnan_(&sum))
                     {
                         value = sum;
                     }
@@ -200,7 +200,7 @@ real aocl_lapack_slansp(char *norm, char *uplo, aocl_int64_t *n, real *ap, real 
                 for(i__ = k; i__ <= i__2; ++i__)
                 {
                     sum = (r__1 = ap[i__], f2c_abs(r__1));
-                    if(value < sum || sum != sum)
+                    if (value < sum || sisnan_(&sum))
                     {
                         value = sum;
                     }
@@ -312,7 +312,7 @@ real aocl_lapack_slansp(char *norm, char *uplo, aocl_int64_t *n, real *ap, real 
             if(ap[k] != 0.f)
             {
                 absa = (r__1 = ap[k], f2c_abs(r__1));
-                if(scale < absa)
+                if (scale < absa)
                 {
                     /* Computing 2nd power */
                     r__1 = scale / absa;

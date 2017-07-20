@@ -188,11 +188,11 @@ void aocl_lapack_dgesc2(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doubl
     /* Solve for U part */
     *scale = 1.;
     /* Check for scaling */
-    i__ = aocl_blas_idamax(n, &rhs[1], &c__1);
-    if(smlnum * 2. * (d__1 = rhs[i__], f2c_abs(d__1)) > (d__2 = a[*n + *n * a_dim1], f2c_abs(d__2)))
+    i__ = idamax_(n, &rhs[1], &c__1);
+    if (smlnum * 2. * (d__1 = rhs[i__], f2c_abs(d__1)) > (d__2 = a[*n + *n * a_dim1], f2c_abs(d__2)))
     {
         temp = .5 / (d__1 = rhs[i__], f2c_abs(d__1));
-        aocl_blas_dscal(n, &temp, &rhs[1], &c__1);
+        dscal_(n, &temp, &rhs[1], &c__1);
         *scale *= temp;
     }
     for(i__ = *n; i__ >= 1; --i__)

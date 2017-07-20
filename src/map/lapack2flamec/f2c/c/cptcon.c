@@ -149,7 +149,7 @@ void aocl_lapack_cptcon(aocl_int64_t *n, real *d__, scomplex *e, real *anorm, re
     aocl_int64_t i__1;
     real r__1;
     /* Builtin functions */
-    double c_abs(scomplex *);
+    double c_f2c_abs(complex *);
     /* Local variables */
     aocl_int64_t i__, ix;
     real ainvnm;
@@ -228,18 +228,18 @@ void aocl_lapack_cptcon(aocl_int64_t *n, real *d__, scomplex *e, real *anorm, re
     i__1 = *n;
     for(i__ = 2; i__ <= i__1; ++i__)
     {
-        rwork[i__] = rwork[i__ - 1] * c_abs(&e[i__ - 1]) + 1.f;
+        rwork[i__] = rwork[i__ - 1] * c_f2c_abs(&e[i__ - 1]) + 1.f;
         /* L20: */
     }
     /* Solve D * M(L)**H * x = b. */
     rwork[*n] /= d__[*n];
     for(i__ = *n - 1; i__ >= 1; --i__)
     {
-        rwork[i__] = rwork[i__] / d__[i__] + rwork[i__ + 1] * c_abs(&e[i__]);
+        rwork[i__] = rwork[i__] / d__[i__] + rwork[i__ + 1] * c_f2c_abs(&e[i__]);
         /* L30: */
     }
-    /* Compute AINVNM = fla_max(x(i)), 1<=i<=n. */
-    ix = aocl_blas_isamax(n, &rwork[1], &c__1);
+    /* Compute AINVNM = max(x(i)), 1<=i<=n. */
+    ix = isamax_(n, &rwork[1], &c__1);
     ainvnm = (r__1 = rwork[ix], f2c_abs(r__1));
     /* Compute the reciprocal condition number. */
     if(ainvnm != 0.f)

@@ -366,8 +366,8 @@ void aocl_lapack_dlasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     if(*k == 1)
     {
         d__[1] = f2c_abs(z__[1]);
-        aocl_blas_dcopy(&m, &vt2[vt2_dim1 + 1], ldvt2, &vt[vt_dim1 + 1], ldvt);
-        if(z__[1] > 0.)
+        dcopy_(&m, &vt2[vt2_dim1 + 1], ldvt2, &vt[vt_dim1 + 1], ldvt);
+        if (z__[1] > 0.)
         {
             aocl_blas_dcopy(&n, &u2[u2_dim1 + 1], &c__1, &u[u_dim1 + 1], &c__1);
         }

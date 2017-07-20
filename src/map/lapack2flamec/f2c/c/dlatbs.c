@@ -426,8 +426,8 @@ void aocl_lapack_dlatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
     }
     /* Compute a bound on the computed solution vector to see if the */
     /* Level 2 BLAS routine DTBSV can be used. */
-    j = aocl_blas_idamax(n, &x[1], &c__1);
-    xmax = (d__1 = x[j], f2c_dabs(d__1));
+    j = idamax_(n, &x[1], &c__1);
+    xmax = (d__1 = x[j], f2c_abs(d__1));
     xbnd = xmax;
     if(notran)
     {
@@ -469,15 +469,15 @@ void aocl_lapack_dlatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 {
                     goto L50;
                 }
-                /* M(j) = G(j-1) / f2c_dabs(A(j,j)) */
-                tjj = (d__1 = ab[maind + j * ab_dim1], f2c_dabs(d__1));
+                /* M(j) = G(j-1) / f2c_abs(A(j,j)) */
+                tjj = (d__1 = ab[maind + j * ab_dim1], f2c_abs(d__1));
                 /* Computing MIN */
                 d__1 = xbnd;
                 d__2 = fla_min(1., tjj) * grow; // , expr subst
                 xbnd = fla_min(d__1, d__2);
                 if(tjj + cnorm[j] >= smlnum)
                 {
-                    /* G(j) = G(j-1)*( 1 + CNORM(j) / f2c_dabs(A(j,j)) ) */
+                    /* G(j) = G(j-1)*( 1 + CNORM(j) / f2c_abs(A(j,j)) ) */
                     grow *= tjj / (tjj + cnorm[j]);
                 }
                 else
@@ -560,10 +560,10 @@ void aocl_lapack_dlatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 /* Computing MIN */
                 d__1 = grow;
                 d__2 = xbnd / xj; // , expr subst
-                grow = fla_min(d__1, d__2);
-                /* M(j) = M(j-1)*( 1 + CNORM(j) ) / f2c_dabs(A(j,j)) */
-                tjj = (d__1 = ab[maind + j * ab_dim1], f2c_dabs(d__1));
-                if(xj > tjj)
+                grow = min(d__1,d__2);
+                /* M(j) = M(j-1)*( 1 + CNORM(j) ) / f2c_abs(A(j,j)) */
+                tjj = (d__1 = ab[maind + j * ab_dim1], f2c_abs(d__1));
+                if (xj > tjj)
                 {
                     xbnd *= tjj / xj;
                 }
@@ -623,8 +623,8 @@ void aocl_lapack_dlatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
             for(j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2)
             {
                 /* Compute x(j) = b(j) / A(j,j), scaling x if necessary. */
-                xj = (d__1 = x[j], f2c_dabs(d__1));
-                if(nounit)
+                xj = (d__1 = x[j], f2c_abs(d__1));
+                if (nounit)
                 {
                     tjjs = ab[maind + j * ab_dim1] * tscal;
                 }
@@ -636,11 +636,11 @@ void aocl_lapack_dlatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         goto L100;
                     }
                 }
-                tjj = f2c_dabs(tjjs);
-                if(tjj > smlnum)
+                tjj = f2c_abs(tjjs);
+                if (tjj > smlnum)
                 {
-                    /* f2c_dabs(A(j,j)) > SMLNUM: */
-                    if(tjj < 1.)
+                    /* f2c_abs(A(j,j)) > SMLNUM: */
+                    if (tjj < 1.)
                     {
                         if(xj > tjj * bignum)
                         {
@@ -652,14 +652,14 @@ void aocl_lapack_dlatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         }
                     }
                     x[j] /= tjjs;
-                    xj = (d__1 = x[j], f2c_dabs(d__1));
+                    xj = (d__1 = x[j], f2c_abs(d__1));
                 }
                 else if(tjj > 0.)
                 {
-                    /* 0 < f2c_dabs(A(j,j)) <= SMLNUM: */
-                    if(xj > tjj * bignum)
+                    /* 0 < f2c_abs(A(j,j)) <= SMLNUM: */
+                    if (xj > tjj * bignum)
                     {
-                        /* Scale x by (1/f2c_dabs(x(j)))*f2c_dabs(A(j,j))*BIGNUM */
+                        /* Scale x by (1/f2c_abs(x(j)))*f2c_abs(A(j,j))*BIGNUM */
                         /* to avoid overflow when dividing by A(j,j). */
                         rec = tjj * bignum / xj;
                         if(cnorm[j] > 1.)
@@ -673,7 +673,7 @@ void aocl_lapack_dlatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         xmax *= rec;
                     }
                     x[j] /= tjjs;
-                    xj = (d__1 = x[j], f2c_dabs(d__1));
+                    xj = (d__1 = x[j], f2c_abs(d__1));
                 }
                 else
                 {
@@ -697,7 +697,7 @@ void aocl_lapack_dlatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     rec = 1. / xj;
                     if(cnorm[j] > (bignum - xmax) * rec)
                     {
-                        /* Scale x by 1/(2*f2c_dabs(x(j))). */
+                        /* Scale x by 1/(2*f2c_abs(x(j))). */
                         rec *= .5;
                         aocl_blas_dscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
@@ -724,8 +724,8 @@ void aocl_lapack_dlatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         aocl_blas_daxpy(&jlen, &d__1, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1,
                                         &x[j - jlen], &c__1);
                         i__3 = j - 1;
-                        i__ = aocl_blas_idamax(&i__3, &x[1], &c__1);
-                        xmax = (d__1 = x[i__], f2c_dabs(d__1));
+                        i__ = idamax_(&i__3, &x[1], &c__1);
+                        xmax = (d__1 = x[i__], f2c_abs(d__1));
                     }
                 }
                 else if(j < *n)
@@ -744,8 +744,8 @@ void aocl_lapack_dlatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                                         &c__1);
                     }
                     i__3 = *n - j;
-                    i__ = j + aocl_blas_idamax(&i__3, &x[j + 1], &c__1);
-                    xmax = (d__1 = x[i__], f2c_dabs(d__1));
+                    i__ = j + idamax_(&i__3, &x[j + 1], &c__1);
+                    xmax = (d__1 = x[i__], f2c_abs(d__1));
                 }
                 /* L110: */
             }
@@ -759,7 +759,7 @@ void aocl_lapack_dlatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
             {
                 /* Compute x(j) = b(j) - sum A(k,j)*x(k). */
                 /* k<>j */
-                xj = (d__1 = x[j], f2c_dabs(d__1));
+                xj = (d__1 = x[j], f2c_abs(d__1));
                 uscal = tscal;
                 rec = 1. / fla_max(xmax, 1.);
                 if(cnorm[j] > (bignum - xj) * rec)
@@ -774,8 +774,8 @@ void aocl_lapack_dlatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     {
                         tjjs = tscal;
                     }
-                    tjj = f2c_dabs(tjjs);
-                    if(tjj > 1.)
+                    tjj = f2c_abs(tjjs);
+                    if (tjj > 1.)
                     {
                         /* Divide by A(j,j) when scaling x if A(j,j) > 1. */
                         /* Computing MIN */
@@ -854,8 +854,8 @@ void aocl_lapack_dlatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     /* Compute x(j) := ( x(j) - sumj ) / A(j,j) if 1/A(j,j) */
                     /* was not used to scale the dotproduct. */
                     x[j] -= sumj;
-                    xj = (d__1 = x[j], f2c_dabs(d__1));
-                    if(nounit)
+                    xj = (d__1 = x[j], f2c_abs(d__1));
+                    if (nounit)
                     {
                         /* Compute x(j) = x(j) / A(j,j), scaling if necessary. */
                         tjjs = ab[maind + j * ab_dim1] * tscal;
@@ -868,15 +868,15 @@ void aocl_lapack_dlatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                             goto L150;
                         }
                     }
-                    tjj = f2c_dabs(tjjs);
-                    if(tjj > smlnum)
+                    tjj = f2c_abs(tjjs);
+                    if (tjj > smlnum)
                     {
-                        /* f2c_dabs(A(j,j)) > SMLNUM: */
-                        if(tjj < 1.)
+                        /* f2c_abs(A(j,j)) > SMLNUM: */
+                        if (tjj < 1.)
                         {
                             if(xj > tjj * bignum)
                             {
-                                /* Scale X by 1/f2c_dabs(x(j)). */
+                                /* Scale X by 1/f2c_abs(x(j)). */
                                 rec = 1. / xj;
                                 aocl_blas_dscal(n, &rec, &x[1], &c__1);
                                 *scale *= rec;
@@ -887,10 +887,10 @@ void aocl_lapack_dlatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     }
                     else if(tjj > 0.)
                     {
-                        /* 0 < f2c_dabs(A(j,j)) <= SMLNUM: */
-                        if(xj > tjj * bignum)
+                        /* 0 < f2c_abs(A(j,j)) <= SMLNUM: */
+                        if (xj > tjj * bignum)
                         {
-                            /* Scale x by (1/f2c_dabs(x(j)))*f2c_dabs(A(j,j))*BIGNUM. */
+                            /* Scale x by (1/f2c_abs(x(j)))*f2c_abs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
                             aocl_blas_dscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
@@ -922,8 +922,8 @@ void aocl_lapack_dlatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 }
                 /* Computing MAX */
                 d__2 = xmax;
-                d__3 = (d__1 = x[j], f2c_dabs(d__1)); // , expr subst
-                xmax = fla_max(d__2, d__3);
+                d__3 = (d__1 = x[j], f2c_abs(d__1)); // , expr subst
+                xmax = max(d__2,d__3);
                 /* L160: */
             }
         }

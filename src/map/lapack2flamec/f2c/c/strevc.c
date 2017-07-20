@@ -498,13 +498,12 @@ void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t 
             wi = 0.f;
             if(ip != 0)
             {
-                wi = sqrt((r__1 = t[ki + (ki - 1) * t_dim1], f2c_abs(r__1)))
-                     * sqrt((r__2 = t[ki - 1 + ki * t_dim1], f2c_abs(r__2)));
+                wi = sqrt((r__1 = t[ki + (ki - 1) * t_dim1], f2c_abs(r__1))) * sqrt((r__2 = t[ki - 1 + ki * t_dim1], f2c_abs(r__2)));
             }
             /* Computing MAX */
             r__1 = ulp * (f2c_abs(wr) + f2c_abs(wi));
-            smin = fla_max(r__1, smlnum);
-            if(ip == 0)
+            smin = max(r__1,smlnum);
+            if (ip == 0)
             {
                 /* Real right eigenvector */
                 work[ki + *n] = 1.f;
@@ -607,10 +606,10 @@ void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t 
                 /* Copy the vector x or Q*x to VR and normalize. */
                 if(!over)
                 {
-                    aocl_blas_scopy(&ki, &work[*n + 1], &c__1, &vr[is * vr_dim1 + 1], &c__1);
-                    ii = aocl_blas_isamax(&ki, &vr[is * vr_dim1 + 1], &c__1);
+                    scopy_(&ki, &work[*n + 1], &c__1, &vr[is * vr_dim1 + 1], & c__1);
+                    ii = isamax_(&ki, &vr[is * vr_dim1 + 1], &c__1);
                     remax = 1.f / (r__1 = vr[ii + is * vr_dim1], f2c_abs(r__1));
-                    aocl_blas_sscal(&ki, &remax, &vr[is * vr_dim1 + 1], &c__1);
+                    sscal_(&ki, &remax, &vr[is * vr_dim1 + 1], &c__1);
                     i__1 = *n;
                     for(k = ki + 1; k <= i__1; ++k)
                     {
@@ -626,9 +625,9 @@ void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t 
                         aocl_blas_sgemv("N", n, &i__1, &c_b22, &vr[vr_offset], ldvr, &work[*n + 1],
                                         &c__1, &work[ki + *n], &vr[ki * vr_dim1 + 1], &c__1);
                     }
-                    ii = aocl_blas_isamax(n, &vr[ki * vr_dim1 + 1], &c__1);
+                    ii = isamax_(n, &vr[ki * vr_dim1 + 1], &c__1);
                     remax = 1.f / (r__1 = vr[ii + ki * vr_dim1], f2c_abs(r__1));
-                    aocl_blas_sscal(n, &remax, &vr[ki * vr_dim1 + 1], &c__1);
+                    sscal_(n, &remax, &vr[ki * vr_dim1 + 1], &c__1);
                 }
             }
             else
@@ -637,8 +636,7 @@ void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t 
                 /* Initial solve */
                 /* [ (T(KI-1,KI-1) T(KI-1,KI) ) - (WR + I* WI)]*X = 0. */
                 /* [ (T(KI,KI-1) T(KI,KI) ) ] */
-                if((r__1 = t[ki - 1 + ki * t_dim1], f2c_abs(r__1))
-                   >= (r__2 = t[ki + (ki - 1) * t_dim1], f2c_abs(r__2)))
+                if ((r__1 = t[ki - 1 + ki * t_dim1], f2c_abs(r__1)) >= (r__2 = t[ ki + (ki - 1) * t_dim1], f2c_abs(r__2)))
                 {
                     work[ki - 1 + *n] = 1.f;
                     work[ki + n2] = wi / t[ki - 1 + ki * t_dim1];
@@ -779,9 +777,8 @@ void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t 
                     {
                         /* Computing MAX */
                         r__3 = emax;
-                        r__4 = (r__1 = vr[k + (is - 1) * vr_dim1], f2c_abs(r__1))
-                               + (r__2 = vr[k + is * vr_dim1], f2c_abs(r__2)); // , expr subst
-                        emax = fla_max(r__3, r__4);
+                        r__4 = (r__1 = vr[k + (is - 1) * vr_dim1] , f2c_abs(r__1)) + (r__2 = vr[k + is * vr_dim1], f2c_abs(r__2)); // , expr subst
+                        emax = max(r__3,r__4);
                         /* L100: */
                     }
                     remax = 1.f / emax;
@@ -818,9 +815,8 @@ void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t 
                     {
                         /* Computing MAX */
                         r__3 = emax;
-                        r__4 = (r__1 = vr[k + (ki - 1) * vr_dim1], f2c_abs(r__1))
-                               + (r__2 = vr[k + ki * vr_dim1], f2c_abs(r__2)); // , expr subst
-                        emax = fla_max(r__3, r__4);
+                        r__4 = (r__1 = vr[k + (ki - 1) * vr_dim1] , f2c_abs(r__1)) + (r__2 = vr[k + ki * vr_dim1], f2c_abs(r__2)); // , expr subst
+                        emax = max(r__3,r__4);
                         /* L120: */
                     }
                     remax = 1.f / emax;
@@ -879,13 +875,12 @@ void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t 
             wi = 0.f;
             if(ip != 0)
             {
-                wi = sqrt((r__1 = t[ki + (ki + 1) * t_dim1], f2c_abs(r__1)))
-                     * sqrt((r__2 = t[ki + 1 + ki * t_dim1], f2c_abs(r__2)));
+                wi = sqrt((r__1 = t[ki + (ki + 1) * t_dim1], f2c_abs(r__1))) * sqrt((r__2 = t[ki + 1 + ki * t_dim1], f2c_abs(r__2)));
             }
             /* Computing MAX */
             r__1 = ulp * (f2c_abs(wr) + f2c_abs(wi));
-            smin = fla_max(r__1, smlnum);
-            if(ip == 0)
+            smin = max(r__1,smlnum);
+            if (ip == 0)
             {
                 /* Real left eigenvector. */
                 work[ki + *n] = 1.f;
@@ -948,7 +943,7 @@ void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t 
                         work[j + *n] = x[0];
                         /* Computing MAX */
                         r__2 = (r__1 = work[j + *n], f2c_abs(r__1));
-                        vmax = fla_max(r__2, vmax);
+                        vmax = max(r__2,vmax);
                         vcrit = bignum / vmax;
                     }
                     else
@@ -991,8 +986,8 @@ void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t 
                         /* Computing MAX */
                         r__3 = (r__1 = work[j + *n], f2c_abs(r__1));
                         r__4 = (r__2 = work[j + 1 + *n], f2c_abs(r__2));
-                        r__3 = fla_max(r__3, r__4); // ; expr subst
-                        vmax = fla_max(r__3, vmax);
+                        r__3 = max( r__3,r__4); // ; expr subst
+                        vmax = max(r__3,vmax);
                         vcrit = bignum / vmax;
                     }
                 L170:;
@@ -1003,7 +998,7 @@ void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t 
                     i__2 = *n - ki + 1;
                     aocl_blas_scopy(&i__2, &work[ki + *n], &c__1, &vl[ki + is * vl_dim1], &c__1);
                     i__2 = *n - ki + 1;
-                    ii = aocl_blas_isamax(&i__2, &vl[ki + is * vl_dim1], &c__1) + ki - 1;
+                    ii = isamax_(&i__2, &vl[ki + is * vl_dim1], &c__1) + ki - 1;
                     remax = 1.f / (r__1 = vl[ii + is * vl_dim1], f2c_abs(r__1));
                     i__2 = *n - ki + 1;
                     aocl_blas_sscal(&i__2, &remax, &vl[ki + is * vl_dim1], &c__1);
@@ -1023,9 +1018,9 @@ void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t 
                                         &work[ki + 1 + *n], &c__1, &work[ki + *n],
                                         &vl[ki * vl_dim1 + 1], &c__1);
                     }
-                    ii = aocl_blas_isamax(n, &vl[ki * vl_dim1 + 1], &c__1);
+                    ii = isamax_(n, &vl[ki * vl_dim1 + 1], &c__1);
                     remax = 1.f / (r__1 = vl[ii + ki * vl_dim1], f2c_abs(r__1));
-                    aocl_blas_sscal(n, &remax, &vl[ki * vl_dim1 + 1], &c__1);
+                    sscal_(n, &remax, &vl[ki * vl_dim1 + 1], &c__1);
                 }
             }
             else
@@ -1034,8 +1029,7 @@ void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t 
                 /* Initial solve: */
                 /* ((T(KI,KI) T(KI,KI+1) )**T - (WR - I* WI))*X = 0. */
                 /* ((T(KI+1,KI) T(KI+1,KI+1)) ) */
-                if((r__1 = t[ki + (ki + 1) * t_dim1], f2c_abs(r__1))
-                   >= (r__2 = t[ki + 1 + ki * t_dim1], f2c_abs(r__2)))
+                if ((r__1 = t[ki + (ki + 1) * t_dim1], f2c_abs(r__1)) >= (r__2 = t[ki + 1 + ki * t_dim1], f2c_abs(r__2)))
                 {
                     work[ki + *n] = wi / t[ki + (ki + 1) * t_dim1];
                     work[ki + 1 + n2] = 1.f;
@@ -1117,8 +1111,8 @@ void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t 
                         /* Computing MAX */
                         r__3 = (r__1 = work[j + *n], f2c_abs(r__1));
                         r__4 = (r__2 = work[j + n2], f2c_abs(r__2));
-                        r__3 = fla_max(r__3, r__4); // ; expr subst
-                        vmax = fla_max(r__3, vmax);
+                        r__3 = max(r__3, r__4); // ; expr subst
+                        vmax = max(r__3,vmax);
                         vcrit = bignum / vmax;
                     }
                     else
@@ -1172,11 +1166,10 @@ void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t 
                         work[j + 1 + *n] = x[1];
                         work[j + 1 + n2] = x[3];
                         /* Computing MAX */
-                        r__1 = f2c_abs(x[0]), r__2 = f2c_abs(x[2]), r__1 = fla_max(r__1, r__2),
-                        r__2 = f2c_abs(x[1]), r__1 = fla_max(r__1, r__2);
+                        r__1 = f2c_abs(x[0]), r__2 = f2c_abs(x[2]), r__1 = max(r__1, r__2), r__2 = f2c_abs(x[1]), r__1 = max(r__1,r__2) ;
                         r__2 = f2c_abs(x[3]);
-                        r__1 = fla_max(r__1, r__2); // ; expr subst
-                        vmax = fla_max(r__1, vmax);
+                        r__1 = max(r__1,r__2); // ; expr subst
+                        vmax = max(r__1,vmax);
                         vcrit = bignum / vmax;
                     }
                 L200:;
@@ -1195,9 +1188,8 @@ void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t 
                     {
                         /* Computing MAX */
                         r__3 = emax;
-                        r__4 = (r__1 = vl[k + is * vl_dim1], f2c_abs(r__1))
-                               + (r__2 = vl[k + (is + 1) * vl_dim1], f2c_abs(r__2)); // , expr subst
-                        emax = fla_max(r__3, r__4);
+                        r__4 = (r__1 = vl[k + is * vl_dim1], f2c_abs( r__1)) + (r__2 = vl[k + (is + 1) * vl_dim1], f2c_abs(r__2)); // , expr subst
+                        emax = max(r__3,r__4);
                         /* L220: */
                     }
                     remax = 1.f / emax;
@@ -1237,9 +1229,8 @@ void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t 
                     {
                         /* Computing MAX */
                         r__3 = emax;
-                        r__4 = (r__1 = vl[k + ki * vl_dim1], f2c_abs(r__1))
-                               + (r__2 = vl[k + (ki + 1) * vl_dim1], f2c_abs(r__2)); // , expr subst
-                        emax = fla_max(r__3, r__4);
+                        r__4 = (r__1 = vl[k + ki * vl_dim1], f2c_abs( r__1)) + (r__2 = vl[k + (ki + 1) * vl_dim1], f2c_abs(r__2)); // , expr subst
+                        emax = max(r__3,r__4);
                         /* L240: */
                     }
                     remax = 1.f / emax;

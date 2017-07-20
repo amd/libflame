@@ -170,7 +170,7 @@ void aocl_lapack_slasd5(aocl_int64_t *i__, real *d__, real *z__, real *delta, re
             c__ = *rho * z__[1] * z__[1] * delsq;
             /* B > ZERO, always */
             /* The following TAU is DSIGMA * DSIGMA - D( 1 ) * D( 1 ) */
-            tau = c__ * 2.f / (b + sqrt((r__1 = b * b - c__ * 4.f, f2c_abs(r__1))));
+            tau = c__ * 2.f / (b + sqrt((r__1 = b * b - c__ * 4.f, f2c_abs(r__1))) );
             /* The following TAU is DSIGMA - D( 1 ) */
             tau /= d__[1] + sqrt(d__[1] * d__[1] + tau);
             *dsigma = d__[1] + tau;

@@ -358,7 +358,7 @@ void aocl_lapack_dlasd4(aocl_int64_t *n, aocl_int64_t *i__, doublereal *d__, dou
         /* $ + ABS( TAU2 )*( DPSI+DPHI ) */
         w = rhoinv + phi + psi;
         /* Test for convergence */
-        if(f2c_abs(w) <= eps * erretm)
+        if (f2c_abs(w) <= eps * erretm)
         {
             goto L240;
         }
@@ -383,7 +383,7 @@ void aocl_lapack_dlasd4(aocl_int64_t *n, aocl_int64_t *i__, doublereal *d__, dou
         }
         else
         {
-            eta = b * 2. / (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_abs(d__1))));
+            eta = b * 2. / (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_abs(d__1))) );
         }
         /* Note, eta should be positive if w is negative, and */
         /* eta should be negative otherwise. However, */
@@ -436,7 +436,7 @@ void aocl_lapack_dlasd4(aocl_int64_t *n, aocl_int64_t *i__, doublereal *d__, dou
         for(niter = iter; niter <= 400; ++niter)
         {
             /* Test for convergence */
-            if(f2c_abs(w) <= eps * erretm)
+            if (f2c_abs(w) <= eps * erretm)
             {
                 goto L240;
             }
@@ -448,11 +448,11 @@ void aocl_lapack_dlasd4(aocl_int64_t *n, aocl_int64_t *i__, doublereal *d__, dou
             b = dtnsq1 * dtnsq * w;
             if(a >= 0.)
             {
-                eta = (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_abs(d__1)))) / (c__ * 2.);
+                eta = (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_abs(d__1)))) / ( c__ * 2.);
             }
             else
             {
-                eta = b * 2. / (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_abs(d__1))));
+                eta = b * 2. / (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_abs( d__1))));
             }
             /* Note, eta should be positive if w is negative, and */
             /* eta should be negative otherwise. However, */
@@ -554,7 +554,7 @@ void aocl_lapack_dlasd4(aocl_int64_t *n, aocl_int64_t *i__, doublereal *d__, dou
             b = z__[*i__] * z__[*i__] * delsq;
             if(a > 0.)
             {
-                tau2 = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_abs(d__1))));
+                tau2 = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_abs( d__1))));
             }
             else
             {
@@ -565,8 +565,7 @@ void aocl_lapack_dlasd4(aocl_int64_t *n, aocl_int64_t *i__, doublereal *d__, dou
             /* SIGMA - D( I ). */
             tau = tau2 / (d__[*i__] + sqrt(d__[*i__] * d__[*i__] + tau2));
             temp = sqrt(eps);
-            if(d__[*i__] <= temp * d__[ip1] && (d__1 = z__[*i__], f2c_abs(d__1)) <= temp
-               && d__[*i__] > 0.)
+            if (d__[*i__] <= temp * d__[ip1] && (d__1 = z__[*i__], f2c_abs(d__1)) <= temp && d__[*i__] > 0.)
             {
                 /* Computing MIN */
                 d__1 = d__[*i__] * 10.;
@@ -586,7 +585,7 @@ void aocl_lapack_dlasd4(aocl_int64_t *n, aocl_int64_t *i__, doublereal *d__, dou
             b = z__[ip1] * z__[ip1] * delsq;
             if(a < 0.)
             {
-                tau2 = b * 2. / (a - sqrt((d__1 = a * a + b * 4. * c__, f2c_abs(d__1))));
+                tau2 = b * 2. / (a - sqrt((d__1 = a * a + b * 4. * c__, f2c_abs( d__1))));
             }
             else
             {
@@ -662,7 +661,7 @@ void aocl_lapack_dlasd4(aocl_int64_t *n, aocl_int64_t *i__, doublereal *d__, dou
         erretm = (phi - psi) * 8. + erretm + rhoinv * 2. + f2c_abs(temp) * 3.;
         /* $ + ABS( TAU2 )*DW */
         /* Test for convergence */
-        if(f2c_abs(w) <= eps * erretm)
+        if (f2c_abs(w) <= eps * erretm)
         {
             goto L240;
         }
@@ -711,11 +710,11 @@ void aocl_lapack_dlasd4(aocl_int64_t *n, aocl_int64_t *i__, doublereal *d__, dou
             }
             else if(a <= 0.)
             {
-                eta = (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_abs(d__1)))) / (c__ * 2.);
+                eta = (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_abs(d__1)))) / ( c__ * 2.);
             }
             else
             {
-                eta = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_abs(d__1))));
+                eta = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_abs( d__1))));
             }
         }
         else
@@ -893,14 +892,14 @@ void aocl_lapack_dlasd4(aocl_int64_t *n, aocl_int64_t *i__, doublereal *d__, dou
         swtch = FALSE_;
         if(orgati)
         {
-            if(-w > f2c_abs(prew) / 10.)
+            if (-w > f2c_abs(prew) / 10.)
             {
                 swtch = TRUE_;
             }
         }
         else
         {
-            if(w > f2c_abs(prew) / 10.)
+            if (w > f2c_abs(prew) / 10.)
             {
                 swtch = TRUE_;
             }
@@ -910,7 +909,7 @@ void aocl_lapack_dlasd4(aocl_int64_t *n, aocl_int64_t *i__, doublereal *d__, dou
         for(niter = iter; niter <= 400; ++niter)
         {
             /* Test for convergence */
-            if(f2c_abs(w) <= eps * erretm)
+            if (f2c_abs(w) <= eps * erretm)
             {
                 /* $ .OR. (SGUB-SGLB).LE.EIGHT*ABS(SGUB+SGLB) ) THEN */
                 goto L240;
@@ -1102,7 +1101,7 @@ void aocl_lapack_dlasd4(aocl_int64_t *n, aocl_int64_t *i__, doublereal *d__, dou
                     }
                     else if(a <= 0.)
                     {
-                        eta = (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_abs(d__1)))) / (c__ * 2.);
+                        eta = (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_abs( d__1)))) / (c__ * 2.);
                     }
                     else
                     {
@@ -1192,7 +1191,7 @@ void aocl_lapack_dlasd4(aocl_int64_t *n, aocl_int64_t *i__, doublereal *d__, dou
             w = rhoinv + phi + psi + temp;
             erretm = (phi - psi) * 8. + erretm + rhoinv * 2. + f2c_abs(temp) * 3.;
             /* $ + ABS( TAU2 )*DW */
-            if(w * prew > 0. && f2c_abs(w) > f2c_abs(prew) / 10.)
+            if (w * prew > 0. && f2c_abs(w) > f2c_abs(prew) / 10.)
             {
                 swtch = !swtch;
             }

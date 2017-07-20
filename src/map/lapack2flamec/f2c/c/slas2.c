@@ -128,9 +128,9 @@ void slas2_(real *f, real *g, real *h__, real *ssmin, real *ssmax)
     fa = f2c_abs(*f);
     ga = f2c_abs(*g);
     ha = f2c_abs(*h__);
-    fhmn = fla_min(fa, ha);
-    fhmx = fla_max(fa, ha);
-    if(fhmn == 0.f)
+    fhmn = min(fa,ha);
+    fhmx = max(fa,ha);
+    if (fhmn == 0.f)
     {
         *ssmin = 0.f;
         if(fhmx == 0.f)

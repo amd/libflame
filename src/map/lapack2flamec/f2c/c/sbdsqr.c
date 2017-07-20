@@ -466,7 +466,7 @@ void aocl_lapack_sbdsqr(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_in
         /* Computing MAX */
         r__2 = smax;
         r__3 = (r__1 = d__[i__], f2c_abs(r__1)); // , expr subst
-        smax = fla_max(r__2, r__3);
+        smax = max(r__2,r__3);
         /* L20: */
     }
     i__1 = *n - 1;
@@ -475,7 +475,7 @@ void aocl_lapack_sbdsqr(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_in
         /* Computing MAX */
         r__2 = smax;
         r__3 = (r__1 = e[i__], f2c_abs(r__1)); // , expr subst
-        smax = fla_max(r__2, r__3);
+        smax = max(r__2,r__3);
         /* L30: */
     }
     smin = 0.f;
@@ -483,7 +483,7 @@ void aocl_lapack_sbdsqr(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_in
     {
         /* Relative accuracy desired */
         sminoa = f2c_abs(d__[1]);
-        if(sminoa == 0.f)
+        if (sminoa == 0.f)
         {
             goto L50;
         }
@@ -491,10 +491,9 @@ void aocl_lapack_sbdsqr(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_in
         i__1 = *n;
         for(i__ = 2; i__ <= i__1; ++i__)
         {
-            mu = (r__2 = d__[i__], f2c_abs(r__2))
-                 * (mu / (mu + (r__1 = e[i__ - 1], f2c_abs(r__1))));
-            sminoa = fla_min(sminoa, mu);
-            if(sminoa == 0.f)
+            mu = (r__2 = d__[i__], f2c_abs(r__2)) * (mu / (mu + (r__1 = e[i__ - 1] , f2c_abs(r__1))));
+            sminoa = min(sminoa,mu);
+            if (sminoa == 0.f)
             {
                 goto L50;
             }
@@ -512,8 +511,8 @@ void aocl_lapack_sbdsqr(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_in
         /* Absolute accuracy desired */
         /* Computing MAX */
         r__1 = f2c_abs(tol) * smax;
-        r__2 = *n * (*n * unfl) * 6; // , expr subst
-        thresh = fla_max(r__1, r__2);
+        r__2 = *n * 6 * *n * unfl; // , expr subst
+        thresh = max(r__1,r__2);
     }
     /* Prepare for main iteration loop for the singular values */
     /* (MAXIT is the maximum number of passes through the inner */
@@ -541,18 +540,19 @@ L60: /* Check for convergence or exceeding iteration count */
         }
     }
     /* Find diagonal block of matrix to work on */
-    if(tol < 0.f && (r__1 = d__[m], f2c_abs(r__1)) <= thresh)
+    if (tol < 0.f && (r__1 = d__[m], f2c_abs(r__1)) <= thresh)
     {
         d__[m] = 0.f;
     }
     smax = (r__1 = d__[m], f2c_abs(r__1));
+    smin = smax;
     i__1 = m - 1;
     for(lll = 1; lll <= i__1; ++lll)
     {
         ll = m - lll;
         abss = (r__1 = d__[ll], f2c_abs(r__1));
         abse = (r__1 = e[ll], f2c_abs(r__1));
-        if(tol < 0.f && abss <= thresh)
+        if (tol < 0.f && abss <= thresh)
         {
             d__[ll] = 0.f;
         }
@@ -607,7 +607,7 @@ L90:
     /* (from larger end diagonal element towards smaller) */
     if(ll > oldm || m < oldll)
     {
-        if((r__1 = d__[ll], f2c_abs(r__1)) >= (r__2 = d__[m], f2c_abs(r__2)))
+        if ((r__1 = d__[ll], f2c_abs(r__1)) >= (r__2 = d__[m], f2c_abs(r__2)))
         {
             /* Chase bulge from top (big end) to bottom (small end) */
             idir = 1;
@@ -623,8 +623,7 @@ L90:
     {
         /* Run convergence test in forward direction */
         /* First apply standard test to bottom of matrix */
-        if((r__2 = e[m - 1], f2c_abs(r__2)) <= f2c_abs(tol) * (r__1 = d__[m], f2c_abs(r__1))
-           || tol < 0.f && (r__3 = e[m - 1], f2c_abs(r__3)) <= thresh)
+        if ((r__2 = e[m - 1], f2c_abs(r__2)) <= f2c_abs(tol) * (r__1 = d__[m], f2c_abs( r__1)) || tol < 0.f && (r__3 = e[m - 1], f2c_abs(r__3)) <= thresh)
         {
             e[m - 1] = 0.f;
             goto L60;
@@ -634,18 +633,17 @@ L90:
             /* If relative accuracy desired, */
             /* apply convergence criterion forward */
             mu = (r__1 = d__[ll], f2c_abs(r__1));
-            smin = mu;
+            sminl = mu;
             i__1 = m - 1;
             for(lll = ll; lll <= i__1; ++lll)
             {
-                if((r__1 = e[lll], f2c_abs(r__1)) <= tol * mu)
+                if ((r__1 = e[lll], f2c_abs(r__1)) <= tol * mu)
                 {
                     e[lll] = 0.f;
                     goto L60;
                 }
-                mu = (r__2 = d__[lll + 1], f2c_abs(r__2))
-                     * (mu / (mu + (r__1 = e[lll], f2c_abs(r__1))));
-                smin = fla_min(smin, mu);
+                mu = (r__2 = d__[lll + 1], f2c_abs(r__2)) * (mu / (mu + (r__1 = e[ lll], f2c_abs(r__1))));
+                sminl = min(sminl,mu);
                 /* L100: */
             }
         }
@@ -654,8 +652,7 @@ L90:
     {
         /* Run convergence test in backward direction */
         /* First apply standard test to top of matrix */
-        if((r__2 = e[ll], f2c_abs(r__2)) <= f2c_abs(tol) * (r__1 = d__[ll], f2c_abs(r__1))
-           || tol < 0.f && (r__3 = e[ll], f2c_abs(r__3)) <= thresh)
+        if ((r__2 = e[ll], f2c_abs(r__2)) <= f2c_abs(tol) * (r__1 = d__[ll], f2c_abs(r__1) ) || tol < 0.f && (r__3 = e[ll], f2c_abs(r__3)) <= thresh)
         {
             e[ll] = 0.f;
             goto L60;
@@ -665,18 +662,17 @@ L90:
             /* If relative accuracy desired, */
             /* apply convergence criterion backward */
             mu = (r__1 = d__[m], f2c_abs(r__1));
-            smin = mu;
+            sminl = mu;
             i__1 = ll;
             for(lll = m - 1; lll >= i__1; --lll)
             {
-                if((r__1 = e[lll], f2c_abs(r__1)) <= tol * mu)
+                if ((r__1 = e[lll], f2c_abs(r__1)) <= tol * mu)
                 {
                     e[lll] = 0.f;
                     goto L60;
                 }
-                mu = (r__2 = d__[lll], f2c_abs(r__2))
-                     * (mu / (mu + (r__1 = e[lll], f2c_abs(r__1))));
-                smin = fla_min(smin, mu);
+                mu = (r__2 = d__[lll], f2c_abs(r__2)) * (mu / (mu + (r__1 = e[lll] , f2c_abs(r__1))));
+                sminl = min(sminl,mu);
                 /* L110: */
             }
         }
@@ -769,7 +765,7 @@ L90:
                                   &c__[ll + c_dim1], ldc);
             }
             /* Test convergence */
-            if((r__1 = e[m - 1], f2c_abs(r__1)) <= thresh)
+            if ((r__1 = e[m - 1], f2c_abs(r__1)) <= thresh)
             {
                 e[m - 1] = 0.f;
             }
@@ -821,7 +817,7 @@ L90:
                                   ldc);
             }
             /* Test convergence */
-            if((r__1 = e[ll], f2c_abs(r__1)) <= thresh)
+            if ((r__1 = e[ll], f2c_abs(r__1)) <= thresh)
             {
                 e[ll] = 0.f;
             }
@@ -834,8 +830,7 @@ L90:
         {
             /* Chase bulge from top to bottom */
             /* Save cosines and sines for later singular vector updates */
-            f = ((r__1 = d__[ll], f2c_abs(r__1)) - shift)
-                * (r_sign(&c_b49, &d__[ll]) + shift / d__[ll]);
+            f = ((r__1 = d__[ll], f2c_abs(r__1)) - shift) * (r_sign(&c_b49, &d__[ ll]) + shift / d__[ll]);
             g = e[ll];
             i__1 = m - 1;
             for(i__ = ll; i__ <= i__1; ++i__)
@@ -885,7 +880,7 @@ L90:
                                   &c__[ll + c_dim1], ldc);
             }
             /* Test convergence */
-            if((r__1 = e[m - 1], f2c_abs(r__1)) <= thresh)
+            if ((r__1 = e[m - 1], f2c_abs(r__1)) <= thresh)
             {
                 e[m - 1] = 0.f;
             }
@@ -894,8 +889,7 @@ L90:
         {
             /* Chase bulge from bottom to top */
             /* Save cosines and sines for later singular vector updates */
-            f = ((r__1 = d__[m], f2c_abs(r__1)) - shift)
-                * (r_sign(&c_b49, &d__[m]) + shift / d__[m]);
+            f = ((r__1 = d__[m], f2c_abs(r__1)) - shift) * (r_sign(&c_b49, &d__[m] ) + shift / d__[m]);
             g = e[m - 1];
             i__1 = ll + 1;
             for(i__ = m; i__ >= i__1; --i__)
@@ -926,7 +920,7 @@ L90:
             }
             e[ll] = f;
             /* Test convergence */
-            if((r__1 = e[ll], f2c_abs(r__1)) <= thresh)
+            if ((r__1 = e[ll], f2c_abs(r__1)) <= thresh)
             {
                 e[ll] = 0.f;
             }

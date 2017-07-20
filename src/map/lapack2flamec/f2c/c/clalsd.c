@@ -334,9 +334,8 @@ void aocl_lapack_clalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
         else
         {
             *rank = 1;
-            aocl_lapack_clascl("G", &c__0, &c__0, &d__[1], &c_b10, &c__1, nrhs, &b[b_offset], ldb,
-                               info);
-            d__[1] = f2c_dabs(d__[1]);
+            clascl_("G", &c__0, &c__0, &d__[1], &c_b10, &c__1, nrhs, &b[ b_offset], ldb, info);
+            d__[1] = f2c_abs(d__[1]);
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -466,7 +465,7 @@ void aocl_lapack_clalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
             }
             /* L90: */
         }
-        tol = rcnd * (r__1 = d__[aocl_blas_isamax(n, &d__[1], &c__1)], f2c_abs(r__1));
+        tol = rcnd * (r__1 = d__[isamax_(n, &d__[1], &c__1)], f2c_abs(r__1));
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
@@ -577,7 +576,7 @@ void aocl_lapack_clalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if((r__1 = d__[i__], f2c_abs(r__1)) < eps)
+        if ((r__1 = d__[i__], f2c_abs(r__1)) < eps)
         {
             d__[i__] = r_sign(&eps, &d__[i__]);
         }
@@ -586,7 +585,7 @@ void aocl_lapack_clalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     i__1 = nm1;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if((r__1 = e[i__], f2c_abs(r__1)) < eps || i__ == nm1)
+        if ((r__1 = e[i__], f2c_abs(r__1)) < eps || i__ == nm1)
         {
             ++nsub;
             iwork[nsub] = (aocl_int_t)(st);
@@ -598,7 +597,7 @@ void aocl_lapack_clalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                 nsize = i__ - st + 1;
                 iwork[sizei + nsub - 1] = (aocl_int_t)(nsize);
             }
-            else if((r__1 = e[i__], f2c_abs(r__1)) >= eps)
+            else if ((r__1 = e[i__], f2c_abs(r__1)) >= eps)
             {
                 /* A subproblem with E(NM1) not too small but I = NM1. */
                 nsize = *n - st + 1;
@@ -725,13 +724,13 @@ void aocl_lapack_clalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
         /* L240: */
     }
     /* Apply the singular values and treat the tiny ones as zero. */
-    tol = rcnd * (r__1 = d__[aocl_blas_isamax(n, &d__[1], &c__1)], f2c_abs(r__1));
+    tol = rcnd * (r__1 = d__[isamax_(n, &d__[1], &c__1)], f2c_abs(r__1));
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Some of the elements in D can be negative because 1-by-1 */
         /* subproblems were not solved explicitly. */
-        if((r__1 = d__[i__], f2c_abs(r__1)) <= tol)
+        if ((r__1 = d__[i__], f2c_abs(r__1)) <= tol)
         {
             aocl_lapack_claset("A", &c__1, nrhs, &c_b1, &c_b1, &work[bx + i__ - 1], n);
         }

@@ -230,8 +230,8 @@ void aocl_lapack_ztgex2(logical *wantq, logical *wantz, aocl_int64_t *n, dcomple
     doublereal d__1;
     dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    double sqrt(doublereal), z_abs(dcomplex *);
-    void d_cnjg(dcomplex *, dcomplex *);
+    double sqrt(doublereal), z_f2c_abs(doublecomplex *);
+    void d_cnjg(doublecomplex *, doublecomplex *);
     /* Local variables */
     dcomplex f, g;
     aocl_int64_t i__, m;
@@ -328,24 +328,24 @@ void aocl_lapack_ztgex2(logical *wantq, logical *wantz, aocl_int64_t *n, dcomple
     threshb = fla_max(d__1, smlnum);
     /* Compute unitary QL and RQ that swap 1-by-1 and 1-by-1 blocks */
     /* using Givens rotations and perform the swap tentatively. */
-    z__2.real = s[3].real * t[0].real - s[3].imag * t[0].imag;
-    z__2.imag = s[3].real * t[0].imag + s[3].imag * t[0].real; // , expr subst
-    z__3.real = t[3].real * s[0].real - t[3].imag * s[0].imag;
-    z__3.imag = t[3].real * s[0].imag + t[3].imag * s[0].real; // , expr subst
-    z__1.real = z__2.real - z__3.real;
-    z__1.imag = z__2.imag - z__3.imag; // , expr subst
-    f.real = z__1.real;
-    f.imag = z__1.imag; // , expr subst
-    z__2.real = s[3].real * t[2].real - s[3].imag * t[2].imag;
-    z__2.imag = s[3].real * t[2].imag + s[3].imag * t[2].real; // , expr subst
-    z__3.real = t[3].real * s[2].real - t[3].imag * s[2].imag;
-    z__3.imag = t[3].real * s[2].imag + t[3].imag * s[2].real; // , expr subst
-    z__1.real = z__2.real - z__3.real;
-    z__1.imag = z__2.imag - z__3.imag; // , expr subst
-    g.real = z__1.real;
-    g.imag = z__1.imag; // , expr subst
-    sa = z_abs(&s[3]) * z_abs(t);
-    sb = z_abs(s) * z_abs(&t[3]);
+    z__2.r = s[3].r * t[0].r - s[3].i * t[0].i;
+    z__2.i = s[3].r * t[0].i + s[ 3].i * t[0].r; // , expr subst
+    z__3.r = t[3].r * s[0].r - t[3].i * s[0].i;
+    z__3.i = t[3].r * s[0].i + t[ 3].i * s[0].r; // , expr subst
+    z__1.r = z__2.r - z__3.r;
+    z__1.i = z__2.i - z__3.i; // , expr subst
+    f.r = z__1.r;
+    f.i = z__1.i; // , expr subst
+    z__2.r = s[3].r * t[2].r - s[3].i * t[2].i;
+    z__2.i = s[3].r * t[2].i + s[ 3].i * t[2].r; // , expr subst
+    z__3.r = t[3].r * s[2].r - t[3].i * s[2].i;
+    z__3.i = t[3].r * s[2].i + t[ 3].i * s[2].r; // , expr subst
+    z__1.r = z__2.r - z__3.r;
+    z__1.i = z__2.i - z__3.i; // , expr subst
+    g.r = z__1.r;
+    g.i = z__1.i; // , expr subst
+    sa = z_f2c_abs(&s[3]);
+    sb = z_f2c_abs(&t[3]);
     zlartg_(&g, &f, &cz, &sz, &cdum);
     z__1.real = -sz.real;
     z__1.imag = -sz.imag; // , expr subst
@@ -363,12 +363,12 @@ void aocl_lapack_ztgex2(logical *wantq, logical *wantz, aocl_int64_t *n, dcomple
     {
         zlartg_(t, &t[1], &cq, &sq, &cdum);
     }
-    aocl_lapack_zrot(&c__2, s, &c__2, &s[1], &c__2, &cq, &sq);
-    aocl_lapack_zrot(&c__2, t, &c__2, &t[1], &c__2, &cq, &sq);
-    /* Weak stability test: |S21| <= O(EPS F-norm((A))) */
-    /* and |T21| <= O(EPS F-norm((B))) */
-    weak = z_abs(&s[1]) <= thresha && z_abs(&t[1]) <= threshb;
-    if(!weak)
+    zrot_(&c__2, s, &c__2, &s[1], &c__2, &cq, &sq);
+    zrot_(&c__2, t, &c__2, &t[1], &c__2, &cq, &sq);
+    /* Weak stability test: |S21| + |T21| <= O(EPS F-norm((S, T))) */
+    ws = z_f2c_abs(&s[1]) + z_f2c_abs(&t[1]);
+    weak = ws <= thresh;
+    if (! weak)
     {
         goto L20;
     }

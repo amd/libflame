@@ -182,7 +182,7 @@ if positive, then the j-th and */
 /* > u(j+1) = VL(:,j) - i*VL(:,j+1). */
 /* > */
 /* > Each eigenvector is scaled so that its largest component has */
-/* > f2c_dabs(real part) + f2c_dabs(imag. part) = 1, except for eigenvectors */
+/* > f2c_abs(real part) + f2c_abs(imag. part) = 1, except for eigenvectors */
 /* > corresponding to an eigenvalue with alpha = beta = 0, which */
 /* > are set to zero. */
 /* > Not referenced if JOBVL = 'N'. */
@@ -208,7 +208,7 @@ if positive, then the j-th and */
 /* > x(j+1) = VR(:,j) - i*VR(:,j+1). */
 /* > */
 /* > Each eigenvector is scaled so that its largest component has */
-/* > f2c_dabs(real part) + f2c_dabs(imag. part) = 1, except for eigenvalues */
+/* > f2c_abs(real part) + f2c_abs(imag. part) = 1, except for eigenvalues */
 /* > corresponding to an eigenvalue with alpha = beta = 0, which */
 /* > are set to zero. */
 /* > Not referenced if JOBVR = 'N'. */
@@ -755,8 +755,8 @@ void aocl_lapack_dgegv(char *jobvl, char *jobvr, aocl_int64_t *n, doublereal *a,
                     {
                         /* Computing MAX */
                         d__2 = temp;
-                        d__3 = (d__1 = vl[jr + jc * vl_dim1], f2c_dabs(d__1)); // , expr subst
-                        temp = fla_max(d__2, d__3);
+                        d__3 = (d__1 = vl[jr + jc * vl_dim1], f2c_abs(d__1)); // , expr subst
+                        temp = max(d__2,d__3);
                         /* L10: */
                     }
                 }
@@ -767,10 +767,8 @@ void aocl_lapack_dgegv(char *jobvl, char *jobvr, aocl_int64_t *n, doublereal *a,
                     {
                         /* Computing MAX */
                         d__3 = temp;
-                        d__4 = (d__1 = vl[jr + jc * vl_dim1], f2c_dabs(d__1))
-                               + (d__2 = vl[jr + (jc + 1) * vl_dim1],
-                                  f2c_dabs(d__2)); // , expr subst
-                        temp = fla_max(d__3, d__4);
+                        d__4 = (d__1 = vl[jr + jc * vl_dim1], f2c_abs(d__1)) + (d__2 = vl[jr + (jc + 1) * vl_dim1], f2c_abs(d__2)); // , expr subst
+                        temp = max(d__3,d__4);
                         /* L20: */
                     }
                 }
@@ -825,8 +823,8 @@ void aocl_lapack_dgegv(char *jobvl, char *jobvr, aocl_int64_t *n, doublereal *a,
                     {
                         /* Computing MAX */
                         d__2 = temp;
-                        d__3 = (d__1 = vr[jr + jc * vr_dim1], f2c_dabs(d__1)); // , expr subst
-                        temp = fla_max(d__2, d__3);
+                        d__3 = (d__1 = vr[jr + jc * vr_dim1], f2c_abs(d__1)); // , expr subst
+                        temp = max(d__2,d__3);
                         /* L60: */
                     }
                 }
@@ -837,10 +835,8 @@ void aocl_lapack_dgegv(char *jobvl, char *jobvr, aocl_int64_t *n, doublereal *a,
                     {
                         /* Computing MAX */
                         d__3 = temp;
-                        d__4 = (d__1 = vr[jr + jc * vr_dim1], f2c_dabs(d__1))
-                               + (d__2 = vr[jr + (jc + 1) * vr_dim1],
-                                  f2c_dabs(d__2)); // , expr subst
-                        temp = fla_max(d__3, d__4);
+                        d__4 = (d__1 = vr[jr + jc * vr_dim1], f2c_abs(d__1)) + (d__2 = vr[jr + (jc + 1) * vr_dim1], f2c_abs(d__2)); // , expr subst
+                        temp = max(d__3,d__4);
                         /* L70: */
                     }
                 }
@@ -881,9 +877,9 @@ void aocl_lapack_dgegv(char *jobvl, char *jobvr, aocl_int64_t *n, doublereal *a,
     i__1 = *n;
     for(jc = 1; jc <= i__1; ++jc)
     {
-        absar = (d__1 = alphar[jc], f2c_dabs(d__1));
-        absai = (d__1 = alphai[jc], f2c_dabs(d__1));
-        absb = (d__1 = beta[jc], f2c_dabs(d__1));
+        absar = (d__1 = alphar[jc], f2c_abs(d__1));
+        absai = (d__1 = alphai[jc], f2c_abs(d__1));
+        absb = (d__1 = beta[jc], f2c_abs(d__1));
         salfar = anrm * alphar[jc];
         salfai = anrm * alphai[jc];
         sbeta = bnrm * beta[jc];
@@ -894,7 +890,7 @@ void aocl_lapack_dgegv(char *jobvl, char *jobvr, aocl_int64_t *n, doublereal *a,
         d__1 = safmin, d__2 = eps * absar;
         d__1 = fla_max(d__1, d__2);
         d__2 = eps * absb; // ; expr subst
-        if(f2c_dabs(salfai) < safmin && absai >= fla_max(d__1, d__2))
+        if (f2c_abs(salfai) < safmin && absai >= max(d__1,d__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
@@ -920,7 +916,7 @@ void aocl_lapack_dgegv(char *jobvl, char *jobvr, aocl_int64_t *n, doublereal *a,
         d__1 = safmin, d__2 = eps * absai;
         d__1 = fla_max(d__1, d__2);
         d__2 = eps * absb; // ; expr subst
-        if(f2c_dabs(salfar) < safmin && absar >= fla_max(d__1, d__2))
+        if (f2c_abs(salfar) < safmin && absar >= max(d__1,d__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
@@ -936,7 +932,7 @@ void aocl_lapack_dgegv(char *jobvl, char *jobvr, aocl_int64_t *n, doublereal *a,
         d__1 = safmin, d__2 = eps * absar;
         d__1 = fla_max(d__1, d__2);
         d__2 = eps * absai; // ; expr subst
-        if(f2c_dabs(sbeta) < safmin && absb >= fla_max(d__1, d__2))
+        if (f2c_abs(sbeta) < safmin && absb >= max(d__1,d__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
@@ -951,11 +947,11 @@ void aocl_lapack_dgegv(char *jobvl, char *jobvr, aocl_int64_t *n, doublereal *a,
         if(ilimit)
         {
             /* Computing MAX */
-            d__1 = f2c_dabs(salfar), d__2 = f2c_dabs(salfai);
-            d__1 = fla_max(d__1, d__2);
-            d__2 = f2c_dabs(sbeta); // ; expr subst
-            temp = scale * safmin * fla_max(d__1, d__2);
-            if(temp > 1.)
+            d__1 = f2c_abs(salfar), d__2 = f2c_abs(salfai);
+            d__1 = max(d__1,d__2);
+            d__2 = f2c_abs(sbeta); // ; expr subst
+            temp = scale * safmin * max(d__1,d__2);
+            if (temp > 1.)
             {
                 scale /= temp;
             }

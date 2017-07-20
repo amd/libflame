@@ -203,7 +203,7 @@ void aocl_lapack_cgebal(char *job, aocl_int64_t *n, scomplex *a, aocl_int64_t *l
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     real r__1, r__2;
     /* Builtin functions */
-    double r_imag(scomplex *), c_abs(scomplex *);
+    double r_imag(complex *), c_f2c_abs(complex *);
     /* Local variables */
     extern /* Subroutine */
         void
@@ -388,9 +388,33 @@ void aocl_lapack_cgebal(char *job, aocl_int64_t *n, scomplex *a, aocl_int64_t *l
     noconv = TRUE_;
     while(noconv)
     {
-        noconv = FALSE_;
-        i__1 = l;
-        for(i__ = k; i__ <= i__1; ++i__)
+        i__2 = l - k + 1;
+        c__ = scnrm2_(&i__2, &a[k + i__ * a_dim1], &c__1);
+        i__2 = l - k + 1;
+        r__ = scnrm2_(&i__2, &a[i__ + k * a_dim1], lda);
+        ica = icamax_(&l, &a[i__ * a_dim1 + 1], &c__1);
+        ca = c_f2c_abs(&a[ica + i__ * a_dim1]);
+        i__2 = *n - k + 1;
+        ira = icamax_(&i__2, &a[i__ + k * a_dim1], lda);
+        ra = c_f2c_abs(&a[i__ + (ira + k - 1) * a_dim1]);
+        /* Guard against zero C or R due to underflow. */
+        if (c__ == 0.f || r__ == 0.f)
+        {
+            goto L200;
+        }
+        g = r__ / 2.f;
+        f = 1.f;
+        s = c__ + r__;
+L160: /* Computing MAX */
+        r__1 = max(f,c__);
+        /* Computing MIN */
+        r__2 = min(r__,g);
+        if (c__ >= g || max(r__1,ca) >= sfmax2 || min(r__2,ra) <= sfmin2)
+        {
+            goto L170;
+        }
+        r__1 = c__ + f + ca + r__ + g + ra;
+        if (sisnan_(&r__1))
         {
             i__2 = l - k + 1;
             c__ = aocl_blas_scnrm2(&i__2, &a[k + i__ * a_dim1], &c__1);

@@ -73,7 +73,7 @@
 /* > \param[in,out] X */
 /* > \verbatim */
 /* > X is REAL array, dimension */
-/* > (1+(N-2)*abs(INCX)) */
+/* > (1+(N-2)*f2c_abs(INCX)) */
 /* > On entry, the vector x. */
 /* > On exit, it is overwritten with the vector v. */
 /* > \endverbatim */
@@ -190,7 +190,7 @@ void aocl_lapack_slarfgp(aocl_int64_t *n, real *alpha, real *x, aocl_int64_t *in
         beta = r_sign(&r__1, alpha);
         smlnum = slamch_("S") / slamch_("E");
         knt = 0;
-        if(f2c_abs(beta) < smlnum)
+        if (f2c_abs(beta) < smlnum)
         {
             /* XNORM, BETA may be inaccurate;
             scale X and recompute them */
@@ -201,7 +201,7 @@ void aocl_lapack_slarfgp(aocl_int64_t *n, real *alpha, real *x, aocl_int64_t *in
             aocl_blas_sscal(&i__1, &bignum, &x[1], incx);
             beta *= bignum;
             *alpha *= bignum;
-            if(f2c_abs(beta) < smlnum && knt < 20)
+            if (f2c_abs(beta) < smlnum)
             {
                 goto L10;
             }
@@ -224,7 +224,7 @@ void aocl_lapack_slarfgp(aocl_int64_t *n, real *alpha, real *x, aocl_int64_t *in
             *tau = *alpha / beta;
             *alpha = -(*alpha);
         }
-        if(f2c_abs(*tau) <= smlnum)
+        if (f2c_abs(*tau) <= smlnum)
         {
             /* In the case where the computed TAU ends up being a denormalized number, */
             /* it loses relative accuracy. This is a BIG problem. Solution: flush TAU */

@@ -263,7 +263,7 @@ void aocl_lapack_dlarrj(aocl_int64_t *n, doublereal *d__, doublereal *e2, aocl_i
         /* Computing MAX */
         d__1 = f2c_abs(left);
         d__2 = f2c_abs(right); // , expr subst
-        tmp = fla_max(d__1, d__2);
+        tmp = max(d__1,d__2);
         /* The following test prevents the test of converged intervals */
         if(width < *rtol * tmp)
         {
@@ -369,8 +369,8 @@ L80:
         /* Computing MAX */
         d__1 = f2c_abs(left);
         d__2 = f2c_abs(right); // , expr subst
-        tmp = fla_max(d__1, d__2);
-        if(width < *rtol * tmp || iter == maxitr)
+        tmp = max(d__1,d__2);
+        if (width < *rtol * tmp || iter == maxitr)
         {
             /* reduce number of unconverged intervals */
             --nint;

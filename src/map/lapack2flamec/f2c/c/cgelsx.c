@@ -227,8 +227,8 @@ void aocl_lapack_cgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, sc
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
     scomplex q__1;
     /* Builtin functions */
-    double c_abs(scomplex *);
-    void r_cnjg(scomplex *, scomplex *);
+    double c_f2c_abs(complex *);
+    void r_cnjg(complex *, complex *);
     /* Local variables */
     aocl_int64_t i__, j, k;
     scomplex c1, c2, s1, s2, t1, t2;
@@ -366,11 +366,11 @@ void aocl_lapack_cgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, sc
     work[i__1].real = 1.f;
     work[i__1].imag = 0.f; // , expr subst
     i__1 = ismax;
-    work[i__1].real = 1.f;
-    work[i__1].imag = 0.f; // , expr subst
-    smax = c_abs(&a[a_dim1 + 1]);
+    work[i__1].r = 1.f;
+    work[i__1].i = 0.f; // , expr subst
+    smax = c_f2c_abs(&a[a_dim1 + 1]);
     smin = smax;
-    if(c_abs(&a[a_dim1 + 1]) == 0.f)
+    if (c_f2c_abs(&a[a_dim1 + 1]) == 0.f)
     {
         *rank = 0;
         i__1 = fla_max(*m, *n);

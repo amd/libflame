@@ -254,8 +254,8 @@ void aocl_lapack_dgeequb(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_i
         {
             /* Computing MAX */
             d__2 = r__[i__];
-            d__3 = (d__1 = a[i__ + j * a_dim1], f2c_dabs(d__1)); // , expr subst
-            r__[i__] = fla_max(d__2, d__3);
+            d__3 = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1)); // , expr subst
+            r__[i__] = max(d__2,d__3);
             /* L20: */
         }
         /* L30: */
@@ -334,8 +334,8 @@ void aocl_lapack_dgeequb(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_i
         {
             /* Computing MAX */
             d__2 = c__[j];
-            d__3 = (d__1 = a[i__ + j * a_dim1], f2c_dabs(d__1)) * r__[i__]; // , expr subst
-            c__[j] = fla_max(d__2, d__3);
+            d__3 = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1)) * r__[i__]; // , expr subst
+            c__[j] = max(d__2,d__3);
             /* L80: */
         }
         if(c__[j] > 0.)

@@ -284,67 +284,8 @@ void aocl_lapack_dsteqr(char *compz, aocl_int64_t *n, doublereal *d__, doublerea
 
         for(i = 1; i <= N; i++)
         {
-            z__[i * LDZ + i] = d__[i];
-        }
-
-        for(i = 1; i <= N - 1; i++)
-        {
-            /* Sub-diagonal */
-            z__[i * LDZ + i + LDZ] = e[i];
-            /* Super-diagonal */
-            z__[i * LDZ + i + 1] = e[i];
-        }
-
-        dsteqr_helper_("V", "L", &N, &z__[z_offset], &LDZ, &d__[1], &wkopt, &lwork, &iwkopt,
-                       &liwork, info);
-        lwork = (aocl_int64_t)wkopt;
-        worker = (doublereal *)malloc(lwork * sizeof(doublereal));
-        liwork = iwkopt;
-        iwork = (aocl_int_t *)malloc(liwork * sizeof(aocl_int_t));
-        dsteqr_helper_("V", "L", &N, &z__[z_offset], &LDZ, &d__[1], worker, &lwork, iwork, &liwork,
-                       info);
-        free(worker);
-        free(iwork);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
-    }
-    else
-    {
-        /* Determine the unit roundoff and over/underflow thresholds. */
-        eps = dlamch_("E");
-        /* Computing 2nd power */
-        d__1 = eps;
-        eps2 = d__1 * d__1;
-        safmin = dlamch_("S");
-        safmax = 1. / safmin;
-        ssfmax = sqrt(safmax) / 3.;
-        ssfmin = sqrt(safmin) / eps2;
-        /* Compute the eigenvalues and eigenvectors of the tridiagonal */
-        /* matrix. */
-        if(icompz == 2)
-        {
-            aocl_lapack_dlaset("Full", n, n, &c_b9, &c_b10, &z__[z_offset], ldz);
-        }
-        nmaxit = *n * 30;
-        jtot = 0;
-        /* Determine where the matrix splits and choose QL or QR iteration */
-        /* for each block, according to whether top or bottom diagonal */
-        /* element is smaller. */
-        l1 = 1;
-        nm1 = *n - 1;
-    L10:
-        if(l1 > *n)
-        {
-            goto L160;
-        }
-        if(l1 > 1)
-        {
-            e[l1 - 1] = 0.;
-        }
-        if(l1 <= nm1)
-        {
-            i__1 = nm1;
-            for(m = l1; m <= i__1; ++m)
+            tst = (d__1 = e[m], f2c_abs(d__1));
+            if (tst == 0.)
             {
                 tst = (d__1 = e[m], f2c_dabs(d__1));
                 if(tst == 0.)
@@ -359,87 +300,71 @@ void aocl_lapack_dsteqr(char *compz, aocl_int64_t *n, doublereal *d__, doublerea
                 }
                 /* L20: */
             }
-        }
-        m = *n;
-    L30:
-        l = l1;
-        lsv = l;
-        lend = m;
-        lendsv = lend;
-        l1 = m + 1;
-        if(lend == l)
-        {
-            goto L10;
-        }
-        /* Scale submatrix in rows and columns L to LEND */
-        i__1 = lend - l + 1;
-        anorm = aocl_lapack_dlanst("M", &i__1, &d__[l], &e[l]);
-        iscale = 0;
-        if(anorm == 0.)
-        {
-            goto L10;
-        }
-        if(anorm > ssfmax)
-        {
-            iscale = 1;
-            i__1 = lend - l + 1;
-            aocl_lapack_dlascl("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &d__[l], n, info);
-            i__1 = lend - l;
-            aocl_lapack_dlascl("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &e[l], n, info);
-        }
-        else if(anorm < ssfmin)
-        {
-            iscale = 2;
-            i__1 = lend - l + 1;
-            aocl_lapack_dlascl("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &d__[l], n, info);
-            i__1 = lend - l;
-            aocl_lapack_dlascl("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info);
-        }
-        /* Choose between QL and QR iteration */
-        if((d__1 = d__[lend], f2c_dabs(d__1)) < (d__2 = d__[l], f2c_dabs(d__2)))
-        {
-            lend = lsv;
-            l = lendsv;
-        }
-        if(lend > l)
-        {
-            /* QL Iteration */
-            /* Look for small subdiagonal element. */
-        L40:
-            if(l != lend)
-            {
-                lendm1 = lend - 1;
-                i__1 = lendm1;
-                for(m = l; m <= i__1; ++m)
-                {
-                    /* Computing 2nd power */
-                    d__2 = (d__1 = e[m], f2c_dabs(d__1));
-                    tst = d__2 * d__2;
-                    if(tst <= eps2 * (d__1 = d__[m], f2c_dabs(d__1))
-                                      * (d__2 = d__[m + 1], f2c_dabs(d__2))
-                                  + safmin)
-                    {
-                        goto L60;
-                    }
-                    /* L50: */
-                }
-            }
-            m = lend;
-        L60:
-            if(m < lend)
+            if (tst <= sqrt((d__1 = d__[m], f2c_abs(d__1))) * sqrt((d__2 = d__[m + 1], f2c_abs(d__2))) * eps)
             {
                 e[m] = 0.;
             }
-            p = d__[l];
-            if(m == l)
+            /* L20: */
+        }
+    }
+    m = *n;
+L30:
+    l = l1;
+    lsv = l;
+    lend = m;
+    lendsv = lend;
+    l1 = m + 1;
+    if (lend == l)
+    {
+        goto L10;
+    }
+    /* Scale submatrix in rows and columns L to LEND */
+    i__1 = lend - l + 1;
+    anorm = dlanst_("M", &i__1, &d__[l], &e[l]);
+    iscale = 0;
+    if (anorm == 0.)
+    {
+        goto L10;
+    }
+    if (anorm > ssfmax)
+    {
+        iscale = 1;
+        i__1 = lend - l + 1;
+        dlascl_("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &d__[l], n, info);
+        i__1 = lend - l;
+        dlascl_("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &e[l], n, info);
+    }
+    else if (anorm < ssfmin)
+    {
+        iscale = 2;
+        i__1 = lend - l + 1;
+        dlascl_("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &d__[l], n, info);
+        i__1 = lend - l;
+        dlascl_("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info);
+    }
+    /* Choose between QL and QR iteration */
+    if ((d__1 = d__[lend], f2c_abs(d__1)) < (d__2 = d__[l], f2c_abs(d__2)))
+    {
+        lend = lsv;
+        l = lendsv;
+    }
+    if (lend > l)
+    {
+        /* QL Iteration */
+        /* Look for small subdiagonal element. */
+L40:
+        if (l != lend)
+        {
+            lendm1 = lend - 1;
+            i__1 = lendm1;
+            for (m = l;
+                    m <= i__1;
+                    ++m)
             {
-                goto L80;
-            }
-            /* If remaining matrix is 2-by-2, use DLAE2 or SLAEV2 */
-            /* to compute its eigensystem. */
-            if(m == l + 1)
-            {
-                if(icompz > 0)
+                /* Computing 2nd power */
+                d__2 = (d__1 = e[m], f2c_abs(d__1));
+                tst = d__2 * d__2;
+                if (tst <= eps2 * (d__1 = d__[m], f2c_abs(d__1)) * (d__2 = d__[m + 1], f2c_abs(d__2)) + safmin)
                 {
                     dlaev2_(&d__[l], &e[l], &d__[l + 1], &rt1, &rt2, &c__, &s);
                     work[l] = c__;
@@ -526,9 +451,57 @@ void aocl_lapack_dsteqr(char *compz, aocl_int64_t *n, doublereal *d__, doublerea
         L90:
             if(l != lend)
             {
-                lendp1 = lend + 1;
-                i__1 = lendp1;
-                for(m = l; m >= i__1; --m)
+                e[i__ + 1] = r__;
+            }
+            g = d__[i__ + 1] - p;
+            r__ = (d__[i__] - g) * s + c__ * 2. * b;
+            p = s * r__;
+            d__[i__ + 1] = g + p;
+            g = c__ * r__ - b;
+            /* If eigenvectors are desired, then save rotations. */
+            if (icompz > 0)
+            {
+                work[i__] = c__;
+                work[*n - 1 + i__] = -s;
+            }
+            /* L70: */
+        }
+        /* If eigenvectors are desired, then apply saved rotations. */
+        if (icompz > 0)
+        {
+            mm = m - l + 1;
+            dlasr_("R", "V", "B", n, &mm, &work[l], &work[*n - 1 + l], &z__[l * z_dim1 + 1], ldz);
+        }
+        d__[l] -= p;
+        e[l] = g;
+        goto L40;
+        /* Eigenvalue found. */
+L80:
+        d__[l] = p;
+        ++l;
+        if (l <= lend)
+        {
+            goto L40;
+        }
+        goto L140;
+    }
+    else
+    {
+        /* QR Iteration */
+        /* Look for small superdiagonal element. */
+L90:
+        if (l != lend)
+        {
+            lendp1 = lend + 1;
+            i__1 = lendp1;
+            for (m = l;
+                    m >= i__1;
+                    --m)
+            {
+                /* Computing 2nd power */
+                d__2 = (d__1 = e[m - 1], f2c_abs(d__1));
+                tst = d__2 * d__2;
+                if (tst <= eps2 * (d__1 = d__[m], f2c_abs(d__1)) * (d__2 = d__[m - 1], f2c_abs(d__2)) + safmin)
                 {
                     /* Computing 2nd power */
                     d__2 = (d__1 = e[m - 1], f2c_dabs(d__1));

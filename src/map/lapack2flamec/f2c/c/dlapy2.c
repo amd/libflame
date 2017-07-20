@@ -86,10 +86,11 @@ doublereal dlapy2_(doublereal *x, doublereal *y)
     /* .. Intrinsic Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    ret_val = 0;
-    x_is_nan__ = (*x != *x);
-    y_is_nan__ = (*y != *y);
-    if(r_once)
+    xabs = f2c_abs(*x);
+    yabs = f2c_abs(*y);
+    w = max(xabs,yabs);
+    z__ = min(xabs,yabs);
+    if (z__ == 0.)
     {
         hugeval = dlamch_("Overflow");
         r_once = 0;

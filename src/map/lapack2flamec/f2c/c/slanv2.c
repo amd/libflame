@@ -190,14 +190,14 @@ void slanv2_(real *a, real *b, real *c__, real *d__, real *rt1r, real *rt1i, rea
         /* Computing MAX */
         r__1 = f2c_abs(*b);
         r__2 = f2c_abs(*c__); // , expr subst
-        bcmax = fla_max(r__1, r__2);
+        bcmax = max(r__1,r__2);
         /* Computing MIN */
         r__1 = f2c_abs(*b);
         r__2 = f2c_abs(*c__); // , expr subst
-        bcmis = fla_min(r__1, r__2) * r_sign(&c_b6, b) * r_sign(&c_b6, c__);
+        bcmis = min(r__1,r__2) * r_sign(&c_b4, b) * r_sign(&c_b4, c__);
         /* Computing MAX */
         r__1 = f2c_abs(p);
-        scale = fla_max(r__1, bcmax);
+        scale = max(r__1,bcmax);
         z__ = p / scale * p + bcmax / scale * bcmis;
         /* If Z is of the order of the machine accuracy, postpone the */
         /* decision on the nature of eigenvalues */
@@ -248,7 +248,7 @@ void slanv2_(real *a, real *b, real *c__, real *d__, real *rt1r, real *rt1i, rea
             p = temp * .5f;
             tau = slapy2_(&sigma, &temp);
             *cs = sqrt((f2c_abs(sigma) / tau + 1.f) * .5f);
-            *sn = -(p / (tau * *cs)) * r_sign(&c_b6, &sigma);
+            *sn = -(p / (tau * *cs)) * r_sign(&c_b4, &sigma);
             /* Compute [ AA BB ] = [ A B ] [ CS -SN ] */
             /* [ CC DD ] [ C D ] [ SN CS ] */
             /* Separate multiply operations, Each multiply result is rounded once

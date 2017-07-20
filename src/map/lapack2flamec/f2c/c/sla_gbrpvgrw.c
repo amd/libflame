@@ -176,7 +176,7 @@ real aocl_lapack_sla_gbrpvgrw(aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *k
         {
             /* Computing MAX */
             r__2 = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs(r__1));
-            amax = fla_max(r__2, amax);
+            amax = max(r__2,amax);
         }
         /* Computing MAX */
         i__3 = j - *ku;
@@ -185,7 +185,7 @@ real aocl_lapack_sla_gbrpvgrw(aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *k
         {
             /* Computing MAX */
             r__2 = (r__1 = afb[kd + i__ - j + j * afb_dim1], f2c_abs(r__1));
-            umax = fla_max(r__2, umax);
+            umax = max(r__2,umax);
         }
         if(umax != 0.f)
         {

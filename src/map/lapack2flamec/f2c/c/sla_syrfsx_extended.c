@@ -187,7 +187,7 @@ static real c_b14 = 1.f;
 /* > BERR_OUT is REAL array, dimension (NRHS) */
 /* > On exit, BERR_OUT(j) contains the componentwise relative backward */
 /* > error for right-hand-side j from the formula */
-/* > fla_max(i) ( f2c_abs(RES(i)) / ( f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s) )(i) ) */
+/* > max(i) ( f2c_abs(RES(i)) / ( f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s) )(i) ) */
 /* > where f2c_abs(Z) is the componentwise absolute value of the matrix */
 /* > or vector Z. This is computed by SLA_LIN_BERR. */
 /* > \endverbatim */
@@ -626,7 +626,7 @@ void sla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
             {
                 yk = (r__1 = y[i__ + j * y_dim1], f2c_abs(r__1));
                 dyk = (r__1 = dy[i__], f2c_abs(r__1));
-                if(yk != 0.f)
+                if (yk != 0.f)
                 {
                     /* Computing MAX */
                     r__1 = dz_z__;
@@ -797,7 +797,7 @@ void sla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
             err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] = final_dz_z__ / (1 - dzratmax);
         }
         /* Compute componentwise relative backward error from formula */
-        /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s) )(i) ) */
+        /* max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s) )(i) ) */
         /* where f2c_abs(Z) is the componentwise absolute value of the matrix */
         /* or vector Z. */
         /* Compute residual RES = B_s - op(A_s) * Y, */
@@ -811,8 +811,7 @@ void sla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
             ayb[i__] = (r__1 = b[i__ + j * b_dim1], f2c_abs(r__1));
         }
         /* Compute f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s). */
-        sla_syamv_(&uplo2, n, &c_b14, &a[a_offset], lda, &y[j * y_dim1 + 1], &c__1, &c_b14, &ayb[1],
-                   &c__1);
+        sla_syamv_(&uplo2, n, &c_b14, &a[a_offset], lda, &y[j * y_dim1 + 1], &c__1, &c_b14, &ayb[1], &c__1);
         sla_lin_berr_(n, n, &c__1, &res[1], &ayb[1], &berr_out__[j]);
         /* End of loop for each RHS. */
     }

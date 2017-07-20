@@ -87,7 +87,6 @@ real slapy3_(real *x, real *y, real *z__)
     /* .. Intrinsic Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    hugeval = slamch_("Overflow");
     xabs = f2c_abs(*x);
     yabs = f2c_abs(*y);
     zabs = f2c_abs(*z__);

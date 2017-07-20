@@ -214,8 +214,7 @@ void aocl_lapack_cggbal(char *job, aocl_int64_t *n, scomplex *a, aocl_int64_t *l
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2, r__3;
     /* Builtin functions */
-    double r_lg10(real *), r_imag(scomplex *), c_abs(scomplex *), r_sign(real *, real *),
-        pow_ri(real *, aocl_int64_t *);
+    double r_lg10(real *), r_imag(complex *), c_f2c_abs(complex *), r_sign(real *, real *), pow_ri(real *, integer *);
     /* Local variables */
     aocl_int64_t i__, j, k, l, m;
     real t;
@@ -503,8 +502,7 @@ L190:
                 goto L210;
             }
             i__3 = i__ + j * a_dim1;
-            r__3 = (r__1 = a[i__3].real, f2c_abs(r__1))
-                   + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
+            r__3 = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
             ta = r_lg10(&r__3) / basl;
         L210:
             i__3 = i__ + j * b_dim1;
@@ -514,8 +512,7 @@ L190:
                 goto L220;
             }
             i__3 = i__ + j * b_dim1;
-            r__3 = (r__1 = b[i__3].real, f2c_abs(r__1))
-                   + (r__2 = r_imag(&b[i__ + j * b_dim1]), f2c_abs(r__2));
+            r__3 = (r__1 = b[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&b[i__ + j * b_dim1]), f2c_abs(r__2));
             tb = r_lg10(&r__3) / basl;
         L220:
             work[i__ + (*n << 2)] = work[i__ + (*n << 2)] - ta - tb;
@@ -637,13 +634,13 @@ L250:
     for(i__ = *ilo; i__ <= i__1; ++i__)
     {
         cor = alpha * work[i__ + *n];
-        if(f2c_abs(cor) > cmax)
+        if (f2c_abs(cor) > cmax)
         {
             cmax = f2c_abs(cor);
         }
         lscale[i__] += cor;
         cor = alpha * work[i__];
-        if(f2c_abs(cor) > cmax)
+        if (f2c_abs(cor) > cmax)
         {
             cmax = f2c_abs(cor);
         }
@@ -674,14 +671,14 @@ L350:
     for(i__ = *ilo; i__ <= i__1; ++i__)
     {
         i__2 = *n - *ilo + 1;
-        irab = aocl_blas_icamax(&i__2, &a[i__ + *ilo * a_dim1], lda);
-        rab = c_abs(&a[i__ + (irab + *ilo - 1) * a_dim1]);
+        irab = icamax_(&i__2, &a[i__ + *ilo * a_dim1], lda);
+        rab = c_f2c_abs(&a[i__ + (irab + *ilo - 1) * a_dim1]);
         i__2 = *n - *ilo + 1;
         irab = aocl_blas_icamax(&i__2, &b[i__ + *ilo * b_dim1], ldb);
         /* Computing MAX */
         r__1 = rab;
-        r__2 = c_abs(&b[i__ + (irab + *ilo - 1) * b_dim1]); // , expr subst
-        rab = fla_max(r__1, r__2);
+        r__2 = c_f2c_abs(&b[i__ + (irab + *ilo - 1) * b_dim1]); // , expr subst
+        rab = max(r__1,r__2);
         r__1 = rab + sfmin;
         lrab = (integer)(r_lg10(&r__1) / basl + 1.f);
         ir = (integer)(lscale[i__] + r_sign(&c_b72, &lscale[i__]));
@@ -691,13 +688,13 @@ L350:
         i__3 = lsfmax - lrab; // ; expr subst
         ir = fla_min(i__2, i__3);
         lscale[i__] = pow_ri(&c_b36, &ir);
-        icab = aocl_blas_icamax(ihi, &a[i__ * a_dim1 + 1], &c__1);
-        cab = c_abs(&a[icab + i__ * a_dim1]);
-        icab = aocl_blas_icamax(ihi, &b[i__ * b_dim1 + 1], &c__1);
+        icab = icamax_(ihi, &a[i__ * a_dim1 + 1], &c__1);
+        cab = c_f2c_abs(&a[icab + i__ * a_dim1]);
+        icab = icamax_(ihi, &b[i__ * b_dim1 + 1], &c__1);
         /* Computing MAX */
         r__1 = cab;
-        r__2 = c_abs(&b[icab + i__ * b_dim1]); // , expr subst
-        cab = fla_max(r__1, r__2);
+        r__2 = c_f2c_abs(&b[icab + i__ * b_dim1]); // , expr subst
+        cab = max(r__1,r__2);
         r__1 = cab + sfmin;
         lcab = (integer)(r_lg10(&r__1) / basl + 1.f);
         jc = (integer)(rscale[i__] + r_sign(&c_b72, &rscale[i__]));

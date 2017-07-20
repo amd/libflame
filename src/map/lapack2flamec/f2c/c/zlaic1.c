@@ -156,8 +156,8 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
     doublereal d__1, d__2;
     dcomplex z__1, z__2, z__3, z__4, z__5, z__6;
     /* Builtin functions */
-    double z_abs(dcomplex *);
-    void d_cnjg(dcomplex *, dcomplex *), z_sqrt(dcomplex *, dcomplex *);
+    double z_f2c_abs(doublecomplex *);
+    void d_cnjg(doublecomplex *, doublecomplex *), z_sqrt(doublecomplex *, doublecomplex *);
     double sqrt(doublereal);
     void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
@@ -193,13 +193,13 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
     --x;
     /* Function Body */
     eps = dlamch_("Epsilon");
-    aocl_lapack_zdotc_f2c(&z__1, j, &x[1], &c__1, &w[1], &c__1);
-    alpha.real = z__1.real;
-    alpha.imag = z__1.imag; // , expr subst
-    absalp = z_abs(&alpha);
-    absgam = z_abs(gamma);
-    absest = f2c_dabs(*sest);
-    if(*job == 1)
+    zdotc_f2c_(&z__1, j, &x[1], &c__1, &w[1], &c__1);
+    alpha.r = z__1.r;
+    alpha.i = z__1.i; // , expr subst
+    absalp = z_f2c_abs(&alpha);
+    absgam = z_f2c_abs(gamma);
+    absest = f2c_abs(*sest);
+    if (*job == 1)
     {
         /* Estimating largest singular value */
         /* special cases */
@@ -403,15 +403,15 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
                 cosine.imag = z__1.imag; // , expr subst
             }
             /* Computing MAX */
-            d__1 = z_abs(&sine);
-            d__2 = z_abs(&cosine); // , expr subst
-            s1 = fla_max(d__1, d__2);
-            z__1.real = sine.real / s1;
-            z__1.imag = sine.imag / s1; // , expr subst
-            s->real = z__1.real, s->imag = z__1.imag;
-            z__1.real = cosine.real / s1;
-            z__1.imag = cosine.imag / s1; // , expr subst
-            c__->real = z__1.real, c__->imag = z__1.imag;
+            d__1 = z_f2c_abs(&sine);
+            d__2 = z_f2c_abs(&cosine); // , expr subst
+            s1 = max(d__1,d__2);
+            z__1.r = sine.r / s1;
+            z__1.i = sine.i / s1; // , expr subst
+            s->r = z__1.r, s->i = z__1.i;
+            z__1.r = cosine.r / s1;
+            z__1.i = cosine.i / s1; // , expr subst
+            c__->r = z__1.r, c__->i = z__1.i;
             d_cnjg(&z__4, s);
             z__3.real = s->real * z__4.real - s->imag * z__4.imag;
             z__3.imag = s->real * z__4.imag + s->imag * z__4.real; // , expr subst
@@ -523,14 +523,14 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
                 d__1 = zeta2 * zeta2;
                 c__->real = d__1, c__->imag = 0.;
                 d__2 = b * b;
-                z__2.real = d__2 - c__->real;
-                z__2.imag = -c__->imag; // , expr subst
-                d__1 = b + sqrt(z_abs(&z__2));
-                z__1.real = c__->real / d__1;
-                z__1.imag = c__->imag / d__1; // , expr subst
-                t = z__1.real;
-                z__2.real = alpha.real / absest;
-                z__2.imag = alpha.imag / absest; // , expr subst
+                z__2.r = d__2 - c__->r;
+                z__2.i = -c__->i; // , expr subst
+                d__1 = b + sqrt(z_f2c_abs(&z__2));
+                z__1.r = c__->r / d__1;
+                z__1.i = c__->i / d__1; // , expr subst
+                t = z__1.r;
+                z__2.r = alpha.r / absest;
+                z__2.i = alpha.i / absest; // , expr subst
                 d__1 = 1. - t;
                 z__1.real = z__2.real / d__1;
                 z__1.imag = z__2.imag / d__1; // , expr subst

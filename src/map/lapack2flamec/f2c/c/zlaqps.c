@@ -212,8 +212,8 @@ void aocl_lapack_zlaqps(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, 
     dcomplex z__1;
     /* Builtin functions */
     double sqrt(doublereal);
-    void d_cnjg(dcomplex *, dcomplex *);
-    double z_abs(dcomplex *);
+    void d_cnjg(doublecomplex *, doublecomplex *);
+    double z_f2c_abs(doublecomplex *);
     integer i_dnnt(doublereal *);
     /* Local variables */
     aocl_int64_t j, k, rk;
@@ -384,7 +384,7 @@ L10:
                 {
                     /* NOTE: The following 4 lines follow from the analysis in */
                     /* Lapack Working Note 176. */
-                    temp = z_abs(&a[rk + j * a_dim1]) / vn1[j];
+                    temp = z_f2c_abs(&a[rk + j * a_dim1]) / vn1[j];
                     /* Computing MAX */
                     d__1 = 0.;
                     d__2 = (temp + 1.) * (1. - temp); // , expr subst

@@ -266,7 +266,7 @@ doublereal aocl_lapack_dla_gercond(char *trans, aocl_int64_t *n, doublereal *a, 
                 i__2 = *n;
                 for(j = 1; j <= i__2; ++j)
                 {
-                    tmp += (d__1 = a[i__ + j * a_dim1] * c__[j], f2c_dabs(d__1));
+                    tmp += (d__1 = a[i__ + j * a_dim1] * c__[j], f2c_abs(d__1));
                 }
             }
             else if(*cmode == 0)
@@ -274,7 +274,7 @@ doublereal aocl_lapack_dla_gercond(char *trans, aocl_int64_t *n, doublereal *a, 
                 i__2 = *n;
                 for(j = 1; j <= i__2; ++j)
                 {
-                    tmp += (d__1 = a[i__ + j * a_dim1], f2c_dabs(d__1));
+                    tmp += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
                 }
             }
             else
@@ -282,7 +282,7 @@ doublereal aocl_lapack_dla_gercond(char *trans, aocl_int64_t *n, doublereal *a, 
                 i__2 = *n;
                 for(j = 1; j <= i__2; ++j)
                 {
-                    tmp += (d__1 = a[i__ + j * a_dim1] / c__[j], f2c_dabs(d__1));
+                    tmp += (d__1 = a[i__ + j * a_dim1] / c__[j], f2c_abs(d__1));
                 }
             }
             work[(*n << 1) + i__] = tmp;
@@ -299,7 +299,7 @@ doublereal aocl_lapack_dla_gercond(char *trans, aocl_int64_t *n, doublereal *a, 
                 i__2 = *n;
                 for(j = 1; j <= i__2; ++j)
                 {
-                    tmp += (d__1 = a[j + i__ * a_dim1] * c__[j], f2c_dabs(d__1));
+                    tmp += (d__1 = a[j + i__ * a_dim1] * c__[j], f2c_abs(d__1));
                 }
             }
             else if(*cmode == 0)
@@ -307,7 +307,7 @@ doublereal aocl_lapack_dla_gercond(char *trans, aocl_int64_t *n, doublereal *a, 
                 i__2 = *n;
                 for(j = 1; j <= i__2; ++j)
                 {
-                    tmp += (d__1 = a[j + i__ * a_dim1], f2c_dabs(d__1));
+                    tmp += (d__1 = a[j + i__ * a_dim1], f2c_abs(d__1));
                 }
             }
             else
@@ -315,7 +315,7 @@ doublereal aocl_lapack_dla_gercond(char *trans, aocl_int64_t *n, doublereal *a, 
                 i__2 = *n;
                 for(j = 1; j <= i__2; ++j)
                 {
-                    tmp += (d__1 = a[j + i__ * a_dim1] / c__[j], f2c_dabs(d__1));
+                    tmp += (d__1 = a[j + i__ * a_dim1] / c__[j], f2c_abs(d__1));
                 }
             }
             work[(*n << 1) + i__] = tmp;

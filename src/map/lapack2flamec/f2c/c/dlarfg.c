@@ -194,7 +194,7 @@ void aocl_lapack_dlarfg(aocl_int64_t *n, doublereal *alpha, doublereal *x, aocl_
             r_once = 0;
         }
         knt = 0;
-        if(f2c_abs(beta) < safmin)
+        if (f2c_abs(beta) < safmin)
         {
             /* XNORM, BETA may be inaccurate;
             scale X and recompute them */
@@ -209,7 +209,7 @@ void aocl_lapack_dlarfg(aocl_int64_t *n, doublereal *alpha, doublereal *x, aocl_
 #endif
             beta *= rsafmn;
             *alpha *= rsafmn;
-            if(f2c_abs(beta) < safmin && knt < 20)
+            if (f2c_abs(beta) < safmin)
             {
                 goto L10;
             }

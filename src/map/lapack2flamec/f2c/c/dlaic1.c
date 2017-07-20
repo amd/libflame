@@ -184,11 +184,11 @@ void aocl_lapack_dlaic1(aocl_int64_t *job, aocl_int64_t *j, doublereal *x, doubl
     --x;
     /* Function Body */
     eps = dlamch_("Epsilon");
-    alpha = aocl_blas_ddot(j, &x[1], &c__1, &w[1], &c__1);
-    absalp = f2c_dabs(alpha);
-    absgam = f2c_dabs(*gamma);
-    absest = f2c_dabs(*sest);
-    if(*job == 1)
+    alpha = ddot_(j, &x[1], &c__1, &w[1], &c__1);
+    absalp = f2c_abs(alpha);
+    absgam = f2c_abs(*gamma);
+    absest = f2c_abs(*sest);
+    if (*job == 1)
     {
         /* Estimating largest singular value */
         /* special cases */
@@ -309,9 +309,9 @@ void aocl_lapack_dlaic1(aocl_int64_t *job, aocl_int64_t *j, doublereal *x, doubl
                 cosine = alpha;
             }
             /* Computing MAX */
-            d__1 = f2c_dabs(sine);
-            d__2 = f2c_dabs(cosine); // , expr subst
-            s1 = fla_max(d__1, d__2);
+            d__1 = f2c_abs(sine);
+            d__2 = f2c_abs(cosine); // , expr subst
+            s1 = max(d__1,d__2);
             *s = sine / s1;
             *c__ = cosine / s1;
             tmp = sqrt(*s * *s + *c__ * *c__);
@@ -376,9 +376,9 @@ void aocl_lapack_dlaic1(aocl_int64_t *job, aocl_int64_t *j, doublereal *x, doubl
             zeta1 = alpha / absest;
             zeta2 = *gamma / absest;
             /* Computing MAX */
-            d__3 = zeta1 * zeta1 + 1. + (d__1 = zeta1 * zeta2, f2c_dabs(d__1));
-            d__4 = (d__2 = zeta1 * zeta2, f2c_dabs(d__2)) + zeta2 * zeta2; // , expr subst
-            norma = fla_max(d__3, d__4);
+            d__3 = zeta1 * zeta1 + 1. + (d__1 = zeta1 * zeta2, f2c_abs(d__1));
+            d__4 = (d__2 = zeta1 * zeta2, f2c_abs(d__2)) + zeta2 * zeta2; // , expr subst
+            norma = max(d__3,d__4);
             /* See if root is closer to zero or to ONE */
             test = (zeta1 - zeta2) * 2. * (zeta1 + zeta2) + 1.;
             if(test >= 0.)
@@ -386,7 +386,7 @@ void aocl_lapack_dlaic1(aocl_int64_t *job, aocl_int64_t *j, doublereal *x, doubl
                 /* root is close to zero, compute directly */
                 b = (zeta1 * zeta1 + zeta2 * zeta2 + 1.) * .5;
                 *c__ = zeta2 * zeta2;
-                t = *c__ / (b + sqrt((d__1 = b * b - *c__, f2c_dabs(d__1))));
+                t = *c__ / (b + sqrt((d__1 = b * b - *c__, f2c_abs(d__1))));
                 sine = zeta1 / (1. - t);
                 cosine = -zeta2 / t;
                 *sestpr = sqrt(t + eps * 4. * eps * norma) * absest;

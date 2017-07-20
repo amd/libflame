@@ -365,7 +365,7 @@ void aocl_lapack_sla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
                     i__3 = fla_min(i__4, lenx);
                     for(j = fla_max(i__2, 1); j <= i__3; ++j)
                     {
-                        temp = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs(r__1));
+                        temp = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs( r__1));
                         symb_zero__ = symb_zero__ && (x[j] == 0.f || temp == 0.f);
                         y[iy] += *alpha * (r__1 = x[j], f2c_abs(r__1)) * temp;
                     }
@@ -405,7 +405,7 @@ void aocl_lapack_sla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
                     i__2 = fla_min(i__4, lenx);
                     for(j = fla_max(i__3, 1); j <= i__2; ++j)
                     {
-                        temp = (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs(r__1));
+                        temp = (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs( r__1));
                         symb_zero__ = symb_zero__ && (x[j] == 0.f || temp == 0.f);
                         y[iy] += *alpha * (r__1 = x[j], f2c_abs(r__1)) * temp;
                     }
@@ -449,7 +449,7 @@ void aocl_lapack_sla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
                     i__3 = fla_min(i__4, lenx);
                     for(j = fla_max(i__2, 1); j <= i__3; ++j)
                     {
-                        temp = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs(r__1));
+                        temp = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs( r__1));
                         symb_zero__ = symb_zero__ && (x[jx] == 0.f || temp == 0.f);
                         y[iy] += *alpha * (r__1 = x[jx], f2c_abs(r__1)) * temp;
                         jx += *incx;
@@ -491,7 +491,7 @@ void aocl_lapack_sla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
                     i__2 = fla_min(i__4, lenx);
                     for(j = fla_max(i__3, 1); j <= i__2; ++j)
                     {
-                        temp = (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs(r__1));
+                        temp = (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs( r__1));
                         symb_zero__ = symb_zero__ && (x[jx] == 0.f || temp == 0.f);
                         y[iy] += *alpha * (r__1 = x[jx], f2c_abs(r__1)) * temp;
                         jx += *incx;

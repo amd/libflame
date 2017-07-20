@@ -49,7 +49,7 @@ static aocl_int64_t c__1 = 1;
 /* > \return ZLANSP */
 /* > \verbatim */
 /* > */
-/* > ZLANSP = ( fla_max(abs(A(i,j))), NORM = 'M' or 'm' */
+/* > ZLANSP = ( max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
 /* > ( */
 /* > ( norm1(A), NORM = '1', 'O' or 'o' */
 /* > ( */
@@ -60,7 +60,7 @@ static aocl_int64_t c__1 = 1;
 /* > where norm1 denotes the one norm of a matrix (maximum column sum), */
 /* > normI denotes the infinity norm of a matrix (maximum row sum) and */
 /* > normF denotes the Frobenius norm of a matrix (square root of sum of */
-/* > squares). Note that fla_max(abs(A(i,j))) is not a consistent matrix norm. */
+/* > squares). Note that max(f2c_abs(A(i,j))) is not a consistent matrix norm. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -134,7 +134,7 @@ doublereal aocl_lapack_zlansp(char *norm, char *uplo, aocl_int64_t *n, dcomplex 
     aocl_int64_t i__1, i__2;
     doublereal ret_val, d__1;
     /* Builtin functions */
-    double z_abs(dcomplex *), d_imag(dcomplex *), sqrt(doublereal);
+    double z_f2c_abs(doublecomplex *), d_imag(doublecomplex *), sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__, j, k;
     doublereal sum, absa, scale;
@@ -171,7 +171,7 @@ doublereal aocl_lapack_zlansp(char *norm, char *uplo, aocl_int64_t *n, dcomplex 
     }
     else if(lsame_(norm, "M", 1, 1))
     {
-        /* Find fla_max(abs(A(i,j))). */
+        /* Find max(f2c_abs(A(i,j))). */
         value = 0.;
         if(lsame_(uplo, "U", 1, 1))
         {
@@ -182,8 +182,8 @@ doublereal aocl_lapack_zlansp(char *norm, char *uplo, aocl_int64_t *n, dcomplex 
                 i__2 = k + j - 1;
                 for(i__ = k; i__ <= i__2; ++i__)
                 {
-                    sum = z_abs(&ap[i__]);
-                    if(value < sum || disnan_(&sum))
+                    sum = z_f2c_abs(&ap[i__]);
+                    if (value < sum || disnan_(&sum))
                     {
                         value = sum;
                     }
@@ -202,8 +202,8 @@ doublereal aocl_lapack_zlansp(char *norm, char *uplo, aocl_int64_t *n, dcomplex 
                 i__2 = k + *n - j;
                 for(i__ = k; i__ <= i__2; ++i__)
                 {
-                    sum = z_abs(&ap[i__]);
-                    if(value < sum || disnan_(&sum))
+                    sum = z_f2c_abs(&ap[i__]);
+                    if (value < sum || disnan_(&sum))
                     {
                         value = sum;
                     }
@@ -228,13 +228,13 @@ doublereal aocl_lapack_zlansp(char *norm, char *uplo, aocl_int64_t *n, dcomplex 
                 i__2 = j - 1;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
-                    absa = z_abs(&ap[k]);
+                    absa = z_f2c_abs(&ap[k]);
                     sum += absa;
                     work[i__] += absa;
                     ++k;
                     /* L50: */
                 }
-                work[j] = sum + z_abs(&ap[k]);
+                work[j] = sum + z_f2c_abs(&ap[k]);
                 ++k;
                 /* L60: */
             }
@@ -260,12 +260,12 @@ doublereal aocl_lapack_zlansp(char *norm, char *uplo, aocl_int64_t *n, dcomplex 
             i__1 = *n;
             for(j = 1; j <= i__1; ++j)
             {
-                sum = work[j] + z_abs(&ap[k]);
+                sum = work[j] + z_f2c_abs(&ap[k]);
                 ++k;
                 i__2 = *n;
                 for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
-                    absa = z_abs(&ap[k]);
+                    absa = z_f2c_abs(&ap[k]);
                     sum += absa;
                     work[i__] += absa;
                     ++k;
@@ -316,8 +316,8 @@ doublereal aocl_lapack_zlansp(char *norm, char *uplo, aocl_int64_t *n, dcomplex 
             if(ap[i__2].real != 0.)
             {
                 i__2 = k;
-                absa = (d__1 = ap[i__2].real, f2c_abs(d__1));
-                if(scale < absa)
+                absa = (d__1 = ap[i__2].r, f2c_abs(d__1));
+                if (scale < absa)
                 {
                     /* Computing 2nd power */
                     d__1 = scale / absa;
@@ -334,7 +334,7 @@ doublereal aocl_lapack_zlansp(char *norm, char *uplo, aocl_int64_t *n, dcomplex 
             if(d_imag(&ap[k]) != 0.)
             {
                 absa = (d__1 = d_imag(&ap[k]), f2c_abs(d__1));
-                if(scale < absa)
+                if (scale < absa)
                 {
                     /* Computing 2nd power */
                     d__1 = scale / absa;

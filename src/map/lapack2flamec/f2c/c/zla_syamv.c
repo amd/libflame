@@ -108,7 +108,7 @@
 /* > */
 /* > \param[in] X */
 /* > \verbatim */
-/* > X is COMPLEX*16 array, dimension at least */
+/* > X is COMPLEX*16 array, DIMENSION at least */
 /* > ( 1 + ( n - 1 )*f2c_abs( INCX ) ) */
 /* > Before entry, the incremented array X must contain the */
 /* > vector x. */
@@ -329,31 +329,23 @@ void aocl_lapack_zla_syamv(aocl_int64_t *uplo, aocl_int64_t *n, doublereal *alph
                     for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = j + i__ * a_dim1;
-                        temp = (d__1 = a[i__3].real, f2c_abs(d__1))
-                               + (d__2 = d_imag(&a[j + i__ * a_dim1]), f2c_abs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag( &a[j + i__ * a_dim1]), f2c_abs(d__2));
                         i__3 = j;
                         symb_zero__
                             = symb_zero__ && (x[i__3].real == 0. && x[i__3].imag == 0. || temp == 0.);
                         i__3 = j;
-                        y[iy] += *alpha
-                                 * ((d__1 = x[i__3].real, f2c_abs(d__1))
-                                    + (d__2 = d_imag(&x[j]), f2c_abs(d__2)))
-                                 * temp;
+                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_abs(d__1)) + ( d__2 = d_imag(&x[j]), f2c_abs(d__2))) * temp;
                     }
                     i__2 = *n;
                     for(j = i__ + 1; j <= i__2; ++j)
                     {
                         i__3 = i__ + j * a_dim1;
-                        temp = (d__1 = a[i__3].real, f2c_abs(d__1))
-                               + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_abs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag( &a[i__ + j * a_dim1]), f2c_abs(d__2));
                         i__3 = j;
                         symb_zero__
                             = symb_zero__ && (x[i__3].real == 0. && x[i__3].imag == 0. || temp == 0.);
                         i__3 = j;
-                        y[iy] += *alpha
-                                 * ((d__1 = x[i__3].real, f2c_abs(d__1))
-                                    + (d__2 = d_imag(&x[j]), f2c_abs(d__2)))
-                                 * temp;
+                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_abs(d__1)) + ( d__2 = d_imag(&x[j]), f2c_abs(d__2))) * temp;
                     }
                 }
                 if(!symb_zero__)
@@ -388,31 +380,23 @@ void aocl_lapack_zla_syamv(aocl_int64_t *uplo, aocl_int64_t *n, doublereal *alph
                     for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = i__ + j * a_dim1;
-                        temp = (d__1 = a[i__3].real, f2c_abs(d__1))
-                               + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_abs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag( &a[i__ + j * a_dim1]), f2c_abs(d__2));
                         i__3 = j;
                         symb_zero__
                             = symb_zero__ && (x[i__3].real == 0. && x[i__3].imag == 0. || temp == 0.);
                         i__3 = j;
-                        y[iy] += *alpha
-                                 * ((d__1 = x[i__3].real, f2c_abs(d__1))
-                                    + (d__2 = d_imag(&x[j]), f2c_abs(d__2)))
-                                 * temp;
+                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_abs(d__1)) + ( d__2 = d_imag(&x[j]), f2c_abs(d__2))) * temp;
                     }
                     i__2 = *n;
                     for(j = i__ + 1; j <= i__2; ++j)
                     {
                         i__3 = j + i__ * a_dim1;
-                        temp = (d__1 = a[i__3].real, f2c_abs(d__1))
-                               + (d__2 = d_imag(&a[j + i__ * a_dim1]), f2c_abs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag( &a[j + i__ * a_dim1]), f2c_abs(d__2));
                         i__3 = j;
                         symb_zero__
                             = symb_zero__ && (x[i__3].real == 0. && x[i__3].imag == 0. || temp == 0.);
                         i__3 = j;
-                        y[iy] += *alpha
-                                 * ((d__1 = x[i__3].real, f2c_abs(d__1))
-                                    + (d__2 = d_imag(&x[j]), f2c_abs(d__2)))
-                                 * temp;
+                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_abs(d__1)) + ( d__2 = d_imag(&x[j]), f2c_abs(d__2))) * temp;
                     }
                 }
                 if(!symb_zero__)
@@ -451,32 +435,24 @@ void aocl_lapack_zla_syamv(aocl_int64_t *uplo, aocl_int64_t *n, doublereal *alph
                     for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = j + i__ * a_dim1;
-                        temp = (d__1 = a[i__3].real, f2c_abs(d__1))
-                               + (d__2 = d_imag(&a[j + i__ * a_dim1]), f2c_abs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag( &a[j + i__ * a_dim1]), f2c_abs(d__2));
                         i__3 = j;
                         symb_zero__
                             = symb_zero__ && (x[i__3].real == 0. && x[i__3].imag == 0. || temp == 0.);
                         i__3 = jx;
-                        y[iy] += *alpha
-                                 * ((d__1 = x[i__3].real, f2c_abs(d__1))
-                                    + (d__2 = d_imag(&x[jx]), f2c_abs(d__2)))
-                                 * temp;
+                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_abs(d__1)) + ( d__2 = d_imag(&x[jx]), f2c_abs(d__2))) * temp;
                         jx += *incx;
                     }
                     i__2 = *n;
                     for(j = i__ + 1; j <= i__2; ++j)
                     {
                         i__3 = i__ + j * a_dim1;
-                        temp = (d__1 = a[i__3].real, f2c_abs(d__1))
-                               + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_abs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag( &a[i__ + j * a_dim1]), f2c_abs(d__2));
                         i__3 = j;
                         symb_zero__
                             = symb_zero__ && (x[i__3].real == 0. && x[i__3].imag == 0. || temp == 0.);
                         i__3 = jx;
-                        y[iy] += *alpha
-                                 * ((d__1 = x[i__3].real, f2c_abs(d__1))
-                                    + (d__2 = d_imag(&x[jx]), f2c_abs(d__2)))
-                                 * temp;
+                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_abs(d__1)) + ( d__2 = d_imag(&x[jx]), f2c_abs(d__2))) * temp;
                         jx += *incx;
                     }
                 }
@@ -513,32 +489,24 @@ void aocl_lapack_zla_syamv(aocl_int64_t *uplo, aocl_int64_t *n, doublereal *alph
                     for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = i__ + j * a_dim1;
-                        temp = (d__1 = a[i__3].real, f2c_abs(d__1))
-                               + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_abs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag( &a[i__ + j * a_dim1]), f2c_abs(d__2));
                         i__3 = j;
                         symb_zero__
                             = symb_zero__ && (x[i__3].real == 0. && x[i__3].imag == 0. || temp == 0.);
                         i__3 = jx;
-                        y[iy] += *alpha
-                                 * ((d__1 = x[i__3].real, f2c_abs(d__1))
-                                    + (d__2 = d_imag(&x[jx]), f2c_abs(d__2)))
-                                 * temp;
+                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_abs(d__1)) + ( d__2 = d_imag(&x[jx]), f2c_abs(d__2))) * temp;
                         jx += *incx;
                     }
                     i__2 = *n;
                     for(j = i__ + 1; j <= i__2; ++j)
                     {
                         i__3 = j + i__ * a_dim1;
-                        temp = (d__1 = a[i__3].real, f2c_abs(d__1))
-                               + (d__2 = d_imag(&a[j + i__ * a_dim1]), f2c_abs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag( &a[j + i__ * a_dim1]), f2c_abs(d__2));
                         i__3 = j;
                         symb_zero__
                             = symb_zero__ && (x[i__3].real == 0. && x[i__3].imag == 0. || temp == 0.);
                         i__3 = jx;
-                        y[iy] += *alpha
-                                 * ((d__1 = x[i__3].real, f2c_abs(d__1))
-                                    + (d__2 = d_imag(&x[jx]), f2c_abs(d__2)))
-                                 * temp;
+                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_abs(d__1)) + ( d__2 = d_imag(&x[jx]), f2c_abs(d__2))) * temp;
                         jx += *incx;
                     }
                 }

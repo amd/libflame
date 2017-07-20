@@ -207,12 +207,12 @@ real aocl_lapack_sla_syrpvgrw(char *uplo, aocl_int64_t *n, aocl_int64_t *info, r
             {
                 /* Computing MAX */
                 r__2 = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
-                r__3 = work[*n + i__]; // , expr subst
-                work[*n + i__] = fla_max(r__2, r__3);
+                r__3 = work[* n + i__]; // , expr subst
+                work[*n + i__] = max(r__2,r__3);
                 /* Computing MAX */
                 r__2 = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
-                r__3 = work[*n + j]; // , expr subst
-                work[*n + j] = fla_max(r__2, r__3);
+                r__3 = work[* n + j]; // , expr subst
+                work[*n + j] = max(r__2,r__3);
             }
         }
     }
@@ -226,12 +226,12 @@ real aocl_lapack_sla_syrpvgrw(char *uplo, aocl_int64_t *n, aocl_int64_t *info, r
             {
                 /* Computing MAX */
                 r__2 = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
-                r__3 = work[*n + i__]; // , expr subst
-                work[*n + i__] = fla_max(r__2, r__3);
+                r__3 = work[* n + i__]; // , expr subst
+                work[*n + i__] = max(r__2,r__3);
                 /* Computing MAX */
                 r__2 = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
-                r__3 = work[*n + j]; // , expr subst
-                work[*n + j] = fla_max(r__2, r__3);
+                r__3 = work[* n + j]; // , expr subst
+                work[*n + j] = max(r__2,r__3);
             }
         }
     }
@@ -286,8 +286,8 @@ real aocl_lapack_sla_syrpvgrw(char *uplo, aocl_int64_t *n, aocl_int64_t *info, r
                 }
                 /* Computing MAX */
                 r__2 = (r__1 = af[k + k * af_dim1], f2c_abs(r__1));
-                r__3 = work[k]; // , expr subst
-                work[k] = fla_max(r__2, r__3);
+                r__3 = work[k] ; // , expr subst
+                work[k] = max(r__2,r__3);
                 k += -2;
             }
         }
@@ -361,8 +361,8 @@ real aocl_lapack_sla_syrpvgrw(char *uplo, aocl_int64_t *n, aocl_int64_t *info, r
                 }
                 /* Computing MAX */
                 r__2 = (r__1 = af[k + k * af_dim1], f2c_abs(r__1));
-                r__3 = work[k]; // , expr subst
-                work[k] = fla_max(r__2, r__3);
+                r__3 = work[k] ; // , expr subst
+                work[k] = max(r__2,r__3);
                 k += 2;
             }
         }

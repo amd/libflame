@@ -179,8 +179,8 @@ doublereal aocl_lapack_dla_gbrpvgrw(aocl_int64_t *n, aocl_int64_t *kl, aocl_int6
         for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
         {
             /* Computing MAX */
-            d__2 = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs(d__1));
-            amax = fla_max(d__2, amax);
+            d__2 = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs(d__1));
+            amax = max(d__2,amax);
         }
         /* Computing MAX */
         i__3 = j - *ku;
@@ -188,8 +188,8 @@ doublereal aocl_lapack_dla_gbrpvgrw(aocl_int64_t *n, aocl_int64_t *kl, aocl_int6
         for(i__ = fla_max(i__3, 1); i__ <= i__2; ++i__)
         {
             /* Computing MAX */
-            d__2 = (d__1 = afb[kd + i__ - j + j * afb_dim1], f2c_dabs(d__1));
-            umax = fla_max(d__2, umax);
+            d__2 = (d__1 = afb[kd + i__ - j + j * afb_dim1], f2c_abs(d__1));
+            umax = max(d__2,umax);
         }
         if(umax != 0.)
         {

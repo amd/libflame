@@ -537,9 +537,9 @@ void aocl_lapack_dgsvj1(char *jobv, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                                 /* Computing MAX */
                                 d__1 = mxaapq;
                                 d__2 = f2c_abs(aapq); // , expr subst
-                                mxaapq = fla_max(d__1, d__2);
+                                mxaapq = max(d__1,d__2);
                                 /* TO rotate or NOT to rotate, THAT is the question ... */
-                                if(f2c_abs(aapq) > *tol)
+                                if (f2c_abs(aapq) > *tol)
                                 {
                                     notrot = 0;
                                     /* ROTATED = ROTATED + 1 */
@@ -549,12 +549,12 @@ void aocl_lapack_dgsvj1(char *jobv, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                                     {
                                         aqoap = aaqq / aapp;
                                         apoaq = aapp / aaqq;
-                                        theta = (d__1 = aqoap - apoaq, f2c_abs(d__1)) * -.5 / aapq;
-                                        if(aaqq > aapp0)
+                                        theta = (d__1 = aqoap - apoaq, f2c_abs( d__1)) * -.5 / aapq;
+                                        if (aaqq > aapp0)
                                         {
                                             theta = -theta;
                                         }
-                                        if(f2c_abs(theta) > bigtheta)
+                                        if (f2c_abs(theta) > bigtheta)
                                         {
                                             t = .5 / theta;
                                             fastr[2] = t * d__[p] / d__[q];
@@ -577,7 +577,7 @@ void aocl_lapack_dgsvj1(char *jobv, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                                             /* Computing MAX */
                                             d__1 = mxsinj;
                                             d__2 = f2c_abs(t); // , expr subst
-                                            mxsinj = fla_max(d__1, d__2);
+                                            mxsinj = max(d__1,d__2);
                                         }
                                         else
                                         {
@@ -593,7 +593,7 @@ void aocl_lapack_dgsvj1(char *jobv, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                                             /* Computing MAX */
                                             d__1 = mxsinj;
                                             d__2 = f2c_abs(sn); // , expr subst
-                                            mxsinj = fla_max(d__1, d__2);
+                                            mxsinj = max(d__1,d__2);
                                             /* Computing MAX */
                                             d__1 = 0.;
                                             d__2 = t * apoaq * aapq + 1.; // , expr subst

@@ -358,15 +358,14 @@ void aocl_lapack_sstein(aocl_int64_t *n, real *d__, real *e, aocl_int64_t *m, re
         /* Computing MAX */
         r__3 = onenrm;
         r__4 = (r__1 = d__[bn], f2c_abs(r__1)) + (r__2 = e[bn - 1], f2c_abs(r__2)); // , expr subst
-        onenrm = fla_max(r__3, r__4);
+        onenrm = max(r__3,r__4);
         i__2 = bn - 1;
         for(i__ = b1 + 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             r__4 = onenrm;
-            r__5 = (r__1 = d__[i__], f2c_abs(r__1)) + (r__2 = e[i__ - 1], f2c_abs(r__2))
-                   + (r__3 = e[i__], f2c_abs(r__3)); // , expr subst
-            onenrm = fla_max(r__4, r__5);
+            r__5 = (r__1 = d__[i__], f2c_abs(r__1)) + (r__2 = e[ i__ - 1], f2c_abs(r__2)) + (r__3 = e[i__], f2c_abs(r__3)); // , expr subst
+            onenrm = max(r__4,r__5);
             /* L50: */
         }
         ortol = onenrm * .001f;
@@ -426,11 +425,10 @@ void aocl_lapack_sstein(aocl_int64_t *n, real *d__, real *e, aocl_int64_t *m, re
             /* Normalize and scale the righthand side vector Pb. */
             jmax = aocl_blas_isamax(&blksiz, &work[indrv1 + 1], &c__1);
             /* Computing MAX */
-            r__3 = eps;
-            r__4 = (r__1 = work[indrv4 + blksiz], f2c_abs(r__1)); // , expr subst
-            scl = blksiz * onenrm * fla_max(r__3, r__4)
-                  / (r__2 = work[indrv1 + jmax], f2c_abs(r__2));
-            aocl_blas_sscal(&blksiz, &scl, &work[indrv1 + 1], &c__1);
+            r__2 = eps;
+            r__3 = (r__1 = work[indrv4 + blksiz], f2c_abs(r__1)); // , expr subst
+            scl = blksiz * onenrm * max(r__2,r__3) / sasum_(&blksiz, &work[ indrv1 + 1], &c__1);
+            sscal_(&blksiz, &scl, &work[indrv1 + 1], &c__1);
             /* Solve the system LU = Pb. */
             aocl_lapack_slagts(&c_n1, &blksiz, &work[indrv4 + 1], &work[indrv2 + 2],
                                &work[indrv3 + 1], &work[indrv5 + 1], &iwork[1], &work[indrv1 + 1],
@@ -441,7 +439,7 @@ void aocl_lapack_sstein(aocl_int64_t *n, real *d__, real *e, aocl_int64_t *m, re
             {
                 goto L90;
             }
-            if((r__1 = xj - xjm, f2c_abs(r__1)) > ortol)
+            if ((r__1 = xj - xjm, f2c_abs(r__1)) > ortol)
             {
                 gpind = j;
             }
@@ -458,8 +456,8 @@ void aocl_lapack_sstein(aocl_int64_t *n, real *d__, real *e, aocl_int64_t *m, re
                 }
             }
             /* Check the infinity norm of the iterate. */
-        L90:
-            jmax = aocl_blas_isamax(&blksiz, &work[indrv1 + 1], &c__1);
+L90:
+            jmax = isamax_(&blksiz, &work[indrv1 + 1], &c__1);
             nrm = (r__1 = work[indrv1 + jmax], f2c_abs(r__1));
             /* Continue for additional iterations after norm reaches */
             /* stopping criterion. */

@@ -536,9 +536,9 @@ void aocl_lapack_sgsvj0(char *jobv, aocl_int64_t *m, aocl_int64_t *n, real *a, a
                                 /* Computing MAX */
                                 r__1 = mxaapq;
                                 r__2 = f2c_abs(aapq); // , expr subst
-                                mxaapq = fla_max(r__1, r__2);
+                                mxaapq = max(r__1,r__2);
                                 /* TO rotate or NOT to rotate, THAT is the question ... */
-                                if(f2c_abs(aapq) > *tol)
+                                if (f2c_abs(aapq) > *tol)
                                 {
                                     /* .. rotate */
                                     /* ROTATED = ROTATED + ONE */
@@ -552,8 +552,8 @@ void aocl_lapack_sgsvj0(char *jobv, aocl_int64_t *m, aocl_int64_t *n, real *a, a
                                     {
                                         aqoap = aaqq / aapp;
                                         apoaq = aapp / aaqq;
-                                        theta = (r__1 = aqoap - apoaq, f2c_abs(r__1)) * -.5f / aapq;
-                                        if(f2c_abs(theta) > bigtheta)
+                                        theta = (r__1 = aqoap - apoaq, f2c_abs( r__1)) * -.5f / aapq;
+                                        if (f2c_abs(theta) > bigtheta)
                                         {
                                             t = .5f / theta;
                                             fastr[2] = t * d__[p] / d__[q];
@@ -576,7 +576,7 @@ void aocl_lapack_sgsvj0(char *jobv, aocl_int64_t *m, aocl_int64_t *n, real *a, a
                                             /* Computing MAX */
                                             r__1 = mxsinj;
                                             r__2 = f2c_abs(t); // , expr subst
-                                            mxsinj = fla_max(r__1, r__2);
+                                            mxsinj = max(r__1,r__2);
                                         }
                                         else
                                         {
@@ -588,7 +588,7 @@ void aocl_lapack_sgsvj0(char *jobv, aocl_int64_t *m, aocl_int64_t *n, real *a, a
                                             /* Computing MAX */
                                             r__1 = mxsinj;
                                             r__2 = f2c_abs(sn); // , expr subst
-                                            mxsinj = fla_max(r__1, r__2);
+                                            mxsinj = max(r__1,r__2);
                                             /* Computing MAX */
                                             r__1 = 0.f;
                                             r__2 = t * apoaq * aapq + 1.f; // , expr subst
@@ -915,9 +915,9 @@ void aocl_lapack_sgsvj0(char *jobv, aocl_int64_t *m, aocl_int64_t *n, real *a, a
                                 /* Computing MAX */
                                 r__1 = mxaapq;
                                 r__2 = f2c_abs(aapq); // , expr subst
-                                mxaapq = fla_max(r__1, r__2);
+                                mxaapq = max(r__1,r__2);
                                 /* TO rotate or NOT to rotate, THAT is the question ... */
-                                if(f2c_abs(aapq) > *tol)
+                                if (f2c_abs(aapq) > *tol)
                                 {
                                     notrot = 0;
                                     /* ROTATED = ROTATED + 1 */
@@ -927,12 +927,12 @@ void aocl_lapack_sgsvj0(char *jobv, aocl_int64_t *m, aocl_int64_t *n, real *a, a
                                     {
                                         aqoap = aaqq / aapp;
                                         apoaq = aapp / aaqq;
-                                        theta = (r__1 = aqoap - apoaq, f2c_abs(r__1)) * -.5f / aapq;
-                                        if(aaqq > aapp0)
+                                        theta = (r__1 = aqoap - apoaq, f2c_abs( r__1)) * -.5f / aapq;
+                                        if (aaqq > aapp0)
                                         {
                                             theta = -theta;
                                         }
-                                        if(f2c_abs(theta) > bigtheta)
+                                        if (f2c_abs(theta) > bigtheta)
                                         {
                                             t = .5f / theta;
                                             fastr[2] = t * d__[p] / d__[q];
@@ -955,7 +955,7 @@ void aocl_lapack_sgsvj0(char *jobv, aocl_int64_t *m, aocl_int64_t *n, real *a, a
                                             /* Computing MAX */
                                             r__1 = mxsinj;
                                             r__2 = f2c_abs(t); // , expr subst
-                                            mxsinj = fla_max(r__1, r__2);
+                                            mxsinj = max(r__1,r__2);
                                         }
                                         else
                                         {
@@ -971,7 +971,7 @@ void aocl_lapack_sgsvj0(char *jobv, aocl_int64_t *m, aocl_int64_t *n, real *a, a
                                             /* Computing MAX */
                                             r__1 = mxsinj;
                                             r__2 = f2c_abs(sn); // , expr subst
-                                            mxsinj = fla_max(r__1, r__2);
+                                            mxsinj = max(r__1,r__2);
                                             /* Computing MAX */
                                             r__1 = 0.f;
                                             r__2 = t * apoaq * aapq + 1.f; // , expr subst

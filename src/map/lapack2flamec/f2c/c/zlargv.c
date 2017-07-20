@@ -224,18 +224,18 @@ void aocl_lapack_zlargv(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, dcompl
         /* Use identical algorithm as in ZLARTG */
         /* Computing MAX */
         /* Computing MAX */
-        d__7 = (d__1 = f.real, f2c_dabs(d__1));
-        d__8 = (d__2 = d_imag(&f), f2c_dabs(d__2)); // , expr subst
+        d__7 = (d__1 = f.r, f2c_abs(d__1));
+        d__8 = (d__2 = d_imag(&f), f2c_abs(d__2)); // , expr subst
         /* Computing MAX */
-        d__9 = (d__3 = g.real, f2c_dabs(d__3));
-        d__10 = (d__4 = d_imag(&g), f2c_dabs(d__4)); // , expr subst
-        d__5 = fla_max(d__7, d__8);
-        d__6 = fla_max(d__9, d__10); // , expr subst
-        scale = fla_max(d__5, d__6);
-        fs.real = f.real;
-        fs.imag = f.imag; // , expr subst
-        gs.real = g.real;
-        gs.imag = g.imag; // , expr subst
+        d__9 = (d__3 = g.r, f2c_abs(d__3));
+        d__10 = (d__4 = d_imag(&g), f2c_abs(d__4)) ; // , expr subst
+        d__5 = max(d__7,d__8);
+        d__6 = max(d__9,d__10); // , expr subst
+        scale = max(d__5,d__6);
+        fs.r = f.r;
+        fs.i = f.i; // , expr subst
+        gs.r = g.r;
+        gs.i = g.i; // , expr subst
         count = 0;
         if(scale >= safmx2)
         {
@@ -330,12 +330,12 @@ void aocl_lapack_zlargv(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, dcompl
             /* and so CS .lt. sqrt(SAFMIN)/SAFMN2 = sqrt(EPS) */
             /* Therefore, CS = F2S/G2S / sqrt( 1 + (F2S/G2S)**2 ) = F2S/G2S */
             cs = f2s / g2s;
-            /* Make sure f2c_dabs(FF) = 1 */
-            /* Do scomplex/real division explicitly with 2 real divisions */
+            /* Make sure f2c_abs(FF) = 1 */
+            /* Do complex/real division explicitly with 2 real divisions */
             /* Computing MAX */
-            d__3 = (d__1 = f.real, f2c_dabs(d__1));
-            d__4 = (d__2 = d_imag(&f), f2c_dabs(d__2)); // , expr subst
-            if(fla_max(d__3, d__4) > 1.)
+            d__3 = (d__1 = f.r, f2c_abs(d__1));
+            d__4 = (d__2 = d_imag(&f), f2c_abs( d__2)); // , expr subst
+            if (max(d__3,d__4) > 1.)
             {
                 d__1 = f.real;
                 d__2 = d_imag(&f);

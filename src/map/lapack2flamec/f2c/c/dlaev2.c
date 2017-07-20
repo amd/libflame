@@ -145,10 +145,10 @@ void dlaev2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *rt1, dou
     /* Compute the eigenvalues */
     sm = *a + *c__;
     df = *a - *c__;
-    adf = f2c_dabs(df);
+    adf = f2c_abs(df);
     tb = *b + *b;
-    ab = f2c_dabs(tb);
-    if(f2c_dabs(*a) > f2c_dabs(*c__))
+    ab = f2c_abs(tb);
+    if (f2c_abs(*a) > f2c_abs(*c__))
     {
         acmx = *a;
         acmn = *c__;
@@ -211,8 +211,8 @@ void dlaev2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *rt1, dou
         cs = df - rt;
         sgn2 = -1;
     }
-    acs = f2c_dabs(cs);
-    if(acs > ab)
+    acs = f2c_abs(cs);
+    if (acs > ab)
     {
         ct = -tb / cs;
         *sn1 = 1. / sqrt(ct * ct + 1.);

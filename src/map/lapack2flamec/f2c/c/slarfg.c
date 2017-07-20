@@ -176,7 +176,7 @@ void aocl_lapack_slarfg(aocl_int64_t *n, real *alpha, real *x, aocl_int64_t *inc
         beta = -r_sign(&r__1, alpha);
         safmin = slamch_("S") / slamch_("E");
         knt = 0;
-        if(f2c_abs(beta) < safmin)
+        if (f2c_abs(beta) < safmin)
         {
             /* XNORM, BETA may be inaccurate;
             scale X and recompute them */
@@ -192,7 +192,7 @@ void aocl_lapack_slarfg(aocl_int64_t *n, real *alpha, real *x, aocl_int64_t *inc
 #endif
             beta *= rsafmn;
             *alpha *= rsafmn;
-            if(f2c_abs(beta) < safmin && knt < 20)
+            if (f2c_abs(beta) < safmin)
             {
                 goto L10;
             }

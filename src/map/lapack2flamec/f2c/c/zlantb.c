@@ -50,7 +50,7 @@ static aocl_int64_t c__1 = 1;
 /* > \return ZLANTB */
 /* > \verbatim */
 /* > */
-/* > ZLANTB = ( fla_max(abs(A(i,j))), NORM = 'M' or 'm' */
+/* > ZLANTB = ( max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
 /* > ( */
 /* > ( norm1(A), NORM = '1', 'O' or 'o' */
 /* > ( */
@@ -61,7 +61,7 @@ static aocl_int64_t c__1 = 1;
 /* > where norm1 denotes the one norm of a matrix (maximum column sum), */
 /* > normI denotes the infinity norm of a matrix (maximum row sum) and */
 /* > normF denotes the Frobenius norm of a matrix (square root of sum of */
-/* > squares). Note that fla_max(abs(A(i,j))) is not a consistent matrix norm. */
+/* > squares). Note that max(f2c_abs(A(i,j))) is not a consistent matrix norm. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -164,7 +164,7 @@ doublereal aocl_lapack_zlantb(char *norm, char *uplo, char *diag, aocl_int64_t *
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal ret_val;
     /* Builtin functions */
-    double z_abs(dcomplex *), sqrt(doublereal);
+    double z_f2c_abs(doublecomplex *), sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__, j, l;
     doublereal sum, scale;
@@ -204,8 +204,8 @@ doublereal aocl_lapack_zlantb(char *norm, char *uplo, char *diag, aocl_int64_t *
     }
     else if(lsame_(norm, "M", 1, 1))
     {
-        /* Find fla_max(abs(A(i,j))). */
-        if(lsame_(diag, "U", 1, 1))
+        /* Find max(f2c_abs(A(i,j))). */
+        if (lsame_(diag, "U"))
         {
             value = 1.;
             if(lsame_(uplo, "U", 1, 1))
@@ -218,8 +218,8 @@ doublereal aocl_lapack_zlantb(char *norm, char *uplo, char *diag, aocl_int64_t *
                     i__3 = *k;
                     for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
                     {
-                        sum = z_abs(&ab[i__ + j * ab_dim1]);
-                        if(value < sum || disnan_(&sum))
+                        sum = z_f2c_abs(&ab[i__ + j * ab_dim1]);
+                        if (value < sum || disnan_(&sum))
                         {
                             value = sum;
                         }
@@ -239,8 +239,8 @@ doublereal aocl_lapack_zlantb(char *norm, char *uplo, char *diag, aocl_int64_t *
                     i__3 = fla_min(i__2, i__4);
                     for(i__ = 2; i__ <= i__3; ++i__)
                     {
-                        sum = z_abs(&ab[i__ + j * ab_dim1]);
-                        if(value < sum || disnan_(&sum))
+                        sum = z_f2c_abs(&ab[i__ + j * ab_dim1]);
+                        if (value < sum || disnan_(&sum))
                         {
                             value = sum;
                         }
@@ -263,8 +263,8 @@ doublereal aocl_lapack_zlantb(char *norm, char *uplo, char *diag, aocl_int64_t *
                     i__2 = *k + 1;
                     for(i__ = fla_max(i__3, 1); i__ <= i__2; ++i__)
                     {
-                        sum = z_abs(&ab[i__ + j * ab_dim1]);
-                        if(value < sum || disnan_(&sum))
+                        sum = z_f2c_abs(&ab[i__ + j * ab_dim1]);
+                        if (value < sum || disnan_(&sum))
                         {
                             value = sum;
                         }
@@ -284,8 +284,8 @@ doublereal aocl_lapack_zlantb(char *norm, char *uplo, char *diag, aocl_int64_t *
                     i__2 = fla_min(i__3, i__4);
                     for(i__ = 1; i__ <= i__2; ++i__)
                     {
-                        sum = z_abs(&ab[i__ + j * ab_dim1]);
-                        if(value < sum || disnan_(&sum))
+                        sum = z_f2c_abs(&ab[i__ + j * ab_dim1]);
+                        if (value < sum || disnan_(&sum))
                         {
                             value = sum;
                         }
@@ -314,7 +314,7 @@ doublereal aocl_lapack_zlantb(char *norm, char *uplo, char *diag, aocl_int64_t *
                     i__3 = *k;
                     for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
                     {
-                        sum += z_abs(&ab[i__ + j * ab_dim1]);
+                        sum += z_f2c_abs(&ab[i__ + j * ab_dim1]);
                         /* L90: */
                     }
                 }
@@ -326,7 +326,7 @@ doublereal aocl_lapack_zlantb(char *norm, char *uplo, char *diag, aocl_int64_t *
                     i__2 = *k + 1;
                     for(i__ = fla_max(i__3, 1); i__ <= i__2; ++i__)
                     {
-                        sum += z_abs(&ab[i__ + j * ab_dim1]);
+                        sum += z_f2c_abs(&ab[i__ + j * ab_dim1]);
                         /* L100: */
                     }
                 }
@@ -351,7 +351,7 @@ doublereal aocl_lapack_zlantb(char *norm, char *uplo, char *diag, aocl_int64_t *
                     i__2 = fla_min(i__3, i__4);
                     for(i__ = 2; i__ <= i__2; ++i__)
                     {
-                        sum += z_abs(&ab[i__ + j * ab_dim1]);
+                        sum += z_f2c_abs(&ab[i__ + j * ab_dim1]);
                         /* L120: */
                     }
                 }
@@ -364,7 +364,7 @@ doublereal aocl_lapack_zlantb(char *norm, char *uplo, char *diag, aocl_int64_t *
                     i__2 = fla_min(i__3, i__4);
                     for(i__ = 1; i__ <= i__2; ++i__)
                     {
-                        sum += z_abs(&ab[i__ + j * ab_dim1]);
+                        sum += z_f2c_abs(&ab[i__ + j * ab_dim1]);
                         /* L130: */
                     }
                 }
@@ -400,7 +400,7 @@ doublereal aocl_lapack_zlantb(char *norm, char *uplo, char *diag, aocl_int64_t *
                     i__4 = j - 1;
                     for(i__ = fla_max(i__2, i__3); i__ <= i__4; ++i__)
                     {
-                        work[i__] += z_abs(&ab[l + i__ + j * ab_dim1]);
+                        work[i__] += z_f2c_abs(&ab[l + i__ + j * ab_dim1]);
                         /* L160: */
                     }
                     /* L170: */
@@ -424,7 +424,7 @@ doublereal aocl_lapack_zlantb(char *norm, char *uplo, char *diag, aocl_int64_t *
                     i__3 = j;
                     for(i__ = fla_max(i__4, i__2); i__ <= i__3; ++i__)
                     {
-                        work[i__] += z_abs(&ab[l + i__ + j * ab_dim1]);
+                        work[i__] += z_f2c_abs(&ab[l + i__ + j * ab_dim1]);
                         /* L190: */
                     }
                     /* L200: */
@@ -451,7 +451,7 @@ doublereal aocl_lapack_zlantb(char *norm, char *uplo, char *diag, aocl_int64_t *
                     i__3 = fla_min(i__4, i__2);
                     for(i__ = j + 1; i__ <= i__3; ++i__)
                     {
-                        work[i__] += z_abs(&ab[l + i__ + j * ab_dim1]);
+                        work[i__] += z_f2c_abs(&ab[l + i__ + j * ab_dim1]);
                         /* L220: */
                     }
                     /* L230: */
@@ -475,7 +475,7 @@ doublereal aocl_lapack_zlantb(char *norm, char *uplo, char *diag, aocl_int64_t *
                     i__3 = fla_min(i__4, i__2);
                     for(i__ = j; i__ <= i__3; ++i__)
                     {
-                        work[i__] += z_abs(&ab[l + i__ + j * ab_dim1]);
+                        work[i__] += z_f2c_abs(&ab[l + i__ + j * ab_dim1]);
                         /* L250: */
                     }
                     /* L260: */

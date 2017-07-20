@@ -304,8 +304,8 @@ void aocl_lapack_dlatdf(aocl_int64_t *ijob, aocl_int64_t *n, doublereal *z__, ao
                 rhs[i__] -= rhs[k] * (z__[i__ + k * z_dim1] * temp);
                 /* L20: */
             }
-            splus += (d__1 = xp[i__ - 1], f2c_dabs(d__1));
-            sminu += (d__1 = rhs[i__], f2c_dabs(d__1));
+            splus += (d__1 = xp[i__ - 1], f2c_abs(d__1));
+            sminu += (d__1 = rhs[i__], f2c_abs(d__1));
             /* L30: */
         }
         if(splus > sminu)

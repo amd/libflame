@@ -160,8 +160,8 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
     real r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8;
     scomplex q__1, q__2, q__3, q__4, q__5;
     /* Builtin functions */
-    double c_abs(scomplex *), r_imag(scomplex *);
-    void r_cnjg(scomplex *, scomplex *);
+    double c_f2c_abs(complex *), r_imag(complex *);
+    void r_cnjg(complex *, complex *);
     /* Local variables */
     real a;
     scomplex b, c__;
@@ -202,16 +202,16 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
         /* ( 0 d ) */
         a = *a1 * *b3;
         d__ = *a3 * *b1;
-        q__2.real = *b1 * a2->real;
-        q__2.imag = *b1 * a2->imag; // , expr subst
-        q__3.real = *a1 * b2->real;
-        q__3.imag = *a1 * b2->imag; // , expr subst
-        q__1.real = q__2.real - q__3.real;
-        q__1.imag = q__2.imag - q__3.imag; // , expr subst
-        b.real = q__1.real;
-        b.imag = q__1.imag; // , expr subst
-        fb = c_abs(&b);
-        /* Transform scomplex 2-by-2 matrix C to real matrix by unitary */
+        q__2.r = *b1 * a2->r;
+        q__2.i = *b1 * a2->i; // , expr subst
+        q__3.r = *a1 * b2->r;
+        q__3.i = *a1 * b2->i; // , expr subst
+        q__1.r = q__2.r - q__3.r;
+        q__1.i = q__2.i - q__3.i; // , expr subst
+        b.r = q__1.r;
+        b.i = q__1.i; // , expr subst
+        fb = c_f2c_abs(&b);
+        /* Transform complex 2-by-2 matrix C to real matrix by unitary */
         /* diagonal matrix diag(1,D1). */
         d1.real = 1.f;
         d1.imag = 0.f; // , expr subst
@@ -226,7 +226,7 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
         /* ( CSL -SNL )*( A B )*( CSR SNR ) = ( R 0 ) */
         /* ( SNL CSL ) ( 0 D ) ( -SNR CSR ) ( 0 T ) */
         slasv2_(&a, &fb, &d__, &s1, &s2, &snr, &csr, &snl, &csl);
-        if(f2c_abs(csl) >= f2c_abs(snl) || f2c_abs(csr) >= f2c_abs(snr))
+        if (f2c_abs(csl) >= f2c_abs(snl) || f2c_abs(csr) >= f2c_abs(snr))
         {
             /* Compute the (1,1) and (1,2) elements of U**H *A and V**H *B, */
             /* and (1,2) element of |U|**H *|A| and |V|**H *|B|. */
@@ -242,26 +242,20 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
             ua12.real = q__1.real;
             ua12.imag = q__1.imag; // , expr subst
             vb11r = csr * *b1;
-            q__2.real = csr * b2->real;
-            q__2.imag = csr * b2->imag; // , expr subst
-            q__4.real = snr * d1.real;
-            q__4.imag = snr * d1.imag; // , expr subst
-            q__3.real = *b3 * q__4.real;
-            q__3.imag = *b3 * q__4.imag; // , expr subst
-            q__1.real = q__2.real + q__3.real;
-            q__1.imag = q__2.imag + q__3.imag; // , expr subst
-            vb12.real = q__1.real;
-            vb12.imag = q__1.imag; // , expr subst
-            aua12 = f2c_abs(csl)
-                        * ((r__1 = a2->real, f2c_abs(r__1)) + (r__2 = r_imag(a2), f2c_abs(r__2)))
-                    + f2c_abs(snl) * f2c_abs(*a3);
-            avb12 = f2c_abs(csr)
-                        * ((r__1 = b2->real, f2c_abs(r__1)) + (r__2 = r_imag(b2), f2c_abs(r__2)))
-                    + f2c_abs(snr) * f2c_abs(*b3);
+            q__2.r = csr * b2->r;
+            q__2.i = csr * b2->i; // , expr subst
+            q__4.r = snr * d1.r;
+            q__4.i = snr * d1.i; // , expr subst
+            q__3.r = *b3 * q__4.r;
+            q__3.i = *b3 * q__4.i; // , expr subst
+            q__1.r = q__2.r + q__3.r;
+            q__1.i = q__2.i + q__3.i; // , expr subst
+            vb12.r = q__1.r;
+            vb12.i = q__1.i; // , expr subst
+            aua12 = f2c_abs(csl) * ((r__1 = a2->r, f2c_abs(r__1)) + (r__2 = r_imag(a2) , f2c_abs(r__2))) + f2c_abs(snl) * f2c_abs(*a3);
+            avb12 = f2c_abs(csr) * ((r__1 = b2->r, f2c_abs(r__1)) + (r__2 = r_imag(b2) , f2c_abs(r__2))) + f2c_abs(snr) * f2c_abs(*b3);
             /* zero (1,2) elements of U**H *A and V**H *B */
-            if(f2c_abs(ua11r)
-                   + ((r__1 = ua12.real, f2c_abs(r__1)) + (r__2 = r_imag(&ua12), f2c_abs(r__2)))
-               == 0.f)
+            if (f2c_abs(ua11r) + ((r__1 = ua12.r, f2c_abs(r__1)) + (r__2 = r_imag(& ua12), f2c_abs(r__2))) == 0.f)
             {
                 q__2.real = vb11r;
                 q__2.imag = 0.f; // , expr subst
@@ -270,9 +264,7 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
                 r_cnjg(&q__3, &vb12);
                 clartg_(&q__1, &q__3, csq, snq, &r__);
             }
-            else if(f2c_abs(vb11r)
-                        + ((r__1 = vb12.real, f2c_abs(r__1)) + (r__2 = r_imag(&vb12), f2c_abs(r__2)))
-                    == 0.f)
+            else if (f2c_abs(vb11r) + ((r__1 = vb12.r, f2c_abs(r__1)) + (r__2 = r_imag(&vb12), f2c_abs(r__2))) == 0.f)
             {
                 q__2.real = ua11r;
                 q__2.imag = 0.f; // , expr subst
@@ -281,14 +273,7 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
                 r_cnjg(&q__3, &ua12);
                 clartg_(&q__1, &q__3, csq, snq, &r__);
             }
-            else if(aua12
-                        / (f2c_abs(ua11r)
-                           + ((r__1 = ua12.real, f2c_abs(r__1))
-                              + (r__2 = r_imag(&ua12), f2c_abs(r__2))))
-                    <= avb12
-                           / (f2c_abs(vb11r)
-                              + ((r__3 = vb12.real, f2c_abs(r__3))
-                                 + (r__4 = r_imag(&vb12), f2c_abs(r__4)))))
+            else if (aua12 / (f2c_abs(ua11r) + ((r__1 = ua12.r, f2c_abs(r__1)) + ( r__2 = r_imag(&ua12), f2c_abs(r__2)))) <= avb12 / (f2c_abs(vb11r) + ((r__3 = vb12.r, f2c_abs(r__3)) + (r__4 = r_imag(&vb12), f2c_abs(r__4)))))
             {
                 q__2.real = ua11r;
                 q__2.imag = 0.f; // , expr subst
@@ -361,20 +346,14 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
             q__2.real = q__3.real * b2->real - q__3.imag * b2->imag;
             q__2.imag = q__3.real * b2->imag + q__3.imag * b2->real; // , expr subst
             r__1 = csr * *b3;
-            q__1.real = q__2.real + r__1;
-            q__1.imag = q__2.imag; // , expr subst
-            vb22.real = q__1.real;
-            vb22.imag = q__1.imag; // , expr subst
-            aua22 = f2c_abs(snl)
-                        * ((r__1 = a2->real, f2c_abs(r__1)) + (r__2 = r_imag(a2), f2c_abs(r__2)))
-                    + f2c_abs(csl) * f2c_abs(*a3);
-            avb22 = f2c_abs(snr)
-                        * ((r__1 = b2->real, f2c_abs(r__1)) + (r__2 = r_imag(b2), f2c_abs(r__2)))
-                    + f2c_abs(csr) * f2c_abs(*b3);
+            q__1.r = q__2.r + r__1;
+            q__1.i = q__2.i; // , expr subst
+            vb22.r = q__1.r;
+            vb22.i = q__1.i; // , expr subst
+            aua22 = f2c_abs(snl) * ((r__1 = a2->r, f2c_abs(r__1)) + (r__2 = r_imag(a2) , f2c_abs(r__2))) + f2c_abs(csl) * f2c_abs(*a3);
+            avb22 = f2c_abs(snr) * ((r__1 = b2->r, f2c_abs(r__1)) + (r__2 = r_imag(b2) , f2c_abs(r__2))) + f2c_abs(csr) * f2c_abs(*b3);
             /* zero (2,2) elements of U**H *A and V**H *B, and then swap. */
-            if((r__1 = ua21.real, f2c_abs(r__1)) + (r__2 = r_imag(&ua21), f2c_abs(r__2))
-                   + ((r__3 = ua22.real, f2c_abs(r__3)) + (r__4 = r_imag(&ua22), f2c_abs(r__4)))
-               == 0.f)
+            if ((r__1 = ua21.r, f2c_abs(r__1)) + (r__2 = r_imag(&ua21), f2c_abs(r__2)) + ((r__3 = ua22.r, f2c_abs(r__3)) + (r__4 = r_imag(&ua22), f2c_abs(r__4))) == 0.f)
             {
                 r_cnjg(&q__2, &vb21);
                 q__1.real = -q__2.real;
@@ -382,9 +361,7 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
                 r_cnjg(&q__3, &vb22);
                 clartg_(&q__1, &q__3, csq, snq, &r__);
             }
-            else if((r__1 = vb21.real, f2c_abs(r__1)) + (r__2 = r_imag(&vb21), f2c_abs(r__2))
-                        + c_abs(&vb22)
-                    == 0.f)
+            else if ((r__1 = vb21.r, f2c_abs(r__1)) + (r__2 = r_imag(&vb21), f2c_abs(r__2)) + c_f2c_abs(&vb22) == 0.f)
             {
                 r_cnjg(&q__2, &ua21);
                 q__1.real = -q__2.real;
@@ -392,14 +369,7 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
                 r_cnjg(&q__3, &ua22);
                 clartg_(&q__1, &q__3, csq, snq, &r__);
             }
-            else if(aua22
-                        / ((r__1 = ua21.real, f2c_abs(r__1)) + (r__2 = r_imag(&ua21), f2c_abs(r__2))
-                           + ((r__3 = ua22.real, f2c_abs(r__3))
-                              + (r__4 = r_imag(&ua22), f2c_abs(r__4))))
-                    <= avb22
-                           / ((r__5 = vb21.real, f2c_abs(r__5)) + (r__6 = r_imag(&vb21), f2c_abs(r__6))
-                              + ((r__7 = vb22.real, f2c_abs(r__7))
-                                 + (r__8 = r_imag(&vb22), f2c_abs(r__8)))))
+            else if (aua22 / ((r__1 = ua21.r, f2c_abs(r__1)) + (r__2 = r_imag(& ua21), f2c_abs(r__2)) + ((r__3 = ua22.r, f2c_abs(r__3)) + (r__4 = r_imag(&ua22), f2c_abs(r__4)))) <= avb22 / ((r__5 = vb21.r, f2c_abs(r__5)) + (r__6 = r_imag(&vb21), f2c_abs(r__6)) + ((r__7 = vb22.r, f2c_abs(r__7)) + (r__8 = r_imag(&vb22), f2c_abs(r__8)))))
             {
                 r_cnjg(&q__2, &ua21);
                 q__1.real = -q__2.real;
@@ -432,16 +402,16 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
         /* ( c d ) */
         a = *a1 * *b3;
         d__ = *a3 * *b1;
-        q__2.real = *b3 * a2->real;
-        q__2.imag = *b3 * a2->imag; // , expr subst
-        q__3.real = *a3 * b2->real;
-        q__3.imag = *a3 * b2->imag; // , expr subst
-        q__1.real = q__2.real - q__3.real;
-        q__1.imag = q__2.imag - q__3.imag; // , expr subst
-        c__.real = q__1.real;
-        c__.imag = q__1.imag; // , expr subst
-        fc = c_abs(&c__);
-        /* Transform scomplex 2-by-2 matrix C to real matrix by unitary */
+        q__2.r = *b3 * a2->r;
+        q__2.i = *b3 * a2->i; // , expr subst
+        q__3.r = *a3 * b2->r;
+        q__3.i = *a3 * b2->i; // , expr subst
+        q__1.r = q__2.r - q__3.r;
+        q__1.i = q__2.i - q__3.i; // , expr subst
+        c__.r = q__1.r;
+        c__.i = q__1.i; // , expr subst
+        fc = c_f2c_abs(&c__);
+        /* Transform complex 2-by-2 matrix C to real matrix by unitary */
         /* diagonal matrix diag(d1,1). */
         d1.real = 1.f;
         d1.imag = 0.f; // , expr subst
@@ -456,7 +426,7 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
         /* ( CSL -SNL )*( A 0 )*( CSR SNR ) = ( R 0 ) */
         /* ( SNL CSL ) ( C D ) ( -SNR CSR ) ( 0 T ) */
         slasv2_(&a, &fc, &d__, &s1, &s2, &snr, &csr, &snl, &csl);
-        if(f2c_abs(csr) >= f2c_abs(snr) || f2c_abs(csl) >= f2c_abs(snl))
+        if (f2c_abs(csr) >= f2c_abs(snr) || f2c_abs(csl) >= f2c_abs(snl))
         {
             /* Compute the (2,1) and (2,2) elements of U**H *A and V**H *B, */
             /* and (2,1) element of |U|**H *|A| and |V|**H *|B|. */
@@ -486,35 +456,22 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
             vb21.real = q__1.real;
             vb21.imag = q__1.imag; // , expr subst
             vb22r = csl * *b3;
-            aua21 = f2c_abs(snr) * f2c_abs(*a1)
-                    + f2c_abs(csr)
-                          * ((r__1 = a2->real, f2c_abs(r__1)) + (r__2 = r_imag(a2), f2c_abs(r__2)));
-            avb21 = f2c_abs(snl) * f2c_abs(*b1)
-                    + f2c_abs(csl)
-                          * ((r__1 = b2->real, f2c_abs(r__1)) + (r__2 = r_imag(b2), f2c_abs(r__2)));
+            aua21 = f2c_abs(snr) * f2c_abs(*a1) + f2c_abs(csr) * ((r__1 = a2->r, f2c_abs(r__1) ) + (r__2 = r_imag(a2), f2c_abs(r__2)));
+            avb21 = f2c_abs(snl) * f2c_abs(*b1) + f2c_abs(csl) * ((r__1 = b2->r, f2c_abs(r__1) ) + (r__2 = r_imag(b2), f2c_abs(r__2)));
             /* zero (2,1) elements of U**H *A and V**H *B. */
-            if((r__1 = ua21.real, f2c_abs(r__1)) + (r__2 = r_imag(&ua21), f2c_abs(r__2))
-                   + f2c_abs(ua22r)
-               == 0.f)
+            if ((r__1 = ua21.r, f2c_abs(r__1)) + (r__2 = r_imag(&ua21), f2c_abs(r__2)) + f2c_abs(ua22r) == 0.f)
             {
                 q__1.real = vb22r;
                 q__1.imag = 0.f; // , expr subst
                 clartg_(&q__1, &vb21, csq, snq, &r__);
             }
-            else if((r__1 = vb21.real, f2c_abs(r__1)) + (r__2 = r_imag(&vb21), f2c_abs(r__2))
-                        + f2c_abs(vb22r)
-                    == 0.f)
+            else if ((r__1 = vb21.r, f2c_abs(r__1)) + (r__2 = r_imag(&vb21), f2c_abs(r__2)) + f2c_abs(vb22r) == 0.f)
             {
                 q__1.real = ua22r;
                 q__1.imag = 0.f; // , expr subst
                 clartg_(&q__1, &ua21, csq, snq, &r__);
             }
-            else if(aua21
-                        / ((r__1 = ua21.real, f2c_abs(r__1)) + (r__2 = r_imag(&ua21), f2c_abs(r__2))
-                           + f2c_abs(ua22r))
-                    <= avb21
-                           / ((r__3 = vb21.real, f2c_abs(r__3)) + (r__4 = r_imag(&vb21), f2c_abs(r__4))
-                              + f2c_abs(vb22r)))
+            else if (aua21 / ((r__1 = ua21.r, f2c_abs(r__1)) + (r__2 = r_imag(& ua21), f2c_abs(r__2)) + f2c_abs(ua22r)) <= avb21 / ((r__3 = vb21.r, f2c_abs(r__3)) + (r__4 = r_imag(&vb21), f2c_abs(r__4)) + f2c_abs(vb22r)))
             {
                 q__1.real = ua22r;
                 q__1.imag = 0.f; // , expr subst
@@ -573,39 +530,24 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
             vb11.real = q__1.real;
             vb11.imag = q__1.imag; // , expr subst
             r_cnjg(&q__3, &d1);
-            q__2.real = snl * q__3.real;
-            q__2.imag = snl * q__3.imag; // , expr subst
-            q__1.real = *b3 * q__2.real;
-            q__1.imag = *b3 * q__2.imag; // , expr subst
-            vb12.real = q__1.real;
-            vb12.imag = q__1.imag; // , expr subst
-            aua11 = f2c_abs(csr) * f2c_abs(*a1)
-                    + f2c_abs(snr)
-                          * ((r__1 = a2->real, f2c_abs(r__1)) + (r__2 = r_imag(a2), f2c_abs(r__2)));
-            avb11 = f2c_abs(csl) * f2c_abs(*b1)
-                    + f2c_abs(snl)
-                          * ((r__1 = b2->real, f2c_abs(r__1)) + (r__2 = r_imag(b2), f2c_abs(r__2)));
+            q__2.r = snl * q__3.r;
+            q__2.i = snl * q__3.i; // , expr subst
+            q__1.r = *b3 * q__2.r;
+            q__1.i = *b3 * q__2.i; // , expr subst
+            vb12.r = q__1.r;
+            vb12.i = q__1.i; // , expr subst
+            aua11 = f2c_abs(csr) * f2c_abs(*a1) + f2c_abs(snr) * ((r__1 = a2->r, f2c_abs(r__1) ) + (r__2 = r_imag(a2), f2c_abs(r__2)));
+            avb11 = f2c_abs(csl) * f2c_abs(*b1) + f2c_abs(snl) * ((r__1 = b2->r, f2c_abs(r__1) ) + (r__2 = r_imag(b2), f2c_abs(r__2)));
             /* zero (1,1) elements of U**H *A and V**H *B, and then swap. */
-            if((r__1 = ua11.real, f2c_abs(r__1)) + (r__2 = r_imag(&ua11), f2c_abs(r__2))
-                   + ((r__3 = ua12.real, f2c_abs(r__3)) + (r__4 = r_imag(&ua12), f2c_abs(r__4)))
-               == 0.f)
+            if ((r__1 = ua11.r, f2c_abs(r__1)) + (r__2 = r_imag(&ua11), f2c_abs(r__2)) + ((r__3 = ua12.r, f2c_abs(r__3)) + (r__4 = r_imag(&ua12), f2c_abs(r__4))) == 0.f)
             {
                 clartg_(&vb12, &vb11, csq, snq, &r__);
             }
-            else if((r__1 = vb11.real, f2c_abs(r__1)) + (r__2 = r_imag(&vb11), f2c_abs(r__2))
-                        + ((r__3 = vb12.real, f2c_abs(r__3)) + (r__4 = r_imag(&vb12), f2c_abs(r__4)))
-                    == 0.f)
+            else if ((r__1 = vb11.r, f2c_abs(r__1)) + (r__2 = r_imag(&vb11), f2c_abs(r__2)) + ((r__3 = vb12.r, f2c_abs(r__3)) + (r__4 = r_imag( &vb12), f2c_abs(r__4))) == 0.f)
             {
                 clartg_(&ua12, &ua11, csq, snq, &r__);
             }
-            else if(aua11
-                        / ((r__1 = ua11.real, f2c_abs(r__1)) + (r__2 = r_imag(&ua11), f2c_abs(r__2))
-                           + ((r__3 = ua12.real, f2c_abs(r__3))
-                              + (r__4 = r_imag(&ua12), f2c_abs(r__4))))
-                    <= avb11
-                           / ((r__5 = vb11.real, f2c_abs(r__5)) + (r__6 = r_imag(&vb11), f2c_abs(r__6))
-                              + ((r__7 = vb12.real, f2c_abs(r__7))
-                                 + (r__8 = r_imag(&vb12), f2c_abs(r__8)))))
+            else if (aua11 / ((r__1 = ua11.r, f2c_abs(r__1)) + (r__2 = r_imag(& ua11), f2c_abs(r__2)) + ((r__3 = ua12.r, f2c_abs(r__3)) + (r__4 = r_imag(&ua12), f2c_abs(r__4)))) <= avb11 / ((r__5 = vb11.r, f2c_abs(r__5)) + (r__6 = r_imag(&vb11), f2c_abs(r__6)) + ((r__7 = vb12.r, f2c_abs(r__7)) + (r__8 = r_imag(&vb12), f2c_abs(r__8)))))
             {
                 clartg_(&ua12, &ua11, csq, snq, &r__);
             }

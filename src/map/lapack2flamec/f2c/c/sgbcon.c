@@ -348,8 +348,8 @@ L10:
         *(unsigned char *)normin = 'Y';
         if(scale != 1.f)
         {
-            ix = aocl_blas_isamax(n, &work[1], &c__1);
-            if(scale < (r__1 = work[ix], f2c_abs(r__1)) * smlnum || scale == 0.f)
+            ix = isamax_(n, &work[1], &c__1);
+            if (scale < (r__1 = work[ix], f2c_abs(r__1)) * smlnum || scale == 0.f)
             {
                 goto L40;
             }

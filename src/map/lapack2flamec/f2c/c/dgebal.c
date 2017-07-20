@@ -368,9 +368,33 @@ void aocl_lapack_dgebal(char *job, aocl_int64_t *n, doublereal *a, aocl_int64_t 
     noconv = TRUE_;
     while(noconv)
     {
-        noconv = FALSE_;
-        i__1 = l;
-        for(i__ = k; i__ <= i__1; ++i__)
+        i__2 = l - k + 1;
+        c__ = dnrm2_(&i__2, &a[k + i__ * a_dim1], &c__1);
+        i__2 = l - k + 1;
+        r__ = dnrm2_(&i__2, &a[i__ + k * a_dim1], lda);
+        ica = idamax_(&l, &a[i__ * a_dim1 + 1], &c__1);
+        ca = (d__1 = a[ica + i__ * a_dim1], f2c_abs(d__1));
+        i__2 = *n - k + 1;
+        ira = idamax_(&i__2, &a[i__ + k * a_dim1], lda);
+        ra = (d__1 = a[i__ + (ira + k - 1) * a_dim1], f2c_abs(d__1));
+        /* Guard against zero C or R due to underflow. */
+        if (c__ == 0. || r__ == 0.)
+        {
+            goto L200;
+        }
+        g = r__ / 2.;
+        f = 1.;
+        s = c__ + r__;
+L160: /* Computing MAX */
+        d__1 = max(f,c__);
+        /* Computing MIN */
+        d__2 = min(r__,g);
+        if (c__ >= g || max(d__1,ca) >= sfmax2 || min(d__2,ra) <= sfmin2)
+        {
+            goto L170;
+        }
+        d__1 = c__ + f + ca + r__ + g + ra;
+        if (disnan_(&d__1))
         {
             i__2 = l - k + 1;
             c__ = aocl_blas_dnrm2(&i__2, &a[k + i__ * a_dim1], &c__1);

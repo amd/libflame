@@ -208,7 +208,7 @@ void aocl_lapack_sgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, real *dl, real *d__,
         i__1 = *n - 2;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
+            if ((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
             {
                 /* No row interchange required */
                 if(d__[i__] != 0.f)
@@ -244,7 +244,7 @@ void aocl_lapack_sgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, real *dl, real *d__,
         if(*n > 1)
         {
             i__ = *n - 1;
-            if((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
+            if ((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
             {
                 if(d__[i__] != 0.f)
                 {
@@ -283,7 +283,7 @@ void aocl_lapack_sgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, real *dl, real *d__,
         i__1 = *n - 2;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
+            if ((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
             {
                 /* No row interchange required */
                 if(d__[i__] != 0.f)
@@ -329,7 +329,7 @@ void aocl_lapack_sgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, real *dl, real *d__,
         if(*n > 1)
         {
             i__ = *n - 1;
-            if((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
+            if ((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
             {
                 if(d__[i__] != 0.f)
                 {

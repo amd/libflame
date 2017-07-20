@@ -351,7 +351,7 @@ real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aoc
                 i__3 = fla_min(i__4, *n);
                 for(j = fla_max(i__2, 1); j <= i__3; ++j)
                 {
-                    tmp += (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs(r__1));
+                    tmp += (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs(r__1) );
                 }
             }
             else

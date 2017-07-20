@@ -49,7 +49,7 @@ static aocl_int64_t c__1 = 1;
 /* > \return CLANHE */
 /* > \verbatim */
 /* > */
-/* > CLANHE = ( fla_max(abs(A(i,j))), NORM = 'M' or 'm' */
+/* > CLANHE = ( max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
 /* > ( */
 /* > ( norm1(A), NORM = '1', 'O' or 'o' */
 /* > ( */
@@ -60,7 +60,7 @@ static aocl_int64_t c__1 = 1;
 /* > where norm1 denotes the one norm of a matrix (maximum column sum), */
 /* > normI denotes the infinity norm of a matrix (maximum row sum) and */
 /* > normF denotes the Frobenius norm of a matrix (square root of sum of */
-/* > squares). Note that fla_max(abs(A(i,j))) is not a consistent matrix norm. */
+/* > squares). Note that max(f2c_abs(A(i,j))) is not a consistent matrix norm. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -152,7 +152,7 @@ real aocl_lapack_clanhe(char *norm, char *uplo, aocl_int64_t *n, scomplex *a, ao
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real ret_val, r__1;
     /* Builtin functions */
-    double c_abs(scomplex *), sqrt(doublereal);
+    double c_f2c_abs(complex *), sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__, j;
     real sum, absa, scale;
@@ -191,7 +191,7 @@ real aocl_lapack_clanhe(char *norm, char *uplo, aocl_int64_t *n, scomplex *a, ao
     }
     else if(lsame_(norm, "M", 1, 1))
     {
-        /* Find fla_max(abs(A(i,j))). */
+        /* Find max(f2c_abs(A(i,j))). */
         value = 0.f;
         if(lsame_(uplo, "U", 1, 1))
         {
@@ -201,16 +201,16 @@ real aocl_lapack_clanhe(char *norm, char *uplo, aocl_int64_t *n, scomplex *a, ao
                 i__2 = j - 1;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
-                    sum = c_abs(&a[i__ + j * a_dim1]);
-                    if(value < sum || sisnan_(&sum))
+                    sum = c_f2c_abs(&a[i__ + j * a_dim1]);
+                    if (value < sum || sisnan_(&sum))
                     {
                         value = sum;
                     }
                     /* L10: */
                 }
                 i__2 = j + j * a_dim1;
-                sum = (r__1 = a[i__2].real, f2c_abs(r__1));
-                if(value < sum || sisnan_(&sum))
+                sum = (r__1 = a[i__2].r, f2c_abs(r__1));
+                if (value < sum || sisnan_(&sum))
                 {
                     value = sum;
                 }
@@ -223,16 +223,16 @@ real aocl_lapack_clanhe(char *norm, char *uplo, aocl_int64_t *n, scomplex *a, ao
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j + j * a_dim1;
-                sum = (r__1 = a[i__2].real, f2c_abs(r__1));
-                if(value < sum || sisnan_(&sum))
+                sum = (r__1 = a[i__2].r, f2c_abs(r__1));
+                if (value < sum || sisnan_(&sum))
                 {
                     value = sum;
                 }
                 i__2 = *n;
                 for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
-                    sum = c_abs(&a[i__ + j * a_dim1]);
-                    if(value < sum || sisnan_(&sum))
+                    sum = c_f2c_abs(&a[i__ + j * a_dim1]);
+                    if (value < sum || sisnan_(&sum))
                     {
                         value = sum;
                     }
@@ -255,13 +255,13 @@ real aocl_lapack_clanhe(char *norm, char *uplo, aocl_int64_t *n, scomplex *a, ao
                 i__2 = j - 1;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
-                    absa = c_abs(&a[i__ + j * a_dim1]);
+                    absa = c_f2c_abs(&a[i__ + j * a_dim1]);
                     sum += absa;
                     work[i__] += absa;
                     /* L50: */
                 }
                 i__2 = j + j * a_dim1;
-                work[j] = sum + (r__1 = a[i__2].real, f2c_abs(r__1));
+                work[j] = sum + (r__1 = a[i__2].r, f2c_abs(r__1));
                 /* L60: */
             }
             i__1 = *n;
@@ -287,11 +287,11 @@ real aocl_lapack_clanhe(char *norm, char *uplo, aocl_int64_t *n, scomplex *a, ao
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j + j * a_dim1;
-                sum = work[j] + (r__1 = a[i__2].real, f2c_abs(r__1));
+                sum = work[j] + (r__1 = a[i__2].r, f2c_abs(r__1));
                 i__2 = *n;
                 for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
-                    absa = c_abs(&a[i__ + j * a_dim1]);
+                    absa = c_f2c_abs(&a[i__ + j * a_dim1]);
                     sum += absa;
                     work[i__] += absa;
                     /* L90: */
@@ -337,8 +337,8 @@ real aocl_lapack_clanhe(char *norm, char *uplo, aocl_int64_t *n, scomplex *a, ao
             if(a[i__2].real != 0.f)
             {
                 i__2 = i__ + i__ * a_dim1;
-                absa = (r__1 = a[i__2].real, f2c_abs(r__1));
-                if(scale < absa)
+                absa = (r__1 = a[i__2].r, f2c_abs(r__1));
+                if (scale < absa)
                 {
                     /* Computing 2nd power */
                     r__1 = scale / absa;

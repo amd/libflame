@@ -247,34 +247,29 @@ void aocl_lapack_csyequb(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t 
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
                 r__3 = s[i__];
-                r__4 = (r__1 = a[i__3].real, f2c_abs(r__1))
-                       + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-                s[i__] = fla_max(r__3, r__4);
+                r__4 = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+                s[i__] = max(r__3,r__4);
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
                 r__3 = s[j];
-                r__4 = (r__1 = a[i__3].real, f2c_abs(r__1))
-                       + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-                s[j] = fla_max(r__3, r__4);
+                r__4 = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+                s[j] = max(r__3,r__4);
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
                 r__3 = *amax;
-                r__4 = (r__1 = a[i__3].real, f2c_abs(r__1))
-                       + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-                *amax = fla_max(r__3, r__4);
+                r__4 = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+                *amax = max(r__3,r__4);
             }
             /* Computing MAX */
             i__2 = j + j * a_dim1;
             r__3 = s[j];
-            r__4 = (r__1 = a[i__2].real, f2c_abs(r__1))
-                   + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-            s[j] = fla_max(r__3, r__4);
+            r__4 = (r__1 = a[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+            s[j] = max(r__3,r__4);
             /* Computing MAX */
             i__2 = j + j * a_dim1;
             r__3 = *amax;
-            r__4 = (r__1 = a[i__2].real, f2c_abs(r__1))
-                   + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-            *amax = fla_max(r__3, r__4);
+            r__4 = (r__1 = a[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+            *amax = max(r__3,r__4);
         }
     }
     else
@@ -285,36 +280,31 @@ void aocl_lapack_csyequb(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t 
             /* Computing MAX */
             i__2 = j + j * a_dim1;
             r__3 = s[j];
-            r__4 = (r__1 = a[i__2].real, f2c_abs(r__1))
-                   + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-            s[j] = fla_max(r__3, r__4);
+            r__4 = (r__1 = a[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+            s[j] = max(r__3,r__4);
             /* Computing MAX */
             i__2 = j + j * a_dim1;
             r__3 = *amax;
-            r__4 = (r__1 = a[i__2].real, f2c_abs(r__1))
-                   + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-            *amax = fla_max(r__3, r__4);
+            r__4 = (r__1 = a[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+            *amax = max(r__3,r__4);
             i__2 = *n;
             for(i__ = j + 1; i__ <= i__2; ++i__)
             {
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
                 r__3 = s[i__];
-                r__4 = (r__1 = a[i__3].real, f2c_abs(r__1))
-                       + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-                s[i__] = fla_max(r__3, r__4);
+                r__4 = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+                s[i__] = max(r__3,r__4);
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
                 r__3 = s[j];
-                r__4 = (r__1 = a[i__3].real, f2c_abs(r__1))
-                       + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-                s[j] = fla_max(r__3, r__4);
+                r__4 = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+                s[j] = max(r__3,r__4);
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
                 r__3 = *amax;
-                r__4 = (r__1 = a[i__3].real, f2c_abs(r__1))
-                       + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-                *amax = fla_max(r__3, r__4);
+                r__4 = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+                *amax = max(r__3,r__4);
             }
         }
     }
@@ -344,37 +334,33 @@ void aocl_lapack_csyequb(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t 
                 i__2 = j - 1;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
+                    i__3 = i__ + j * a_dim1;
+                    t = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__ + j * a_dim1;
-                    r__3 = ((r__1 = a[i__5].real, f2c_abs(r__1))
-                            + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)))
-                           * s[j];
-                    q__1.real = work[i__4].real + r__3;
-                    q__1.imag = work[i__4].imag; // , expr subst
-                    work[i__3].real = q__1.real;
-                    work[i__3].imag = q__1.imag; // , expr subst
+                    r__3 = ((r__1 = a[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ i__ + j * a_dim1]), f2c_abs(r__2))) * s[j];
+                    q__1.r = work[i__4].r + r__3;
+                    q__1.i = work[i__4].i; // , expr subst
+                    work[i__3].r = q__1.r;
+                    work[i__3].i = q__1.i; // , expr subst
                     i__3 = j;
                     i__4 = j;
                     i__5 = i__ + j * a_dim1;
-                    r__3 = ((r__1 = a[i__5].real, f2c_abs(r__1))
-                            + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)))
-                           * s[i__];
-                    q__1.real = work[i__4].real + r__3;
-                    q__1.imag = work[i__4].imag; // , expr subst
-                    work[i__3].real = q__1.real;
-                    work[i__3].imag = q__1.imag; // , expr subst
+                    r__3 = ((r__1 = a[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ i__ + j * a_dim1]), f2c_abs(r__2))) * s[i__];
+                    q__1.r = work[i__4].r + r__3;
+                    q__1.i = work[i__4].i; // , expr subst
+                    work[i__3].r = q__1.r;
+                    work[i__3].i = q__1.i; // , expr subst
                 }
                 i__2 = j;
                 i__3 = j;
                 i__4 = j + j * a_dim1;
-                r__3 = ((r__1 = a[i__4].real, f2c_abs(r__1))
-                        + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)))
-                       * s[j];
-                q__1.real = work[i__3].real + r__3;
-                q__1.imag = work[i__3].imag; // , expr subst
-                work[i__2].real = q__1.real;
-                work[i__2].imag = q__1.imag; // , expr subst
+                r__3 = ((r__1 = a[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2))) * s[j];
+                q__1.r = work[i__3].r + r__3;
+                q__1.i = work[i__3].i; // , expr subst
+                work[i__2].r = q__1.r;
+                work[i__2].i = q__1.i; // , expr subst
             }
         }
         else
@@ -385,36 +371,32 @@ void aocl_lapack_csyequb(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t 
                 i__2 = j;
                 i__3 = j;
                 i__4 = j + j * a_dim1;
-                r__3 = ((r__1 = a[i__4].real, f2c_abs(r__1))
-                        + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)))
-                       * s[j];
-                q__1.real = work[i__3].real + r__3;
-                q__1.imag = work[i__3].imag; // , expr subst
-                work[i__2].real = q__1.real;
-                work[i__2].imag = q__1.imag; // , expr subst
+                r__3 = ((r__1 = a[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2))) * s[j];
+                q__1.r = work[i__3].r + r__3;
+                q__1.i = work[i__3].i; // , expr subst
+                work[i__2].r = q__1.r;
+                work[i__2].i = q__1.i; // , expr subst
                 i__2 = *n;
                 for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
+                    i__3 = i__ + j * a_dim1;
+                    t = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__ + j * a_dim1;
-                    r__3 = ((r__1 = a[i__5].real, f2c_abs(r__1))
-                            + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)))
-                           * s[j];
-                    q__1.real = work[i__4].real + r__3;
-                    q__1.imag = work[i__4].imag; // , expr subst
-                    work[i__3].real = q__1.real;
-                    work[i__3].imag = q__1.imag; // , expr subst
+                    r__3 = ((r__1 = a[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ i__ + j * a_dim1]), f2c_abs(r__2))) * s[j];
+                    q__1.r = work[i__4].r + r__3;
+                    q__1.i = work[i__4].i; // , expr subst
+                    work[i__3].r = q__1.r;
+                    work[i__3].i = q__1.i; // , expr subst
                     i__3 = j;
                     i__4 = j;
                     i__5 = i__ + j * a_dim1;
-                    r__3 = ((r__1 = a[i__5].real, f2c_abs(r__1))
-                            + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)))
-                           * s[i__];
-                    q__1.real = work[i__4].real + r__3;
-                    q__1.imag = work[i__4].imag; // , expr subst
-                    work[i__3].real = q__1.real;
-                    work[i__3].imag = q__1.imag; // , expr subst
+                    r__3 = ((r__1 = a[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ i__ + j * a_dim1]), f2c_abs(r__2))) * s[i__];
+                    q__1.r = work[i__4].r + r__3;
+                    q__1.i = work[i__4].i; // , expr subst
+                    work[i__3].r = q__1.r;
+                    work[i__3].i = q__1.i; // , expr subst
                 }
             }
         }
@@ -454,8 +436,7 @@ void aocl_lapack_csyequb(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t 
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
-            t = (r__1 = a[i__2].real, f2c_abs(r__1))
-                + (r__2 = r_imag(&a[i__ + i__ * a_dim1]), f2c_abs(r__2));
+            t = (r__1 = a[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + i__ * a_dim1]), f2c_abs(r__2));
             si = s[i__];
             c2 = (*n - 1) * t;
             i__2 = i__;
@@ -478,8 +459,7 @@ void aocl_lapack_csyequb(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t 
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    t = (r__1 = a[i__3].real, f2c_abs(r__1))
-                        + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2));
+                    t = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2));
                     u += s[j] * t;
                     i__3 = j;
                     i__4 = j;
@@ -493,8 +473,7 @@ void aocl_lapack_csyequb(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t 
                 for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    t = (r__1 = a[i__3].real, f2c_abs(r__1))
-                        + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
+                    t = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
                     u += s[j] * t;
                     i__3 = j;
                     i__4 = j;
@@ -511,8 +490,7 @@ void aocl_lapack_csyequb(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t 
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    t = (r__1 = a[i__3].real, f2c_abs(r__1))
-                        + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
+                    t = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
                     u += s[j] * t;
                     i__3 = j;
                     i__4 = j;
@@ -526,8 +504,7 @@ void aocl_lapack_csyequb(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t 
                 for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    t = (r__1 = a[i__3].real, f2c_abs(r__1))
-                        + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2));
+                    t = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2));
                     u += s[j] * t;
                     i__3 = j;
                     i__4 = j;

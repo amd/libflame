@@ -175,9 +175,8 @@ void aocl_lapack_claqr1(aocl_int64_t *n, scomplex *h__, aocl_int64_t *ldh, scomp
         q__1.real = q__2.real;
         q__1.imag = q__2.imag; // , expr subst
         i__2 = h_dim1 + 2;
-        s = (r__1 = q__1.real, f2c_abs(r__1)) + (r__2 = q__1.imag, f2c_abs(r__2))
-            + ((r__3 = h__[i__2].real, f2c_abs(r__3)) + (r__4 = h__[i__2].imag, f2c_abs(r__4)));
-        if(s == 0.f)
+        s = (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2)) + ( (r__3 = h__[i__2].r, f2c_abs(r__3)) + (r__4 = r_imag(&h__[h_dim1 + 2]), f2c_abs(r__4)));
+        if (s == 0.f)
         {
             v[1].real = 0.f;
             v[1].imag = 0.f; // , expr subst
@@ -227,10 +226,8 @@ void aocl_lapack_claqr1(aocl_int64_t *n, scomplex *h__, aocl_int64_t *ldh, scomp
         q__1.imag = q__2.imag; // , expr subst
         i__2 = h_dim1 + 2;
         i__3 = h_dim1 + 3;
-        s = (r__1 = q__1.real, f2c_abs(r__1)) + (r__2 = q__1.imag, f2c_abs(r__2))
-            + ((r__3 = h__[i__2].real, f2c_abs(r__3)) + (r__4 = h__[i__2].imag, f2c_abs(r__4)))
-            + ((r__5 = h__[i__3].real, f2c_abs(r__5)) + (r__6 = h__[i__3].imag, f2c_abs(r__6)));
-        if(s == 0.f)
+        s = (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2)) + ( (r__3 = h__[i__2].r, f2c_abs(r__3)) + (r__4 = r_imag(&h__[h_dim1 + 2]), f2c_abs(r__4))) + ((r__5 = h__[i__3].r, f2c_abs(r__5)) + (r__6 = r_imag(&h__[h_dim1 + 3]), f2c_abs(r__6)));
+        if (s == 0.f)
         {
             v[1].real = 0.f;
             v[1].imag = 0.f; // , expr subst

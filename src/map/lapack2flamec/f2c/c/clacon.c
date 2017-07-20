@@ -142,7 +142,7 @@ void aocl_lapack_clacon(aocl_int64_t *n, scomplex *v, scomplex *x, real *est, ao
     real r__1, r__2;
     scomplex q__1;
     /* Builtin functions */
-    double c_abs(scomplex *), r_imag(scomplex *);
+    double c_f2c_abs(complex *), r_imag(complex *);
     /* Local variables */
     aocl_int64_t i__;
     real temp;
@@ -218,9 +218,9 @@ void aocl_lapack_clacon(aocl_int64_t *n, scomplex *v, scomplex *x, real *est, ao
 L20:
     if(*n == 1)
     {
-        v[1].real = x[1].real;
-        v[1].imag = x[1].imag; // , expr subst
-        *est = c_abs(&v[1]);
+        v[1].r = x[1].r;
+        v[1].i = x[1].i; // , expr subst
+        *est = c_f2c_abs(&v[1]);
         /* ... QUIT */
         goto L130;
     }
@@ -228,8 +228,8 @@ L20:
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        absxi = c_abs(&x[i__]);
-        if(absxi > safmin)
+        absxi = c_f2c_abs(&x[i__]);
+        if (absxi > safmin)
         {
             i__2 = i__;
             i__3 = i__;
@@ -288,8 +288,8 @@ L70:
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        absxi = c_abs(&x[i__]);
-        if(absxi > safmin)
+        absxi = c_f2c_abs(&x[i__]);
+        if (absxi > safmin)
         {
             i__2 = i__;
             i__3 = i__;
@@ -316,8 +316,8 @@ L70:
     /* X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L90:
     jlast = j;
-    j = aocl_lapack_icmax1(n, &x[1], &c__1);
-    if(c_abs(&x[jlast]) != c_abs(&x[j]) && iter < 5)
+    j = icmax1_(n, &x[1], &c__1);
+    if (c_f2c_abs(&x[jlast]) != c_f2c_abs(&x[j]) && iter < 5)
     {
         ++iter;
         goto L50;

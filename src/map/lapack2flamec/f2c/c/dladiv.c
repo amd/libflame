@@ -124,20 +124,11 @@ void dladiv_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, dou
     /* Computing MAX */
     d__1 = f2c_abs(*a);
     d__2 = f2c_abs(*b); // , expr subst
-    ab = fla_max(d__1, d__2);
+    ab = max(d__1,d__2);
     /* Computing MAX */
     d__1 = f2c_abs(*c__);
     d__2 = f2c_abs(*d__); // , expr subst
-    cd = fla_max(d__1, d__2);
-
-    if(ov == 0)
-    {
-        ov = dlamch_("Overflow threshold") * .5;
-        eps = dlamch_("Epsilon");
-        un = dlamch_("Safe minimum") * 2. / eps;
-        be = 2. / (eps * eps);
-    }
-
+    cd = max(d__1,d__2);
     s = 1.;
     if(ab >= ov)
     {
@@ -163,8 +154,7 @@ void dladiv_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, dou
         dd *= be;
         s *= be;
     }
-
-    if(f2c_abs(*d__) <= f2c_abs(*c__))
+    if (f2c_abs(*d__) <= f2c_abs(*c__))
     {
         dladiv1_(&aa, &bb, &cc, &dd, p, q);
     }

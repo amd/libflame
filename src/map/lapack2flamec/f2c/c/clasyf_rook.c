@@ -313,8 +313,7 @@ void aocl_lapack_clasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
         /* Determine rows and columns to be interchanged and whether */
         /* a 1-by-1 or 2-by-2 pivot block will be used */
         i__1 = k + kw * w_dim1;
-        absakk = (r__1 = w[i__1].real, f2c_abs(r__1))
-                 + (r__2 = r_imag(&w[k + kw * w_dim1]), f2c_abs(r__2));
+        absakk = (r__1 = w[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&w[k + kw * w_dim1]), f2c_abs(r__2));
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value. */
         /* Determine both COLMAX and IMAX. */
@@ -323,8 +322,7 @@ void aocl_lapack_clasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
             i__1 = k - 1;
             imax = aocl_blas_icamax(&i__1, &w[kw * w_dim1 + 1], &c__1);
             i__1 = imax + kw * w_dim1;
-            colmax = (r__1 = w[i__1].real, f2c_abs(r__1))
-                     + (r__2 = r_imag(&w[imax + kw * w_dim1]), f2c_abs(r__2));
+            colmax = (r__1 = w[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&w[imax + kw * w_dim1]), f2c_abs(r__2));
         }
         else
         {
@@ -379,8 +377,7 @@ void aocl_lapack_clasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
                     i__1 = k - imax;
                     jmax = imax + aocl_blas_icamax(&i__1, &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
                     i__1 = jmax + (kw - 1) * w_dim1;
-                    rowmax = (r__1 = w[i__1].real, f2c_abs(r__1))
-                             + (r__2 = r_imag(&w[jmax + (kw - 1) * w_dim1]), f2c_abs(r__2));
+                    rowmax = (r__1 = w[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(& w[jmax + (kw - 1) * w_dim1]), f2c_abs(r__2));
                 }
                 else
                 {
@@ -391,9 +388,8 @@ void aocl_lapack_clasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
                     i__1 = imax - 1;
                     itemp = aocl_blas_icamax(&i__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
                     i__1 = itemp + (kw - 1) * w_dim1;
-                    stemp = (r__1 = w[i__1].real, f2c_abs(r__1))
-                            + (r__2 = r_imag(&w[itemp + (kw - 1) * w_dim1]), f2c_abs(r__2));
-                    if(stemp > rowmax)
+                    stemp = (r__1 = w[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&w[ itemp + (kw - 1) * w_dim1]), f2c_abs(r__2));
+                    if (stemp > rowmax)
                     {
                         rowmax = stemp;
                         jmax = itemp;
@@ -403,9 +399,7 @@ void aocl_lapack_clasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
                 /* CABS1( W( IMAX, KW-1 ) ).GE.ALPHA*ROWMAX */
                 /* (used to handle NaN and Inf) */
                 i__1 = imax + (kw - 1) * w_dim1;
-                if(!((r__1 = w[i__1].real, f2c_abs(r__1))
-                         + (r__2 = r_imag(&w[imax + (kw - 1) * w_dim1]), f2c_abs(r__2))
-                     < alpha * rowmax))
+                if (! ((r__1 = w[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&w[imax + (kw - 1) * w_dim1]), f2c_abs(r__2)) < alpha * rowmax))
                 {
                     /* interchange rows and columns K and IMAX, */
                     /* use 1-by-1 pivot block */
@@ -488,9 +482,7 @@ void aocl_lapack_clasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
                 if(k > 1)
                 {
                     i__1 = k + k * a_dim1;
-                    if((r__1 = a[i__1].real, f2c_abs(r__1))
-                           + (r__2 = r_imag(&a[k + k * a_dim1]), f2c_abs(r__2))
-                       >= sfmin)
+                    if ((r__1 = a[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[k + k * a_dim1]), f2c_abs(r__2)) >= sfmin)
                     {
                         c_div(&q__1, &c_b1, &a[k + k * a_dim1]);
                         r1.real = q__1.real;
@@ -698,8 +690,7 @@ void aocl_lapack_clasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
         /* Determine rows and columns to be interchanged and whether */
         /* a 1-by-1 or 2-by-2 pivot block will be used */
         i__1 = k + k * w_dim1;
-        absakk = (r__1 = w[i__1].real, f2c_abs(r__1))
-                 + (r__2 = r_imag(&w[k + k * w_dim1]), f2c_abs(r__2));
+        absakk = (r__1 = w[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&w[k + k * w_dim1]), f2c_abs(r__2));
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value. */
         /* Determine both COLMAX and IMAX. */
@@ -708,8 +699,7 @@ void aocl_lapack_clasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
             i__1 = *n - k;
             imax = k + aocl_blas_icamax(&i__1, &w[k + 1 + k * w_dim1], &c__1);
             i__1 = imax + k * w_dim1;
-            colmax = (r__1 = w[i__1].real, f2c_abs(r__1))
-                     + (r__2 = r_imag(&w[imax + k * w_dim1]), f2c_abs(r__2));
+            colmax = (r__1 = w[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&w[imax + k * w_dim1]), f2c_abs(r__2));
         }
         else
         {
@@ -765,8 +755,7 @@ void aocl_lapack_clasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
                     i__1 = imax - k;
                     jmax = k - 1 + aocl_blas_icamax(&i__1, &w[k + (k + 1) * w_dim1], &c__1);
                     i__1 = jmax + (k + 1) * w_dim1;
-                    rowmax = (r__1 = w[i__1].real, f2c_abs(r__1))
-                             + (r__2 = r_imag(&w[jmax + (k + 1) * w_dim1]), f2c_abs(r__2));
+                    rowmax = (r__1 = w[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(& w[jmax + (k + 1) * w_dim1]), f2c_abs(r__2));
                 }
                 else
                 {
@@ -777,9 +766,8 @@ void aocl_lapack_clasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
                     i__1 = *n - imax;
                     itemp = imax + aocl_blas_icamax(&i__1, &w[imax + 1 + (k + 1) * w_dim1], &c__1);
                     i__1 = itemp + (k + 1) * w_dim1;
-                    stemp = (r__1 = w[i__1].real, f2c_abs(r__1))
-                            + (r__2 = r_imag(&w[itemp + (k + 1) * w_dim1]), f2c_abs(r__2));
-                    if(stemp > rowmax)
+                    stemp = (r__1 = w[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&w[ itemp + (k + 1) * w_dim1]), f2c_abs(r__2));
+                    if (stemp > rowmax)
                     {
                         rowmax = stemp;
                         jmax = itemp;
@@ -789,9 +777,7 @@ void aocl_lapack_clasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
                 /* CABS1( W( IMAX, K+1 ) ).GE.ALPHA*ROWMAX */
                 /* (used to handle NaN and Inf) */
                 i__1 = imax + (k + 1) * w_dim1;
-                if(!((r__1 = w[i__1].real, f2c_abs(r__1))
-                         + (r__2 = r_imag(&w[imax + (k + 1) * w_dim1]), f2c_abs(r__2))
-                     < alpha * rowmax))
+                if (! ((r__1 = w[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&w[imax + (k + 1) * w_dim1]), f2c_abs(r__2)) < alpha * rowmax))
                 {
                     /* interchange rows and columns K and IMAX, */
                     /* use 1-by-1 pivot block */
@@ -871,9 +857,7 @@ void aocl_lapack_clasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
                 if(k < *n)
                 {
                     i__1 = k + k * a_dim1;
-                    if((r__1 = a[i__1].real, f2c_abs(r__1))
-                           + (r__2 = r_imag(&a[k + k * a_dim1]), f2c_abs(r__2))
-                       >= sfmin)
+                    if ((r__1 = a[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[k + k * a_dim1]), f2c_abs(r__2)) >= sfmin)
                     {
                         c_div(&q__1, &c_b1, &a[k + k * a_dim1]);
                         r1.real = q__1.real;

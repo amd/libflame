@@ -485,10 +485,10 @@ void aocl_lapack_slasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     /* Computing MAX */
     r__1 = f2c_abs(*alpha);
     r__2 = f2c_abs(*beta); // , expr subst
-    tol = fla_max(r__1, r__2);
+    tol = max(r__1,r__2);
     /* Computing MAX */
     r__2 = (r__1 = d__[n], f2c_abs(r__1));
-    tol = eps * 8.f * fla_max(r__2, tol);
+    tol = eps * 8.f * max(r__2,tol);
     /* There are 2 kinds of deflation -- first a value in the z-vector */
     /* is small, second two (or more) singular values are very close */
     /* together (their difference is (*small_val). */
@@ -509,7 +509,7 @@ void aocl_lapack_slasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     i__1 = n;
     for(j = 2; j <= i__1; ++j)
     {
-        if((r__1 = z__[j], f2c_abs(r__1)) <= tol)
+        if ((r__1 = z__[j], f2c_abs(r__1)) <= tol)
         {
             /* Deflate due to small z component. */
             --k2;
@@ -535,7 +535,7 @@ L100:
     {
         goto L110;
     }
-    if((r__1 = z__[j], f2c_abs(r__1)) <= tol)
+    if ((r__1 = z__[j], f2c_abs(r__1)) <= tol)
     {
         /* Deflate due to small z component. */
         --k2;
@@ -545,7 +545,7 @@ L100:
     else
     {
         /* Check if singular values are close enough to allow deflation. */
-        if((r__1 = d__[j] - d__[jprev], f2c_abs(r__1)) <= tol)
+        if ((r__1 = d__[j] - d__[jprev], f2c_abs(r__1)) <= tol)
         {
             /* Deflation is possible. */
             s = z__[jprev];
@@ -653,7 +653,7 @@ L120: /* Count up the total number of the various types of columns, then */
     /* Determine DSIGMA(1), DSIGMA(2) and Z(1) */
     dsigma[1] = 0.f;
     hlftol = tol / 2.f;
-    if(f2c_abs(dsigma[2]) <= hlftol)
+    if (f2c_abs(dsigma[2]) <= hlftol)
     {
         dsigma[2] = hlftol;
     }
@@ -674,7 +674,7 @@ L120: /* Count up the total number of the various types of columns, then */
     }
     else
     {
-        if(f2c_abs(z1) <= tol)
+        if (f2c_abs(z1) <= tol)
         {
             z__[1] = tol;
         }

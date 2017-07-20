@@ -49,7 +49,7 @@ static aocl_int64_t c__1 = 1;
 /* > \return SLANTB */
 /* > \verbatim */
 /* > */
-/* > SLANTB = ( fla_max(abs(A(i,j))), NORM = 'M' or 'm' */
+/* > SLANTB = ( max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
 /* > ( */
 /* > ( norm1(A), NORM = '1', 'O' or 'o' */
 /* > ( */
@@ -60,7 +60,7 @@ static aocl_int64_t c__1 = 1;
 /* > where norm1 denotes the one norm of a matrix (maximum column sum), */
 /* > normI denotes the infinity norm of a matrix (maximum row sum) and */
 /* > normF denotes the Frobenius norm of a matrix (square root of sum of */
-/* > squares). Note that fla_max(abs(A(i,j))) is not a consistent matrix norm. */
+/* > squares). Note that max(f2c_abs(A(i,j))) is not a consistent matrix norm. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -202,8 +202,8 @@ real aocl_lapack_slantb(char *norm, char *uplo, char *diag, aocl_int64_t *n, aoc
     }
     else if(lsame_(norm, "M", 1, 1))
     {
-        /* Find fla_max(abs(A(i,j))). */
-        if(lsame_(diag, "U", 1, 1))
+        /* Find max(f2c_abs(A(i,j))). */
+        if (lsame_(diag, "U"))
         {
             value = 1.f;
             if(lsame_(uplo, "U", 1, 1))
@@ -217,7 +217,7 @@ real aocl_lapack_slantb(char *norm, char *uplo, char *diag, aocl_int64_t *n, aoc
                     for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
                     {
                         sum = (r__1 = ab[i__ + j * ab_dim1], f2c_abs(r__1));
-                        if(value < sum || sum != sum)
+                        if (value < sum || sisnan_(&sum))
                         {
                             value = sum;
                         }
@@ -238,7 +238,7 @@ real aocl_lapack_slantb(char *norm, char *uplo, char *diag, aocl_int64_t *n, aoc
                     for(i__ = 2; i__ <= i__3; ++i__)
                     {
                         sum = (r__1 = ab[i__ + j * ab_dim1], f2c_abs(r__1));
-                        if(value < sum || sum != sum)
+                        if (value < sum || sisnan_(&sum))
                         {
                             value = sum;
                         }
@@ -262,7 +262,7 @@ real aocl_lapack_slantb(char *norm, char *uplo, char *diag, aocl_int64_t *n, aoc
                     for(i__ = fla_max(i__3, 1); i__ <= i__2; ++i__)
                     {
                         sum = (r__1 = ab[i__ + j * ab_dim1], f2c_abs(r__1));
-                        if(value < sum || sum != sum)
+                        if (value < sum || sisnan_(&sum))
                         {
                             value = sum;
                         }
@@ -283,7 +283,7 @@ real aocl_lapack_slantb(char *norm, char *uplo, char *diag, aocl_int64_t *n, aoc
                     for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         sum = (r__1 = ab[i__ + j * ab_dim1], f2c_abs(r__1));
-                        if(value < sum || sum != sum)
+                        if (value < sum || sisnan_(&sum))
                         {
                             value = sum;
                         }
@@ -398,7 +398,7 @@ real aocl_lapack_slantb(char *norm, char *uplo, char *diag, aocl_int64_t *n, aoc
                     i__4 = j - 1;
                     for(i__ = fla_max(i__2, i__3); i__ <= i__4; ++i__)
                     {
-                        work[i__] += (r__1 = ab[l + i__ + j * ab_dim1], f2c_abs(r__1));
+                        work[i__] += (r__1 = ab[l + i__ + j * ab_dim1], f2c_abs( r__1));
                         /* L160: */
                     }
                     /* L170: */
@@ -422,7 +422,7 @@ real aocl_lapack_slantb(char *norm, char *uplo, char *diag, aocl_int64_t *n, aoc
                     i__3 = j;
                     for(i__ = fla_max(i__4, i__2); i__ <= i__3; ++i__)
                     {
-                        work[i__] += (r__1 = ab[l + i__ + j * ab_dim1], f2c_abs(r__1));
+                        work[i__] += (r__1 = ab[l + i__ + j * ab_dim1], f2c_abs( r__1));
                         /* L190: */
                     }
                     /* L200: */
@@ -449,7 +449,7 @@ real aocl_lapack_slantb(char *norm, char *uplo, char *diag, aocl_int64_t *n, aoc
                     i__3 = fla_min(i__4, i__2);
                     for(i__ = j + 1; i__ <= i__3; ++i__)
                     {
-                        work[i__] += (r__1 = ab[l + i__ + j * ab_dim1], f2c_abs(r__1));
+                        work[i__] += (r__1 = ab[l + i__ + j * ab_dim1], f2c_abs( r__1));
                         /* L220: */
                     }
                     /* L230: */
@@ -473,7 +473,7 @@ real aocl_lapack_slantb(char *norm, char *uplo, char *diag, aocl_int64_t *n, aoc
                     i__3 = fla_min(i__4, i__2);
                     for(i__ = j; i__ <= i__3; ++i__)
                     {
-                        work[i__] += (r__1 = ab[l + i__ + j * ab_dim1], f2c_abs(r__1));
+                        work[i__] += (r__1 = ab[l + i__ + j * ab_dim1], f2c_abs( r__1));
                         /* L250: */
                     }
                     /* L260: */

@@ -189,12 +189,11 @@ void aocl_lapack_sgesc2(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *rhs, 
     /* Solve for U part */
     *scale = 1.f;
     /* Check for scaling */
-    i__ = aocl_blas_isamax(n, &rhs[1], &c__1);
-    if(smlnum * 2.f * (r__1 = rhs[i__], f2c_abs(r__1))
-       > (r__2 = a[*n + *n * a_dim1], f2c_abs(r__2)))
+    i__ = isamax_(n, &rhs[1], &c__1);
+    if (smlnum * 2.f * (r__1 = rhs[i__], f2c_abs(r__1)) > (r__2 = a[*n + *n * a_dim1], f2c_abs(r__2)))
     {
         temp = .5f / (r__1 = rhs[i__], f2c_abs(r__1));
-        aocl_blas_sscal(n, &temp, &rhs[1], &c__1);
+        sscal_(n, &temp, &rhs[1], &c__1);
         *scale *= temp;
     }
     for(i__ = *n; i__ >= 1; --i__)

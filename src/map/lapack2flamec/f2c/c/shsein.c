@@ -543,9 +543,7 @@ void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, 
             i__2 = kl;
             for(i__ = k - 1; i__ >= i__2; --i__)
             {
-                if(select[i__]
-                   && (r__1 = wr[i__] - wkr, f2c_abs(r__1)) + (r__2 = wi[i__] - wki, f2c_abs(r__2))
-                          < eps3)
+                if (select[i__] && (r__1 = wr[i__] - wkr, f2c_abs(r__1)) + (r__2 = wi[i__] - wki, f2c_abs(r__2)) < eps3)
                 {
                     wkr += eps3;
                     goto L60;

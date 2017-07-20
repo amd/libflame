@@ -490,9 +490,8 @@ void aocl_lapack_cstedc(char *compz, aocl_int64_t *n, real *d__, real *e, scompl
         L40:
             if(finish < *n)
             {
-                tiny = eps * sqrt((r__1 = d__[finish], f2c_abs(r__1)))
-                       * sqrt((r__2 = d__[finish + 1], f2c_abs(r__2)));
-                if((r__1 = e[finish], f2c_abs(r__1)) > tiny)
+                tiny = eps * sqrt((r__1 = d__[finish], f2c_abs(r__1))) * sqrt(( r__2 = d__[finish + 1], f2c_abs(r__2)));
+                if ((r__1 = e[finish], f2c_abs(r__1)) > tiny)
                 {
                     ++finish;
                     goto L40;

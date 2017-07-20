@@ -288,7 +288,7 @@ void aocl_lapack_sptrfs(aocl_int64_t *n, aocl_int64_t *nrhs, real *d__, real *e,
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - A * X. Also compute */
         /* f2c_abs(A)*f2c_abs(x) + f2c_abs(b) for use in the backward error bound. */
-        if(*n == 1)
+        if (*n == 1)
         {
             bi = b[j * b_dim1 + 1];
             dx = d__[1] * x[j * x_dim1 + 1];
@@ -320,7 +320,7 @@ void aocl_lapack_sptrfs(aocl_int64_t *n, aocl_int64_t *nrhs, real *d__, real *e,
             work[*n] = f2c_abs(bi) + f2c_abs(cx) + f2c_abs(dx);
         }
         /* Compute componentwise relative backward error from formula */
-        /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(A)*f2c_abs(X) + f2c_abs(B) )(i) ) */
+        /* max(i) ( f2c_abs(R(i)) / ( f2c_abs(A)*f2c_abs(X) + f2c_abs(B) )(i) ) */
         /* where f2c_abs(Z) is the componentwise absolute value of the matrix */
         /* or vector Z. If the i-th component of the denominator is less */
         /* than SAFE2, then SAFE1 is added to the i-th components of the */
@@ -333,16 +333,15 @@ void aocl_lapack_sptrfs(aocl_int64_t *n, aocl_int64_t *nrhs, real *d__, real *e,
             {
                 /* Computing MAX */
                 r__2 = s;
-                r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[i__]; // , expr subst
-                s = fla_max(r__2, r__3);
+                r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[ i__]; // , expr subst
+                s = max(r__2,r__3);
             }
             else
             {
                 /* Computing MAX */
                 r__2 = s;
-                r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1)
-                       / (work[i__] + safe1); // , expr subst
-                s = fla_max(r__2, r__3);
+                r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1) / (work[i__] + safe1); // , expr subst
+                s = max(r__2,r__3);
             }
             /* L40: */
         }
@@ -410,8 +409,8 @@ void aocl_lapack_sptrfs(aocl_int64_t *n, aocl_int64_t *nrhs, real *d__, real *e,
             work[i__] = work[i__] / df[i__] + work[i__ + 1] * (r__1 = ef[i__], f2c_abs(r__1));
             /* L70: */
         }
-        /* Compute norm(inv(A)) = fla_max(x(i)), 1<=i<=n. */
-        ix = aocl_blas_isamax(n, &work[1], &c__1);
+        /* Compute norm(inv(A)) = max(x(i)), 1<=i<=n. */
+        ix = isamax_(n, &work[1], &c__1);
         ferr[j] *= (r__1 = work[ix], f2c_abs(r__1));
         /* Normalize error. */
         lstres = 0.f;
@@ -421,7 +420,7 @@ void aocl_lapack_sptrfs(aocl_int64_t *n, aocl_int64_t *nrhs, real *d__, real *e,
             /* Computing MAX */
             r__2 = lstres;
             r__3 = (r__1 = x[i__ + j * x_dim1], f2c_abs(r__1)); // , expr subst
-            lstres = fla_max(r__2, r__3);
+            lstres = max(r__2,r__3);
             /* L80: */
         }
         if(lstres != 0.f)

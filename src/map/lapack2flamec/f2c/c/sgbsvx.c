@@ -698,8 +698,8 @@ void aocl_lapack_sgbsvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
                 {
                     /* Computing MAX */
                     r__2 = anorm;
-                    r__3 = (r__1 = ab[i__ + j * ab_dim1], f2c_abs(r__1)); // , expr subst
-                    anorm = fla_max(r__2, r__3);
+                    r__3 = (r__1 = ab[i__ + j * ab_dim1], f2c_abs( r__1)); // , expr subst
+                    anorm = max(r__2,r__3);
                     /* L80: */
                 }
                 /* L90: */

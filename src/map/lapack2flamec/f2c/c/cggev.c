@@ -639,9 +639,8 @@ void aocl_lapack_cggev(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
                     /* Computing MAX */
                     i__3 = jr + jc * vl_dim1;
                     r__3 = temp;
-                    r__4 = (r__1 = vl[i__3].real, f2c_abs(r__1))
-                           + (r__2 = r_imag(&vl[jr + jc * vl_dim1]), f2c_abs(r__2)); // , expr subst
-                    temp = fla_max(r__3, r__4);
+                    r__4 = (r__1 = vl[i__3].r, f2c_abs(r__1)) + ( r__2 = r_imag(&vl[jr + jc * vl_dim1]), f2c_abs(r__2)); // , expr subst
+                    temp = max(r__3,r__4);
                     /* L10: */
                 }
                 if(temp < smlnum)
@@ -677,9 +676,8 @@ void aocl_lapack_cggev(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
                     /* Computing MAX */
                     i__3 = jr + jc * vr_dim1;
                     r__3 = temp;
-                    r__4 = (r__1 = vr[i__3].real, f2c_abs(r__1))
-                           + (r__2 = r_imag(&vr[jr + jc * vr_dim1]), f2c_abs(r__2)); // , expr subst
-                    temp = fla_max(r__3, r__4);
+                    r__4 = (r__1 = vr[i__3].r, f2c_abs(r__1)) + ( r__2 = r_imag(&vr[jr + jc * vr_dim1]), f2c_abs(r__2)); // , expr subst
+                    temp = max(r__3,r__4);
                     /* L40: */
                 }
                 if(temp < smlnum)

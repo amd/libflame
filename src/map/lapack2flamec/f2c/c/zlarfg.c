@@ -193,7 +193,7 @@ void aocl_lapack_zlarfg(aocl_int64_t *n, dcomplex *alpha, dcomplex *x, aocl_int6
         safmin = dlamch_("S") / dlamch_("E");
         rsafmn = 1. / safmin;
         knt = 0;
-        if(f2c_abs(beta) < safmin)
+        if (f2c_abs(beta) < safmin)
         {
             /* XNORM, BETA may be inaccurate;
             scale X and recompute them */
@@ -204,7 +204,7 @@ void aocl_lapack_zlarfg(aocl_int64_t *n, dcomplex *alpha, dcomplex *x, aocl_int6
             beta *= rsafmn;
             alphi *= rsafmn;
             alphr *= rsafmn;
-            if(f2c_abs(beta) < safmin && knt < 20)
+            if (f2c_abs(beta) < safmin)
             {
                 goto L10;
             }

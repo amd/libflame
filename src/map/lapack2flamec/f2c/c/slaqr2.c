@@ -469,8 +469,8 @@ void aocl_lapack_slaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
         *nd = 0;
         /* Computing MAX */
         r__2 = smlnum;
-        r__3 = ulp * (r__1 = h__[kwtop + kwtop * h_dim1], f2c_abs(r__1)); // , expr subst
-        if(f2c_abs(s) <= fla_max(r__2, r__3))
+        r__3 = ulp * (r__1 = h__[kwtop + kwtop * h_dim1], f2c_abs( r__1)); // , expr subst
+        if (f2c_abs(s) <= max(r__2,r__3))
         {
             *ns = 0;
             *nd = 1;
@@ -527,14 +527,14 @@ L20:
         {
             /* ==== Real eigenvalue ==== */
             foo = (r__1 = t[*ns + *ns * t_dim1], f2c_abs(r__1));
-            if(foo == 0.f)
+            if (foo == 0.f)
             {
                 foo = f2c_abs(s);
             }
             /* Computing MAX */
             r__2 = smlnum;
             r__3 = ulp * foo; // , expr subst
-            if((r__1 = s * v[*ns * v_dim1 + 1], f2c_abs(r__1)) <= fla_max(r__2, r__3))
+            if ((r__1 = s * v[*ns * v_dim1 + 1], f2c_abs(r__1)) <= max(r__2,r__3))
             {
                 /* ==== Deflatable ==== */
                 --(*ns);
@@ -552,10 +552,8 @@ L20:
         else
         {
             /* ==== Complex conjugate pair ==== */
-            foo = (r__3 = t[*ns + *ns * t_dim1], f2c_abs(r__3))
-                  + sqrt((r__1 = t[*ns + (*ns - 1) * t_dim1], f2c_abs(r__1)))
-                        * sqrt((r__2 = t[*ns - 1 + *ns * t_dim1], f2c_abs(r__2)));
-            if(foo == 0.f)
+            foo = (r__3 = t[*ns + *ns * t_dim1], f2c_abs(r__3)) + sqrt((r__1 = t[* ns + (*ns - 1) * t_dim1], f2c_abs(r__1))) * sqrt((r__2 = t[* ns - 1 + *ns * t_dim1], f2c_abs(r__2)));
+            if (foo == 0.f)
             {
                 foo = f2c_abs(s);
             }
@@ -625,9 +623,7 @@ L20:
             }
             else
             {
-                evi = (r__3 = t[i__ + i__ * t_dim1], f2c_abs(r__3))
-                      + sqrt((r__1 = t[i__ + 1 + i__ * t_dim1], f2c_abs(r__1)))
-                            * sqrt((r__2 = t[i__ + (i__ + 1) * t_dim1], f2c_abs(r__2)));
+                evi = (r__3 = t[i__ + i__ * t_dim1], f2c_abs(r__3)) + sqrt((r__1 = t[i__ + 1 + i__ * t_dim1], f2c_abs(r__1))) * sqrt((r__2 = t[i__ + (i__ + 1) * t_dim1], f2c_abs(r__2)));
             }
             if(k == kend)
             {
@@ -639,9 +635,7 @@ L20:
             }
             else
             {
-                evk = (r__3 = t[k + k * t_dim1], f2c_abs(r__3))
-                      + sqrt((r__1 = t[k + 1 + k * t_dim1], f2c_abs(r__1)))
-                            * sqrt((r__2 = t[k + (k + 1) * t_dim1], f2c_abs(r__2)));
+                evk = (r__3 = t[k + k * t_dim1], f2c_abs(r__3)) + sqrt((r__1 = t[ k + 1 + k * t_dim1], f2c_abs(r__1))) * sqrt((r__2 = t[k + (k + 1) * t_dim1], f2c_abs(r__2)));
             }
             if(evi >= evk)
             {

@@ -158,8 +158,8 @@ void aocl_lapack_chetri2x(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t
     real r__1;
     scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    double c_abs(scomplex *);
-    void c_div(scomplex *, scomplex *, scomplex *), r_cnjg(scomplex *, scomplex *);
+    double c_f2c_abs(complex *);
+    void c_div(complex *, complex *, complex *), r_cnjg(complex *, complex *);
     /* Local variables */
     scomplex d__;
     aocl_int64_t i__, j, k;
@@ -296,9 +296,9 @@ void aocl_lapack_chetri2x(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t
             else
             {
                 /* 2 x 2 diagonal NNB */
-                r__1 = c_abs(&work[k + 1 + work_dim1]);
-                t.real = r__1;
-                t.imag = 0.f; // , expr subst
+                r__1 = c_f2c_abs(&work[k + 1 + work_dim1]);
+                t.r = r__1;
+                t.i = 0.f; // , expr subst
                 i__1 = k + k * a_dim1;
                 r__1 = a[i__1].real;
                 q__2.real = r__1;
@@ -649,9 +649,9 @@ void aocl_lapack_chetri2x(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t
             else
             {
                 /* 2 x 2 diagonal NNB */
-                r__1 = c_abs(&work[k - 1 + work_dim1]);
-                t.real = r__1;
-                t.imag = 0.f; // , expr subst
+                r__1 = c_f2c_abs(&work[k - 1 + work_dim1]);
+                t.r = r__1;
+                t.i = 0.f; // , expr subst
                 i__1 = k - 1 + (k - 1) * a_dim1;
                 r__1 = a[i__1].real;
                 q__2.real = r__1;

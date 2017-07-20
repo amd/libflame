@@ -372,7 +372,7 @@ void aocl_lapack_ctgsna(char *job, char *howmny, logical *select, aocl_int64_t *
     real r__1, r__2;
     scomplex q__1;
     /* Builtin functions */
-    double c_abs(scomplex *);
+    double c_f2c_abs(complex *);
     /* Local variables */
     aocl_int64_t i__, k, n1, n2, ks;
     real cond;
@@ -547,20 +547,18 @@ void aocl_lapack_ctgsna(char *job, char *howmny, logical *select, aocl_int64_t *
         {
             /* Compute the reciprocal condition number of the k-th */
             /* eigenvalue. */
-            rnrm = aocl_blas_scnrm2(n, &vr[ks * vr_dim1 + 1], &c__1);
-            lnrm = aocl_blas_scnrm2(n, &vl[ks * vl_dim1 + 1], &c__1);
-            aocl_blas_cgemv("N", n, n, &c_b19, &a[a_offset], lda, &vr[ks * vr_dim1 + 1], &c__1,
-                            &c_b20, &work[1], &c__1);
-            aocl_lapack_cdotc_f2c(&q__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
-            yhax.real = q__1.real;
-            yhax.imag = q__1.imag; // , expr subst
-            aocl_blas_cgemv("N", n, n, &c_b19, &b[b_offset], ldb, &vr[ks * vr_dim1 + 1], &c__1,
-                            &c_b20, &work[1], &c__1);
-            aocl_lapack_cdotc_f2c(&q__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
-            yhbx.real = q__1.real;
-            yhbx.imag = q__1.imag; // , expr subst
-            r__1 = c_abs(&yhax);
-            r__2 = c_abs(&yhbx);
+            rnrm = scnrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
+            lnrm = scnrm2_(n, &vl[ks * vl_dim1 + 1], &c__1);
+            cgemv_("N", n, n, &c_b19, &a[a_offset], lda, &vr[ks * vr_dim1 + 1] , &c__1, &c_b20, &work[1], &c__1);
+            cdotc_f2c_(&q__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
+            yhax.r = q__1.r;
+            yhax.i = q__1.i; // , expr subst
+            cgemv_("N", n, n, &c_b19, &b[b_offset], ldb, &vr[ks * vr_dim1 + 1] , &c__1, &c_b20, &work[1], &c__1);
+            cdotc_f2c_(&q__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
+            yhbx.r = q__1.r;
+            yhbx.i = q__1.i; // , expr subst
+            r__1 = c_f2c_abs(&yhax);
+            r__2 = c_f2c_abs(&yhbx);
             cond = slapy2_(&r__1, &r__2);
             if(cond == 0.f)
             {
@@ -575,8 +573,8 @@ void aocl_lapack_ctgsna(char *job, char *howmny, logical *select, aocl_int64_t *
         {
             if(*n == 1)
             {
-                r__1 = c_abs(&a[a_dim1 + 1]);
-                r__2 = c_abs(&b[b_dim1 + 1]);
+                r__1 = c_f2c_abs(&a[a_dim1 + 1]);
+                r__2 = c_f2c_abs(&b[b_dim1 + 1]);
                 dif[ks] = slapy2_(&r__1, &r__2);
             }
             else

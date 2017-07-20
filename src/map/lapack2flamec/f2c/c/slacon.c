@@ -279,8 +279,8 @@ L90: /* TEST FOR CYCLING. */
     /* X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L110:
     jlast = j;
-    j = aocl_blas_isamax(n, &x[1], &c__1);
-    if(x[jlast] != (r__1 = x[j], f2c_abs(r__1)) && iter < 5)
+    j = isamax_(n, &x[1], &c__1);
+    if (x[jlast] != (r__1 = x[j], f2c_abs(r__1)) && iter < 5)
     {
         ++iter;
         goto L50;

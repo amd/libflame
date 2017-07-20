@@ -144,8 +144,8 @@ void aocl_lapack_chptri(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
     real r__1;
     scomplex q__1, q__2;
     /* Builtin functions */
-    double c_abs(scomplex *);
-    void r_cnjg(scomplex *, scomplex *);
+    double c_f2c_abs(complex *);
+    void r_cnjg(complex *, complex *);
     /* Local variables */
     real d__;
     aocl_int64_t j, k;
@@ -288,7 +288,7 @@ void aocl_lapack_chptri(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
         {
             /* 2 x 2 diagonal block */
             /* Invert the diagonal block. */
-            t = c_abs(&ap[kcnext + k - 1]);
+            t = c_f2c_abs(&ap[kcnext + k - 1]);
             i__1 = kc + k - 1;
             ak = ap[i__1].real / t;
             i__1 = kcnext + k;
@@ -361,7 +361,7 @@ void aocl_lapack_chptri(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
             kcnext = kcnext + k + 1;
         }
         kp = (i__1 = ipiv[k], f2c_abs(i__1));
-        if(kp != k)
+        if (kp != k)
         {
             /* Interchange rows and columns K and KP in the leading */
             /* submatrix A(1:k+1,1:k+1) */
@@ -467,7 +467,7 @@ void aocl_lapack_chptri(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
         {
             /* 2 x 2 diagonal block */
             /* Invert the diagonal block. */
-            t = c_abs(&ap[kcnext + 1]);
+            t = c_f2c_abs(&ap[kcnext + 1]);
             i__1 = kcnext;
             ak = ap[i__1].real / t;
             i__1 = kc;
@@ -541,7 +541,7 @@ void aocl_lapack_chptri(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
             kcnext -= *n - k + 3;
         }
         kp = (i__1 = ipiv[k], f2c_abs(i__1));
-        if(kp != k)
+        if (kp != k)
         {
             /* Interchange rows and columns K and KP in the trailing */
             /* submatrix A(k-1:n,k-1:n) */

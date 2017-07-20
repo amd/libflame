@@ -227,8 +227,8 @@ void aocl_lapack_sptcon(aocl_int64_t *n, real *d__, real *e, real *anorm, real *
         work[i__] = work[i__] / d__[i__] + work[i__ + 1] * (r__1 = e[i__], f2c_abs(r__1));
         /* L30: */
     }
-    /* Compute AINVNM = fla_max(x(i)), 1<=i<=n. */
-    ix = aocl_blas_isamax(n, &work[1], &c__1);
+    /* Compute AINVNM = max(x(i)), 1<=i<=n. */
+    ix = isamax_(n, &work[1], &c__1);
     ainvnm = (r__1 = work[ix], f2c_abs(r__1));
     /* Compute the reciprocal condition number. */
     if(ainvnm != 0.f)

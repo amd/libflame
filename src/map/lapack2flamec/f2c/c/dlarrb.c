@@ -325,7 +325,7 @@ void aocl_lapack_dlarrb(aocl_int64_t *n, doublereal *d__, doublereal *lld, aocl_
         /* Computing MAX */
         d__1 = f2c_abs(left);
         d__2 = f2c_abs(right); // , expr subst
-        tmp = fla_max(d__1, d__2);
+        tmp = max(d__1,d__2);
         /* Computing MAX */
         d__1 = *rtol1 * gap;
         d__2 = *rtol2 * tmp; // , expr subst
@@ -387,7 +387,7 @@ L80:
         /* Computing MAX */
         d__1 = f2c_abs(left);
         d__2 = f2c_abs(right); // , expr subst
-        tmp = fla_max(d__1, d__2);
+        tmp = max(d__1,d__2);
         /* Computing MAX */
         d__1 = *rtol1 * gap;
         d__2 = *rtol2 * tmp; // , expr subst

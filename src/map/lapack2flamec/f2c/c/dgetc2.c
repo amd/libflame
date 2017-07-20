@@ -208,7 +208,7 @@ void aocl_lapack_dgetc2(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_
             i__3 = *n;
             for(jp = i__; jp <= i__3; ++jp)
             {
-                if((d__1 = a[ip + jp * a_dim1], f2c_abs(d__1)) >= xmax)
+                if ((d__1 = a[ip + jp * a_dim1], f2c_abs(d__1)) >= xmax)
                 {
                     xmax = (d__1 = a[ip + jp * a_dim1], f2c_abs(d__1));
                     ipv = ip;
@@ -237,7 +237,7 @@ void aocl_lapack_dgetc2(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_
         }
         jpiv[i__] = (aocl_int_t)(jpv);
         /* Check for singularity */
-        if((d__1 = a[i__ + i__ * a_dim1], f2c_abs(d__1)) < smin)
+        if ((d__1 = a[i__ + i__ * a_dim1], f2c_abs(d__1)) < smin)
         {
             *info = i__;
             a[i__ + i__ * a_dim1] = smin;
@@ -254,7 +254,7 @@ void aocl_lapack_dgetc2(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_
                        &a[i__ + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
         /* L40: */
     }
-    if((d__1 = a[*n + *n * a_dim1], f2c_abs(d__1)) < smin)
+    if ((d__1 = a[*n + *n * a_dim1], f2c_abs(d__1)) < smin)
     {
         *info = *n;
         a[*n + *n * a_dim1] = smin;

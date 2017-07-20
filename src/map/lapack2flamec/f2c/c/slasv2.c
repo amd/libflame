@@ -191,7 +191,7 @@ void slasv2_(real *f, real *g, real *h__, real *ssmin, real *ssmax, real *snr, r
     }
     gt = *g;
     ga = f2c_abs(gt);
-    if(ga == 0.f)
+    if (ga == 0.f)
     {
         /* Diagonal matrix */
         *ssmin = ha;

@@ -200,7 +200,7 @@ void aocl_lapack_dlarra(aocl_int64_t *n, doublereal *d__, doublereal *e, doubler
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             eabs = (d__1 = e[i__], f2c_abs(d__1));
-            if(eabs <= tmp1)
+            if (eabs <= tmp1)
             {
                 e[i__] = 0.;
                 e2[i__] = 0.;
@@ -217,8 +217,7 @@ void aocl_lapack_dlarra(aocl_int64_t *n, doublereal *d__, doublereal *e, doubler
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             eabs = (d__1 = e[i__], f2c_abs(d__1));
-            if(eabs <= *spltol * sqrt((d__1 = d__[i__], f2c_abs(d__1)))
-                           * sqrt((d__2 = d__[i__ + 1], f2c_abs(d__2))))
+            if (eabs <= *spltol * sqrt((d__1 = d__[i__], f2c_abs(d__1))) * sqrt(( d__2 = d__[i__ + 1], f2c_abs(d__2))))
             {
                 e[i__] = 0.;
                 e2[i__] = 0.;

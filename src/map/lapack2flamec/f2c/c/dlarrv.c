@@ -729,8 +729,7 @@ void aocl_lapack_dlarrv(aocl_int64_t *n, doublereal *vl, doublereal *vu, doubler
                         /* boundary of the child cluster */
                         newlst = j;
                     }
-                    else if(wgap[wbegin + j - 1]
-                            >= *minrgp * (d__1 = work[wbegin + j - 1], f2c_abs(d__1)))
+                    else if (wgap[wbegin + j - 1] >= *minrgp * (d__1 = work[ wbegin + j - 1], f2c_abs(d__1)))
                     {
                         /* the right relative gap is big enough, the child cluster */
                         /* (NEWFST,..,NEWLST) is well separated from the following */
@@ -914,7 +913,7 @@ void aocl_lapack_dlarrv(aocl_int64_t *n, doublereal *vl, doublereal *vu, doubler
                             /* Computing MAX */
                             d__1 = f2c_abs(left);
                             d__2 = f2c_abs(right); // , expr subst
-                            lgap = eps * fla_max(d__1, d__2);
+                            lgap = eps * max(d__1,d__2);
                         }
                         else
                         {
@@ -930,7 +929,7 @@ void aocl_lapack_dlarrv(aocl_int64_t *n, doublereal *vl, doublereal *vu, doubler
                             /* Computing MAX */
                             d__1 = f2c_abs(left);
                             d__2 = f2c_abs(right); // , expr subst
-                            rgap = eps * fla_max(d__1, d__2);
+                            rgap = eps * max(d__1,d__2);
                         }
                         else
                         {
@@ -1025,8 +1024,7 @@ void aocl_lapack_dlarrv(aocl_int64_t *n, doublereal *vl, doublereal *vu, doubler
                         /* a role in the quotient */
                         /* Convergence test for Rayleigh-Quotient iteration */
                         /* (omitted when Bisection has been used) */
-                        if(resid > tol * gap && f2c_abs(rqcorr) > rqtol * f2c_abs(lambda)
-                           && !usedbs)
+                        if (resid > tol * gap && f2c_abs(rqcorr) > rqtol * f2c_abs( lambda) && ! usedbs)
                         {
                             /* We need to check that the RQCORR update doesn't */
                             /* move the eigenvalue away from the desired one and */
@@ -1080,7 +1078,7 @@ void aocl_lapack_dlarrv(aocl_int64_t *n, doublereal *vl, doublereal *vu, doubler
                             {
                                 needbs = TRUE_;
                             }
-                            if(right - left < rqtol * f2c_abs(lambda))
+                            if (right - left < rqtol * f2c_abs(lambda))
                             {
                                 /* The eigenvalue is computed to bisection accuracy */
                                 /* compute eigenvector and stop */

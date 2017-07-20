@@ -299,9 +299,9 @@ void aocl_lapack_dlarrf(aocl_int64_t *n, doublereal *d__, doublereal *l, doubler
     /* Setting NOFAIL to .FALSE. for quick fix for bug 113 */
     nofail = FALSE_;
     /* Compute the average gap length of the cluster */
-    clwdth = (d__1 = w[*clend] - w[*clstrt], f2c_abs(d__1)) + werr[*clend] + werr[*clstrt];
-    avgap = clwdth / (doublereal)(*clend - *clstrt);
-    mingap = fla_min(*clgapl, *clgapr);
+    clwdth = (d__1 = w[*clend] - w[*clstrt], f2c_abs(d__1)) + werr[*clend] + werr[ *clstrt];
+    avgap = clwdth / (doublereal) (*clend - *clstrt);
+    mingap = min(*clgapl,*clgapr);
     /* Initial values for shifts to both ends of cluster */
     /* Computing MIN */
     d__1 = w[*clstrt];
@@ -345,7 +345,7 @@ L5:
     /* Left end */
     s = -lsigma;
     dplus[1] = d__[1] + s;
-    if(f2c_abs(dplus[1]) < *pivmin)
+    if (f2c_abs(dplus[1]) < *pivmin)
     {
         dplus[1] = -(*pivmin);
         /* Need to set SAWNAN1 because refined RRR test should not be used */
@@ -359,7 +359,7 @@ L5:
         lplus[i__] = ld[i__] / dplus[i__];
         s = s * lplus[i__] * l[i__] - lsigma;
         dplus[i__ + 1] = d__[i__ + 1] + s;
-        if((d__1 = dplus[i__ + 1], f2c_abs(d__1)) < *pivmin)
+        if ((d__1 = dplus[i__ + 1], f2c_abs(d__1)) < *pivmin)
         {
             dplus[i__ + 1] = -(*pivmin);
             /* Need to set SAWNAN1 because refined RRR test should not be used */
@@ -369,7 +369,7 @@ L5:
         /* Computing MAX */
         d__2 = max1;
         d__3 = (d__1 = dplus[i__ + 1], f2c_abs(d__1)); // , expr subst
-        max1 = fla_max(d__2, d__3);
+        max1 = max(d__2,d__3);
         /* L6: */
     }
     sawnan1 = sawnan1 || disnan_(&max1);
@@ -382,7 +382,7 @@ L5:
     /* Right end */
     s = -rsigma;
     work[1] = d__[1] + s;
-    if(f2c_abs(work[1]) < *pivmin)
+    if (f2c_abs(work[1]) < *pivmin)
     {
         work[1] = -(*pivmin);
         /* Need to set SAWNAN2 because refined RRR test should not be used */
@@ -396,7 +396,7 @@ L5:
         work[*n + i__] = ld[i__] / work[i__];
         s = s * work[*n + i__] * l[i__] - rsigma;
         work[i__ + 1] = d__[i__ + 1] + s;
-        if((d__1 = work[i__ + 1], f2c_abs(d__1)) < *pivmin)
+        if ((d__1 = work[i__ + 1], f2c_abs(d__1)) < *pivmin)
         {
             work[i__ + 1] = -(*pivmin);
             /* Need to set SAWNAN2 because refined RRR test should not be used */
@@ -406,7 +406,7 @@ L5:
         /* Computing MAX */
         d__2 = max2;
         d__3 = (d__1 = work[i__ + 1], f2c_abs(d__1)); // , expr subst
-        max2 = fla_max(d__2, d__3);
+        max2 = max(d__2,d__3);
         /* L7: */
     }
     sawnan2 = sawnan2 || disnan_(&max2);
@@ -487,7 +487,7 @@ L5:
                 /* Computing MAX */
                 d__2 = tmp;
                 d__3 = (d__1 = dplus[i__] * prod, f2c_abs(d__1)); // , expr subst
-                tmp = fla_max(d__2, d__3);
+                tmp = max(d__2,d__3);
                 /* L15: */
             }
             rrr1 = tmp / (*spdiam * sqrt(znm2));
@@ -521,7 +521,7 @@ L5:
                 /* Computing MAX */
                 d__2 = tmp;
                 d__3 = (d__1 = work[i__] * prod, f2c_abs(d__1)); // , expr subst
-                tmp = fla_max(d__2, d__3);
+                tmp = max(d__2,d__3);
                 /* L16: */
             }
             rrr2 = tmp / (*spdiam * sqrt(znm2));

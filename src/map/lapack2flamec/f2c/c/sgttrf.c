@@ -204,7 +204,7 @@ void aocl_lapack_sgttrf(aocl_int64_t *n, real *dl, real *d__, real *du, real *du
     i__1 = *n - 2;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
+        if ((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
         {
             /* No row interchange required, eliminate DL(I) */
             if(d__[i__] != 0.f)
@@ -232,7 +232,7 @@ void aocl_lapack_sgttrf(aocl_int64_t *n, real *dl, real *d__, real *du, real *du
     if(*n > 1)
     {
         i__ = *n - 1;
-        if((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
+        if ((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
         {
             if(d__[i__] != 0.f)
             {

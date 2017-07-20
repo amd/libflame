@@ -45,7 +45,7 @@
 /* > where x( i ) = X( 1 + ( i - 1 )*INCX ). The value of sumsq is */
 /* > assumed to be non-negative and scl returns the value */
 /* > */
-/* > scl = fla_max( scale, f2c_abs( x( i ) ) ). */
+/* > scl = max( scale, f2c_abs( x( i ) ) ). */
 /* > */
 /* > scale and sumsq must be supplied in SCALE and SUMSQ and */
 /* > scl and smsq are overwritten on SCALE and SUMSQ respectively. */
@@ -203,14 +203,8 @@ void aocl_lapack_dlassq(aocl_int64_t *n, doublereal *x, aocl_int64_t *incx, doub
         ax = f2c_dabs(x[ix]);
         if(ax > tbig)
         {
-            /* Computing 2nd power */
-            r__1 = ax * sbig;
-            abig += r__1 * r__1;
-            notbig = FALSE_;
-        }
-        else if(ax < tsml)
-        {
-            if(notbig)
+            absxi = (d__1 = x[ix], f2c_abs(d__1));
+            if (absxi > 0. || disnan_(&absxi))
             {
                 /* Computing 2nd power */
                 r__1 = ax * ssml;

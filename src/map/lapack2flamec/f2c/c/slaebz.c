@@ -406,7 +406,7 @@ void aocl_lapack_slaebz(aocl_int64_t *ijob, aocl_int64_t *nitmax, aocl_int64_t *
             for(jp = 1; jp <= 2; ++jp)
             {
                 tmp1 = d__[1] - ab[ji + jp * ab_dim1];
-                if(f2c_abs(tmp1) < *pivmin)
+                if (f2c_abs(tmp1) < *pivmin)
                 {
                     tmp1 = -(*pivmin);
                 }
@@ -419,7 +419,7 @@ void aocl_lapack_slaebz(aocl_int64_t *ijob, aocl_int64_t *nitmax, aocl_int64_t *
                 for(j = 2; j <= i__2; ++j)
                 {
                     tmp1 = d__[j] - e2[j - 1] / tmp1 - ab[ji + jp * ab_dim1];
-                    if(f2c_abs(tmp1) < *pivmin)
+                    if (f2c_abs(tmp1) < *pivmin)
                     {
                         tmp1 = -(*pivmin);
                     }
@@ -670,11 +670,11 @@ void aocl_lapack_slaebz(aocl_int64_t *ijob, aocl_int64_t *nitmax, aocl_int64_t *
         i__2 = kl;
         for(ji = kf; ji <= i__2; ++ji)
         {
-            tmp1 = (r__1 = ab[ji + (ab_dim1 << 1)] - ab[ji + ab_dim1], f2c_abs(r__1));
+            tmp1 = (r__1 = ab[ji + (ab_dim1 << 1)] - ab[ji + ab_dim1], f2c_abs( r__1));
             /* Computing MAX */
             r__3 = (r__1 = ab[ji + (ab_dim1 << 1)], f2c_abs(r__1));
             r__4 = (r__2 = ab[ji + ab_dim1], f2c_abs(r__2)); // , expr subst
-            tmp2 = fla_max(r__3, r__4);
+            tmp2 = max(r__3,r__4);
             /* Computing MAX */
             r__1 = fla_max(*abstol, *pivmin);
             r__2 = *reltol * tmp2; // , expr subst

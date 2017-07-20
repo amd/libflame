@@ -123,9 +123,8 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
     AOCL_DTL_TRACE_ENTRY_INDENT
     dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    double sqrt(doublereal), d_imag(dcomplex *);
-    void d_cnjg(dcomplex *, dcomplex *),
-        z_div(dcomplex *, dcomplex *, dcomplex *);
+    double log(doublereal), pow_di(doublereal *, integer *), d_imag( doublecomplex *), z_f2c_abs(doublecomplex *), sqrt(doublereal);
+    void d_cnjg(doublecomplex *, doublecomplex *);
     /* Local variables */
     doublereal d__, u, v, w, f1, f2, g1, g2, h2;
     doublereal d__1, d__2, d__3, d__4;
@@ -142,7 +141,28 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
     rtmin = sqrt(safmin);
     /* .. */
     /* .. Executable Statements .. */
-    if(g->real == 0. && g->imag == 0.)
+    safmin = dlamch_("S");
+    eps = dlamch_("E");
+    d__1 = dlamch_("B");
+    i__1 = (integer) (log(safmin / eps) / log(dlamch_("B")) / 2.);
+    safmn2 = pow_di(&d__1, &i__1);
+    safmx2 = 1. / safmn2;
+    /* Computing MAX */
+    /* Computing MAX */
+    d__7 = (d__1 = f->r, f2c_abs(d__1));
+    d__8 = (d__2 = d_imag(f), f2c_abs(d__2)); // , expr subst
+    /* Computing MAX */
+    d__9 = (d__3 = g->r, f2c_abs(d__3));
+    d__10 = (d__4 = d_imag(g), f2c_abs(d__4)); // , expr subst
+    d__5 = max(d__7,d__8);
+    d__6 = max(d__9,d__10); // , expr subst
+    scale = max(d__5,d__6);
+    fs.r = f->r;
+    fs.i = f->i; // , expr subst
+    gs.r = g->r;
+    gs.i = g->i; // , expr subst
+    count = 0;
+    if (scale >= safmx2)
     {
         *c__ = 1.;
         s->real = 0., s->imag = 0.;
@@ -150,8 +170,8 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
     }
     else if(f->real == 0. && f->imag == 0.)
     {
-        *c__ = 0.;
-        if(g->real == 0.)
+        d__1 = z_f2c_abs(g);
+        if (g->r == 0. && g->i == 0. || disnan_(&d__1))
         {
             d__2 = (d__1 = d_imag(g), f2c_dabs(d__1));
             r__->real = d__2, r__->imag = 0.;
@@ -161,11 +181,70 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
         }
         else if(d_imag(g) == 0.)
         {
-            d__2 = (d__1 = g->real, f2c_dabs(d__1));
-            r__->real = d__2, r__->imag = 0.;
-            d_cnjg(&z__2, g);
-            z_div(&z__1, &z__2, r__);
-            s->real = z__1.real, s->imag = z__1.imag;
+            goto L20;
+        }
+    }
+    /* Computing 2nd power */
+    d__1 = fs.r;
+    /* Computing 2nd power */
+    d__2 = d_imag(&fs);
+    f2 = d__1 * d__1 + d__2 * d__2;
+    /* Computing 2nd power */
+    d__1 = gs.r;
+    /* Computing 2nd power */
+    d__2 = d_imag(&gs);
+    g2 = d__1 * d__1 + d__2 * d__2;
+    if (f2 <= max(g2,1.) * safmin)
+    {
+        /* This is a rare case: F is very small. */
+        if (f->r == 0. && f->i == 0.)
+        {
+            *cs = 0.;
+            d__2 = g->r;
+            d__3 = d_imag(g);
+            d__1 = dlapy2_(&d__2, &d__3);
+            r__->r = d__1, r__->i = 0.;
+            /* Do complex/real division explicitly with two real divisions */
+            d__1 = gs.r;
+            d__2 = d_imag(&gs);
+            d__ = dlapy2_(&d__1, &d__2);
+            d__1 = gs.r / d__;
+            d__2 = -d_imag(&gs) / d__;
+            z__1.r = d__1;
+            z__1.i = d__2; // , expr subst
+            sn->r = z__1.r, sn->i = z__1.i;
+            return 0;
+        }
+        d__1 = fs.r;
+        d__2 = d_imag(&fs);
+        f2s = dlapy2_(&d__1, &d__2);
+        /* G2 and G2S are accurate */
+        /* G2 is at least SAFMIN, and G2S is at least SAFMN2 */
+        g2s = sqrt(g2);
+        /* Error in CS from underflow in F2S is at most */
+        /* UNFL / SAFMN2 .lt. sqrt(UNFL*EPS) .lt. EPS */
+        /* If MAX(G2,ONE)=G2, then F2 .lt. G2*SAFMIN, */
+        /* and so CS .lt. sqrt(SAFMIN) */
+        /* If MAX(G2,ONE)=ONE, then F2 .lt. SAFMIN */
+        /* and so CS .lt. sqrt(SAFMIN)/SAFMN2 = sqrt(EPS) */
+        /* Therefore, CS = F2S/G2S / sqrt( 1 + (F2S/G2S)**2 ) = F2S/G2S */
+        *cs = f2s / g2s;
+        /* Make sure f2c_abs(FF) = 1 */
+        /* Do complex/real division explicitly with 2 real divisions */
+        /* Computing MAX */
+        d__3 = (d__1 = f->r, f2c_abs(d__1));
+        d__4 = (d__2 = d_imag(f), f2c_abs(d__2)); // , expr subst
+        if (max(d__3,d__4) > 1.)
+        {
+            d__1 = f->r;
+            d__2 = d_imag(f);
+            d__ = dlapy2_(&d__1, &d__2);
+            d__1 = f->r / d__;
+            d__2 = d_imag(f) / d__;
+            z__1.r = d__1;
+            z__1.i = d__2; // , expr subst
+            ff.r = z__1.r;
+            ff.i = z__1.i; // , expr subst
         }
         else
         {

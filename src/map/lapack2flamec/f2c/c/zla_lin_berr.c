@@ -39,8 +39,8 @@
 /* > */
 /* > ZLA_LIN_BERR computes componentwise relative backward error from */
 /* > the formula */
-/* > fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(op(A_s))*f2c_dabs(Y) + f2c_dabs(B_s) )(i) ) */
-/* > where f2c_dabs(Z) is the componentwise absolute value of the matrix */
+/* > max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s) )(i) ) */
+/* > where f2c_abs(Z) is the componentwise absolute value of the matrix */
 /* > or vector Z. */
 /* > \endverbatim */
 /* Arguments: */
@@ -77,7 +77,7 @@
 /* > \verbatim */
 /* > AYB is DOUBLE PRECISION array, dimension (N, NRHS) */
 /* > The denominator in the relative backward error formula above, i.e., */
-/* > the matrix f2c_dabs(op(A_s))*f2c_dabs(Y) + f2c_dabs(B_s). The matrices A, Y, and B */
+/* > the matrix f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s). The matrices A, Y, and B */
 /* > are from iterative refinement (see zla_gerfsx_extended.f). */
 /* > \endverbatim */
 /* > */
@@ -171,12 +171,11 @@ void aocl_lapack_zla_lin_berr(aocl_int64_t *n, aocl_int64_t *nz, aocl_int64_t *n
             if(ayb[i__ + j * ayb_dim1] != 0.)
             {
                 i__3 = i__ + j * res_dim1;
-                d__3 = (d__1 = res[i__3].real, f2c_dabs(d__1))
-                       + (d__2 = d_imag(&res[i__ + j * res_dim1]), f2c_dabs(d__2));
-                z__3.real = d__3;
-                z__3.imag = 0.; // , expr subst
-                z__2.real = safe1 + z__3.real;
-                z__2.imag = z__3.imag; // , expr subst
+                d__3 = (d__1 = res[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&res[ i__ + j * res_dim1]), f2c_abs(d__2));
+                z__3.r = d__3;
+                z__3.i = 0.; // , expr subst
+                z__2.r = safe1 + z__3.r;
+                z__2.i = z__3.i; // , expr subst
                 i__4 = i__ + j * ayb_dim1;
                 z__1.real = z__2.real / ayb[i__4];
                 z__1.imag = z__2.imag / ayb[i__4]; // , expr subst

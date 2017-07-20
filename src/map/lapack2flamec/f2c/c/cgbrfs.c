@@ -413,7 +413,7 @@ void aocl_lapack_cgbrfs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int
         aocl_blas_cgbmv(trans, n, n, kl, ku, &q__1, &ab[ab_offset], ldab, &x[j * x_dim1 + 1], &c__1,
                         &c_b1, &work[1], &c__1);
         /* Compute componentwise relative backward error from formula */
-        /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A))*f2c_abs(X) + f2c_abs(B) )(i) ) */
+        /* max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A))*f2c_abs(X) + f2c_abs(B) )(i) ) */
         /* where f2c_abs(Z) is the componentwise absolute value of the matrix */
         /* or vector Z. If the i-th component of the denominator is less */
         /* than SAFE2, then SAFE1 is added to the i-th components of the */
@@ -422,20 +422,18 @@ void aocl_lapack_cgbrfs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            rwork[i__] = (r__1 = b[i__3].real, f2c_abs(r__1))
-                         + (r__2 = r_imag(&b[i__ + j * b_dim1]), f2c_abs(r__2));
+            rwork[i__] = (r__1 = b[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&b[ i__ + j * b_dim1]), f2c_abs(r__2));
             /* L30: */
         }
         /* Compute f2c_abs(op(A))*f2c_abs(X) + f2c_abs(B). */
-        if(notran)
+        if (notran)
         {
             i__2 = *n;
             for(k = 1; k <= i__2; ++k)
             {
                 kk = *ku + 1 - k;
                 i__3 = k + j * x_dim1;
-                xk = (r__1 = x[i__3].real, f2c_abs(r__1))
-                     + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
+                xk = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
                 /* Computing MAX */
                 i__3 = 1;
                 i__4 = k - *ku; // , expr subst
@@ -446,9 +444,7 @@ void aocl_lapack_cgbrfs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int
                 for(i__ = fla_max(i__3, i__4); i__ <= i__5; ++i__)
                 {
                     i__3 = kk + i__ + k * ab_dim1;
-                    rwork[i__] += ((r__1 = ab[i__3].real, f2c_abs(r__1))
-                                   + (r__2 = r_imag(&ab[kk + i__ + k * ab_dim1]), f2c_abs(r__2)))
-                                  * xk;
+                    rwork[i__] += ((r__1 = ab[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&ab[kk + i__ + k * ab_dim1]), f2c_abs(r__2))) * xk;
                     /* L40: */
                 }
                 /* L50: */
@@ -472,10 +468,7 @@ void aocl_lapack_cgbrfs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int
                 {
                     i__5 = kk + i__ + k * ab_dim1;
                     i__3 = i__ + j * x_dim1;
-                    s += ((r__1 = ab[i__5].real, f2c_abs(r__1))
-                          + (r__2 = r_imag(&ab[kk + i__ + k * ab_dim1]), f2c_abs(r__2)))
-                         * ((r__3 = x[i__3].real, f2c_abs(r__3))
-                            + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4)));
+                    s += ((r__1 = ab[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&ab[ kk + i__ + k * ab_dim1]), f2c_abs(r__2))) * ((r__3 = x[i__3].r, f2c_abs(r__3)) + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4)));
                     /* L60: */
                 }
                 rwork[k] += s;
@@ -491,20 +484,16 @@ void aocl_lapack_cgbrfs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int
                 /* Computing MAX */
                 i__4 = i__;
                 r__3 = s;
-                r__4 = ((r__1 = work[i__4].real, f2c_abs(r__1))
-                        + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)))
-                       / rwork[i__]; // , expr subst
-                s = fla_max(r__3, r__4);
+                r__4 = ((r__1 = work[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2))) / rwork[i__]; // , expr subst
+                s = max(r__3,r__4);
             }
             else
             {
                 /* Computing MAX */
                 i__4 = i__;
                 r__3 = s;
-                r__4 = ((r__1 = work[i__4].real, f2c_abs(r__1))
-                        + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + safe1)
-                       / (rwork[i__] + safe1); // , expr subst
-                s = fla_max(r__3, r__4);
+                r__4 = ((r__1 = work[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + safe1) / (rwork[i__] + safe1); // , expr subst
+                s = max(r__3,r__4);
             }
             /* L80: */
         }
@@ -547,15 +536,12 @@ void aocl_lapack_cgbrfs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int
             if(rwork[i__] > safe2)
             {
                 i__4 = i__;
-                rwork[i__] = (r__1 = work[i__4].real, f2c_abs(r__1))
-                             + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__];
+                rwork[i__] = (r__1 = work[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__] ;
             }
             else
             {
                 i__4 = i__;
-                rwork[i__] = (r__1 = work[i__4].real, f2c_abs(r__1))
-                             + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__]
-                             + safe1;
+                rwork[i__] = (r__1 = work[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__] + safe1;
             }
             /* L90: */
         }
@@ -610,9 +596,8 @@ void aocl_lapack_cgbrfs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int
             /* Computing MAX */
             i__4 = i__ + j * x_dim1;
             r__3 = lstres;
-            r__4 = (r__1 = x[i__4].real, f2c_abs(r__1))
-                   + (r__2 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__2)); // , expr subst
-            lstres = fla_max(r__3, r__4);
+            r__4 = (r__1 = x[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__2)); // , expr subst
+            lstres = max(r__3,r__4);
             /* L130: */
         }
         if(lstres != 0.f)

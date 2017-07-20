@@ -161,18 +161,16 @@ doublereal aocl_lapack_zla_gerpvgrw(aocl_int64_t *n, aocl_int64_t *ncols, dcompl
         {
             /* Computing MAX */
             i__3 = i__ + j * a_dim1;
-            d__3 = (d__1 = a[i__3].real, f2c_dabs(d__1))
-                   + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2));
-            amax = fla_max(d__3, amax);
+            d__3 = (d__1 = a[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_abs(d__2));
+            amax = max(d__3,amax);
         }
         i__2 = j;
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             i__3 = i__ + j * af_dim1;
-            d__3 = (d__1 = af[i__3].real, f2c_dabs(d__1))
-                   + (d__2 = d_imag(&af[i__ + j * af_dim1]), f2c_dabs(d__2));
-            umax = fla_max(d__3, umax);
+            d__3 = (d__1 = af[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&af[i__ + j * af_dim1]), f2c_abs(d__2));
+            umax = max(d__3,umax);
         }
         if(umax != 0.)
         {

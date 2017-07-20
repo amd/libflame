@@ -87,7 +87,7 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* > \param[in] V */
 /* > \verbatim */
-/* > V is COMPLEX*16 array, dimension (1+(L-1)*f2c_dabs(INCV)) */
+/* > V is COMPLEX*16 array, dimension (1+(L-1)*f2c_abs(INCV)) */
 /* > The vector v in the representation of H as returned by */
 /* > ZTZRZF. V is not used if TAU = 0. */
 /* > \endverbatim */

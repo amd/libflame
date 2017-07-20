@@ -482,7 +482,7 @@ void aocl_lapack_dlasq2(aocl_int64_t *n, doublereal *z__, aocl_int64_t *info)
         emax = 0.;
         if(n0 > i0)
         {
-            emin = (d__1 = z__[(n0 << 2) - 5], f2c_dabs(d__1));
+            emin = (d__1 = z__[(n0 << 2) - 5], f2c_abs(d__1));
         }
         else
         {

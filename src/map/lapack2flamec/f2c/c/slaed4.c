@@ -324,10 +324,10 @@ void aocl_lapack_slaed4(aocl_int64_t *n, aocl_int64_t *i__, real *d__, real *z__
         temp = z__[*n] / delta[*n];
         phi = z__[*n] * temp;
         dphi = temp * temp;
-        erretm = (-phi - psi) * 8.f + erretm - phi + rhoinv + f2c_abs(tau) * (dpsi + dphi);
+        erretm = (-phi - psi) * 8.f + erretm - phi + rhoinv + f2c_abs(tau) * ( dpsi + dphi);
         w = rhoinv + phi + psi;
         /* Test for convergence */
-        if(f2c_abs(w) <= eps * erretm)
+        if (f2c_abs(w) <= eps * erretm)
         {
             *dlam = d__[*i__] + tau;
             goto L250;
@@ -359,11 +359,11 @@ void aocl_lapack_slaed4(aocl_int64_t *n, aocl_int64_t *i__, real *d__, real *z__
         }
         else if(a >= 0.f)
         {
-            eta = (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / (c__ * 2.f);
+            eta = (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / ( c__ * 2.f);
         }
         else
         {
-            eta = b * 2.f / (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))));
+            eta = b * 2.f / (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1) )));
         }
         /* Note, eta should be positive if w is negative, and */
         /* eta should be negative otherwise. However, */
@@ -411,14 +411,14 @@ void aocl_lapack_slaed4(aocl_int64_t *n, aocl_int64_t *i__, real *d__, real *z__
         temp = z__[*n] / delta[*n];
         phi = z__[*n] * temp;
         dphi = temp * temp;
-        erretm = (-phi - psi) * 8.f + erretm - phi + rhoinv + f2c_abs(tau) * (dpsi + dphi);
+        erretm = (-phi - psi) * 8.f + erretm - phi + rhoinv + f2c_abs(tau) * ( dpsi + dphi);
         w = rhoinv + phi + psi;
         /* Main loop to update the values of the array DELTA */
         iter = niter + 1;
         for(niter = iter; niter <= 30; ++niter)
         {
             /* Test for convergence */
-            if(f2c_abs(w) <= eps * erretm)
+            if (f2c_abs(w) <= eps * erretm)
             {
                 *dlam = d__[*i__] + tau;
                 goto L250;
@@ -441,7 +441,7 @@ void aocl_lapack_slaed4(aocl_int64_t *n, aocl_int64_t *i__, real *d__, real *z__
             }
             else
             {
-                eta = b * 2.f / (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))));
+                eta = b * 2.f / (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs( r__1))));
             }
             /* Note, eta should be positive if w is negative, and */
             /* eta should be negative otherwise. However, */
@@ -489,7 +489,7 @@ void aocl_lapack_slaed4(aocl_int64_t *n, aocl_int64_t *i__, real *d__, real *z__
             temp = z__[*n] / delta[*n];
             phi = z__[*n] * temp;
             dphi = temp * temp;
-            erretm = (-phi - psi) * 8.f + erretm - phi + rhoinv + f2c_abs(tau) * (dpsi + dphi);
+            erretm = (-phi - psi) * 8.f + erretm - phi + rhoinv + f2c_abs(tau) * ( dpsi + dphi);
             w = rhoinv + phi + psi;
             /* L90: */
         }
@@ -538,7 +538,7 @@ void aocl_lapack_slaed4(aocl_int64_t *n, aocl_int64_t *i__, real *d__, real *z__
             b = z__[*i__] * z__[*i__] * del;
             if(a > 0.f)
             {
-                tau = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))));
+                tau = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs( r__1))));
             }
             else
             {
@@ -556,7 +556,7 @@ void aocl_lapack_slaed4(aocl_int64_t *n, aocl_int64_t *i__, real *d__, real *z__
             b = z__[ip1] * z__[ip1] * del;
             if(a < 0.f)
             {
-                tau = b * 2.f / (a - sqrt((r__1 = a * a + b * 4.f * c__, f2c_abs(r__1))));
+                tau = b * 2.f / (a - sqrt((r__1 = a * a + b * 4.f * c__, f2c_abs( r__1))));
             }
             else
             {
@@ -645,10 +645,9 @@ void aocl_lapack_slaed4(aocl_int64_t *n, aocl_int64_t *i__, real *d__, real *z__
         dw = dpsi + dphi + temp * temp;
         temp = z__[ii] * temp;
         w += temp;
-        erretm
-            = (phi - psi) * 8.f + erretm + rhoinv * 2.f + f2c_abs(temp) * 3.f + f2c_abs(tau) * dw;
+        erretm = (phi - psi) * 8.f + erretm + rhoinv * 2.f + f2c_abs(temp) * 3.f + f2c_abs(tau) * dw;
         /* Test for convergence */
-        if(f2c_abs(w) <= eps * erretm)
+        if (f2c_abs(w) <= eps * erretm)
         {
             if(orgati)
             {
@@ -707,7 +706,7 @@ void aocl_lapack_slaed4(aocl_int64_t *n, aocl_int64_t *i__, real *d__, real *z__
             }
             else
             {
-                eta = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))));
+                eta = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs( r__1))));
             }
         }
         else
@@ -795,19 +794,18 @@ void aocl_lapack_slaed4(aocl_int64_t *n, aocl_int64_t *i__, real *d__, real *z__
         dw = dpsi + dphi + temp * temp;
         temp = z__[ii] * temp;
         w = rhoinv + phi + psi + temp;
-        erretm = (phi - psi) * 8.f + erretm + rhoinv * 2.f + f2c_abs(temp) * 3.f
-                 + (r__1 = tau + eta, f2c_abs(r__1)) * dw;
+        erretm = (phi - psi) * 8.f + erretm + rhoinv * 2.f + f2c_abs(temp) * 3.f + (r__1 = tau + eta, f2c_abs(r__1)) * dw;
         swtch = FALSE_;
         if(orgati)
         {
-            if(-w > f2c_abs(prew) / 10.f)
+            if (-w > f2c_abs(prew) / 10.f)
             {
                 swtch = TRUE_;
             }
         }
         else
         {
-            if(w > f2c_abs(prew) / 10.f)
+            if (w > f2c_abs(prew) / 10.f)
             {
                 swtch = TRUE_;
             }
@@ -818,7 +816,7 @@ void aocl_lapack_slaed4(aocl_int64_t *n, aocl_int64_t *i__, real *d__, real *z__
         for(niter = iter; niter <= 30; ++niter)
         {
             /* Test for convergence */
-            if(f2c_abs(w) <= eps * erretm)
+            if (f2c_abs(w) <= eps * erretm)
             {
                 if(orgati)
                 {
@@ -895,7 +893,7 @@ void aocl_lapack_slaed4(aocl_int64_t *n, aocl_int64_t *i__, real *d__, real *z__
                 }
                 else if(a <= 0.f)
                 {
-                    eta = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / (c__ * 2.f);
+                    eta = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))) ) / (c__ * 2.f);
                 }
                 else
                 {
@@ -996,9 +994,8 @@ void aocl_lapack_slaed4(aocl_int64_t *n, aocl_int64_t *i__, real *d__, real *z__
             dw = dpsi + dphi + temp * temp;
             temp = z__[ii] * temp;
             w = rhoinv + phi + psi + temp;
-            erretm = (phi - psi) * 8.f + erretm + rhoinv * 2.f + f2c_abs(temp) * 3.f
-                     + f2c_abs(tau) * dw;
-            if(w * prew > 0.f && f2c_abs(w) > f2c_abs(prew) / 10.f)
+            erretm = (phi - psi) * 8.f + erretm + rhoinv * 2.f + f2c_abs(temp) * 3.f + f2c_abs(tau) * dw;
+            if (w * prew > 0.f && f2c_abs(w) > f2c_abs(prew) / 10.f)
             {
                 swtch = !swtch;
             }

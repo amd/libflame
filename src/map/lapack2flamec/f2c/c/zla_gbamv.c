@@ -373,16 +373,12 @@ void aocl_lapack_zla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
                     for(j = fla_max(i__2, 1); j <= i__3; ++j)
                     {
                         i__2 = kd + i__ - j + j * ab_dim1;
-                        temp = (d__1 = ab[i__2].real, f2c_abs(d__1))
-                               + (d__2 = d_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_abs(d__2));
+                        temp = (d__1 = ab[i__2].r, f2c_abs(d__1)) + (d__2 = d_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_abs( d__2));
                         i__2 = j;
                         symb_zero__
                             = symb_zero__ && (x[i__2].real == 0. && x[i__2].imag == 0. || temp == 0.);
                         i__2 = j;
-                        y[iy] += *alpha
-                                 * ((d__1 = x[i__2].real, f2c_abs(d__1))
-                                    + (d__2 = d_imag(&x[j]), f2c_abs(d__2)))
-                                 * temp;
+                        y[iy] += *alpha * ((d__1 = x[i__2].r, f2c_abs(d__1)) + ( d__2 = d_imag(&x[j]), f2c_abs(d__2))) * temp;
                     }
                 }
                 if(!symb_zero__)
@@ -421,16 +417,12 @@ void aocl_lapack_zla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
                     for(j = fla_max(i__3, 1); j <= i__2; ++j)
                     {
                         i__3 = ke - i__ + j + i__ * ab_dim1;
-                        temp = (d__1 = ab[i__3].real, f2c_abs(d__1))
-                               + (d__2 = d_imag(&ab[ke - i__ + j + i__ * ab_dim1]), f2c_abs(d__2));
+                        temp = (d__1 = ab[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&ab[ke - i__ + j + i__ * ab_dim1]), f2c_abs(d__2));
                         i__3 = j;
                         symb_zero__
                             = symb_zero__ && (x[i__3].real == 0. && x[i__3].imag == 0. || temp == 0.);
                         i__3 = j;
-                        y[iy] += *alpha
-                                 * ((d__1 = x[i__3].real, f2c_abs(d__1))
-                                    + (d__2 = d_imag(&x[j]), f2c_abs(d__2)))
-                                 * temp;
+                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_abs(d__1)) + ( d__2 = d_imag(&x[j]), f2c_abs(d__2))) * temp;
                     }
                 }
                 if(!symb_zero__)
@@ -473,16 +465,12 @@ void aocl_lapack_zla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
                     for(j = fla_max(i__2, 1); j <= i__3; ++j)
                     {
                         i__2 = kd + i__ - j + j * ab_dim1;
-                        temp = (d__1 = ab[i__2].real, f2c_abs(d__1))
-                               + (d__2 = d_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_abs(d__2));
+                        temp = (d__1 = ab[i__2].r, f2c_abs(d__1)) + (d__2 = d_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_abs( d__2));
                         i__2 = jx;
                         symb_zero__
                             = symb_zero__ && (x[i__2].real == 0. && x[i__2].imag == 0. || temp == 0.);
                         i__2 = jx;
-                        y[iy] += *alpha
-                                 * ((d__1 = x[i__2].real, f2c_abs(d__1))
-                                    + (d__2 = d_imag(&x[jx]), f2c_abs(d__2)))
-                                 * temp;
+                        y[iy] += *alpha * ((d__1 = x[i__2].r, f2c_abs(d__1)) + ( d__2 = d_imag(&x[jx]), f2c_abs(d__2))) * temp;
                         jx += *incx;
                     }
                 }
@@ -523,16 +511,12 @@ void aocl_lapack_zla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
                     for(j = fla_max(i__3, 1); j <= i__2; ++j)
                     {
                         i__3 = ke - i__ + j + i__ * ab_dim1;
-                        temp = (d__1 = ab[i__3].real, f2c_abs(d__1))
-                               + (d__2 = d_imag(&ab[ke - i__ + j + i__ * ab_dim1]), f2c_abs(d__2));
+                        temp = (d__1 = ab[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&ab[ke - i__ + j + i__ * ab_dim1]), f2c_abs(d__2));
                         i__3 = jx;
                         symb_zero__
                             = symb_zero__ && (x[i__3].real == 0. && x[i__3].imag == 0. || temp == 0.);
                         i__3 = jx;
-                        y[iy] += *alpha
-                                 * ((d__1 = x[i__3].real, f2c_abs(d__1))
-                                    + (d__2 = d_imag(&x[jx]), f2c_abs(d__2)))
-                                 * temp;
+                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_abs(d__1)) + ( d__2 = d_imag(&x[jx]), f2c_abs(d__2))) * temp;
                         jx += *incx;
                     }
                 }

@@ -49,7 +49,7 @@ static aocl_int64_t c__1 = 1;
 /* > \return DLANGB */
 /* > \verbatim */
 /* > */
-/* > DLANGB = ( fla_max(abs(A(i,j))), NORM = 'M' or 'm' */
+/* > DLANGB = ( max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
 /* > ( */
 /* > ( norm1(A), NORM = '1', 'O' or 'o' */
 /* > ( */
@@ -60,7 +60,7 @@ static aocl_int64_t c__1 = 1;
 /* > where norm1 denotes the one norm of a matrix (maximum column sum), */
 /* > normI denotes the infinity norm of a matrix (maximum row sum) and */
 /* > normF denotes the Frobenius norm of a matrix (square root of sum of */
-/* > squares). Note that fla_max(abs(A(i,j))) is not a consistent matrix norm. */
+/* > squares). Note that max(f2c_abs(A(i,j))) is not a consistent matrix norm. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -185,7 +185,7 @@ doublereal aocl_lapack_dlangb(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aoc
     }
     else if(lsame_(norm, "M", 1, 1))
     {
-        /* Find fla_max(abs(A(i,j))). */
+        /* Find max(f2c_abs(A(i,j))). */
         value = 0.;
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
@@ -199,7 +199,7 @@ doublereal aocl_lapack_dlangb(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aoc
             for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
             {
                 temp = (d__1 = ab[i__ + j * ab_dim1], f2c_abs(d__1));
-                if(value < temp || temp != temp)
+                if (value < temp || disnan_(&temp))
                 {
                     value = temp;
                 }

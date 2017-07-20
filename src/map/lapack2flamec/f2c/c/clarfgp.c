@@ -76,7 +76,7 @@ static scomplex c_b6 = {1.f, 0.f};
 /* > \param[in,out] X */
 /* > \verbatim */
 /* > X is COMPLEX array, dimension */
-/* > (1+(N-2)*abs(INCX)) */
+/* > (1+(N-2)*f2c_abs(INCX)) */
 /* > On entry, the vector x. */
 /* > On exit, it is overwritten with the vector v. */
 /* > \endverbatim */
@@ -132,7 +132,7 @@ void aocl_lapack_clarfgp(aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int
     real r__1, r__2;
     scomplex q__1, q__2;
     /* Builtin functions */
-    double r_imag(scomplex *), c_abs(scomplex *), r_sign(real *, real *);
+    double r_imag(complex *), r_sign(real *, real *), c_f2c_abs(complex *);
     /* Local variables */
     aocl_int64_t j;
     scomplex savealpha;
@@ -182,7 +182,7 @@ void aocl_lapack_clarfgp(aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int
     alphi = r_imag(alpha);
     if(xnorm <= eps * c_abs(alpha))
     {
-        /* H = [1-alpha/abs(alpha) 0;
+        /* H = [1-alpha/f2c_abs(alpha) 0;
         0 I], sign chosen so ALPHA >= 0. */
         if(alphi == 0.f)
         {
@@ -237,7 +237,7 @@ void aocl_lapack_clarfgp(aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int
         smlnum = slamch_("S") / slamch_("E");
         bignum = 1.f / smlnum;
         knt = 0;
-        if(f2c_abs(beta) < smlnum)
+        if (f2c_abs(beta) < smlnum)
         {
         /* XNORM, BETA may be inaccurate;
         scale X and recompute them */
@@ -248,7 +248,7 @@ void aocl_lapack_clarfgp(aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int
             beta *= bignum;
             alphi *= bignum;
             alphr *= bignum;
-            if(f2c_abs(beta) < smlnum && knt < 20)
+            if (f2c_abs(beta) < smlnum)
             {
                 goto L10;
             }
@@ -289,9 +289,9 @@ void aocl_lapack_clarfgp(aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int
             q__1.imag = alphi; // , expr subst
             alpha->real = q__1.real, alpha->imag = q__1.imag;
         }
-        cladiv_f2c_(&q__1, &c_b6, alpha);
-        alpha->real = q__1.real, alpha->imag = q__1.imag;
-        if(c_abs(tau) <= smlnum)
+        cladiv_(&q__1, &c_b5, alpha);
+        alpha->r = q__1.r, alpha->i = q__1.i;
+        if (c_f2c_abs(tau) <= smlnum)
         {
             /* In the case where the computed TAU ends up being a denormalized number, */
             /* it loses relative accuracy. This is a BIG problem. Solution: flush TAU */

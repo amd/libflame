@@ -422,9 +422,9 @@ void aocl_lapack_dgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, do
     /* Determine RANK using incremental condition estimation */
     work[ismin] = 1.;
     work[ismax] = 1.;
-    smax = (d__1 = a[a_dim1 + 1], f2c_dabs(d__1));
+    smax = (d__1 = a[a_dim1 + 1], f2c_abs(d__1));
     smin = smax;
-    if((d__1 = a[a_dim1 + 1], f2c_dabs(d__1)) == 0.)
+    if ((d__1 = a[a_dim1 + 1], f2c_abs(d__1)) == 0.)
     {
         *rank = 0;
         i__1 = fla_max(*m, *n);

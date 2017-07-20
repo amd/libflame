@@ -48,7 +48,7 @@ static aocl_int64_t c__1 = 1;
 /* > \return DLANSF */
 /* > \verbatim */
 /* > */
-/* > DLANSF = ( fla_max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
+/* > DLANSF = ( max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
 /* > ( */
 /* > ( norm1(A), NORM = '1', 'O' or 'o' */
 /* > ( */
@@ -59,7 +59,7 @@ static aocl_int64_t c__1 = 1;
 /* > where norm1 denotes the one norm of a matrix (maximum column sum), */
 /* > normI denotes the infinity norm of a matrix (maximum row sum) and */
 /* > normF denotes the Frobenius norm of a matrix (square root of sum of */
-/* > squares). Note that fla_max(f2c_abs(A(i,j))) is not a matrix norm. */
+/* > squares). Note that max(f2c_abs(A(i,j))) is not a matrix norm. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -273,7 +273,6 @@ doublereal aocl_lapack_dlansf(char *norm, char *transr, char *uplo, aocl_int64_t
     else if(*n == 1)
     {
         ret_val = f2c_abs(a[0]);
-        AOCL_DTL_TRACE_LOG_EXIT
         return ret_val;
     }
     /* set noe = 1 if n is odd. if n is even set noe=0 */
@@ -316,7 +315,7 @@ doublereal aocl_lapack_dlansf(char *norm, char *transr, char *uplo, aocl_int64_t
     }
     if(lsame_(norm, "M", 1, 1))
     {
-        /* Find fla_max(f2c_abs(A(i,j))). */
+        /* Find max(f2c_abs(A(i,j))). */
         k = (*n + 1) / 2;
         value = 0.;
         if(noe == 1)
@@ -332,7 +331,7 @@ doublereal aocl_lapack_dlansf(char *norm, char *transr, char *uplo, aocl_int64_t
                     for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         temp = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -350,7 +349,7 @@ doublereal aocl_lapack_dlansf(char *norm, char *transr, char *uplo, aocl_int64_t
                     for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         temp = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -371,7 +370,7 @@ doublereal aocl_lapack_dlansf(char *norm, char *transr, char *uplo, aocl_int64_t
                     for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         temp = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -389,7 +388,7 @@ doublereal aocl_lapack_dlansf(char *norm, char *transr, char *uplo, aocl_int64_t
                     for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         temp = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
-                        if(value < temp || disnan_(&temp))
+                        if (value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }

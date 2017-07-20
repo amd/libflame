@@ -113,7 +113,7 @@ void dlartgs_(doublereal *x, doublereal *y, doublereal *sigma, doublereal *cs, d
     thresh = dlamch_("E");
     /* Compute the first column of B**T*B - SIGMA^2*I, up to a scale */
     /* factor. */
-    if(*sigma == 0. && f2c_abs(*x) < thresh || f2c_abs(*x) == *sigma && *y == 0.)
+    if (*sigma == 0. && f2c_abs(*x) < thresh || f2c_abs(*x) == *sigma && *y == 0.)
     {
         z__ = 0.;
         w = 0.;
@@ -131,7 +131,7 @@ void dlartgs_(doublereal *x, doublereal *y, doublereal *sigma, doublereal *cs, d
             w = -(*y);
         }
     }
-    else if(f2c_abs(*x) < thresh)
+    else if (f2c_abs(*x) < thresh)
     {
         z__ = -(*sigma) * *sigma;
         w = 0.;

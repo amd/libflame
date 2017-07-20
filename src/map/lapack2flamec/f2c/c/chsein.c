@@ -519,12 +519,11 @@ void aocl_lapack_chsein(char *side, char *eigsrc, char *initv, logical *select, 
             for(i__ = k - 1; i__ >= i__2; --i__)
             {
                 i__3 = i__;
-                q__2.real = w[i__3].real - wk.real;
-                q__2.imag = w[i__3].imag - wk.imag; // , expr subst
-                q__1.real = q__2.real;
-                q__1.imag = q__2.imag; // , expr subst
-                if(select[i__]
-                   && (r__1 = q__1.real, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2)) < eps3)
+                q__2.r = w[i__3].r - wk.r;
+                q__2.i = w[i__3].i - wk.i; // , expr subst
+                q__1.r = q__2.r;
+                q__1.i = q__2.i; // , expr subst
+                if (select[i__] && (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2)) < eps3)
                 {
                     q__1.real = wk.real + eps3;
                     q__1.imag = wk.imag; // , expr subst

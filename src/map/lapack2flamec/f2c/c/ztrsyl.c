@@ -346,22 +346,22 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                 scaloc = 1.;
                 i__2 = k + k * a_dim1;
                 i__3 = l + l * b_dim1;
-                z__2.real = sgn * b[i__3].real;
-                z__2.imag = sgn * b[i__3].imag; // , expr subst
-                z__1.real = a[i__2].real + z__2.real;
-                z__1.imag = a[i__2].imag + z__2.imag; // , expr subst
-                a11.real = z__1.real;
-                a11.imag = z__1.imag; // , expr subst
-                da11 = (d__1 = a11.real, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs(d__2));
-                if(da11 <= smin)
+                z__2.r = sgn * b[i__3].r;
+                z__2.i = sgn * b[i__3].i; // , expr subst
+                z__1.r = a[i__2].r + z__2.r;
+                z__1.i = a[i__2].i + z__2.i; // , expr subst
+                a11.r = z__1.r;
+                a11.i = z__1.i; // , expr subst
+                da11 = (d__1 = a11.r, f2c_abs(d__1)) + (d__2 = d_imag(&a11), f2c_abs( d__2));
+                if (da11 <= smin)
                 {
                     a11.real = smin;
                     a11.imag = 0.; // , expr subst
                     da11 = smin;
                     *info = 1;
                 }
-                db = (d__1 = vec.real, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs(d__2));
-                if(da11 < 1. && db > 1.)
+                db = (d__1 = vec.r, f2c_abs(d__1)) + (d__2 = d_imag(&vec), f2c_abs( d__2));
+                if (da11 < 1. && db > 1.)
                 {
                     if(db > bignum * da11)
                     {
@@ -429,22 +429,22 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                 scaloc = 1.;
                 d_cnjg(&z__2, &a[k + k * a_dim1]);
                 i__3 = l + l * b_dim1;
-                z__3.real = sgn * b[i__3].real;
-                z__3.imag = sgn * b[i__3].imag; // , expr subst
-                z__1.real = z__2.real + z__3.real;
-                z__1.imag = z__2.imag + z__3.imag; // , expr subst
-                a11.real = z__1.real;
-                a11.imag = z__1.imag; // , expr subst
-                da11 = (d__1 = a11.real, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs(d__2));
-                if(da11 <= smin)
+                z__3.r = sgn * b[i__3].r;
+                z__3.i = sgn * b[i__3].i; // , expr subst
+                z__1.r = z__2.r + z__3.r;
+                z__1.i = z__2.i + z__3.i; // , expr subst
+                a11.r = z__1.r;
+                a11.i = z__1.i; // , expr subst
+                da11 = (d__1 = a11.r, f2c_abs(d__1)) + (d__2 = d_imag(&a11), f2c_abs( d__2));
+                if (da11 <= smin)
                 {
                     a11.real = smin;
                     a11.imag = 0.; // , expr subst
                     da11 = smin;
                     *info = 1;
                 }
-                db = (d__1 = vec.real, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs(d__2));
-                if(da11 < 1. && db > 1.)
+                db = (d__1 = vec.r, f2c_abs(d__1)) + (d__2 = d_imag(&vec), f2c_abs( d__2));
+                if (da11 < 1. && db > 1.)
                 {
                     if(db > bignum * da11)
                     {
@@ -525,18 +525,18 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                 z__2.real = a[i__2].real + z__3.real;
                 z__2.imag = a[i__2].imag + z__3.imag; // , expr subst
                 d_cnjg(&z__1, &z__2);
-                a11.real = z__1.real;
-                a11.imag = z__1.imag; // , expr subst
-                da11 = (d__1 = a11.real, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs(d__2));
-                if(da11 <= smin)
+                a11.r = z__1.r;
+                a11.i = z__1.i; // , expr subst
+                da11 = (d__1 = a11.r, f2c_abs(d__1)) + (d__2 = d_imag(&a11), f2c_abs( d__2));
+                if (da11 <= smin)
                 {
                     a11.real = smin;
                     a11.imag = 0.; // , expr subst
                     da11 = smin;
                     *info = 1;
                 }
-                db = (d__1 = vec.real, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs(d__2));
-                if(da11 < 1. && db > 1.)
+                db = (d__1 = vec.r, f2c_abs(d__1)) + (d__2 = d_imag(&vec), f2c_abs( d__2));
+                if (da11 < 1. && db > 1.)
                 {
                     if(db > bignum * da11)
                     {
@@ -613,22 +613,22 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                 scaloc = 1.;
                 i__1 = k + k * a_dim1;
                 d_cnjg(&z__3, &b[l + l * b_dim1]);
-                z__2.real = sgn * z__3.real;
-                z__2.imag = sgn * z__3.imag; // , expr subst
-                z__1.real = a[i__1].real + z__2.real;
-                z__1.imag = a[i__1].imag + z__2.imag; // , expr subst
-                a11.real = z__1.real;
-                a11.imag = z__1.imag; // , expr subst
-                da11 = (d__1 = a11.real, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs(d__2));
-                if(da11 <= smin)
+                z__2.r = sgn * z__3.r;
+                z__2.i = sgn * z__3.i; // , expr subst
+                z__1.r = a[i__1].r + z__2.r;
+                z__1.i = a[i__1].i + z__2.i; // , expr subst
+                a11.r = z__1.r;
+                a11.i = z__1.i; // , expr subst
+                da11 = (d__1 = a11.r, f2c_abs(d__1)) + (d__2 = d_imag(&a11), f2c_abs( d__2));
+                if (da11 <= smin)
                 {
                     a11.real = smin;
                     a11.imag = 0.; // , expr subst
                     da11 = smin;
                     *info = 1;
                 }
-                db = (d__1 = vec.real, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs(d__2));
-                if(da11 < 1. && db > 1.)
+                db = (d__1 = vec.r, f2c_abs(d__1)) + (d__2 = d_imag(&vec), f2c_abs( d__2));
+                if (da11 < 1. && db > 1.)
                 {
                     if(db > bignum * da11)
                     {

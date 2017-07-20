@@ -147,8 +147,8 @@ void aocl_lapack_cgesc2(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomple
     real r__1;
     scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    double c_abs(scomplex *);
-    void c_div(scomplex *, scomplex *, scomplex *);
+    double c_f2c_abs(complex *);
+    void c_div(complex *, complex *, complex *);
     /* Local variables */
     aocl_int64_t i__, j;
     real eps;
@@ -212,16 +212,16 @@ void aocl_lapack_cgesc2(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomple
     /* Solve for U part */
     *scale = 1.f;
     /* Check for scaling */
-    i__ = aocl_blas_icamax(n, &rhs[1], &c__1);
-    if(smlnum * 2.f * c_abs(&rhs[i__]) > c_abs(&a[*n + *n * a_dim1]))
+    i__ = icamax_(n, &rhs[1], &c__1);
+    if (smlnum * 2.f * c_f2c_abs(&rhs[i__]) > c_f2c_abs(&a[*n + *n * a_dim1]))
     {
-        r__1 = c_abs(&rhs[i__]);
-        q__1.real = .5f / r__1;
-        q__1.imag = 0.f / r__1; // , expr subst
-        temp.real = q__1.real;
-        temp.imag = q__1.imag; // , expr subst
-        aocl_blas_cscal(n, &temp, &rhs[1], &c__1);
-        *scale *= temp.real;
+        r__1 = c_f2c_abs(&rhs[i__]);
+        q__1.r = .5f / r__1;
+        q__1.i = 0.f / r__1; // , expr subst
+        temp.r = q__1.r;
+        temp.i = q__1.i; // , expr subst
+        cscal_(n, &temp, &rhs[1], &c__1);
+        *scale *= temp.r;
     }
     for(i__ = *n; i__ >= 1; --i__)
     {

@@ -423,7 +423,7 @@ void aocl_lapack_zgbsvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     doublereal d__1, d__2;
     dcomplex z__1;
     /* Builtin functions */
-    double z_abs(dcomplex *);
+    double z_f2c_abs(doublecomplex *);
     /* Local variables */
     aocl_int64_t i__, j, j1, j2;
     doublereal amax;
@@ -718,8 +718,8 @@ void aocl_lapack_zgbsvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
                 {
                     /* Computing MAX */
                     d__1 = anorm;
-                    d__2 = z_abs(&ab[i__ + j * ab_dim1]); // , expr subst
-                    anorm = fla_max(d__1, d__2);
+                    d__2 = z_f2c_abs(&ab[i__ + j * ab_dim1]); // , expr subst
+                    anorm = max(d__1,d__2);
                     /* L80: */
                 }
                 /* L90: */

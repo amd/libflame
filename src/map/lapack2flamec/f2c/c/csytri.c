@@ -370,7 +370,7 @@ void aocl_lapack_csytri(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
             kstep = 2;
         }
         kp = (i__1 = ipiv[k], f2c_abs(i__1));
-        if(kp != k)
+        if (kp != k)
         {
             /* Interchange rows and columns K and KP in the leading */
             /* submatrix A(1:k+1,1:k+1) */
@@ -530,7 +530,7 @@ void aocl_lapack_csytri(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
             kstep = 2;
         }
         kp = (i__1 = ipiv[k], f2c_abs(i__1));
-        if(kp != k)
+        if (kp != k)
         {
             /* Interchange rows and columns K and KP in the trailing */
             /* submatrix A(k-1:n,k-1:n) */

@@ -304,9 +304,7 @@ real aocl_lapack_cla_gbrcond_c(char *trans, aocl_int64_t *n, aocl_int64_t *kl, a
                 for(j = fla_max(i__2, 1); j <= i__3; ++j)
                 {
                     i__2 = kd + i__ - j + j * ab_dim1;
-                    tmp += ((r__1 = ab[i__2].real, f2c_abs(r__1))
-                            + (r__2 = r_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_abs(r__2)))
-                           / c__[j];
+                    tmp += ((r__1 = ab[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(& ab[kd + i__ - j + j * ab_dim1]), f2c_abs(r__2))) / c__[j];
                 }
             }
             else
@@ -319,8 +317,7 @@ real aocl_lapack_cla_gbrcond_c(char *trans, aocl_int64_t *n, aocl_int64_t *kl, a
                 for(j = fla_max(i__3, 1); j <= i__2; ++j)
                 {
                     i__3 = kd + i__ - j + j * ab_dim1;
-                    tmp += (r__1 = ab[i__3].real, f2c_abs(r__1))
-                           + (r__2 = r_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_abs(r__2));
+                    tmp += (r__1 = ab[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(& ab[kd + i__ - j + j * ab_dim1]), f2c_abs(r__2));
                 }
             }
             rwork[i__] = tmp;
@@ -343,9 +340,7 @@ real aocl_lapack_cla_gbrcond_c(char *trans, aocl_int64_t *n, aocl_int64_t *kl, a
                 for(j = fla_max(i__2, 1); j <= i__3; ++j)
                 {
                     i__2 = ke - i__ + j + i__ * ab_dim1;
-                    tmp += ((r__1 = ab[i__2].real, f2c_abs(r__1))
-                            + (r__2 = r_imag(&ab[ke - i__ + j + i__ * ab_dim1]), f2c_abs(r__2)))
-                           / c__[j];
+                    tmp += ((r__1 = ab[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(& ab[ke - i__ + j + i__ * ab_dim1]), f2c_abs(r__2))) / c__[j];
                 }
             }
             else
@@ -358,8 +353,7 @@ real aocl_lapack_cla_gbrcond_c(char *trans, aocl_int64_t *n, aocl_int64_t *kl, a
                 for(j = fla_max(i__3, 1); j <= i__2; ++j)
                 {
                     i__3 = ke - i__ + j + i__ * ab_dim1;
-                    tmp += (r__1 = ab[i__3].real, f2c_abs(r__1))
-                           + (r__2 = r_imag(&ab[ke - i__ + j + i__ * ab_dim1]), f2c_abs(r__2));
+                    tmp += (r__1 = ab[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(& ab[ke - i__ + j + i__ * ab_dim1]), f2c_abs(r__2));
                 }
             }
             rwork[i__] = tmp;

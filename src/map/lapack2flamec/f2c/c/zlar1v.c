@@ -265,7 +265,7 @@ void aocl_lapack_zlar1v(aocl_int64_t *n, aocl_int64_t *b1, aocl_int64_t *bn, dou
     doublereal d__1;
     dcomplex z__1, z__2;
     /* Builtin functions */
-    double z_abs(dcomplex *), sqrt(doublereal);
+    double z_f2c_abs(doublecomplex *), sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__;
     doublereal s;
@@ -373,7 +373,7 @@ L60:
         for(i__ = *b1; i__ <= i__1; ++i__)
         {
             dplus = d__[i__] + s;
-            if(f2c_dabs(dplus) < *pivmin)
+            if (f2c_abs(dplus) < *pivmin)
             {
                 dplus = -(*pivmin);
             }
@@ -394,7 +394,7 @@ L60:
         for(i__ = r1; i__ <= i__1; ++i__)
         {
             dplus = d__[i__] + s;
-            if(f2c_dabs(dplus) < *pivmin)
+            if (f2c_abs(dplus) < *pivmin)
             {
                 dplus = -(*pivmin);
             }
@@ -436,7 +436,7 @@ L60:
         for(i__ = *bn - 1; i__ >= i__1; --i__)
         {
             dminus = lld[i__] + work[indp + i__];
-            if(f2c_dabs(dminus) < *pivmin)
+            if (f2c_abs(dminus) < *pivmin)
             {
                 dminus = -(*pivmin);
             }
@@ -469,7 +469,7 @@ L60:
     {
         *negcnt = -1;
     }
-    if(f2c_dabs(*mingma) == 0.)
+    if (f2c_abs(*mingma) == 0.)
     {
         *mingma = eps * work[inds + r1 - 1];
     }
@@ -482,7 +482,7 @@ L60:
         {
             tmp = eps * work[inds + i__];
         }
-        if(f2c_dabs(tmp) <= f2c_dabs(*mingma))
+        if (f2c_abs(tmp) <= f2c_abs(*mingma))
         {
             *mingma = tmp;
             *r__ = i__ + 1;
@@ -505,14 +505,13 @@ L60:
             i__2 = i__;
             i__3 = indlpl + i__;
             i__4 = i__ + 1;
-            z__2.real = work[i__3] * z__[i__4].real;
-            z__2.imag = work[i__3] * z__[i__4].imag; // , expr subst
-            z__1.real = -z__2.real;
-            z__1.imag = -z__2.imag; // , expr subst
-            z__[i__2].real = z__1.real;
-            z__[i__2].imag = z__1.imag; // , expr subst
-            if((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_dabs(d__1))
-               < *gaptol)
+            z__2.r = work[i__3] * z__[i__4].r;
+            z__2.i = work[i__3] * z__[i__4] .i; // , expr subst
+            z__1.r = -z__2.r;
+            z__1.i = -z__2.i; // , expr subst
+            z__[i__2].r = z__1.r;
+            z__[i__2].i = z__1.i; // , expr subst
+            if ((z_f2c_abs(&z__[i__]) + z_f2c_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_abs(d__1)) < *gaptol)
             {
                 i__2 = i__;
                 z__[i__2].real = 0.;
@@ -558,8 +557,7 @@ L60:
                 z__[i__2].real = z__1.real;
                 z__[i__2].imag = z__1.imag; // , expr subst
             }
-            if((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_dabs(d__1))
-               < *gaptol)
+            if ((z_f2c_abs(&z__[i__]) + z_f2c_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_abs(d__1)) < *gaptol)
             {
                 i__2 = i__;
                 z__[i__2].real = 0.;
@@ -585,14 +583,13 @@ L60:
             i__2 = i__ + 1;
             i__3 = indumn + i__;
             i__4 = i__;
-            z__2.real = work[i__3] * z__[i__4].real;
-            z__2.imag = work[i__3] * z__[i__4].imag; // , expr subst
-            z__1.real = -z__2.real;
-            z__1.imag = -z__2.imag; // , expr subst
-            z__[i__2].real = z__1.real;
-            z__[i__2].imag = z__1.imag; // , expr subst
-            if((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_dabs(d__1))
-               < *gaptol)
+            z__2.r = work[i__3] * z__[i__4].r;
+            z__2.i = work[i__3] * z__[i__4] .i; // , expr subst
+            z__1.r = -z__2.r;
+            z__1.i = -z__2.i; // , expr subst
+            z__[i__2].r = z__1.r;
+            z__[i__2].i = z__1.i; // , expr subst
+            if ((z_f2c_abs(&z__[i__]) + z_f2c_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_abs(d__1)) < *gaptol)
             {
                 i__2 = i__ + 1;
                 z__[i__2].real = 0.;
@@ -638,8 +635,7 @@ L60:
                 z__[i__2].real = z__1.real;
                 z__[i__2].imag = z__1.imag; // , expr subst
             }
-            if((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_dabs(d__1))
-               < *gaptol)
+            if ((z_f2c_abs(&z__[i__]) + z_f2c_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_abs(d__1)) < *gaptol)
             {
                 i__2 = i__ + 1;
                 z__[i__2].real = 0.;
@@ -659,7 +655,7 @@ L60:
     /* Compute quantities for convergence test */
     tmp = 1. / *ztz;
     *nrminv = sqrt(tmp);
-    *resid = f2c_dabs(*mingma) * *nrminv;
+    *resid = f2c_abs(*mingma) * *nrminv;
     *rqcorr = *mingma * tmp;
     AOCL_DTL_TRACE_LOG_EXIT
     return;

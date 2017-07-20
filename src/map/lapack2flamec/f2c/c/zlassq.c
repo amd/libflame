@@ -41,12 +41,21 @@
 /* > */
 /* > (scale_out**2)*sumsq_out = x( 1 )**2 +...+ x( n )**2 + (scale**2)*sumsq, */
 /* > */
-/* > where x( i ) = X( 1 + ( i - 1 )*INCX ). The value of sumsq is */
-/* > assumed to be non-negative. */
+/* > where x( i ) = f2c_abs( X( 1 + ( i - 1 )*INCX ) ). The value of sumsq is */
+/* > assumed to be at least unity and the value of ssq will then satisfy */
 /* > */
 /* > scale and sumsq must be supplied in SCALE and SUMSQ and */
 /* > scale_out and sumsq_out are overwritten on SCALE and SUMSQ respectively. */
 /* > */
+/* > scale is assumed to be non-negative and scl returns the value */
+/* > */
+/* > scl = max( scale, f2c_abs( real( x( i ) ) ), f2c_abs( aimag( x( i ) ) ) ), */
+/* > i */
+/* > */
+/* > scale and sumsq must be supplied in SCALE and SUMSQ respectively. */
+/* > SCALE and SUMSQ are overwritten by scl and ssq respectively. */
+/* > */
+/* > The routine makes only one pass through the vector X. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -214,14 +223,9 @@ void aocl_lapack_zlassq(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, double
         ax = (r__1 = x[i__2].real, f2c_abs(r__1));
         if(ax > tbig)
         {
-            /* Computing 2nd power */
-            r__1 = ax * sbig;
-            abig += r__1 * r__1;
-            notbig = FALSE_;
-        }
-        else if(ax < tsml)
-        {
-            if(notbig)
+            i__3 = ix;
+            temp1 = (d__1 = x[i__3].r, f2c_abs(d__1));
+            if (temp1 > 0. || disnan_(&temp1))
             {
                 /* Computing 2nd power */
                 r__1 = ax * ssml;
@@ -291,10 +295,24 @@ void aocl_lapack_zlassq(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, double
                     asml += *scale * (*scale * (ssml * (ssml * *sumsq)));
                 }
             }
-        }
-        else
-        {
-            amed += *scale * (*scale * *sumsq);
+            temp1 = (d__1 = d_imag(&x[ix]), f2c_abs(d__1));
+            if (temp1 > 0. || disnan_(&temp1))
+            {
+                if (*scale < temp1)
+                {
+                    /* Computing 2nd power */
+                    d__1 = *scale / temp1;
+                    *sumsq = *sumsq * (d__1 * d__1) + 1;
+                    *scale = temp1;
+                }
+                else
+                {
+                    /* Computing 2nd power */
+                    d__1 = temp1 / *scale;
+                    *sumsq += d__1 * d__1;
+                }
+            }
+            /* L10: */
         }
     }
     /* Combine abig and amed or amed and asml if more than one */

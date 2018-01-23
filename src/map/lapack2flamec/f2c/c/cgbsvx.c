@@ -431,7 +431,7 @@ void aocl_lapack_cgbsvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     real r__1, r__2;
     scomplex q__1;
     /* Builtin functions */
-    double c_f2c_abs(complex *);
+    double c_abs(complex *);
     /* Local variables */
     aocl_int64_t i__, j, j1, j2;
     real amax;
@@ -726,7 +726,7 @@ void aocl_lapack_cgbsvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
                 {
                     /* Computing MAX */
                     r__1 = anorm;
-                    r__2 = c_f2c_abs(&ab[i__ + j * ab_dim1]); // , expr subst
+                    r__2 = c_abs(&ab[i__ + j * ab_dim1]); // , expr subst
                     anorm = max(r__1,r__2);
                     /* L80: */
                 }

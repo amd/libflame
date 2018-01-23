@@ -230,7 +230,7 @@ void aocl_lapack_ctgex2(logical *wantq, logical *wantz, aocl_int64_t *n, scomple
     real r__1;
     scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    double sqrt(doublereal), c_f2c_abs(complex *);
+    double sqrt(doublereal), c_abs(complex *);
     void r_cnjg(complex *, complex *);
     /* Local variables */
     scomplex f, g;
@@ -343,8 +343,8 @@ void aocl_lapack_ctgex2(logical *wantq, logical *wantz, aocl_int64_t *n, scomple
     q__1.i = q__2.i - q__3.i; // , expr subst
     g.r = q__1.r;
     g.i = q__1.i; // , expr subst
-    sa = c_f2c_abs(&s[3]);
-    sb = c_f2c_abs(&t[3]);
+    sa = c_abs(&s[3]);
+    sb = c_abs(&t[3]);
     clartg_(&g, &f, &cz, &sz, &cdum);
     q__1.real = -sz.real;
     q__1.imag = -sz.imag; // , expr subst
@@ -365,7 +365,7 @@ void aocl_lapack_ctgex2(logical *wantq, logical *wantz, aocl_int64_t *n, scomple
     crot_(&c__2, s, &c__2, &s[1], &c__2, &cq, &sq);
     crot_(&c__2, t, &c__2, &t[1], &c__2, &cq, &sq);
     /* Weak stability test: |S21| + |T21| <= O(EPS F-norm((S, T))) */
-    ws = c_f2c_abs(&s[1]) + c_f2c_abs(&t[1]);
+    ws = c_abs(&s[1]) + c_abs(&t[1]);
     weak = ws <= thresh;
     if (! weak)
     {

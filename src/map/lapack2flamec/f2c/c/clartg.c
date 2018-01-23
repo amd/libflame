@@ -117,7 +117,7 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
     real r__1, r__2, r__3, r__4;
     scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    double log(doublereal), pow_ri(real *, integer *), r_imag(complex *), c_f2c_abs(complex *), sqrt(doublereal);
+    double log(doublereal), pow_ri(real *, integer *), r_imag(complex *), c_abs(complex *), sqrt(doublereal);
     void r_cnjg(complex *, complex *);
     /* Local variables */
     real d__, u, v, w, f1, f2, g1, g2, h2;
@@ -169,7 +169,7 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
     }
     else if(f__t.real == 0.f && f__t.imag == 0.f)
     {
-        r__1 = c_f2c_abs(g);
+        r__1 = c_abs(g);
         if (g->r == 0.f && g->i == 0.f || sisnan_(&r__1))
         {
             r__2 = (r__1 = r_imag(&g__t), f2c_abs(r__1));

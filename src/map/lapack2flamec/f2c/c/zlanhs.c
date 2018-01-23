@@ -129,7 +129,7 @@ doublereal aocl_lapack_zlanhs(char *norm, aocl_int64_t *n, dcomplex *a, aocl_int
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val;
     /* Builtin functions */
-    double z_f2c_abs(doublecomplex *), sqrt(doublereal);
+    double z_abs(doublecomplex *), sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__, j;
     doublereal sum, scale;
@@ -179,7 +179,7 @@ doublereal aocl_lapack_zlanhs(char *norm, aocl_int64_t *n, dcomplex *a, aocl_int
             i__2 = fla_min(i__3, i__4);
             for(i__ = 1; i__ <= i__2; ++i__)
             {
-                sum = z_f2c_abs(&a[i__ + j * a_dim1]);
+                sum = z_abs(&a[i__ + j * a_dim1]);
                 if (value < sum || disnan_(&sum))
                 {
                     value = sum;
@@ -203,7 +203,7 @@ doublereal aocl_lapack_zlanhs(char *norm, aocl_int64_t *n, dcomplex *a, aocl_int
             i__2 = fla_min(i__3, i__4);
             for(i__ = 1; i__ <= i__2; ++i__)
             {
-                sum += z_f2c_abs(&a[i__ + j * a_dim1]);
+                sum += z_abs(&a[i__ + j * a_dim1]);
                 /* L30: */
             }
             if(value < sum || disnan_(&sum))
@@ -231,7 +231,7 @@ doublereal aocl_lapack_zlanhs(char *norm, aocl_int64_t *n, dcomplex *a, aocl_int
             i__2 = fla_min(i__3, i__4);
             for(i__ = 1; i__ <= i__2; ++i__)
             {
-                work[i__] += z_f2c_abs(&a[i__ + j * a_dim1]);
+                work[i__] += z_abs(&a[i__ + j * a_dim1]);
                 /* L60: */
             }
             /* L70: */

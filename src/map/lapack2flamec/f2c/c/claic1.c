@@ -163,7 +163,7 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
     real r__1, r__2;
     scomplex q__1, q__2, q__3, q__4, q__5, q__6;
     /* Builtin functions */
-    double c_f2c_abs(complex *);
+    double c_abs(complex *);
     void r_cnjg(complex *, complex *), c_sqrt(complex *, complex *);
     double sqrt(doublereal);
     void c_div(scomplex *, scomplex *, scomplex *);
@@ -202,8 +202,8 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
     cdotc_f2c_(&q__1, j, &x[1], &c__1, &w[1], &c__1);
     alpha.r = q__1.r;
     alpha.i = q__1.i; // , expr subst
-    absalp = c_f2c_abs(&alpha);
-    absgam = c_f2c_abs(gamma);
+    absalp = c_abs(&alpha);
+    absgam = c_abs(gamma);
     absest = f2c_abs(*sest);
     if (*job == 1)
     {
@@ -409,8 +409,8 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
                 cosine.imag = q__1.imag; // , expr subst
             }
             /* Computing MAX */
-            r__1 = c_f2c_abs(&sine);
-            r__2 = c_f2c_abs(&cosine); // , expr subst
+            r__1 = c_abs(&sine);
+            r__2 = c_abs(&cosine); // , expr subst
             s1 = max(r__1,r__2);
             q__1.r = sine.r / s1;
             q__1.i = sine.i / s1; // , expr subst
@@ -531,7 +531,7 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
                 r__2 = b * b;
                 q__2.r = r__2 - c__->r;
                 q__2.i = -c__->i; // , expr subst
-                r__1 = b + sqrt(c_f2c_abs(&q__2));
+                r__1 = b + sqrt(c_abs(&q__2));
                 q__1.r = c__->r / r__1;
                 q__1.i = c__->i / r__1; // , expr subst
                 t = q__1.r;

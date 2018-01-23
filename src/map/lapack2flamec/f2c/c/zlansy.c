@@ -144,7 +144,7 @@ doublereal aocl_lapack_zlansy(char *norm, char *uplo, aocl_int64_t *n, dcomplex 
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal ret_val;
     /* Builtin functions */
-    double z_f2c_abs(doublecomplex *), sqrt(doublereal);
+    double z_abs(doublecomplex *), sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__, j;
     doublereal sum, absa, scale;
@@ -193,7 +193,7 @@ doublereal aocl_lapack_zlansy(char *norm, char *uplo, aocl_int64_t *n, dcomplex 
                 i__2 = j;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
-                    sum = z_f2c_abs(&a[i__ + j * a_dim1]);
+                    sum = z_abs(&a[i__ + j * a_dim1]);
                     if (value < sum || disnan_(&sum))
                     {
                         value = sum;
@@ -211,7 +211,7 @@ doublereal aocl_lapack_zlansy(char *norm, char *uplo, aocl_int64_t *n, dcomplex 
                 i__2 = *n;
                 for(i__ = j; i__ <= i__2; ++i__)
                 {
-                    sum = z_f2c_abs(&a[i__ + j * a_dim1]);
+                    sum = z_abs(&a[i__ + j * a_dim1]);
                     if (value < sum || disnan_(&sum))
                     {
                         value = sum;
@@ -235,12 +235,12 @@ doublereal aocl_lapack_zlansy(char *norm, char *uplo, aocl_int64_t *n, dcomplex 
                 i__2 = j - 1;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
-                    absa = z_f2c_abs(&a[i__ + j * a_dim1]);
+                    absa = z_abs(&a[i__ + j * a_dim1]);
                     sum += absa;
                     work[i__] += absa;
                     /* L50: */
                 }
-                work[j] = sum + z_f2c_abs(&a[j + j * a_dim1]);
+                work[j] = sum + z_abs(&a[j + j * a_dim1]);
                 /* L60: */
             }
             i__1 = *n;
@@ -265,11 +265,11 @@ doublereal aocl_lapack_zlansy(char *norm, char *uplo, aocl_int64_t *n, dcomplex 
             i__1 = *n;
             for(j = 1; j <= i__1; ++j)
             {
-                sum = work[j] + z_f2c_abs(&a[j + j * a_dim1]);
+                sum = work[j] + z_abs(&a[j + j * a_dim1]);
                 i__2 = *n;
                 for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
-                    absa = z_f2c_abs(&a[i__ + j * a_dim1]);
+                    absa = z_abs(&a[i__ + j * a_dim1]);
                     sum += absa;
                     work[i__] += absa;
                     /* L90: */

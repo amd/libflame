@@ -495,7 +495,7 @@ void aocl_lapack_ctgsen(aocl_int64_t *ijob, logical *wantq, logical *wantz, logi
     real r__1;
     scomplex q__1, q__2;
     /* Builtin functions */
-    double sqrt(doublereal), c_f2c_abs(complex *);
+    double sqrt(doublereal), c_abs(complex *);
     void r_cnjg(complex *, complex *);
     /* Local variables */
     aocl_int64_t i__, k, n1, n2, ks, mn2, ijb, kase, ierr;
@@ -881,7 +881,7 @@ void aocl_lapack_ctgsen(aocl_int64_t *ijob, logical *wantq, logical *wantz, logi
     i__1 = *n;
     for(k = 1; k <= i__1; ++k)
     {
-        dscale = c_f2c_abs(&b[k + k * b_dim1]);
+        dscale = c_abs(&b[k + k * b_dim1]);
         if (dscale > safmin)
         {
             i__2 = k + k * b_dim1;

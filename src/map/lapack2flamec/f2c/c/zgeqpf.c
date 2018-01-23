@@ -178,7 +178,7 @@ void aocl_lapack_zgeqpf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
     /* Builtin functions */
     double sqrt(doublereal);
     void d_cnjg(doublecomplex *, doublecomplex *);
-    double z_f2c_abs(doublecomplex *);
+    double z_abs(doublecomplex *);
     /* Local variables */
     aocl_int64_t i__, j, ma, mn;
     dcomplex aii;
@@ -341,7 +341,7 @@ void aocl_lapack_zgeqpf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
                 {
                     /* NOTE: The following 4 lines follow from the analysis in */
                     /* Lapack Working Note 176. */
-                    temp = z_f2c_abs(&a[i__ + j * a_dim1]) / rwork[j];
+                    temp = z_abs(&a[i__ + j * a_dim1]) / rwork[j];
                     /* Computing MAX */
                     d__1 = 0.;
                     d__2 = (temp + 1.) * (1. - temp); // , expr subst

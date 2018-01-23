@@ -220,7 +220,7 @@ void aocl_lapack_zgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, dc
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
     dcomplex z__1;
     /* Builtin functions */
-    double z_f2c_abs(doublecomplex *);
+    double z_abs(doublecomplex *);
     void d_cnjg(doublecomplex *, doublecomplex *);
     /* Local variables */
     aocl_int64_t i__, j, k;
@@ -360,9 +360,9 @@ void aocl_lapack_zgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, dc
     i__1 = ismax;
     work[i__1].r = 1.;
     work[i__1].i = 0.; // , expr subst
-    smax = z_f2c_abs(&a[a_dim1 + 1]);
+    smax = z_abs(&a[a_dim1 + 1]);
     smin = smax;
-    if (z_f2c_abs(&a[a_dim1 + 1]) == 0.)
+    if (z_abs(&a[a_dim1 + 1]) == 0.)
     {
         *rank = 0;
         i__1 = fla_max(*m, *n);

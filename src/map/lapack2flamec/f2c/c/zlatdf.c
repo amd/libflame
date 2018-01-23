@@ -197,7 +197,7 @@ void aocl_lapack_zlatdf(aocl_int64_t *ijob, aocl_int64_t *n, dcomplex *z__, aocl
     dcomplex z__1, z__2, z__3;
     /* Builtin functions */
     void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
-    double z_f2c_abs(doublecomplex *);
+    double z_abs(doublecomplex *);
     void z_sqrt(doublecomplex *, doublecomplex *);
     /* Local variables */
     aocl_int64_t i__, j, k;
@@ -377,8 +377,8 @@ void aocl_lapack_zlatdf(aocl_int64_t *ijob, aocl_int64_t *n, dcomplex *z__, aocl
                 rhs[i__2].imag = z__1.imag; // , expr subst
                 /* L20: */
             }
-            splus += z_f2c_abs(&work[i__ - 1]);
-            sminu += z_f2c_abs(&rhs[i__]);
+            splus += z_abs(&work[i__ - 1]);
+            sminu += z_abs(&rhs[i__]);
             /* L30: */
         }
         if(splus > sminu)

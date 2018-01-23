@@ -127,7 +127,7 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
     AOCL_DTL_SNPRINTF("zlartg inputs : f (%lf,%lf), g (%lf,%lf)", f->real, f->imag, g->real, g->imag);
     dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    double log(doublereal), pow_di(doublereal *, integer *), d_imag( doublecomplex *), z_f2c_abs(doublecomplex *), sqrt(doublereal);
+    double log(doublereal), pow_di(doublereal *, integer *), d_imag( doublecomplex *), z_abs(doublecomplex *), sqrt(doublereal);
     void d_cnjg(doublecomplex *, doublecomplex *);
     /* Local variables */
     doublereal d__, u, v, w, f1, f2, g1, g2, h2;
@@ -174,7 +174,7 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
     }
     else if(f__t.real == 0. && f__t.imag == 0.)
     {
-        d__1 = z_f2c_abs(g);
+        d__1 = z_abs(g);
         if (g->r == 0. && g->i == 0. || disnan_(&d__1))
         {
             d__2 = (d__1 = d_imag(&g__t), f2c_dabs(d__1));

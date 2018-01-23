@@ -155,7 +155,7 @@ doublereal aocl_lapack_zlanhb(char *norm, char *uplo, aocl_int64_t *n, aocl_int6
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1;
     /* Builtin functions */
-    double z_f2c_abs(doublecomplex *), sqrt(doublereal);
+    double z_abs(doublecomplex *), sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__, j, l;
     doublereal sum, absa, scale;
@@ -206,7 +206,7 @@ doublereal aocl_lapack_zlanhb(char *norm, char *uplo, aocl_int64_t *n, aocl_int6
                 i__3 = *k;
                 for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
                 {
-                    sum = z_f2c_abs(&ab[i__ + j * ab_dim1]);
+                    sum = z_abs(&ab[i__ + j * ab_dim1]);
                     if (value < sum || disnan_(&sum))
                     {
                         value = sum;
@@ -239,7 +239,7 @@ doublereal aocl_lapack_zlanhb(char *norm, char *uplo, aocl_int64_t *n, aocl_int6
                 i__3 = fla_min(i__2, i__4);
                 for(i__ = 2; i__ <= i__3; ++i__)
                 {
-                    sum = z_f2c_abs(&ab[i__ + j * ab_dim1]);
+                    sum = z_abs(&ab[i__ + j * ab_dim1]);
                     if (value < sum || disnan_(&sum))
                     {
                         value = sum;
@@ -267,7 +267,7 @@ doublereal aocl_lapack_zlanhb(char *norm, char *uplo, aocl_int64_t *n, aocl_int6
                 i__4 = j - 1;
                 for(i__ = fla_max(i__3, i__2); i__ <= i__4; ++i__)
                 {
-                    absa = z_f2c_abs(&ab[l + i__ + j * ab_dim1]);
+                    absa = z_abs(&ab[l + i__ + j * ab_dim1]);
                     sum += absa;
                     work[i__] += absa;
                     /* L50: */
@@ -307,7 +307,7 @@ doublereal aocl_lapack_zlanhb(char *norm, char *uplo, aocl_int64_t *n, aocl_int6
                 i__4 = fla_min(i__3, i__2);
                 for(i__ = j + 1; i__ <= i__4; ++i__)
                 {
-                    absa = z_f2c_abs(&ab[l + i__ + j * ab_dim1]);
+                    absa = z_abs(&ab[l + i__ + j * ab_dim1]);
                     sum += absa;
                     work[i__] += absa;
                     /* L90: */

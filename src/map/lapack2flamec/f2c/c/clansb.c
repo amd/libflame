@@ -153,7 +153,7 @@ real aocl_lapack_clansb(char *norm, char *uplo, aocl_int64_t *n, aocl_int64_t *k
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     real ret_val;
     /* Builtin functions */
-    double c_f2c_abs(complex *), sqrt(doublereal);
+    double c_abs(complex *), sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__, j, l;
     real sum, absa, scale;
@@ -204,7 +204,7 @@ real aocl_lapack_clansb(char *norm, char *uplo, aocl_int64_t *n, aocl_int64_t *k
                 i__3 = *k + 1;
                 for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
                 {
-                    sum = c_f2c_abs(&ab[i__ + j * ab_dim1]);
+                    sum = c_abs(&ab[i__ + j * ab_dim1]);
                     if (value < sum || sisnan_(&sum))
                     {
                         value = sum;
@@ -225,7 +225,7 @@ real aocl_lapack_clansb(char *norm, char *uplo, aocl_int64_t *n, aocl_int64_t *k
                 i__3 = fla_min(i__2, i__4);
                 for(i__ = 1; i__ <= i__3; ++i__)
                 {
-                    sum = c_f2c_abs(&ab[i__ + j * ab_dim1]);
+                    sum = c_abs(&ab[i__ + j * ab_dim1]);
                     if (value < sum || sisnan_(&sum))
                     {
                         value = sum;
@@ -253,12 +253,12 @@ real aocl_lapack_clansb(char *norm, char *uplo, aocl_int64_t *n, aocl_int64_t *k
                 i__4 = j - 1;
                 for(i__ = fla_max(i__3, i__2); i__ <= i__4; ++i__)
                 {
-                    absa = c_f2c_abs(&ab[l + i__ + j * ab_dim1]);
+                    absa = c_abs(&ab[l + i__ + j * ab_dim1]);
                     sum += absa;
                     work[i__] += absa;
                     /* L50: */
                 }
-                work[j] = sum + c_f2c_abs(&ab[*k + 1 + j * ab_dim1]);
+                work[j] = sum + c_abs(&ab[*k + 1 + j * ab_dim1]);
                 /* L60: */
             }
             i__1 = *n;
@@ -283,7 +283,7 @@ real aocl_lapack_clansb(char *norm, char *uplo, aocl_int64_t *n, aocl_int64_t *k
             i__1 = *n;
             for(j = 1; j <= i__1; ++j)
             {
-                sum = work[j] + c_f2c_abs(&ab[j * ab_dim1 + 1]);
+                sum = work[j] + c_abs(&ab[j * ab_dim1 + 1]);
                 l = 1 - j;
                 /* Computing MIN */
                 i__3 = *n;
@@ -291,7 +291,7 @@ real aocl_lapack_clansb(char *norm, char *uplo, aocl_int64_t *n, aocl_int64_t *k
                 i__4 = fla_min(i__3, i__2);
                 for(i__ = j + 1; i__ <= i__4; ++i__)
                 {
-                    absa = c_f2c_abs(&ab[l + i__ + j * ab_dim1]);
+                    absa = c_abs(&ab[l + i__ + j * ab_dim1]);
                     sum += absa;
                     work[i__] += absa;
                     /* L90: */

@@ -92,7 +92,7 @@ aocl_int64_t aocl_lapack_icmax1(aocl_int64_t *n, scomplex *cx, aocl_int64_t *inc
     /* System generated locals */
     aocl_int64_t ret_val, i__1;
     /* Builtin functions */
-    double c_f2c_abs(complex *);
+    double c_abs(complex *);
     /* Local variables */
     aocl_int64_t i__, ix;
     real smax;
@@ -138,14 +138,14 @@ aocl_int64_t aocl_lapack_icmax1(aocl_int64_t *n, scomplex *cx, aocl_int64_t *inc
     }
     /* CODE FOR INCREMENT NOT EQUAL TO 1 */
     ix = 1;
-    smax = c_f2c_abs(&cx[1]);
+    smax = c_abs(&cx[1]);
     ix += *incx;
     i__1 = *n;
     for (i__ = 2;
             i__ <= i__1;
             ++i__)
     {
-        if (c_f2c_abs(&cx[ix]) <= smax)
+        if (c_abs(&cx[ix]) <= smax)
         {
             if(c_abs(&cx[i__]) > smax)
             {
@@ -154,7 +154,7 @@ aocl_int64_t aocl_lapack_icmax1(aocl_int64_t *n, scomplex *cx, aocl_int64_t *inc
             }
         }
         ret_val = i__;
-        smax = c_f2c_abs(&cx[ix]);
+        smax = c_abs(&cx[ix]);
 L10:
         ix += *incx;
         /* L20: */
@@ -162,13 +162,13 @@ L10:
     return ret_val;
     /* CODE FOR INCREMENT EQUAL TO 1 */
 L30:
-    smax = c_f2c_abs(&cx[1]);
+    smax = c_abs(&cx[1]);
     i__1 = *n;
     for (i__ = 2;
             i__ <= i__1;
             ++i__)
     {
-        if (c_f2c_abs(&cx[i__]) <= smax)
+        if (c_abs(&cx[i__]) <= smax)
         {
             if(c_abs(&cx[ix]) > smax)
             {
@@ -178,7 +178,7 @@ L30:
             ix += *incx;
         }
         ret_val = i__;
-        smax = c_f2c_abs(&cx[i__]);
+        smax = c_abs(&cx[i__]);
 L40:
         ;
     }

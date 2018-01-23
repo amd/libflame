@@ -144,7 +144,7 @@ void aocl_lapack_chptri(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
     real r__1;
     scomplex q__1, q__2;
     /* Builtin functions */
-    double c_f2c_abs(complex *);
+    double c_abs(complex *);
     void r_cnjg(complex *, complex *);
     /* Local variables */
     real d__;
@@ -288,7 +288,7 @@ void aocl_lapack_chptri(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
         {
             /* 2 x 2 diagonal block */
             /* Invert the diagonal block. */
-            t = c_f2c_abs(&ap[kcnext + k - 1]);
+            t = c_abs(&ap[kcnext + k - 1]);
             i__1 = kc + k - 1;
             ak = ap[i__1].real / t;
             i__1 = kcnext + k;
@@ -467,7 +467,7 @@ void aocl_lapack_chptri(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
         {
             /* 2 x 2 diagonal block */
             /* Invert the diagonal block. */
-            t = c_f2c_abs(&ap[kcnext + 1]);
+            t = c_abs(&ap[kcnext + 1]);
             i__1 = kcnext;
             ak = ap[i__1].real / t;
             i__1 = kc;

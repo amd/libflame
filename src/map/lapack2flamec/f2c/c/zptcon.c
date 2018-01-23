@@ -142,7 +142,7 @@ void aocl_lapack_zptcon(aocl_int64_t *n, doublereal *d__, dcomplex *e, doublerea
     aocl_int64_t i__1;
     doublereal d__1;
     /* Builtin functions */
-    double z_f2c_abs(doublecomplex *);
+    double z_abs(doublecomplex *);
     /* Local variables */
     aocl_int64_t i__, ix;
     doublereal ainvnm;
@@ -221,14 +221,14 @@ void aocl_lapack_zptcon(aocl_int64_t *n, doublereal *d__, dcomplex *e, doublerea
     i__1 = *n;
     for(i__ = 2; i__ <= i__1; ++i__)
     {
-        rwork[i__] = rwork[i__ - 1] * z_f2c_abs(&e[i__ - 1]) + 1.;
+        rwork[i__] = rwork[i__ - 1] * z_abs(&e[i__ - 1]) + 1.;
         /* L20: */
     }
     /* Solve D * M(L)**H * x = b. */
     rwork[*n] /= d__[*n];
     for(i__ = *n - 1; i__ >= 1; --i__)
     {
-        rwork[i__] = rwork[i__] / d__[i__] + rwork[i__ + 1] * z_f2c_abs(&e[i__]);
+        rwork[i__] = rwork[i__] / d__[i__] + rwork[i__ + 1] * z_abs(&e[i__]);
         /* L30: */
     }
     /* Compute AINVNM = max(x(i)), 1<=i<=n. */

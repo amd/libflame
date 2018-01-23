@@ -244,7 +244,7 @@ void aocl_lapack_zgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     dcomplex z__1, z__2, z__3;
     /* Builtin functions */
     void d_cnjg(doublecomplex *, doublecomplex *);
-    double z_f2c_abs(doublecomplex *);
+    double z_abs(doublecomplex *);
     /* Local variables */
     aocl_int64_t i__, j, l;
     dcomplex t;
@@ -718,7 +718,7 @@ void aocl_lapack_zgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     i__1 = minmn;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        abst = z_f2c_abs(&t);
+        abst = z_abs(&t);
         d__[i__] = abst;
         if(abst != 0.)
         {
@@ -770,7 +770,7 @@ void aocl_lapack_zgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                     t.real = z__1.real;
                     t.imag = z__1.imag; // , expr subst
                 }
-                abst = z_f2c_abs(&t);
+                abst = z_abs(&t);
                 e[i__] = abst;
                 if(abst != 0.)
                 {

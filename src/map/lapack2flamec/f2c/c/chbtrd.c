@@ -212,7 +212,7 @@ void aocl_lapack_chbtrd(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *k
     scomplex q__1;
     /* Builtin functions */
     void r_cnjg(complex *, complex *);
-    double c_f2c_abs(complex *);
+    double c_abs(complex *);
     /* Local variables */
     aocl_int64_t i__, j, k, l;
     scomplex t;
@@ -551,7 +551,7 @@ void aocl_lapack_chbtrd(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *k
                 i__3 = *kd + (i__ + 1) * ab_dim1;
                 t.r = ab[i__3].r;
                 t.i = ab[i__3].i; // , expr subst
-                abst = c_f2c_abs(&t);
+                abst = c_abs(&t);
                 i__3 = *kd + (i__ + 1) * ab_dim1;
                 ab[i__3].real = abst;
                 ab[i__3].imag = 0.f; // , expr subst
@@ -841,7 +841,7 @@ void aocl_lapack_chbtrd(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *k
                 i__2 = i__ * ab_dim1 + 2;
                 t.r = ab[i__2].r;
                 t.i = ab[i__2].i; // , expr subst
-                abst = c_f2c_abs(&t);
+                abst = c_abs(&t);
                 i__2 = i__ * ab_dim1 + 2;
                 ab[i__2].real = abst;
                 ab[i__2].imag = 0.f; // , expr subst

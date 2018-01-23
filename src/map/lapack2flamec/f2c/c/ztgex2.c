@@ -230,7 +230,7 @@ void aocl_lapack_ztgex2(logical *wantq, logical *wantz, aocl_int64_t *n, dcomple
     doublereal d__1;
     dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    double sqrt(doublereal), z_f2c_abs(doublecomplex *);
+    double sqrt(doublereal), z_abs(doublecomplex *);
     void d_cnjg(doublecomplex *, doublecomplex *);
     /* Local variables */
     dcomplex f, g;
@@ -344,8 +344,8 @@ void aocl_lapack_ztgex2(logical *wantq, logical *wantz, aocl_int64_t *n, dcomple
     z__1.i = z__2.i - z__3.i; // , expr subst
     g.r = z__1.r;
     g.i = z__1.i; // , expr subst
-    sa = z_f2c_abs(&s[3]);
-    sb = z_f2c_abs(&t[3]);
+    sa = z_abs(&s[3]);
+    sb = z_abs(&t[3]);
     zlartg_(&g, &f, &cz, &sz, &cdum);
     z__1.real = -sz.real;
     z__1.imag = -sz.imag; // , expr subst
@@ -366,7 +366,7 @@ void aocl_lapack_ztgex2(logical *wantq, logical *wantz, aocl_int64_t *n, dcomple
     zrot_(&c__2, s, &c__2, &s[1], &c__2, &cq, &sq);
     zrot_(&c__2, t, &c__2, &t[1], &c__2, &cq, &sq);
     /* Weak stability test: |S21| + |T21| <= O(EPS F-norm((S, T))) */
-    ws = z_f2c_abs(&s[1]) + z_f2c_abs(&t[1]);
+    ws = z_abs(&s[1]) + z_abs(&t[1]);
     weak = ws <= thresh;
     if (! weak)
     {

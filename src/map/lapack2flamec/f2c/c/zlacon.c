@@ -135,7 +135,7 @@ void aocl_lapack_zlacon(aocl_int64_t *n, dcomplex *v, dcomplex *x, doublereal *e
     doublereal d__1, d__2;
     dcomplex z__1;
     /* Builtin functions */
-    double z_f2c_abs(doublecomplex *), d_imag(doublecomplex *);
+    double z_abs(doublecomplex *), d_imag(doublecomplex *);
     /* Local variables */
     aocl_int64_t i__;
     doublereal temp;
@@ -213,7 +213,7 @@ L20:
     {
         v[1].r = x[1].r;
         v[1].i = x[1].i; // , expr subst
-        *est = z_f2c_abs(&v[1]);
+        *est = z_abs(&v[1]);
         /* ... QUIT */
         goto L130;
     }
@@ -221,7 +221,7 @@ L20:
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        absxi = z_f2c_abs(&x[i__]);
+        absxi = z_abs(&x[i__]);
         if (absxi > safmin)
         {
             i__2 = i__;
@@ -281,7 +281,7 @@ L70:
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        absxi = z_f2c_abs(&x[i__]);
+        absxi = z_abs(&x[i__]);
         if (absxi > safmin)
         {
             i__2 = i__;
@@ -310,7 +310,7 @@ L70:
 L90:
     jlast = j;
     j = izmax1_(n, &x[1], &c__1);
-    if (z_f2c_abs(&x[jlast]) != z_f2c_abs(&x[j]) && iter < 5)
+    if (z_abs(&x[jlast]) != z_abs(&x[j]) && iter < 5)
     {
         ++iter;
         goto L50;

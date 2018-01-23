@@ -148,7 +148,7 @@ doublereal aocl_lapack_zlangb(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aoc
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal ret_val;
     /* Builtin functions */
-    double z_f2c_abs(doublecomplex *), sqrt(doublereal);
+    double z_abs(doublecomplex *), sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__, j, k, l;
     doublereal sum, temp, scale;
@@ -200,7 +200,7 @@ doublereal aocl_lapack_zlangb(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aoc
             i__3 = fla_min(i__4, i__5);
             for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
             {
-                temp = z_f2c_abs(&ab[i__ + j * ab_dim1]);
+                temp = z_abs(&ab[i__ + j * ab_dim1]);
                 if (value < temp || disnan_(&temp))
                 {
                     value = temp;
@@ -226,7 +226,7 @@ doublereal aocl_lapack_zlangb(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aoc
             i__2 = fla_min(i__4, i__5);
             for(i__ = fla_max(i__3, 1); i__ <= i__2; ++i__)
             {
-                sum += z_f2c_abs(&ab[i__ + j * ab_dim1]);
+                sum += z_abs(&ab[i__ + j * ab_dim1]);
                 /* L30: */
             }
             if(value < sum || disnan_(&sum))
@@ -258,7 +258,7 @@ doublereal aocl_lapack_zlangb(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aoc
             i__4 = fla_min(i__5, i__6);
             for(i__ = fla_max(i__2, i__3); i__ <= i__4; ++i__)
             {
-                work[i__] += z_f2c_abs(&ab[k + i__ + j * ab_dim1]);
+                work[i__] += z_abs(&ab[k + i__ + j * ab_dim1]);
                 /* L60: */
             }
             /* L70: */

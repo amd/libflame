@@ -162,7 +162,7 @@ void aocl_lapack_clacn2(aocl_int64_t *n, scomplex *v, scomplex *x, real *est, ao
     real r__1, r__2;
     scomplex q__1;
     /* Builtin functions */
-    double c_f2c_abs(complex *), r_imag(complex *);
+    double c_abs(complex *), r_imag(complex *);
     /* Local variables */
     aocl_int64_t i__;
     real temp, absxi;
@@ -233,7 +233,7 @@ L20:
     {
         v[1].r = x[1].r;
         v[1].i = x[1].i; // , expr subst
-        *est = c_f2c_abs(&v[1]);
+        *est = c_abs(&v[1]);
         /* ... QUIT */
         goto L130;
     }
@@ -241,7 +241,7 @@ L20:
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        absxi = c_f2c_abs(&x[i__]);
+        absxi = c_abs(&x[i__]);
         if (absxi > safmin)
         {
             i__2 = i__;
@@ -301,7 +301,7 @@ L70:
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        absxi = c_f2c_abs(&x[i__]);
+        absxi = c_abs(&x[i__]);
         if (absxi > safmin)
         {
             i__2 = i__;
@@ -330,7 +330,7 @@ L70:
 L90:
     jlast = isave[2];
     isave[2] = icmax1_(n, &x[1], &c__1);
-    if (c_f2c_abs(&x[jlast]) != c_f2c_abs(&x[isave[2]]) && isave[3] < 5)
+    if (c_abs(&x[jlast]) != c_abs(&x[isave[2]]) && isave[3] < 5)
     {
         ++isave[3];
         goto L50;

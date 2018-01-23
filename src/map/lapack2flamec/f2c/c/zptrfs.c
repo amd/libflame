@@ -221,7 +221,7 @@ void aocl_lapack_zptrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, doubler
     /* Builtin functions */
     double d_imag(doublecomplex *);
     void d_cnjg(doublecomplex *, doublecomplex *);
-    double z_f2c_abs(doublecomplex *);
+    double z_abs(doublecomplex *);
     /* Local variables */
     aocl_int64_t i__, j;
     doublereal s;
@@ -633,14 +633,14 @@ void aocl_lapack_zptrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, doubler
         i__2 = *n;
         for(i__ = 2; i__ <= i__2; ++i__)
         {
-            rwork[i__] = rwork[i__ - 1] * z_f2c_abs(&ef[i__ - 1]) + 1.;
+            rwork[i__] = rwork[i__ - 1] * z_abs(&ef[i__ - 1]) + 1.;
             /* L70: */
         }
         /* Solve D * M(L)**H * x = b. */
         rwork[*n] /= df[*n];
         for(i__ = *n - 1; i__ >= 1; --i__)
         {
-            rwork[i__] = rwork[i__] / df[i__] + rwork[i__ + 1] * z_f2c_abs(&ef[ i__]);
+            rwork[i__] = rwork[i__] / df[i__] + rwork[i__ + 1] * z_abs(&ef[ i__]);
             /* L80: */
         }
         /* Compute norm(inv(A)) = max(x(i)), 1<=i<=n. */
@@ -653,7 +653,7 @@ void aocl_lapack_zptrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, doubler
         {
             /* Computing MAX */
             d__1 = lstres;
-            d__2 = z_f2c_abs(&x[i__ + j * x_dim1]); // , expr subst
+            d__2 = z_abs(&x[i__ + j * x_dim1]); // , expr subst
             lstres = max(d__1,d__2);
             /* L90: */
         }

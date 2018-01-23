@@ -123,7 +123,7 @@ void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
     doublereal d__1, d__2;
     dcomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7;
     /* Builtin functions */
-    double z_f2c_abs(doublecomplex *);
+    double z_abs(doublecomplex *);
     void pow_zi(doublecomplex *, doublecomplex *, integer *), z_sqrt( doublecomplex *, doublecomplex *), z_div(doublecomplex *, doublecomplex *, doublecomplex *);
     /* Local variables */
     dcomplex s, t;
@@ -146,11 +146,11 @@ void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
     /* .. Executable Statements .. */
     /* Special case: The matrix is actually diagonal. */
     /* To avoid divide by zero later, we treat this case separately. */
-    if (z_f2c_abs(b) == 0.)
+    if (z_abs(b) == 0.)
     {
         rt1->r = a->r, rt1->i = a->i;
         rt2->r = c__->r, rt2->i = c__->i;
-        if (z_f2c_abs(rt1) < z_f2c_abs(rt2))
+        if (z_abs(rt1) < z_abs(rt2))
         {
             tmp.real = rt1->real;
             tmp.imag = rt1->imag; // , expr subst
@@ -184,8 +184,8 @@ void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
         t.real = z__1.real;
         t.imag = z__1.imag; // , expr subst
         /* Take the square root carefully to avoid over/under flow. */
-        babs = z_f2c_abs(b);
-        tabs = z_f2c_abs(&t);
+        babs = z_abs(b);
+        tabs = z_abs(&t);
         z__ = max(babs,tabs);
         if (z__ > 0.)
         {
@@ -211,7 +211,7 @@ void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
         z__1.r = s.r - t.r;
         z__1.i = s.i - t.i; // , expr subst
         rt2->r = z__1.r, rt2->i = z__1.i;
-        if (z_f2c_abs(rt1) < z_f2c_abs(rt2))
+        if (z_abs(rt1) < z_abs(rt2))
         {
             tmp.real = rt1->real;
             tmp.imag = rt1->imag; // , expr subst
@@ -226,7 +226,7 @@ void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
         z__2.imag = rt1->imag - a->imag; // , expr subst
         z_div(&z__1, &z__2, b);
         sn1->r = z__1.r, sn1->i = z__1.i;
-        tabs = z_f2c_abs(sn1);
+        tabs = z_abs(sn1);
         if (tabs > 1.)
         {
             /* Computing 2nd power */
@@ -253,7 +253,7 @@ void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
             t.real = z__1.real;
             t.imag = z__1.imag; // , expr subst
         }
-        evnorm = z_f2c_abs(&t);
+        evnorm = z_abs(&t);
         if (evnorm >= .1)
         {
             z_div(&z__1, &c_b1, &t);

@@ -125,7 +125,7 @@ void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
     doublereal d__1, d__2;
     dcomplex z__1, z__2;
     /* Builtin functions */
-    double d_imag(doublecomplex *), d_sign(doublereal *, doublereal *), z_f2c_abs( doublecomplex *);
+    double d_imag(doublecomplex *), d_sign(doublereal *, doublereal *), z_abs( doublecomplex *);
     /* Local variables */
     aocl_int64_t j;
     dcomplex savealpha;
@@ -283,7 +283,7 @@ void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
         }
         zladiv_(&z__1, &c_b5, alpha);
         alpha->r = z__1.r, alpha->i = z__1.i;
-        if (z_f2c_abs(tau) <= smlnum)
+        if (z_abs(tau) <= smlnum)
         {
             /* In the case where the computed TAU ends up being a denormalized number, */
             /* it loses relative accuracy. This is a BIG problem. Solution: flush TAU */

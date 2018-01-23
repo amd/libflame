@@ -262,7 +262,7 @@ void aocl_lapack_cgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, sc
     real r__1, r__2;
     scomplex q__1;
     /* Builtin functions */
-    double c_f2c_abs(complex *);
+    double c_abs(complex *);
     /* Local variables */
     aocl_int64_t i__, j;
     scomplex c1, c2, s1, s2;
@@ -442,9 +442,9 @@ void aocl_lapack_cgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, sc
     i__1 = ismax;
     work[i__1].r = 1.f;
     work[i__1].i = 0.f; // , expr subst
-    smax = c_f2c_abs(&a[a_dim1 + 1]);
+    smax = c_abs(&a[a_dim1 + 1]);
     smin = smax;
-    if (c_f2c_abs(&a[a_dim1 + 1]) == 0.f)
+    if (c_abs(&a[a_dim1 + 1]) == 0.f)
     {
         *rank = 0;
         i__1 = fla_max(*m, *n);

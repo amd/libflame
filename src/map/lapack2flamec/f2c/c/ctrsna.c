@@ -303,7 +303,7 @@ void aocl_lapack_ctrsna(char *job, char *howmny, logical *select, aocl_int64_t *
     real r__1, r__2;
     scomplex q__1;
     /* Builtin functions */
-    double c_f2c_abs(complex *), r_imag(complex *);
+    double c_abs(complex *), r_imag(complex *);
     /* Local variables */
     aocl_int64_t i__, j, k, ks, ix;
     real eps, est;
@@ -450,7 +450,7 @@ void aocl_lapack_ctrsna(char *job, char *howmny, logical *select, aocl_int64_t *
         }
         if(wantsp)
         {
-            sep[1] = c_f2c_abs(&t[t_dim1 + 1]);
+            sep[1] = c_abs(&t[t_dim1 + 1]);
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -478,7 +478,7 @@ void aocl_lapack_ctrsna(char *job, char *howmny, logical *select, aocl_int64_t *
             prod.i = q__1.i; // , expr subst
             rnrm = scnrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
             lnrm = scnrm2_(n, &vl[ks * vl_dim1 + 1], &c__1);
-            s[ks] = c_f2c_abs(&prod) / (rnrm * lnrm);
+            s[ks] = c_abs(&prod) / (rnrm * lnrm);
         }
         if(wantsp)
         {

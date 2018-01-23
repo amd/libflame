@@ -157,7 +157,7 @@ void aocl_lapack_zhetri_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
     doublereal d__1;
     dcomplex z__1, z__2;
     /* Builtin functions */
-    double z_f2c_abs(doublecomplex *);
+    double z_abs(doublecomplex *);
     void d_cnjg(doublecomplex *, doublecomplex *);
     /* Local variables */
     doublereal d__;
@@ -301,7 +301,7 @@ void aocl_lapack_zhetri_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
         {
             /* 2 x 2 diagonal block */
             /* Invert the diagonal block. */
-            t = z_f2c_abs(&a[k + (k + 1) * a_dim1]);
+            t = z_abs(&a[k + (k + 1) * a_dim1]);
             i__1 = k + k * a_dim1;
             ak = a[i__1].real / t;
             i__1 = k + 1 + (k + 1) * a_dim1;
@@ -561,7 +561,7 @@ void aocl_lapack_zhetri_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
         {
             /* 2 x 2 diagonal block */
             /* Invert the diagonal block. */
-            t = z_f2c_abs(&a[k + (k - 1) * a_dim1]);
+            t = z_abs(&a[k + (k - 1) * a_dim1]);
             i__1 = k - 1 + (k - 1) * a_dim1;
             ak = a[i__1].real / t;
             i__1 = k + k * a_dim1;

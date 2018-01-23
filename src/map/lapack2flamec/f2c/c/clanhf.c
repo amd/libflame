@@ -278,7 +278,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
     aocl_int64_t i__1, i__2;
     real ret_val, r__1;
     /* Builtin functions */
-    double c_f2c_abs(complex *), sqrt(doublereal);
+    double c_abs(complex *), sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__, j, k, l;
     real s;
@@ -317,7 +317,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
     }
     else if(*n == 1)
     {
-        ret_val = c_f2c_abs(a);
+        ret_val = c_abs(a);
         return ret_val;
     }
     /* set noe = 1 if n is odd. if n is even set noe=0 */
@@ -383,7 +383,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                     i__1 = *n - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
                     {
-                        temp = c_f2c_abs(&a[i__ + j * lda]);
+                        temp = c_abs(&a[i__ + j * lda]);
                         if (value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -395,7 +395,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = j - 2;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -420,7 +420,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = *n - 1;
                         for(i__ = j + 1; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -437,7 +437,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = k + j - 2;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -463,7 +463,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = *n - 1;
                         for(i__ = k + j + 1; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -473,7 +473,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                     i__1 = *n - 2;
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
-                        temp = c_f2c_abs(&a[i__ + j * lda]);
+                        temp = c_abs(&a[i__ + j * lda]);
                         if (value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -502,7 +502,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = j - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -527,7 +527,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = k - 1;
                         for(i__ = j + 2; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -538,7 +538,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                     i__1 = k - 2;
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
-                        temp = c_f2c_abs(&a[i__ + j * lda]);
+                        temp = c_abs(&a[i__ + j * lda]);
                         if (value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -558,7 +558,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -575,7 +575,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -593,7 +593,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                     i__1 = k - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
                     {
-                        temp = c_f2c_abs(&a[i__ + j * lda]);
+                        temp = c_abs(&a[i__ + j * lda]);
                         if (value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -605,7 +605,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = j - k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -630,7 +630,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = k - 1;
                         for(i__ = j - k + 2; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -666,7 +666,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                     i__1 = *n;
                     for(i__ = 2; i__ <= i__1; ++i__)
                     {
-                        temp = c_f2c_abs(&a[i__ + j * lda]);
+                        temp = c_abs(&a[i__ + j * lda]);
                         if (value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -678,7 +678,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = j - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -703,7 +703,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = *n;
                         for(i__ = j + 2; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -720,7 +720,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = k + j - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -746,7 +746,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = *n;
                         for(i__ = k + j + 2; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -756,7 +756,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                     i__1 = *n - 2;
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
-                        temp = c_f2c_abs(&a[i__ + j * lda]);
+                        temp = c_abs(&a[i__ + j * lda]);
                         if (value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -798,7 +798,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                     i__1 = k - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
                     {
-                        temp = c_f2c_abs(&a[i__ + j * lda]);
+                        temp = c_abs(&a[i__ + j * lda]);
                         if (value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -810,7 +810,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = j - 2;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -835,7 +835,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = k - 1;
                         for(i__ = j + 1; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -846,7 +846,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                     i__1 = k - 2;
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
-                        temp = c_f2c_abs(&a[i__ + j * lda]);
+                        temp = c_abs(&a[i__ + j * lda]);
                         if (value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -866,7 +866,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -883,7 +883,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -901,7 +901,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                     i__1 = k - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
                     {
-                        temp = c_f2c_abs(&a[i__ + j * lda]);
+                        temp = c_abs(&a[i__ + j * lda]);
                         if (value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -913,7 +913,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = j - k - 2;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -938,7 +938,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = k - 1;
                         for(i__ = j - k + 1; i__ <= i__2; ++i__)
                         {
-                            temp = c_f2c_abs(&a[i__ + j * lda]);
+                            temp = c_abs(&a[i__ + j * lda]);
                             if (value < temp || sisnan_(&temp))
                             {
                                 value = temp;
@@ -949,7 +949,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                     i__1 = k - 2;
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
-                        temp = c_f2c_abs(&a[i__ + j * lda]);
+                        temp = c_abs(&a[i__ + j * lda]);
                         if (value < temp || sisnan_(&temp))
                         {
                             value = temp;
@@ -992,7 +992,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = k + j - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* -> A(i,j+k) */
                             s += aa;
                             work[i__] += aa;
@@ -1015,7 +1015,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         for(l = j + 1; l <= i__2; ++l)
                         {
                             ++i__;
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* -> A(l,j) */
                             s += aa;
                             work[l] += aa;
@@ -1050,7 +1050,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__1 = j - 2;
                         for(i__ = 0; i__ <= i__1; ++i__)
                         {
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* -> A(j+k,i+k) */
                             s += aa;
                             work[i__ + k] += aa;
@@ -1074,7 +1074,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         for(l = j + 1; l <= i__1; ++l)
                         {
                             ++i__;
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* -> A(l,j) */
                             s += aa;
                             work[l] += aa;
@@ -1111,7 +1111,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = k + j - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* -> A(i,j+k) */
                             s += aa;
                             work[i__] += aa;
@@ -1130,7 +1130,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         for(l = j + 1; l <= i__2; ++l)
                         {
                             ++i__;
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* -> A(l,j) */
                             s += aa;
                             work[l] += aa;
@@ -1162,7 +1162,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__1 = j - 1;
                         for(i__ = 0; i__ <= i__1; ++i__)
                         {
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* -> A(j+k,i+k) */
                             s += aa;
                             work[i__ + k] += aa;
@@ -1183,7 +1183,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         for(l = j + 1; l <= i__1; ++l)
                         {
                             ++i__;
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* -> A(l,j) */
                             s += aa;
                             work[l] += aa;
@@ -1229,7 +1229,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* A(j,n1+i) */
                             work[i__ + n1] += aa;
                             s += aa;
@@ -1243,7 +1243,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                     i__1 = k - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
                     {
-                        aa = c_f2c_abs(&a[i__ + j * lda]);
+                        aa = c_abs(&a[i__ + j * lda]);
                         /* A(k-1,i+n1) */
                         work[i__ + n1] += aa;
                         s += aa;
@@ -1256,7 +1256,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = j - k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* A(i,j-k) */
                             work[i__] += aa;
                             s += aa;
@@ -1275,7 +1275,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         for(l = j + 1; l <= i__2; ++l)
                         {
                             ++i__;
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* A(j,l) */
                             work[l] += aa;
                             s += aa;
@@ -1311,7 +1311,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = j - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* A(j,i) */
                             work[i__] += aa;
                             s += aa;
@@ -1331,7 +1331,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         for(l = k + j + 1; l <= i__2; ++l)
                         {
                             ++i__;
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* A(l,k+j) */
                             s += aa;
                             work[l] += aa;
@@ -1343,7 +1343,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                     i__1 = k - 2;
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
-                        aa = c_f2c_abs(&a[i__ + j * lda]);
+                        aa = c_abs(&a[i__ + j * lda]);
                         /* A(k,i) */
                         work[i__] += aa;
                         s += aa;
@@ -1363,7 +1363,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* A(j,i) */
                             work[i__] += aa;
                             s += aa;
@@ -1400,7 +1400,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* A(j,i+k) */
                             work[i__ + k] += aa;
                             s += aa;
@@ -1415,7 +1415,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                     i__1 = k - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
                     {
-                        aa = c_f2c_abs(&a[i__ + j * lda]);
+                        aa = c_abs(&a[i__ + j * lda]);
                         /* A(k,k+i) */
                         work[i__ + k] += aa;
                         s += aa;
@@ -1428,7 +1428,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = j - 2 - k;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* A(i,j-k-1) */
                             work[i__] += aa;
                             s += aa;
@@ -1448,7 +1448,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         for(l = j + 1; l <= i__2; ++l)
                         {
                             ++i__;
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* A(j,l) */
                             work[l] += aa;
                             s += aa;
@@ -1460,7 +1460,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                     i__1 = k - 2;
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
-                        aa = c_f2c_abs(&a[i__ + j * lda]);
+                        aa = c_abs(&a[i__ + j * lda]);
                         /* A(i,k-1) */
                         work[i__] += aa;
                         s += aa;
@@ -1496,7 +1496,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                     i__1 = k - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
                     {
-                        aa = c_f2c_abs(&a[i__]);
+                        aa = c_abs(&a[i__]);
                         /* A(k+i,k) */
                         work[i__ + k] += aa;
                         s += aa;
@@ -1510,7 +1510,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = j - 2;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* A(j-1,i) */
                             work[i__] += aa;
                             s += aa;
@@ -1530,7 +1530,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         for(l = k + j + 1; l <= i__2; ++l)
                         {
                             ++i__;
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* A(l,k+j) */
                             s += aa;
                             work[l] += aa;
@@ -1542,7 +1542,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                     i__1 = k - 2;
                     for(i__ = 0; i__ <= i__1; ++i__)
                     {
-                        aa = c_f2c_abs(&a[i__ + j * lda]);
+                        aa = c_abs(&a[i__ + j * lda]);
                         /* A(k,i) */
                         work[i__] += aa;
                         s += aa;
@@ -1562,7 +1562,7 @@ real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, s
                         i__2 = k - 1;
                         for(i__ = 0; i__ <= i__2; ++i__)
                         {
-                            aa = c_f2c_abs(&a[i__ + j * lda]);
+                            aa = c_abs(&a[i__ + j * lda]);
                             /* A(j-1,i) */
                             work[i__] += aa;
                             s += aa;

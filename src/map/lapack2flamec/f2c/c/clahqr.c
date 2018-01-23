@@ -247,7 +247,7 @@ void aocl_lapack_clahqr(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     /* Builtin functions */
     double r_imag(complex *);
     void r_cnjg(complex *, complex *);
-    double c_f2c_abs(complex *);
+    double c_abs(complex *);
     void c_sqrt(complex *, complex *), pow_ci(complex *, complex *, integer *) ;
     /* Local variables */
     aocl_int64_t i__, j, k, l, m;
@@ -374,13 +374,13 @@ void aocl_lapack_clahqr(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
             sc.r = q__1.r;
             sc.i = q__1.i; // , expr subst
             r_cnjg(&q__2, &sc);
-            r__1 = c_f2c_abs(&sc);
+            r__1 = c_abs(&sc);
             q__1.r = q__2.r / r__1;
             q__1.i = q__2.i / r__1; // , expr subst
             sc.r = q__1.r;
             sc.i = q__1.i; // , expr subst
             i__2 = i__ + (i__ - 1) * h_dim1;
-            r__1 = c_f2c_abs(&h__[i__ + (i__ - 1) * h_dim1]);
+            r__1 = c_abs(&h__[i__ + (i__ - 1) * h_dim1]);
             h__[i__2].r = r__1;
             h__[i__2].i = 0.f; // , expr subst
             i__2 = jhi - i__ + 1;
@@ -831,7 +831,7 @@ L30:
                 q__1.i = 0.f - t1.i; // , expr subst
                 temp.r = q__1.r;
                 temp.i = q__1.i; // , expr subst
-                r__1 = c_f2c_abs(&temp);
+                r__1 = c_abs(&temp);
                 q__1.r = temp.r / r__1;
                 q__1.i = temp.i / r__1; // , expr subst
                 temp.r = q__1.r;
@@ -883,7 +883,7 @@ L30:
         temp.imag = h__[i__2].imag; // , expr subst
         if(r_imag(&temp) != 0.f)
         {
-            rtemp = c_f2c_abs(&temp);
+            rtemp = c_abs(&temp);
             i__1 = i__ + (i__ - 1) * h_dim1;
             h__[i__1].r = rtemp;
             h__[i__1].i = 0.f; // , expr subst

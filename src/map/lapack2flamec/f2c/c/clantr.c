@@ -172,7 +172,7 @@ real aocl_lapack_clantr(char *norm, char *uplo, char *diag, aocl_int64_t *m, aoc
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     real ret_val;
     /* Builtin functions */
-    double c_f2c_abs(complex *), sqrt(doublereal);
+    double c_abs(complex *), sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__, j;
     real sum, scale;
@@ -227,7 +227,7 @@ real aocl_lapack_clantr(char *norm, char *uplo, char *diag, aocl_int64_t *m, aoc
                     i__2 = fla_min(i__3, i__4);
                     for(i__ = 1; i__ <= i__2; ++i__)
                     {
-                        sum = c_f2c_abs(&a[i__ + j * a_dim1]);
+                        sum = c_abs(&a[i__ + j * a_dim1]);
                         if (value < sum || sisnan_(&sum))
                         {
                             value = sum;
@@ -245,7 +245,7 @@ real aocl_lapack_clantr(char *norm, char *uplo, char *diag, aocl_int64_t *m, aoc
                     i__2 = *m;
                     for(i__ = j + 1; i__ <= i__2; ++i__)
                     {
-                        sum = c_f2c_abs(&a[i__ + j * a_dim1]);
+                        sum = c_abs(&a[i__ + j * a_dim1]);
                         if (value < sum || sisnan_(&sum))
                         {
                             value = sum;
@@ -267,7 +267,7 @@ real aocl_lapack_clantr(char *norm, char *uplo, char *diag, aocl_int64_t *m, aoc
                     i__2 = fla_min(*m, j);
                     for(i__ = 1; i__ <= i__2; ++i__)
                     {
-                        sum = c_f2c_abs(&a[i__ + j * a_dim1]);
+                        sum = c_abs(&a[i__ + j * a_dim1]);
                         if (value < sum || sisnan_(&sum))
                         {
                             value = sum;
@@ -285,7 +285,7 @@ real aocl_lapack_clantr(char *norm, char *uplo, char *diag, aocl_int64_t *m, aoc
                     i__2 = *m;
                     for(i__ = j; i__ <= i__2; ++i__)
                     {
-                        sum = c_f2c_abs(&a[i__ + j * a_dim1]);
+                        sum = c_abs(&a[i__ + j * a_dim1]);
                         if (value < sum || sisnan_(&sum))
                         {
                             value = sum;
@@ -313,7 +313,7 @@ real aocl_lapack_clantr(char *norm, char *uplo, char *diag, aocl_int64_t *m, aoc
                     i__2 = j - 1;
                     for(i__ = 1; i__ <= i__2; ++i__)
                     {
-                        sum += c_f2c_abs(&a[i__ + j * a_dim1]);
+                        sum += c_abs(&a[i__ + j * a_dim1]);
                         /* L90: */
                     }
                 }
@@ -323,7 +323,7 @@ real aocl_lapack_clantr(char *norm, char *uplo, char *diag, aocl_int64_t *m, aoc
                     i__2 = fla_min(*m, j);
                     for(i__ = 1; i__ <= i__2; ++i__)
                     {
-                        sum += c_f2c_abs(&a[i__ + j * a_dim1]);
+                        sum += c_abs(&a[i__ + j * a_dim1]);
                         /* L100: */
                     }
                 }
@@ -345,7 +345,7 @@ real aocl_lapack_clantr(char *norm, char *uplo, char *diag, aocl_int64_t *m, aoc
                     i__2 = *m;
                     for(i__ = j + 1; i__ <= i__2; ++i__)
                     {
-                        sum += c_f2c_abs(&a[i__ + j * a_dim1]);
+                        sum += c_abs(&a[i__ + j * a_dim1]);
                         /* L120: */
                     }
                 }
@@ -355,7 +355,7 @@ real aocl_lapack_clantr(char *norm, char *uplo, char *diag, aocl_int64_t *m, aoc
                     i__2 = *m;
                     for(i__ = j; i__ <= i__2; ++i__)
                     {
-                        sum += c_f2c_abs(&a[i__ + j * a_dim1]);
+                        sum += c_abs(&a[i__ + j * a_dim1]);
                         /* L130: */
                     }
                 }
@@ -389,7 +389,7 @@ real aocl_lapack_clantr(char *norm, char *uplo, char *diag, aocl_int64_t *m, aoc
                     i__2 = fla_min(i__3, i__4);
                     for(i__ = 1; i__ <= i__2; ++i__)
                     {
-                        work[i__] += c_f2c_abs(&a[i__ + j * a_dim1]);
+                        work[i__] += c_abs(&a[i__ + j * a_dim1]);
                         /* L160: */
                     }
                     /* L170: */
@@ -409,7 +409,7 @@ real aocl_lapack_clantr(char *norm, char *uplo, char *diag, aocl_int64_t *m, aoc
                     i__2 = fla_min(*m, j);
                     for(i__ = 1; i__ <= i__2; ++i__)
                     {
-                        work[i__] += c_f2c_abs(&a[i__ + j * a_dim1]);
+                        work[i__] += c_abs(&a[i__ + j * a_dim1]);
                         /* L190: */
                     }
                     /* L200: */
@@ -438,7 +438,7 @@ real aocl_lapack_clantr(char *norm, char *uplo, char *diag, aocl_int64_t *m, aoc
                     i__2 = *m;
                     for(i__ = j + 1; i__ <= i__2; ++i__)
                     {
-                        work[i__] += c_f2c_abs(&a[i__ + j * a_dim1]);
+                        work[i__] += c_abs(&a[i__ + j * a_dim1]);
                         /* L230: */
                     }
                     /* L240: */
@@ -458,7 +458,7 @@ real aocl_lapack_clantr(char *norm, char *uplo, char *diag, aocl_int64_t *m, aoc
                     i__2 = *m;
                     for(i__ = j; i__ <= i__2; ++i__)
                     {
-                        work[i__] += c_f2c_abs(&a[i__ + j * a_dim1]);
+                        work[i__] += c_abs(&a[i__ + j * a_dim1]);
                         /* L260: */
                     }
                     /* L270: */

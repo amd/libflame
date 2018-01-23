@@ -269,7 +269,7 @@ void aocl_lapack_clar1v(aocl_int64_t *n, aocl_int64_t *b1, aocl_int64_t *bn, rea
     real r__1;
     scomplex q__1, q__2;
     /* Builtin functions */
-    double c_f2c_abs(complex *), sqrt(doublereal);
+    double c_abs(complex *), sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__;
     real s;
@@ -515,7 +515,7 @@ L60:
             q__1.i = -q__2.i; // , expr subst
             z__[i__2].r = q__1.r;
             z__[i__2].i = q__1.i; // , expr subst
-            if ((c_f2c_abs(&z__[i__]) + c_f2c_abs(&z__[i__ + 1])) * (r__1 = ld[i__], f2c_abs(r__1)) < *gaptol)
+            if ((c_abs(&z__[i__]) + c_abs(&z__[i__ + 1])) * (r__1 = ld[i__], f2c_abs(r__1)) < *gaptol)
             {
                 i__2 = i__;
                 z__[i__2].real = 0.f;
@@ -561,7 +561,7 @@ L60:
                 z__[i__2].real = q__1.real;
                 z__[i__2].imag = q__1.imag; // , expr subst
             }
-            if ((c_f2c_abs(&z__[i__]) + c_f2c_abs(&z__[i__ + 1])) * (r__1 = ld[i__], f2c_abs(r__1)) < *gaptol)
+            if ((c_abs(&z__[i__]) + c_abs(&z__[i__ + 1])) * (r__1 = ld[i__], f2c_abs(r__1)) < *gaptol)
             {
                 i__2 = i__;
                 z__[i__2].real = 0.f;
@@ -593,7 +593,7 @@ L60:
             q__1.i = -q__2.i; // , expr subst
             z__[i__2].r = q__1.r;
             z__[i__2].i = q__1.i; // , expr subst
-            if ((c_f2c_abs(&z__[i__]) + c_f2c_abs(&z__[i__ + 1])) * (r__1 = ld[i__], f2c_abs(r__1)) < *gaptol)
+            if ((c_abs(&z__[i__]) + c_abs(&z__[i__ + 1])) * (r__1 = ld[i__], f2c_abs(r__1)) < *gaptol)
             {
                 i__2 = i__ + 1;
                 z__[i__2].real = 0.f;
@@ -639,7 +639,7 @@ L60:
                 z__[i__2].real = q__1.real;
                 z__[i__2].imag = q__1.imag; // , expr subst
             }
-            if ((c_f2c_abs(&z__[i__]) + c_f2c_abs(&z__[i__ + 1])) * (r__1 = ld[i__], f2c_abs(r__1)) < *gaptol)
+            if ((c_abs(&z__[i__]) + c_abs(&z__[i__ + 1])) * (r__1 = ld[i__], f2c_abs(r__1)) < *gaptol)
             {
                 i__2 = i__ + 1;
                 z__[i__2].real = 0.f;

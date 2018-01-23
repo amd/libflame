@@ -125,7 +125,7 @@ void zlaev2_(dcomplex *a, dcomplex *b, dcomplex *c__, doublereal *rt1,
     doublereal d__1, d__2, d__3;
     dcomplex z__1, z__2;
     /* Builtin functions */
-    double z_f2c_abs(doublecomplex *);
+    double z_abs(doublecomplex *);
     void d_cnjg(doublecomplex *, doublecomplex *);
     /* Local variables */
     doublereal t;
@@ -150,7 +150,7 @@ void zlaev2_(dcomplex *a, dcomplex *b, dcomplex *c__, doublereal *rt1,
     /* .. Intrinsic Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    if (z_f2c_abs(b) == 0.)
+    if (z_abs(b) == 0.)
     {
         w.real = 1.;
         w.imag = 0.; // , expr subst
@@ -158,14 +158,14 @@ void zlaev2_(dcomplex *a, dcomplex *b, dcomplex *c__, doublereal *rt1,
     else
     {
         d_cnjg(&z__2, b);
-        d__1 = z_f2c_abs(b);
+        d__1 = z_abs(b);
         z__1.r = z__2.r / d__1;
         z__1.i = z__2.i / d__1; // , expr subst
         w.r = z__1.r;
         w.i = z__1.i; // , expr subst
     }
     d__1 = a->r;
-    d__2 = z_f2c_abs(b);
+    d__2 = z_abs(b);
     d__3 = c__->r;
     dlaev2_(&d__1, &d__2, &d__3, rt1, rt2, cs1, &t);
     z__1.real = t * w.real;

@@ -160,7 +160,7 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
     real r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8;
     scomplex q__1, q__2, q__3, q__4, q__5;
     /* Builtin functions */
-    double c_f2c_abs(complex *), r_imag(complex *);
+    double c_abs(complex *), r_imag(complex *);
     void r_cnjg(complex *, complex *);
     /* Local variables */
     real a;
@@ -210,7 +210,7 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
         q__1.i = q__2.i - q__3.i; // , expr subst
         b.r = q__1.r;
         b.i = q__1.i; // , expr subst
-        fb = c_f2c_abs(&b);
+        fb = c_abs(&b);
         /* Transform complex 2-by-2 matrix C to real matrix by unitary */
         /* diagonal matrix diag(1,D1). */
         d1.real = 1.f;
@@ -361,7 +361,7 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
                 r_cnjg(&q__3, &vb22);
                 clartg_(&q__1, &q__3, csq, snq, &r__);
             }
-            else if ((r__1 = vb21.r, f2c_abs(r__1)) + (r__2 = r_imag(&vb21), f2c_abs(r__2)) + c_f2c_abs(&vb22) == 0.f)
+            else if ((r__1 = vb21.r, f2c_abs(r__1)) + (r__2 = r_imag(&vb21), f2c_abs(r__2)) + c_abs(&vb22) == 0.f)
             {
                 r_cnjg(&q__2, &ua21);
                 q__1.real = -q__2.real;
@@ -410,7 +410,7 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
         q__1.i = q__2.i - q__3.i; // , expr subst
         c__.r = q__1.r;
         c__.i = q__1.i; // , expr subst
-        fc = c_f2c_abs(&c__);
+        fc = c_abs(&c__);
         /* Transform complex 2-by-2 matrix C to real matrix by unitary */
         /* diagonal matrix diag(d1,1). */
         d1.real = 1.f;

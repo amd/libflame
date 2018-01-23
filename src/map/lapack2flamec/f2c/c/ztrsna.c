@@ -293,7 +293,7 @@ void aocl_lapack_ztrsna(char *job, char *howmny, logical *select, aocl_int64_t *
     doublereal d__1, d__2;
     dcomplex z__1;
     /* Builtin functions */
-    double z_f2c_abs(doublecomplex *), d_imag(doublecomplex *);
+    double z_abs(doublecomplex *), d_imag(doublecomplex *);
     /* Local variables */
     aocl_int64_t i__, j, k, ks, ix;
     doublereal eps, est;
@@ -440,7 +440,7 @@ void aocl_lapack_ztrsna(char *job, char *howmny, logical *select, aocl_int64_t *
         }
         if(wantsp)
         {
-            sep[1] = z_f2c_abs(&t[t_dim1 + 1]);
+            sep[1] = z_abs(&t[t_dim1 + 1]);
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -468,7 +468,7 @@ void aocl_lapack_ztrsna(char *job, char *howmny, logical *select, aocl_int64_t *
             prod.i = z__1.i; // , expr subst
             rnrm = dznrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
             lnrm = dznrm2_(n, &vl[ks * vl_dim1 + 1], &c__1);
-            s[ks] = z_f2c_abs(&prod) / (rnrm * lnrm);
+            s[ks] = z_abs(&prod) / (rnrm * lnrm);
         }
         if(wantsp)
         {

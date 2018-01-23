@@ -362,7 +362,7 @@ void aocl_lapack_ztgsna(char *job, char *howmny, logical *select, aocl_int64_t *
     doublereal d__1, d__2;
     dcomplex z__1;
     /* Builtin functions */
-    double z_f2c_abs(doublecomplex *);
+    double z_abs(doublecomplex *);
     /* Local variables */
     aocl_int64_t i__, k, n1, n2, ks;
     doublereal cond;
@@ -545,8 +545,8 @@ void aocl_lapack_ztgsna(char *job, char *howmny, logical *select, aocl_int64_t *
             zdotc_f2c_(&z__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
             yhbx.r = z__1.r;
             yhbx.i = z__1.i; // , expr subst
-            d__1 = z_f2c_abs(&yhax);
-            d__2 = z_f2c_abs(&yhbx);
+            d__1 = z_abs(&yhax);
+            d__2 = z_abs(&yhbx);
             cond = dlapy2_(&d__1, &d__2);
             if(cond == 0.)
             {
@@ -561,8 +561,8 @@ void aocl_lapack_ztgsna(char *job, char *howmny, logical *select, aocl_int64_t *
         {
             if(*n == 1)
             {
-                d__1 = z_f2c_abs(&a[a_dim1 + 1]);
-                d__2 = z_f2c_abs(&b[b_dim1 + 1]);
+                d__1 = z_abs(&a[a_dim1 + 1]);
+                d__2 = z_abs(&b[b_dim1 + 1]);
                 dif[ks] = dlapy2_(&d__1, &d__2);
             }
             else

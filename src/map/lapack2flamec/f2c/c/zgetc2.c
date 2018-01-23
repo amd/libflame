@@ -138,7 +138,7 @@ void aocl_lapack_zgetc2(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_in
     doublereal d__1;
     dcomplex z__1;
     /* Builtin functions */
-    double z_f2c_abs(doublecomplex *);
+    double z_abs(doublecomplex *);
     void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
     /* Local variables */
     aocl_int64_t i__, j, ip, jp;
@@ -216,9 +216,9 @@ void aocl_lapack_zgetc2(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_in
             i__3 = *n;
             for(jp = i__; jp <= i__3; ++jp)
             {
-                if (z_f2c_abs(&a[ip + jp * a_dim1]) >= xmax)
+                if (z_abs(&a[ip + jp * a_dim1]) >= xmax)
                 {
-                    xmax = z_f2c_abs(&a[ip + jp * a_dim1]);
+                    xmax = z_abs(&a[ip + jp * a_dim1]);
                     ipv = ip;
                     jpv = jp;
                 }
@@ -245,7 +245,7 @@ void aocl_lapack_zgetc2(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_in
         }
         jpiv[i__] = (aocl_int_t)(jpv);
         /* Check for singularity */
-        if (z_f2c_abs(&a[i__ + i__ * a_dim1]) < smin)
+        if (z_abs(&a[i__ + i__ * a_dim1]) < smin)
         {
             *info = i__;
             i__2 = i__ + i__ * a_dim1;
@@ -269,7 +269,7 @@ void aocl_lapack_zgetc2(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_in
                         &a[i__ + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
         /* L40: */
     }
-    if (z_f2c_abs(&a[*n + *n * a_dim1]) < smin)
+    if (z_abs(&a[*n + *n * a_dim1]) < smin)
     {
         *info = *n;
         i__1 = *n + *n * a_dim1;

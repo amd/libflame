@@ -139,7 +139,7 @@ void aocl_lapack_zgesc2(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomple
     doublereal d__1;
     dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    double z_f2c_abs(doublecomplex *);
+    double z_abs(doublecomplex *);
     void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
     /* Local variables */
     aocl_int64_t i__, j;
@@ -205,9 +205,9 @@ void aocl_lapack_zgesc2(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomple
     *scale = 1.;
     /* Check for scaling */
     i__ = izamax_(n, &rhs[1], &c__1);
-    if (smlnum * 2. * z_f2c_abs(&rhs[i__]) > z_f2c_abs(&a[*n + *n * a_dim1]))
+    if (smlnum * 2. * z_abs(&rhs[i__]) > z_abs(&a[*n + *n * a_dim1]))
     {
-        d__1 = z_f2c_abs(&rhs[i__]);
+        d__1 = z_abs(&rhs[i__]);
         z__1.r = .5 / d__1;
         z__1.i = 0. / d__1; // , expr subst
         temp.r = z__1.r;

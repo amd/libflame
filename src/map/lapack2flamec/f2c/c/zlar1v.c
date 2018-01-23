@@ -265,7 +265,7 @@ void aocl_lapack_zlar1v(aocl_int64_t *n, aocl_int64_t *b1, aocl_int64_t *bn, dou
     doublereal d__1;
     dcomplex z__1, z__2;
     /* Builtin functions */
-    double z_f2c_abs(doublecomplex *), sqrt(doublereal);
+    double z_abs(doublecomplex *), sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__;
     doublereal s;
@@ -511,7 +511,7 @@ L60:
             z__1.i = -z__2.i; // , expr subst
             z__[i__2].r = z__1.r;
             z__[i__2].i = z__1.i; // , expr subst
-            if ((z_f2c_abs(&z__[i__]) + z_f2c_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_abs(d__1)) < *gaptol)
+            if ((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_abs(d__1)) < *gaptol)
             {
                 i__2 = i__;
                 z__[i__2].real = 0.;
@@ -557,7 +557,7 @@ L60:
                 z__[i__2].real = z__1.real;
                 z__[i__2].imag = z__1.imag; // , expr subst
             }
-            if ((z_f2c_abs(&z__[i__]) + z_f2c_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_abs(d__1)) < *gaptol)
+            if ((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_abs(d__1)) < *gaptol)
             {
                 i__2 = i__;
                 z__[i__2].real = 0.;
@@ -589,7 +589,7 @@ L60:
             z__1.i = -z__2.i; // , expr subst
             z__[i__2].r = z__1.r;
             z__[i__2].i = z__1.i; // , expr subst
-            if ((z_f2c_abs(&z__[i__]) + z_f2c_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_abs(d__1)) < *gaptol)
+            if ((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_abs(d__1)) < *gaptol)
             {
                 i__2 = i__ + 1;
                 z__[i__2].real = 0.;
@@ -635,7 +635,7 @@ L60:
                 z__[i__2].real = z__1.real;
                 z__[i__2].imag = z__1.imag; // , expr subst
             }
-            if ((z_f2c_abs(&z__[i__]) + z_f2c_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_abs(d__1)) < *gaptol)
+            if ((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_abs(d__1)) < *gaptol)
             {
                 i__2 = i__ + 1;
                 z__[i__2].real = 0.;

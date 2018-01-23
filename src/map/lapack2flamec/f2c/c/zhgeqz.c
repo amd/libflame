@@ -370,7 +370,7 @@ void fla_zhgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64
     doublereal d__1, d__2, d__3, d__4, d__5, d__6, d__7, d__8;
     dcomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7;
     /* Builtin functions */
-    double z_f2c_abs(doublecomplex *);
+    double z_abs(doublecomplex *);
     void d_cnjg(doublecomplex *, doublecomplex *);
     double d_imag(doublecomplex *);
     void z_div(doublecomplex *, doublecomplex *, doublecomplex *), pow_zi( doublecomplex *, doublecomplex *, integer *), z_sqrt( doublecomplex *, doublecomplex *);
@@ -662,7 +662,7 @@ void fla_zhgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64
     i__1 = *n;
     for(j = *ihi + 1; j <= i__1; ++j)
     {
-        absb = z_f2c_abs(&t[j + j * t_dim1]);
+        absb = z_abs(&t[j + j * t_dim1]);
         if (absb > safmin)
         {
             i__2 = j + j * t_dim1;
@@ -881,7 +881,7 @@ void fla_zhgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64
                 goto L60;
             }
         }
-        if (z_f2c_abs(&t[ilast + ilast * t_dim1]) <= btol)
+        if (z_abs(&t[ilast + ilast * t_dim1]) <= btol)
         {
 #ifdef FLA_ENABLE_AMD_OPT
             if(enable_opt)
@@ -932,7 +932,7 @@ void fla_zhgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64
                 }
             }
             /* Test 2: for T(j,j)=0 */
-            if (z_f2c_abs(&t[j + j * t_dim1]) < btol)
+            if (z_abs(&t[j + j * t_dim1]) < btol)
             {
                 i__3 = j + j * t_dim1;
                 t[i__3].real = 0.;
@@ -1119,7 +1119,7 @@ void fla_zhgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64
         }
         /* H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHA and BETA */
 L60:
-        absb = z_f2c_abs(&t[ilast + ilast * t_dim1]);
+        absb = z_abs(&t[ilast + ilast * t_dim1]);
         if (absb > safmin)
         {
             i__2 = ilast + ilast * t_dim1;
@@ -1846,7 +1846,7 @@ L190: /* Set Eigenvalues 1:ILO-1 */
     i__1 = *ilo - 1;
     for(j = 1; j <= i__1; ++j)
     {
-        absb = z_f2c_abs(&t[j + j * t_dim1]);
+        absb = z_abs(&t[j + j * t_dim1]);
         if (absb > safmin)
         {
             i__2 = j + j * t_dim1;

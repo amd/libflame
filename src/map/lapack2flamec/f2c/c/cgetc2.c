@@ -146,7 +146,7 @@ void aocl_lapack_cgetc2(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_in
     real r__1;
     scomplex q__1;
     /* Builtin functions */
-    double c_f2c_abs(complex *);
+    double c_abs(complex *);
     void c_div(complex *, complex *, complex *);
     /* Local variables */
     aocl_int64_t i__, j, ip, jp;
@@ -224,9 +224,9 @@ void aocl_lapack_cgetc2(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_in
             i__3 = *n;
             for(jp = i__; jp <= i__3; ++jp)
             {
-                if (c_f2c_abs(&a[ip + jp * a_dim1]) >= xmax)
+                if (c_abs(&a[ip + jp * a_dim1]) >= xmax)
                 {
-                    xmax = c_f2c_abs(&a[ip + jp * a_dim1]);
+                    xmax = c_abs(&a[ip + jp * a_dim1]);
                     ipv = ip;
                     jpv = jp;
                 }
@@ -253,7 +253,7 @@ void aocl_lapack_cgetc2(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_in
         }
         jpiv[i__] = (aocl_int_t)(jpv);
         /* Check for singularity */
-        if (c_f2c_abs(&a[i__ + i__ * a_dim1]) < smin)
+        if (c_abs(&a[i__ + i__ * a_dim1]) < smin)
         {
             *info = i__;
             i__2 = i__ + i__ * a_dim1;
@@ -277,7 +277,7 @@ void aocl_lapack_cgetc2(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_in
                         &a[i__ + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
         /* L40: */
     }
-    if (c_f2c_abs(&a[*n + *n * a_dim1]) < smin)
+    if (c_abs(&a[*n + *n * a_dim1]) < smin)
     {
         *info = *n;
         i__1 = *n + *n * a_dim1;

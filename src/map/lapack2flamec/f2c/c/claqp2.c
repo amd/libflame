@@ -182,7 +182,7 @@ void aocl_lapack_claqp2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, 
     /* Builtin functions */
     double sqrt(doublereal);
     void r_cnjg(complex *, complex *);
-    double c_f2c_abs(complex *);
+    double c_abs(complex *);
     /* Local variables */
     aocl_int64_t i__, j, mn;
     scomplex aii;
@@ -281,7 +281,7 @@ void aocl_lapack_claqp2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, 
                 /* NOTE: The following 4 lines follow from the analysis in */
                 /* Lapack Working Note 176. */
                 /* Computing 2nd power */
-                r__1 = c_f2c_abs(&a[offpi + j * a_dim1]) / vn1[j];
+                r__1 = c_abs(&a[offpi + j * a_dim1]) / vn1[j];
                 temp = 1.f - r__1 * r__1;
                 temp = fla_max(temp, 0.f);
                 /* Computing 2nd power */

@@ -26,7 +26,7 @@ use or performance of this software.
 
 /**  barf  [ba:rf]  2.  "He suggested using FORTRAN, and everybody barfed."
 
-    - From The Shogakukan DICTIONARY OF NEW ENGLISH (Second edition) */
+	- From The Shogakukan DICTIONARY OF NEW ENGLISH (Second edition) */
 
 #ifndef F2C_INCLUDE
 #define F2C_INCLUDE
@@ -34,18 +34,18 @@ use or performance of this software.
 #include <math.h>
 #include <string.h>
 #ifdef _MSC_VER
-#include "f2c_types_win.h"
+# include <f2c_types_win.h>
 #else
-#include "f2c_types.h"
+# include <f2c_types.h>
 #endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#ifdef INTEGER_STAR_8 /* Adjust for integer*8. */
-#define qbit_clear(a, b) ((a) & ~((ulongint)1 << (b)))
-#define qbit_set(a, b) ((a) | ((ulongint)1 << (b)))
+#ifdef INTEGER_STAR_8	/* Adjust for integer*8. */
+#define qbit_clear(a,b)	((a) & ~((ulongint)1 << (b)))
+#define qbit_set(a,b)	((a) |  ((ulongint)1 << (b)))
 #endif
 
 #define TRUE_ (1)
@@ -60,123 +60,116 @@ extern "C" {
 
 /*external read, write*/
 typedef struct
-{
-    flag cierr;
-    ftnint ciunit;
-    flag ciend;
-    char *cifmt;
-    ftnint cirec;
+{	flag cierr;
+	ftnint ciunit;
+	flag ciend;
+	char *cifmt;
+	ftnint cirec;
 } cilist;
 
 /*internal read, write*/
 typedef struct
-{
-    flag icierr;
-    char *iciunit;
-    flag iciend;
-    char *icifmt;
-    ftnint icirlen;
-    ftnint icirnum;
+{	flag icierr;
+	char *iciunit;
+	flag iciend;
+	char *icifmt;
+	ftnint icirlen;
+	ftnint icirnum;
 } icilist;
 
 /*open*/
 typedef struct
-{
-    flag oerr;
-    ftnint ounit;
-    char *ofnm;
-    ftnlen ofnmlen;
-    char *osta;
-    char *oacc;
-    char *ofm;
-    ftnint orl;
-    char *oblnk;
+{	flag oerr;
+	ftnint ounit;
+	char *ofnm;
+	ftnlen ofnmlen;
+	char *osta;
+	char *oacc;
+	char *ofm;
+	ftnint orl;
+	char *oblnk;
 } olist;
 
 /*close*/
 typedef struct
-{
-    flag cerr;
-    ftnint cunit;
-    char *csta;
+{	flag cerr;
+	ftnint cunit;
+	char *csta;
 } cllist;
 
 /*rewind, backspace, endfile*/
 typedef struct
-{
-    flag aerr;
-    ftnint aunit;
+{	flag aerr;
+	ftnint aunit;
 } alist;
 
 /* inquire */
 typedef struct
-{
-    flag inerr;
-    ftnint inunit;
-    char *infile;
-    ftnlen infilen;
-    ftnint *inex; /*parameters in standard's order*/
-    ftnint *inopen;
-    ftnint *innum;
-    ftnint *innamed;
-    char *inname;
-    ftnlen innamlen;
-    char *inacc;
-    ftnlen inacclen;
-    char *inseq;
-    ftnlen inseqlen;
-    char *indir;
-    ftnlen indirlen;
-    char *infmt;
-    ftnlen infmtlen;
-    char *inform;
-    ftnint informlen;
-    char *inunf;
-    ftnlen inunflen;
-    ftnint *inrecl;
-    ftnint *innrec;
-    char *inblank;
-    ftnlen inblanklen;
+{	flag inerr;
+	ftnint inunit;
+	char *infile;
+	ftnlen infilen;
+	ftnint	*inex;	/*parameters in standard's order*/
+	ftnint	*inopen;
+	ftnint	*innum;
+	ftnint	*innamed;
+	char	*inname;
+	ftnlen	innamlen;
+	char	*inacc;
+	ftnlen	inacclen;
+	char	*inseq;
+	ftnlen	inseqlen;
+	char 	*indir;
+	ftnlen	indirlen;
+	char	*infmt;
+	ftnlen	infmtlen;
+	char	*inform;
+	ftnint	informlen;
+	char	*inunf;
+	ftnlen	inunflen;
+	ftnint	*inrecl;
+	ftnint	*innrec;
+	char	*inblank;
+	ftnlen	inblanklen;
 } inlist;
 
-union Multitype
-{ /* for multiple entry points */
-    integer1 g;
-    shortint h;
-    integer i;
-    /* longint j; */
-    real r;
-    doublereal d;
-    scomplex c;
-    dcomplex z;
+union Multitype {	/* for multiple entry points */
+	integer1 g;
+	shortint h;
+	integer i;
+	/* longint j; */
+	real r;
+	doublereal d;
+	complex c;
+	doublecomplex z;
 };
 
 typedef union Multitype Multitype;
 
-struct Vardesc
-{ /* for Namelist */
-    char *name;
-    char *addr;
-    ftnlen *dims;
-    int type;
+struct Vardesc {	/* for Namelist */
+	char *name;
+	char *addr;
+	ftnlen *dims;
+	int  type;
 };
 typedef struct Vardesc Vardesc;
 
-struct Namelist
-{
-    char *name;
-    Vardesc **vars;
-    int nvars;
+struct Namelist {
+	char *name;
+	Vardesc **vars;
+	int nvars;
 };
 typedef struct Namelist Namelist;
 
 #define abs(x) ((x) >= 0 ? (x) : -(x))
-#define dabs(x) (doublereal) abs(x)
-#define dmin(a, b) (doublereal) min(a, b)
-#define dmax(a, b) (doublereal) max(a, b)
-#define bit_test(a, b) ((a) >> (b)&1)
-#define bit_clear(a, b) ((a) & ~((uinteger)1 << (b)))
-#define bit_set(a, b) ((a) | ((uinteger)1 << (b)))
+#define dabs(x) (doublereal)abs(x)
+#define min(a,b) ((a) <= (b) ? (a) : (b))
+#define max(a,b) ((a) >= (b) ? (a) : (b))
+#define dmin(a,b) (doublereal)min(a,b)
+#define dmax(a,b) (doublereal)max(a,b)
+#define bit_test(a,b)	((a) >> (b) & 1)
+#define bit_clear(a,b)	((a) & ~((uinteger)1 << (b)))
+#define bit_set(a,b)	((a) |  ((uinteger)1 << (b)))
 
 /* undef any lower-case symbols that your C compiler predefines, e.g.: */
 
@@ -217,7 +210,7 @@ extern doublereal _0;
 
 double f__cabs(double, double);
 char *F77_aloc(integer Len, const char *whence);
-void sig_die(const char *, int);
+void sig_die(const char*, int);
 void _uninit_f2c(void *x, int type, long len);
 
 /*
@@ -226,12 +219,12 @@ void _uninit_f2c(void *x, int type, long len);
 
 int abort_(void);
 
-void c_cos(scomplex *r, scomplex *z);
-void c_div(scomplex *c, scomplex *a, scomplex *b);
-void c_exp(scomplex *r, scomplex *z);
-void c_log(scomplex *r, scomplex *z);
-void c_sin(scomplex *r, scomplex *z);
-void c_sqrt(scomplex *r, scomplex *z);
+void c_cos(complex *r, complex *z);
+void c_div(complex *c, complex *a, complex *b);
+void c_exp(complex *r, complex *z);
+void c_log(complex *r, complex *z);
+void c_sin(complex *r, complex *z);
+void c_sqrt(complex *r, complex *z);
 
 double dtime_(float *tarray);
 
@@ -256,7 +249,7 @@ integer lbit_bits(integer a, integer b, integer len);
 integer lbit_shift(integer a, integer b);
 integer lbit_cshift(integer a, integer b, integer len);
 
-void pow_ci(scomplex *p, scomplex *a, integer *b);
+void pow_ci(complex *p, complex *a, integer *b);
 double pow_dd(doublereal *ap, doublereal *bp);
 double pow_di(doublereal *ap, integer *bp);
 shortint pow_hh(shortint *ap, shortint *bp);
@@ -265,8 +258,8 @@ integer pow_ii(integer *ap, integer *bp);
 longint pow_qq(longint *ap, longint *bp);
 #endif
 double pow_ri(real *ap, integer *bp);
-void pow_zi(dcomplex *, dcomplex *, integer *);
-void pow_zz(dcomplex *r, dcomplex *a, dcomplex *b);
+void pow_zi(doublecomplex*, doublecomplex*, integer*);
+void pow_zz(doublecomplex *r, doublecomplex *a, doublecomplex *b);
 
 #ifdef INTEGER_STAR_8
 longint qbit_bits(longint a, integer b, integer len);
@@ -279,17 +272,17 @@ double r_acos(real *x);
 double r_asin(real *x);
 double r_atan(real *x);
 double r_atn2(real *x, real *y);
-void r_cnjg(scomplex *r, scomplex *z);
+void r_cnjg(complex *r, complex *z);
 double r_cos(real *x);
 double r_cosh(real *x);
 double r_dim(real *a, real *b);
 double r_exp(real *x);
-double r_imag(scomplex *z);
+double r_imag(complex *z);
 double r_int(real *x);
 double r_lg10(real *x);
 double r_log(real *x);
 double r_mod(real *x, real *y);
-double fla_r_nint(real *x);
+double r_nint(real *x);
 double r_sign(real *a, real *b);
 double r_sin(real *x);
 double r_sinh(real *x);
@@ -306,37 +299,37 @@ int s_stop(char *s, ftnlen n);
 ftnint signal_(integer *sigp, void *proc);
 integer system_(register char *s, ftnlen n);
 
-void z_div(dcomplex *, dcomplex *, dcomplex *);
-void z_cos(dcomplex *r, dcomplex *z);
-void z_exp(dcomplex *r, dcomplex *z);
-void z_log(dcomplex *r, dcomplex *z);
-void z_sin(dcomplex *r, dcomplex *z);
-void z_sqrt(dcomplex *r, dcomplex *z);
+void z_div(doublecomplex*, doublecomplex*, doublecomplex*);
+void z_cos(doublecomplex *r, doublecomplex *z);
+void z_exp(doublecomplex *r, doublecomplex *z);
+void z_log(doublecomplex *r, doublecomplex *z);
+void z_sin(doublecomplex *r, doublecomplex *z);
+void z_sqrt(doublecomplex *r, doublecomplex *z);
 
 #ifndef F2C_NO_INLINE_H
-#if defined(__GNUC__)
-#include "f2c_inline.h"
-#endif
+# if defined(__GNUC__)
+#  include <f2c_inline.h>
+# endif
 #endif
 
 #if !defined(F2C_INLINE_H)
-double c_abs(const scomplex *z);
+double c_abs(const complex *z);
 double d_abs(const doublereal *x);
 double d_acos(const doublereal *x);
 double d_asin(const doublereal *x);
 double d_atan(const doublereal *x);
 double d_atn2(const doublereal *x, const doublereal *y);
-void d_cnjg(dcomplex *r, const dcomplex *z);
+void d_cnjg(doublecomplex *r, const doublecomplex *z);
 double d_cos(const doublereal *x);
 double d_cosh(const doublereal *x);
 double d_dim(const doublereal *a, const doublereal *b);
 double d_exp(const doublereal *x);
-double d_imag(const dcomplex *z);
+double d_imag(const doublecomplex *z);
 double d_int(const doublereal *x);
 double d_lg10(const doublereal *x);
 double d_log(const doublereal *x);
 double d_mod(const doublereal *x, const doublereal *y);
-double fla_d_nint(const doublereal *x);
+double d_nint(const doublereal *x);
 double d_prod(const real *x, const real *y);
 double d_sign(const doublereal *a, const doublereal *b);
 double d_sin(const doublereal *x);
@@ -353,7 +346,7 @@ shortint h_dim(const shortint *a, const shortint *b);
 shortint h_dnnt(const doublereal *x);
 shortint h_len(const char *s, ftnlen n);
 shortint h_mod(const short *a, const short *b);
-shortint fla_h_nint(const real *x);
+shortint h_nint(const real *x);
 shortint h_sign(const shortint *a, const shortint *b);
 shortlogical hl_ge(const char *a, const char *b, ftnlen la, ftnlen lb);
 shortlogical hl_gt(const char *a, const char *b, ftnlen la, ftnlen lb);
@@ -366,12 +359,12 @@ integer i_dnnt(const doublereal *x);
 integer i_len(const char *s, ftnlen n);
 integer i_len_trim(const char *s, ftnlen n);
 integer i_mod(const integer *a, const integer *b);
-aocl_int64_t fla_i_nint(const real *x);
+integer i_nint(const real *x);
 integer i_sign(const integer *a, const integer *b);
 integer i_sceiling(const real *x);
 ftnint iargc_(void);
 int s_copy(char *a, const char *b, ftnlen la, ftnlen lb);
-double z_abs(const dcomplex *z);
+double z_abs(const doublecomplex *z);
 #endif /* !F2C_INLINE_H */
 
 /*************************************************************

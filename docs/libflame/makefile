@@ -32,6 +32,6 @@ clean: cleanexpdf
 
 cleanexpdf:
 	- rm -f $(DOC).aux $(DOC).idx $(DOC).log $(DOC).blg $(DOC).bbl $(DOC).toc
-	- rm -f $(DOC).dvi $(DOC).pdf $(DOC).ps $(DOC).ind $(DOC).ilg $(DOC).out
+	- rm -f $(DOC).dvi $(DOC).ps $(DOC).ind $(DOC).ilg $(DOC).out
 	- rm -f make.err
 	- find . -name "*~" | xargs rm -f

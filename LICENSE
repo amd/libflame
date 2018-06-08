@@ -1,15 +1,25 @@
-This summary and the license information provided below is for reference
-purposes and is not intended to be a comprehensive list of all copyright notices
-or license terms and conditions applicable to LAPACK Library version 5.1.
-Please refer to the source code files in AOCL-LAPACK Library version 5.1 for all
-copyrights and licenses.
+libflame license
+----------------
 
-AMD copyrighted code (BSD-3-clause)
+libflame is available as free software under the following "3-clause"
+(also known as "new" or "modified") BSD license.
 
-------
+---------
 Copyright (C) 2014, The University of Texas at Austin
 
-License Text http://spdx.org/licenses/BSD-3-Clause
+Copyright (C) 2018, Advanced Micro Devices, Inc.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+ - Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+ - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+ - Neither the name of the copyright holder nor the names of its 
+   contributors may be used to endorse or promote products derived from 
+   this software without specific prior written permission.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:

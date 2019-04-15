@@ -28,7 +28,7 @@ export PREFIX_INST="--prefix=$HOME/flame"
 export CFLAGS="-march=native"
 
 # Run configure.
-${configure_path} \
+./configure \
             ${PREFIX_INST} \
             ${LIBDIR_INST} \
             ${INCDIR_INST} \

@@ -40,6 +40,10 @@ config.mk
 
 include/*/*.h
 
+# -- monolithic headers --
+
+include/*/*.h
+
 # -- build system directories --
 
 config

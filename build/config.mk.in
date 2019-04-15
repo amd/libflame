@@ -28,10 +28,6 @@ SO_MMB    := $(SO_MAJOR).$(SO_MINORB)
 # library name.
 ARCH                           := @fla_host_cpu@
 
-# This variable identifies the operating system / kernel. It is the result of
-# 'uname -s'.
-OS_NAME                        := @os_name@
-
 # We have to set these particular variables because some of the @anchors@
 # that are substituted in via configure may be defined *in terms of* these
 # variables. For example, @libdir@ may be replaced with '${exec_prefix}/lib',
@@ -47,11 +43,6 @@ includedir                     := @includedir@
 # DESTDIR so that advanced users may install to a temporary location.
 INSTALL_LIBDIR                 := $(DESTDIR)$(libdir)
 INSTALL_INCDIR                 := $(DESTDIR)$(includedir)
-
-# The directory path to the top level of the source distribution. When
-# building in-tree, this path is ".". When building out-of-tree, this path
-# is path used to identify the location of configure.
-DIST_PATH                      := @dist_path@
 
 #$(info INSTALL_LIBDIR = $(INSTALL_LIBDIR))
 #$(info INSTALL_INCDIR = $(INSTALL_INCDIR))
@@ -74,7 +65,6 @@ FLA_ENABLE_AMD_OPT             := @fla_enable_amd_opt@
 ifeq ($(V),1)
 FLA_ENABLE_VERBOSE_MAKE_OUTPUT := yes
 endif
-
 
 
 

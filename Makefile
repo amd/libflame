@@ -24,6 +24,44 @@
 
 
 
+
+# Accept an abbreivated request for verbosity (e.g. 'make V=1 ...')
+ifeq ($(V),1)
+ENABLE_VERBOSE := yes
+endif
+
+# Makefile fragment name.
+FRAGMENT_MK     := .fragment.mk
+
+# Locations of important files.
+BUILD_DIR       := ./build
+CONFIG_DIR      := ./config
+SRC_DIR         := ./src
+OBJ_DIR         := ./obj
+LIB_DIR         := ./lib
+INC_DIR         := ./include
+
+# Avoid catting the config.sys_type file unless it exists. This makes the
+# output of things like 'make distclean' (when the directory is already
+# clean) less confusing.
+ifneq ($(wildcard config.sys_type),)
+# The host string will uniquely identify the current host (as much
+# as is reasonable) for purposes of separating the configure products and
+# object files of one architecture from another.
+#HOST            := $(shell sh $(BUILD_DIR)/ac-utils/config.guess)
+HOST            := $(shell cat config.sys_type)
+else
+HOST            := unknown-generic
+endif
+
+# Use the system type to name the config, object, and library directories.
+# These directories are special in that they will contain products specific
+# to this particular architecture.
+BASE_CONFIG_PATH := $(CONFIG_DIR)/$(HOST)
+BASE_OBJ_PATH    := $(OBJ_DIR)/$(HOST)
+BASE_LIB_PATH    := $(LIB_DIR)/$(HOST)
+BASE_INC_PATH    := $(INC_DIR)/$(HOST)
+
 # Accept an abbreivated request for verbosity (e.g. 'make V=1 ...')
 ifeq ($(V),1)
 ENABLE_VERBOSE := yes
@@ -39,37 +77,8 @@ endif
 # --- Include architecture-specific variable definitions ----------------------
 #
 
-# Avoid catting the config.sys_type file unless it exists. This makes the
-# output of things like 'make distclean' (when the directory is already
-# clean) less confusing.
-ifneq ($(wildcard config.sys_type),)
-# The host string will uniquely identify the current host (as much
-# as is reasonable) for purposes of separating the configure products and
-# object files of one architecture from another.
-HOST            := $(shell cat config.sys_type)
-else
-HOST            := unknown-generic
-endif
-
-# --- Important directories for source code and build products ---
-
-SRC_DIR         := src
-CONFIG_DIR      := config
-OBJ_DIR         := obj
-LIB_DIR         := lib
-INC_DIR         := include
-
-# Use the system type to name the config, object, and library directories.
-# These directories are special in that they will contain products specific
-# to this particular architecture.
-BASE_CONFIG_PATH := ./$(CONFIG_DIR)/$(HOST)
-BASE_OBJ_PATH    := ./$(OBJ_DIR)/$(HOST)/$(SRC_DIR)
-BASE_LIB_PATH    := ./$(LIB_DIR)/$(HOST)
-BASE_INC_PATH    := ./$(INC_DIR)/$(HOST)
-
-# Pathname to the makefile fragment containing lots of various definitions,
-# most of which were substituted via configure.
-CONFIG_MK_FILE   := $(BASE_CONFIG_PATH)/config.mk
+# Pathnames to makefile fragment containing lots of various definitions.
+CONFIG_MK_FILE := $(BASE_CONFIG_PATH)/config.mk
 
 # Include the definitions in the config makefile fragment.
 -include $(CONFIG_MK_FILE)
@@ -132,6 +141,16 @@ SOFLAGS    += -Wl,-soname,$(LIBFLAME_SONAME)
 #
 # --- Main target variable definitions ----------------------------------------
 #
+
+# Construct the architecture-version string, which will be used to name the
+# libraries upon installation.
+#VERSION                        := $(shell cat version)
+#ARCH_VERS                      := $(ARCH)-$(VERSION)
+
+# --- FLAME/C variable names ---
+
+#MK_ALL_FLAMEC_LIB                     := $(BASE_LIB_PATH)/$(ALL_FLAMEC_LIB_NAME)
+#MK_ALL_FLAMEC_DLL                     := $(BASE_LIB_PATH)/$(ALL_FLAMEC_DLL_NAME)
 
 MK_BASE_FLAMEC_SRC                    :=
 MK_BASE_FLAMEC_OBJS                   :=
@@ -250,13 +269,12 @@ endif
 
 # A script (originating from BLIS) that creates a monolithic header file from
 # many header files that are recursively #included from one another.
-BUILD_PATH := $(DIST_PATH)/build
-FLATTEN_H  := $(PYTHON) $(BUILD_PATH)/flatten-headers.py
+FLATTEN_H := $(PYTHON) $(BUILD_DIR)/flatten-headers.py
 
 # The path to the main header files.
-FLAF2C_H_SRC_PATH := $(DIST_PATH)/src/base/flamec/include/FLA_f2c.h
-FLAME_H_SRC_PATH  := $(DIST_PATH)/src/base/flamec/include/FLAME.h
-BLIS1_H_SRC_PATH  := $(DIST_PATH)/src/base/flamec/blis/include/blis1.h
+FLAF2C_H_SRC_PATH := src/base/flamec/include/FLA_f2c.h
+FLAME_H_SRC_PATH  := src/base/flamec/include/FLAME.h
+BLIS1_H_SRC_PATH  := src/base/flamec/blis/include/blis1.h
 
 # Construct the path to what will be the intermediate flattened/monolithic
 # header files.
@@ -297,22 +315,10 @@ HEADERS_TO_INSTALL := $(FLAME_H_FLAT)
 HEADERS_INST       := $(addprefix $(MK_INCL_DIR_INST)/, $(notdir $(HEADERS_TO_INSTALL)))
 
 # Add -I to each header path so we can specify our include search paths to the
-# C and Fortran compilers. NOTE: This is primarily for access to the monolithic
-# (flattened) FLAME.h file, athough a few other files are placed there too (see
-# above).
+# C and Fortran compilers. NOTE: There is currently only one directory path:
+# namely, the path to FLAME.h.
 #INCLUDE_PATHS   := $(strip $(patsubst %, -I%, $(MK_HEADER_DIR_PATHS)))
 INCLUDE_PATHS   := $(strip $(patsubst %, -I%, $(BASE_INC_PATH)))
-
-# When lapack2flame is enabled, we need to add a -I option for the directory
-# in which the lapack2flame headers reside.
-ifeq ($(FLA_ENABLE_LAPACK2FLAME),yes)
-L2F_FRAG_DIR_PATHS   := $(filter $(DIST_PATH)/src/map/lapack2flamec%,$(FRAGMENT_DIR_PATHS))
-L2F_HEADER_DIR_PATHS := $(dir $(foreach frag_path, $(L2F_FRAG_DIR_PATHS), \
-                                       $(firstword $(wildcard $(frag_path)/*.h))))
-INCLUDE_PATHS   += $(strip $(patsubst %, -I%, $(L2F_HEADER_DIR_PATHS)))
-endif
-
-# Add the include flags determined above to various compiler flags variables.
 CFLAGS          := $(CFLAGS) $(INCLUDE_PATHS)
 CFLAGS_NOOPT    := $(CFLAGS_NOOPT) $(INCLUDE_PATHS)
 CPPFLAGS        := $(CPPFLAGS) $(INCLUDE_PATHS)
@@ -328,28 +334,28 @@ FFLAGS          := $(FFLAGS) $(INCLUDE_PATHS)
 # directory with the base object directory, and also replacing the source file
 # suffix (ie: '.c' or '.f') with '.o'.
 
-MK_FLABLAS_F2C_OBJS                   := $(patsubst $(SRC_PATH)/%.c, $(BASE_OBJ_PATH)/%.o, \
+MK_FLABLAS_F2C_OBJS                   := $(patsubst $(SRC_DIR)/%.c, $(BASE_OBJ_PATH)/%.o, \
                                                     $(filter %.c, $(MK_FLABLAS_F2C_SRC)))
 
-MK_BASE_FLAMEC_OBJS                   := $(patsubst $(SRC_PATH)/%.c, $(BASE_OBJ_PATH)/%.o, \
+MK_BASE_FLAMEC_OBJS                   := $(patsubst $(SRC_DIR)/%.c, $(BASE_OBJ_PATH)/%.o, \
                                                     $(filter %.c, $(MK_BASE_FLAMEC_SRC)))
 
-MK_BLAS_FLAMEC_OBJS                   := $(patsubst $(SRC_PATH)/%.c, $(BASE_OBJ_PATH)/%.o, \
+MK_BLAS_FLAMEC_OBJS                   := $(patsubst $(SRC_DIR)/%.c, $(BASE_OBJ_PATH)/%.o, \
                                                     $(filter %.c, $(MK_BLAS_FLAMEC_SRC)))
 
-MK_LAPACK_FLAMEC_OBJS                 := $(patsubst $(SRC_PATH)/%.c, $(BASE_OBJ_PATH)/%.o, \
+MK_LAPACK_FLAMEC_OBJS                 := $(patsubst $(SRC_DIR)/%.c, $(BASE_OBJ_PATH)/%.o, \
                                                     $(filter %.c, $(MK_LAPACK_FLAMEC_SRC)))
 
-MK_MAP_LAPACK2FLAMEC_OBJS             := $(patsubst $(SRC_PATH)/%.c, $(BASE_OBJ_PATH)/%.o, \
+MK_MAP_LAPACK2FLAMEC_OBJS             := $(patsubst $(SRC_DIR)/%.c, $(BASE_OBJ_PATH)/%.o, \
                                                     $(filter %.c, $(MK_MAP_LAPACK2FLAMEC_SRC)))
 
-MK_MAP_LAPACK2FLAMEC_F2C_OBJS         := $(patsubst $(SRC_PATH)/%.c, $(BASE_OBJ_PATH)/%.o, \
+MK_MAP_LAPACK2FLAMEC_F2C_OBJS         := $(patsubst $(SRC_DIR)/%.c, $(BASE_OBJ_PATH)/%.o, \
                                                     $(filter %.c, $(MK_MAP_LAPACK2FLAMEC_F2C_SRC)))
 
-MK_MAP_LAPACK2FLAMEC_F2C_FLAMEC_OBJS  := $(patsubst $(SRC_PATH)/%.c, $(BASE_OBJ_PATH)/%.o, \
+MK_MAP_LAPACK2FLAMEC_F2C_FLAMEC_OBJS  := $(patsubst $(SRC_DIR)/%.c, $(BASE_OBJ_PATH)/%.o, \
                                                     $(filter %.c, $(MK_MAP_LAPACK2FLAMEC_F2C_FLAMEC_SRC)))
 
-MK_MAP_LAPACK2FLAMEC_F2C_INSTALL_OBJS := $(patsubst $(SRC_PATH)/%.c, $(BASE_OBJ_PATH)/%.o, \
+MK_MAP_LAPACK2FLAMEC_F2C_INSTALL_OBJS := $(patsubst $(SRC_DIR)/%.c, $(BASE_OBJ_PATH)/%.o, \
                                                     $(filter %.c, $(MK_MAP_LAPACK2FLAMEC_F2C_INSTALL_SRC)))
 
 # Combine the base, blas, and lapack libraries.
@@ -455,7 +461,7 @@ endif
 # --- Special source code / object code rules ---
 
 FLA_SLAMCH=base/flamec/util/lapack/mch/fla_slamch
-$(BASE_OBJ_PATH)/$(FLA_SLAMCH).o: $(SRC_PATH)/$(FLA_SLAMCH).c $(CONFIG_MK_FILE) $(HEADERS_TO_FLATTEN)
+$(BASE_OBJ_PATH)/$(FLA_SLAMCH).o: $(SRC_DIR)/$(FLA_SLAMCH).c $(CONFIG_MK_FILE) $(HEADERS_TO_FLATTEN) 
 ifeq ($(ENABLE_VERBOSE),yes)
 	$(CC) $(CFLAGS_NOOPT) -c $< -o $@
 else
@@ -467,7 +473,7 @@ ifeq ($(FLA_ENABLE_MAX_ARG_LIST_HACK),yes)
 endif
 
 FLA_DLAMCH=base/flamec/util/lapack/mch/fla_dlamch
-$(BASE_OBJ_PATH)/$(FLA_DLAMCH).o: $(SRC_PATH)/$(FLA_DLAMCH).c $(CONFIG_MK_FILE) $(HEADERS_TO_FLATTEN)
+$(BASE_OBJ_PATH)/$(FLA_DLAMCH).o: $(SRC_DIR)/$(FLA_DLAMCH).c $(CONFIG_MK_FILE) $(HEADERS_TO_FLATTEN)
 ifeq ($(ENABLE_VERBOSE),yes)
 	$(CC) $(CFLAGS_NOOPT) -c $< -o $@
 else
@@ -482,7 +488,7 @@ endif
 # --- General source code / object code rules ---
 
 # Default compilation rules
-$(BASE_OBJ_PATH)/%.o: $(SRC_PATH)/%.c $(CONFIG_MK_FILE) $(HEADERS_TO_FLATTEN)
+$(BASE_OBJ_PATH)/%.o: $(SRC_DIR)/%.c $(CONFIG_MK_FILE) $(HEADERS_TO_FLATTEN)
 ifeq ($(ENABLE_VERBOSE),yes)
 	$(CC) $(CFLAGS) -c $< -o $@
 else
@@ -682,10 +688,10 @@ endif
 cleanmk:
 ifeq ($(IS_CONFIGURED),yes)
 ifeq ($(ENABLE_VERBOSE),yes)
-	- $(FIND) $(SRC_FRAG_PATH) -name "$(FRAGMENT_MK)" | $(XARGS) $(RM_F)
+	- $(FIND) $(SRC_DIR) -name "$(FRAGMENT_MK)" | $(XARGS) $(RM_F)
 else
-	@echo "Removing makefile fragments from $(SRC_FRAG_PATH)"
-	@$(FIND) $(SRC_FRAG_PATH) -name "$(FRAGMENT_MK)" | $(XARGS) $(RM_F)
+	@echo "Removing makefile fragments from $(SRC_DIR)"
+	@$(FIND) $(SRC_DIR) -name "$(FRAGMENT_MK)" | $(XARGS) $(RM_F)
 endif
 endif
 
@@ -727,7 +733,6 @@ ifeq ($(ENABLE_VERBOSE),yes)
 	- $(RM_RF) autom4te.cache
 	- $(RM_RF) config.status
 	- $(RM_RF) config.sys_type
-	- $(RM_RF) config.dist_path
 else
 	@echo "Removing $(AR_OBJ_LIST_FILE)"
 	@$(RM_F) $(AR_OBJ_LIST_FILE)
@@ -745,17 +750,16 @@ else
 	@$(RM_RF) autom4te.cache
 	@$(RM_RF) config.status
 	@$(RM_RF) config.sys_type
-	@$(RM_RF) config.dist_path
 endif
 endif
 
 cleanleaves:
 ifeq ($(IS_CONFIGURED),yes)
 ifeq ($(ENABLE_VERBOSE),yes)
-	- $(FIND) $(BASE_OBJ_PATH) -name "*.[osx]" | $(XARGS) $(RM_F)
+	- $(FIND) $(SRC_DIR) -name "*.[osx]" | $(XARGS) $(RM_F)
 else
 	@echo "Removing leaf-level build objects from source tree"
-	@$(FIND) $(BASE_OBJ_PATH) -name "*.[osx]" | $(XARGS) $(RM_F)
+	@$(FIND) $(SRC_DIR) -name "*.[osx]" | $(XARGS) $(RM_F)
 endif
 endif
 

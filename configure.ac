@@ -26,7 +26,7 @@ dnl         [flame@cs.utexas.edu],
 dnl         [libflame],
 dnl         [http://www.cs.utexas.edu/users/flame/])
 AC_INIT([libflame],
-        [],
+        [`cat version`],
         [flame@cs.utexas.edu],
         [libflame],
         [http://www.cs.utexas.edu/users/flame/])
@@ -533,47 +533,17 @@ AC_SUBST(fla_blis_flags)
 
 
 dnl ----------------------------------------------------------------------------
-dnl Determine the distribution path.
-dnl ----------------------------------------------------------------------------
-
-dnl The name of the script, stripped of any preceeding path.
-dnl script_name=${0##*/}
-
-dnl The path to the script. We need this to find the top-level directory
-dnl of the source distribution in the event that the user has chosen to
-dnl build elsewhere.
-dnl dist_path=${0%/${script_name}}
-
-
-dnl ----------------------------------------------------------------------------
-dnl Handle the version number.
-dnl ----------------------------------------------------------------------------
-
-dnl The file in which the version string is kept.
-dnl version_file="version"
-dnl version_filepath="${dist_path}/${version_file}"
-
-dnl Grab the contents of the version file.
-dnl version=$(cat ${version_filepath})
-
-AC_SUBST(dist_path)
-AC_SUBST(version)
-
-
-dnl ----------------------------------------------------------------------------
 dnl Read shared object (so) version.
 dnl ----------------------------------------------------------------------------
 
-dnl The file in which the so_version string is kept.
-dnl so_version_file="so_version"
-dnl so_version_filepath="${dist_path}/${so_version_file}"
+so_version_filepath='./so_version'
 
-dnl The first line of the 'so_version' file contains the .so major version.
-dnl so_version_major=$(cat ${so_version_filepath} | sed -n "1p")
+# The first line of the 'so_version' file contains the .so major version.
+so_version_major=$(cat ${so_version_filepath} | sed -n "1p")
 
-dnl The second line contains the minor and build .so version numbers
-dnl (separated by a '.').
-dnl so_version_minorbuild=$(cat ${so_version_filepath} | sed -n "2p")
+# The second line contains the minor and build .so version numbers
+# (separated by a '.').
+so_version_minorbuild=$(cat ${so_version_filepath} | sed -n "2p")
 
 AC_SUBST(so_version_major)
 AC_SUBST(so_version_minorbuild)

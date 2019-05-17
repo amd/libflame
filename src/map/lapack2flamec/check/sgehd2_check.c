@@ -1,11 +1,10 @@
-#include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
+#include "FLA_f2c.h"
 
-int sgehd2_check(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, float *a, aocl_int64_t *lda, float *tau,
-                 float *work, aocl_int64_t *info)
+int sgehd2_check(int *n, int *ilo, int *ihi, float *a, int *lda, float *tau, float *work, int *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1;
+    int a_dim1, a_offset, i__1;
 
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -15,26 +14,26 @@ int sgehd2_check(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, float *a
     --work;
     /* Function Body */
     *info = 0;
-    if(*n < 0)
+    if (*n < 0)
     {
         *info = -1;
     }
-    else if(*ilo < 1 || *ilo > fla_max(1, *n))
+    else if (*ilo < 1 || *ilo > max(1,*n))
     {
         *info = -2;
     }
-    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
+    else if (*ihi < min(*ilo,*n) || *ihi > *n)
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < max(1,*n))
     {
         *info = -5;
     }
-    if(*info != 0)
+    if (*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGEHD2", &i__1, (ftnlen)6);
+        xerbla_("SGEHD2", &i__1);
         return LAPACK_FAILURE;
     }
     return LAPACK_SUCCESS;

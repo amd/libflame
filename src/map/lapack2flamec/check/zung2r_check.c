@@ -1,8 +1,8 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int dorg2r_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double *a, aocl_int64_t *lda, double *tau,
-                 double *work, aocl_int64_t *info)
+int sorg2r_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, float *a, aocl_int64_t *lda, float *tau,
+                 float *work, aocl_int64_t *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
@@ -34,7 +34,7 @@ int dorg2r_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double *a, a
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DORG2R", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SORG2R", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

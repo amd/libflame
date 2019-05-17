@@ -1,7 +1,7 @@
 #include "FLA_f2c.h" /* Table of constant values */
 #include "FLA_lapack2flame_return_defs.h"
 
-int slauu2_check(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int64_t *info)
+int spotrf_check(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int64_t *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
@@ -30,7 +30,7 @@ int slauu2_check(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SLAUU2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SPOTRF", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

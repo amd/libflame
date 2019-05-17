@@ -1,11 +1,10 @@
-#include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
+#include "FLA_f2c.h"
 
-int sgeqr2_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, float *tau, float *work,
-                 aocl_int64_t *info)
+int dgeqr2_check(int *m, int *n, double *a, int * lda, double *tau, double *work, int *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1;
+    int a_dim1, a_offset, i__1;
 
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -15,28 +14,28 @@ int sgeqr2_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, 
     --work;
     /* Function Body */
     *info = 0;
-    if(*m < 0)
+    if (*m < 0)
     {
         *info = -1;
     }
-    else if(*n < 0)
+    else if (*n < 0)
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < max(1,*m))
     {
         *info = -4;
     }
-    if(*info != 0)
+    if (*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGEQR2", &i__1, (ftnlen)6);
+        xerbla_("DGEQR2", &i__1);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */
-    if(*m == 0 || *n == 0)
-    {
+    if (*m == 0 || *n == 0)
+      {
         return LAPACK_QUICK_RETURN;
-    }
+      }
     return LAPACK_SUCCESS;
 }

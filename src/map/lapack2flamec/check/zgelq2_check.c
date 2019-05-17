@@ -1,8 +1,8 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int zgelq2_check(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomplex *tau, dcomplex *work,
-                 aocl_int64_t *info)
+int dgeqr2p_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda, double *tau, double *work,
+                  aocl_int64_t *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
@@ -30,7 +30,7 @@ int zgelq2_check(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *ld
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGELQ2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGEQR2P", &i__1, (ftnlen)7);
         return LAPACK_FAILURE;
     }
     return LAPACK_SUCCESS;

@@ -3,8 +3,8 @@
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 
-int dgeqrf_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda, double *tau, double *work,
-                 aocl_int64_t *lwork, aocl_int64_t *info)
+int dgeqrfp_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda, double *tau, double *work,
+                  aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
@@ -44,7 +44,7 @@ int dgeqrf_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda,
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DGEQRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGEQRFP", &i__1, (ftnlen)7);
         return LAPACK_FAILURE;
     }
     else if(lquery)

@@ -1,8 +1,8 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int cgebd2_check(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *d__, real *e,
-                 scomplex *tauq, scomplex *taup, scomplex *work, aocl_int64_t *info)
+int sgebd2_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, float *d__, float *e, float *tauq,
+                 float *taup, float *work, aocl_int64_t *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
@@ -33,7 +33,7 @@ int cgebd2_check(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *ld
     if(*info < 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGEBD2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGEBD2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     return LAPACK_SUCCESS;

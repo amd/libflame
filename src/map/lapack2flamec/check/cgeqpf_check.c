@@ -1,7 +1,8 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-int cgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int64_t *jpvt, scomplex *tau,
-                 scomplex *work, float *rwork, aocl_int64_t *info)
+
+int dgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *jpvt, double *tau,
+                 double *work, aocl_int64_t *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
@@ -13,7 +14,6 @@ int cgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *ld
     --jpvt;
     --tau;
     --work;
-    --rwork;
     /* Function Body */
     *info = 0;
     if(*m < 0)
@@ -31,7 +31,7 @@ int cgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *ld
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGEQPF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGEQPF", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

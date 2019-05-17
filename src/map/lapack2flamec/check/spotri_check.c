@@ -1,18 +1,22 @@
+/*
+ * Copyright (c) 2020 Advanced Micro Devices, Inc.
+ */
+
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int spotri_check(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int64_t *info)
+int dgetrfnp_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
-
     /* Parameter adjustments */
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;
     a -= a_offset;
+
     /* Function Body */
     *info = 0;
-    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
+    if(*m < 0)
     {
         *info = -1;
     }
@@ -20,30 +24,21 @@ int spotri_check(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SPOTRI", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGETRFNP", &i__1, (ftnlen)8);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */
-    if(*n == 0)
+    if(*m == 0 || *n == 0)
     {
         return LAPACK_QUICK_RETURN;
     }
-    /* Check for singularity */
-    i__1 = *n;
-    for(*info = 1; *info <= i__1; ++(*info))
-    {
-        if(a[*info + *info * a_dim1] == 0.f)
-        {
-            return LAPACK_FAILURE;
-        }
-    }
-    *info = 0;
+
     return LAPACK_SUCCESS;
 }

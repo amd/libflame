@@ -1,28 +1,22 @@
-#include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-static aocl_int64_t c_n1 = -1;
+#include "FLA_f2c.h"
+static int c_n1 = -1;
 
-int sorgbr_check(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, float *a, aocl_int64_t *lda, float *tau,
-                 float *work, aocl_int64_t *lwork, aocl_int64_t *info)
+int sorgbr_check(char *vect, int *m, int *n, int *k, float *a, int *lda, float *tau, float *work, int *lwork, int *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    int a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    aocl_int64_t mn;
-    aocl_int64_t iinfo;
+    int mn;
+    int iinfo;
     logical wantq;
-    extern int sorglq_check(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, float *, aocl_int64_t *, float *, float *,
-                            aocl_int64_t *, aocl_int64_t *),
-        sorgqr_check(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, float *, aocl_int64_t *, float *, float *,
-                     aocl_int64_t *, aocl_int64_t *);
-    aocl_int64_t lwkopt;
+    extern int
+    sorglq_check( int *, int *, int *, float *, int *,
+             float *, float * , int *, int *),
+                  sorgqr_check(int *, int *, int *, float *, int *,
+                          float *, float *, int *, int *);
+    int lwkopt;
     logical lquery;
-
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    sprintf(buffer, "sorgbr inputs: vect %c, m %d, n %d, k %d, lda %d\n", *vect, *m, *n, *k, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
 
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -32,89 +26,86 @@ int sorgbr_check(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, 
     --work;
     /* Function Body */
     *info = 0;
-    wantq = lsame_(vect, "Q", 1, 1);
-    mn = fla_min(*m, *n);
+    wantq = lsame_(vect, "Q");
+    mn = min(*m,*n);
     lquery = *lwork == -1;
-    if(!wantq && !lsame_(vect, "P", 1, 1))
+    if (! wantq && ! lsame_(vect, "P"))
     {
         *info = -1;
     }
-    else if(*m < 0)
+    else if (*m < 0)
     {
         *info = -2;
     }
-    else if(*n < 0 || wantq && (*n > *m || *n < fla_min(*m, *k))
-            || !wantq && (*m > *n || *m < fla_min(*n, *k)))
+    else if (*n < 0 || wantq && (*n > *m || *n < min(*m,*k)) || ! wantq && ( *m > *n || *m < min(*n,*k)))
     {
         *info = -3;
     }
-    else if(*k < 0)
+    else if (*k < 0)
     {
         *info = -4;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < max(1,*m))
     {
         *info = -6;
     }
-    else if(*lwork < fla_max(1, mn) && !lquery)
+    else if (*lwork < max(1,mn) && ! lquery)
     {
         *info = -9;
     }
-    if(*info == 0)
+    if (*info == 0)
     {
         work[1] = 1.f;
-        if(wantq)
+        if (wantq)
         {
-            if(*m >= *k)
+            if (*m >= *k)
             {
                 sorgqr_check(m, n, k, &a[a_offset], lda, &tau[1], &work[1], &c_n1, &iinfo);
             }
             else
             {
-                if(*m > 1)
+                if (*m > 1)
                 {
                     i__1 = *m - 1;
                     i__2 = *m - 1;
                     i__3 = *m - 1;
-                    sorgqr_check(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1],
-                                 &c_n1, &iinfo);
+                    sorgqr_check(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, & tau[1], &work[1], &c_n1, &iinfo);
                 }
             }
         }
         else
         {
-            if(*k < *n)
+            if (*k < *n)
             {
                 sorglq_check(m, n, k, &a[a_offset], lda, &tau[1], &work[1], &c_n1, &iinfo);
             }
             else
             {
-                if(*n > 1)
+                if (*n > 1)
                 {
                     i__1 = *n - 1;
                     i__2 = *n - 1;
                     i__3 = *n - 1;
-                    sorglq_check(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1],
-                                 &c_n1, &iinfo);
+                    sorglq_check(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, & tau[1], &work[1], &c_n1, &iinfo);
                 }
             }
         }
         lwkopt = work[1];
-        lwkopt = fla_max(lwkopt, mn);
+        lwkopt = max(lwkopt,mn);
     }
-    if(*info != 0)
+    if (*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SORGBR", &i__1, (ftnlen)6);
+        xerbla_("SORGBR", &i__1);
         return LAPACK_FAILURE;
     }
-    else if(lquery)
+    else if (lquery)
     {
-        work[1] = (float)lwkopt;
+        work[1] = (float) lwkopt;
         return LAPACK_QUERY_RETURN;
     }
     /* Quick return if possible */
-    if(*m == 0 || *n == 0)
+    if (*m == 0 || *n == 0)
     {
         work[1] = 1.f;
         return LAPACK_QUICK_RETURN;

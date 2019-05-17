@@ -1,7 +1,7 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int chegs2_check(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *b,
+int dsygs2_check(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, double *b,
                  aocl_int64_t *ldb, aocl_int64_t *info)
 {
     /* System generated locals */
@@ -41,7 +41,7 @@ int chegs2_check(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomplex *a, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHEGS2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSYGS2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     return LAPACK_SUCCESS;

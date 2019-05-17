@@ -1,21 +1,16 @@
-#include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
+#include "FLA_f2c.h"
 
-int sbdsqr_check(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_int64_t *nru, aocl_int64_t *ncc, float *d__,
-                 float *e, float *vt, aocl_int64_t *ldvt, float *u, aocl_int64_t *ldu, float *c__,
-                 aocl_int64_t *ldc, float *work, aocl_int64_t *info)
+int sbdsqr_check(char *uplo, int *n, int *ncvt, int * nru, int *ncc, 
+                 float *d__, float *e, 
+                 float *vt, int *ldvt, 
+                 float * u, int *ldu, 
+                 float *c__, int *ldc, 
+                 float *work, int *info)
 {
     /* System generated locals */
-    aocl_int64_t c_dim1, c_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1;
+    int c_dim1, c_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1;
     logical lower;
-
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    sprintf(buffer,
-            "sbdsqr inputs: uplo %c, n %d, ncvt %d, nru %d, ncc %d, ldvt %d, ldu %d, ldc %d\n",
-            *uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
 
     /* Parameter adjustments */
     --d__;
@@ -32,46 +27,46 @@ int sbdsqr_check(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_int64_t *
     --work;
     /* Function Body */
     *info = 0;
-    lower = lsame_(uplo, "L", 1, 1);
-    if(!lsame_(uplo, "U", 1, 1) && !lower)
+    lower = lsame_(uplo, "L");
+    if (! lsame_(uplo, "U") && ! lower)
     {
         *info = -1;
     }
-    else if(*n < 0)
+    else if (*n < 0)
     {
         *info = -2;
     }
-    else if(*ncvt < 0)
+    else if (*ncvt < 0)
     {
         *info = -3;
     }
-    else if(*nru < 0)
+    else if (*nru < 0)
     {
         *info = -4;
     }
-    else if(*ncc < 0)
+    else if (*ncc < 0)
     {
         *info = -5;
     }
-    else if(*ncvt == 0 && *ldvt < 1 || *ncvt > 0 && *ldvt < fla_max(1, *n))
+    else if (*ncvt == 0 && *ldvt < 1 || *ncvt > 0 && *ldvt < max(1,*n))
     {
         *info = -9;
     }
-    else if(*ldu < fla_max(1, *nru))
+    else if (*ldu < max(1,*nru))
     {
         *info = -11;
     }
-    else if(*ncc == 0 && *ldc < 1 || *ncc > 0 && *ldc < fla_max(1, *n))
+    else if (*ncc == 0 && *ldc < 1 || *ncc > 0 && *ldc < max(1,*n))
     {
         *info = -13;
     }
-    if(*info != 0)
+    if (*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SBDSQR", &i__1, (ftnlen)6);
+        xerbla_("SBDSQR", &i__1);
         return LAPACK_FAILURE;
     }
-    if(*n == 0)
+    if (*n == 0)
     {
         return LAPACK_QUICK_RETURN;
     }

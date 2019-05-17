@@ -3,7 +3,7 @@
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 
-int zunmlq_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
+int zunmqr_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
                  aocl_int64_t *lda, dcomplex *tau, dcomplex *c__, aocl_int64_t *ldc, dcomplex *work,
                  aocl_int64_t *lwork, aocl_int64_t *info)
 {
@@ -63,7 +63,7 @@ int zunmlq_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, *k))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -7;
     }
@@ -81,7 +81,7 @@ int zunmlq_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl
         /* is used to define the local array T. */
         /* Computing MIN */
         i__1 = 64;
-        i__2 = aocl_lapack_ilaenv(&c__1, "ZUNMLQ", ch__1, m, n, k, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__1, "ZUNMQR", ch__1, m, n, k, &c_n1); // , expr subst
         nb = fla_min(i__1, i__2);
         lwkopt = fla_max(1, nw) * nb;
         work[1].real = (double)lwkopt;
@@ -90,7 +90,7 @@ int zunmlq_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZUNMLQ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZUNMQR", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)
@@ -104,5 +104,6 @@ int zunmlq_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl
         work[1].imag = 0.; // , expr subst
         return LAPACK_QUICK_RETURN;
     }
+
     return LAPACK_SUCCESS;
 }

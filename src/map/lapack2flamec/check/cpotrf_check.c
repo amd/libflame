@@ -1,10 +1,10 @@
-#include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
+#include "FLA_f2c.h"
 
-int cpotrf_check(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int64_t *info)
+int cpotrf_check(char *uplo, int *n, scomplex *a, int *lda, int *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1;
+    int a_dim1, a_offset, i__1;
     /* Local variables */
     logical upper;
     /* Parameter adjustments */
@@ -13,27 +13,27 @@ int cpotrf_check(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, ao
     a -= a_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    upper = lsame_(uplo, "U");
+    if (! upper && ! lsame_(uplo, "L"))
     {
         *info = -1;
     }
-    else if(*n < 0)
+    else if (*n < 0)
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < max(1,*n))
     {
         *info = -4;
     }
-    if(*info != 0)
+    if (*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CPOTRF", &i__1, (ftnlen)6);
+        xerbla_("CPOTRF", &i__1);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */
-    if(*n == 0)
+    if (*n == 0)
     {
         return LAPACK_QUICK_RETURN;
     }

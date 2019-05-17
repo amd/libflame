@@ -1,11 +1,13 @@
 #include "FLA_f2c.h" /* Table of constant values */
 #include "FLA_lapack2flame_return_defs.h"
 
-int dorm2r_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double *a,
-                 aocl_int64_t *lda, double *tau, double *c__, aocl_int64_t *ldc, double *work, aocl_int64_t *info)
+int zunm2r_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
+                 aocl_int64_t *lda, dcomplex *tau, dcomplex *c__, aocl_int64_t *ldc, dcomplex *work,
+                 aocl_int64_t *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1;
+
     /* Local variables */
     aocl_int64_t nq;
     logical left;
@@ -37,7 +39,7 @@ int dorm2r_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl
     {
         *info = -1;
     }
-    else if(!notran && !lsame_(trans, "T", 1, 1))
+    else if(!notran && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -64,7 +66,7 @@ int dorm2r_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DORM2R", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZUNM2R", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */
@@ -72,6 +74,5 @@ int dorm2r_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl
     {
         return LAPACK_QUICK_RETURN;
     }
-
     return LAPACK_SUCCESS;
 }

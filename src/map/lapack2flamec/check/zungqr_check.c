@@ -3,7 +3,7 @@
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 
-int zungqr_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a, aocl_int64_t *lda, dcomplex *tau,
+int zunglq_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a, aocl_int64_t *lda, dcomplex *tau,
                  dcomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
@@ -11,8 +11,8 @@ int zungqr_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
 
     /* Local variables */
     aocl_int64_t nb;
-    aocl_int64_t lwkopt;
     logical lquery;
+    aocl_int64_t lwkopt;
 
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -22,8 +22,8 @@ int zungqr_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
     --work;
     /* Function Body */
     *info = 0;
-    nb = aocl_lapack_ilaenv(&c__1, "ZUNGQR", " ", m, n, k, &c_n1);
-    lwkopt = fla_max(1, *n) * nb;
+    nb = aocl_lapack_ilaenv(&c__1, "ZUNGLQ", " ", m, n, k, &c_n1);
+    lwkopt = fla_max(1, *m) * nb;
     work[1].real = (double)lwkopt;
     work[1].imag = 0.; // , expr subst
     lquery = *lwork == -1;
@@ -31,11 +31,11 @@ int zungqr_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
     {
         *info = -1;
     }
-    else if(*n < 0 || *n > *m)
+    else if(*n < *m)
     {
         *info = -2;
     }
-    else if(*k < 0 || *k > *n)
+    else if(*k < 0 || *k > *m)
     {
         *info = -3;
     }
@@ -43,14 +43,14 @@ int zungqr_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
     {
         *info = -5;
     }
-    else if(*lwork < fla_max(1, *n) && !lquery)
+    else if(*lwork < fla_max(1, *m) && !lquery)
     {
         *info = -8;
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZUNGQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZUNGLQ", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)
@@ -58,7 +58,7 @@ int zungqr_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
         return LAPACK_QUERY_RETURN;
     }
     /* Quick return if possible */
-    if(*n <= 0)
+    if(*m <= 0)
     {
         work[1].real = 1.;
         work[1].imag = 0.; // , expr subst

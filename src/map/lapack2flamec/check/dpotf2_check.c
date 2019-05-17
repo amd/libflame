@@ -1,7 +1,7 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int dpotf2_check(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *info)
+int dlauum_check(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
@@ -30,7 +30,7 @@ int dpotf2_check(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DPOTF2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLAUUM", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

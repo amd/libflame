@@ -1,7 +1,7 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int sgeqr2_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, float *tau, float *work,
+int dgeqr2_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda, double *tau, double *work,
                  aocl_int64_t *info)
 {
     /* System generated locals */
@@ -30,7 +30,7 @@ int sgeqr2_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGEQR2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGEQR2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

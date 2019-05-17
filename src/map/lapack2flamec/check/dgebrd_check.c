@@ -1,24 +1,19 @@
-#include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+#include "FLA_f2c.h"
+static int c__1 = 1;
+static int c_n1 = -1;
 
-int dgebrd_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda, double *d__, double *e,
-                 double *tauq, double *taup, double *work, aocl_int64_t *lwork, aocl_int64_t *info)
+
+
+int dgebrd_check(int *m, int *n, double *a, int * lda, double *d__, double *e, double *tauq, double * taup, double *work, int *lwork, int *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2;
+    int a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    aocl_int64_t nb;
-    aocl_int64_t minmn;
-    aocl_int64_t lwkopt;
+    int nb;
+    int minmn;
+    int lwkopt;
     logical lquery;
-
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    sprintf(buffer, "dgebrd inputs: m %d, n %d, lda %d\n", *m, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
 
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -33,45 +28,45 @@ int dgebrd_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda,
     *info = 0;
     /* Computing MAX */
     i__1 = 1;
-    i__2 = aocl_lapack_ilaenv(&c__1, "DGEBRD", " ", m, n, &c_n1, &c_n1); // , expr subst
-    nb = fla_max(i__1, i__2);
+    i__2 = ilaenv_(&c__1, "DGEBRD", " ", m, n, &c_n1, &c_n1); // , expr subst
+    nb = max(i__1,i__2);
     lwkopt = (*m + *n) * nb;
-    work[1] = (double)lwkopt;
+    work[1] = (double) lwkopt;
     lquery = *lwork == -1;
-    if(*m < 0)
+    if (*m < 0)
     {
         *info = -1;
     }
-    else if(*n < 0)
+    else if (*n < 0)
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < max(1,*m))
     {
         *info = -4;
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__1 = fla_max(1, *m);
-        if(*lwork < fla_max(i__1, *n) && !lquery)
+        i__1 = max(1,*m);
+        if (*lwork < max(i__1,*n) && ! lquery)
         {
             *info = -10;
         }
     }
-    if(*info < 0)
+    if (*info < 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DGEBRD", &i__1, (ftnlen)6);
+        xerbla_("DGEBRD", &i__1);
         return LAPACK_FAILURE;
     }
-    else if(lquery)
+    else if (lquery)
     {
         return LAPACK_QUERY_RETURN;
     }
     /* Quick return if possible */
-    minmn = fla_min(*m, *n);
-    if(minmn == 0)
+    minmn = min(*m,*n);
+    if (minmn == 0)
     {
         work[1] = 1.;
         return LAPACK_QUICK_RETURN;

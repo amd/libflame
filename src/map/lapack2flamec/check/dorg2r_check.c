@@ -1,7 +1,6 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-
-int dorg2r_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double *a, aocl_int64_t *lda, double *tau,
+int dorgl2_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double *a, aocl_int64_t *lda, double *tau,
                  double *work, aocl_int64_t *info)
 {
     /* System generated locals */
@@ -19,11 +18,11 @@ int dorg2r_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double *a, a
     {
         *info = -1;
     }
-    else if(*n < 0 || *n > *m)
+    else if(*n < *m)
     {
         *info = -2;
     }
-    else if(*k < 0 || *k > *n)
+    else if(*k < 0 || *k > *m)
     {
         *info = -3;
     }
@@ -34,11 +33,11 @@ int dorg2r_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double *a, a
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DORG2R", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DORGL2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */
-    if(*n <= 0)
+    if(*m <= 0)
     {
         return LAPACK_QUICK_RETURN;
     }

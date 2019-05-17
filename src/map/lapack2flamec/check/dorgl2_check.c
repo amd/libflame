@@ -1,10 +1,9 @@
-#include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-int dorgl2_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double *a, aocl_int64_t *lda, double *tau,
-                 double *work, aocl_int64_t *info)
+#include "FLA_f2c.h"
+int dorgl2_check(int *m, int *n, int *k, double * a, int *lda, double *tau, double *work, int *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1;
+    int a_dim1, a_offset, i__1;
 
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -14,30 +13,30 @@ int dorgl2_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double *a, a
     --work;
     /* Function Body */
     *info = 0;
-    if(*m < 0)
+    if (*m < 0)
     {
         *info = -1;
     }
-    else if(*n < *m)
+    else if (*n < *m)
     {
         *info = -2;
     }
-    else if(*k < 0 || *k > *m)
+    else if (*k < 0 || *k > *m)
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < max(1,*m))
     {
         *info = -5;
     }
-    if(*info != 0)
+    if (*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DORGL2", &i__1, (ftnlen)6);
+        xerbla_("DORGL2", &i__1);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */
-    if(*m <= 0)
+    if (*m <= 0)
     {
         return LAPACK_QUICK_RETURN;
     }

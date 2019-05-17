@@ -1,11 +1,10 @@
-#include "FLA_f2c.h" /* Table of constant values */
 #include "FLA_lapack2flame_return_defs.h"
+#include "FLA_f2c.h" /* Table of constant values */
 
-int sgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int64_t *jpvt, float *tau,
-                 float *work, aocl_int64_t *info)
+int sgeqpf_check(int *m, int *n, float *a, int *lda, int *jpvt, float *tau, float *work, int *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1;
+    int a_dim1, a_offset, i__1;
 
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -16,28 +15,28 @@ int sgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, 
     --work;
     /* Function Body */
     *info = 0;
-    if(*m < 0)
+    if (*m < 0)
     {
         *info = -1;
     }
-    else if(*n < 0)
+    else if (*n < 0)
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < max(1,*m))
     {
         *info = -4;
     }
-    if(*info != 0)
+    if (*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGEQPF", &i__1, (ftnlen)6);
+        xerbla_("SGEQPF", &i__1);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */
-    if(*m == 0 || *n == 0)
-    {
+    if (*m == 0 || *n == 0)
+      {
         return LAPACK_QUICK_RETURN;
-    }
+      }
     return LAPACK_SUCCESS;
 }

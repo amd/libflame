@@ -1,8 +1,8 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int dsytd2_check(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, double *d__, double *e,
-                 double *tau, aocl_int64_t *info)
+int ssytd2_check(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, float *d__, float *e, float *tau,
+                 aocl_int64_t *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
@@ -34,7 +34,7 @@ int dsytd2_check(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, doub
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DSYTD2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSYTD2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

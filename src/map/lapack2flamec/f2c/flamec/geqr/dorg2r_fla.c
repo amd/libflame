@@ -1,13 +1,15 @@
-/* ../netlib/dorg2r.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-
+/* dorg2r.f -- translated by f2c (version 20160102). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 /*
-    Modifications Copyright (c) 2023 Advanced Micro Devices, Inc.  All rights reserved.
-*/
-
+ *     Modifications Copyright (C) 2021-2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+#include "FLAME.h"
+#if FLA_ENABLE_AOCL_BLAS
+#include "blis.h"
+#endif
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b DORG2R generates all or part of the orthogonal matrix Q from a QR factorization
@@ -113,151 +115,20 @@ static aocl_int64_t c__1 = 1;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date September 2012 */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dorg2r_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a, aocl_int64_t *lda,
-                doublereal *tau, doublereal *work, aocl_int64_t *info)
-{
-    extern fla_context fla_global_context;
-    extern void dorg2r_fla_opt(aocl_int64_t * m, aocl_int64_t * n, aocl_int64_t * k, doublereal * a,
-                               aocl_int64_t * lda, doublereal * tau, doublereal * work,
-                               aocl_int64_t * info);
-    extern void dorg2r_fla_native(aocl_int64_t * m, aocl_int64_t * n, aocl_int64_t * k,
-                                  doublereal * a, aocl_int64_t * lda, doublereal * tau,
-                                  doublereal * work, aocl_int64_t * info);
-
-    /* Initialize global context data */
-    aocl_fla_init();
-
-#if FLA_ENABLE_AMD_OPT
-    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
-    {
-        dorg2r_fla_opt(m, n, k, a, lda, tau, work, info);
-    }
-    else
-    {
-        dorg2r_fla_native(m, n, k, a, lda, tau, work, info);
-    }
-#else
-    dorg2r_fla_native(m, n, k, a, lda, tau, work, info);
-#endif
-
-    return;
-}
-
-#if FLA_ENABLE_AMD_OPT
-void dorg2r_fla_opt(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a,
-                    aocl_int64_t *lda, doublereal *tau, doublereal *work, aocl_int64_t *info)
+int lapack_dorg2r(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a,
+                  aocl_int64_t *lda, doublereal *tau, doublereal *work, aocl_int64_t *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1;
     /* Local variables */
     aocl_int64_t i__, j, l;
-    /* Test the input arguments */
-    /* Parameter adjustments */
-    a_dim1 = *lda;
-    a_offset = 1 + a_dim1;
-    a -= a_offset;
-    --tau;
-    --work;
-    /* Function Body */
-    *info = 0;
-    if(*m < 0)
-    {
-        *info = -1;
-    }
-    else if(*n < 0 || *n > *m)
-    {
-        *info = -2;
-    }
-    else if(*k < 0 || *k > *n)
-    {
-        *info = -3;
-    }
-    else if(*lda < fla_max(1, *m))
-    {
-        *info = -5;
-    }
-    if(*info != 0)
-    {
-        i__1 = -(*info);
-        aocl_blas_xerbla("DORG2R", &i__1, (ftnlen)6);
-        return;
-    }
-    /* Quick return if possible */
-    if(*n <= 0)
-    {
-        return;
-    }
-    /* Initialise columns k+1:n to columns of the unit matrix */
-    i__1 = *n;
-    for(j = *k + 1; j <= i__1; ++j)
-    {
-        i__2 = *m;
-        for(l = 1; l <= i__2; ++l)
-        {
-            a[l + j * a_dim1] = 0.;
-            /* L10: */
-        }
-        a[j + j * a_dim1] = 1.;
-        /* L20: */
-    }
-
-    for(i__ = *k; i__ >= 1; --i__)
-    {
-        /* Apply H(i) to A(i:m,i:n) from the left */
-        if(i__ < *n)
-        {
-            a[i__ + i__ * a_dim1] = 1.;
-            i__1 = *m - i__ + 1;
-            i__2 = *n - i__;
-            aocl_lapack_dlarf("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
-                              &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
-        }
-
-        /* Inline DSCAL for small size */
-        i__1 = *m - i__;
-        d__1 = -tau[i__];
-
-        if(i__ < *m)
-        {
-            fla_dscal(&i__1, &d__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
-        }
-        else
-        {
-            aocl_blas_dscal(&i__1, &d__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
-        }
-
-        a[i__ + i__ * a_dim1] = 1. - tau[i__];
-        /* Set A(1:i-1,i) to zero */
-        i__1 = i__ - 1;
-        for(l = 1; l <= i__1; ++l)
-        {
-            a[l + i__ * a_dim1] = 0.;
-            /* L30: */
-        }
-        /* L40: */
-    }
-    return;
-    /* End of DORG2R */
-}
-#endif
-
-void dorg2r_fla_native(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a,
-                       aocl_int64_t *lda, doublereal *tau, doublereal *work, aocl_int64_t *info)
-{
-    /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2;
-    doublereal d__1;
-    /* Local variables */
-    aocl_int64_t i__, j, l;
-    /* -- LAPACK computational routine (version 3.4.2) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* September 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -301,12 +172,12 @@ void dorg2r_fla_native(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double
     {
         i__1 = -(*info);
         aocl_blas_xerbla("DORG2R", &i__1, (ftnlen)6);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n <= 0)
     {
-        return;
+        return 0;
     }
     /* Initialise columns k+1:n to columns of the unit matrix */
     i__1 = *n;
@@ -321,7 +192,6 @@ void dorg2r_fla_native(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double
         a[j + j * a_dim1] = 1.;
         /* L20: */
     }
-
     for(i__ = *k; i__ >= 1; --i__)
     {
         /* Apply H(i) to A(i:m,i:n) from the left */
@@ -333,12 +203,15 @@ void dorg2r_fla_native(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double
             aocl_lapack_dlarf("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
                               &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
         }
-
         if(i__ < *m)
         {
             i__1 = *m - i__;
             d__1 = -tau[i__];
+#if FLA_ENABLE_AMD_OPT
+            fla_dscal(&i__1, &d__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
+#else
             aocl_blas_dscal(&i__1, &d__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
+#endif
         }
         a[i__ + i__ * a_dim1] = 1. - tau[i__];
         /* Set A(1:i-1,i) to zero */
@@ -350,7 +223,7 @@ void dorg2r_fla_native(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double
         }
         /* L40: */
     }
-    return;
+    return 0;
     /* End of DORG2R */
 }
-/* dorg2r_ */
+/* lapack_dorg2r */

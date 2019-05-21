@@ -1,32 +1,19 @@
-/*
- *     Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
- */
-
-/* ../netlib/sorgtr.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sorgtr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c_n1 = -1;
 /* > \brief \b SORGTR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SORGTR + dependencies */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgtr.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgtr. f"> */
 /* > [TGZ]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorgtr.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorgtr. f"> */
 /* > [ZIP]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgtr.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgtr. f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -59,7 +46,7 @@ static aocl_int64_t c_n1 = -1;
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A contains elementary reflectors */
 /* > from SSYTRD;
- */
+*/
 /* > = 'L': Lower triangle of A contains elementary reflectors */
 /* > from SSYTRD. */
 /* > \endverbatim */
@@ -81,7 +68,7 @@ static aocl_int64_t c_n1 = -1;
 /* > \param[in] LDA */
 /* > \verbatim */
 /* > LDA is INTEGER */
-/* > The leading dimension of the array A. LDA >= fla_max(1,N). */
+/* > The leading dimension of the array A. LDA >= max(1,N). */
 /* > \endverbatim */
 /* > */
 /* > \param[in] TAU */
@@ -100,7 +87,7 @@ static aocl_int64_t c_n1 = -1;
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
-/* > The dimension of the array WORK. LWORK >= fla_max(1,N-1). */
+/* > The dimension of the array WORK. LWORK >= max(1,N-1). */
 /* > For optimum performance LWORK >= (N-1)*NB, where NB is */
 /* > the optimal blocksize. */
 /* > */
@@ -127,20 +114,22 @@ the routine */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sorgtr_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau, real *work,
-                aocl_int64_t *lwork, aocl_int64_t *info)
+int sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    aocl_int64_t i__, j, nb;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    integer i__, j, nb;
+    extern logical lsame_(char *, char *);
+    integer iinfo;
     logical upper;
-    extern void sorgqr_fla(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, real *, aocl_int64_t *, real *,
-                 real *, aocl_int64_t *, aocl_int64_t *);
+    extern /* Subroutine */
+    int xerbla_(char *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int sorgql_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), sorgqr_fla( integer *, integer *, integer *, real *, integer *, real *, real * , integer *, integer *);
     logical lquery;
-    aocl_int64_t lwkopt;
+    integer lwkopt;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -171,16 +160,16 @@ void sorgtr_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *t
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    upper = lsame_(uplo, "U");
+    if (! upper && ! lsame_(uplo, "L"))
     {
         *info = -1;
     }
-    else if(*n < 0)
+    else if (*n < 0)
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < max(1,*n))
     {
         *info = -4;
     }
@@ -189,60 +178,64 @@ void sorgtr_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *t
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
+        if (*lwork < max(i__1,i__2) && ! lquery)
         {
             *info = -7;
         }
     }
-    if(*info == 0)
+    if (*info == 0)
     {
-        if(upper)
+        if (upper)
         {
             i__1 = *n - 1;
             i__2 = *n - 1;
             i__3 = *n - 1;
-            nb = aocl_lapack_ilaenv(&c__1, "SORGQL", " ", &i__1, &i__2, &i__3, &c_n1);
+            nb = ilaenv_(&c__1, "SORGQL", " ", &i__1, &i__2, &i__3, &c_n1);
         }
         else
         {
             i__1 = *n - 1;
             i__2 = *n - 1;
             i__3 = *n - 1;
-            nb = aocl_lapack_ilaenv(&c__1, "SORGQR", " ", &i__1, &i__2, &i__3, &c_n1);
+            nb = ilaenv_(&c__1, "SORGQR", " ", &i__1, &i__2, &i__3, &c_n1);
         }
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        lwkopt = fla_max(i__1, i__2) * nb;
-        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
+        lwkopt = max(i__1,i__2) * nb;
+        work[1] = (real) lwkopt;
     }
-    if(*info != 0)
+    if (*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SORGTR", &i__1, (ftnlen)6);
-        return;
+        xerbla_("SORGTR", &i__1);
+        return 0;
     }
-    else if(lquery)
+    else if (lquery)
     {
-        return;
+        return 0;
     }
     /* Quick return if possible */
-    if(*n == 0)
+    if (*n == 0)
     {
         work[1] = 1.f;
-        return;
+        return 0;
     }
-    if(upper)
+    if (upper)
     {
         /* Q was determined by a call to SSYTRD with UPLO = 'U' */
         /* Shift the vectors which define the elementary reflectors one */
         /* column to the left, and set the last row and column of Q to */
         /* those of the unit matrix */
         i__1 = *n - 1;
-        for(j = 1; j <= i__1; ++j)
+        for (j = 1;
+                j <= i__1;
+                ++j)
         {
             i__2 = j - 1;
-            for(i__ = 1; i__ <= i__2; ++i__)
+            for (i__ = 1;
+                    i__ <= i__2;
+                    ++i__)
             {
                 a[i__ + j * a_dim1] = a[i__ + (j + 1) * a_dim1];
                 /* L10: */
@@ -251,7 +244,9 @@ void sorgtr_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *t
             /* L20: */
         }
         i__1 = *n - 1;
-        for(i__ = 1; i__ <= i__1; ++i__)
+        for (i__ = 1;
+                i__ <= i__1;
+                ++i__)
         {
             a[i__ + *n * a_dim1] = 0.f;
             /* L30: */
@@ -261,8 +256,7 @@ void sorgtr_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *t
         i__1 = *n - 1;
         i__2 = *n - 1;
         i__3 = *n - 1;
-        aocl_lapack_sorgql(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], lwork,
-                           &iinfo);
+        sorgql_(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], lwork, &iinfo);
     }
     else
     {
@@ -270,11 +264,15 @@ void sorgtr_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *t
         /* Shift the vectors which define the elementary reflectors one */
         /* column to the right, and set the first row and column of Q to */
         /* those of the unit matrix */
-        for(j = *n; j >= 2; --j)
+        for (j = *n;
+                j >= 2;
+                --j)
         {
             a[j * a_dim1 + 1] = 0.f;
             i__1 = *n;
-            for(i__ = j + 1; i__ <= i__1; ++i__)
+            for (i__ = j + 1;
+                    i__ <= i__1;
+                    ++i__)
             {
                 a[i__ + j * a_dim1] = a[i__ + (j - 1) * a_dim1];
                 /* L40: */
@@ -283,23 +281,24 @@ void sorgtr_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *t
         }
         a[a_dim1 + 1] = 1.f;
         i__1 = *n;
-        for(i__ = 2; i__ <= i__1; ++i__)
+        for (i__ = 2;
+                i__ <= i__1;
+                ++i__)
         {
             a[i__ + a_dim1] = 0.f;
             /* L60: */
         }
-        if(*n > 1)
+        if (*n > 1)
         {
             /* Generate Q(2:n,2:n) */
             i__1 = *n - 1;
             i__2 = *n - 1;
             i__3 = *n - 1;
-            sorgqr_fla(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1], lwork,
-                       &iinfo);
+            sorgqr_fla(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1], lwork, &iinfo);
         }
     }
-    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
-    return;
+    work[1] = (real) lwkopt;
+    return 0;
     /* End of SORGTR */
 }
 /* sorgtr_ */

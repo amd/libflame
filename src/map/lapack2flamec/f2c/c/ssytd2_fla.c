@@ -1,34 +1,20 @@
-/*
- *     Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
- */
-
-/* ../netlib/ssytd2.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ssytd2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 static real c_b8 = 0.f;
 static real c_b14 = -1.f;
-/* > \brief \b SSYTD2 reduces a symmetric matrix to real symmetric tridiagonal form by an orthogonal
- * similarit y transformation (unblocked algorithm). */
+/* > \brief \b SSYTD2 reduces a symmetric matrix to real symmetric tridiagonal form by an orthogonal similarit y transformation (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SSYTD2 + dependencies */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytd2.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytd2. f"> */
 /* > [TGZ]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytd2.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytd2. f"> */
 /* > [ZIP]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytd2.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytd2. f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -92,7 +78,7 @@ if UPLO */
 /* > \param[in] LDA */
 /* > \verbatim */
 /* > LDA is INTEGER */
-/* > The leading dimension of the array A. LDA >= fla_max(1,N). */
+/* > The leading dimension of the array A. LDA >= max(1,N). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] D */
@@ -180,17 +166,21 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ssytd2_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *d__, real *e,
-                real *tau, aocl_int64_t *info)
+int ssytd2_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *e, real *tau, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    aocl_int64_t i__;
+    integer i__;
     real taui;
+    extern real sdot_(integer *, real *, integer *, real *, integer *);
+    extern /* Subroutine */
+    int ssyr2_(char *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
     real alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
     logical upper;
+    extern /* Subroutine */
+    int saxpy_(integer *, real *, real *, integer *, real *, integer *), ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(char *, integer *), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -221,55 +211,53 @@ void ssytd2_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *d
     --tau;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    upper = lsame_(uplo, "U");
+    if (! upper && ! lsame_(uplo, "L"))
     {
         *info = -1;
     }
-    else if(*n < 0)
+    else if (*n < 0)
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < max(1,*n))
     {
         *info = -4;
     }
-    if(*info != 0)
+    if (*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SSYTD2", &i__1, (ftnlen)6);
-        return;
+        xerbla_("SSYTD2", &i__1);
+        return 0;
     }
     /* Quick return if possible */
-    if(*n <= 0)
+    if (*n <= 0)
     {
-        return;
+        return 0;
     }
-    if(upper)
+    if (upper)
     {
         /* Reduce the upper triangle of A */
-        for(i__ = *n - 1; i__ >= 1; --i__)
+        for (i__ = *n - 1;
+                i__ >= 1;
+                --i__)
         {
             /* Generate elementary reflector H(i) = I - tau * v * v**T */
             /* to annihilate A(1:i-1,i+1) */
-            aocl_lapack_slarfg(&i__, &a[i__ + (i__ + 1) * a_dim1], &a[(i__ + 1) * a_dim1 + 1],
-                               &c__1, &taui);
+            slarfg_(&i__, &a[i__ + (i__ + 1) * a_dim1], &a[(i__ + 1) * a_dim1 + 1], &c__1, &taui);
             e[i__] = a[i__ + (i__ + 1) * a_dim1];
-            if(taui != 0.f)
+            if (taui != 0.f)
             {
                 /* Apply H(i) from both sides to A(1:i,1:i) */
                 a[i__ + (i__ + 1) * a_dim1] = 1.f;
                 /* Compute x := tau * A * v storing x in TAU(1:i) */
-                aocl_blas_ssymv(uplo, &i__, &taui, &a[a_offset], lda, &a[(i__ + 1) * a_dim1 + 1],
-                                &c__1, &c_b8, &tau[1], &c__1);
+                ssymv_(uplo, &i__, &taui, &a[a_offset], lda, &a[(i__ + 1) * a_dim1 + 1], &c__1, &c_b8, &tau[1], &c__1);
                 /* Compute w := x - 1/2 * tau * (x**T * v) * v */
-                alpha = taui * -.5f
-                        * aocl_blas_sdot(&i__, &tau[1], &c__1, &a[(i__ + 1) * a_dim1 + 1], &c__1);
-                aocl_blas_saxpy(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1], &c__1);
+                alpha = taui * -.5f * sdot_(&i__, &tau[1], &c__1, &a[(i__ + 1) * a_dim1 + 1], &c__1);
+                saxpy_(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[ 1], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**T - w * v**T */
-                aocl_blas_ssyr2(uplo, &i__, &c_b14, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1],
-                                &c__1, &a[a_offset], lda);
+                ssyr2_(uplo, &i__, &c_b14, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1], &c__1, &a[a_offset], lda);
                 a[i__ + (i__ + 1) * a_dim1] = e[i__];
             }
             d__[i__ + 1] = a[i__ + 1 + (i__ + 1) * a_dim1];
@@ -282,36 +270,33 @@ void ssytd2_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *d
     {
         /* Reduce the lower triangle of A */
         i__1 = *n - 1;
-        for(i__ = 1; i__ <= i__1; ++i__)
+        for (i__ = 1;
+                i__ <= i__1;
+                ++i__)
         {
             /* Generate elementary reflector H(i) = I - tau * v * v**T */
             /* to annihilate A(i+2:n,i) */
             i__2 = *n - i__;
             /* Computing MIN */
             i__3 = i__ + 2;
-            aocl_lapack_slarfg(&i__2, &a[i__ + 1 + i__ * a_dim1],
-                               &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &taui);
+            slarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[min(i__3,*n) + i__ * a_dim1], &c__1, &taui);
             e[i__] = a[i__ + 1 + i__ * a_dim1];
-            if(taui != 0.f)
+            if (taui != 0.f)
             {
                 /* Apply H(i) from both sides to A(i+1:n,i+1:n) */
                 a[i__ + 1 + i__ * a_dim1] = 1.f;
                 /* Compute x := tau * A * v storing y in TAU(i:n-1) */
                 i__2 = *n - i__;
-                aocl_blas_ssymv(uplo, &i__2, &taui, &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
-                                &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b8, &tau[i__], &c__1);
+                ssymv_(uplo, &i__2, &taui, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b8, &tau[ i__], &c__1);
                 /* Compute w := x - 1/2 * tau * (x**T * v) * v */
                 i__2 = *n - i__;
-                alpha
-                    = taui * -.5f
-                      * aocl_blas_sdot(&i__2, &tau[i__], &c__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
+                alpha = taui * -.5f * sdot_(&i__2, &tau[i__], &c__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
                 i__2 = *n - i__;
-                aocl_blas_saxpy(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__], &c__1);
+                saxpy_(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[ i__], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**T - w * v**T */
                 i__2 = *n - i__;
-                aocl_blas_ssyr2(uplo, &i__2, &c_b14, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
-                                &c__1, &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
+                ssyr2_(uplo, &i__2, &c_b14, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__], &c__1, &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
                 a[i__ + 1 + i__ * a_dim1] = e[i__];
             }
             d__[i__] = a[i__ + i__ * a_dim1];
@@ -320,7 +305,7 @@ void ssytd2_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *d
         }
         d__[*n] = a[*n + *n * a_dim1];
     }
-    return;
+    return 0;
     /* End of SSYTD2 */
 }
 /* ssytd2_ */

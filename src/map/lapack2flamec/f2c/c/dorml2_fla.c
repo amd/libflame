@@ -1,29 +1,16 @@
-/*
- *     Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
- */
-
-/* ../netlib/dorml2.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dorml2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DORML2 multiplies a general matrix by the orthogonal matrix from a LQ factorization determined by sgelqf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DORML2 + dependencies */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorml2.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorml2. f"> */
 /* > [TGZ]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorml2.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorml2. f"> */
 /* > [ZIP]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorml2.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorml2. f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -94,7 +81,7 @@
 /* > The number of elementary reflectors whose product defines */
 /* > the matrix Q. */
 /* > If SIDE = 'L', M >= K >= 0;
- */
+*/
 /* > if SIDE = 'R', N >= K >= 0. */
 /* > \endverbatim */
 /* > */
@@ -112,7 +99,7 @@
 /* > \param[in] LDA */
 /* > \verbatim */
 /* > LDA is INTEGER */
-/* > The leading dimension of the array A. LDA >= fla_max(1,K). */
+/* > The leading dimension of the array A. LDA >= max(1,K). */
 /* > \endverbatim */
 /* > */
 /* > \param[in] TAU */
@@ -132,7 +119,7 @@
 /* > \param[in] LDC */
 /* > \verbatim */
 /* > LDC is INTEGER */
-/* > The leading dimension of the array C. LDC >= fla_max(1,M). */
+/* > The leading dimension of the array C. LDC >= max(1,M). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WORK */
@@ -158,17 +145,19 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dorml2_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
-                doublereal *a, aocl_int64_t *lda, doublereal *tau, doublereal *c__,
-                aocl_int64_t *ldc, doublereal *work, aocl_int64_t *info)
+int dorml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal * c__, integer *ldc, doublereal *work, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
+    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
     /* Local variables */
-    aocl_int64_t i__, i1, i2, i3, ic, jc, mi, ni, nq;
+    integer i__, i1, i2, i3, ic, jc, mi, ni, nq;
     doublereal aii;
     logical left;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    int dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int xerbla_(char *, integer *);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -202,10 +191,10 @@ void dorml2_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     --work;
     /* Function Body */
     *info = 0;
-    left = lsame_(side, "L", 1, 1);
-    notran = lsame_(trans, "N", 1, 1);
+    left = lsame_(side, "L");
+    notran = lsame_(trans, "N");
     /* NQ is the order of Q */
-    if(left)
+    if (left)
     {
         nq = *m;
     }
@@ -213,46 +202,46 @@ void dorml2_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     {
         nq = *n;
     }
-    if(!left && !lsame_(side, "R", 1, 1))
+    if (! left && ! lsame_(side, "R"))
     {
         *info = -1;
     }
-    else if(!notran && !lsame_(trans, "T", 1, 1))
+    else if (! notran && ! lsame_(trans, "T"))
     {
         *info = -2;
     }
-    else if(*m < 0)
+    else if (*m < 0)
     {
         *info = -3;
     }
-    else if(*n < 0)
+    else if (*n < 0)
     {
         *info = -4;
     }
-    else if(*k < 0 || *k > nq)
+    else if (*k < 0 || *k > nq)
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, *k))
+    else if (*lda < max(1,*k))
     {
         *info = -7;
     }
-    else if(*ldc < fla_max(1, *m))
+    else if (*ldc < max(1,*m))
     {
         *info = -10;
     }
-    if(*info != 0)
+    if (*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DORML2", &i__1, (ftnlen)6);
-        return;
+        xerbla_("DORML2", &i__1);
+        return 0;
     }
     /* Quick return if possible */
-    if(*m == 0 || *n == 0 || *k == 0)
+    if (*m == 0 || *n == 0 || *k == 0)
     {
-        return;
+        return 0;
     }
-    if(left && notran || !left && !notran)
+    if (left && notran || ! left && ! notran)
     {
         i1 = 1;
         i2 = *k;
@@ -264,7 +253,7 @@ void dorml2_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
         i2 = 1;
         i3 = -1;
     }
-    if(left)
+    if (left)
     {
         ni = *n;
         jc = 1;
@@ -276,9 +265,11 @@ void dorml2_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     }
     i__1 = i2;
     i__2 = i3;
-    for(i__ = i1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
+    for (i__ = i1;
+            i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
+            i__ += i__2)
     {
-        if(left)
+        if (left)
         {
             /* H(i) is applied to C(i:m,1:n) */
             mi = *m - i__ + 1;
@@ -293,12 +284,11 @@ void dorml2_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
         /* Apply H(i) */
         aii = a[i__ + i__ * a_dim1];
         a[i__ + i__ * a_dim1] = 1.;
-        aocl_lapack_dlarf(side, &mi, &ni, &a[i__ + i__ * a_dim1], lda, &tau[i__],
-                          &c__[ic + jc * c_dim1], ldc, &work[1]);
+        dlarf_(side, &mi, &ni, &a[i__ + i__ * a_dim1], lda, &tau[i__], &c__[ ic + jc * c_dim1], ldc, &work[1]);
         a[i__ + i__ * a_dim1] = aii;
         /* L10: */
     }
-    return;
+    return 0;
     /* End of DORML2 */
 }
 /* dorml2_ */

@@ -1,33 +1,21 @@
-/* ../netlib/sormqr.f -- translated by f2c (version 20000121). You must link the resulting object
- * file with the libraries: -lf2c -lm (in that order) */
-
- /*
-  *   Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
- */
-
-#include "FLAME.h"
+/* ../netlib/sormqr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
-static aocl_int64_t c__2 = 2;
-static aocl_int64_t c__65 = 65;
+static integer c__1 = 1;
+static integer c_n1 = -1;
+static integer c__2 = 2;
+static integer c__65 = 65;
 /* > \brief \b SORMQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SORMQR + dependencies */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sormqr.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sormqr. f"> */
 /* > [TGZ]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sormqr.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sormqr. f"> */
 /* > [ZIP]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormqr.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormqr. f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -67,7 +55,7 @@ static aocl_int64_t c__65 = 65;
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'L': apply Q or Q**T from the Left;
- */
+*/
 /* > = 'R': apply Q or Q**T from the Right. */
 /* > \endverbatim */
 /* > */
@@ -75,7 +63,7 @@ static aocl_int64_t c__65 = 65;
 /* > \verbatim */
 /* > TRANS is CHARACTER*1 */
 /* > = 'N': No transpose, apply Q;
- */
+*/
 /* > = 'T': Transpose, apply Q**T. */
 /* > \endverbatim */
 /* > */
@@ -97,7 +85,7 @@ static aocl_int64_t c__65 = 65;
 /* > The number of elementary reflectors whose product defines */
 /* > the matrix Q. */
 /* > If SIDE = 'L', M >= K >= 0;
- */
+*/
 /* > if SIDE = 'R', N >= K >= 0. */
 /* > \endverbatim */
 /* > */
@@ -113,9 +101,9 @@ static aocl_int64_t c__65 = 65;
 /* > \verbatim */
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
-/* > If SIDE = 'L', LDA >= fla_max(1,M);
- */
-/* > if SIDE = 'R', LDA >= fla_max(1,N). */
+/* > If SIDE = 'L', LDA >= max(1,M);
+*/
+/* > if SIDE = 'R', LDA >= max(1,N). */
 /* > \endverbatim */
 /* > */
 /* > \param[in] TAU */
@@ -135,7 +123,7 @@ static aocl_int64_t c__65 = 65;
 /* > \param[in] LDC */
 /* > \verbatim */
 /* > LDC is INTEGER */
-/* > The leading dimension of the array C. LDC >= fla_max(1,M). */
+/* > The leading dimension of the array C. LDC >= max(1,M). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WORK */
@@ -148,10 +136,12 @@ static aocl_int64_t c__65 = 65;
 /* > \verbatim */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
-/* > If SIDE = 'L', LWORK >= fla_max(1,N);
- */
-/* > if SIDE = 'R', LWORK >= fla_max(1,M). */
-/* > For good performance, LWORK should generally be larger. */
+/* > If SIDE = 'L', LWORK >= max(1,N);
+*/
+/* > if SIDE = 'R', LWORK >= max(1,M). */
+/* > For optimum performance LWORK >= N*NB if SIDE = 'L', and */
+/* > LWORK >= M*NB if SIDE = 'R', where NB is the optimal */
+/* > blocksize. */
 /* > */
 /* > If LWORK = -1, then a workspace query is assumed;
 the routine */
@@ -172,40 +162,38 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
+/* > \date November 2011 */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int lapack_sormqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
-                  real *a, aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc, real *work,
-                  aocl_int64_t *lwork, aocl_int64_t *info)
+int sormqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
+    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     /* Local variables */
+    integer i__;
+    real t[4160] /* was [65][64] */
+    ;
+    integer i1, i2, i3, ib, ic, jc, nb, mi, ni, nq, nw, iws;
     logical left;
-    aocl_int64_t i__;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t nbmin, iinfo, i1, i2, i3, ib, ic, jc, nb;
+    extern logical lsame_(char *, char *);
+    integer nbmin, iinfo;
     extern /* Subroutine */
-        void
-        sorm2r_fla(char *, char *, aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, real *,
-                      aocl_int64_t *, real *, real *, aocl_int64_t *, real *, aocl_int64_t *);
-    aocl_int64_t mi, ni, nq, nw;
+    int sorm2r_fla(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), slarfb_(char *, char *, char *, char * , integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(char *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
     logical notran;
-    aocl_int64_t ldwork, lwkopt;
+    integer ldwork, lwkopt;
     logical lquery;
-    aocl_int64_t iwt;
-#if FLA_OPENMP_MULTITHREADING
-    int thread_id, actual_num_threads;
-    aocl_int64_t index, mi_sub, ni_sub;
-#endif
-    /* -- LAPACK computational routine -- */
+    /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
+    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -214,6 +202,8 @@ int lapack_sormqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aoc
     /* .. Parameters .. */
     /* .. */
     /* .. Local Scalars .. */
+    /* .. */
+    /* .. Local Arrays .. */
     /* .. */
     /* .. External Functions .. */
     /* .. */
@@ -224,116 +214,116 @@ int lapack_sormqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aoc
     /* .. Executable Statements .. */
     /* Test the input arguments */
     /* Parameter adjustments */
-
-    /* Initialize global context data */
-    aocl_fla_init();
-
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     --tau;
     c_dim1 = *ldc;
-    c_offset = 1 + c_dim1 * 1;
+    c_offset = 1 + c_dim1;
     c__ -= c_offset;
     --work;
     /* Function Body */
     *info = 0;
-    left = lsame_(side, "L", 1, 1);
-    notran = lsame_(trans, "N", 1, 1);
+    left = lsame_(side, "L");
+    notran = lsame_(trans, "N");
     lquery = *lwork == -1;
     /* NQ is the order of Q and NW is the minimum dimension of WORK */
-    if(left)
+    if (left)
     {
         nq = *m;
-        nw = fla_max(1, *n);
+        nw = *n;
     }
     else
     {
         nq = *n;
-        nw = fla_max(1, *m);
+        nw = *m;
     }
-    if(!left && !lsame_(side, "R", 1, 1))
+    if (! left && ! lsame_(side, "R"))
     {
         *info = -1;
     }
-    else if(!notran && !lsame_(trans, "T", 1, 1))
+    else if (! notran && ! lsame_(trans, "T"))
     {
         *info = -2;
     }
-    else if(*m < 0)
+    else if (*m < 0)
     {
         *info = -3;
     }
-    else if(*n < 0)
+    else if (*n < 0)
     {
         *info = -4;
     }
-    else if(*k < 0 || *k > nq)
+    else if (*k < 0 || *k > nq)
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, nq))
+    else if (*lda < max(1,nq))
     {
         *info = -7;
     }
-    else if(*ldc < fla_max(1, *m))
+    else if (*ldc < max(1,*m))
     {
         *info = -10;
     }
-    else if(*lwork < nw && !lquery)
+    else if (*lwork < max(1,nw) && ! lquery)
     {
         *info = -12;
     }
-    if(*info == 0)
+    if (*info == 0)
     {
-        /* Compute the workspace requirements */
+        /* Determine the block size. NB may be at most NBMAX, where NBMAX */
+        /* is used to define the local array T. */
         /* Computing MIN */
         i__1 = 64;
-        i__2 = aocl_lapack_ilaenv(&c__1, "SORMQR", ch__1, m, n, k, &c_n1); // , expr subst
-        nb = fla_min(i__1, i__2);
-        lwkopt = nw * nb + 4160;
-        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
+        i__2 = ilaenv_(&c__1, "SORMQR", ch__1, m, n, k, &c_n1); // , expr subst
+        nb = min(i__1,i__2);
+        lwkopt = max(1,nw) * nb;
+        work[1] = (real) lwkopt;
     }
-    if(*info != 0)
+    if (*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SORMQR", &i__1, (ftnlen)6);
+        xerbla_("SORMQR", &i__1);
         return 0;
     }
-    else if(lquery)
+    else if (lquery)
     {
         return 0;
     }
     /* Quick return if possible */
-    if(*m == 0 || *n == 0 || *k == 0)
+    if (*m == 0 || *n == 0 || *k == 0)
     {
         work[1] = 1.f;
         return 0;
     }
     nbmin = 2;
     ldwork = nw;
-    if(nb > 1 && nb < *k)
+    if (nb > 1 && nb < *k)
     {
-        if(*lwork < lwkopt)
+        iws = nw * nb;
+        if (*lwork < iws)
         {
-            nb = (*lwork - 4160) / ldwork;
+            nb = *lwork / ldwork;
             /* Computing MAX */
             i__1 = 2;
-            i__2 = aocl_lapack_ilaenv(&c__2, "SORMQR", ch__1, m, n, k, &c_n1); // , expr subst
-            nbmin = fla_max(i__1, i__2);
+            i__2 = ilaenv_(&c__2, "SORMQR", ch__1, m, n, k, &c_n1); // , expr subst
+            nbmin = max(i__1,i__2);
         }
     }
-    if(nb < nbmin || nb >= *k)
+    else
+    {
+        iws = nw;
+    }
+    if (nb < nbmin || nb >= *k)
     {
         /* Use unblocked code */
-        sorm2r_fla(side, trans, m, n, k, &a[a_offset], lda, &tau[1], &c__[c_offset], ldc,
-                      &work[1], &iinfo);
+        sorm2r_fla(side, trans, m, n, k, &a[a_offset], lda, &tau[1], &c__[ c_offset], ldc, &work[1], &iinfo);
     }
     else
     {
         /* Use blocked code */
-        iwt = nw * nb + 1;
-        if(left && !notran || !left && notran)
+        if (left && ! notran || ! left && notran)
         {
             i1 = 1;
             i2 = *k;
@@ -345,7 +335,7 @@ int lapack_sormqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aoc
             i2 = 1;
             i3 = -nb;
         }
-        if(left)
+        if (left)
         {
             ni = *n;
             jc = 1;
@@ -357,79 +347,37 @@ int lapack_sormqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aoc
         }
         i__1 = i2;
         i__2 = i3;
-
-#ifdef FLA_OPENMP_MULTITHREADING
-        /* Get optimum thread number for DORMLQ*/
-        FLA_Thread_optimum(FLA_ORMQR, &actual_num_threads);
-#pragma omp parallel num_threads(actual_num_threads) private(i__, thread_id, mi_sub, ni_sub, index)
+        for (i__ = i1;
+                i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
+                i__ += i__2)
         {
-            thread_id = omp_get_thread_num();
-#else
-        {
-#endif
-            for(i__ = i1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
+            /* Computing MIN */
+            i__4 = nb;
+            i__5 = *k - i__ + 1; // , expr subst
+            ib = min(i__4,i__5);
+            /* Form the triangular factor of the block reflector */
+            /* H = H(i) H(i+1) . . . H(i+ib-1) */
+            i__4 = nq - i__ + 1;
+            slarft_("Forward", "Columnwise", &i__4, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__], t, &c__65) ;
+            if (left)
             {
-                /* Computing MIN */
-#ifdef FLA_OPENMP_MULTITHREADING
-/* Compute triangular factor of the block reflector in a single thread */
-#pragma omp single
-#endif
-                {
-                    i__4 = nb;
-                    i__5 = *k - i__ + 1; // , expr subst
-                    ib = fla_min(i__4, i__5);
-                    /* Form the triangular factor of the block reflector */
-                    /* H = H(i) H(i+1) . . . H(i+ib-1) */
-                    i__4 = nq - i__ + 1;
-                    aocl_lapack_slarft("Forward", "Columnwise", &i__4, &ib, &a[i__ + i__ * a_dim1],
-                                       lda, &tau[i__], &work[iwt], &c__65);
-                }
-                if(left)
-                {
-                    /* H or H**T is applied to C(i:m,1:n) */
-                    mi = *m - i__ + 1;
-                    ic = i__;
-#ifdef FLA_OPENMP_MULTITHREADING
-                    /* Determine the sub partition range of current thread */
-                    FLA_Thread_get_subrange(thread_id, actual_num_threads, ni, &ni_sub, &index);
-                    mi_sub = mi;
-#endif
-                }
-                else
-                {
-                    /* H or H**T is applied to C(1:m,i:n) */
-                    ni = *n - i__ + 1;
-                    jc = i__;
-#ifdef FLA_OPENMP_MULTITHREADING
-                    /* Determine the sub partition range of current thread */
-                    FLA_Thread_get_subrange(thread_id, actual_num_threads, mi, &mi_sub, &index);
-                    ni_sub = ni;
-#endif
-                }
-                /* Apply H or H**T */
-#ifdef FLA_OPENMP_MULTITHREADING
-                if(left)
-                    aocl_lapack_slarfb(side, trans, "Forward", "Columnwise", &mi_sub, &ni_sub, &ib,
-                                       &a[i__ + i__ * a_dim1], lda, &work[iwt], &c__65,
-                                       &c__[ic + (index + jc) * c_dim1], ldc, &work[1 + index],
-                                       &ldwork);
-                else
-                    aocl_lapack_slarfb(side, trans, "Forward", "Columnwise", &mi_sub, &ni_sub, &ib,
-                                       &a[i__ + i__ * a_dim1], lda, &work[iwt], &c__65,
-                                       &c__[index + ic + jc * c_dim1], ldc, &work[1 + index],
-                                       &ldwork);
-#pragma omp barrier
-#else
-                aocl_lapack_slarfb(side, trans, "Forward", "Columnwise", &mi, &ni, &ib,
-                                   &a[i__ + i__ * a_dim1], lda, &work[iwt], &c__65,
-                                   &c__[ic + jc * c_dim1], ldc, &work[1], &ldwork);
-#endif
-                /* L10: */
+                /* H or H**T is applied to C(i:m,1:n) */
+                mi = *m - i__ + 1;
+                ic = i__;
             }
+            else
+            {
+                /* H or H**T is applied to C(1:m,i:n) */
+                ni = *n - i__ + 1;
+                jc = i__;
+            }
+            /* Apply H or H**T */
+            slarfb_(side, trans, "Forward", "Columnwise", &mi, &ni, &ib, &a[ i__ + i__ * a_dim1], lda, t, &c__65, &c__[ic + jc * c_dim1], ldc, &work[1], &ldwork);
+            /* L10: */
         }
     }
-    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
+    work[1] = (real) lwkopt;
     return 0;
     /* End of SORMQR */
 }
-/* lapack_sormqr */
+/* sormqr_ */

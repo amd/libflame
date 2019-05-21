@@ -1,32 +1,19 @@
-/*
- *     Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
- */
-
-/* ../netlib/sormtr.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sormtr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c_n1 = -1;
 /* > \brief \b SORMTR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SORMTR + dependencies */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sormtr.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sormtr. f"> */
 /* > [TGZ]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sormtr.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sormtr. f"> */
 /* > [ZIP]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormtr.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormtr. f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -57,7 +44,7 @@ static aocl_int64_t c_n1 = -1;
 /* > nq-1 elementary reflectors, as returned by SSYTRD: */
 /* > */
 /* > if UPLO = 'U', Q = H(nq-1) . . . H(2) H(1);
- */
+*/
 /* > */
 /* > if UPLO = 'L', Q = H(1) H(2) . . . H(nq-1). */
 /* > \endverbatim */
@@ -67,7 +54,7 @@ static aocl_int64_t c_n1 = -1;
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'L': apply Q or Q**T from the Left;
- */
+*/
 /* > = 'R': apply Q or Q**T from the Right. */
 /* > \endverbatim */
 /* > */
@@ -76,7 +63,7 @@ static aocl_int64_t c_n1 = -1;
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A contains elementary reflectors */
 /* > from SSYTRD;
- */
+*/
 /* > = 'L': Lower triangle of A contains elementary reflectors */
 /* > from SSYTRD. */
 /* > \endverbatim */
@@ -85,7 +72,7 @@ static aocl_int64_t c_n1 = -1;
 /* > \verbatim */
 /* > TRANS is CHARACTER*1 */
 /* > = 'N': No transpose, apply Q;
- */
+*/
 /* > = 'T': Transpose, apply Q**T. */
 /* > \endverbatim */
 /* > */
@@ -114,8 +101,8 @@ static aocl_int64_t c_n1 = -1;
 /* > \verbatim */
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
-/* > LDA >= fla_max(1,M) if SIDE = 'L';
-LDA >= fla_max(1,N) if SIDE = 'R'. */
+/* > LDA >= max(1,M) if SIDE = 'L';
+LDA >= max(1,N) if SIDE = 'R'. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] TAU */
@@ -137,7 +124,7 @@ LDA >= fla_max(1,N) if SIDE = 'R'. */
 /* > \param[in] LDC */
 /* > \verbatim */
 /* > LDC is INTEGER */
-/* > The leading dimension of the array C. LDC >= fla_max(1,M). */
+/* > The leading dimension of the array C. LDC >= max(1,M). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WORK */
@@ -150,9 +137,9 @@ LDA >= fla_max(1,N) if SIDE = 'R'. */
 /* > \verbatim */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
-/* > If SIDE = 'L', LWORK >= fla_max(1,N);
- */
-/* > if SIDE = 'R', LWORK >= fla_max(1,M). */
+/* > If SIDE = 'L', LWORK >= max(1,N);
+*/
+/* > if SIDE = 'R', LWORK >= max(1,M). */
 /* > For optimum performance LWORK >= N*NB if SIDE = 'L', and */
 /* > LWORK >= M*NB if SIDE = 'R', where NB is the optimal */
 /* > blocksize. */
@@ -180,29 +167,29 @@ the routine */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sormtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n, real *a,
-                aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc, real *work,
-                aocl_int64_t *lwork, aocl_int64_t *info)
+int sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
+    integer a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     /* Local variables */
-    aocl_int64_t i1, i2, nb, mi, ni, nq, nw;
+    integer i1, i2, nb, mi, ni, nq, nw;
     logical left;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    extern logical lsame_(char *, char *);
+    integer iinfo;
     logical upper;
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    int xerbla_(char *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int sormql_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-        int
-        lapack_sormqr(char *, char *, aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, real *,
-                   aocl_int64_t *, real *, real *, aocl_int64_t *, real *, aocl_int64_t *,
-                   aocl_int64_t *);
+    int sormqr_fla(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -233,11 +220,11 @@ void sormtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
     --work;
     /* Function Body */
     *info = 0;
-    left = lsame_(side, "L", 1, 1);
-    upper = lsame_(uplo, "U", 1, 1);
+    left = lsame_(side, "L");
+    upper = lsame_(uplo, "U");
     lquery = *lwork == -1;
     /* NQ is the order of Q and NW is the minimum dimension of WORK */
-    if(left)
+    if (left)
     {
         nq = *m;
         nw = *n;
@@ -247,90 +234,90 @@ void sormtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
         nq = *n;
         nw = *m;
     }
-    if(!left && !lsame_(side, "R", 1, 1))
+    if (! left && ! lsame_(side, "R"))
     {
         *info = -1;
     }
-    else if(!upper && !lsame_(uplo, "L", 1, 1))
+    else if (! upper && ! lsame_(uplo, "L"))
     {
         *info = -2;
     }
-    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "T", 1, 1))
+    else if (! lsame_(trans, "N") && ! lsame_(trans, "T"))
     {
         *info = -3;
     }
-    else if(*m < 0)
+    else if (*m < 0)
     {
         *info = -4;
     }
-    else if(*n < 0)
+    else if (*n < 0)
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, nq))
+    else if (*lda < max(1,nq))
     {
         *info = -7;
     }
-    else if(*ldc < fla_max(1, *m))
+    else if (*ldc < max(1,*m))
     {
         *info = -10;
     }
-    else if(*lwork < fla_max(1, nw) && !lquery)
+    else if (*lwork < max(1,nw) && ! lquery)
     {
         *info = -12;
     }
-    if(*info == 0)
+    if (*info == 0)
     {
-        if(upper)
+        if (upper)
         {
-            if(left)
+            if (left)
             {
                 i__2 = *m - 1;
                 i__3 = *m - 1;
-                nb = aocl_lapack_ilaenv(&c__1, "SORMQL", ch__1, &i__2, n, &i__3, &c_n1);
+                nb = ilaenv_(&c__1, "SORMQL", ch__1, &i__2, n, &i__3, &c_n1);
             }
             else
             {
                 i__2 = *n - 1;
                 i__3 = *n - 1;
-                nb = aocl_lapack_ilaenv(&c__1, "SORMQL", ch__1, m, &i__2, &i__3, &c_n1);
+                nb = ilaenv_(&c__1, "SORMQL", ch__1, m, &i__2, &i__3, &c_n1);
             }
         }
         else
         {
-            if(left)
+            if (left)
             {
                 i__2 = *m - 1;
                 i__3 = *m - 1;
-                nb = aocl_lapack_ilaenv(&c__1, "SORMQR", ch__1, &i__2, n, &i__3, &c_n1);
+                nb = ilaenv_(&c__1, "SORMQR", ch__1, &i__2, n, &i__3, &c_n1);
             }
             else
             {
                 i__2 = *n - 1;
                 i__3 = *n - 1;
-                nb = aocl_lapack_ilaenv(&c__1, "SORMQR", ch__1, m, &i__2, &i__3, &c_n1);
+                nb = ilaenv_(&c__1, "SORMQR", ch__1, m, &i__2, &i__3, &c_n1);
             }
         }
-        lwkopt = fla_max(1, nw) * nb;
-        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
+        lwkopt = max(1,nw) * nb;
+        work[1] = (real) lwkopt;
     }
-    if(*info != 0)
+    if (*info != 0)
     {
         i__2 = -(*info);
-        aocl_blas_xerbla("SORMTR", &i__2, (ftnlen)6);
-        return;
+        xerbla_("SORMTR", &i__2);
+        return 0;
     }
-    else if(lquery)
+    else if (lquery)
     {
-        return;
+        return 0;
     }
     /* Quick return if possible */
-    if(*m == 0 || *n == 0 || nq == 1)
+    if (*m == 0 || *n == 0 || nq == 1)
     {
         work[1] = 1.f;
-        return;
+        return 0;
     }
-    if(left)
+    if (left)
     {
         mi = *m - 1;
         ni = *n;
@@ -340,17 +327,16 @@ void sormtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
         mi = *m;
         ni = *n - 1;
     }
-    if(upper)
+    if (upper)
     {
         /* Q was determined by a call to SSYTRD with UPLO = 'U' */
         i__2 = nq - 1;
-        aocl_lapack_sormql(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1],
-                           &c__[c_offset], ldc, &work[1], lwork, &iinfo);
+        sormql_(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, & tau[1], &c__[c_offset], ldc, &work[1], lwork, &iinfo);
     }
     else
     {
         /* Q was determined by a call to SSYTRD with UPLO = 'L' */
-        if(left)
+        if (left)
         {
             i1 = 2;
             i2 = 1;
@@ -361,11 +347,10 @@ void sormtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
             i2 = 2;
         }
         i__2 = nq - 1;
-        lapack_sormqr(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1],
-                   &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
+        sormqr_fla(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1], & c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     }
-    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
-    return;
+    work[1] = (real) lwkopt;
+    return 0;
     /* End of SORMTR */
 }
 /* sormtr_ */

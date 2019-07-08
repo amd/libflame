@@ -329,144 +329,66 @@ void zgetf2_(aocl_int_t *m, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A,
 #endif /* FLA_ENABLE_AMD_OPT */
 
 // Note that p should be set zero.
-#define LAPACK_getrf_body(prefix)                                                            \
-    FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                                   \
-    FLA_Obj A, p;                                                                            \
-    aocl_int64_t min_m_n = fla_min(*m, *n);                                                       \
-    FLA_Error e_val = FLA_SUCCESS;                                                           \
-    FLA_Error init_result;                                                                   \
-    FLA_Bool skip = FALSE;                                                                   \
-                                                                                             \
-    if(*m < FLA_GETRF_SMALL && *n < FLA_GETRF_SMALL) /* Small sizes- lapack path */          \
-    {                                                                                        \
-        switch(datatype)                                                                     \
-        {                                                                                    \
-            case FLA_FLOAT:                                                                  \
-            {                                                                                \
-                lapack_sgetrf(m, n, (float *)buff_A, ldim_A, buff_p, info);                  \
-                break;                                                                       \
-            }                                                                                \
-            case FLA_COMPLEX:                                                                \
-            {                                                                                \
-                lapack_cgetrf(m, n, (scomplex *)buff_A, ldim_A, buff_p, info);               \
-                break;                                                                       \
-            }                                                                                \
-            case FLA_DOUBLE_COMPLEX:                                                         \
-            {                                                                                \
-                lapack_zgetrf(m, n, (dcomplex *)buff_A, ldim_A, buff_p, info);               \
-                break;                                                                       \
-            }                                                                                \
-        }                                                                                    \
-        if(*info != 0)                                                                       \
-            skip = TRUE;                                                                     \
-    }                                                                                        \
-    else if((datatype == FLA_FLOAT && *m < FLA_GETRF_FLOAT && *n < FLA_GETRF_FLOAT)          \
-            || (datatype == FLA_COMPLEX && *m < FLA_GETRF_COMPLEX && *n < FLA_GETRF_COMPLEX) \
-            || (datatype == FLA_DOUBLE_COMPLEX && *m < FLA_GETRF_DOUBLE_COMPLEX              \
-                && *n < FLA_GETRF_DOUBLE_COMPLEX))                                           \
-    {                                                                                        \
-        fla_dim_t *buff_p64 = (fla_dim_t *) FLA_malloc(sizeof(fla_dim_t) * min_m_n);         \
-        if(buff_p64 == NULL) { return; }                                                     \
-        FLA_Init_safe(&init_result);                                                         \
-                                                                                             \
-        FLA_Obj_create_without_buffer(datatype, *m, *n, &A);                                 \
-        FLA_Obj_attach_buffer(buff_A, 1, *ldim_A, &A);                                       \
-                                                                                             \
-        FLA_Obj_create_without_buffer(FLA_INT, min_m_n, 1, &p);                              \
-        FLA_Obj_attach_buffer(buff_p64, 1, min_m_n, &p);                                     \
-                                                                                             \
-        e_val = FLA_LU_piv(A, p);                                                            \
-        FLA_Shift_pivots_to(FLA_LAPACK_PIVOTS, p);                                           \
-                                                                                             \
-        FLA_Obj_free_without_buffer(&A);                                                     \
-        FLA_Obj_free_without_buffer(&p);                                                     \
-                                                                                             \
-        FLA_Finalize_safe(init_result);                                                      \
-        for(aocl_int64_t ip = 0; ip < min_m_n; ip++)                                         \
-            buff_p[ip] = (aocl_int_t)buff_p64[ip];                                           \
-        FLA_free(buff_p64);                                                                  \
-    }                                                                                        \
-    else                                                                                     \
-    {                                                                                        \
-        switch(datatype)                                                                     \
-        {                                                                                    \
-            case FLA_FLOAT:                                                                  \
-            {                                                                                \
-                aocl_lapack_sgetrf2(m, n, (float *)buff_A, ldim_A, buff_p, info);                       \
-                break;                                                                       \
-            }                                                                                \
-            case FLA_COMPLEX:                                                                \
-            {                                                                                \
-                aocl_lapack_cgetrf2(m, n, (scomplex *)buff_A, ldim_A, buff_p, info);                    \
-                break;                                                                       \
-            }                                                                                \
-            case FLA_DOUBLE_COMPLEX:                                                         \
-            {                                                                                \
-                aocl_lapack_zgetrf2(m, n, (dcomplex *)buff_A, ldim_A, buff_p, info);                    \
-                break;                                                                       \
-            }                                                                                \
-        }                                                                                    \
-        if(*info != 0)                                                                       \
-            skip = TRUE;                                                                     \
-    }                                                                                        \
-                                                                                             \
-    if(e_val != FLA_SUCCESS)                                                                 \
-        *info = e_val + 1;                                                                   \
-    else if(skip != TRUE)                                                                    \
-        *info = 0;
-
-#else /* FLA_ENABLE_SUPERMATRIX */
-
-#define LAPACK_getrf_body_s LAPACK_getrf_body
-#define LAPACK_getrf_body_d LAPACK_getrf_body
-#define LAPACK_getrf_body_z LAPACK_getrf_body
-
-// Note that p should be set zero.
-#define LAPACK_getrf_body(prefix)                            \
-    FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);   \
-    FLA_Obj A, p, AH, ph;                                    \
-    integer min_m_n = fla_min(*m, *n);                       \
-    fla_dim_t nth, b_flash;                                  \
-    FLA_Error e_val;                                         \
-    FLA_Error init_result;                                   \
-                                                             \
-    nth = FLASH_get_num_threads(1);                          \
-    b_flash = FLA_EXT_HIER_BLOCKSIZE;                        \
-                                                             \
-    FLA_Init_safe(&init_result);                             \
-    FLASH_Queue_set_num_threads(nth);                        \
-                                                             \
-    FLA_Obj_create_without_buffer(datatype, *m, *n, &A);     \
-    FLA_Obj_attach_buffer(buff_A, 1, *ldim_A, &A);           \
-                                                             \
-    FLA_Obj_create_without_buffer(FLA_INT, min_m_n, 1, &p);  \
-    FLA_Obj_attach_buffer(buff_p, 1, min_m_n, &p);           \
-                                                             \
-    FLA_Set(FLA_ZERO, p);                                    \
-                                                             \
-    FLASH_Obj_create_hier_copy_of_flat(A, 1, &b_flash, &AH); \
-    FLASH_Obj_create_hier_copy_of_flat(p, 1, &b_flash, &ph); \
-                                                             \
-    e_val = FLASH_LU_piv(AH, ph);                            \
-                                                             \
-    FLASH_Obj_flatten(AH, A);                                \
-    FLASH_Obj_flatten(ph, p);                                \
-    FLA_Shift_pivots_to(FLA_LAPACK_PIVOTS, p);               \
-                                                             \
-    FLA_Obj_free(&AH);                                       \
-    FLA_Obj_free(&ph);                                       \
-                                                             \
-    FLA_Obj_free_without_buffer(&A);                         \
-    FLA_Obj_free_without_buffer(&p);                         \
-                                                             \
-    FLA_Finalize_safe(init_result);                          \
-                                                             \
-    if(e_val != FLA_SUCCESS)                                 \
-        *info = e_val + 1;                                   \
-    else                                                     \
-        *info = 0;
-
-#endif /* FLA_ENABLE_SUPERMATRIX */
+#if 1
+#define LAPACK_getrf_body(prefix)                                            \
+  FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                     \
+  FLA_Obj      A, p;                                                         \
+  int          min_m_n    = min( *m, *n );                                   \
+  FLA_Error    e_val;                                                        \
+  FLA_Error    init_result;                                                  \
+  void *ts_hdl;                                                              \
+                                                                             \
+  FLA_Init_safe_ts( &ts_hdl, &init_result );                                 \
+                                                                             \
+  FLA_Obj_create_without_buffer_ts( &ts_hdl, datatype, *m, *n, &A );         \
+  FLA_Obj_attach_buffer_ts( &ts_hdl, buff_A, 1, *ldim_A, &A );               \
+                                                                             \
+  FLA_Obj_create_without_buffer_ts( &ts_hdl, FLA_INT, min_m_n, 1, &p );      \
+  FLA_Obj_attach_buffer_ts( &ts_hdl, buff_p, 1, min_m_n, &p );               \
+  FLA_Set_ts( &ts_hdl, FLA_ZERO, p );                                        \
+                                                                             \
+  e_val = FLA_LU_piv_ts( &ts_hdl, A, p );                                    \
+  FLA_Shift_pivots_to_ts( &ts_hdl, FLA_LAPACK_PIVOTS, p );                   \
+                                                                             \
+  FLA_Obj_free_without_buffer_ts( &ts_hdl, &A );                             \
+  FLA_Obj_free_without_buffer_ts( &ts_hdl, &p );                             \
+                                                                             \
+  FLA_Finalize_safe_ts( &ts_hdl, init_result );                              \
+                                                                             \
+  if ( e_val != FLA_SUCCESS ) *info = e_val + 1;                             \
+  else                        *info = 0;                                     \
+                                                                             \
+  return 0;
+#else
+#define LAPACK_getrf_body(prefix)                               \
+  FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);        \
+  FLA_Obj      A, p;                                            \
+  int          min_m_n    = min( *m, *n );                      \
+  FLA_Error    e_val;                                           \
+  FLA_Error    init_result;                                     \
+                                                                \
+  FLA_Init_safe( &init_result );                                \
+                                                                \
+  FLA_Obj_create_without_buffer( datatype, *m, *n, &A );        \
+  FLA_Obj_attach_buffer( buff_A, 1, *ldim_A, &A );              \
+                                                                \
+  FLA_Obj_create_without_buffer( FLA_INT, min_m_n, 1, &p );     \
+  FLA_Obj_attach_buffer( buff_p, 1, min_m_n, &p );              \
+  FLA_Set( FLA_ZERO, p );                                       \
+                                                                \
+  e_val = FLA_LU_piv( A, p );                                   \
+  FLA_Shift_pivots_to( FLA_LAPACK_PIVOTS, p );                  \
+                                                                \
+  FLA_Obj_free_without_buffer( &A );                            \
+  FLA_Obj_free_without_buffer( &p );                            \
+                                                                \
+  FLA_Finalize_safe( init_result );                             \
+                                                                \
+  if ( e_val != FLA_SUCCESS ) *info = e_val + 1;                \
+  else                        *info = 0;                        \
+                                                                \
+  return 0;
+#endif
 
 LAPACK_getrf(s)
 {

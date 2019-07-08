@@ -10,11 +10,70 @@
 
 #include "FLAME.h"
 
-TLS_CLASS_SPEC fla_apqudut_t*   flash_apqudut_cntl_leaf = NULL;
-TLS_CLASS_SPEC fla_apqudut_t*   flash_apqudut_cntl_mid = NULL;
-TLS_CLASS_SPEC fla_apqudut_t*   flash_apqudut_cntl = NULL;
-TLS_CLASS_SPEC fla_blocksize_t* flash_apqudut_var2_bsize = NULL;
-TLS_CLASS_SPEC fla_blocksize_t* flash_apqudut_var3_bsize = NULL;
+#ifdef FLA_ENABLE_THREAD_SAFE_INTERFACES
+void FLASH_Apply_QUD_UT_cntl_init_ts(FLA_Cntl_init_flash_s *FLA_cntl_flash_init_i)
+{
+	// Set blocksizes for hierarchical storage.
+	FLA_cntl_flash_init_i->flash_apqudut_var2_bsize = FLA_Blocksize_create( 1, 1, 1, 1 );
+	FLA_cntl_flash_init_i->flash_apqudut_var3_bsize = FLA_Blocksize_create( 1, 1, 1, 1 );
+
+	// Create a control tree to invoke variant 1.
+	FLA_cntl_flash_init_i->flash_apqudut_cntl_leaf = FLA_Cntl_apqudut_obj_create( FLA_HIER,
+	                                                       FLA_SUBPROBLEM, 
+	                                                       NULL,
+	                                                       NULL,
+	                                                       NULL,
+	                                                       NULL,
+	                                                       NULL,
+	                                                       NULL,
+	                                                       NULL,
+	                                                       NULL,
+	                                                       NULL );
+
+	// Create a control tree to invoke variant 2.
+	FLA_cntl_flash_init_i->flash_apqudut_cntl_mid  = FLA_Cntl_apqudut_obj_create( FLA_HIER,
+	                                                       FLA_BLOCKED_VARIANT2, 
+	                                                       FLA_cntl_flash_init_i->flash_apqudut_var2_bsize,
+	                                                       FLA_cntl_flash_init_i->flash_apqudut_cntl_leaf,
+	                                                       NULL,
+	                                                       NULL,
+	                                                       NULL,
+	                                                       NULL,
+	                                                       NULL,
+	                                                       NULL,
+	                                                       NULL );
+
+	// Create a control tree to invoke variant 3.
+	FLA_cntl_flash_init_i->flash_apqudut_cntl      = FLA_Cntl_apqudut_obj_create( FLA_HIER,
+	                                                       FLA_BLOCKED_VARIANT3, 
+	                                                       FLA_cntl_flash_init_i->flash_apqudut_var3_bsize,
+	                                                       FLA_cntl_flash_init_i->flash_apqudut_cntl_mid,
+	                                                       NULL,
+	                                                       NULL,
+	                                                       NULL,
+	                                                       NULL,
+	                                                       NULL,
+	                                                       NULL,
+	                                                       NULL );
+}
+
+void FLASH_Apply_QUD_UT_cntl_finalize_ts(FLA_Cntl_init_flash_s *FLA_cntl_flash_init_i)
+{
+	FLA_Cntl_obj_free( FLA_cntl_flash_init_i->flash_apqudut_cntl_leaf );
+	FLA_Cntl_obj_free( FLA_cntl_flash_init_i->flash_apqudut_cntl_mid );
+	FLA_Cntl_obj_free( FLA_cntl_flash_init_i->flash_apqudut_cntl );
+
+	FLA_Blocksize_free( FLA_cntl_flash_init_i->flash_apqudut_var2_bsize );
+	FLA_Blocksize_free( FLA_cntl_flash_init_i->flash_apqudut_var3_bsize );
+}
+
+#endif
+
+fla_apqudut_t*   flash_apqudut_cntl_leaf = NULL;
+fla_apqudut_t*   flash_apqudut_cntl_mid = NULL;
+fla_apqudut_t*   flash_apqudut_cntl = NULL;
+fla_blocksize_t* flash_apqudut_var2_bsize = NULL;
+fla_blocksize_t* flash_apqudut_var3_bsize = NULL;
 
 void FLASH_Apply_QUD_UT_cntl_init()
 {

@@ -10,11 +10,56 @@
 
 #include "FLAME.h"
 
-TLS_CLASS_SPEC fla_axpyt_t*       flash_axpyt_cntl_blas = NULL;
-TLS_CLASS_SPEC fla_axpyt_t*       flash_axpyt_cntl_tb;
-TLS_CLASS_SPEC fla_axpyt_t*       flash_axpyt_cntl_lr;
-TLS_CLASS_SPEC fla_axpyt_t*       flash_axpyt_cntl;
-TLS_CLASS_SPEC fla_blocksize_t*   flash_axpyt_bsize;
+#ifdef FLA_ENABLE_THREAD_SAFE_INTERFACES
+void FLASH_Axpyt_cntl_init_ts(FLA_Cntl_init_flash_s *FLA_cntl_flash_init_i)
+{
+	// Set blocksize for hierarchical storage.
+	FLA_cntl_flash_init_i->flash_axpyt_bsize     = FLA_Blocksize_create( 1, 1, 1, 1 );
+
+	// Create a control tree that assumes A and B are small.
+	FLA_cntl_flash_init_i->flash_axpyt_cntl_blas = FLA_Cntl_axpyt_obj_create( FLA_HIER,
+	                                                   FLA_SUBPROBLEM,
+	                                                   NULL,
+	                                                   NULL );
+
+	// Create a control tree that marches through A and B vertically.
+	FLA_cntl_flash_init_i->flash_axpyt_cntl_tb   = FLA_Cntl_axpyt_obj_create( FLA_HIER,
+	                                                   FLA_BLOCKED_VARIANT1,
+	                                                   FLA_cntl_flash_init_i->flash_axpyt_bsize,
+	                                                   FLA_cntl_flash_init_i->flash_axpyt_cntl_blas );
+
+	// Create a control tree that marches through A and B horizontally.
+	FLA_cntl_flash_init_i->flash_axpyt_cntl_lr   = FLA_Cntl_axpyt_obj_create( FLA_HIER,
+	                                                   FLA_BLOCKED_VARIANT3,
+	                                                   FLA_cntl_flash_init_i->flash_axpyt_bsize,
+	                                                   FLA_cntl_flash_init_i->flash_axpyt_cntl_blas );
+
+	// Create a control tree that marches through A and B horizontally, then
+	// vertically.
+	FLA_cntl_flash_init_i->flash_axpyt_cntl      = FLA_Cntl_axpyt_obj_create( FLA_HIER,
+	                                                   FLA_BLOCKED_VARIANT3,
+	                                                   FLA_cntl_flash_init_i->flash_axpyt_bsize,
+	                                                   FLA_cntl_flash_init_i->flash_axpyt_cntl_tb );
+}
+
+void FLASH_Axpyt_cntl_finalize_ts(FLA_Cntl_init_flash_s *FLA_cntl_flash_init_i)
+{
+	FLA_Cntl_obj_free( FLA_cntl_flash_init_i->flash_axpyt_cntl_blas );
+
+	FLA_Cntl_obj_free( FLA_cntl_flash_init_i->flash_axpyt_cntl_tb );
+	FLA_Cntl_obj_free( FLA_cntl_flash_init_i->flash_axpyt_cntl_lr );
+	FLA_Cntl_obj_free( FLA_cntl_flash_init_i->flash_axpyt_cntl );
+
+	FLA_Blocksize_free( FLA_cntl_flash_init_i->flash_axpyt_bsize );
+}
+
+#endif
+
+fla_axpyt_t*       flash_axpyt_cntl_blas = NULL;
+fla_axpyt_t*       flash_axpyt_cntl_tb;
+fla_axpyt_t*       flash_axpyt_cntl_lr;
+fla_axpyt_t*       flash_axpyt_cntl;
+fla_blocksize_t*   flash_axpyt_bsize;
 
 void FLASH_Axpyt_cntl_init()
 {

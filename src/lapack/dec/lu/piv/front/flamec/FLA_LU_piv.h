@@ -14,10 +14,6 @@
 
 #include "FLA_LU_piv_vars.h"
 
-#ifdef FLA_ENABLE_THREAD_SAFE_INTERFACES
-FLA_Error FLA_LU_piv_internal_ts( FLA_cntl_init_s *FLA_cntl_init_i, FLA_Obj A, FLA_Obj p, fla_lu_t* cntl );
-#endif
-
 FLA_Error FLA_LU_piv_internal( FLA_Obj A, FLA_Obj p, fla_lu_t* cntl );
 fla_dim_t   FLA_LU_piv_small_s_var0( fla_dim_t *m, fla_dim_t *n, real *a, fla_dim_t *lda,
                                    aocl_int_t *ipiv, fla_dim_t *info );

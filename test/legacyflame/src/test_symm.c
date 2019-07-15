@@ -314,9 +314,9 @@ void libfla_test_symm_experiment( test_params_t params,
 
 
 
-extern LIBFLAME_IMPORT TLS_CLASS_SPEC fla_scal_t* fla_scal_cntl_blas;
-extern LIBFLAME_IMPORT TLS_CLASS_SPEC fla_gemm_t* fla_gemm_cntl_blas;
-extern LIBFLAME_IMPORT TLS_CLASS_SPEC fla_symm_t* fla_symm_cntl_blas;
+extern __thread fla_scal_t* fla_scal_cntl_blas;
+extern __thread fla_gemm_t* fla_gemm_cntl_blas;
+extern __thread fla_symm_t* fla_symm_cntl_blas;
 
 void libfla_test_symm_cntl_create( unsigned int var,
                                    fla_dim_t        b_alg_flat )

@@ -10,11 +10,11 @@
 
 #include "FLAME.h"
 
-extern fla_uddateut_t* flash_uddateut_cntl;
-extern fla_apqudut_t*  flash_apqudut_cntl;
+extern __thread fla_uddateut_t* flash_uddateut_cntl;
+extern __thread fla_apqudut_t*  flash_apqudut_cntl;
 
-TLS_CLASS_SPEC fla_uddateutinc_t*     flash_uddateutinc_cntl = NULL;
-TLS_CLASS_SPEC fla_blocksize_t*       flash_uddateutinc_var1_bsize = NULL;
+__thread fla_uddateutinc_t*     flash_uddateutinc_cntl = NULL;
+__thread fla_blocksize_t*       flash_uddateutinc_var1_bsize = NULL;
 
 void FLASH_UDdate_UT_inc_cntl_init()
 {

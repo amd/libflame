@@ -17,9 +17,9 @@
 #define LAST_VARIANT     2
 
 // Static variables.
-static char* op_str                   = "LQ factorization via UT transform";
-static char* flash_front_str          = "FLASH_LQ_UT";
-static char* fla_front_str            = "FLA_LQ_UT";
+static char* op_str                   = "QR factorization via UT transform";
+static char* flash_front_str          = "FLASH_QR_UT";
+static char* fla_front_str            = "FLA_QR_UT";
 static char* fla_unb_var_str          = "unb_var";
 static char* fla_opt_var_str          = "opt_var";
 static char* fla_blk_var_str          = "blk_var";
@@ -30,33 +30,32 @@ static test_thresh_t thresh           = { 1e-02, 1e-03,   // warn, pass for s
                                           1e-11, 1e-12 }; // warn, pass for z
 
 static fla_apqut_t*     apqut_cntl_blk;
-static fla_lqut_t*      lqut_cntl_opt;
-static fla_lqut_t*      lqut_cntl_unb;
-static fla_lqut_t*      lqut_cntl_blk;
-static fla_lqut_t*      lqut_cntl_blk_sub;
-static fla_blocksize_t* lqut_cntl_bsize;
+static fla_qrut_t*      qrut_cntl_opt;
+static fla_qrut_t*      qrut_cntl_unb;
+static fla_qrut_t*      qrut_cntl_blk;
+static fla_qrut_t*      qrut_cntl_blk_sub;
+static fla_blocksize_t* qrut_cntl_bsize;
 
 // Local prototypes.
-void libfla_test_lqut_experiment( test_params_t params,
+void libfla_test_qrut_experiment( test_params_t params,
                                   unsigned int  var,
                                   char*         sc_str,
                                   FLA_Datatype  datatype,
-                                  uinteger  p,
+                                  unsigned int  p,
                                   unsigned int  pci,
                                   unsigned int  n_repeats,
                                   signed int    impl,
                                   double*       perf,
-                                  double*       t,
                                   double*       residual );
-void libfla_test_lqut_impl( int     impl,
+void libfla_test_qrut_impl( int     impl,
                             FLA_Obj A,
                             FLA_Obj T );
-void libfla_test_lqut_cntl_create( unsigned int var,
-                                   fla_dim_t        b_alg_flat );
-void libfla_test_lqut_cntl_free( void );
+void libfla_test_qrut_cntl_create( unsigned int var,
+                                   dim_t        b_alg_flat );
+void libfla_test_qrut_cntl_free( void );
 
 
-void libfla_test_lqut( FILE* output_stream, test_params_t params, test_op_t op )
+void libfla_test_qrut( FILE* output_stream, test_params_t params, test_op_t op )
 {
 	libfla_test_output_info( "--- %s ---\n", op_str );
 	libfla_test_output_info( "\n" );
@@ -70,7 +69,7 @@ void libfla_test_lqut( FILE* output_stream, test_params_t params, test_op_t op )
 		                       NUM_PARAM_COMBOS, pc_str,
 		                       NUM_MATRIX_ARGS,
 		                       FLA_TEST_HIER_FRONT_END,
-		                       params, thresh, libfla_test_lqut_experiment );
+		                       params, thresh, libfla_test_qrut_experiment );
 	}
 
 	if ( op.fla_front == ENABLE )
@@ -82,7 +81,7 @@ void libfla_test_lqut( FILE* output_stream, test_params_t params, test_op_t op )
 		                       NUM_PARAM_COMBOS, pc_str,
 		                       NUM_MATRIX_ARGS,
 		                       FLA_TEST_FLAT_FRONT_END,
-		                       params, thresh, libfla_test_lqut_experiment );
+		                       params, thresh, libfla_test_qrut_experiment );
 	}
 
 	if ( op.fla_unb_vars == ENABLE )
@@ -94,7 +93,7 @@ void libfla_test_lqut( FILE* output_stream, test_params_t params, test_op_t op )
 		                       NUM_PARAM_COMBOS, pc_str,
 		                       NUM_MATRIX_ARGS,
 		                       FLA_TEST_FLAT_UNB_VAR,
-		                       params, thresh, libfla_test_lqut_experiment );
+		                       params, thresh, libfla_test_qrut_experiment );
 	}
 
 	if ( op.fla_opt_vars == ENABLE )
@@ -106,7 +105,7 @@ void libfla_test_lqut( FILE* output_stream, test_params_t params, test_op_t op )
 		                       NUM_PARAM_COMBOS, pc_str,
 		                       NUM_MATRIX_ARGS,
 		                       FLA_TEST_FLAT_OPT_VAR,
-		                       params, thresh, libfla_test_lqut_experiment );
+		                       params, thresh, libfla_test_qrut_experiment );
 	}
 
 	if ( op.fla_blk_vars == ENABLE )
@@ -118,46 +117,45 @@ void libfla_test_lqut( FILE* output_stream, test_params_t params, test_op_t op )
 		                       NUM_PARAM_COMBOS, pc_str,
 		                       NUM_MATRIX_ARGS,
 		                       FLA_TEST_FLAT_BLK_VAR,
-		                       params, thresh, libfla_test_lqut_experiment );
+		                       params, thresh, libfla_test_qrut_experiment );
 	}
 
 }
 
 
 
-void libfla_test_lqut_experiment( test_params_t params,
+void libfla_test_qrut_experiment( test_params_t params,
                                   unsigned int  var,
                                   char*         sc_str,
                                   FLA_Datatype  datatype,
-                                  uinteger  p_cur,
+                                  unsigned int  p_cur,
                                   unsigned int  pci,
                                   unsigned int  n_repeats,
                                   signed int    impl,
                                   double*       perf,
-                                  double*       t,
                                   double*       residual )
 {
-	fla_dim_t        b_flash    = params.b_flash;
-	fla_dim_t        b_alg_flat = params.b_alg_flat;
+	dim_t        b_flash    = params.b_flash;
+	dim_t        b_alg_flat = params.b_alg_flat;
 	double       time_min   = 1e9;
 	double       time;
 	unsigned int i;
-	uinteger m, n;
-	uinteger min_m_n;
-	integer   m_input    = -1;
-	integer   n_input    = -2;
+	unsigned int m, n;
+	unsigned int min_m_n;
+	signed int   m_input    = -2;
+	signed int   n_input    = -1;
 	FLA_Obj      A, T, x, b, y, norm;
 	FLA_Obj      A_save;
 	FLA_Obj      A_test, T_test, x_test, b_test;
 
 	// Determine the dimensions.
-	if ( m_input < 0 ) m = p_cur * -m_input;
+	if ( m_input < 0 ) m = p_cur * abs(m_input);
 	else               m = p_cur;
-	if ( n_input < 0 ) n = p_cur * -n_input;
+	if ( n_input < 0 ) n = p_cur * abs(n_input);
 	else               n = p_cur;
 
 	// Compute the minimum dimension.
-	min_m_n = fla_min( m, n );
+	min_m_n = min( m, n );
 
 	// Create the matrices for the current operation.
 	libfla_test_obj_create( datatype, FLA_NO_TRANSPOSE, sc_str[0], m, n, &A );
@@ -190,7 +188,7 @@ void libfla_test_lqut_experiment( test_params_t params,
 	// Use hierarchical matrices if we're testing the FLASH front-end.
 	if ( impl == FLA_TEST_HIER_FRONT_END )
 	{
-		FLASH_LQ_UT_create_hier_matrices( A, 1, &b_flash, &A_test, &T_test );
+		FLASH_QR_UT_create_hier_matrices( A, 1, &b_flash, &A_test, &T_test );
 		FLASH_Obj_create_hier_copy_of_flat( b, 1, &b_flash, &b_test );
 		FLASH_Obj_create_hier_copy_of_flat( x, 1, &b_flash, &x_test );
 	}
@@ -204,7 +202,7 @@ void libfla_test_lqut_experiment( test_params_t params,
 	if ( impl == FLA_TEST_FLAT_UNB_VAR ||
 	     impl == FLA_TEST_FLAT_OPT_VAR ||
 	     impl == FLA_TEST_FLAT_BLK_VAR )
-		libfla_test_lqut_cntl_create( var, b_alg_flat );
+		libfla_test_qrut_cntl_create( var, b_alg_flat );
 
 	// Repeat the experiment n_repeats times and record results.
 	for ( i = 0; i < n_repeats; ++i )
@@ -216,21 +214,21 @@ void libfla_test_lqut_experiment( test_params_t params,
 		
 		time = FLA_Clock();
 
-		libfla_test_lqut_impl( impl, A_test, T_test );
+		libfla_test_qrut_impl( impl, A_test, T_test );
 		
 		time = FLA_Clock() - time;
-		time_min = fla_min( time_min, time );
+		time_min = min( time_min, time );
 	}
 
 	// Perform a linear solve with the result.
 	if ( impl == FLA_TEST_HIER_FRONT_END )
 	{
-		FLASH_LQ_UT_solve( A_test, T_test, b_test, x_test );
+		FLASH_QR_UT_solve( A_test, T_test, b_test, x_test );
 		FLASH_Obj_flatten( x_test, x );
 	}
 	else
     {
-		FLA_LQ_UT_solve( A_test, T_test, b, x );
+		FLA_QR_UT_solve( A_test, T_test, b, x );
 	}
 
 	// Free the hierarchical matrices if we're testing the FLASH front-end.
@@ -246,12 +244,11 @@ void libfla_test_lqut_experiment( test_params_t params,
 	if ( impl == FLA_TEST_FLAT_UNB_VAR ||
 	     impl == FLA_TEST_FLAT_OPT_VAR ||
 	     impl == FLA_TEST_FLAT_BLK_VAR )
-		libfla_test_lqut_cntl_free();
+		libfla_test_qrut_cntl_free();
 
 	// Compute the performance of the best experiment repeat.
-	*t = time_min;
-  *perf = (         2.0   * n * m * m - 
-	          ( 2.0 / 3.0 ) * m * m * m ) / time_min / FLOPS_PER_UNIT_PERF;
+	*perf = (         2.0   * m * n * n - 
+	          ( 2.0 / 3.0 ) * n * n * n ) / time_min / FLOPS_PER_UNIT_PERF;
 	if ( FLA_Obj_is_complex( A ) ) *perf *= 4.0;
 
 	// Compute the residual.
@@ -280,19 +277,19 @@ extern __thread fla_gemm_t*  fla_gemm_cntl_blas;
 extern __thread fla_trmm_t*  fla_trmm_cntl_blas;
 extern __thread fla_trsm_t*  fla_trsm_cntl_blas;
 
-void libfla_test_lqut_cntl_create( unsigned int var,
-                                   fla_dim_t        b_alg_flat )
+void libfla_test_qrut_cntl_create( unsigned int var,
+                                   dim_t        b_alg_flat )
 {
 	int var_unb  = FLA_UNB_VAR_OFFSET + var;
 	int var_opt  = FLA_OPT_VAR_OFFSET + var;
 	int var_blk  = FLA_BLK_VAR_OFFSET + var;
 	int var_opt2 = FLA_OPT_VAR_OFFSET + 2;
 
-	lqut_cntl_bsize = FLA_Blocksize_create( b_alg_flat, b_alg_flat, b_alg_flat, b_alg_flat );
+	qrut_cntl_bsize = FLA_Blocksize_create( b_alg_flat, b_alg_flat, b_alg_flat, b_alg_flat );
 
 	apqut_cntl_blk  = FLA_Cntl_apqut_obj_create( FLA_FLAT,
 	                                             FLA_BLOCKED_VARIANT1,
-	                                             lqut_cntl_bsize,
+	                                             qrut_cntl_bsize,
 	                                             NULL,
 	                                             fla_trmm_cntl_blas,
 	                                             fla_trmm_cntl_blas,
@@ -302,71 +299,71 @@ void libfla_test_lqut_cntl_create( unsigned int var,
 	                                             fla_copyt_cntl_blas,
 	                                             fla_axpyt_cntl_blas );
 
-	lqut_cntl_unb   = FLA_Cntl_lqut_obj_create( FLA_FLAT,
+	qrut_cntl_unb   = FLA_Cntl_qrut_obj_create( FLA_FLAT,
                                                 var_unb,
                                                 NULL,
                                                 NULL,
                                                 NULL );
 
-	lqut_cntl_opt   = FLA_Cntl_lqut_obj_create( FLA_FLAT,
+	qrut_cntl_opt   = FLA_Cntl_qrut_obj_create( FLA_FLAT,
                                                 var_opt,
                                                 NULL,
                                                 NULL,
                                                 NULL );
 
 	// Use unblocked variant 2 for blocked variant 1 subproblem.
-	lqut_cntl_blk_sub = FLA_Cntl_lqut_obj_create( FLA_FLAT,
+	qrut_cntl_blk_sub = FLA_Cntl_qrut_obj_create( FLA_FLAT,
                                                   var_opt2,
                                                   NULL,
                                                   NULL,
                                                   NULL );
 
-	lqut_cntl_blk   = FLA_Cntl_lqut_obj_create( FLA_FLAT,
+	qrut_cntl_blk   = FLA_Cntl_qrut_obj_create( FLA_FLAT,
                                                 var_blk,
-                                                lqut_cntl_bsize,
-                                                lqut_cntl_blk_sub,
+                                                qrut_cntl_bsize,
+                                                qrut_cntl_blk_sub,
                                                 apqut_cntl_blk );
 }
 
 
 
-void libfla_test_lqut_cntl_free( void )
+void libfla_test_qrut_cntl_free( void )
 {
-	FLA_Blocksize_free( lqut_cntl_bsize );
+	FLA_Blocksize_free( qrut_cntl_bsize );
 
 	FLA_Cntl_obj_free( apqut_cntl_blk );
-	FLA_Cntl_obj_free( lqut_cntl_unb );
-	FLA_Cntl_obj_free( lqut_cntl_opt );
-	FLA_Cntl_obj_free( lqut_cntl_blk );
-	FLA_Cntl_obj_free( lqut_cntl_blk_sub );
+	FLA_Cntl_obj_free( qrut_cntl_unb );
+	FLA_Cntl_obj_free( qrut_cntl_opt );
+	FLA_Cntl_obj_free( qrut_cntl_blk );
+	FLA_Cntl_obj_free( qrut_cntl_blk_sub );
 }
 
 
 
-void libfla_test_lqut_impl( int     impl,
+void libfla_test_qrut_impl( int     impl,
                             FLA_Obj A,
                             FLA_Obj T )
 {
 	switch ( impl )
 	{
 		case FLA_TEST_HIER_FRONT_END:
-		FLASH_LQ_UT( A, T );
+		FLASH_QR_UT( A, T );
 		break;
 
 		case FLA_TEST_FLAT_FRONT_END:
-		FLA_LQ_UT( A, T );
+		FLA_QR_UT( A, T );
 		break;
 
 		case FLA_TEST_FLAT_UNB_VAR:
-		FLA_LQ_UT_internal( A, T, lqut_cntl_unb );
+		FLA_QR_UT_internal( A, T, qrut_cntl_unb );
 		break;
 
 		case FLA_TEST_FLAT_OPT_VAR:
-		FLA_LQ_UT_internal( A, T, lqut_cntl_opt );
+		FLA_QR_UT_internal( A, T, qrut_cntl_opt );
 		break;
 
 		case FLA_TEST_FLAT_BLK_VAR:
-		FLA_LQ_UT_internal( A, T, lqut_cntl_blk );
+		FLA_QR_UT_internal( A, T, qrut_cntl_blk );
 		break;
 
 		default:

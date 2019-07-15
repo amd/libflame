@@ -15,42 +15,32 @@
 #include "FLAME.h"
 
 
-static TLS_CLASS_SPEC FLA_Bool FLA_initialized = FALSE;
+static __thread FLA_Bool FLA_initialized = FALSE;
 
-FLA_Obj TLS_CLASS_SPEC FLA_THREE = {};
-FLA_Obj TLS_CLASS_SPEC FLA_TWO = {};
-FLA_Obj TLS_CLASS_SPEC FLA_ONE = {};
-FLA_Obj TLS_CLASS_SPEC FLA_ONE_HALF = {};
-FLA_Obj TLS_CLASS_SPEC FLA_ZERO = {};
-FLA_Obj TLS_CLASS_SPEC FLA_MINUS_ONE_HALF = {};
-FLA_Obj TLS_CLASS_SPEC FLA_MINUS_ONE = {};
-FLA_Obj TLS_CLASS_SPEC FLA_MINUS_TWO = {};
-FLA_Obj TLS_CLASS_SPEC FLA_MINUS_THREE = {};
+FLA_Obj __thread FLA_THREE = {};
+FLA_Obj __thread FLA_TWO = {};
+FLA_Obj __thread FLA_ONE = {};
+FLA_Obj __thread FLA_ONE_HALF = {};
+FLA_Obj __thread FLA_ZERO = {};
+FLA_Obj __thread FLA_MINUS_ONE_HALF = {};
+FLA_Obj __thread FLA_MINUS_ONE = {};
+FLA_Obj __thread FLA_MINUS_TWO = {};
+FLA_Obj __thread FLA_MINUS_THREE = {};
 
-FLA_Obj TLS_CLASS_SPEC FLA_EPSILON = {};
-FLA_Obj TLS_CLASS_SPEC FLA_SAFE_MIN = {};
-FLA_Obj TLS_CLASS_SPEC FLA_SAFE_MIN_SQUARE = {};
-FLA_Obj TLS_CLASS_SPEC FLA_SAFE_INV_MIN = {};
-FLA_Obj TLS_CLASS_SPEC FLA_SAFE_INV_MIN_SQUARE = {};
-FLA_Obj TLS_CLASS_SPEC FLA_UNDERFLOW_THRES = {};
-FLA_Obj TLS_CLASS_SPEC FLA_OVERFLOW_THRES = {};
-FLA_Obj TLS_CLASS_SPEC FLA_UNDERFLOW_SQUARE_THRES = {};
-FLA_Obj TLS_CLASS_SPEC FLA_OVERFLOW_SQUARE_THRES = {};
+FLA_Obj __thread FLA_EPSILON = {};
+FLA_Obj __thread FLA_SAFE_MIN = {};
+FLA_Obj __thread FLA_SAFE_MIN_SQUARE = {};
+FLA_Obj __thread FLA_SAFE_INV_MIN = {};
+FLA_Obj __thread FLA_SAFE_INV_MIN_SQUARE = {};
+FLA_Obj __thread FLA_UNDERFLOW_THRES = {};
+FLA_Obj __thread FLA_OVERFLOW_THRES = {};
+FLA_Obj __thread FLA_UNDERFLOW_SQUARE_THRES = {};
+FLA_Obj __thread FLA_OVERFLOW_SQUARE_THRES = {};
 
-const TLS_CLASS_SPEC float    fzero = 0.0f;
-const TLS_CLASS_SPEC double   dzero = 0.0;
-const TLS_CLASS_SPEC scomplex czero = { 0.0f, 0.0f };
-const TLS_CLASS_SPEC dcomplex zzero = { 0.0 , 0.0  };
-
-struct _LF_VERSION
-{
-	char version[1000];
-	int once;
-};
-typedef struct _LF_VERSION LF_VERSION;
-
-#define VERSION_MAKE_STR(x) _VERSION_MAKE_STR(x)
-#define _VERSION_MAKE_STR(x) #x
+const __thread float    fzero = 0.0f;
+const __thread double   dzero = 0.0;
+const __thread scomplex czero = { 0.0f, 0.0f };
+const __thread dcomplex zzero = { 0.0 , 0.0  };
 
 /* *************************************************************************
 

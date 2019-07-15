@@ -11,7 +11,7 @@
 #include "FLAME.h"
 
 
-static TLS_CLASS_SPEC unsigned int fla_error_checking_level = FLA_INTERNAL_ERROR_CHECKING_LEVEL;
+static __thread unsigned int fla_error_checking_level = FLA_INTERNAL_ERROR_CHECKING_LEVEL;
 
 
 

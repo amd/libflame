@@ -39,7 +39,7 @@ INC_PATH        := $(INCLUDE_DIR)/$(HOST)/
 # CC             := gcc
 # LINKER         := $(CC)
 # CFLAGS         := -g -O2 -Wall -Wno-comment
-CFLAGS         := -g -O2 -Wall -Wno-comment -fopenmp
+ CFLAGS         := -g -O2 -Wall -Wno-comment -fopenmp
 LDFLAGS        := -lm -fopenmp -lgfortran 
 # INSTALL_PREFIX := $(HOME)/flame
 
@@ -51,9 +51,11 @@ LDFLAGS        := -lm -fopenmp -lgfortran
 
 # BLAS implementation path. A BLAS library must be given in order to run
 # the libflame test suite. Modify these definitions if needed.
-#LIBBLAS_PATH   := $(INSTALL_LIBDIR) 
-#LIBBLAS        := $(LIBBLAS_PATH)/libblis.a
-LIBBLAS         := 
+LIBBLAS_PATH   := /home/vasanth/code/amd_git/blis/lib
+#LIBBLAS_PATH   := /home/vasanth/code/amd_git/blis_origin/lib
+#LIBBLAS        := $(LIBBLAS_PATH)/libblas.a
+LIBBLAS        := $(LIBBLAS_PATH)/libblis.a
+#LIBBLAS        := $(HOME)/blis/lib/libblis.a
 
 # LAPACK implementation path. These values only matter if libflame was
 # configured with the external-lapack-interfaces option enabled. Modify
@@ -69,7 +71,7 @@ LIBLAPACK      :=
 #
 
 TEST_SRC_PATH  := lu
-#TEST_SRC := driver
+TEST_SRC := driver
 TEST_SRC := dgetrf_test_gen
 TEST_OBJ_PATH  := obj
 

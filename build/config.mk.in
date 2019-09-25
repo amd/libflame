@@ -28,6 +28,10 @@ SO_MMB    := $(SO_MAJOR).$(SO_MINORB)
 # library name.
 ARCH                           := @fla_host_cpu@
 
+# This variable identifies the operating system / kernel. It is the result of
+# 'uname -s'.
+OS_NAME                        := @os_name@
+
 # We have to set these particular variables because some of the @anchors@
 # that are substituted in via configure may be defined *in terms of* these
 # variables. For example, @libdir@ may be replaced with '${exec_prefix}/lib',

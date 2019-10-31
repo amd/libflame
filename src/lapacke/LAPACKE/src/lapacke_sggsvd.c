@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function sggsvd
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_sggsvd)( int matrix_layout, char jobu, char jobv, char jobq,
+lapack_int LAPACKE_sggsvd( int matrix_layout, char jobu, char jobv, char jobq,
                            lapack_int m, lapack_int n, lapack_int p,
                            lapack_int* k, lapack_int* l, float* a,
                            lapack_int lda, float* b, lapack_int ldb,
@@ -43,16 +44,16 @@ lapack_int API_SUFFIX(LAPACKE_sggsvd)( int matrix_layout, char jobu, char jobv, 
     lapack_int info = 0;
     float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sggsvd", -1 );
+        LAPACKE_xerbla( "LAPACKE_sggsvd", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, m, n, a, lda ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, m, n, a, lda ) ) {
             return -10;
         }
-        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, p, n, b, ldb ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, p, n, b, ldb ) ) {
             return -12;
         }
     }
@@ -64,14 +65,14 @@ lapack_int API_SUFFIX(LAPACKE_sggsvd)( int matrix_layout, char jobu, char jobv, 
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_sggsvd_work)( matrix_layout, jobu, jobv, jobq, m, n, p, k, l,
+    info = LAPACKE_sggsvd_work( matrix_layout, jobu, jobv, jobq, m, n, p, k, l,
                                 a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q,
                                 ldq, work, iwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sggsvd", info );
+        LAPACKE_xerbla( "LAPACKE_sggsvd", info );
     }
     return info;
 }

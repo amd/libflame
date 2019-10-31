@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dsbgv
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dsbgv)( int matrix_layout, char jobz, char uplo, lapack_int n,
+lapack_int LAPACKE_dsbgv( int matrix_layout, char jobz, char uplo, lapack_int n,
                           lapack_int ka, lapack_int kb, double* ab,
                           lapack_int ldab, double* bb, lapack_int ldbb,
                           double* w, double* z, lapack_int ldz )
@@ -40,16 +41,16 @@ lapack_int API_SUFFIX(LAPACKE_dsbgv)( int matrix_layout, char jobz, char uplo, l
     lapack_int info = 0;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsbgv", -1 );
+        LAPACKE_xerbla( "LAPACKE_dsbgv", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_dsb_nancheck)( matrix_layout, uplo, n, ka, ab, ldab ) ) {
+        if( LAPACKE_dsb_nancheck( matrix_layout, uplo, n, ka, ab, ldab ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_dsb_nancheck)( matrix_layout, uplo, n, kb, bb, ldbb ) ) {
+        if( LAPACKE_dsb_nancheck( matrix_layout, uplo, n, kb, bb, ldbb ) ) {
             return -9;
         }
     }
@@ -61,13 +62,13 @@ lapack_int API_SUFFIX(LAPACKE_dsbgv)( int matrix_layout, char jobz, char uplo, l
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_dsbgv_work)( matrix_layout, jobz, uplo, n, ka, kb, ab, ldab,
+    info = LAPACKE_dsbgv_work( matrix_layout, jobz, uplo, n, ka, kb, ab, ldab,
                                bb, ldbb, w, z, ldz, work );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsbgv", info );
+        LAPACKE_xerbla( "LAPACKE_dsbgv", info );
     }
     return info;
 }

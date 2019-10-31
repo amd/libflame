@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function spftrs
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_spftrs_work)( int matrix_layout, char transr, char uplo,
+lapack_int LAPACKE_spftrs_work( int matrix_layout, char transr, char uplo,
                                 lapack_int n, lapack_int nrhs, const float* a,
                                 float* b, lapack_int ldb )
 {
@@ -50,7 +51,7 @@ lapack_int API_SUFFIX(LAPACKE_spftrs_work)( int matrix_layout, char transr, char
         /* Check leading dimension(s) */
         if( ldb < nrhs ) {
             info = -8;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_spftrs_work", info );
+            LAPACKE_xerbla( "LAPACKE_spftrs_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -66,26 +67,26 @@ lapack_int API_SUFFIX(LAPACKE_spftrs_work)( int matrix_layout, char transr, char
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
-        API_SUFFIX(LAPACKE_spf_trans)( matrix_layout, transr, uplo, n, a, a_t );
+        LAPACKE_sge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_spf_trans( matrix_layout, transr, uplo, n, a, a_t );
         /* Call LAPACK function and adjust info */
         LAPACK_spftrs( &transr, &uplo, &n, &nrhs, a_t, b_t, &ldb_t, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
+        LAPACKE_sge_trans( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_1:
         LAPACKE_free( b_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_spftrs_work", info );
+            LAPACKE_xerbla( "LAPACKE_spftrs_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_spftrs_work", info );
+        LAPACKE_xerbla( "LAPACKE_spftrs_work", info );
     }
     return info;
 }

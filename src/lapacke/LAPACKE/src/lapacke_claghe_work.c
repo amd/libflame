@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function claghe
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_claghe_work)( int matrix_layout, lapack_int n, lapack_int k,
+lapack_int LAPACKE_claghe_work( int matrix_layout, lapack_int n, lapack_int k,
                                 const float* d, lapack_complex_float* a,
                                 lapack_int lda, lapack_int* iseed,
                                 lapack_complex_float* work )
@@ -50,7 +51,7 @@ lapack_int API_SUFFIX(LAPACKE_claghe_work)( int matrix_layout, lapack_int n, lap
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_claghe_work", info );
+            LAPACKE_xerbla( "LAPACKE_claghe_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -66,16 +67,16 @@ lapack_int API_SUFFIX(LAPACKE_claghe_work)( int matrix_layout, lapack_int n, lap
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
+        LAPACKE_cge_trans( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_claghe_work", info );
+            LAPACKE_xerbla( "LAPACKE_claghe_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_claghe_work", info );
+        LAPACKE_xerbla( "LAPACKE_claghe_work", info );
     }
     return info;
 }

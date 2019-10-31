@@ -89,10 +89,6 @@ lapacke_cgerqf.c
 lapacke_cgerqf_work.c
 lapacke_cgesdd.c
 lapacke_cgesdd_work.c
-lapacke_cgedmd.c
-lapacke_cgedmd_work.c
-lapacke_cgedmdq.c
-lapacke_cgedmdq_work.c
 lapacke_cgesv.c
 lapacke_cgesv_work.c
 lapacke_cgesvd.c
@@ -117,8 +113,6 @@ lapacke_cgetrs.c
 lapacke_cgetrs_work.c
 lapacke_cgetsls.c
 lapacke_cgetsls_work.c
-lapacke_cgetsqrhrt.c
-lapacke_cgetsqrhrt_work.c
 lapacke_cggbak.c
 lapacke_cggbak_work.c
 lapacke_cggbal.c
@@ -313,8 +307,6 @@ lapacke_clacrm.c
 lapacke_clacrm_work.c
 lapacke_clag2z.c
 lapacke_clag2z_work.c
-lapacke_clangb.c
-lapacke_clangb_work.c
 lapacke_clange.c
 lapacke_clange_work.c
 lapacke_clanhe.c
@@ -563,8 +555,6 @@ lapacke_ctrsna.c
 lapacke_ctrsna_work.c
 lapacke_ctrsyl.c
 lapacke_ctrsyl_work.c
-lapacke_ctrsyl3.c
-lapacke_ctrsyl3_work.c
 lapacke_ctrtri.c
 lapacke_ctrtri_work.c
 lapacke_ctrtrs.c
@@ -595,10 +585,6 @@ lapacke_cungrq.c
 lapacke_cungrq_work.c
 lapacke_cungtr.c
 lapacke_cungtr_work.c
-lapacke_cungtsqr_row.c
-lapacke_cungtsqr_row_work.c
-lapacke_cunhr_col.c
-lapacke_cunhr_col_work.c
 lapacke_cunmbr.c
 lapacke_cunmbr_work.c
 lapacke_cunmhr.c
@@ -717,10 +703,6 @@ lapacke_dgerqf.c
 lapacke_dgerqf_work.c
 lapacke_dgesdd.c
 lapacke_dgesdd_work.c
-lapacke_dgedmd.c
-lapacke_dgedmd_work.c
-lapacke_dgedmdq.c
-lapacke_dgedmdq_work.c
 lapacke_dgesv.c
 lapacke_dgesv_work.c
 lapacke_dgesvd.c
@@ -745,8 +727,6 @@ lapacke_dgetrs.c
 lapacke_dgetrs_work.c
 lapacke_dgetsls.c
 lapacke_dgetsls_work.c
-lapacke_dgetsqrhrt.c
-lapacke_dgetsqrhrt_work.c
 lapacke_dggbak.c
 lapacke_dggbak_work.c
 lapacke_dggbal.c
@@ -805,8 +785,6 @@ lapacke_dlag2s.c
 lapacke_dlag2s_work.c
 lapacke_dlamch.c
 lapacke_dlamch_work.c
-lapacke_dlangb.c
-lapacke_dlangb_work.c
 lapacke_dlange.c
 lapacke_dlange_work.c
 lapacke_dlansy.c
@@ -871,10 +849,6 @@ lapacke_dorgrq.c
 lapacke_dorgrq_work.c
 lapacke_dorgtr.c
 lapacke_dorgtr_work.c
-lapacke_dorgtsqr_row.c
-lapacke_dorgtsqr_row_work.c
-lapacke_dorhr_col.c
-lapacke_dorhr_col_work.c
 lapacke_dormbr.c
 lapacke_dormbr_work.c
 lapacke_dormhr.c
@@ -1187,8 +1161,6 @@ lapacke_dtrsna.c
 lapacke_dtrsna_work.c
 lapacke_dtrsyl.c
 lapacke_dtrsyl_work.c
-lapacke_dtrsyl3.c
-lapacke_dtrsyl3_work.c
 lapacke_dtrtri.c
 lapacke_dtrtri_work.c
 lapacke_dtrtrs.c
@@ -1302,10 +1274,6 @@ lapacke_sgerqf.c
 lapacke_sgerqf_work.c
 lapacke_sgesdd.c
 lapacke_sgesdd_work.c
-lapacke_sgedmd.c
-lapacke_sgedmd_work.c
-lapacke_sgedmdq.c
-lapacke_sgedmdq_work.c
 lapacke_sgesv.c
 lapacke_sgesv_work.c
 lapacke_sgesvd.c
@@ -1330,8 +1298,6 @@ lapacke_sgetrs.c
 lapacke_sgetrs_work.c
 lapacke_sgetsls.c
 lapacke_sgetsls_work.c
-lapacke_sgetsqrhrt.c
-lapacke_sgetsqrhrt_work.c
 lapacke_sggbak.c
 lapacke_sggbak_work.c
 lapacke_sggbal.c
@@ -1390,8 +1356,6 @@ lapacke_slag2d.c
 lapacke_slag2d_work.c
 lapacke_slamch.c
 lapacke_slamch_work.c
-lapacke_slangb.c
-lapacke_slangb_work.c
 lapacke_slange.c
 lapacke_slange_work.c
 lapacke_slansy.c
@@ -1456,10 +1420,6 @@ lapacke_sorgrq.c
 lapacke_sorgrq_work.c
 lapacke_sorgtr.c
 lapacke_sorgtr_work.c
-lapacke_sorgtsqr_row.c
-lapacke_sorgtsqr_row_work.c
-lapacke_sorhr_col.c
-lapacke_sorhr_col_work.c
 lapacke_sormbr.c
 lapacke_sormbr_work.c
 lapacke_sormhr.c
@@ -1768,8 +1728,6 @@ lapacke_strsna.c
 lapacke_strsna_work.c
 lapacke_strsyl.c
 lapacke_strsyl_work.c
-lapacke_strsyl3.c
-lapacke_strsyl3_work.c
 lapacke_strtri.c
 lapacke_strtri_work.c
 lapacke_strtrs.c
@@ -1876,10 +1834,6 @@ lapacke_zgerqf.c
 lapacke_zgerqf_work.c
 lapacke_zgesdd.c
 lapacke_zgesdd_work.c
-lapacke_zgedmd.c
-lapacke_zgedmd_work.c
-lapacke_zgedmdq.c
-lapacke_zgedmdq_work.c
 lapacke_zgesv.c
 lapacke_zgesv_work.c
 lapacke_zgesvd.c
@@ -1904,8 +1858,6 @@ lapacke_zgetrs.c
 lapacke_zgetrs_work.c
 lapacke_zgetsls.c
 lapacke_zgetsls_work.c
-lapacke_zgetsqrhrt.c
-lapacke_zgetsqrhrt_work.c
 lapacke_zggbak.c
 lapacke_zggbak_work.c
 lapacke_zggbal.c
@@ -2100,8 +2052,6 @@ lapacke_zlacrm.c
 lapacke_zlacrm_work.c
 lapacke_zlag2c.c
 lapacke_zlag2c_work.c
-lapacke_zlangb.c
-lapacke_zlangb_work.c
 lapacke_zlange.c
 lapacke_zlange_work.c
 lapacke_zlanhe.c
@@ -2350,8 +2300,6 @@ lapacke_ztrsna.c
 lapacke_ztrsna_work.c
 lapacke_ztrsyl.c
 lapacke_ztrsyl_work.c
-lapacke_ztrsyl3.c
-lapacke_ztrsyl3_work.c
 lapacke_ztrtri.c
 lapacke_ztrtri_work.c
 lapacke_ztrtrs.c
@@ -2382,10 +2330,6 @@ lapacke_zungrq.c
 lapacke_zungrq_work.c
 lapacke_zungtr.c
 lapacke_zungtr_work.c
-lapacke_zungtsqr_row.c
-lapacke_zungtsqr_row_work.c
-lapacke_zunhr_col.c
-lapacke_zunhr_col_work.c
 lapacke_zunmbr.c
 lapacke_zunmbr_work.c
 lapacke_zunmhr.c

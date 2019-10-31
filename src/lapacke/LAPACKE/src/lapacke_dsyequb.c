@@ -28,24 +28,25 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dsyequb
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dsyequb)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_dsyequb( int matrix_layout, char uplo, lapack_int n,
                             const double* a, lapack_int lda, double* s,
                             double* scond, double* amax )
 {
     lapack_int info = 0;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsyequb", -1 );
+        LAPACKE_xerbla( "LAPACKE_dsyequb", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_dsy_nancheck)( matrix_layout, uplo, n, a, lda ) ) {
+        if( LAPACKE_dsy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
             return -4;
         }
     }
@@ -57,13 +58,13 @@ lapack_int API_SUFFIX(LAPACKE_dsyequb)( int matrix_layout, char uplo, lapack_int
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_dsyequb_work)( matrix_layout, uplo, n, a, lda, s, scond, amax,
+    info = LAPACKE_dsyequb_work( matrix_layout, uplo, n, a, lda, s, scond, amax,
                                  work );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsyequb", info );
+        LAPACKE_xerbla( "LAPACKE_dsyequb", info );
     }
     return info;
 }

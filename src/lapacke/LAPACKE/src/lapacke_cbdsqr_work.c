@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function cbdsqr
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cbdsqr_work)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_cbdsqr_work( int matrix_layout, char uplo, lapack_int n,
                                 lapack_int ncvt, lapack_int nru, lapack_int ncc,
                                 float* d, float* e, lapack_complex_float* vt,
                                 lapack_int ldvt, lapack_complex_float* u,
@@ -57,17 +58,17 @@ lapack_int API_SUFFIX(LAPACKE_cbdsqr_work)( int matrix_layout, char uplo, lapack
         /* Check leading dimension(s) */
         if( ldc < ncc ) {
             info = -14;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cbdsqr_work", info );
+            LAPACKE_xerbla( "LAPACKE_cbdsqr_work", info );
             return info;
         }
         if( ldu < n ) {
             info = -12;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cbdsqr_work", info );
+            LAPACKE_xerbla( "LAPACKE_cbdsqr_work", info );
             return info;
         }
         if( ldvt < ncvt ) {
             info = -10;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cbdsqr_work", info );
+            LAPACKE_xerbla( "LAPACKE_cbdsqr_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -100,13 +101,13 @@ lapack_int API_SUFFIX(LAPACKE_cbdsqr_work)( int matrix_layout, char uplo, lapack
         }
         /* Transpose input matrices */
         if( ncvt != 0 ) {
-            API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, n, ncvt, vt, ldvt, vt_t, ldvt_t );
+            LAPACKE_cge_trans( matrix_layout, n, ncvt, vt, ldvt, vt_t, ldvt_t );
         }
         if( nru != 0 ) {
-            API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, nru, n, u, ldu, u_t, ldu_t );
+            LAPACKE_cge_trans( matrix_layout, nru, n, u, ldu, u_t, ldu_t );
         }
         if( ncc != 0 ) {
-            API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, n, ncc, c, ldc, c_t, ldc_t );
+            LAPACKE_cge_trans( matrix_layout, n, ncc, c, ldc, c_t, ldc_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_cbdsqr( &uplo, &n, &ncvt, &nru, &ncc, d, e, vt_t, &ldvt_t, u_t,
@@ -116,14 +117,14 @@ lapack_int API_SUFFIX(LAPACKE_cbdsqr_work)( int matrix_layout, char uplo, lapack
         }
         /* Transpose output matrices */
         if( ncvt != 0 ) {
-            API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, n, ncvt, vt_t, ldvt_t, vt,
+            LAPACKE_cge_trans( LAPACK_COL_MAJOR, n, ncvt, vt_t, ldvt_t, vt,
                                ldvt );
         }
         if( nru != 0 ) {
-            API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, nru, n, u_t, ldu_t, u, ldu );
+            LAPACKE_cge_trans( LAPACK_COL_MAJOR, nru, n, u_t, ldu_t, u, ldu );
         }
         if( ncc != 0 ) {
-            API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, n, ncc, c_t, ldc_t, c, ldc );
+            LAPACKE_cge_trans( LAPACK_COL_MAJOR, n, ncc, c_t, ldc_t, c, ldc );
         }
         /* Release memory and exit */
         if( ncc != 0 ) {
@@ -139,11 +140,11 @@ exit_level_1:
         }
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cbdsqr_work", info );
+            LAPACKE_xerbla( "LAPACKE_cbdsqr_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cbdsqr_work", info );
+        LAPACKE_xerbla( "LAPACKE_cbdsqr_work", info );
     }
     return info;
 }

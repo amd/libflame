@@ -28,22 +28,23 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function ssterf
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_ssterf)( lapack_int n, float* d, float* e )
+lapack_int LAPACKE_ssterf( lapack_int n, float* d, float* e )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n, d, 1 ) ) {
+        if( LAPACKE_s_nancheck( n, d, 1 ) ) {
             return -2;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n-1, e, 1 ) ) {
+        if( LAPACKE_s_nancheck( n-1, e, 1 ) ) {
             return -3;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_ssterf_work)( n, d, e );
+    return LAPACKE_ssterf_work( n, d, e );
 }

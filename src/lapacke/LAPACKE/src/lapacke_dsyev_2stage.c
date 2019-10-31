@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dsyev_2stage
 * Author: Intel Corporation
+* Generated December 2016
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dsyev_2stage)( int matrix_layout, char jobz, char uplo, lapack_int n,
+lapack_int LAPACKE_dsyev_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
                           double* a, lapack_int lda, double* w )
 {
     lapack_int info = 0;
@@ -40,19 +41,19 @@ lapack_int API_SUFFIX(LAPACKE_dsyev_2stage)( int matrix_layout, char jobz, char 
     double* work = NULL;
     double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsyev_2stage", -1 );
+        LAPACKE_xerbla( "LAPACKE_dsyev_2stage", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_dsy_nancheck)( matrix_layout, uplo, n, a, lda ) ) {
+        if( LAPACKE_dsy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
             return -5;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_dsyev_2stage_work)( matrix_layout, jobz, uplo, n, a, lda, w,
+    info = LAPACKE_dsyev_2stage_work( matrix_layout, jobz, uplo, n, a, lda, w,
                                &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -65,13 +66,13 @@ lapack_int API_SUFFIX(LAPACKE_dsyev_2stage)( int matrix_layout, char jobz, char 
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_dsyev_2stage_work)( matrix_layout, jobz, uplo, n, a, lda, w, work,
+    info = LAPACKE_dsyev_2stage_work( matrix_layout, jobz, uplo, n, a, lda, w, work,
                                lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsyev_2stage", info );
+        LAPACKE_xerbla( "LAPACKE_dsyev_2stage", info );
     }
     return info;
 }

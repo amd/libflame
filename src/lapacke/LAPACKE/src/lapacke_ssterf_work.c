@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function ssterf
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_ssterf_work)( lapack_int n, float* d, float* e )
+lapack_int LAPACKE_ssterf_work( lapack_int n, float* d, float* e )
 {
     lapack_int info = 0;
     /* Call LAPACK function and adjust info */

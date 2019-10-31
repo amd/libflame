@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function csytri2
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_csytri2_work)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_csytri2_work( int matrix_layout, char uplo, lapack_int n,
                                  lapack_complex_float* a, lapack_int lda,
                                  const lapack_int* ipiv,
                                  lapack_complex_float* work, lapack_int lwork )
@@ -50,7 +51,7 @@ lapack_int API_SUFFIX(LAPACKE_csytri2_work)( int matrix_layout, char uplo, lapac
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -5;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_csytri2_work", info );
+            LAPACKE_xerbla( "LAPACKE_csytri2_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -66,23 +67,23 @@ lapack_int API_SUFFIX(LAPACKE_csytri2_work)( int matrix_layout, char uplo, lapac
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_csy_trans)( matrix_layout, uplo, n, a, lda, a_t, lda_t );
+        LAPACKE_csy_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_csytri2( &uplo, &n, a_t, &lda_t, ipiv, work, &lwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_csy_trans)( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
+        LAPACKE_csy_trans( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_csytri2_work", info );
+            LAPACKE_xerbla( "LAPACKE_csytri2_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_csytri2_work", info );
+        LAPACKE_xerbla( "LAPACKE_csytri2_work", info );
     }
     return info;
 }

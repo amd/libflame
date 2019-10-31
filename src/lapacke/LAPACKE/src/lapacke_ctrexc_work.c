@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function ctrexc
 * Author: Intel Corporation
+* Generated December 2016
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_ctrexc_work)( int matrix_layout, char compq, lapack_int n,
+lapack_int LAPACKE_ctrexc_work( int matrix_layout, char compq, lapack_int n,
                                 lapack_complex_float* t, lapack_int ldt,
                                 lapack_complex_float* q, lapack_int ldq,
                                 lapack_int ifst, lapack_int ilst )
@@ -50,14 +51,14 @@ lapack_int API_SUFFIX(LAPACKE_ctrexc_work)( int matrix_layout, char compq, lapac
         lapack_complex_float* t_t = NULL;
         lapack_complex_float* q_t = NULL;
         /* Check leading dimension(s) */
-        if( ldq < n && API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
+        if( ldq < n && LAPACKE_lsame( compq, 'v' ) ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctrexc_work", info );
+            LAPACKE_xerbla( "LAPACKE_ctrexc_work", info );
             return info;
         }
         if( ldt < n ) {
             info = -5;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctrexc_work", info );
+            LAPACKE_xerbla( "LAPACKE_ctrexc_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -67,7 +68,7 @@ lapack_int API_SUFFIX(LAPACKE_ctrexc_work)( int matrix_layout, char compq, lapac
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
+        if( LAPACKE_lsame( compq, 'v' ) ) {
             q_t = (lapack_complex_float*)
                 LAPACKE_malloc( sizeof(lapack_complex_float) *
                                 ldq_t * MAX(1,n) );
@@ -77,9 +78,9 @@ lapack_int API_SUFFIX(LAPACKE_ctrexc_work)( int matrix_layout, char compq, lapac
             }
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, n, n, t, ldt, t_t, ldt_t );
-        if( API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
-            API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, n, n, q, ldq, q_t, ldq_t );
+        LAPACKE_cge_trans( matrix_layout, n, n, t, ldt, t_t, ldt_t );
+        if( LAPACKE_lsame( compq, 'v' ) ) {
+            LAPACKE_cge_trans( matrix_layout, n, n, q, ldq, q_t, ldq_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_ctrexc( &compq, &n, t_t, &ldt_t, q_t, &ldq_t, &ifst, &ilst,
@@ -88,23 +89,23 @@ lapack_int API_SUFFIX(LAPACKE_ctrexc_work)( int matrix_layout, char compq, lapac
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, n, n, t_t, ldt_t, t, ldt );
-        if( API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
-            API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, n, n, q_t, ldq_t, q, ldq );
+        LAPACKE_cge_trans( LAPACK_COL_MAJOR, n, n, t_t, ldt_t, t, ldt );
+        if( LAPACKE_lsame( compq, 'v' ) ) {
+            LAPACKE_cge_trans( LAPACK_COL_MAJOR, n, n, q_t, ldq_t, q, ldq );
         }
         /* Release memory and exit */
-        if( API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
+        if( LAPACKE_lsame( compq, 'v' ) ) {
             LAPACKE_free( q_t );
         }
 exit_level_1:
         LAPACKE_free( t_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctrexc_work", info );
+            LAPACKE_xerbla( "LAPACKE_ctrexc_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctrexc_work", info );
+        LAPACKE_xerbla( "LAPACKE_ctrexc_work", info );
     }
     return info;
 }

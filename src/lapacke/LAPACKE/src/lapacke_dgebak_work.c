@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dgebak
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dgebak_work)( int matrix_layout, char job, char side,
+lapack_int LAPACKE_dgebak_work( int matrix_layout, char job, char side,
                                 lapack_int n, lapack_int ilo, lapack_int ihi,
                                 const double* scale, lapack_int m, double* v,
                                 lapack_int ldv )
@@ -50,7 +51,7 @@ lapack_int API_SUFFIX(LAPACKE_dgebak_work)( int matrix_layout, char job, char si
         /* Check leading dimension(s) */
         if( ldv < m ) {
             info = -10;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgebak_work", info );
+            LAPACKE_xerbla( "LAPACKE_dgebak_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -60,7 +61,7 @@ lapack_int API_SUFFIX(LAPACKE_dgebak_work)( int matrix_layout, char job, char si
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, n, m, v, ldv, v_t, ldv_t );
+        LAPACKE_dge_trans( matrix_layout, n, m, v, ldv, v_t, ldv_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dgebak( &job, &side, &n, &ilo, &ihi, scale, &m, v_t, &ldv_t,
                        &info );
@@ -68,16 +69,16 @@ lapack_int API_SUFFIX(LAPACKE_dgebak_work)( int matrix_layout, char job, char si
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, m, v_t, ldv_t, v, ldv );
+        LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, m, v_t, ldv_t, v, ldv );
         /* Release memory and exit */
         LAPACKE_free( v_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgebak_work", info );
+            LAPACKE_xerbla( "LAPACKE_dgebak_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgebak_work", info );
+        LAPACKE_xerbla( "LAPACKE_dgebak_work", info );
     }
     return info;
 }

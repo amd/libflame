@@ -28,25 +28,26 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dlapy3
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-double API_SUFFIX(LAPACKE_dlapy3)( double x, double y, double z )
+double LAPACKE_dlapy3( double x, double y, double z )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &x, 1 ) ) {
+        if( LAPACKE_d_nancheck( 1, &x, 1 ) ) {
             return -1;
         }
-        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &y, 1 ) ) {
+        if( LAPACKE_d_nancheck( 1, &y, 1 ) ) {
             return -2;
         }
-        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &z, 1 ) ) {
+        if( LAPACKE_d_nancheck( 1, &z, 1 ) ) {
             return -3;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_dlapy3_work)( x, y, z );
+    return LAPACKE_dlapy3_work( x, y, z );
 }

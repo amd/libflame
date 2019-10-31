@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function zhseqr
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zhseqr_work)( int matrix_layout, char job, char compz,
+lapack_int LAPACKE_zhseqr_work( int matrix_layout, char job, char compz,
                                 lapack_int n, lapack_int ilo, lapack_int ihi,
                                 lapack_complex_double* h, lapack_int ldh,
                                 lapack_complex_double* w,
@@ -55,12 +56,12 @@ lapack_int API_SUFFIX(LAPACKE_zhseqr_work)( int matrix_layout, char job, char co
         /* Check leading dimension(s) */
         if( ldh < n ) {
             info = -8;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhseqr_work", info );
+            LAPACKE_xerbla( "LAPACKE_zhseqr_work", info );
             return info;
         }
         if( ldz < n ) {
             info = -11;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhseqr_work", info );
+            LAPACKE_xerbla( "LAPACKE_zhseqr_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -76,7 +77,7 @@ lapack_int API_SUFFIX(LAPACKE_zhseqr_work)( int matrix_layout, char job, char co
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( compz, 'i' ) || API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
+        if( LAPACKE_lsame( compz, 'i' ) || LAPACKE_lsame( compz, 'v' ) ) {
             z_t = (lapack_complex_double*)
                 LAPACKE_malloc( sizeof(lapack_complex_double) *
                                 ldz_t * MAX(1,n) );
@@ -86,9 +87,9 @@ lapack_int API_SUFFIX(LAPACKE_zhseqr_work)( int matrix_layout, char job, char co
             }
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, n, h, ldh, h_t, ldh_t );
-        if( API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
-            API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, n, z, ldz, z_t, ldz_t );
+        LAPACKE_zge_trans( matrix_layout, n, n, h, ldh, h_t, ldh_t );
+        if( LAPACKE_lsame( compz, 'v' ) ) {
+            LAPACKE_zge_trans( matrix_layout, n, n, z, ldz, z_t, ldz_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_zhseqr( &job, &compz, &n, &ilo, &ihi, h_t, &ldh_t, w, z_t,
@@ -97,23 +98,23 @@ lapack_int API_SUFFIX(LAPACKE_zhseqr_work)( int matrix_layout, char job, char co
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, n, h_t, ldh_t, h, ldh );
-        if( API_SUFFIX(LAPACKE_lsame)( compz, 'i' ) || API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
-            API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, n, z_t, ldz_t, z, ldz );
+        LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, n, h_t, ldh_t, h, ldh );
+        if( LAPACKE_lsame( compz, 'i' ) || LAPACKE_lsame( compz, 'v' ) ) {
+            LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, n, z_t, ldz_t, z, ldz );
         }
         /* Release memory and exit */
-        if( API_SUFFIX(LAPACKE_lsame)( compz, 'i' ) || API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
+        if( LAPACKE_lsame( compz, 'i' ) || LAPACKE_lsame( compz, 'v' ) ) {
             LAPACKE_free( z_t );
         }
 exit_level_1:
         LAPACKE_free( h_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhseqr_work", info );
+            LAPACKE_xerbla( "LAPACKE_zhseqr_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhseqr_work", info );
+        LAPACKE_xerbla( "LAPACKE_zhseqr_work", info );
     }
     return info;
 }

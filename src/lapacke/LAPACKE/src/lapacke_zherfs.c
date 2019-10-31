@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zherfs
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zherfs)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_zherfs( int matrix_layout, char uplo, lapack_int n,
                            lapack_int nrhs, const lapack_complex_double* a,
                            lapack_int lda, const lapack_complex_double* af,
                            lapack_int ldaf, const lapack_int* ipiv,
@@ -44,22 +45,22 @@ lapack_int API_SUFFIX(LAPACKE_zherfs)( int matrix_layout, char uplo, lapack_int 
     double* rwork = NULL;
     lapack_complex_double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zherfs", -1 );
+        LAPACKE_xerbla( "LAPACKE_zherfs", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_zhe_nancheck)( matrix_layout, uplo, n, a, lda ) ) {
+        if( LAPACKE_zhe_nancheck( matrix_layout, uplo, n, a, lda ) ) {
             return -5;
         }
-        if( API_SUFFIX(LAPACKE_zhe_nancheck)( matrix_layout, uplo, n, af, ldaf ) ) {
+        if( LAPACKE_zhe_nancheck( matrix_layout, uplo, n, af, ldaf ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( LAPACKE_zge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
             return -10;
         }
-        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, nrhs, x, ldx ) ) {
+        if( LAPACKE_zge_nancheck( matrix_layout, n, nrhs, x, ldx ) ) {
             return -12;
         }
     }
@@ -77,7 +78,7 @@ lapack_int API_SUFFIX(LAPACKE_zherfs)( int matrix_layout, char uplo, lapack_int 
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_zherfs_work)( matrix_layout, uplo, n, nrhs, a, lda, af, ldaf,
+    info = LAPACKE_zherfs_work( matrix_layout, uplo, n, nrhs, a, lda, af, ldaf,
                                 ipiv, b, ldb, x, ldx, ferr, berr, work, rwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -85,7 +86,7 @@ exit_level_1:
     LAPACKE_free( rwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zherfs", info );
+        LAPACKE_xerbla( "LAPACKE_zherfs", info );
     }
     return info;
 }

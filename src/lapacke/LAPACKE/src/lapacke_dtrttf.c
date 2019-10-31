@@ -28,25 +28,26 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dtrttf
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dtrttf)( int matrix_layout, char transr, char uplo,
+lapack_int LAPACKE_dtrttf( int matrix_layout, char transr, char uplo,
                            lapack_int n, const double* a, lapack_int lda,
                            double* arf )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtrttf", -1 );
+        LAPACKE_xerbla( "LAPACKE_dtrttf", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_dtr_nancheck)( matrix_layout, uplo, 'n', n, a, lda ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, n, n, a, lda ) ) {
             return -5;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_dtrttf_work)( matrix_layout, transr, uplo, n, a, lda, arf );
+    return LAPACKE_dtrttf_work( matrix_layout, transr, uplo, n, a, lda, arf );
 }

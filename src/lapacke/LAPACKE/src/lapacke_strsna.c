@@ -28,44 +28,45 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function strsna
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_strsna)( int matrix_layout, char job, char howmny,
+lapack_int LAPACKE_strsna( int matrix_layout, char job, char howmny,
                            const lapack_logical* select, lapack_int n,
                            const float* t, lapack_int ldt, const float* vl,
                            lapack_int ldvl, const float* vr, lapack_int ldvr,
                            float* s, float* sep, lapack_int mm, lapack_int* m )
 {
     lapack_int info = 0;
-    lapack_int ldwork =  API_SUFFIX(LAPACKE_lsame)( job, 'e' ) ? 1 : MAX(1,n) ;
+    lapack_int ldwork =  LAPACKE_lsame( job, 'e' ) ? 1 : MAX(1,n) ;
     lapack_int* iwork = NULL;
     float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_strsna", -1 );
+        LAPACKE_xerbla( "LAPACKE_strsna", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, n, n, t, ldt ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, n, t, ldt ) ) {
             return -6;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( job, 'b' ) || API_SUFFIX(LAPACKE_lsame)( job, 'e' ) ) {
-            if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, n, mm, vl, ldvl ) ) {
+        if( LAPACKE_lsame( job, 'b' ) || LAPACKE_lsame( job, 'e' ) ) {
+            if( LAPACKE_sge_nancheck( matrix_layout, n, mm, vl, ldvl ) ) {
                 return -8;
             }
         }
-        if( API_SUFFIX(LAPACKE_lsame)( job, 'b' ) || API_SUFFIX(LAPACKE_lsame)( job, 'e' ) ) {
-            if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, n, mm, vr, ldvr ) ) {
+        if( LAPACKE_lsame( job, 'b' ) || LAPACKE_lsame( job, 'e' ) ) {
+            if( LAPACKE_sge_nancheck( matrix_layout, n, mm, vr, ldvr ) ) {
                 return -10;
             }
         }
     }
 #endif
     /* Allocate memory for working array(s) */
-    if( API_SUFFIX(LAPACKE_lsame)( job, 'b' ) || API_SUFFIX(LAPACKE_lsame)( job, 'v' ) ) {
+    if( LAPACKE_lsame( job, 'b' ) || LAPACKE_lsame( job, 'v' ) ) {
         iwork = (lapack_int*)
             LAPACKE_malloc( sizeof(lapack_int) * MAX(1,2*(n-1)) );
         if( iwork == NULL ) {
@@ -73,7 +74,7 @@ lapack_int API_SUFFIX(LAPACKE_strsna)( int matrix_layout, char job, char howmny,
             goto exit_level_0;
         }
     }
-    if( API_SUFFIX(LAPACKE_lsame)( job, 'b' ) || API_SUFFIX(LAPACKE_lsame)( job, 'v' ) ) {
+    if( LAPACKE_lsame( job, 'b' ) || LAPACKE_lsame( job, 'v' ) ) {
         work = (float*)LAPACKE_malloc( sizeof(float) * ldwork * MAX(1,n+6) );
         if( work == NULL ) {
             info = LAPACK_WORK_MEMORY_ERROR;
@@ -81,20 +82,20 @@ lapack_int API_SUFFIX(LAPACKE_strsna)( int matrix_layout, char job, char howmny,
         }
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_strsna_work)( matrix_layout, job, howmny, select, n, t, ldt,
+    info = LAPACKE_strsna_work( matrix_layout, job, howmny, select, n, t, ldt,
                                 vl, ldvl, vr, ldvr, s, sep, mm, m, work, ldwork,
                                 iwork );
     /* Release memory and exit */
-    if( API_SUFFIX(LAPACKE_lsame)( job, 'b' ) || API_SUFFIX(LAPACKE_lsame)( job, 'v' ) ) {
+    if( LAPACKE_lsame( job, 'b' ) || LAPACKE_lsame( job, 'v' ) ) {
         LAPACKE_free( work );
     }
 exit_level_1:
-    if( API_SUFFIX(LAPACKE_lsame)( job, 'b' ) || API_SUFFIX(LAPACKE_lsame)( job, 'v' ) ) {
+    if( LAPACKE_lsame( job, 'b' ) || LAPACKE_lsame( job, 'v' ) ) {
         LAPACKE_free( iwork );
     }
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_strsna", info );
+        LAPACKE_xerbla( "LAPACKE_strsna", info );
     }
     return info;
 }

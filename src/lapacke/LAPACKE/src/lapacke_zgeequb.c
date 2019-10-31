@@ -28,27 +28,28 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zgeequb
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zgeequb)( int matrix_layout, lapack_int m, lapack_int n,
+lapack_int LAPACKE_zgeequb( int matrix_layout, lapack_int m, lapack_int n,
                             const lapack_complex_double* a, lapack_int lda,
                             double* r, double* c, double* rowcnd,
                             double* colcnd, double* amax )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgeequb", -1 );
+        LAPACKE_xerbla( "LAPACKE_zgeequb", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, m, n, a, lda ) ) {
+        if( LAPACKE_zge_nancheck( matrix_layout, m, n, a, lda ) ) {
             return -4;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_zgeequb_work)( matrix_layout, m, n, a, lda, r, c, rowcnd,
+    return LAPACKE_zgeequb_work( matrix_layout, m, n, a, lda, r, c, rowcnd,
                                  colcnd, amax );
 }

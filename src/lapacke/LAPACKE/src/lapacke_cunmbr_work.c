@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function cunmbr
 * Author: Intel Corporation
+* Generated June 2016
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cunmbr_work)( int matrix_layout, char vect, char side,
+lapack_int LAPACKE_cunmbr_work( int matrix_layout, char vect, char side,
                                 char trans, lapack_int m, lapack_int n,
                                 lapack_int k, const lapack_complex_float* a,
                                 lapack_int lda, const lapack_complex_float* tau,
@@ -48,8 +49,8 @@ lapack_int API_SUFFIX(LAPACKE_cunmbr_work)( int matrix_layout, char vect, char s
             info = info - 1;
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
-        lapack_int nq = API_SUFFIX(LAPACKE_lsame)( side, 'l' ) ? m : n;
-        lapack_int r = API_SUFFIX(LAPACKE_lsame)( vect, 'q' ) ? nq : MIN(nq,k);
+        lapack_int nq = LAPACKE_lsame( side, 'l' ) ? m : n;
+        lapack_int r = LAPACKE_lsame( vect, 'q' ) ? nq : MIN(nq,k);
         lapack_int lda_t = MAX(1,r);
         lapack_int ldc_t = MAX(1,m);
         lapack_complex_float* a_t = NULL;
@@ -57,12 +58,12 @@ lapack_int API_SUFFIX(LAPACKE_cunmbr_work)( int matrix_layout, char vect, char s
         /* Check leading dimension(s) */
         if( lda < MIN(nq,k) ) {
             info = -9;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cunmbr_work", info );
+            LAPACKE_xerbla( "LAPACKE_cunmbr_work", info );
             return info;
         }
         if( ldc < n ) {
             info = -12;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cunmbr_work", info );
+            LAPACKE_xerbla( "LAPACKE_cunmbr_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -72,7 +73,7 @@ lapack_int API_SUFFIX(LAPACKE_cunmbr_work)( int matrix_layout, char vect, char s
             return (info < 0) ? (info - 1) : info;
         }
         /* Allocate memory for temporary array(s) */
-        if( API_SUFFIX(LAPACKE_lsame)( vect, 'q' ) ) {
+        if( LAPACKE_lsame( vect, 'q' ) ) {
           a_t = (lapack_complex_float*)LAPACKE_malloc( sizeof(lapack_complex_float) * lda_t * MAX(1,k) );
         } else {
           a_t = (lapack_complex_float*)LAPACKE_malloc( sizeof(lapack_complex_float) * lda_t * MAX(1,nq) );
@@ -88,8 +89,8 @@ lapack_int API_SUFFIX(LAPACKE_cunmbr_work)( int matrix_layout, char vect, char s
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, r, MIN(nq,k), a, lda, a_t, lda_t );
-        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, m, n, c, ldc, c_t, ldc_t );
+        LAPACKE_cge_trans( matrix_layout, r, MIN(nq,k), a, lda, a_t, lda_t );
+        LAPACKE_cge_trans( matrix_layout, m, n, c, ldc, c_t, ldc_t );
         /* Call LAPACK function and adjust info */
         LAPACK_cunmbr( &vect, &side, &trans, &m, &n, &k, a_t, &lda_t, tau, c_t,
                        &ldc_t, work, &lwork, &info );
@@ -97,18 +98,18 @@ lapack_int API_SUFFIX(LAPACKE_cunmbr_work)( int matrix_layout, char vect, char s
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, m, n, c_t, ldc_t, c, ldc );
+        LAPACKE_cge_trans( LAPACK_COL_MAJOR, m, n, c_t, ldc_t, c, ldc );
         /* Release memory and exit */
         LAPACKE_free( c_t );
 exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cunmbr_work", info );
+            LAPACKE_xerbla( "LAPACKE_cunmbr_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cunmbr_work", info );
+        LAPACKE_xerbla( "LAPACKE_cunmbr_work", info );
     }
     return info;
 }

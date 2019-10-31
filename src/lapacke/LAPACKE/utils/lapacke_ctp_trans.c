@@ -28,6 +28,7 @@
 ******************************************************************************
 * Contents: Native C interface to LAPACK utility function
 * Author: Intel Corporation
+* Created in February, 2010
 *****************************************************************************/
 
 #include "lapacke_utils.h"
@@ -36,7 +37,7 @@
  * column-major(Fortran) layout or vice versa.
  */
 
-void API_SUFFIX(LAPACKE_ctp_trans)( int matrix_layout, char uplo, char diag,
+void LAPACKE_ctp_trans( int matrix_layout, char uplo, char diag,
                         lapack_int n, const lapack_complex_float *in,
                         lapack_complex_float *out )
 {
@@ -46,12 +47,12 @@ void API_SUFFIX(LAPACKE_ctp_trans)( int matrix_layout, char uplo, char diag,
     if( in == NULL || out == NULL ) return ;
 
     colmaj = ( matrix_layout == LAPACK_COL_MAJOR );
-    upper  = API_SUFFIX(LAPACKE_lsame)( uplo, 'u' );
-    unit   = API_SUFFIX(LAPACKE_lsame)( diag, 'u' );
+    upper  = LAPACKE_lsame( uplo, 'u' );
+    unit   = LAPACKE_lsame( diag, 'u' );
 
     if( ( !colmaj && ( matrix_layout != LAPACK_ROW_MAJOR ) ) ||
-        ( !upper  && !API_SUFFIX(LAPACKE_lsame)( uplo, 'l' ) ) ||
-        ( !unit   && !API_SUFFIX(LAPACKE_lsame)( diag, 'n' ) ) ) {
+        ( !upper  && !LAPACKE_lsame( uplo, 'l' ) ) ||
+        ( !unit   && !LAPACKE_lsame( diag, 'n' ) ) ) {
         /* Just exit if any of input parameters are wrong */
         return;
     }

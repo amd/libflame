@@ -28,31 +28,32 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function cgbsv
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cgbsv)( int matrix_layout, lapack_int n, lapack_int kl,
+lapack_int LAPACKE_cgbsv( int matrix_layout, lapack_int n, lapack_int kl,
                           lapack_int ku, lapack_int nrhs,
                           lapack_complex_float* ab, lapack_int ldab,
                           lapack_int* ipiv, lapack_complex_float* b,
                           lapack_int ldb )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgbsv", -1 );
+        LAPACKE_xerbla( "LAPACKE_cgbsv", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_cgb_nancheck)( matrix_layout, n, n, kl, kl+ku, ab, ldab ) ) {
+        if( LAPACKE_cgb_nancheck( matrix_layout, n, n, kl, kl+ku, ab, ldab ) ) {
             return -6;
         }
-        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
             return -9;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_cgbsv_work)( matrix_layout, n, kl, ku, nrhs, ab, ldab, ipiv, b,
+    return LAPACKE_cgbsv_work( matrix_layout, n, kl, ku, nrhs, ab, ldab, ipiv, b,
                                ldb );
 }

@@ -28,32 +28,33 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function sstev
 * Author: Intel Corporation
+* Generated June 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_sstev)( int matrix_layout, char jobz, lapack_int n, float* d,
+lapack_int LAPACKE_sstev( int matrix_layout, char jobz, lapack_int n, float* d,
                           float* e, float* z, lapack_int ldz )
 {
     lapack_int info = 0;
     float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sstev", -1 );
+        LAPACKE_xerbla( "LAPACKE_sstev", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n, d, 1 ) ) {
+        if( LAPACKE_s_nancheck( n, d, 1 ) ) {
             return -4;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n-1, e, 1 ) ) {
+        if( LAPACKE_s_nancheck( n-1, e, 1 ) ) {
             return -5;
         }
     }
 #endif
     /* Allocate memory for working array(s) */
-    if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
+    if( LAPACKE_lsame( jobz, 'v' ) ) {
         work = (float*)LAPACKE_malloc( sizeof(float) * MAX(1,2*n-2) );
         if( work == NULL ) {
             info = LAPACK_WORK_MEMORY_ERROR;
@@ -61,14 +62,14 @@ lapack_int API_SUFFIX(LAPACKE_sstev)( int matrix_layout, char jobz, lapack_int n
         }
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_sstev_work)( matrix_layout, jobz, n, d, e, z, ldz, work );
+    info = LAPACKE_sstev_work( matrix_layout, jobz, n, d, e, z, ldz, work );
     /* Release memory and exit */
-    if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
+    if( LAPACKE_lsame( jobz, 'v' ) ) {
         LAPACKE_free( work );
     }
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sstev", info );
+        LAPACKE_xerbla( "LAPACKE_sstev", info );
     }
     return info;
 }

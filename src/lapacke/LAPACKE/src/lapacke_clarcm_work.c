@@ -28,15 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function clarcm
 * Author: Intel Corporation
+* Generated November 2017
 *****************************************************************************/
-
-/*
- *     Modifications Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
- */
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_clarcm_work)(int matrix_layout, lapack_int m, lapack_int n,
+lapack_int LAPACKE_clarcm_work(int matrix_layout, lapack_int m, lapack_int n,
                                 const float* a, lapack_int lda,
                                 const lapack_complex_float* b, lapack_int ldb,
                                 lapack_complex_float* c, lapack_int ldc,
@@ -56,45 +53,45 @@ lapack_int API_SUFFIX(LAPACKE_clarcm_work)(int matrix_layout, lapack_int m, lapa
         /* Check leading dimension(s) */
         if( lda < m ) {
             info = -5;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clarcm_work", info );
+            LAPACKE_xerbla( "LAPACKE_clarcm_work", info );
             return info;
         }
         if( ldb < n ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clarcm_work", info );
+            LAPACKE_xerbla( "LAPACKE_clarcm_work", info );
             return info;
         }
         if( ldc < n ) {
             info = -9;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clarcm_work", info );
+            LAPACKE_xerbla( "LAPACKE_clarcm_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
         a_t = (float*)
             LAPACKE_malloc(sizeof(float) * lda_t * MAX(1,m));
+        b_t = (lapack_complex_float*)
+            LAPACKE_malloc(sizeof(lapack_complex_float) * ldb_t * MAX(1,n));
+        c_t = (lapack_complex_float*)
+            LAPACKE_malloc((sizeof(lapack_complex_float) * ldc_t * MAX(1,n)));
         if (a_t == NULL) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
-        b_t = (lapack_complex_float*)
-            LAPACKE_malloc(sizeof(lapack_complex_float) * ldb_t * MAX(1,n));
         if (b_t == NULL) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_1;
         }
-        c_t = (lapack_complex_float*)
-            LAPACKE_malloc((sizeof(lapack_complex_float) * ldc_t * MAX(1,n)));
         if (c_t == NULL) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_2;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_sge_trans)(matrix_layout, m, m, a, lda, a_t, lda_t);
-        API_SUFFIX(LAPACKE_cge_trans)(matrix_layout, m, n, b, ldb, b_t, ldb_t);
+        LAPACKE_sge_trans(matrix_layout, m, m, a, lda, a_t, lda_t);
+        LAPACKE_cge_trans(matrix_layout, m, n, b, ldb, b_t, ldb_t);
         /* Call LAPACK function */
         LAPACK_clarcm(&m, &n, a_t, &lda_t, b_t, &ldb_t, c_t, &ldc_t, rwork);
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_cge_trans)(LAPACK_COL_MAJOR, m, n, c_t, ldc_t, c, ldc);
+        LAPACKE_cge_trans(LAPACK_COL_MAJOR, m, n, c_t, ldc_t, c, ldc);
         /* Release memory and exit */
         LAPACKE_free(c_t);
 exit_level_2:
@@ -103,11 +100,11 @@ exit_level_1:
         LAPACKE_free(a_t);
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clarcm_work", info );
+            LAPACKE_xerbla( "LAPACKE_clarcm_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)("LAPACKE_clarcm_work", -1);
+        LAPACKE_xerbla("LAPACKE_clarcm_work", -1);
     }
     return info;
 }

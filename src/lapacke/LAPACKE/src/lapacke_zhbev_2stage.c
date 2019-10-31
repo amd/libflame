@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zhbev_2stage
 * Author: Intel Corporation
+* Generated December 2016
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zhbev_2stage)( int matrix_layout, char jobz, char uplo, lapack_int n,
+lapack_int LAPACKE_zhbev_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
                           lapack_int kd, lapack_complex_double* ab,
                           lapack_int ldab, double* w, lapack_complex_double* z,
                           lapack_int ldz )
@@ -43,19 +44,19 @@ lapack_int API_SUFFIX(LAPACKE_zhbev_2stage)( int matrix_layout, char jobz, char 
     lapack_complex_double* work = NULL;
     lapack_complex_double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhbev_2stage", -1 );
+        LAPACKE_xerbla( "LAPACKE_zhbev_2stage", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_zhb_nancheck)( matrix_layout, uplo, n, kd, ab, ldab ) ) {
+        if( LAPACKE_zhb_nancheck( matrix_layout, uplo, n, kd, ab, ldab ) ) {
             return -6;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_zhbev_2stage_work)( matrix_layout, jobz, uplo, n, kd, ab, ldab, w, z,
+    info = LAPACKE_zhbev_2stage_work( matrix_layout, jobz, uplo, n, kd, ab, ldab, w, z,
                                ldz, &work_query, lwork, rwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -74,7 +75,7 @@ lapack_int API_SUFFIX(LAPACKE_zhbev_2stage)( int matrix_layout, char jobz, char 
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_zhbev_2stage_work)( matrix_layout, jobz, uplo, n, kd, ab, ldab, w, z,
+    info = LAPACKE_zhbev_2stage_work( matrix_layout, jobz, uplo, n, kd, ab, ldab, w, z,
                                ldz, work, lwork, rwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -82,7 +83,7 @@ exit_level_1:
     LAPACKE_free( rwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhbev_2stage", info );
+        LAPACKE_xerbla( "LAPACKE_zhbev_2stage", info );
     }
     return info;
 }

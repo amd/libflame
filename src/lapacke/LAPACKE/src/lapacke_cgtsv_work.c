@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function cgtsv
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cgtsv_work)( int matrix_layout, lapack_int n, lapack_int nrhs,
+lapack_int LAPACKE_cgtsv_work( int matrix_layout, lapack_int n, lapack_int nrhs,
                                lapack_complex_float* dl,
                                lapack_complex_float* d,
                                lapack_complex_float* du,
@@ -51,7 +52,7 @@ lapack_int API_SUFFIX(LAPACKE_cgtsv_work)( int matrix_layout, lapack_int n, lapa
         /* Check leading dimension(s) */
         if( ldb < nrhs ) {
             info = -8;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgtsv_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgtsv_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -63,23 +64,23 @@ lapack_int API_SUFFIX(LAPACKE_cgtsv_work)( int matrix_layout, lapack_int n, lapa
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_cge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_cgtsv( &n, &nrhs, dl, d, du, b_t, &ldb_t, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
+        LAPACKE_cge_trans( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
         /* Release memory and exit */
         LAPACKE_free( b_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgtsv_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgtsv_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgtsv_work", info );
+        LAPACKE_xerbla( "LAPACKE_cgtsv_work", info );
     }
     return info;
 }

@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dgbcon
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dgbcon)( int matrix_layout, char norm, lapack_int n,
+lapack_int LAPACKE_dgbcon( int matrix_layout, char norm, lapack_int n,
                            lapack_int kl, lapack_int ku, const double* ab,
                            lapack_int ldab, const lapack_int* ipiv,
                            double anorm, double* rcond )
@@ -41,16 +42,16 @@ lapack_int API_SUFFIX(LAPACKE_dgbcon)( int matrix_layout, char norm, lapack_int 
     lapack_int* iwork = NULL;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgbcon", -1 );
+        LAPACKE_xerbla( "LAPACKE_dgbcon", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_dgb_nancheck)( matrix_layout, n, n, kl, kl+ku, ab, ldab ) ) {
+        if( LAPACKE_dgb_nancheck( matrix_layout, n, n, kl, kl+ku, ab, ldab ) ) {
             return -6;
         }
-        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &anorm, 1 ) ) {
+        if( LAPACKE_d_nancheck( 1, &anorm, 1 ) ) {
             return -9;
         }
     }
@@ -67,7 +68,7 @@ lapack_int API_SUFFIX(LAPACKE_dgbcon)( int matrix_layout, char norm, lapack_int 
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_dgbcon_work)( matrix_layout, norm, n, kl, ku, ab, ldab, ipiv,
+    info = LAPACKE_dgbcon_work( matrix_layout, norm, n, kl, ku, ab, ldab, ipiv,
                                 anorm, rcond, work, iwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -75,7 +76,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgbcon", info );
+        LAPACKE_xerbla( "LAPACKE_dgbcon", info );
     }
     return info;
 }

@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dorcsd2by1
 * Author: Intel Corporation
+* Generated November 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dorcsd2by1)( int matrix_layout, char jobu1, char jobu2,
+lapack_int LAPACKE_dorcsd2by1( int matrix_layout, char jobu1, char jobu2,
                            char jobv1t, lapack_int m, lapack_int p, lapack_int q,
                            double* x11, lapack_int ldx11, double* x21, lapack_int ldx21,
                            double* theta, double* u1, lapack_int ldu1, double* u2,
@@ -45,7 +46,7 @@ lapack_int API_SUFFIX(LAPACKE_dorcsd2by1)( int matrix_layout, char jobu1, char j
     double work_query;
     lapack_int nrows_x11, nrows_x21;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dorcsd2by1", -1 );
+        LAPACKE_xerbla( "LAPACKE_dorcsd2by1", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
@@ -53,11 +54,11 @@ lapack_int API_SUFFIX(LAPACKE_dorcsd2by1)( int matrix_layout, char jobu1, char j
         /* Optionally check input matrices for NaNs */
         nrows_x11 = p;
         nrows_x21 = m-p;
-        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, nrows_x11, q, x11, ldx11 ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, nrows_x11, q, x11, ldx11 ) ) {
             return -8;
         }
  
-        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, nrows_x21, q, x21, ldx21 ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, nrows_x21, q, x21, ldx21 ) ) {
             return -9;
         }
     }
@@ -69,7 +70,7 @@ lapack_int API_SUFFIX(LAPACKE_dorcsd2by1)( int matrix_layout, char jobu1, char j
         goto exit_level_0;
     }
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_dorcsd2by1_work)( matrix_layout, jobu1, jobu2, jobv1t, m, p, q,
+    info = LAPACKE_dorcsd2by1_work( matrix_layout, jobu1, jobu2, jobv1t, m, p, q,
                                 x11, ldx11, x21, ldx21, theta, u1, ldu1, u2,
                                 ldu2, v1t, ldv1t, &work_query,
                                 lwork, iwork );
@@ -84,7 +85,7 @@ lapack_int API_SUFFIX(LAPACKE_dorcsd2by1)( int matrix_layout, char jobu1, char j
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_dorcsd2by1_work)( matrix_layout, jobu1, jobu2, jobv1t, m, p, q,
+    info = LAPACKE_dorcsd2by1_work( matrix_layout, jobu1, jobu2, jobv1t, m, p, q,
                                 x11, ldx11, x21, ldx21, theta, u1, ldu1, u2,
                                 ldu2, v1t, ldv1t, work, lwork, iwork );
     /* Release memory and exit */
@@ -93,7 +94,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dorcsd2by1", info );
+        LAPACKE_xerbla( "LAPACKE_dorcsd2by1", info );
     }
     return info;
 }

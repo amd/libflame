@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dlamch
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-double API_SUFFIX(LAPACKE_dlamch)( char cmach )
+double LAPACKE_dlamch( char cmach )
 {
-    return API_SUFFIX(LAPACKE_dlamch_work)( cmach );
+    return LAPACKE_dlamch_work( cmach );
 }

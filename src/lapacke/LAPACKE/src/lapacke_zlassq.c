@@ -28,26 +28,27 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zlassq
 * Author: Julien langou
+* Generated February 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zlassq)( lapack_int n, lapack_complex_double* x,
+lapack_int LAPACKE_zlassq( lapack_int n, lapack_complex_double* x,
                            lapack_int incx, double* scale, double* sumsq )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input vector `x` and in/out scalars `scale` and `sumsq` for NaNs */
-        if( API_SUFFIX(LAPACKE_z_nancheck)( n, x, incx ) ) {
+        if( LAPACKE_z_nancheck( n, x, incx ) ) {
             return -2;
         }
-        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, scale, 1 ) ) {
+        if( LAPACKE_d_nancheck( 1, scale, 1 ) ) {
             return -4;
         }
-        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, sumsq, 1 ) ) {
+        if( LAPACKE_d_nancheck( 1, sumsq, 1 ) ) {
             return -5;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_zlassq_work)( n, x, incx, scale, sumsq );
+    return LAPACKE_zlassq_work( n, x, incx, scale, sumsq );
 }

@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function sgeev
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_sgeev)( int matrix_layout, char jobvl, char jobvr,
+lapack_int LAPACKE_sgeev( int matrix_layout, char jobvl, char jobvr,
                           lapack_int n, float* a, lapack_int lda, float* wr,
                           float* wi, float* vl, lapack_int ldvl, float* vr,
                           lapack_int ldvr )
@@ -42,19 +43,19 @@ lapack_int API_SUFFIX(LAPACKE_sgeev)( int matrix_layout, char jobvl, char jobvr,
     float* work = NULL;
     float work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgeev", -1 );
+        LAPACKE_xerbla( "LAPACKE_sgeev", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, n, n, a, lda ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, n, a, lda ) ) {
             return -5;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_sgeev_work)( matrix_layout, jobvl, jobvr, n, a, lda, wr, wi,
+    info = LAPACKE_sgeev_work( matrix_layout, jobvl, jobvr, n, a, lda, wr, wi,
                                vl, ldvl, vr, ldvr, &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -67,13 +68,13 @@ lapack_int API_SUFFIX(LAPACKE_sgeev)( int matrix_layout, char jobvl, char jobvr,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_sgeev_work)( matrix_layout, jobvl, jobvr, n, a, lda, wr, wi,
+    info = LAPACKE_sgeev_work( matrix_layout, jobvl, jobvr, n, a, lda, wr, wi,
                                vl, ldvl, vr, ldvr, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgeev", info );
+        LAPACKE_xerbla( "LAPACKE_sgeev", info );
     }
     return info;
 }

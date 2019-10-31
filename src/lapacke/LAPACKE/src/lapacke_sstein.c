@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function sstein
 * Author: Intel Corporation
+* Generated June 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_sstein)( int matrix_layout, lapack_int n, const float* d,
+lapack_int LAPACKE_sstein( int matrix_layout, lapack_int n, const float* d,
                            const float* e, lapack_int m, const float* w,
                            const lapack_int* iblock, const lapack_int* isplit,
                            float* z, lapack_int ldz, lapack_int* ifailv )
@@ -41,19 +42,19 @@ lapack_int API_SUFFIX(LAPACKE_sstein)( int matrix_layout, lapack_int n, const fl
     lapack_int* iwork = NULL;
     float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sstein", -1 );
+        LAPACKE_xerbla( "LAPACKE_sstein", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n, d, 1 ) ) {
+        if( LAPACKE_s_nancheck( n, d, 1 ) ) {
             return -3;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n-1, e, 1 ) ) {
+        if( LAPACKE_s_nancheck( n-1, e, 1 ) ) {
             return -4;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n, w, 1 ) ) {
+        if( LAPACKE_s_nancheck( n, w, 1 ) ) {
             return -6;
         }
     }
@@ -70,7 +71,7 @@ lapack_int API_SUFFIX(LAPACKE_sstein)( int matrix_layout, lapack_int n, const fl
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_sstein_work)( matrix_layout, n, d, e, m, w, iblock, isplit, z,
+    info = LAPACKE_sstein_work( matrix_layout, n, d, e, m, w, iblock, isplit, z,
                                 ldz, work, iwork, ifailv );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -78,7 +79,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sstein", info );
+        LAPACKE_xerbla( "LAPACKE_sstein", info );
     }
     return info;
 }

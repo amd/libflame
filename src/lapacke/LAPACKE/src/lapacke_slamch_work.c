@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function slamch
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-float API_SUFFIX(LAPACKE_slamch_work)( char cmach )
+float LAPACKE_slamch_work( char cmach )
 {
     float res;
     /* Call LAPACK function and adjust info */

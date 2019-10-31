@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function ztgsyl
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_ztgsyl_work)( int matrix_layout, char trans, lapack_int ijob,
+lapack_int LAPACKE_ztgsyl_work( int matrix_layout, char trans, lapack_int ijob,
                                 lapack_int m, lapack_int n,
                                 const lapack_complex_double* a, lapack_int lda,
                                 const lapack_complex_double* b, lapack_int ldb,
@@ -69,32 +70,32 @@ lapack_int API_SUFFIX(LAPACKE_ztgsyl_work)( int matrix_layout, char trans, lapac
         /* Check leading dimension(s) */
         if( lda < m ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgsyl_work", info );
+            LAPACKE_xerbla( "LAPACKE_ztgsyl_work", info );
             return info;
         }
         if( ldb < n ) {
             info = -9;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgsyl_work", info );
+            LAPACKE_xerbla( "LAPACKE_ztgsyl_work", info );
             return info;
         }
         if( ldc < n ) {
             info = -11;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgsyl_work", info );
+            LAPACKE_xerbla( "LAPACKE_ztgsyl_work", info );
             return info;
         }
         if( ldd < m ) {
             info = -13;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgsyl_work", info );
+            LAPACKE_xerbla( "LAPACKE_ztgsyl_work", info );
             return info;
         }
         if( lde < n ) {
             info = -15;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgsyl_work", info );
+            LAPACKE_xerbla( "LAPACKE_ztgsyl_work", info );
             return info;
         }
         if( ldf < n ) {
             info = -17;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgsyl_work", info );
+            LAPACKE_xerbla( "LAPACKE_ztgsyl_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -142,12 +143,12 @@ lapack_int API_SUFFIX(LAPACKE_ztgsyl_work)( int matrix_layout, char trans, lapac
             goto exit_level_5;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, m, m, a, lda, a_t, lda_t );
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, n, b, ldb, b_t, ldb_t );
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, m, n, c, ldc, c_t, ldc_t );
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, m, m, d, ldd, d_t, ldd_t );
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, n, e, lde, e_t, lde_t );
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, m, n, f, ldf, f_t, ldf_t );
+        LAPACKE_zge_trans( matrix_layout, m, m, a, lda, a_t, lda_t );
+        LAPACKE_zge_trans( matrix_layout, n, n, b, ldb, b_t, ldb_t );
+        LAPACKE_zge_trans( matrix_layout, m, n, c, ldc, c_t, ldc_t );
+        LAPACKE_zge_trans( matrix_layout, m, m, d, ldd, d_t, ldd_t );
+        LAPACKE_zge_trans( matrix_layout, n, n, e, lde, e_t, lde_t );
+        LAPACKE_zge_trans( matrix_layout, m, n, f, ldf, f_t, ldf_t );
         /* Call LAPACK function and adjust info */
         LAPACK_ztgsyl( &trans, &ijob, &m, &n, a_t, &lda_t, b_t, &ldb_t, c_t,
                        &ldc_t, d_t, &ldd_t, e_t, &lde_t, f_t, &ldf_t, scale,
@@ -156,8 +157,8 @@ lapack_int API_SUFFIX(LAPACKE_ztgsyl_work)( int matrix_layout, char trans, lapac
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, m, n, c_t, ldc_t, c, ldc );
-        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, m, n, f_t, ldf_t, f, ldf );
+        LAPACKE_zge_trans( LAPACK_COL_MAJOR, m, n, c_t, ldc_t, c, ldc );
+        LAPACKE_zge_trans( LAPACK_COL_MAJOR, m, n, f_t, ldf_t, f, ldf );
         /* Release memory and exit */
         LAPACKE_free( f_t );
 exit_level_5:
@@ -172,11 +173,11 @@ exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgsyl_work", info );
+            LAPACKE_xerbla( "LAPACKE_ztgsyl_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgsyl_work", info );
+        LAPACKE_xerbla( "LAPACKE_ztgsyl_work", info );
     }
     return info;
 }

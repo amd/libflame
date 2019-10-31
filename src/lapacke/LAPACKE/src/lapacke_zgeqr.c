@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zgeqr
 * Author: Intel Corporation
+* Generated June 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zgeqr)( int matrix_layout, lapack_int m, lapack_int n,
+lapack_int LAPACKE_zgeqr( int matrix_layout, lapack_int m, lapack_int n,
                           lapack_complex_double* a, lapack_int lda,
                           lapack_complex_double* t, lapack_int tsize )
 {
@@ -41,19 +42,19 @@ lapack_int API_SUFFIX(LAPACKE_zgeqr)( int matrix_layout, lapack_int m, lapack_in
     lapack_complex_double* work = NULL;
     lapack_complex_double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgeqr", -1 );
+        LAPACKE_xerbla( "LAPACKE_zgeqr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, m, n, a, lda ) ) {
+        if( LAPACKE_zge_nancheck( matrix_layout, m, n, a, lda ) ) {
             return -4;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_zgeqr_work)( matrix_layout, m, n, a, lda, t, tsize, &work_query,
+    info = LAPACKE_zgeqr_work( matrix_layout, m, n, a, lda, t, tsize, &work_query,
                                lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -70,12 +71,12 @@ lapack_int API_SUFFIX(LAPACKE_zgeqr)( int matrix_layout, lapack_int m, lapack_in
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_zgeqr_work)( matrix_layout, m, n, a, lda, t, tsize, work, lwork );
+    info = LAPACKE_zgeqr_work( matrix_layout, m, n, a, lda, t, tsize, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgeqr", info );
+        LAPACKE_xerbla( "LAPACKE_zgeqr", info );
     }
     return info;
 }

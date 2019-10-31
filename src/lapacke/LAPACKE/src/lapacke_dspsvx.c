@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dspsvx
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dspsvx)( int matrix_layout, char fact, char uplo, lapack_int n,
+lapack_int LAPACKE_dspsvx( int matrix_layout, char fact, char uplo, lapack_int n,
                            lapack_int nrhs, const double* ap, double* afp,
                            lapack_int* ipiv, const double* b, lapack_int ldb,
                            double* x, lapack_int ldx, double* rcond,
@@ -42,21 +43,21 @@ lapack_int API_SUFFIX(LAPACKE_dspsvx)( int matrix_layout, char fact, char uplo, 
     lapack_int* iwork = NULL;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dspsvx", -1 );
+        LAPACKE_xerbla( "LAPACKE_dspsvx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_lsame)( fact, 'f' ) ) {
-            if( API_SUFFIX(LAPACKE_dsp_nancheck)( n, afp ) ) {
+        if( LAPACKE_lsame( fact, 'f' ) ) {
+            if( LAPACKE_dsp_nancheck( n, afp ) ) {
                 return -7;
             }
         }
-        if( API_SUFFIX(LAPACKE_dsp_nancheck)( n, ap ) ) {
+        if( LAPACKE_dsp_nancheck( n, ap ) ) {
             return -6;
         }
-        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
             return -9;
         }
     }
@@ -73,7 +74,7 @@ lapack_int API_SUFFIX(LAPACKE_dspsvx)( int matrix_layout, char fact, char uplo, 
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_dspsvx_work)( matrix_layout, fact, uplo, n, nrhs, ap, afp,
+    info = LAPACKE_dspsvx_work( matrix_layout, fact, uplo, n, nrhs, ap, afp,
                                 ipiv, b, ldb, x, ldx, rcond, ferr, berr, work,
                                 iwork );
     /* Release memory and exit */
@@ -82,7 +83,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dspsvx", info );
+        LAPACKE_xerbla( "LAPACKE_dspsvx", info );
     }
     return info;
 }

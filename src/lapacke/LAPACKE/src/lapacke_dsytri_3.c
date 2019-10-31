@@ -28,35 +28,36 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dsytri_3
 * Author: Intel Corporation
+* Generated June 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dsytri_3)( int matrix_layout, char uplo, lapack_int n, double* a,
+lapack_int LAPACKE_dsytri_3( int matrix_layout, char uplo, lapack_int n, double* a,
                             lapack_int lda, const double* e, const lapack_int* ipiv )
 {
     lapack_int info = 0;
     lapack_int lwork = -1;
     double* work = NULL;
     double work_query;
-    lapack_int e_start = API_SUFFIX(LAPACKE_lsame)( uplo, 'U' ) ? 1 : 0;
+    lapack_int e_start = LAPACKE_lsame( uplo, 'U' ) ? 1 : 0;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsytri_3", -1 );
+        LAPACKE_xerbla( "LAPACKE_dsytri_3", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_dsy_nancheck)( matrix_layout, uplo, n, a, lda ) ) {
+        if( LAPACKE_dsy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
             return -4;
         }
-        if( API_SUFFIX(LAPACKE_d_nancheck)( n-1, e + e_start, 1 ) ) {
+        if( LAPACKE_d_nancheck( n-1, e + e_start, 1 ) ) {
             return -6;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_dsytri_3_work)( matrix_layout, uplo, n, a, lda, e, ipiv,
+    info = LAPACKE_dsytri_3_work( matrix_layout, uplo, n, a, lda, e, ipiv,
                                 &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -69,12 +70,12 @@ lapack_int API_SUFFIX(LAPACKE_dsytri_3)( int matrix_layout, char uplo, lapack_in
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_dsytri_3_work)( matrix_layout, uplo, n, a, lda, e, ipiv, work, lwork );
+    info = LAPACKE_dsytri_3_work( matrix_layout, uplo, n, a, lda, e, ipiv, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsytri_3", info );
+        LAPACKE_xerbla( "LAPACKE_dsytri_3", info );
     }
     return info;
 }

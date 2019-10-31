@@ -28,12 +28,13 @@
 ******************************************************************************
 * Contents: Native C interface to LAPACK lsame
 * Author: Intel Corporation
+* Created in January, 2010
 *****************************************************************************/
 
 #include <stdio.h>
 #include "lapacke_utils.h"
 
-void API_SUFFIX(LAPACKE_xerbla)( const char *name, lapack_int info )
+void LAPACKE_xerbla( const char *name, lapack_int info )
 {
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
         printf( "Not enough memory to allocate work array in %s\n", name );

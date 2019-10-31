@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dgebrd
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dgebrd_work)( int matrix_layout, lapack_int m, lapack_int n,
+lapack_int LAPACKE_dgebrd_work( int matrix_layout, lapack_int m, lapack_int n,
                                 double* a, lapack_int lda, double* d, double* e,
                                 double* tauq, double* taup, double* work,
                                 lapack_int lwork )
@@ -50,7 +51,7 @@ lapack_int API_SUFFIX(LAPACKE_dgebrd_work)( int matrix_layout, lapack_int m, lap
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -5;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgebrd_work", info );
+            LAPACKE_xerbla( "LAPACKE_dgebrd_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -66,7 +67,7 @@ lapack_int API_SUFFIX(LAPACKE_dgebrd_work)( int matrix_layout, lapack_int m, lap
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, m, n, a, lda, a_t, lda_t );
+        LAPACKE_dge_trans( matrix_layout, m, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dgebrd( &m, &n, a_t, &lda_t, d, e, tauq, taup, work, &lwork,
                        &info );
@@ -74,16 +75,16 @@ lapack_int API_SUFFIX(LAPACKE_dgebrd_work)( int matrix_layout, lapack_int m, lap
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
+        LAPACKE_dge_trans( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgebrd_work", info );
+            LAPACKE_xerbla( "LAPACKE_dgebrd_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgebrd_work", info );
+        LAPACKE_xerbla( "LAPACKE_dgebrd_work", info );
     }
     return info;
 }

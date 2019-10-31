@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function ctfsm
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_ctfsm_work)( int matrix_layout, char transr, char side,
+lapack_int LAPACKE_ctfsm_work( int matrix_layout, char transr, char side,
                                char uplo, char trans, char diag, lapack_int m,
                                lapack_int n, lapack_complex_float alpha,
                                const lapack_complex_float* a,
@@ -48,14 +49,12 @@ lapack_int API_SUFFIX(LAPACKE_ctfsm_work)( int matrix_layout, char transr, char 
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldb_t = MAX(1,m);
-        lapack_int mn = m;
         lapack_complex_float* b_t = NULL;
         lapack_complex_float* a_t = NULL;
-        if( API_SUFFIX(LAPACKE_lsame)( side, 'r' ) ) mn = n;
         /* Check leading dimension(s) */
-        if( ldb < m ) {
+        if( ldb < n ) {
             info = -12;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctfsm_work", info );
+            LAPACKE_xerbla( "LAPACKE_ctfsm_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -68,7 +67,7 @@ lapack_int API_SUFFIX(LAPACKE_ctfsm_work)( int matrix_layout, char transr, char 
         if( IS_C_NONZERO(alpha) ) {
             a_t = (lapack_complex_float*)
                 LAPACKE_malloc( sizeof(lapack_complex_float) *
-                                ( MAX(1,mn) * MAX(2,mn+1) ) / 2 );
+                                ( MAX(1,n) * MAX(2,n+1) ) / 2 );
             if( a_t == NULL ) {
                 info = LAPACK_TRANSPOSE_MEMORY_ERROR;
                 goto exit_level_1;
@@ -76,17 +75,17 @@ lapack_int API_SUFFIX(LAPACKE_ctfsm_work)( int matrix_layout, char transr, char 
         }
         /* Transpose input matrices */
         if( IS_C_NONZERO(alpha) ) {
-            API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, m, n, b, ldb, b_t, ldb_t );
+            LAPACKE_cge_trans( matrix_layout, m, n, b, ldb, b_t, ldb_t );
         }
         if( IS_C_NONZERO(alpha) ) {
-            API_SUFFIX(LAPACKE_ctf_trans)( matrix_layout, transr, uplo, diag, mn, a, a_t );
+            LAPACKE_ctf_trans( matrix_layout, transr, uplo, diag, n, a, a_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_ctfsm( &transr, &side, &uplo, &trans, &diag, &m, &n, &alpha, a_t,
                       b_t, &ldb_t );
         info = 0;  /* LAPACK call is ok! */
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, m, n, b_t, ldb_t, b, ldb );
+        LAPACKE_cge_trans( LAPACK_COL_MAJOR, m, n, b_t, ldb_t, b, ldb );
         /* Release memory and exit */
         if( IS_C_NONZERO(alpha) ) {
             LAPACKE_free( a_t );
@@ -95,11 +94,11 @@ exit_level_1:
         LAPACKE_free( b_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctfsm_work", info );
+            LAPACKE_xerbla( "LAPACKE_ctfsm_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctfsm_work", info );
+        LAPACKE_xerbla( "LAPACKE_ctfsm_work", info );
     }
     return info;
 }

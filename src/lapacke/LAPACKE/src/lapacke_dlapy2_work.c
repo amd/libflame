@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dlapy2
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-double API_SUFFIX(LAPACKE_dlapy2_work)( double x, double y )
+double LAPACKE_dlapy2_work( double x, double y )
 {
     double res = 0.;
     /* Call LAPACK function and adjust info */

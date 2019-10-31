@@ -28,23 +28,24 @@
 ******************************************************************************
 * Contents: Native high-level C interface to LAPACK function slacn2
 * Author: Intel Corporation
+* Generated October, 2012
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_slacn2)( lapack_int n, float* v, float* x, lapack_int* isgn,
+lapack_int LAPACKE_slacn2( lapack_int n, float* v, float* x, lapack_int* isgn,
                            float* est, lapack_int* kase, lapack_int* isave )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, est, 1 ) ) {
+        if( LAPACKE_s_nancheck( 1, est, 1 ) ) {
             return -5;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n, x, 1 ) ) {
+        if( LAPACKE_s_nancheck( n, x, 1 ) ) {
             return -3;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_slacn2_work)( n, v, x, isgn, est, kase, isave );
+    return LAPACKE_slacn2_work( n, v, x, isgn, est, kase, isave );
 }

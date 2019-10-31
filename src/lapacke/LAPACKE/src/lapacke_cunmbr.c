@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function cunmbr
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cunmbr)( int matrix_layout, char vect, char side, char trans,
+lapack_int LAPACKE_cunmbr( int matrix_layout, char vect, char side, char trans,
                            lapack_int m, lapack_int n, lapack_int k,
                            const lapack_complex_float* a, lapack_int lda,
                            const lapack_complex_float* tau,
@@ -44,27 +45,27 @@ lapack_int API_SUFFIX(LAPACKE_cunmbr)( int matrix_layout, char vect, char side, 
     lapack_complex_float work_query;
     lapack_int nq, r;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cunmbr", -1 );
+        LAPACKE_xerbla( "LAPACKE_cunmbr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        nq = API_SUFFIX(LAPACKE_lsame)( side, 'l' ) ? m : n;
-        r = API_SUFFIX(LAPACKE_lsame)( vect, 'q' ) ? nq : MIN(nq,k);
-        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, r, MIN(nq,k), a, lda ) ) {
+        nq = LAPACKE_lsame( side, 'l' ) ? m : n;
+        r = LAPACKE_lsame( vect, 'q' ) ? nq : MIN(nq,k);
+        if( LAPACKE_cge_nancheck( matrix_layout, r, MIN(nq,k), a, lda ) ) {
             return -8;
         }
-        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, m, n, c, ldc ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, m, n, c, ldc ) ) {
             return -11;
         }
-        if( API_SUFFIX(LAPACKE_c_nancheck)( MIN(nq,k), tau, 1 ) ) {
+        if( LAPACKE_c_nancheck( MIN(nq,k), tau, 1 ) ) {
             return -10;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_cunmbr_work)( matrix_layout, vect, side, trans, m, n, k, a,
+    info = LAPACKE_cunmbr_work( matrix_layout, vect, side, trans, m, n, k, a,
                                 lda, tau, c, ldc, &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -78,13 +79,13 @@ lapack_int API_SUFFIX(LAPACKE_cunmbr)( int matrix_layout, char vect, char side, 
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_cunmbr_work)( matrix_layout, vect, side, trans, m, n, k, a,
+    info = LAPACKE_cunmbr_work( matrix_layout, vect, side, trans, m, n, k, a,
                                 lda, tau, c, ldc, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cunmbr", info );
+        LAPACKE_xerbla( "LAPACKE_cunmbr", info );
     }
     return info;
 }

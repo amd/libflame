@@ -28,6 +28,7 @@
 ******************************************************************************
 * Contents: Native C interface to LAPACK utility function
 * Author: Intel Corporation
+* Created in February, 2010
 *****************************************************************************/
 
 #include "lapacke_utils.h"
@@ -36,7 +37,7 @@
  * column-major(Fortran) layout or vice versa.
  */
 
-void API_SUFFIX(LAPACKE_sgb_trans)( int matrix_layout, lapack_int m, lapack_int n,
+void LAPACKE_sgb_trans( int matrix_layout, lapack_int m, lapack_int n,
                         lapack_int kl, lapack_int ku,
                         const float *in, lapack_int ldin,
                         float *out, lapack_int ldout )
@@ -54,7 +55,7 @@ void API_SUFFIX(LAPACKE_sgb_trans)( int matrix_layout, lapack_int m, lapack_int 
         }
     } else if ( matrix_layout == LAPACK_ROW_MAJOR ) {
         /* TODO: interchange loops for performance.
-         * This is just reference implementation.
+         * This is just reference impemeltation.
          */
         for( j = 0; j < MIN( n, ldin ); j++ ) {
             for( i = MAX( ku-j, 0 ); i < MIN3( ldout, m+ku-j, kl+ku+1 );

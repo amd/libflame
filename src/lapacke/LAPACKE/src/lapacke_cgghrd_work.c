@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function cgghrd
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cgghrd_work)( int matrix_layout, char compq, char compz,
+lapack_int LAPACKE_cgghrd_work( int matrix_layout, char compq, char compz,
                                 lapack_int n, lapack_int ilo, lapack_int ihi,
                                 lapack_complex_float* a, lapack_int lda,
                                 lapack_complex_float* b, lapack_int ldb,
@@ -59,22 +60,22 @@ lapack_int API_SUFFIX(LAPACKE_cgghrd_work)( int matrix_layout, char compq, char 
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -8;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgghrd_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgghrd_work", info );
             return info;
         }
         if( ldb < n ) {
             info = -10;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgghrd_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgghrd_work", info );
             return info;
         }
         if( ldq < n ) {
             info = -12;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgghrd_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgghrd_work", info );
             return info;
         }
         if( ldz < n ) {
             info = -14;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgghrd_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgghrd_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -90,7 +91,7 @@ lapack_int API_SUFFIX(LAPACKE_cgghrd_work)( int matrix_layout, char compq, char 
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_1;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( compq, 'i' ) || API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
+        if( LAPACKE_lsame( compq, 'i' ) || LAPACKE_lsame( compq, 'v' ) ) {
             q_t = (lapack_complex_float*)
                 LAPACKE_malloc( sizeof(lapack_complex_float) *
                                 ldq_t * MAX(1,n) );
@@ -99,7 +100,7 @@ lapack_int API_SUFFIX(LAPACKE_cgghrd_work)( int matrix_layout, char compq, char 
                 goto exit_level_2;
             }
         }
-        if( API_SUFFIX(LAPACKE_lsame)( compz, 'i' ) || API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
+        if( LAPACKE_lsame( compz, 'i' ) || LAPACKE_lsame( compz, 'v' ) ) {
             z_t = (lapack_complex_float*)
                 LAPACKE_malloc( sizeof(lapack_complex_float) *
                                 ldz_t * MAX(1,n) );
@@ -109,13 +110,13 @@ lapack_int API_SUFFIX(LAPACKE_cgghrd_work)( int matrix_layout, char compq, char 
             }
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, n, n, a, lda, a_t, lda_t );
-        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, n, n, b, ldb, b_t, ldb_t );
-        if( API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
-            API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, n, n, q, ldq, q_t, ldq_t );
+        LAPACKE_cge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
+        LAPACKE_cge_trans( matrix_layout, n, n, b, ldb, b_t, ldb_t );
+        if( LAPACKE_lsame( compq, 'v' ) ) {
+            LAPACKE_cge_trans( matrix_layout, n, n, q, ldq, q_t, ldq_t );
         }
-        if( API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
-            API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, n, n, z, ldz, z_t, ldz_t );
+        if( LAPACKE_lsame( compz, 'v' ) ) {
+            LAPACKE_cge_trans( matrix_layout, n, n, z, ldz, z_t, ldz_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_cgghrd( &compq, &compz, &n, &ilo, &ihi, a_t, &lda_t, b_t, &ldb_t,
@@ -124,20 +125,20 @@ lapack_int API_SUFFIX(LAPACKE_cgghrd_work)( int matrix_layout, char compq, char 
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
-        API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, n, n, b_t, ldb_t, b, ldb );
-        if( API_SUFFIX(LAPACKE_lsame)( compq, 'i' ) || API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
-            API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, n, n, q_t, ldq_t, q, ldq );
+        LAPACKE_cge_trans( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
+        LAPACKE_cge_trans( LAPACK_COL_MAJOR, n, n, b_t, ldb_t, b, ldb );
+        if( LAPACKE_lsame( compq, 'i' ) || LAPACKE_lsame( compq, 'v' ) ) {
+            LAPACKE_cge_trans( LAPACK_COL_MAJOR, n, n, q_t, ldq_t, q, ldq );
         }
-        if( API_SUFFIX(LAPACKE_lsame)( compz, 'i' ) || API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
-            API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, n, n, z_t, ldz_t, z, ldz );
+        if( LAPACKE_lsame( compz, 'i' ) || LAPACKE_lsame( compz, 'v' ) ) {
+            LAPACKE_cge_trans( LAPACK_COL_MAJOR, n, n, z_t, ldz_t, z, ldz );
         }
         /* Release memory and exit */
-        if( API_SUFFIX(LAPACKE_lsame)( compz, 'i' ) || API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
+        if( LAPACKE_lsame( compz, 'i' ) || LAPACKE_lsame( compz, 'v' ) ) {
             LAPACKE_free( z_t );
         }
 exit_level_3:
-        if( API_SUFFIX(LAPACKE_lsame)( compq, 'i' ) || API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
+        if( LAPACKE_lsame( compq, 'i' ) || LAPACKE_lsame( compq, 'v' ) ) {
             LAPACKE_free( q_t );
         }
 exit_level_2:
@@ -146,11 +147,11 @@ exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgghrd_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgghrd_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgghrd_work", info );
+        LAPACKE_xerbla( "LAPACKE_cgghrd_work", info );
     }
     return info;
 }

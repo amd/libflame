@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function spbcon
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_spbcon_work)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_spbcon_work( int matrix_layout, char uplo, lapack_int n,
                                 lapack_int kd, const float* ab, lapack_int ldab,
                                 float anorm, float* rcond, float* work,
                                 lapack_int* iwork )
@@ -51,7 +52,7 @@ lapack_int API_SUFFIX(LAPACKE_spbcon_work)( int matrix_layout, char uplo, lapack
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -6;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_spbcon_work", info );
+            LAPACKE_xerbla( "LAPACKE_spbcon_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -61,7 +62,7 @@ lapack_int API_SUFFIX(LAPACKE_spbcon_work)( int matrix_layout, char uplo, lapack
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_spb_trans)( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
+        LAPACKE_spb_trans( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
         /* Call LAPACK function and adjust info */
         LAPACK_spbcon( &uplo, &n, &kd, ab_t, &ldab_t, &anorm, rcond, work,
                        iwork, &info );
@@ -72,11 +73,11 @@ lapack_int API_SUFFIX(LAPACKE_spbcon_work)( int matrix_layout, char uplo, lapack
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_spbcon_work", info );
+            LAPACKE_xerbla( "LAPACKE_spbcon_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_spbcon_work", info );
+        LAPACKE_xerbla( "LAPACKE_spbcon_work", info );
     }
     return info;
 }

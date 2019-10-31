@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function clacgv
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_clacgv_work)( lapack_int n, lapack_complex_float* x,
+lapack_int LAPACKE_clacgv_work( lapack_int n, lapack_complex_float* x,
                                 lapack_int incx )
 {
     lapack_int info = 0;

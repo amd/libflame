@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function clantr
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-float API_SUFFIX(LAPACKE_clantr_work)( int matrix_layout, char norm, char uplo,
+float LAPACKE_clantr_work( int matrix_layout, char norm, char uplo,
                                 char diag, lapack_int m, lapack_int n,
                                 const lapack_complex_float* a, lapack_int lda,
                                 float* work )
@@ -40,51 +41,41 @@ float API_SUFFIX(LAPACKE_clantr_work)( int matrix_layout, char norm, char uplo,
     lapack_int info = 0;
     float res = 0.;
     if( matrix_layout == LAPACK_COL_MAJOR ) {
-        /* Call LAPACK function */
+        /* Call LAPACK function and adjust info */
         res = LAPACK_clantr( &norm, &uplo, &diag, &m, &n, a, &lda, work );
+        if( info < 0 ) {
+            info = info - 1;
+        }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
-        float* work_lapack = NULL;
-        char norm_lapack;
-        char uplo_lapack;
+        lapack_int lda_t = MAX(1,m);
+        lapack_complex_float* a_t = NULL;
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -8;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clantr_work", info );
+            LAPACKE_xerbla( "LAPACKE_clantr_work", info );
             return info;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( norm, '1' ) || API_SUFFIX(LAPACKE_lsame)( norm, 'o' ) ) {
-            norm_lapack = 'i';
-        } else if( API_SUFFIX(LAPACKE_lsame)( norm, 'i' ) ) {
-            norm_lapack = '1';
-        } else {
-            norm_lapack = norm;
+        /* Allocate memory for temporary array(s) */
+        a_t = (lapack_complex_float*)
+            LAPACKE_malloc( sizeof(lapack_complex_float) * lda_t * MAX(1,MAX(m,n)) );
+        if( a_t == NULL ) {
+            info = LAPACK_TRANSPOSE_MEMORY_ERROR;
+            goto exit_level_0;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( uplo, 'u' ) ) {
-            uplo_lapack = 'l';
-        } else {
-            uplo_lapack = 'u';
-        }
-        /* Allocate memory for work array(s) */
-        if( API_SUFFIX(LAPACKE_lsame)( norm_lapack, 'i' ) ) {
-            work_lapack = (float*)LAPACKE_malloc( sizeof(float) * MAX(1,n) );
-            if( work_lapack == NULL ) {
-                info = LAPACK_WORK_MEMORY_ERROR;
-                goto exit_level_0;
-            }
-        }
-        /* Call LAPACK function */
-        res = LAPACK_clantr( &norm_lapack, &uplo_lapack, &diag, &n, &m, a, &lda, work_lapack );
+        /* Transpose input matrices */
+        LAPACKE_ctr_trans( matrix_layout, uplo, diag, MAX(m,n), a, lda, a_t, lda_t );
+        /* Call LAPACK function and adjust info */
+        res = LAPACK_clantr( &norm, &uplo, &diag, &m, &n, a_t, &lda_t, work );
+        info = 0;  /* LAPACK call is ok! */
         /* Release memory and exit */
-        if( work_lapack ) {
-            LAPACKE_free( work_lapack );
-        }
+        LAPACKE_free( a_t );
 exit_level_0:
-        if( info == LAPACK_WORK_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clantr_work", info );
+        if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
+            LAPACKE_xerbla( "LAPACKE_clantr_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clantr_work", info );
+        LAPACKE_xerbla( "LAPACKE_clantr_work", info );
     }
     return res;
 }

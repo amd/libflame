@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dorgtr
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dorgtr)( int matrix_layout, char uplo, lapack_int n, double* a,
+lapack_int LAPACKE_dorgtr( int matrix_layout, char uplo, lapack_int n, double* a,
                            lapack_int lda, const double* tau )
 {
     lapack_int info = 0;
@@ -40,22 +41,22 @@ lapack_int API_SUFFIX(LAPACKE_dorgtr)( int matrix_layout, char uplo, lapack_int 
     double* work = NULL;
     double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dorgtr", -1 );
+        LAPACKE_xerbla( "LAPACKE_dorgtr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_dsy_nancheck)( matrix_layout, uplo, n, a, lda ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, n, n, a, lda ) ) {
             return -4;
         }
-        if( API_SUFFIX(LAPACKE_d_nancheck)( n-1, tau, 1 ) ) {
+        if( LAPACKE_d_nancheck( n-1, tau, 1 ) ) {
             return -6;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_dorgtr_work)( matrix_layout, uplo, n, a, lda, tau, &work_query,
+    info = LAPACKE_dorgtr_work( matrix_layout, uplo, n, a, lda, tau, &work_query,
                                 lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -68,13 +69,13 @@ lapack_int API_SUFFIX(LAPACKE_dorgtr)( int matrix_layout, char uplo, lapack_int 
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_dorgtr_work)( matrix_layout, uplo, n, a, lda, tau, work,
+    info = LAPACKE_dorgtr_work( matrix_layout, uplo, n, a, lda, tau, work,
                                 lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dorgtr", info );
+        LAPACKE_xerbla( "LAPACKE_dorgtr", info );
     }
     return info;
 }

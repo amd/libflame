@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function sstedc
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_sstedc_work)( int matrix_layout, char compz, lapack_int n,
+lapack_int LAPACKE_sstedc_work( int matrix_layout, char compz, lapack_int n,
                                 float* d, float* e, float* z, lapack_int ldz,
                                 float* work, lapack_int lwork,
                                 lapack_int* iwork, lapack_int liwork )
@@ -51,7 +52,7 @@ lapack_int API_SUFFIX(LAPACKE_sstedc_work)( int matrix_layout, char compz, lapac
         /* Check leading dimension(s) */
         if( ldz < n ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sstedc_work", info );
+            LAPACKE_xerbla( "LAPACKE_sstedc_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -61,7 +62,7 @@ lapack_int API_SUFFIX(LAPACKE_sstedc_work)( int matrix_layout, char compz, lapac
             return (info < 0) ? (info - 1) : info;
         }
         /* Allocate memory for temporary array(s) */
-        if( API_SUFFIX(LAPACKE_lsame)( compz, 'i' ) || API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
+        if( LAPACKE_lsame( compz, 'i' ) || LAPACKE_lsame( compz, 'v' ) ) {
             z_t = (float*)LAPACKE_malloc( sizeof(float) * ldz_t * MAX(1,n) );
             if( z_t == NULL ) {
                 info = LAPACK_TRANSPOSE_MEMORY_ERROR;
@@ -69,8 +70,8 @@ lapack_int API_SUFFIX(LAPACKE_sstedc_work)( int matrix_layout, char compz, lapac
             }
         }
         /* Transpose input matrices */
-        if( API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
-            API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, n, z, ldz, z_t, ldz_t );
+        if( LAPACKE_lsame( compz, 'v' ) ) {
+            LAPACKE_sge_trans( matrix_layout, n, n, z, ldz, z_t, ldz_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_sstedc( &compz, &n, d, e, z_t, &ldz_t, work, &lwork, iwork,
@@ -79,20 +80,20 @@ lapack_int API_SUFFIX(LAPACKE_sstedc_work)( int matrix_layout, char compz, lapac
             info = info - 1;
         }
         /* Transpose output matrices */
-        if( API_SUFFIX(LAPACKE_lsame)( compz, 'i' ) || API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
-            API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, n, n, z_t, ldz_t, z, ldz );
+        if( LAPACKE_lsame( compz, 'i' ) || LAPACKE_lsame( compz, 'v' ) ) {
+            LAPACKE_sge_trans( LAPACK_COL_MAJOR, n, n, z_t, ldz_t, z, ldz );
         }
         /* Release memory and exit */
-        if( API_SUFFIX(LAPACKE_lsame)( compz, 'i' ) || API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
+        if( LAPACKE_lsame( compz, 'i' ) || LAPACKE_lsame( compz, 'v' ) ) {
             LAPACKE_free( z_t );
         }
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sstedc_work", info );
+            LAPACKE_xerbla( "LAPACKE_sstedc_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sstedc_work", info );
+        LAPACKE_xerbla( "LAPACKE_sstedc_work", info );
     }
     return info;
 }

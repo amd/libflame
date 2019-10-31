@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zggglm
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zggglm)( int matrix_layout, lapack_int n, lapack_int m,
+lapack_int LAPACKE_zggglm( int matrix_layout, lapack_int n, lapack_int m,
                            lapack_int p, lapack_complex_double* a,
                            lapack_int lda, lapack_complex_double* b,
                            lapack_int ldb, lapack_complex_double* d,
@@ -43,25 +44,25 @@ lapack_int API_SUFFIX(LAPACKE_zggglm)( int matrix_layout, lapack_int n, lapack_i
     lapack_complex_double* work = NULL;
     lapack_complex_double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zggglm", -1 );
+        LAPACKE_xerbla( "LAPACKE_zggglm", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, m, a, lda ) ) {
+        if( LAPACKE_zge_nancheck( matrix_layout, n, m, a, lda ) ) {
             return -5;
         }
-        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, p, b, ldb ) ) {
+        if( LAPACKE_zge_nancheck( matrix_layout, n, p, b, ldb ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_z_nancheck)( n, d, 1 ) ) {
+        if( LAPACKE_z_nancheck( n, d, 1 ) ) {
             return -9;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_zggglm_work)( matrix_layout, n, m, p, a, lda, b, ldb, d, x, y,
+    info = LAPACKE_zggglm_work( matrix_layout, n, m, p, a, lda, b, ldb, d, x, y,
                                 &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -75,13 +76,13 @@ lapack_int API_SUFFIX(LAPACKE_zggglm)( int matrix_layout, lapack_int n, lapack_i
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_zggglm_work)( matrix_layout, n, m, p, a, lda, b, ldb, d, x, y,
+    info = LAPACKE_zggglm_work( matrix_layout, n, m, p, a, lda, b, ldb, d, x, y,
                                 work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zggglm", info );
+        LAPACKE_xerbla( "LAPACKE_zggglm", info );
     }
     return info;
 }

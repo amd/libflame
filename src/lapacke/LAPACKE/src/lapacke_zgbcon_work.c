@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function zgbcon
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zgbcon_work)( int matrix_layout, char norm, lapack_int n,
+lapack_int LAPACKE_zgbcon_work( int matrix_layout, char norm, lapack_int n,
                                 lapack_int kl, lapack_int ku,
                                 const lapack_complex_double* ab,
                                 lapack_int ldab, const lapack_int* ipiv,
@@ -53,7 +54,7 @@ lapack_int API_SUFFIX(LAPACKE_zgbcon_work)( int matrix_layout, char norm, lapack
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgbcon_work", info );
+            LAPACKE_xerbla( "LAPACKE_zgbcon_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -64,7 +65,7 @@ lapack_int API_SUFFIX(LAPACKE_zgbcon_work)( int matrix_layout, char norm, lapack
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_zgb_trans)( matrix_layout, n, n, kl, kl+ku, ab, ldab, ab_t,
+        LAPACKE_zgb_trans( matrix_layout, n, n, kl, kl+ku, ab, ldab, ab_t,
                            ldab_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zgbcon( &norm, &n, &kl, &ku, ab_t, &ldab_t, ipiv, &anorm, rcond,
@@ -76,11 +77,11 @@ lapack_int API_SUFFIX(LAPACKE_zgbcon_work)( int matrix_layout, char norm, lapack
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgbcon_work", info );
+            LAPACKE_xerbla( "LAPACKE_zgbcon_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgbcon_work", info );
+        LAPACKE_xerbla( "LAPACKE_zgbcon_work", info );
     }
     return info;
 }

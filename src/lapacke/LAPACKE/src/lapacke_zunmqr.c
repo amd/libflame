@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zunmqr
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zunmqr)( int matrix_layout, char side, char trans,
+lapack_int LAPACKE_zunmqr( int matrix_layout, char side, char trans,
                            lapack_int m, lapack_int n, lapack_int k,
                            const lapack_complex_double* a, lapack_int lda,
                            const lapack_complex_double* tau,
@@ -44,26 +45,26 @@ lapack_int API_SUFFIX(LAPACKE_zunmqr)( int matrix_layout, char side, char trans,
     lapack_complex_double work_query;
     lapack_int r;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zunmqr", -1 );
+        LAPACKE_xerbla( "LAPACKE_zunmqr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        r = API_SUFFIX(LAPACKE_lsame)( side, 'l' ) ? m : n;
-        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, r, k, a, lda ) ) {
+        r = LAPACKE_lsame( side, 'l' ) ? m : n;
+        if( LAPACKE_zge_nancheck( matrix_layout, r, k, a, lda ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, m, n, c, ldc ) ) {
+        if( LAPACKE_zge_nancheck( matrix_layout, m, n, c, ldc ) ) {
             return -10;
         }
-        if( API_SUFFIX(LAPACKE_z_nancheck)( k, tau, 1 ) ) {
+        if( LAPACKE_z_nancheck( k, tau, 1 ) ) {
             return -9;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_zunmqr_work)( matrix_layout, side, trans, m, n, k, a, lda, tau,
+    info = LAPACKE_zunmqr_work( matrix_layout, side, trans, m, n, k, a, lda, tau,
                                 c, ldc, &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -77,13 +78,13 @@ lapack_int API_SUFFIX(LAPACKE_zunmqr)( int matrix_layout, char side, char trans,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_zunmqr_work)( matrix_layout, side, trans, m, n, k, a, lda, tau,
+    info = LAPACKE_zunmqr_work( matrix_layout, side, trans, m, n, k, a, lda, tau,
                                 c, ldc, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zunmqr", info );
+        LAPACKE_xerbla( "LAPACKE_zunmqr", info );
     }
     return info;
 }

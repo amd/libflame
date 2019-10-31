@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function cggsvp
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cggsvp)( int matrix_layout, char jobu, char jobv, char jobq,
+lapack_int LAPACKE_cggsvp( int matrix_layout, char jobu, char jobv, char jobq,
                            lapack_int m, lapack_int p, lapack_int n,
                            lapack_complex_float* a, lapack_int lda,
                            lapack_complex_float* b, lapack_int ldb, float tola,
@@ -47,22 +48,22 @@ lapack_int API_SUFFIX(LAPACKE_cggsvp)( int matrix_layout, char jobu, char jobv, 
     lapack_complex_float* tau = NULL;
     lapack_complex_float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cggsvp", -1 );
+        LAPACKE_xerbla( "LAPACKE_cggsvp", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, m, n, a, lda ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, m, n, a, lda ) ) {
             return -8;
         }
-        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, p, n, b, ldb ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, p, n, b, ldb ) ) {
             return -10;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &tola, 1 ) ) {
+        if( LAPACKE_s_nancheck( 1, &tola, 1 ) ) {
             return -12;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &tolb, 1 ) ) {
+        if( LAPACKE_s_nancheck( 1, &tolb, 1 ) ) {
             return -13;
         }
     }
@@ -91,7 +92,7 @@ lapack_int API_SUFFIX(LAPACKE_cggsvp)( int matrix_layout, char jobu, char jobv, 
         goto exit_level_3;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_cggsvp_work)( matrix_layout, jobu, jobv, jobq, m, p, n, a, lda,
+    info = LAPACKE_cggsvp_work( matrix_layout, jobu, jobv, jobq, m, p, n, a, lda,
                                 b, ldb, tola, tolb, k, l, u, ldu, v, ldv, q,
                                 ldq, iwork, rwork, tau, work );
     /* Release memory and exit */
@@ -104,7 +105,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cggsvp", info );
+        LAPACKE_xerbla( "LAPACKE_cggsvp", info );
     }
     return info;
 }

@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function zlassq
 * Author: Julien Langou
+* Generated February, 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zlassq_work)( lapack_int n, lapack_complex_double* x,
+lapack_int LAPACKE_zlassq_work( lapack_int n, lapack_complex_double* x,
                                 lapack_int incx, double* scale, double* sumsq )
 {
     lapack_int info = 0;

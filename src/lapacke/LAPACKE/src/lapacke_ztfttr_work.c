@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function ztfttr
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_ztfttr_work)( int matrix_layout, char transr, char uplo,
+lapack_int LAPACKE_ztfttr_work( int matrix_layout, char transr, char uplo,
                                 lapack_int n, const lapack_complex_double* arf,
                                 lapack_complex_double* a, lapack_int lda )
 {
@@ -50,7 +51,7 @@ lapack_int API_SUFFIX(LAPACKE_ztfttr_work)( int matrix_layout, char transr, char
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztfttr_work", info );
+            LAPACKE_xerbla( "LAPACKE_ztfttr_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -68,25 +69,25 @@ lapack_int API_SUFFIX(LAPACKE_ztfttr_work)( int matrix_layout, char transr, char
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_zpf_trans)( matrix_layout, transr, uplo, n, arf, arf_t );
+        LAPACKE_zpf_trans( matrix_layout, transr, uplo, n, arf, arf_t );
         /* Call LAPACK function and adjust info */
         LAPACK_ztfttr( &transr, &uplo, &n, arf_t, a_t, &lda_t, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
+        LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( arf_t );
 exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztfttr_work", info );
+            LAPACKE_xerbla( "LAPACKE_ztfttr_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztfttr_work", info );
+        LAPACKE_xerbla( "LAPACKE_ztfttr_work", info );
     }
     return info;
 }

@@ -28,22 +28,23 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function slapy2
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-float API_SUFFIX(LAPACKE_slapy2)( float x, float y )
+float LAPACKE_slapy2( float x, float y )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &x, 1 ) ) {
+        if( LAPACKE_s_nancheck( 1, &x, 1 ) ) {
             return -1;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &y, 1 ) ) {
+        if( LAPACKE_s_nancheck( 1, &y, 1 ) ) {
             return -2;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_slapy2_work)( x, y );
+    return LAPACKE_slapy2_work( x, y );
 }

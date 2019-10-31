@@ -28,26 +28,27 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dgttrf
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dgttrf)( lapack_int n, double* dl, double* d, double* du,
+lapack_int LAPACKE_dgttrf( lapack_int n, double* dl, double* d, double* du,
                            double* du2, lapack_int* ipiv )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_d_nancheck)( n, d, 1 ) ) {
+        if( LAPACKE_d_nancheck( n, d, 1 ) ) {
             return -3;
         }
-        if( API_SUFFIX(LAPACKE_d_nancheck)( n-1, dl, 1 ) ) {
+        if( LAPACKE_d_nancheck( n-1, dl, 1 ) ) {
             return -2;
         }
-        if( API_SUFFIX(LAPACKE_d_nancheck)( n-1, du, 1 ) ) {
+        if( LAPACKE_d_nancheck( n-1, du, 1 ) ) {
             return -4;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_dgttrf_work)( n, dl, d, du, du2, ipiv );
+    return LAPACKE_dgttrf_work( n, dl, d, du, du2, ipiv );
 }

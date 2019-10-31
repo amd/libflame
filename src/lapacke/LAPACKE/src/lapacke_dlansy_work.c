@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dlansy
 * Author: Intel Corporation
+* Generated June 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-double API_SUFFIX(LAPACKE_dlansy_work)( int matrix_layout, char norm, char uplo,
+double LAPACKE_dlansy_work( int matrix_layout, char norm, char uplo,
                                 lapack_int n, const double* a, lapack_int lda,
                                 double* work )
 {
@@ -50,7 +51,7 @@ double API_SUFFIX(LAPACKE_dlansy_work)( int matrix_layout, char norm, char uplo,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlansy_work", info );
+            LAPACKE_xerbla( "LAPACKE_dlansy_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -60,7 +61,7 @@ double API_SUFFIX(LAPACKE_dlansy_work)( int matrix_layout, char norm, char uplo,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_dsy_trans)( matrix_layout, uplo, n, a, lda, a_t, lda_t );
+        LAPACKE_dsy_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         res = LAPACK_dlansy( &norm, &uplo, &n, a_t, &lda_t, work );
         info = 0;  /* LAPACK call is ok! */
@@ -68,11 +69,11 @@ double API_SUFFIX(LAPACKE_dlansy_work)( int matrix_layout, char norm, char uplo,
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlansy_work", info );
+            LAPACKE_xerbla( "LAPACKE_dlansy_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlansy_work", info );
+        LAPACKE_xerbla( "LAPACKE_dlansy_work", info );
     }
     return res;
 }

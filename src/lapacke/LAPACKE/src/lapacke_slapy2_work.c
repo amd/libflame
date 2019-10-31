@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function slapy2
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-float API_SUFFIX(LAPACKE_slapy2_work)( float x, float y )
+float LAPACKE_slapy2_work( float x, float y )
 {
     float res = 0.;
     /* Call LAPACK function and adjust info */

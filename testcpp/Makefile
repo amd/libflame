@@ -18,6 +18,7 @@ BUILD_DIR       := ../build
 CONFIG_DIR      := ../config
 LIB_DIR         := ../lib
 INCLUDE_DIR     := ../include
+SRC_PATH         := ../src
 HOST            := $(shell sh $(BUILD_DIR)/ac-utils/config.guess)
 CONFIG_MK_FILE  := $(CONFIG_DIR)/$(HOST)/config.mk
 LIB_PATH        := $(LIB_DIR)/$(HOST)/
@@ -63,7 +64,7 @@ LIBLAPACK      :=
 # --- General build definitions ------------------------------------------------
 #
 
-TEST_SRC_PATH  := test
+TEST_SRC_PATH  := src
 TEST_SRC := libflame_test
 TEST_OBJ_PATH  := obj
 
@@ -71,10 +72,9 @@ FLA_LIB_PATH   := $(LIB_PATH)
 FLA_INC_PATH   := $(INC_PATH)
 LIBFLAME       := $(FLA_LIB_PATH)/libflame.a
 #LIBFLAME       := $(FLA_LIB_PATH)/libflame.so
-LAPACKE        := LAPACKE/liblapacke.a
+LAPACKE        := $(SRC_PATH)/lapacke/liblapacke.a
 
-CFLAGS         += -I$(FLA_INC_PATH) -Isrc -ILAPACKE/include -I$(TEST_SRC_PATH)
-
+CFLAGS         += -I$(FLA_INC_PATH) -I$(SRC_PATH)/src_cpp -I$(SRC_PATH)/lapacke/LAPACKE/include -I$(TEST_SRC_PATH) 
 FNAME          := libflame
 
 TEST_OBJS      := $(patsubst $(TEST_SRC_PATH)/$(TEST_SRC).cc, \

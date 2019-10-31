@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function zlarfb
 * Author: Intel Corporation
+* Generated December 2016
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zlarfb_work)( int matrix_layout, char side, char trans,
+lapack_int LAPACKE_zlarfb_work( int matrix_layout, char side, char trans,
                                 char direct, char storev, lapack_int m,
                                 lapack_int n, lapack_int k,
                                 const lapack_complex_double* v, lapack_int ldv,
@@ -42,8 +43,6 @@ lapack_int API_SUFFIX(LAPACKE_zlarfb_work)( int matrix_layout, char side, char t
 {
     lapack_int info = 0;
     lapack_int nrows_v, ncols_v;
-    lapack_logical left, col, forward;
-    char uplo;
     lapack_int ldc_t, ldt_t, ldv_t;
     lapack_complex_double *v_t = NULL, *t_t = NULL, *c_t = NULL;
     if( matrix_layout == LAPACK_COL_MAJOR ) {
@@ -54,36 +53,33 @@ lapack_int API_SUFFIX(LAPACKE_zlarfb_work)( int matrix_layout, char side, char t
             info = info - 1;
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
-        left = API_SUFFIX(LAPACKE_lsame)( side, 'l' );
-        col = API_SUFFIX(LAPACKE_lsame)( storev, 'c' );
-        forward = API_SUFFIX(LAPACKE_lsame)( direct, 'f' );
-
-        nrows_v = ( col && left ) ? m : ( ( col && !left ) ? n : ( !col ? k : 1) );
-        ncols_v = ( !col && left ) ? m : ( ( !col && !left ) ? n : ( col ? k : 1 ) );
-        uplo = ( ( forward && col ) || !( forward || col ) ) ? 'l' : 'u';
-
+        nrows_v = ( LAPACKE_lsame( storev, 'c' ) &&
+                             LAPACKE_lsame( side, 'l' ) ) ? m :
+                             ( ( LAPACKE_lsame( storev, 'c' ) &&
+                             LAPACKE_lsame( side, 'r' ) ) ? n :
+                             ( LAPACKE_lsame( storev, 'r' ) ? k : 1) );
+        ncols_v = LAPACKE_lsame( storev, 'c' ) ? k :
+                             ( ( LAPACKE_lsame( storev, 'r' ) &&
+                             LAPACKE_lsame( side, 'l' ) ) ? m :
+                             ( ( LAPACKE_lsame( storev, 'r' ) &&
+                             LAPACKE_lsame( side, 'r' ) ) ? n : 1) );
         ldc_t = MAX(1,m);
         ldt_t = MAX(1,k);
         ldv_t = MAX(1,nrows_v);
         /* Check leading dimension(s) */
         if( ldc < n ) {
             info = -14;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zlarfb_work", info );
+            LAPACKE_xerbla( "LAPACKE_zlarfb_work", info );
             return info;
         }
         if( ldt < k ) {
             info = -12;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zlarfb_work", info );
+            LAPACKE_xerbla( "LAPACKE_zlarfb_work", info );
             return info;
         }
         if( ldv < ncols_v ) {
             info = -10;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zlarfb_work", info );
-            return info;
-        }
-        if( ( col && k > nrows_v ) || ( !col && k > ncols_v ) ) {
-            info = -8;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zlarfb_work", info );
+            LAPACKE_xerbla( "LAPACKE_zlarfb_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -107,16 +103,44 @@ lapack_int API_SUFFIX(LAPACKE_zlarfb_work)( int matrix_layout, char side, char t
             goto exit_level_2;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_ztz_trans)( matrix_layout, direct, uplo, 'u', nrows_v, ncols_v,
-                           v, ldv, v_t, ldv_t );
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, k, k, t, ldt, t_t, ldt_t );
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, m, n, c, ldc, c_t, ldc_t );
+        if( LAPACKE_lsame( storev, 'c' ) && LAPACKE_lsame( direct, 'f' ) ) {
+            LAPACKE_ztr_trans( matrix_layout, 'l', 'u', k, v, ldv, v_t, ldv_t );
+            LAPACKE_zge_trans( matrix_layout, nrows_v-k, ncols_v, &v[k*ldv], ldv,
+                               &v_t[k], ldv_t );
+        } else if( LAPACKE_lsame( storev, 'c' ) &&
+                   LAPACKE_lsame( direct, 'b' ) ) {
+            if( k > nrows_v ) {
+                LAPACKE_xerbla( "LAPACKE_zlarfb_work", -8 );
+                return -8;
+            }
+            LAPACKE_ztr_trans( matrix_layout, 'u', 'u', k, &v[(nrows_v-k)*ldv],
+                               ldv, &v_t[nrows_v-k], ldv_t );
+            LAPACKE_zge_trans( matrix_layout, nrows_v-k, ncols_v, v, ldv, v_t,
+                               ldv_t );
+        } else if( LAPACKE_lsame( storev, 'r' ) &&
+                   LAPACKE_lsame( direct, 'f' ) ) {
+            LAPACKE_ztr_trans( matrix_layout, 'u', 'u', k, v, ldv, v_t, ldv_t );
+            LAPACKE_zge_trans( matrix_layout, nrows_v, ncols_v-k, &v[k], ldv,
+                               &v_t[k*ldv_t], ldv_t );
+        } else if( LAPACKE_lsame( storev, 'r' ) &&
+                   LAPACKE_lsame( direct, 'b' ) ) {
+            if( k > ncols_v ) {
+                LAPACKE_xerbla( "LAPACKE_zlarfb_work", -8 );
+                return -8;
+            }
+            LAPACKE_ztr_trans( matrix_layout, 'l', 'u', k, &v[ncols_v-k], ldv,
+                               &v_t[(ncols_v-k)*ldv_t], ldv_t );
+            LAPACKE_zge_trans( matrix_layout, nrows_v, ncols_v-k, v, ldv, v_t,
+                               ldv_t );
+        }
+        LAPACKE_zge_trans( matrix_layout, k, k, t, ldt, t_t, ldt_t );
+        LAPACKE_zge_trans( matrix_layout, m, n, c, ldc, c_t, ldc_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zlarfb( &side, &trans, &direct, &storev, &m, &n, &k, v_t, &ldv_t,
                        t_t, &ldt_t, c_t, &ldc_t, work, &ldwork );
         info = 0;  /* LAPACK call is ok! */
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, m, n, c_t, ldc_t, c, ldc );
+        LAPACKE_zge_trans( LAPACK_COL_MAJOR, m, n, c_t, ldc_t, c, ldc );
         /* Release memory and exit */
         LAPACKE_free( c_t );
 exit_level_2:
@@ -125,11 +149,11 @@ exit_level_1:
         LAPACKE_free( v_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zlarfb_work", info );
+            LAPACKE_xerbla( "LAPACKE_zlarfb_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zlarfb_work", info );
+        LAPACKE_xerbla( "LAPACKE_zlarfb_work", info );
     }
     return info;
 }

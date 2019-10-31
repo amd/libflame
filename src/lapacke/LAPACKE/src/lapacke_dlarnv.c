@@ -28,12 +28,13 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dlarnv
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dlarnv)( lapack_int idist, lapack_int* iseed, lapack_int n,
+lapack_int LAPACKE_dlarnv( lapack_int idist, lapack_int* iseed, lapack_int n,
                            double* x )
 {
-    return API_SUFFIX(LAPACKE_dlarnv_work)( idist, iseed, n, x );
+    return LAPACKE_dlarnv_work( idist, iseed, n, x );
 }

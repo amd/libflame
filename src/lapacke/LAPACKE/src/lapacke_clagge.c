@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function clagge
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_clagge)( int matrix_layout, lapack_int m, lapack_int n,
+lapack_int LAPACKE_clagge( int matrix_layout, lapack_int m, lapack_int n,
                            lapack_int kl, lapack_int ku, const float* d,
                            lapack_complex_float* a, lapack_int lda,
                            lapack_int* iseed )
@@ -40,13 +41,13 @@ lapack_int API_SUFFIX(LAPACKE_clagge)( int matrix_layout, lapack_int m, lapack_i
     lapack_int info = 0;
     lapack_complex_float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clagge", -1 );
+        LAPACKE_xerbla( "LAPACKE_clagge", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_s_nancheck)( MIN(m,n), d, 1 ) ) {
+        if( LAPACKE_s_nancheck( MIN(m,n), d, 1 ) ) {
             return -6;
         }
     }
@@ -59,13 +60,13 @@ lapack_int API_SUFFIX(LAPACKE_clagge)( int matrix_layout, lapack_int m, lapack_i
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_clagge_work)( matrix_layout, m, n, kl, ku, d, a, lda, iseed,
+    info = LAPACKE_clagge_work( matrix_layout, m, n, kl, ku, d, a, lda, iseed,
                                 work );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clagge", info );
+        LAPACKE_xerbla( "LAPACKE_clagge", info );
     }
     return info;
 }

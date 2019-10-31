@@ -28,18 +28,19 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function claset
 * Author: Intel Corporation
+* Generated December 2016
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_claset)( int matrix_layout, char uplo, lapack_int m,
+lapack_int LAPACKE_claset( int matrix_layout, char uplo, lapack_int m,
                            lapack_int n, lapack_complex_float alpha,
                            lapack_complex_float beta, lapack_complex_float* a,
                            lapack_int lda )
 {
 
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_claset", -1 );
+        LAPACKE_xerbla( "LAPACKE_claset", -1 );
         return -1;
     }
 
@@ -51,14 +52,14 @@ lapack_int API_SUFFIX(LAPACKE_claset)( int matrix_layout, char uplo, lapack_int 
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_c_nancheck)( 1, &alpha, 1 ) ) {
+        if( LAPACKE_c_nancheck( 1, &alpha, 1 ) ) {
             return -5;
         }
-        if( API_SUFFIX(LAPACKE_c_nancheck)( 1, &beta, 1 ) ) {
+        if( LAPACKE_c_nancheck( 1, &beta, 1 ) ) {
             return -6;
         }
     }
 #endif
 
-    return API_SUFFIX(LAPACKE_claset_work)( matrix_layout, uplo, m, n, alpha, beta, a, lda );
+    return LAPACKE_claset_work( matrix_layout, uplo, m, n, alpha, beta, a, lda );
 }

@@ -28,29 +28,30 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function strexc
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_strexc)( int matrix_layout, char compq, lapack_int n, float* t,
+lapack_int LAPACKE_strexc( int matrix_layout, char compq, lapack_int n, float* t,
                            lapack_int ldt, float* q, lapack_int ldq,
                            lapack_int* ifst, lapack_int* ilst )
 {
     lapack_int info = 0;
     float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_strexc", -1 );
+        LAPACKE_xerbla( "LAPACKE_strexc", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
-            if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, n, n, q, ldq ) ) {
+        if( LAPACKE_lsame( compq, 'v' ) ) {
+            if( LAPACKE_sge_nancheck( matrix_layout, n, n, q, ldq ) ) {
                 return -6;
             }
         }
-        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, n, n, t, ldt ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, n, t, ldt ) ) {
             return -4;
         }
     }
@@ -62,13 +63,13 @@ lapack_int API_SUFFIX(LAPACKE_strexc)( int matrix_layout, char compq, lapack_int
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_strexc_work)( matrix_layout, compq, n, t, ldt, q, ldq, ifst,
+    info = LAPACKE_strexc_work( matrix_layout, compq, n, t, ldt, q, ldq, ifst,
                                 ilst, work );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_strexc", info );
+        LAPACKE_xerbla( "LAPACKE_strexc", info );
     }
     return info;
 }

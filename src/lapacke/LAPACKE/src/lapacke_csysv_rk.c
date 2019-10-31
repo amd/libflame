@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function csysv_rk
 * Author: Intel Corporation
+* Generated June 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_csysv_rk)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_csysv_rk( int matrix_layout, char uplo, lapack_int n,
                           lapack_int nrhs, lapack_complex_float* a,
                           lapack_int lda, lapack_complex_float* e,
                           lapack_int* ipiv,
@@ -43,22 +44,22 @@ lapack_int API_SUFFIX(LAPACKE_csysv_rk)( int matrix_layout, char uplo, lapack_in
     lapack_complex_float* work = NULL;
     lapack_complex_float work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_csysv_rk", -1 );
+        LAPACKE_xerbla( "LAPACKE_csysv_rk", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_csy_nancheck)( matrix_layout, uplo, n, a, lda ) ) {
+        if( LAPACKE_csy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
             return -5;
         }
-        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
             return -9;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_csysv_rk_work)( matrix_layout, uplo, n, nrhs, a, lda, e, ipiv, b,
+    info = LAPACKE_csysv_rk_work( matrix_layout, uplo, n, nrhs, a, lda, e, ipiv, b,
                                ldb, &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -72,13 +73,13 @@ lapack_int API_SUFFIX(LAPACKE_csysv_rk)( int matrix_layout, char uplo, lapack_in
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_csysv_rk_work)( matrix_layout, uplo, n, nrhs, a, lda, e, ipiv, b,
+    info = LAPACKE_csysv_rk_work( matrix_layout, uplo, n, nrhs, a, lda, e, ipiv, b,
                                ldb, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_csysv_rk", info );
+        LAPACKE_xerbla( "LAPACKE_csysv_rk", info );
     }
     return info;
 }

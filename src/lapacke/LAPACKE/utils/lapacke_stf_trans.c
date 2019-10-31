@@ -28,6 +28,7 @@
 ******************************************************************************
 * Contents: Native C interface to LAPACK utility function
 * Author: Intel Corporation
+* Created in February, 2010
 *****************************************************************************/
 
 #include "lapacke_utils.h"
@@ -37,7 +38,7 @@
  * This functions does copy diagonal for both unit and non-unit cases.
  */
 
-void API_SUFFIX(LAPACKE_stf_trans)( int matrix_layout, char transr, char uplo, char diag,
+void LAPACKE_stf_trans( int matrix_layout, char transr, char uplo, char diag,
                         lapack_int n, const float *in,
                         float *out )
 {
@@ -47,15 +48,15 @@ void API_SUFFIX(LAPACKE_stf_trans)( int matrix_layout, char transr, char uplo, c
     if( in == NULL || out == NULL ) return ;
 
     rowmaj = (matrix_layout == LAPACK_ROW_MAJOR);
-    ntr    = API_SUFFIX(LAPACKE_lsame)( transr, 'n' );
-    lower  = API_SUFFIX(LAPACKE_lsame)( uplo,   'l' );
-    unit   = API_SUFFIX(LAPACKE_lsame)( diag,   'u' );
+    ntr    = LAPACKE_lsame( transr, 'n' );
+    lower  = LAPACKE_lsame( uplo,   'l' );
+    unit   = LAPACKE_lsame( diag,   'u' );
 
     if( ( !rowmaj && ( matrix_layout != LAPACK_COL_MAJOR ) ) ||
-        ( !ntr    && !API_SUFFIX(LAPACKE_lsame)( transr, 't' ) &&
-                     !API_SUFFIX(LAPACKE_lsame)( transr, 'c' ) ) ||
-        ( !lower  && !API_SUFFIX(LAPACKE_lsame)( uplo,   'u' ) ) ||
-        ( !unit   && !API_SUFFIX(LAPACKE_lsame)( diag,   'n' ) ) ) {
+        ( !ntr    && !LAPACKE_lsame( transr, 't' ) &&
+                     !LAPACKE_lsame( transr, 'c' ) ) ||
+        ( !lower  && !LAPACKE_lsame( uplo,   'u' ) ) ||
+        ( !unit   && !LAPACKE_lsame( diag,   'n' ) ) ) {
         /* Just exit if input parameters are wrong */
         return;
     }
@@ -81,8 +82,8 @@ void API_SUFFIX(LAPACKE_stf_trans)( int matrix_layout, char transr, char uplo, c
 
     /* Perform conversion: */
     if( rowmaj ) {
-        API_SUFFIX(LAPACKE_sge_trans)( LAPACK_ROW_MAJOR, row, col, in, col, out, row );
+        LAPACKE_sge_trans( LAPACK_ROW_MAJOR, row, col, in, col, out, row );
     } else {
-        API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, row, col, in, row, out, col );
+        LAPACKE_sge_trans( LAPACK_COL_MAJOR, row, col, in, row, out, col );
     }
 }

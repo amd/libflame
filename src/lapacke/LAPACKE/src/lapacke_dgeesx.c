@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dgeesx
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dgeesx)( int matrix_layout, char jobvs, char sort,
+lapack_int LAPACKE_dgeesx( int matrix_layout, char jobvs, char sort,
                            LAPACK_D_SELECT2 select, char sense, lapack_int n,
                            double* a, lapack_int lda, lapack_int* sdim,
                            double* wr, double* wi, double* vs, lapack_int ldvs,
@@ -47,19 +48,19 @@ lapack_int API_SUFFIX(LAPACKE_dgeesx)( int matrix_layout, char jobvs, char sort,
     lapack_int iwork_query;
     double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgeesx", -1 );
+        LAPACKE_xerbla( "LAPACKE_dgeesx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, n, n, a, lda ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, n, n, a, lda ) ) {
             return -7;
         }
     }
 #endif
     /* Allocate memory for working array(s) */
-    if( API_SUFFIX(LAPACKE_lsame)( sort, 's' ) ) {
+    if( LAPACKE_lsame( sort, 's' ) ) {
         bwork = (lapack_logical*)
             LAPACKE_malloc( sizeof(lapack_logical) * MAX(1,n) );
         if( bwork == NULL ) {
@@ -68,25 +69,22 @@ lapack_int API_SUFFIX(LAPACKE_dgeesx)( int matrix_layout, char jobvs, char sort,
         }
     }
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_dgeesx_work)( matrix_layout, jobvs, sort, select, sense, n, a,
+    info = LAPACKE_dgeesx_work( matrix_layout, jobvs, sort, select, sense, n, a,
                                 lda, sdim, wr, wi, vs, ldvs, rconde, rcondv,
                                 &work_query, lwork, &iwork_query, liwork,
                                 bwork );
     if( info != 0 ) {
         goto exit_level_1;
     }
-    liwork = iwork_query;
+    liwork = (lapack_int)iwork_query;
     lwork = (lapack_int)work_query;
     /* Allocate memory for work arrays */
-    if( API_SUFFIX(LAPACKE_lsame)( sense, 'b' ) || API_SUFFIX(LAPACKE_lsame)( sense, 'v' ) ) {
+    if( LAPACKE_lsame( sense, 'b' ) || LAPACKE_lsame( sense, 'v' ) ) {
         iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * liwork );
-    }
-    else {
-        iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * 1 );
-    }
-    if( iwork == NULL ) {
-        info = LAPACK_WORK_MEMORY_ERROR;
-        goto exit_level_1;
+        if( iwork == NULL ) {
+            info = LAPACK_WORK_MEMORY_ERROR;
+            goto exit_level_1;
+        }
     }
     work = (double*)LAPACKE_malloc( sizeof(double) * lwork );
     if( work == NULL ) {
@@ -94,20 +92,22 @@ lapack_int API_SUFFIX(LAPACKE_dgeesx)( int matrix_layout, char jobvs, char sort,
         goto exit_level_2;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_dgeesx_work)( matrix_layout, jobvs, sort, select, sense, n, a,
+    info = LAPACKE_dgeesx_work( matrix_layout, jobvs, sort, select, sense, n, a,
                                 lda, sdim, wr, wi, vs, ldvs, rconde, rcondv,
                                 work, lwork, iwork, liwork, bwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_2:
-    LAPACKE_free( iwork );
+    if( LAPACKE_lsame( sense, 'b' ) || LAPACKE_lsame( sense, 'v' ) ) {
+        LAPACKE_free( iwork );
+    }
 exit_level_1:
-    if( API_SUFFIX(LAPACKE_lsame)( sort, 's' ) ) {
+    if( LAPACKE_lsame( sort, 's' ) ) {
         LAPACKE_free( bwork );
     }
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgeesx", info );
+        LAPACKE_xerbla( "LAPACKE_dgeesx", info );
     }
     return info;
 }

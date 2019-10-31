@@ -28,20 +28,21 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function ddisna
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_ddisna)( char job, lapack_int m, lapack_int n,
+lapack_int LAPACKE_ddisna( char job, lapack_int m, lapack_int n,
                            const double* d, double* sep )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_d_nancheck)( MIN(m,n), d, 1 ) ) {
+        if( LAPACKE_d_nancheck( MIN(m,n), d, 1 ) ) {
             return -4;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_ddisna_work)( job, m, n, d, sep );
+    return LAPACKE_ddisna_work( job, m, n, d, sep );
 }

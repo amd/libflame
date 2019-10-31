@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function strevc
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_strevc_work)( int matrix_layout, char side, char howmny,
+lapack_int LAPACKE_strevc_work( int matrix_layout, char side, char howmny,
                                 lapack_logical* select, lapack_int n,
                                 const float* t, lapack_int ldt, float* vl,
                                 lapack_int ldvl, float* vr, lapack_int ldvr,
@@ -56,17 +57,17 @@ lapack_int API_SUFFIX(LAPACKE_strevc_work)( int matrix_layout, char side, char h
         /* Check leading dimension(s) */
         if( ldt < n ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_strevc_work", info );
+            LAPACKE_xerbla( "LAPACKE_strevc_work", info );
             return info;
         }
         if( ldvl < mm ) {
             info = -9;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_strevc_work", info );
+            LAPACKE_xerbla( "LAPACKE_strevc_work", info );
             return info;
         }
         if( ldvr < mm ) {
             info = -11;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_strevc_work", info );
+            LAPACKE_xerbla( "LAPACKE_strevc_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -75,14 +76,14 @@ lapack_int API_SUFFIX(LAPACKE_strevc_work)( int matrix_layout, char side, char h
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( side, 'b' ) || API_SUFFIX(LAPACKE_lsame)( side, 'l' ) ) {
+        if( LAPACKE_lsame( side, 'b' ) || LAPACKE_lsame( side, 'l' ) ) {
             vl_t = (float*)LAPACKE_malloc( sizeof(float) * ldvl_t * MAX(1,mm) );
             if( vl_t == NULL ) {
                 info = LAPACK_TRANSPOSE_MEMORY_ERROR;
                 goto exit_level_1;
             }
         }
-        if( API_SUFFIX(LAPACKE_lsame)( side, 'b' ) || API_SUFFIX(LAPACKE_lsame)( side, 'r' ) ) {
+        if( LAPACKE_lsame( side, 'b' ) || LAPACKE_lsame( side, 'r' ) ) {
             vr_t = (float*)LAPACKE_malloc( sizeof(float) * ldvr_t * MAX(1,mm) );
             if( vr_t == NULL ) {
                 info = LAPACK_TRANSPOSE_MEMORY_ERROR;
@@ -90,14 +91,14 @@ lapack_int API_SUFFIX(LAPACKE_strevc_work)( int matrix_layout, char side, char h
             }
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, n, t, ldt, t_t, ldt_t );
-        if( ( API_SUFFIX(LAPACKE_lsame)( side, 'l' ) || API_SUFFIX(LAPACKE_lsame)( side, 'b' ) ) &&
-            API_SUFFIX(LAPACKE_lsame)( howmny, 'b' ) ) {
-            API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, mm, vl, ldvl, vl_t, ldvl_t );
+        LAPACKE_sge_trans( matrix_layout, n, n, t, ldt, t_t, ldt_t );
+        if( ( LAPACKE_lsame( side, 'l' ) || LAPACKE_lsame( side, 'b' ) ) &&
+            LAPACKE_lsame( howmny, 'b' ) ) {
+            LAPACKE_sge_trans( matrix_layout, n, mm, vl, ldvl, vl_t, ldvl_t );
         }
-        if( ( API_SUFFIX(LAPACKE_lsame)( side, 'r' ) || API_SUFFIX(LAPACKE_lsame)( side, 'b' ) ) &&
-            API_SUFFIX(LAPACKE_lsame)( howmny, 'b' ) ) {
-            API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, mm, vr, ldvr, vr_t, ldvr_t );
+        if( ( LAPACKE_lsame( side, 'r' ) || LAPACKE_lsame( side, 'b' ) ) &&
+            LAPACKE_lsame( howmny, 'b' ) ) {
+            LAPACKE_sge_trans( matrix_layout, n, mm, vr, ldvr, vr_t, ldvr_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_strevc( &side, &howmny, select, &n, t_t, &ldt_t, vl_t, &ldvl_t,
@@ -106,31 +107,31 @@ lapack_int API_SUFFIX(LAPACKE_strevc_work)( int matrix_layout, char side, char h
             info = info - 1;
         }
         /* Transpose output matrices */
-        if( API_SUFFIX(LAPACKE_lsame)( side, 'b' ) || API_SUFFIX(LAPACKE_lsame)( side, 'l' ) ) {
-            API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, n, mm, vl_t, ldvl_t, vl,
+        if( LAPACKE_lsame( side, 'b' ) || LAPACKE_lsame( side, 'l' ) ) {
+            LAPACKE_sge_trans( LAPACK_COL_MAJOR, n, mm, vl_t, ldvl_t, vl,
                                ldvl );
         }
-        if( API_SUFFIX(LAPACKE_lsame)( side, 'b' ) || API_SUFFIX(LAPACKE_lsame)( side, 'r' ) ) {
-            API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, n, mm, vr_t, ldvr_t, vr,
+        if( LAPACKE_lsame( side, 'b' ) || LAPACKE_lsame( side, 'r' ) ) {
+            LAPACKE_sge_trans( LAPACK_COL_MAJOR, n, mm, vr_t, ldvr_t, vr,
                                ldvr );
         }
         /* Release memory and exit */
-        if( API_SUFFIX(LAPACKE_lsame)( side, 'b' ) || API_SUFFIX(LAPACKE_lsame)( side, 'r' ) ) {
+        if( LAPACKE_lsame( side, 'b' ) || LAPACKE_lsame( side, 'r' ) ) {
             LAPACKE_free( vr_t );
         }
 exit_level_2:
-        if( API_SUFFIX(LAPACKE_lsame)( side, 'b' ) || API_SUFFIX(LAPACKE_lsame)( side, 'l' ) ) {
+        if( LAPACKE_lsame( side, 'b' ) || LAPACKE_lsame( side, 'l' ) ) {
             LAPACKE_free( vl_t );
         }
 exit_level_1:
         LAPACKE_free( t_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_strevc_work", info );
+            LAPACKE_xerbla( "LAPACKE_strevc_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_strevc_work", info );
+        LAPACKE_xerbla( "LAPACKE_strevc_work", info );
     }
     return info;
 }

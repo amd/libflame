@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function sggevx
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_sggevx)( int matrix_layout, char balanc, char jobvl,
+lapack_int LAPACKE_sggevx( int matrix_layout, char balanc, char jobvl,
                            char jobvr, char sense, lapack_int n, float* a,
                            lapack_int lda, float* b, lapack_int ldb,
                            float* alphar, float* alphai, float* beta, float* vl,
@@ -48,23 +49,23 @@ lapack_int API_SUFFIX(LAPACKE_sggevx)( int matrix_layout, char balanc, char jobv
     float* work = NULL;
     float work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sggevx", -1 );
+        LAPACKE_xerbla( "LAPACKE_sggevx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, n, n, a, lda ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, n, a, lda ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, n, n, b, ldb ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, n, b, ldb ) ) {
             return -9;
         }
     }
 #endif
     /* Allocate memory for working array(s) */
-    if( API_SUFFIX(LAPACKE_lsame)( sense, 'b' ) || API_SUFFIX(LAPACKE_lsame)( sense, 'e' ) ||
-        API_SUFFIX(LAPACKE_lsame)( sense, 'v' ) ) {
+    if( LAPACKE_lsame( sense, 'b' ) || LAPACKE_lsame( sense, 'e' ) ||
+        LAPACKE_lsame( sense, 'v' ) ) {
         bwork = (lapack_logical*)
             LAPACKE_malloc( sizeof(lapack_logical) * MAX(1,n) );
         if( bwork == NULL ) {
@@ -72,8 +73,8 @@ lapack_int API_SUFFIX(LAPACKE_sggevx)( int matrix_layout, char balanc, char jobv
             goto exit_level_0;
         }
     }
-    if( API_SUFFIX(LAPACKE_lsame)( sense, 'b' ) || API_SUFFIX(LAPACKE_lsame)( sense, 'n' ) ||
-        API_SUFFIX(LAPACKE_lsame)( sense, 'v' ) ) {
+    if( LAPACKE_lsame( sense, 'b' ) || LAPACKE_lsame( sense, 'n' ) ||
+        LAPACKE_lsame( sense, 'v' ) ) {
         iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * MAX(1,n+6) );
         if( iwork == NULL ) {
             info = LAPACK_WORK_MEMORY_ERROR;
@@ -81,7 +82,7 @@ lapack_int API_SUFFIX(LAPACKE_sggevx)( int matrix_layout, char balanc, char jobv
         }
     }
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_sggevx_work)( matrix_layout, balanc, jobvl, jobvr, sense, n, a,
+    info = LAPACKE_sggevx_work( matrix_layout, balanc, jobvl, jobvr, sense, n, a,
                                 lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr,
                                 ldvr, ilo, ihi, lscale, rscale, abnrm, bbnrm,
                                 rconde, rcondv, &work_query, lwork, iwork,
@@ -97,25 +98,25 @@ lapack_int API_SUFFIX(LAPACKE_sggevx)( int matrix_layout, char balanc, char jobv
         goto exit_level_2;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_sggevx_work)( matrix_layout, balanc, jobvl, jobvr, sense, n, a,
+    info = LAPACKE_sggevx_work( matrix_layout, balanc, jobvl, jobvr, sense, n, a,
                                 lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr,
                                 ldvr, ilo, ihi, lscale, rscale, abnrm, bbnrm,
                                 rconde, rcondv, work, lwork, iwork, bwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_2:
-    if( API_SUFFIX(LAPACKE_lsame)( sense, 'b' ) || API_SUFFIX(LAPACKE_lsame)( sense, 'n' ) ||
-        API_SUFFIX(LAPACKE_lsame)( sense, 'v' ) ) {
+    if( LAPACKE_lsame( sense, 'b' ) || LAPACKE_lsame( sense, 'n' ) ||
+        LAPACKE_lsame( sense, 'v' ) ) {
         LAPACKE_free( iwork );
     }
 exit_level_1:
-    if( API_SUFFIX(LAPACKE_lsame)( sense, 'b' ) || API_SUFFIX(LAPACKE_lsame)( sense, 'e' ) ||
-        API_SUFFIX(LAPACKE_lsame)( sense, 'v' ) ) {
+    if( LAPACKE_lsame( sense, 'b' ) || LAPACKE_lsame( sense, 'e' ) ||
+        LAPACKE_lsame( sense, 'v' ) ) {
         LAPACKE_free( bwork );
     }
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sggevx", info );
+        LAPACKE_xerbla( "LAPACKE_sggevx", info );
     }
     return info;
 }

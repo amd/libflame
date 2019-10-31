@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dsycon
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dsycon_work)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_dsycon_work( int matrix_layout, char uplo, lapack_int n,
                                 const double* a, lapack_int lda,
                                 const lapack_int* ipiv, double anorm,
                                 double* rcond, double* work, lapack_int* iwork )
@@ -51,7 +52,7 @@ lapack_int API_SUFFIX(LAPACKE_dsycon_work)( int matrix_layout, char uplo, lapack
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -5;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsycon_work", info );
+            LAPACKE_xerbla( "LAPACKE_dsycon_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -61,7 +62,7 @@ lapack_int API_SUFFIX(LAPACKE_dsycon_work)( int matrix_layout, char uplo, lapack
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_dsy_trans)( matrix_layout, uplo, n, a, lda, a_t, lda_t );
+        LAPACKE_dsy_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dsycon( &uplo, &n, a_t, &lda_t, ipiv, &anorm, rcond, work, iwork,
                        &info );
@@ -72,11 +73,11 @@ lapack_int API_SUFFIX(LAPACKE_dsycon_work)( int matrix_layout, char uplo, lapack
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsycon_work", info );
+            LAPACKE_xerbla( "LAPACKE_dsycon_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsycon_work", info );
+        LAPACKE_xerbla( "LAPACKE_dsycon_work", info );
     }
     return info;
 }

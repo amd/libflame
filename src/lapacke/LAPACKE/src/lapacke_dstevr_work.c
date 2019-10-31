@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dstevr
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dstevr_work)( int matrix_layout, char jobz, char range,
+lapack_int LAPACKE_dstevr_work( int matrix_layout, char jobz, char range,
                                 lapack_int n, double* d, double* e, double vl,
                                 double vu, lapack_int il, lapack_int iu,
                                 double abstol, lapack_int* m, double* w,
@@ -50,15 +51,15 @@ lapack_int API_SUFFIX(LAPACKE_dstevr_work)( int matrix_layout, char jobz, char r
             info = info - 1;
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
-        lapack_int ncols_z = ( API_SUFFIX(LAPACKE_lsame)( range, 'a' ) ||
-                             API_SUFFIX(LAPACKE_lsame)( range, 'v' ) ) ? n :
-                             ( API_SUFFIX(LAPACKE_lsame)( range, 'i' ) ? (iu-il+1) : 1);
+        lapack_int ncols_z = ( LAPACKE_lsame( range, 'a' ) ||
+                             LAPACKE_lsame( range, 'v' ) ) ? n :
+                             ( LAPACKE_lsame( range, 'i' ) ? (iu-il+1) : 1);
         lapack_int ldz_t = MAX(1,n);
         double* z_t = NULL;
         /* Check leading dimension(s) */
         if( ldz < ncols_z ) {
             info = -15;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dstevr_work", info );
+            LAPACKE_xerbla( "LAPACKE_dstevr_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -69,7 +70,7 @@ lapack_int API_SUFFIX(LAPACKE_dstevr_work)( int matrix_layout, char jobz, char r
             return (info < 0) ? (info - 1) : info;
         }
         /* Allocate memory for temporary array(s) */
-        if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
+        if( LAPACKE_lsame( jobz, 'v' ) ) {
             z_t = (double*)
                 LAPACKE_malloc( sizeof(double) * ldz_t * MAX(1,ncols_z) );
             if( z_t == NULL ) {
@@ -85,21 +86,21 @@ lapack_int API_SUFFIX(LAPACKE_dstevr_work)( int matrix_layout, char jobz, char r
             info = info - 1;
         }
         /* Transpose output matrices */
-        if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
-            API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, ncols_z, z_t, ldz_t, z,
+        if( LAPACKE_lsame( jobz, 'v' ) ) {
+            LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, ncols_z, z_t, ldz_t, z,
                                ldz );
         }
         /* Release memory and exit */
-        if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
+        if( LAPACKE_lsame( jobz, 'v' ) ) {
             LAPACKE_free( z_t );
         }
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dstevr_work", info );
+            LAPACKE_xerbla( "LAPACKE_dstevr_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dstevr_work", info );
+        LAPACKE_xerbla( "LAPACKE_dstevr_work", info );
     }
     return info;
 }

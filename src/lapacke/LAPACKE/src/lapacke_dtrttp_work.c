@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dtrttp
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dtrttp_work)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_dtrttp_work( int matrix_layout, char uplo, lapack_int n,
                                 const double* a, lapack_int lda, double* ap )
 {
     lapack_int info = 0;
@@ -49,7 +50,7 @@ lapack_int API_SUFFIX(LAPACKE_dtrttp_work)( int matrix_layout, char uplo, lapack
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -5;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtrttp_work", info );
+            LAPACKE_xerbla( "LAPACKE_dtrttp_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -65,25 +66,25 @@ lapack_int API_SUFFIX(LAPACKE_dtrttp_work)( int matrix_layout, char uplo, lapack
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, n, n, a, lda, a_t, lda_t );
+        LAPACKE_dge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dtrttp( &uplo, &n, a_t, &lda_t, ap_t, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_dpp_trans)( LAPACK_COL_MAJOR, uplo, n, ap_t, ap );
+        LAPACKE_dpp_trans( LAPACK_COL_MAJOR, uplo, n, ap_t, ap );
         /* Release memory and exit */
         LAPACKE_free( ap_t );
 exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtrttp_work", info );
+            LAPACKE_xerbla( "LAPACKE_dtrttp_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtrttp_work", info );
+        LAPACKE_xerbla( "LAPACKE_dtrttp_work", info );
     }
     return info;
 }

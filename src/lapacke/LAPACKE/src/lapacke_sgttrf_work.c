@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function sgttrf
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_sgttrf_work)( lapack_int n, float* dl, float* d, float* du,
+lapack_int LAPACKE_sgttrf_work( lapack_int n, float* dl, float* d, float* du,
                                 float* du2, lapack_int* ipiv )
 {
     lapack_int info = 0;

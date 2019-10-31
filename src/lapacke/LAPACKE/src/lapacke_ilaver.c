@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dgesv
 * Author: Intel Corporation
+* Generated June 2016
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-void API_SUFFIX(LAPACKE_ilaver)( lapack_int* vers_major,
+void LAPACKE_ilaver( lapack_int* vers_major,
                      lapack_int* vers_minor,
                      lapack_int* vers_patch )
 {

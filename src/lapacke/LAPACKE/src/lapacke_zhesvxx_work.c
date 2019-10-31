@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function zhesvxx
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zhesvxx_work)( int matrix_layout, char fact, char uplo,
+lapack_int LAPACKE_zhesvxx_work( int matrix_layout, char fact, char uplo,
                                  lapack_int n, lapack_int nrhs,
                                  lapack_complex_double* a, lapack_int lda,
                                  lapack_complex_double* af, lapack_int ldaf,
@@ -69,22 +70,22 @@ lapack_int API_SUFFIX(LAPACKE_zhesvxx_work)( int matrix_layout, char fact, char 
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhesvxx_work", info );
+            LAPACKE_xerbla( "LAPACKE_zhesvxx_work", info );
             return info;
         }
         if( ldaf < n ) {
             info = -9;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhesvxx_work", info );
+            LAPACKE_xerbla( "LAPACKE_zhesvxx_work", info );
             return info;
         }
         if( ldb < nrhs ) {
             info = -14;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhesvxx_work", info );
+            LAPACKE_xerbla( "LAPACKE_zhesvxx_work", info );
             return info;
         }
         if( ldx < nrhs ) {
             info = -16;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhesvxx_work", info );
+            LAPACKE_xerbla( "LAPACKE_zhesvxx_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -127,11 +128,11 @@ lapack_int API_SUFFIX(LAPACKE_zhesvxx_work)( int matrix_layout, char fact, char 
             goto exit_level_5;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_zhe_trans)( matrix_layout, uplo, n, a, lda, a_t, lda_t );
-        if( API_SUFFIX(LAPACKE_lsame)( fact, 'f' ) ) {
-            API_SUFFIX(LAPACKE_zhe_trans)( matrix_layout, uplo, n, af, ldaf, af_t, ldaf_t );
+        LAPACKE_zhe_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
+        if( LAPACKE_lsame( fact, 'f' ) ) {
+            LAPACKE_zhe_trans( matrix_layout, uplo, n, af, ldaf, af_t, ldaf_t );
         }
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_zge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zhesvxx( &fact, &uplo, &n, &nrhs, a_t, &lda_t, af_t, &ldaf_t,
                         ipiv, equed, s, b_t, &ldb_t, x_t, &ldx_t, rcond, rpvgrw,
@@ -141,20 +142,20 @@ lapack_int API_SUFFIX(LAPACKE_zhesvxx_work)( int matrix_layout, char fact, char 
             info = info - 1;
         }
         /* Transpose output matrices */
-        if( API_SUFFIX(LAPACKE_lsame)( fact, 'e' ) && API_SUFFIX(LAPACKE_lsame)( *equed, 'y' ) ) {
-            API_SUFFIX(LAPACKE_zhe_trans)( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
+        if( LAPACKE_lsame( fact, 'e' ) && LAPACKE_lsame( *equed, 'y' ) ) {
+            LAPACKE_zhe_trans( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
         }
-        if( API_SUFFIX(LAPACKE_lsame)( fact, 'e' ) || API_SUFFIX(LAPACKE_lsame)( fact, 'n' ) ) {
-            API_SUFFIX(LAPACKE_zhe_trans)( LAPACK_COL_MAJOR, uplo, n, af_t, ldaf_t, af,
+        if( LAPACKE_lsame( fact, 'e' ) || LAPACKE_lsame( fact, 'n' ) ) {
+            LAPACKE_zhe_trans( LAPACK_COL_MAJOR, uplo, n, af_t, ldaf_t, af,
                                ldaf );
         }
-        if( API_SUFFIX(LAPACKE_lsame)( fact, 'f' ) && API_SUFFIX(LAPACKE_lsame)( *equed, 'y' ) ) {
-            API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
+        if( LAPACKE_lsame( fact, 'f' ) && LAPACKE_lsame( *equed, 'y' ) ) {
+            LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
         }
-        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
-        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, nrhs, n_err_bnds, err_bnds_norm_t,
+        LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
+        LAPACKE_dge_trans( LAPACK_COL_MAJOR, nrhs, n_err_bnds, err_bnds_norm_t,
                            nrhs, err_bnds_norm, n_err_bnds );
-        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, nrhs, n_err_bnds, err_bnds_comp_t,
+        LAPACKE_dge_trans( LAPACK_COL_MAJOR, nrhs, n_err_bnds, err_bnds_comp_t,
                            nrhs, err_bnds_comp, n_err_bnds );
         /* Release memory and exit */
         LAPACKE_free( err_bnds_comp_t );
@@ -170,11 +171,11 @@ exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhesvxx_work", info );
+            LAPACKE_xerbla( "LAPACKE_zhesvxx_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhesvxx_work", info );
+        LAPACKE_xerbla( "LAPACKE_zhesvxx_work", info );
     }
     return info;
 }

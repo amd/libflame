@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function strtri
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_strtri_work)( int matrix_layout, char uplo, char diag,
+lapack_int LAPACKE_strtri_work( int matrix_layout, char uplo, char diag,
                                 lapack_int n, float* a, lapack_int lda )
 {
     lapack_int info = 0;
@@ -48,7 +49,7 @@ lapack_int API_SUFFIX(LAPACKE_strtri_work)( int matrix_layout, char uplo, char d
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_strtri_work", info );
+            LAPACKE_xerbla( "LAPACKE_strtri_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -58,24 +59,24 @@ lapack_int API_SUFFIX(LAPACKE_strtri_work)( int matrix_layout, char uplo, char d
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_str_trans)( matrix_layout, uplo, diag, n, a, lda, a_t, lda_t );
+        LAPACKE_str_trans( matrix_layout, uplo, diag, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_strtri( &uplo, &diag, &n, a_t, &lda_t, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_str_trans)( LAPACK_COL_MAJOR, uplo, diag, n, a_t, lda_t, a,
+        LAPACKE_str_trans( LAPACK_COL_MAJOR, uplo, diag, n, a_t, lda_t, a,
                            lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_strtri_work", info );
+            LAPACKE_xerbla( "LAPACKE_strtri_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_strtri_work", info );
+        LAPACKE_xerbla( "LAPACKE_strtri_work", info );
     }
     return info;
 }

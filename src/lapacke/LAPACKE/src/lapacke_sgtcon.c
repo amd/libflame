@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function sgtcon
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_sgtcon)( char norm, lapack_int n, const float* dl,
+lapack_int LAPACKE_sgtcon( char norm, lapack_int n, const float* dl,
                            const float* d, const float* du, const float* du2,
                            const lapack_int* ipiv, float anorm, float* rcond )
 {
@@ -42,19 +43,19 @@ lapack_int API_SUFFIX(LAPACKE_sgtcon)( char norm, lapack_int n, const float* dl,
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &anorm, 1 ) ) {
+        if( LAPACKE_s_nancheck( 1, &anorm, 1 ) ) {
             return -8;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n, d, 1 ) ) {
+        if( LAPACKE_s_nancheck( n, d, 1 ) ) {
             return -4;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n-1, dl, 1 ) ) {
+        if( LAPACKE_s_nancheck( n-1, dl, 1 ) ) {
             return -3;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n-1, du, 1 ) ) {
+        if( LAPACKE_s_nancheck( n-1, du, 1 ) ) {
             return -5;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n-2, du2, 1 ) ) {
+        if( LAPACKE_s_nancheck( n-2, du2, 1 ) ) {
             return -6;
         }
     }
@@ -71,7 +72,7 @@ lapack_int API_SUFFIX(LAPACKE_sgtcon)( char norm, lapack_int n, const float* dl,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_sgtcon_work)( norm, n, dl, d, du, du2, ipiv, anorm, rcond,
+    info = LAPACKE_sgtcon_work( norm, n, dl, d, du, du2, ipiv, anorm, rcond,
                                 work, iwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -79,7 +80,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgtcon", info );
+        LAPACKE_xerbla( "LAPACKE_sgtcon", info );
     }
     return info;
 }

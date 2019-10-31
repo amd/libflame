@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function zgtrfs
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zgtrfs_work)( int matrix_layout, char trans, lapack_int n,
+lapack_int LAPACKE_zgtrfs_work( int matrix_layout, char trans, lapack_int n,
                                 lapack_int nrhs,
                                 const lapack_complex_double* dl,
                                 const lapack_complex_double* d,
@@ -63,12 +64,12 @@ lapack_int API_SUFFIX(LAPACKE_zgtrfs_work)( int matrix_layout, char trans, lapac
         /* Check leading dimension(s) */
         if( ldb < nrhs ) {
             info = -14;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgtrfs_work", info );
+            LAPACKE_xerbla( "LAPACKE_zgtrfs_work", info );
             return info;
         }
         if( ldx < nrhs ) {
             info = -16;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgtrfs_work", info );
+            LAPACKE_xerbla( "LAPACKE_zgtrfs_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -87,8 +88,8 @@ lapack_int API_SUFFIX(LAPACKE_zgtrfs_work)( int matrix_layout, char trans, lapac
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, nrhs, x, ldx, x_t, ldx_t );
+        LAPACKE_zge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_zge_trans( matrix_layout, n, nrhs, x, ldx, x_t, ldx_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zgtrfs( &trans, &n, &nrhs, dl, d, du, dlf, df, duf, du2, ipiv,
                        b_t, &ldb_t, x_t, &ldx_t, ferr, berr, work, rwork,
@@ -97,18 +98,18 @@ lapack_int API_SUFFIX(LAPACKE_zgtrfs_work)( int matrix_layout, char trans, lapac
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
+        LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
         /* Release memory and exit */
         LAPACKE_free( x_t );
 exit_level_1:
         LAPACKE_free( b_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgtrfs_work", info );
+            LAPACKE_xerbla( "LAPACKE_zgtrfs_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgtrfs_work", info );
+        LAPACKE_xerbla( "LAPACKE_zgtrfs_work", info );
     }
     return info;
 }

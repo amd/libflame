@@ -28,13 +28,13 @@
 ******************************************************************************
 * Contents: Native C interface to LAPACK lsame
 * Author: Intel Corporation
+* Created in January, 2010
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_logical API_SUFFIX(LAPACKE_lsame)( char ca,  char cb )
+lapack_logical LAPACKE_lsame( char ca,  char cb )
 {
-  
     return (lapack_logical) LAPACK_lsame( &ca, &cb, 1, 1 );
 }
 

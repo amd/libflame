@@ -28,40 +28,39 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function ztfsm
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_ztfsm)( int matrix_layout, char transr, char side, char uplo,
+lapack_int LAPACKE_ztfsm( int matrix_layout, char transr, char side, char uplo,
                           char trans, char diag, lapack_int m, lapack_int n,
                           lapack_complex_double alpha,
                           const lapack_complex_double* a,
                           lapack_complex_double* b, lapack_int ldb )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztfsm", -1 );
+        LAPACKE_xerbla( "LAPACKE_ztfsm", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
-        lapack_int mn = m;
-        if( API_SUFFIX(LAPACKE_lsame)( side, 'r' ) ) mn = n;
         /* Optionally check input matrices for NaNs */
         if( IS_Z_NONZERO(alpha) ) {
-            if( API_SUFFIX(LAPACKE_ztf_nancheck)( matrix_layout, transr, uplo, diag, mn, a ) ) {
+            if( LAPACKE_ztf_nancheck( matrix_layout, transr, uplo, diag, n, a ) ) {
                 return -10;
             }
         }
-        if( API_SUFFIX(LAPACKE_z_nancheck)( 1, &alpha, 1 ) ) {
+        if( LAPACKE_z_nancheck( 1, &alpha, 1 ) ) {
             return -9;
         }
         if( IS_Z_NONZERO(alpha) ) {
-            if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, m, n, b, ldb ) ) {
+            if( LAPACKE_zge_nancheck( matrix_layout, m, n, b, ldb ) ) {
                 return -11;
             }
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_ztfsm_work)( matrix_layout, transr, side, uplo, trans, diag, m,
+    return LAPACKE_ztfsm_work( matrix_layout, transr, side, uplo, trans, diag, m,
                                n, alpha, a, b, ldb );
 }

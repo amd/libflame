@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function chbgv
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_chbgv)( int matrix_layout, char jobz, char uplo, lapack_int n,
+lapack_int LAPACKE_chbgv( int matrix_layout, char jobz, char uplo, lapack_int n,
                           lapack_int ka, lapack_int kb,
                           lapack_complex_float* ab, lapack_int ldab,
                           lapack_complex_float* bb, lapack_int ldbb, float* w,
@@ -42,16 +43,16 @@ lapack_int API_SUFFIX(LAPACKE_chbgv)( int matrix_layout, char jobz, char uplo, l
     float* rwork = NULL;
     lapack_complex_float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_chbgv", -1 );
+        LAPACKE_xerbla( "LAPACKE_chbgv", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_chb_nancheck)( matrix_layout, uplo, n, ka, ab, ldab ) ) {
+        if( LAPACKE_chb_nancheck( matrix_layout, uplo, n, ka, ab, ldab ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_chb_nancheck)( matrix_layout, uplo, n, kb, bb, ldbb ) ) {
+        if( LAPACKE_chb_nancheck( matrix_layout, uplo, n, kb, bb, ldbb ) ) {
             return -9;
         }
     }
@@ -69,7 +70,7 @@ lapack_int API_SUFFIX(LAPACKE_chbgv)( int matrix_layout, char jobz, char uplo, l
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_chbgv_work)( matrix_layout, jobz, uplo, n, ka, kb, ab, ldab,
+    info = LAPACKE_chbgv_work( matrix_layout, jobz, uplo, n, ka, kb, ab, ldab,
                                bb, ldbb, w, z, ldz, work, rwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -77,7 +78,7 @@ exit_level_1:
     LAPACKE_free( rwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_chbgv", info );
+        LAPACKE_xerbla( "LAPACKE_chbgv", info );
     }
     return info;
 }

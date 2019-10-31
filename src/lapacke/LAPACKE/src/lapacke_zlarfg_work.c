@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function zlarfg
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zlarfg_work)( lapack_int n, lapack_complex_double* alpha,
+lapack_int LAPACKE_zlarfg_work( lapack_int n, lapack_complex_double* alpha,
                                 lapack_complex_double* x, lapack_int incx,
                                 lapack_complex_double* tau )
 {

@@ -28,30 +28,31 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function slange
 * Author: Intel Corporation
+* Generated June 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-float API_SUFFIX(LAPACKE_slange)( int matrix_layout, char norm, lapack_int m,
+float LAPACKE_slange( int matrix_layout, char norm, lapack_int m,
                            lapack_int n, const float* a, lapack_int lda )
 {
     lapack_int info = 0;
     float res = 0.;
     float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_slange", -1 );
+        LAPACKE_xerbla( "LAPACKE_slange", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, m, n, a, lda ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, m, n, a, lda ) ) {
             return -5;
         }
     }
 #endif
     /* Allocate memory for working array(s) */
-    if( API_SUFFIX(LAPACKE_lsame)( norm, 'i' ) ) {
+    if( LAPACKE_lsame( norm, 'i' ) ) {
         work = (float*)LAPACKE_malloc( sizeof(float) * MAX(1,m) );
         if( work == NULL ) {
             info = LAPACK_WORK_MEMORY_ERROR;
@@ -59,14 +60,14 @@ float API_SUFFIX(LAPACKE_slange)( int matrix_layout, char norm, lapack_int m,
         }
     }
     /* Call middle-level interface */
-    res = API_SUFFIX(LAPACKE_slange_work)( matrix_layout, norm, m, n, a, lda, work );
+    res = LAPACKE_slange_work( matrix_layout, norm, m, n, a, lda, work );
     /* Release memory and exit */
-    if( API_SUFFIX(LAPACKE_lsame)( norm, 'i' ) ) {
+    if( LAPACKE_lsame( norm, 'i' ) ) {
         LAPACKE_free( work );
     }
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_slange", info );
+        LAPACKE_xerbla( "LAPACKE_slange", info );
     }
     return res;
 }

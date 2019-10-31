@@ -28,6 +28,7 @@
 ##############################################################################
 # Contents: Native C interface to LAPACK
 # Author: Intel Corporation
+# September, 2010
 ##############################################################################
 # makefile for LAPACKE, used to build lapacke binary.
 #
@@ -39,7 +40,7 @@ include $(TOPSRCDIR)/make.inc
 
 .SUFFIXES: .c .o
 .c.o:
-	$(CC) $(CFLAGS) -Wall -I../include -c -o $@ $<
+	$(CC) $(CFLAGS) -I../include -c -o $@ $<
 
 OBJ = \
 lapacke_ilaver.o \
@@ -136,10 +137,6 @@ lapacke_cgerqf.o \
 lapacke_cgerqf_work.o \
 lapacke_cgesdd.o \
 lapacke_cgesdd_work.o \
-lapacke_cgedmd.o \
-lapacke_cgedmd_work.o \
-lapacke_cgedmdq.o \
-lapacke_cgedmdq_work.o \
 lapacke_cgesv.o \
 lapacke_cgesv_work.o \
 lapacke_cgesvd.o \
@@ -164,8 +161,6 @@ lapacke_cgetrs.o \
 lapacke_cgetrs_work.o \
 lapacke_cgetsls.o \
 lapacke_cgetsls_work.o \
-lapacke_cgetsqrhrt.o \
-lapacke_cgetsqrhrt_work.o \
 lapacke_cggbak.o \
 lapacke_cggbak_work.o \
 lapacke_cggbal.o \
@@ -360,8 +355,6 @@ lapacke_clacrm.o \
 lapacke_clacrm_work.o \
 lapacke_clag2z.o \
 lapacke_clag2z_work.o \
-lapacke_clangb.o \
-lapacke_clangb_work.o \
 lapacke_clange.o \
 lapacke_clange_work.o \
 lapacke_clanhe.o \
@@ -610,8 +603,6 @@ lapacke_ctrsna.o \
 lapacke_ctrsna_work.o \
 lapacke_ctrsyl.o \
 lapacke_ctrsyl_work.o \
-lapacke_ctrsyl3.o \
-lapacke_ctrsyl3_work.o \
 lapacke_ctrtri.o \
 lapacke_ctrtri_work.o \
 lapacke_ctrtrs.o \
@@ -642,10 +633,6 @@ lapacke_cungrq.o \
 lapacke_cungrq_work.o \
 lapacke_cungtr.o \
 lapacke_cungtr_work.o \
-lapacke_cungtsqr_row.o \
-lapacke_cungtsqr_row_work.o \
-lapacke_cunhr_col.o \
-lapacke_cunhr_col_work.o \
 lapacke_cunmbr.o \
 lapacke_cunmbr_work.o \
 lapacke_cunmhr.o \
@@ -764,10 +751,6 @@ lapacke_dgerqf.o \
 lapacke_dgerqf_work.o \
 lapacke_dgesdd.o \
 lapacke_dgesdd_work.o \
-lapacke_dgedmd.o \
-lapacke_dgedmd_work.o \
-lapacke_dgedmdq.o \
-lapacke_dgedmdq_work.o \
 lapacke_dgesv.o \
 lapacke_dgesv_work.o \
 lapacke_dgesvd.o \
@@ -792,8 +775,6 @@ lapacke_dgetrs.o \
 lapacke_dgetrs_work.o \
 lapacke_dgetsls.o \
 lapacke_dgetsls_work.o \
-lapacke_dgetsqrhrt.o \
-lapacke_dgetsqrhrt_work.o \
 lapacke_dggbak.o \
 lapacke_dggbak_work.o \
 lapacke_dggbal.o \
@@ -852,8 +833,6 @@ lapacke_dlag2s.o \
 lapacke_dlag2s_work.o \
 lapacke_dlamch.o \
 lapacke_dlamch_work.o \
-lapacke_dlangb.o \
-lapacke_dlangb_work.o \
 lapacke_dlange.o \
 lapacke_dlange_work.o \
 lapacke_dlansy.o \
@@ -918,10 +897,6 @@ lapacke_dorgrq.o \
 lapacke_dorgrq_work.o \
 lapacke_dorgtr.o \
 lapacke_dorgtr_work.o \
-lapacke_dorgtsqr_row.o \
-lapacke_dorgtsqr_row_work.o \
-lapacke_dorhr_col.o \
-lapacke_dorhr_col_work.o \
 lapacke_dormbr.o \
 lapacke_dormbr_work.o \
 lapacke_dormhr.o \
@@ -1234,8 +1209,6 @@ lapacke_dtrsna.o \
 lapacke_dtrsna_work.o \
 lapacke_dtrsyl.o \
 lapacke_dtrsyl_work.o \
-lapacke_dtrsyl3.o \
-lapacke_dtrsyl3_work.o \
 lapacke_dtrtri.o \
 lapacke_dtrtri_work.o \
 lapacke_dtrtrs.o \
@@ -1344,10 +1317,6 @@ lapacke_sgerqf.o \
 lapacke_sgerqf_work.o \
 lapacke_sgesdd.o \
 lapacke_sgesdd_work.o \
-lapacke_sgedmd.o \
-lapacke_sgedmd_work.o \
-lapacke_sgedmdq.o \
-lapacke_sgedmdq_work.o \
 lapacke_sgesv.o \
 lapacke_sgesv_work.o \
 lapacke_sgesvd.o \
@@ -1372,8 +1341,6 @@ lapacke_sgetrs.o \
 lapacke_sgetrs_work.o \
 lapacke_sgetsls.o \
 lapacke_sgetsls_work.o \
-lapacke_sgetsqrhrt.o \
-lapacke_sgetsqrhrt_work.o \
 lapacke_sggbak.o \
 lapacke_sggbak_work.o \
 lapacke_sggbal.o \
@@ -1432,8 +1399,6 @@ lapacke_slag2d.o \
 lapacke_slag2d_work.o \
 lapacke_slamch.o \
 lapacke_slamch_work.o \
-lapacke_slangb.o \
-lapacke_slangb_work.o \
 lapacke_slange.o \
 lapacke_slange_work.o \
 lapacke_slansy.o \
@@ -1498,10 +1463,6 @@ lapacke_sorgrq.o \
 lapacke_sorgrq_work.o \
 lapacke_sorgtr.o \
 lapacke_sorgtr_work.o \
-lapacke_sorgtsqr_row.o \
-lapacke_sorgtsqr_row_work.o \
-lapacke_sorhr_col.o \
-lapacke_sorhr_col_work.o \
 lapacke_sormbr.o \
 lapacke_sormbr_work.o \
 lapacke_sormhr.o \
@@ -1810,8 +1771,6 @@ lapacke_strsna.o \
 lapacke_strsna_work.o \
 lapacke_strsyl.o \
 lapacke_strsyl_work.o \
-lapacke_strsyl3.o \
-lapacke_strsyl3_work.o \
 lapacke_strtri.o \
 lapacke_strtri_work.o \
 lapacke_strtrs.o \
@@ -1918,10 +1877,6 @@ lapacke_zgerqf.o \
 lapacke_zgerqf_work.o \
 lapacke_zgesdd.o \
 lapacke_zgesdd_work.o \
-lapacke_zgedmd.o \
-lapacke_zgedmd_work.o \
-lapacke_zgedmdq.o \
-lapacke_zgedmdq_work.o \
 lapacke_zgesv.o \
 lapacke_zgesv_work.o \
 lapacke_zgesvd.o \
@@ -1946,8 +1901,6 @@ lapacke_zgetrs.o \
 lapacke_zgetrs_work.o \
 lapacke_zgetsls.o \
 lapacke_zgetsls_work.o \
-lapacke_zgetsqrhrt.o \
-lapacke_zgetsqrhrt_work.o \
 lapacke_zggbak.o \
 lapacke_zggbak_work.o \
 lapacke_zggbal.o \
@@ -2142,8 +2095,6 @@ lapacke_zlacrm.o \
 lapacke_zlacrm_work.o \
 lapacke_zlag2c.o \
 lapacke_zlag2c_work.o \
-lapacke_zlangb.o \
-lapacke_zlangb_work.o \
 lapacke_zlange.o \
 lapacke_zlange_work.o \
 lapacke_zlanhe.o \
@@ -2392,8 +2343,6 @@ lapacke_ztrsna.o \
 lapacke_ztrsna_work.o \
 lapacke_ztrsyl.o \
 lapacke_ztrsyl_work.o \
-lapacke_ztrsyl3.o \
-lapacke_ztrsyl3_work.o \
 lapacke_ztrtri.o \
 lapacke_ztrtri_work.o \
 lapacke_ztrtrs.o \
@@ -2424,10 +2373,6 @@ lapacke_zungrq.o \
 lapacke_zungrq_work.o \
 lapacke_zungtr.o \
 lapacke_zungtr_work.o \
-lapacke_zungtsqr_row.o \
-lapacke_zungtsqr_row_work.o \
-lapacke_zunhr_col.o \
-lapacke_zunhr_col_work.o \
 lapacke_zunmbr.o \
 lapacke_zunmbr_work.o \
 lapacke_zunmhr.o \
@@ -2529,21 +2474,7 @@ endif
 .PHONY: all
 all: $(LAPACKELIB)
 
-LAPACKELIB_DEPS := $(OBJ) $(OBJ_S) $(OBJ_C) $(OBJ_D) $(OBJ_Z)
-
-ifdef BUILD_DEPRECATED
-  LAPACKELIB_DEPS += $(DEPRECATED)
-endif
-
-ifdef USEXBLAS
-  LAPACKELIB_DEPS += $(EXTENDED)
-endif
-
-ifdef LAPACKE_WITH_TMG
-  LAPACKELIB_DEPS += $(MATGEN)
-endif
-
-$(LAPACKELIB): $(LAPACKELIB_DEPS)
+$(LAPACKELIB): $(OBJ) $(OBJ_S) $(OBJ_C) $(OBJ_D) $(OBJ_Z) $(DEPRECATED) $(EXTENDED) $(MATGEN)
 	$(AR) $(ARFLAGS) $@ $(OBJ)
 	$(AR) $(ARFLAGS) $@ $(OBJ_S)
 	$(AR) $(ARFLAGS) $@ $(OBJ_C)
@@ -2552,7 +2483,7 @@ $(LAPACKELIB): $(LAPACKELIB_DEPS)
 ifdef BUILD_DEPRECATED
 	$(AR) $(ARFLAGS) $@ $(DEPRECATED)
 endif
-ifdef USEXBLAS
+ifdef (USEXBLAS)
 	$(AR) $(ARFLAGS) $@ $(EXTENDED)
 endif
 ifdef LAPACKE_WITH_TMG

@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function sgerqf
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_sgerqf)( int matrix_layout, lapack_int m, lapack_int n,
+lapack_int LAPACKE_sgerqf( int matrix_layout, lapack_int m, lapack_int n,
                            float* a, lapack_int lda, float* tau )
 {
     lapack_int info = 0;
@@ -40,19 +41,19 @@ lapack_int API_SUFFIX(LAPACKE_sgerqf)( int matrix_layout, lapack_int m, lapack_i
     float* work = NULL;
     float work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgerqf", -1 );
+        LAPACKE_xerbla( "LAPACKE_sgerqf", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, m, n, a, lda ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, m, n, a, lda ) ) {
             return -4;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_sgerqf_work)( matrix_layout, m, n, a, lda, tau, &work_query,
+    info = LAPACKE_sgerqf_work( matrix_layout, m, n, a, lda, tau, &work_query,
                                 lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -65,12 +66,12 @@ lapack_int API_SUFFIX(LAPACKE_sgerqf)( int matrix_layout, lapack_int m, lapack_i
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_sgerqf_work)( matrix_layout, m, n, a, lda, tau, work, lwork );
+    info = LAPACKE_sgerqf_work( matrix_layout, m, n, a, lda, tau, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgerqf", info );
+        LAPACKE_xerbla( "LAPACKE_sgerqf", info );
     }
     return info;
 }

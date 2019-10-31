@@ -28,12 +28,13 @@
 ******************************************************************************
 * Contents: Native C interface to LAPACK utility function
 * Author: Intel Corporation
+* Created in February, 2010
 *****************************************************************************/
 #include "lapacke_utils.h"
 
 /* Check a matrix for NaN entries. */
 
-lapack_logical API_SUFFIX(LAPACKE_ctr_nancheck)( int matrix_layout, char uplo, char diag,
+lapack_logical LAPACKE_ctr_nancheck( int matrix_layout, char uplo, char diag,
                                       lapack_int n,
                                       const lapack_complex_float *a,
                                       lapack_int lda )
@@ -44,12 +45,12 @@ lapack_logical API_SUFFIX(LAPACKE_ctr_nancheck)( int matrix_layout, char uplo, c
     if( a == NULL ) return (lapack_logical) 0;
 
     colmaj = ( matrix_layout == LAPACK_COL_MAJOR );
-    lower  = API_SUFFIX(LAPACKE_lsame)( uplo, 'l' );
-    unit   = API_SUFFIX(LAPACKE_lsame)( diag, 'u' );
+    lower  = LAPACKE_lsame( uplo, 'l' );
+    unit   = LAPACKE_lsame( diag, 'u' );
 
     if( ( !colmaj && ( matrix_layout != LAPACK_ROW_MAJOR ) ) ||
-        ( !lower  && !API_SUFFIX(LAPACKE_lsame)( uplo, 'u' ) ) ||
-        ( !unit   && !API_SUFFIX(LAPACKE_lsame)( diag, 'n' ) ) ) {
+        ( !lower  && !LAPACKE_lsame( uplo, 'u' ) ) ||
+        ( !unit   && !LAPACKE_lsame( diag, 'n' ) ) ) {
         /* Just exit if any of input parameters are wrong */
         return (lapack_logical) 0;
     }

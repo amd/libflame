@@ -28,35 +28,36 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function cgtsv
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cgtsv)( int matrix_layout, lapack_int n, lapack_int nrhs,
+lapack_int LAPACKE_cgtsv( int matrix_layout, lapack_int n, lapack_int nrhs,
                           lapack_complex_float* dl, lapack_complex_float* d,
                           lapack_complex_float* du, lapack_complex_float* b,
                           lapack_int ldb )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgtsv", -1 );
+        LAPACKE_xerbla( "LAPACKE_cgtsv", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_c_nancheck)( n, d, 1 ) ) {
+        if( LAPACKE_c_nancheck( n, d, 1 ) ) {
             return -5;
         }
-        if( API_SUFFIX(LAPACKE_c_nancheck)( n-1, dl, 1 ) ) {
+        if( LAPACKE_c_nancheck( n-1, dl, 1 ) ) {
             return -4;
         }
-        if( API_SUFFIX(LAPACKE_c_nancheck)( n-1, du, 1 ) ) {
+        if( LAPACKE_c_nancheck( n-1, du, 1 ) ) {
             return -6;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_cgtsv_work)( matrix_layout, n, nrhs, dl, d, du, b, ldb );
+    return LAPACKE_cgtsv_work( matrix_layout, n, nrhs, dl, d, du, b, ldb );
 }

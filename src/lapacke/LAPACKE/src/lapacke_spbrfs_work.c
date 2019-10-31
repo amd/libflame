@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function spbrfs
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_spbrfs_work)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_spbrfs_work( int matrix_layout, char uplo, lapack_int n,
                                 lapack_int kd, lapack_int nrhs, const float* ab,
                                 lapack_int ldab, const float* afb,
                                 lapack_int ldafb, const float* b,
@@ -60,22 +61,22 @@ lapack_int API_SUFFIX(LAPACKE_spbrfs_work)( int matrix_layout, char uplo, lapack
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_spbrfs_work", info );
+            LAPACKE_xerbla( "LAPACKE_spbrfs_work", info );
             return info;
         }
         if( ldafb < n ) {
             info = -9;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_spbrfs_work", info );
+            LAPACKE_xerbla( "LAPACKE_spbrfs_work", info );
             return info;
         }
         if( ldb < nrhs ) {
             info = -11;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_spbrfs_work", info );
+            LAPACKE_xerbla( "LAPACKE_spbrfs_work", info );
             return info;
         }
         if( ldx < nrhs ) {
             info = -13;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_spbrfs_work", info );
+            LAPACKE_xerbla( "LAPACKE_spbrfs_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -100,11 +101,11 @@ lapack_int API_SUFFIX(LAPACKE_spbrfs_work)( int matrix_layout, char uplo, lapack
             goto exit_level_3;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_spb_trans)( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
-        API_SUFFIX(LAPACKE_spb_trans)( matrix_layout, uplo, n, kd, afb, ldafb, afb_t,
+        LAPACKE_spb_trans( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
+        LAPACKE_spb_trans( matrix_layout, uplo, n, kd, afb, ldafb, afb_t,
                            ldafb_t );
-        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
-        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, nrhs, x, ldx, x_t, ldx_t );
+        LAPACKE_sge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_sge_trans( matrix_layout, n, nrhs, x, ldx, x_t, ldx_t );
         /* Call LAPACK function and adjust info */
         LAPACK_spbrfs( &uplo, &n, &kd, &nrhs, ab_t, &ldab_t, afb_t, &ldafb_t,
                        b_t, &ldb_t, x_t, &ldx_t, ferr, berr, work, iwork,
@@ -113,7 +114,7 @@ lapack_int API_SUFFIX(LAPACKE_spbrfs_work)( int matrix_layout, char uplo, lapack
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
+        LAPACKE_sge_trans( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
         /* Release memory and exit */
         LAPACKE_free( x_t );
 exit_level_3:
@@ -124,11 +125,11 @@ exit_level_1:
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_spbrfs_work", info );
+            LAPACKE_xerbla( "LAPACKE_spbrfs_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_spbrfs_work", info );
+        LAPACKE_xerbla( "LAPACKE_spbrfs_work", info );
     }
     return info;
 }

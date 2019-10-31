@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function cgbbrd
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cgbbrd_work)( int matrix_layout, char vect, lapack_int m,
+lapack_int LAPACKE_cgbbrd_work( int matrix_layout, char vect, lapack_int m,
                                 lapack_int n, lapack_int ncc, lapack_int kl,
                                 lapack_int ku, lapack_complex_float* ab,
                                 lapack_int ldab, float* d, float* e,
@@ -61,22 +62,22 @@ lapack_int API_SUFFIX(LAPACKE_cgbbrd_work)( int matrix_layout, char vect, lapack
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -9;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgbbrd_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgbbrd_work", info );
             return info;
         }
         if( ldc < ncc ) {
             info = -17;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgbbrd_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgbbrd_work", info );
             return info;
         }
         if( ldpt < n ) {
             info = -15;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgbbrd_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgbbrd_work", info );
             return info;
         }
         if( ldq < m ) {
             info = -13;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgbbrd_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgbbrd_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -86,7 +87,7 @@ lapack_int API_SUFFIX(LAPACKE_cgbbrd_work)( int matrix_layout, char vect, lapack
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( vect, 'b' ) || API_SUFFIX(LAPACKE_lsame)( vect, 'q' ) ) {
+        if( LAPACKE_lsame( vect, 'b' ) || LAPACKE_lsame( vect, 'q' ) ) {
             q_t = (lapack_complex_float*)
                 LAPACKE_malloc( sizeof(lapack_complex_float) *
                                 ldq_t * MAX(1,m) );
@@ -95,7 +96,7 @@ lapack_int API_SUFFIX(LAPACKE_cgbbrd_work)( int matrix_layout, char vect, lapack
                 goto exit_level_1;
             }
         }
-        if( API_SUFFIX(LAPACKE_lsame)( vect, 'b' ) || API_SUFFIX(LAPACKE_lsame)( vect, 'p' ) ) {
+        if( LAPACKE_lsame( vect, 'b' ) || LAPACKE_lsame( vect, 'p' ) ) {
             pt_t = (lapack_complex_float*)
                 LAPACKE_malloc( sizeof(lapack_complex_float) *
                                 ldpt_t * MAX(1,n) );
@@ -114,9 +115,9 @@ lapack_int API_SUFFIX(LAPACKE_cgbbrd_work)( int matrix_layout, char vect, lapack
             }
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_cgb_trans)( matrix_layout, m, n, kl, ku, ab, ldab, ab_t, ldab_t );
+        LAPACKE_cgb_trans( matrix_layout, m, n, kl, ku, ab, ldab, ab_t, ldab_t );
         if( ncc != 0 ) {
-            API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, m, ncc, c, ldc, c_t, ldc_t );
+            LAPACKE_cge_trans( matrix_layout, m, ncc, c, ldc, c_t, ldc_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_cgbbrd( &vect, &m, &n, &ncc, &kl, &ku, ab_t, &ldab_t, d, e, q_t,
@@ -125,38 +126,38 @@ lapack_int API_SUFFIX(LAPACKE_cgbbrd_work)( int matrix_layout, char vect, lapack
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_cgb_trans)( LAPACK_COL_MAJOR, m, n, kl, ku, ab_t, ldab_t, ab,
+        LAPACKE_cgb_trans( LAPACK_COL_MAJOR, m, n, kl, ku, ab_t, ldab_t, ab,
                            ldab );
-        if( API_SUFFIX(LAPACKE_lsame)( vect, 'b' ) || API_SUFFIX(LAPACKE_lsame)( vect, 'q' ) ) {
-            API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, m, m, q_t, ldq_t, q, ldq );
+        if( LAPACKE_lsame( vect, 'b' ) || LAPACKE_lsame( vect, 'q' ) ) {
+            LAPACKE_cge_trans( LAPACK_COL_MAJOR, m, m, q_t, ldq_t, q, ldq );
         }
-        if( API_SUFFIX(LAPACKE_lsame)( vect, 'b' ) || API_SUFFIX(LAPACKE_lsame)( vect, 'p' ) ) {
-            API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, n, n, pt_t, ldpt_t, pt, ldpt );
+        if( LAPACKE_lsame( vect, 'b' ) || LAPACKE_lsame( vect, 'p' ) ) {
+            LAPACKE_cge_trans( LAPACK_COL_MAJOR, n, n, pt_t, ldpt_t, pt, ldpt );
         }
         if( ncc != 0 ) {
-            API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, m, ncc, c_t, ldc_t, c, ldc );
+            LAPACKE_cge_trans( LAPACK_COL_MAJOR, m, ncc, c_t, ldc_t, c, ldc );
         }
         /* Release memory and exit */
         if( ncc != 0 ) {
             LAPACKE_free( c_t );
         }
 exit_level_3:
-        if( API_SUFFIX(LAPACKE_lsame)( vect, 'b' ) || API_SUFFIX(LAPACKE_lsame)( vect, 'p' ) ) {
+        if( LAPACKE_lsame( vect, 'b' ) || LAPACKE_lsame( vect, 'p' ) ) {
             LAPACKE_free( pt_t );
         }
 exit_level_2:
-        if( API_SUFFIX(LAPACKE_lsame)( vect, 'b' ) || API_SUFFIX(LAPACKE_lsame)( vect, 'q' ) ) {
+        if( LAPACKE_lsame( vect, 'b' ) || LAPACKE_lsame( vect, 'q' ) ) {
             LAPACKE_free( q_t );
         }
 exit_level_1:
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgbbrd_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgbbrd_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgbbrd_work", info );
+        LAPACKE_xerbla( "LAPACKE_cgbbrd_work", info );
     }
     return info;
 }

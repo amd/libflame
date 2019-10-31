@@ -28,6 +28,7 @@
 ******************************************************************************
 * Contents: Native C interface to LAPACK utility function
 * Author: Intel Corporation
+* Created in February, 2010
 *****************************************************************************/
 
 #include "lapacke_utils.h"
@@ -36,7 +37,7 @@
  * layout or vice versa.
  */
 
-void API_SUFFIX(LAPACKE_ctr_trans)( int matrix_layout, char uplo, char diag, lapack_int n,
+void LAPACKE_ctr_trans( int matrix_layout, char uplo, char diag, lapack_int n,
                         const lapack_complex_float *in, lapack_int ldin,
                         lapack_complex_float *out, lapack_int ldout )
 {
@@ -46,12 +47,12 @@ void API_SUFFIX(LAPACKE_ctr_trans)( int matrix_layout, char uplo, char diag, lap
     if( in == NULL || out == NULL ) return ;
 
     colmaj = ( matrix_layout == LAPACK_COL_MAJOR );
-    lower  = API_SUFFIX(LAPACKE_lsame)( uplo, 'l' );
-    unit   = API_SUFFIX(LAPACKE_lsame)( diag, 'u' );
+    lower  = LAPACKE_lsame( uplo, 'l' );
+    unit   = LAPACKE_lsame( diag, 'u' );
 
     if( ( !colmaj && ( matrix_layout != LAPACK_ROW_MAJOR ) ) ||
-        ( !lower  && !API_SUFFIX(LAPACKE_lsame)( uplo, 'u' ) ) ||
-        ( !unit   && !API_SUFFIX(LAPACKE_lsame)( diag, 'n' ) ) ) {
+        ( !lower  && !LAPACKE_lsame( uplo, 'u' ) ) ||
+        ( !unit   && !LAPACKE_lsame( diag, 'n' ) ) ) {
         /* Just exit if any of input parameters are wrong */
         return;
     }

@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dspev
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dspev_work)( int matrix_layout, char jobz, char uplo,
+lapack_int LAPACKE_dspev_work( int matrix_layout, char jobz, char uplo,
                                lapack_int n, double* ap, double* w, double* z,
                                lapack_int ldz, double* work )
 {
@@ -50,11 +51,11 @@ lapack_int API_SUFFIX(LAPACKE_dspev_work)( int matrix_layout, char jobz, char up
         /* Check leading dimension(s) */
         if( ldz < n ) {
             info = -8;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dspev_work", info );
+            LAPACKE_xerbla( "LAPACKE_dspev_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
-        if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
+        if( LAPACKE_lsame( jobz, 'v' ) ) {
             z_t = (double*)LAPACKE_malloc( sizeof(double) * ldz_t * MAX(1,n) );
             if( z_t == NULL ) {
                 info = LAPACK_TRANSPOSE_MEMORY_ERROR;
@@ -68,30 +69,30 @@ lapack_int API_SUFFIX(LAPACKE_dspev_work)( int matrix_layout, char jobz, char up
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_dsp_trans)( matrix_layout, uplo, n, ap, ap_t );
+        LAPACKE_dsp_trans( matrix_layout, uplo, n, ap, ap_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dspev( &jobz, &uplo, &n, ap_t, w, z_t, &ldz_t, work, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
-            API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, n, z_t, ldz_t, z, ldz );
+        if( LAPACKE_lsame( jobz, 'v' ) ) {
+            LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, n, z_t, ldz_t, z, ldz );
         }
-        API_SUFFIX(LAPACKE_dsp_trans)( LAPACK_COL_MAJOR, uplo, n, ap_t, ap );
+        LAPACKE_dsp_trans( LAPACK_COL_MAJOR, uplo, n, ap_t, ap );
         /* Release memory and exit */
         LAPACKE_free( ap_t );
 exit_level_1:
-        if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
+        if( LAPACKE_lsame( jobz, 'v' ) ) {
             LAPACKE_free( z_t );
         }
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dspev_work", info );
+            LAPACKE_xerbla( "LAPACKE_dspev_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dspev_work", info );
+        LAPACKE_xerbla( "LAPACKE_dspev_work", info );
     }
     return info;
 }

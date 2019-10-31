@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function cgbtrf
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cgbtrf_work)( int matrix_layout, lapack_int m, lapack_int n,
+lapack_int LAPACKE_cgbtrf_work( int matrix_layout, lapack_int m, lapack_int n,
                                 lapack_int kl, lapack_int ku,
                                 lapack_complex_float* ab, lapack_int ldab,
                                 lapack_int* ipiv )
@@ -50,7 +51,7 @@ lapack_int API_SUFFIX(LAPACKE_cgbtrf_work)( int matrix_layout, lapack_int m, lap
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgbtrf_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgbtrf_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -61,7 +62,7 @@ lapack_int API_SUFFIX(LAPACKE_cgbtrf_work)( int matrix_layout, lapack_int m, lap
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_cgb_trans)( matrix_layout, m, n, kl, kl+ku, ab, ldab, ab_t,
+        LAPACKE_cgb_trans( matrix_layout, m, n, kl, kl+ku, ab, ldab, ab_t,
                            ldab_t );
         /* Call LAPACK function and adjust info */
         LAPACK_cgbtrf( &m, &n, &kl, &ku, ab_t, &ldab_t, ipiv, &info );
@@ -69,17 +70,17 @@ lapack_int API_SUFFIX(LAPACKE_cgbtrf_work)( int matrix_layout, lapack_int m, lap
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_cgb_trans)( LAPACK_COL_MAJOR, m, n, kl, kl+ku, ab_t, ldab_t, ab,
+        LAPACKE_cgb_trans( LAPACK_COL_MAJOR, m, n, kl, kl+ku, ab_t, ldab_t, ab,
                            ldab );
         /* Release memory and exit */
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgbtrf_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgbtrf_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgbtrf_work", info );
+        LAPACKE_xerbla( "LAPACKE_cgbtrf_work", info );
     }
     return info;
 }

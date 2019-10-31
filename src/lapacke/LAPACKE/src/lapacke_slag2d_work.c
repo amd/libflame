@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function slag2d
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_slag2d_work)( int matrix_layout, lapack_int m, lapack_int n,
+lapack_int LAPACKE_slag2d_work( int matrix_layout, lapack_int m, lapack_int n,
                                 const float* sa, lapack_int ldsa, double* a,
                                 lapack_int lda )
 {
@@ -51,12 +52,12 @@ lapack_int API_SUFFIX(LAPACKE_slag2d_work)( int matrix_layout, lapack_int m, lap
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_slag2d_work", info );
+            LAPACKE_xerbla( "LAPACKE_slag2d_work", info );
             return info;
         }
         if( ldsa < n ) {
             info = -5;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_slag2d_work", info );
+            LAPACKE_xerbla( "LAPACKE_slag2d_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -71,25 +72,25 @@ lapack_int API_SUFFIX(LAPACKE_slag2d_work)( int matrix_layout, lapack_int m, lap
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, m, n, sa, ldsa, sa_t, ldsa_t );
+        LAPACKE_sge_trans( matrix_layout, m, n, sa, ldsa, sa_t, ldsa_t );
         /* Call LAPACK function and adjust info */
         LAPACK_slag2d( &m, &n, sa_t, &ldsa_t, a_t, &lda_t, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
+        LAPACKE_dge_trans( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_1:
         LAPACKE_free( sa_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_slag2d_work", info );
+            LAPACKE_xerbla( "LAPACKE_slag2d_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_slag2d_work", info );
+        LAPACKE_xerbla( "LAPACKE_slag2d_work", info );
     }
     return info;
 }

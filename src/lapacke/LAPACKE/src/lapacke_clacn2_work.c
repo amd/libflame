@@ -28,11 +28,12 @@
 ******************************************************************************
 * Contents: Native middle-level C interface to LAPACK function clacn2
 * Author: Intel Corporation
+* Generated October, 2012
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_clacn2_work)( lapack_int n, lapack_complex_float* v,
+lapack_int LAPACKE_clacn2_work( lapack_int n, lapack_complex_float* v,
                                 lapack_complex_float* x,
                                 float* est, lapack_int* kase,
                                 lapack_int* isave )

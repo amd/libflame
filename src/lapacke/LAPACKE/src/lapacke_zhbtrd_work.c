@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function zhbtrd
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zhbtrd_work)( int matrix_layout, char vect, char uplo,
+lapack_int LAPACKE_zhbtrd_work( int matrix_layout, char vect, char uplo,
                                 lapack_int n, lapack_int kd,
                                 lapack_complex_double* ab, lapack_int ldab,
                                 double* d, double* e, lapack_complex_double* q,
@@ -54,12 +55,12 @@ lapack_int API_SUFFIX(LAPACKE_zhbtrd_work)( int matrix_layout, char vect, char u
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhbtrd_work", info );
+            LAPACKE_xerbla( "LAPACKE_zhbtrd_work", info );
             return info;
         }
         if( ldq < n ) {
             info = -11;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhbtrd_work", info );
+            LAPACKE_xerbla( "LAPACKE_zhbtrd_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -69,7 +70,7 @@ lapack_int API_SUFFIX(LAPACKE_zhbtrd_work)( int matrix_layout, char vect, char u
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( vect, 'u' ) || API_SUFFIX(LAPACKE_lsame)( vect, 'v' ) ) {
+        if( LAPACKE_lsame( vect, 'u' ) || LAPACKE_lsame( vect, 'v' ) ) {
             q_t = (lapack_complex_double*)
                 LAPACKE_malloc( sizeof(lapack_complex_double) *
                                 ldq_t * MAX(1,n) );
@@ -79,9 +80,9 @@ lapack_int API_SUFFIX(LAPACKE_zhbtrd_work)( int matrix_layout, char vect, char u
             }
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_zhb_trans)( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
-        if( API_SUFFIX(LAPACKE_lsame)( vect, 'u' ) || API_SUFFIX(LAPACKE_lsame)( vect, 'v' ) ) {
-            API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, n, q, ldq, q_t, ldq_t );
+        LAPACKE_zhb_trans( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
+        if( LAPACKE_lsame( vect, 'u' ) || LAPACKE_lsame( vect, 'v' ) ) {
+            LAPACKE_zge_trans( matrix_layout, n, n, q, ldq, q_t, ldq_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_zhbtrd( &vect, &uplo, &n, &kd, ab_t, &ldab_t, d, e, q_t, &ldq_t,
@@ -90,24 +91,24 @@ lapack_int API_SUFFIX(LAPACKE_zhbtrd_work)( int matrix_layout, char vect, char u
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_zhb_trans)( LAPACK_COL_MAJOR, uplo, n, kd, ab_t, ldab_t, ab,
+        LAPACKE_zhb_trans( LAPACK_COL_MAJOR, uplo, n, kd, ab_t, ldab_t, ab,
                            ldab );
-        if( API_SUFFIX(LAPACKE_lsame)( vect, 'u' ) || API_SUFFIX(LAPACKE_lsame)( vect, 'v' ) ) {
-            API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, n, q_t, ldq_t, q, ldq );
+        if( LAPACKE_lsame( vect, 'u' ) || LAPACKE_lsame( vect, 'v' ) ) {
+            LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, n, q_t, ldq_t, q, ldq );
         }
         /* Release memory and exit */
-        if( API_SUFFIX(LAPACKE_lsame)( vect, 'u' ) || API_SUFFIX(LAPACKE_lsame)( vect, 'v' ) ) {
+        if( LAPACKE_lsame( vect, 'u' ) || LAPACKE_lsame( vect, 'v' ) ) {
             LAPACKE_free( q_t );
         }
 exit_level_1:
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhbtrd_work", info );
+            LAPACKE_xerbla( "LAPACKE_zhbtrd_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhbtrd_work", info );
+        LAPACKE_xerbla( "LAPACKE_zhbtrd_work", info );
     }
     return info;
 }

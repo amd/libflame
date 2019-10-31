@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function stprfs
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_stprfs)( int matrix_layout, char uplo, char trans, char diag,
+lapack_int LAPACKE_stprfs( int matrix_layout, char uplo, char trans, char diag,
                            lapack_int n, lapack_int nrhs, const float* ap,
                            const float* b, lapack_int ldb, const float* x,
                            lapack_int ldx, float* ferr, float* berr )
@@ -41,19 +42,19 @@ lapack_int API_SUFFIX(LAPACKE_stprfs)( int matrix_layout, char uplo, char trans,
     lapack_int* iwork = NULL;
     float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_stprfs", -1 );
+        LAPACKE_xerbla( "LAPACKE_stprfs", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_stp_nancheck)( matrix_layout, uplo, diag, n, ap ) ) {
+        if( LAPACKE_stp_nancheck( matrix_layout, uplo, diag, n, ap ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
             return -8;
         }
-        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, n, nrhs, x, ldx ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, nrhs, x, ldx ) ) {
             return -10;
         }
     }
@@ -70,7 +71,7 @@ lapack_int API_SUFFIX(LAPACKE_stprfs)( int matrix_layout, char uplo, char trans,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_stprfs_work)( matrix_layout, uplo, trans, diag, n, nrhs, ap, b,
+    info = LAPACKE_stprfs_work( matrix_layout, uplo, trans, diag, n, nrhs, ap, b,
                                 ldb, x, ldx, ferr, berr, work, iwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -78,7 +79,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_stprfs", info );
+        LAPACKE_xerbla( "LAPACKE_stprfs", info );
     }
     return info;
 }

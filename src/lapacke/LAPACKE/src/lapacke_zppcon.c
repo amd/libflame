@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zppcon
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zppcon)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_zppcon( int matrix_layout, char uplo, lapack_int n,
                            const lapack_complex_double* ap, double anorm,
                            double* rcond )
 {
@@ -40,16 +41,16 @@ lapack_int API_SUFFIX(LAPACKE_zppcon)( int matrix_layout, char uplo, lapack_int 
     double* rwork = NULL;
     lapack_complex_double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zppcon", -1 );
+        LAPACKE_xerbla( "LAPACKE_zppcon", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &anorm, 1 ) ) {
+        if( LAPACKE_d_nancheck( 1, &anorm, 1 ) ) {
             return -5;
         }
-        if( API_SUFFIX(LAPACKE_zpp_nancheck)( n, ap ) ) {
+        if( LAPACKE_zpp_nancheck( n, ap ) ) {
             return -4;
         }
     }
@@ -67,7 +68,7 @@ lapack_int API_SUFFIX(LAPACKE_zppcon)( int matrix_layout, char uplo, lapack_int 
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_zppcon_work)( matrix_layout, uplo, n, ap, anorm, rcond, work,
+    info = LAPACKE_zppcon_work( matrix_layout, uplo, n, ap, anorm, rcond, work,
                                 rwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -75,7 +76,7 @@ exit_level_1:
     LAPACKE_free( rwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zppcon", info );
+        LAPACKE_xerbla( "LAPACKE_zppcon", info );
     }
     return info;
 }

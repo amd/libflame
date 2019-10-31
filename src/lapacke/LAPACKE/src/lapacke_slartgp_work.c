@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function slartgp
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_slartgp_work)( float f, float g, float* cs, float* sn,
+lapack_int LAPACKE_slartgp_work( float f, float g, float* cs, float* sn,
                                  float* r )
 {
     lapack_int info = 0;

@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zgeev
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zgeev)( int matrix_layout, char jobvl, char jobvr,
+lapack_int LAPACKE_zgeev( int matrix_layout, char jobvl, char jobvr,
                           lapack_int n, lapack_complex_double* a,
                           lapack_int lda, lapack_complex_double* w,
                           lapack_complex_double* vl, lapack_int ldvl,
@@ -44,13 +45,13 @@ lapack_int API_SUFFIX(LAPACKE_zgeev)( int matrix_layout, char jobvl, char jobvr,
     lapack_complex_double* work = NULL;
     lapack_complex_double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgeev", -1 );
+        LAPACKE_xerbla( "LAPACKE_zgeev", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, n, a, lda ) ) {
+        if( LAPACKE_zge_nancheck( matrix_layout, n, n, a, lda ) ) {
             return -5;
         }
     }
@@ -62,7 +63,7 @@ lapack_int API_SUFFIX(LAPACKE_zgeev)( int matrix_layout, char jobvl, char jobvr,
         goto exit_level_0;
     }
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_zgeev_work)( matrix_layout, jobvl, jobvr, n, a, lda, w, vl,
+    info = LAPACKE_zgeev_work( matrix_layout, jobvl, jobvr, n, a, lda, w, vl,
                                ldvl, vr, ldvr, &work_query, lwork, rwork );
     if( info != 0 ) {
         goto exit_level_1;
@@ -76,7 +77,7 @@ lapack_int API_SUFFIX(LAPACKE_zgeev)( int matrix_layout, char jobvl, char jobvr,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_zgeev_work)( matrix_layout, jobvl, jobvr, n, a, lda, w, vl,
+    info = LAPACKE_zgeev_work( matrix_layout, jobvl, jobvr, n, a, lda, w, vl,
                                ldvl, vr, ldvr, work, lwork, rwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -84,7 +85,7 @@ exit_level_1:
     LAPACKE_free( rwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgeev", info );
+        LAPACKE_xerbla( "LAPACKE_zgeev", info );
     }
     return info;
 }

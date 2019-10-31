@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dtrsen
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dtrsen_work)( int matrix_layout, char job, char compq,
+lapack_int LAPACKE_dtrsen_work( int matrix_layout, char job, char compq,
                                 const lapack_logical* select, lapack_int n,
                                 double* t, lapack_int ldt, double* q,
                                 lapack_int ldq, double* wr, double* wi,
@@ -56,12 +57,12 @@ lapack_int API_SUFFIX(LAPACKE_dtrsen_work)( int matrix_layout, char job, char co
         /* Check leading dimension(s) */
         if( ldq < n ) {
             info = -9;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtrsen_work", info );
+            LAPACKE_xerbla( "LAPACKE_dtrsen_work", info );
             return info;
         }
         if( ldt < n ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtrsen_work", info );
+            LAPACKE_xerbla( "LAPACKE_dtrsen_work", info );
             return info;
         }
         /* Allocate memory for temporary array T */
@@ -71,7 +72,7 @@ lapack_int API_SUFFIX(LAPACKE_dtrsen_work)( int matrix_layout, char job, char co
             goto exit_level_0;
         }
         /* Transpose input matrix T */
-        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, n, n, t, ldt, t_t, ldt_t );
+        LAPACKE_dge_trans( matrix_layout, n, n, t, ldt, t_t, ldt_t );
         /* Query optimal working array(s) size if requested */
         if( liwork == -1 || lwork == -1 ) {
             LAPACK_dtrsen( &job, &compq, select, &n, t_t, &ldt_t, q, &ldq_t, wr,
@@ -80,7 +81,7 @@ lapack_int API_SUFFIX(LAPACKE_dtrsen_work)( int matrix_layout, char job, char co
             return (info < 0) ? (info - 1) : info;
         }
         /* Allocate memory for temporary array(s) */
-        if( API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
+        if( LAPACKE_lsame( compq, 'v' ) ) {
             q_t = (double*)LAPACKE_malloc( sizeof(double) * ldq_t * MAX(1,n) );
             if( q_t == NULL ) {
                 info = LAPACK_TRANSPOSE_MEMORY_ERROR;
@@ -88,8 +89,8 @@ lapack_int API_SUFFIX(LAPACKE_dtrsen_work)( int matrix_layout, char job, char co
             }
         }
         /* Transpose input matrices */
-        if( API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
-            API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, n, n, q, ldq, q_t, ldq_t );
+        if( LAPACKE_lsame( compq, 'v' ) ) {
+            LAPACKE_dge_trans( matrix_layout, n, n, q, ldq, q_t, ldq_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_dtrsen( &job, &compq, select, &n, t_t, &ldt_t, q_t, &ldq_t, wr,
@@ -98,23 +99,23 @@ lapack_int API_SUFFIX(LAPACKE_dtrsen_work)( int matrix_layout, char job, char co
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, n, t_t, ldt_t, t, ldt );
-        if( API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
-            API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, n, q_t, ldq_t, q, ldq );
+        LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, n, t_t, ldt_t, t, ldt );
+        if( LAPACKE_lsame( compq, 'v' ) ) {
+            LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, n, q_t, ldq_t, q, ldq );
         }
         /* Release memory and exit */
-        if( API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
+        if( LAPACKE_lsame( compq, 'v' ) ) {
             LAPACKE_free( q_t );
         }
 exit_level_1:
         LAPACKE_free( t_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtrsen_work", info );
+            LAPACKE_xerbla( "LAPACKE_dtrsen_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtrsen_work", info );
+        LAPACKE_xerbla( "LAPACKE_dtrsen_work", info );
     }
     return info;
 }

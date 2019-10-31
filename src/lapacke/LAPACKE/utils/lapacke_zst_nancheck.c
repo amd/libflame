@@ -28,15 +28,16 @@
 ******************************************************************************
 * Contents: Native C interface to LAPACK utility function
 * Author: Intel Corporation
+* Created in February, 2010
 *****************************************************************************/
 #include "lapacke_utils.h"
 
 /* Check a matrix for NaN entries. */
 
-lapack_logical API_SUFFIX(LAPACKE_zst_nancheck)( lapack_int n,
+lapack_logical LAPACKE_zst_nancheck( lapack_int n,
                                       const lapack_complex_double *d,
                                       const lapack_complex_double *e )
 {
-    return API_SUFFIX(LAPACKE_z_nancheck)( n,   d, 1 )
-        || API_SUFFIX(LAPACKE_z_nancheck)( n-1, e, 1 );
+    return LAPACKE_z_nancheck( n,   d, 1 )
+        || LAPACKE_z_nancheck( n-1, e, 1 );
 }

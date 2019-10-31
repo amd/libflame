@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zhsein
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zhsein)( int matrix_layout, char job, char eigsrc, char initv,
+lapack_int LAPACKE_zhsein( int matrix_layout, char job, char eigsrc, char initv,
                            const lapack_logical* select, lapack_int n,
                            const lapack_complex_double* h, lapack_int ldh,
                            lapack_complex_double* w, lapack_complex_double* vl,
@@ -44,26 +45,26 @@ lapack_int API_SUFFIX(LAPACKE_zhsein)( int matrix_layout, char job, char eigsrc,
     double* rwork = NULL;
     lapack_complex_double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhsein", -1 );
+        LAPACKE_xerbla( "LAPACKE_zhsein", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, n, h, ldh ) ) {
+        if( LAPACKE_zge_nancheck( matrix_layout, n, n, h, ldh ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( job, 'b' ) || API_SUFFIX(LAPACKE_lsame)( job, 'l' ) ) {
-            if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, mm, vl, ldvl ) ) {
+        if( LAPACKE_lsame( job, 'b' ) || LAPACKE_lsame( job, 'l' ) ) {
+            if( LAPACKE_zge_nancheck( matrix_layout, n, mm, vl, ldvl ) ) {
                 return -10;
             }
         }
-        if( API_SUFFIX(LAPACKE_lsame)( job, 'b' ) || API_SUFFIX(LAPACKE_lsame)( job, 'r' ) ) {
-            if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, mm, vr, ldvr ) ) {
+        if( LAPACKE_lsame( job, 'b' ) || LAPACKE_lsame( job, 'r' ) ) {
+            if( LAPACKE_zge_nancheck( matrix_layout, n, mm, vr, ldvr ) ) {
                 return -12;
             }
         }
-        if( API_SUFFIX(LAPACKE_z_nancheck)( n, w, 1 ) ) {
+        if( LAPACKE_z_nancheck( n, w, 1 ) ) {
             return -9;
         }
     }
@@ -81,7 +82,7 @@ lapack_int API_SUFFIX(LAPACKE_zhsein)( int matrix_layout, char job, char eigsrc,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_zhsein_work)( matrix_layout, job, eigsrc, initv, select, n, h,
+    info = LAPACKE_zhsein_work( matrix_layout, job, eigsrc, initv, select, n, h,
                                 ldh, w, vl, ldvl, vr, ldvr, mm, m, work, rwork,
                                 ifaill, ifailr );
     /* Release memory and exit */
@@ -90,7 +91,7 @@ exit_level_1:
     LAPACKE_free( rwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhsein", info );
+        LAPACKE_xerbla( "LAPACKE_zhsein", info );
     }
     return info;
 }

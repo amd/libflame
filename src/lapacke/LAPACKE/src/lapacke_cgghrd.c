@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function cgghrd
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cgghrd)( int matrix_layout, char compq, char compz,
+lapack_int LAPACKE_cgghrd( int matrix_layout, char compq, char compz,
                            lapack_int n, lapack_int ilo, lapack_int ihi,
                            lapack_complex_float* a, lapack_int lda,
                            lapack_complex_float* b, lapack_int ldb,
@@ -40,30 +41,30 @@ lapack_int API_SUFFIX(LAPACKE_cgghrd)( int matrix_layout, char compq, char compz
                            lapack_complex_float* z, lapack_int ldz )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgghrd", -1 );
+        LAPACKE_xerbla( "LAPACKE_cgghrd", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, n, n, a, lda ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, n, n, a, lda ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, n, n, b, ldb ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, n, n, b, ldb ) ) {
             return -9;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( compq, 'i' ) || API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
-            if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, n, n, q, ldq ) ) {
+        if( LAPACKE_lsame( compq, 'i' ) || LAPACKE_lsame( compq, 'v' ) ) {
+            if( LAPACKE_cge_nancheck( matrix_layout, n, n, q, ldq ) ) {
                 return -11;
             }
         }
-        if( API_SUFFIX(LAPACKE_lsame)( compz, 'i' ) || API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
-            if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, n, n, z, ldz ) ) {
+        if( LAPACKE_lsame( compz, 'i' ) || LAPACKE_lsame( compz, 'v' ) ) {
+            if( LAPACKE_cge_nancheck( matrix_layout, n, n, z, ldz ) ) {
                 return -13;
             }
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_cgghrd_work)( matrix_layout, compq, compz, n, ilo, ihi, a, lda,
+    return LAPACKE_cgghrd_work( matrix_layout, compq, compz, n, ilo, ihi, a, lda,
                                 b, ldb, q, ldq, z, ldz );
 }

@@ -28,6 +28,7 @@
 ******************************************************************************
 * Contents: Native C interface to LAPACK utility function
 * Author: Intel Corporation
+* Created in February, 2010
 *****************************************************************************/
 #include "lapacke_utils.h"
 
@@ -36,7 +37,7 @@
  * check 1d array for NaNs. It doesn't depend upon uplo or matrix_layout.
  */
 
-lapack_logical API_SUFFIX(LAPACKE_ztp_nancheck)( int matrix_layout, char uplo, char diag,
+lapack_logical LAPACKE_ztp_nancheck( int matrix_layout, char uplo, char diag,
                                       lapack_int n,
                                       const lapack_complex_double *ap )
 {
@@ -46,12 +47,12 @@ lapack_logical API_SUFFIX(LAPACKE_ztp_nancheck)( int matrix_layout, char uplo, c
     if( ap == NULL ) return (lapack_logical) 0;
 
     colmaj = ( matrix_layout == LAPACK_COL_MAJOR );
-    upper  = API_SUFFIX(LAPACKE_lsame)( uplo, 'u' );
-    unit   = API_SUFFIX(LAPACKE_lsame)( diag, 'u' );
+    upper  = LAPACKE_lsame( uplo, 'u' );
+    unit   = LAPACKE_lsame( diag, 'u' );
 
     if( ( !colmaj && ( matrix_layout != LAPACK_ROW_MAJOR ) ) ||
-        ( !upper  && !API_SUFFIX(LAPACKE_lsame)( uplo, 'l' ) ) ||
-        ( !unit   && !API_SUFFIX(LAPACKE_lsame)( diag, 'n' ) ) ) {
+        ( !upper  && !LAPACKE_lsame( uplo, 'l' ) ) ||
+        ( !unit   && !LAPACKE_lsame( diag, 'n' ) ) ) {
         /* Just exit if any of input parameters are wrong */
         return (lapack_logical) 0;
     }
@@ -65,11 +66,11 @@ lapack_logical API_SUFFIX(LAPACKE_ztp_nancheck)( int matrix_layout, char uplo, c
          */
         if( ( colmaj || upper ) && !( colmaj && upper ) ) {
             for( i = 1; i < n; i++ )
-                if( API_SUFFIX(LAPACKE_z_nancheck)( i, &ap[ ((size_t)i+1)*i/2 ], 1 ) )
+                if( LAPACKE_z_nancheck( i, &ap[ ((size_t)i+1)*i/2 ], 1 ) )
                     return (lapack_logical) 1;
         } else {
             for( i = 0; i < n-1; i++ )
-                if( API_SUFFIX(LAPACKE_z_nancheck)( n-i-1,
+                if( LAPACKE_z_nancheck( n-i-1,
                     &ap[ (size_t)i+1 + i*((size_t)2*n-i+1)/2 ], 1 ) )
                     return (lapack_logical) 1;
         }
@@ -77,6 +78,6 @@ lapack_logical API_SUFFIX(LAPACKE_ztp_nancheck)( int matrix_layout, char uplo, c
     } else {
         /* Non-unit case - just check whole array for NaNs. */
         len = n*(n+1)/2;
-        return API_SUFFIX(LAPACKE_z_nancheck)( len, ap, 1 );
+        return LAPACKE_z_nancheck( len, ap, 1 );
     }
 }

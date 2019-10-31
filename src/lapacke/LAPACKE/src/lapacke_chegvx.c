@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function chegvx
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_chegvx)( int matrix_layout, lapack_int itype, char jobz,
+lapack_int LAPACKE_chegvx( int matrix_layout, lapack_int itype, char jobz,
                            char range, char uplo, lapack_int n,
                            lapack_complex_float* a, lapack_int lda,
                            lapack_complex_float* b, lapack_int ldb, float vl,
@@ -47,28 +48,28 @@ lapack_int API_SUFFIX(LAPACKE_chegvx)( int matrix_layout, lapack_int itype, char
     lapack_complex_float* work = NULL;
     lapack_complex_float work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_chegvx", -1 );
+        LAPACKE_xerbla( "LAPACKE_chegvx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_che_nancheck)( matrix_layout, uplo, n, a, lda ) ) {
+        if( LAPACKE_che_nancheck( matrix_layout, uplo, n, a, lda ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &abstol, 1 ) ) {
+        if( LAPACKE_s_nancheck( 1, &abstol, 1 ) ) {
             return -15;
         }
-        if( API_SUFFIX(LAPACKE_che_nancheck)( matrix_layout, uplo, n, b, ldb ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, n, n, b, ldb ) ) {
             return -9;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( range, 'v' ) ) {
-            if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &vl, 1 ) ) {
+        if( LAPACKE_lsame( range, 'v' ) ) {
+            if( LAPACKE_s_nancheck( 1, &vl, 1 ) ) {
                 return -11;
             }
         }
-        if( API_SUFFIX(LAPACKE_lsame)( range, 'v' ) ) {
-            if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &vu, 1 ) ) {
+        if( LAPACKE_lsame( range, 'v' ) ) {
+            if( LAPACKE_s_nancheck( 1, &vu, 1 ) ) {
                 return -12;
             }
         }
@@ -86,7 +87,7 @@ lapack_int API_SUFFIX(LAPACKE_chegvx)( int matrix_layout, lapack_int itype, char
         goto exit_level_1;
     }
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_chegvx_work)( matrix_layout, itype, jobz, range, uplo, n, a,
+    info = LAPACKE_chegvx_work( matrix_layout, itype, jobz, range, uplo, n, a,
                                 lda, b, ldb, vl, vu, il, iu, abstol, m, w, z,
                                 ldz, &work_query, lwork, rwork, iwork, ifail );
     if( info != 0 ) {
@@ -101,7 +102,7 @@ lapack_int API_SUFFIX(LAPACKE_chegvx)( int matrix_layout, lapack_int itype, char
         goto exit_level_2;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_chegvx_work)( matrix_layout, itype, jobz, range, uplo, n, a,
+    info = LAPACKE_chegvx_work( matrix_layout, itype, jobz, range, uplo, n, a,
                                 lda, b, ldb, vl, vu, il, iu, abstol, m, w, z,
                                 ldz, work, lwork, rwork, iwork, ifail );
     /* Release memory and exit */
@@ -112,7 +113,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_chegvx", info );
+        LAPACKE_xerbla( "LAPACKE_chegvx", info );
     }
     return info;
 }

@@ -28,33 +28,34 @@
 ******************************************************************************
 * Contents: Native high-level C interface to LAPACK function zsyr
 * Author: Intel Corporation
+* Generated March, 2012
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zsyr)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_zsyr( int matrix_layout, char uplo, lapack_int n,
                              lapack_complex_double alpha,
                              const lapack_complex_double* x, lapack_int incx,
                              lapack_complex_double* a, lapack_int lda )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zsyr", -1 );
+        LAPACKE_xerbla( "LAPACKE_zsyr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_zsy_nancheck)( matrix_layout, uplo, n, a, lda ) ) {
+        if( LAPACKE_zsy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_z_nancheck)( 1, &alpha, 1 ) ) {
+        if( LAPACKE_z_nancheck( 1, &alpha, 1 ) ) {
             return -4;
         }
-        if( API_SUFFIX(LAPACKE_z_nancheck)( n, x, 1 ) ) {
+        if( LAPACKE_z_nancheck( n, x, 1 ) ) {
             return -5;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_zsyr_work)( matrix_layout, uplo, n, alpha, x, incx, a,
+    return LAPACKE_zsyr_work( matrix_layout, uplo, n, alpha, x, incx, a,
                                   lda );
 }

@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dorbdb
 * Author: Intel Corporation
+* Generated June 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dorbdb_work)( int matrix_layout, char trans, char signs,
+lapack_int LAPACKE_dorbdb_work( int matrix_layout, char trans, char signs,
                                 lapack_int m, lapack_int p, lapack_int q,
                                 double* x11, lapack_int ldx11, double* x12,
                                 lapack_int ldx12, double* x21, lapack_int ldx21,
@@ -59,7 +60,7 @@ lapack_int API_SUFFIX(LAPACKE_dorbdb_work)( int matrix_layout, char trans, char 
     if( matrix_layout == LAPACK_COL_MAJOR ||
         matrix_layout == LAPACK_ROW_MAJOR ) {
         char ltrans;
-        if( !API_SUFFIX(LAPACKE_lsame)( trans, 't' ) && matrix_layout == LAPACK_COL_MAJOR ) {
+        if( !LAPACKE_lsame( trans, 't' ) && matrix_layout == LAPACK_COL_MAJOR ) {
             ltrans = 'n';
         } else {
             ltrans = 't';
@@ -73,7 +74,7 @@ lapack_int API_SUFFIX(LAPACKE_dorbdb_work)( int matrix_layout, char trans, char 
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dorbdb_work", info );
+        LAPACKE_xerbla( "LAPACKE_dorbdb_work", info );
     }
     return info;
 }

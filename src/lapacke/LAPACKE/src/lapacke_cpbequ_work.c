@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function cpbequ
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cpbequ_work)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_cpbequ_work( int matrix_layout, char uplo, lapack_int n,
                                 lapack_int kd, const lapack_complex_float* ab,
                                 lapack_int ldab, float* s, float* scond,
                                 float* amax )
@@ -50,7 +51,7 @@ lapack_int API_SUFFIX(LAPACKE_cpbequ_work)( int matrix_layout, char uplo, lapack
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -6;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cpbequ_work", info );
+            LAPACKE_xerbla( "LAPACKE_cpbequ_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -61,7 +62,7 @@ lapack_int API_SUFFIX(LAPACKE_cpbequ_work)( int matrix_layout, char uplo, lapack
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_cpb_trans)( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
+        LAPACKE_cpb_trans( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
         /* Call LAPACK function and adjust info */
         LAPACK_cpbequ( &uplo, &n, &kd, ab_t, &ldab_t, s, scond, amax, &info );
         if( info < 0 ) {
@@ -71,11 +72,11 @@ lapack_int API_SUFFIX(LAPACKE_cpbequ_work)( int matrix_layout, char uplo, lapack
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cpbequ_work", info );
+            LAPACKE_xerbla( "LAPACKE_cpbequ_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cpbequ_work", info );
+        LAPACKE_xerbla( "LAPACKE_cpbequ_work", info );
     }
     return info;
 }

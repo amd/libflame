@@ -28,6 +28,7 @@
 ******************************************************************************
 * Contents: Native C interface to LAPACK utility function
 * Author: Intel Corporation
+* Created in February, 2010
 *****************************************************************************/
 
 #include "lapacke_utils.h"
@@ -36,9 +37,9 @@
  * layout or vice versa.
  */
 
-void API_SUFFIX(LAPACKE_dgg_trans)( int matrix_layout, lapack_int m, lapack_int n,
+void LAPACKE_dgg_trans( int matrix_layout, lapack_int m, lapack_int n,
                         const double* in, lapack_int ldin,
                         double* out, lapack_int ldout )
 {
-    API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, m, n, in, ldin, out, ldout );
+    LAPACKE_dge_trans( matrix_layout, m, n, in, ldin, out, ldout );
 }

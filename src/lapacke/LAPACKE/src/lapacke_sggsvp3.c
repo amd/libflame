@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function sggsvp3
 * Author: Intel Corporation
+* Generated August, 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_sggsvp3)( int matrix_layout, char jobu, char jobv, char jobq,
+lapack_int LAPACKE_sggsvp3( int matrix_layout, char jobu, char jobv, char jobq,
                             lapack_int m, lapack_int p, lapack_int n, float* a,
                             lapack_int lda, float* b, lapack_int ldb, float tola,
                             float tolb, lapack_int* k, lapack_int* l, float* u,
@@ -46,28 +47,28 @@ lapack_int API_SUFFIX(LAPACKE_sggsvp3)( int matrix_layout, char jobu, char jobv,
     lapack_int lwork = -1;
     float work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sggsvp3", -1 );
+        LAPACKE_xerbla( "LAPACKE_sggsvp3", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, m, n, a, lda ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, m, n, a, lda ) ) {
             return -8;
         }
-        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, p, n, b, ldb ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, p, n, b, ldb ) ) {
             return -10;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &tola, 1 ) ) {
+        if( LAPACKE_s_nancheck( 1, &tola, 1 ) ) {
             return -12;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &tolb, 1 ) ) {
+        if( LAPACKE_s_nancheck( 1, &tolb, 1 ) ) {
             return -13;
         }
     }
 #endif
     /* Query optimal size for working array */
-    info = API_SUFFIX(LAPACKE_sggsvp3_work)( matrix_layout, jobu, jobv, jobq, m, p, n,
+    info = LAPACKE_sggsvp3_work( matrix_layout, jobu, jobv, jobq, m, p, n,
                                  a, lda, b, ldb, tola, tolb, k, l, u, ldu,
                                  v, ldv, q, ldq, iwork, tau, &work_query,
                                  lwork );
@@ -91,7 +92,7 @@ lapack_int API_SUFFIX(LAPACKE_sggsvp3)( int matrix_layout, char jobu, char jobv,
         goto exit_level_2;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_sggsvp3_work)( matrix_layout, jobu, jobv, jobq, m, p, n, a, lda,
+    info = LAPACKE_sggsvp3_work( matrix_layout, jobu, jobv, jobq, m, p, n, a, lda,
                                  b, ldb, tola, tolb, k, l, u, ldu, v, ldv, q,
                                  ldq, iwork, tau, work, lwork );
     /* Release memory and exit */
@@ -102,7 +103,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sggsvp3", info );
+        LAPACKE_xerbla( "LAPACKE_sggsvp3", info );
     }
     return info;
 }

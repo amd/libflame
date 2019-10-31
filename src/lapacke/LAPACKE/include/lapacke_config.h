@@ -28,6 +28,7 @@
 ******************************************************************************
 * Contents: Native C interface to LAPACK
 * Author: Intel Corporation
+* Generated May, 2011
 *****************************************************************************/
 
 #ifndef _LAPACKE_CONFIG_H_
@@ -41,54 +42,17 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include <stdlib.h>
-#include <stdint.h>
-#include <inttypes.h>
-
-
-#ifdef __cplusplus
-    // For C++, include stdint.h.
-#include <stdint.h> // skipped
-#elif __STDC_VERSION__ >= 199901L
-    // For C99 (or later), include stdint.h.
-#include <stdint.h> // skipped
-#else
-    // When stdint.h is not available, manually typedef the types we will use.
-#ifdef _WIN32
-    typedef          __int32  int32_t;
-    typedef unsigned __int32 uint32_t;
-    typedef          __int64  int64_t;
-    typedef unsigned __int64 uint64_t;
-#else
-#error "Attempting to compile on pre-C99 system without stdint.h."
-#endif
-#endif
-
-#if FLA_ENABLE_ILP64
-#define LAPACK_ILP64
-#endif
-
 
 #ifndef lapack_int
 #if defined(LAPACK_ILP64)
-#define lapack_int        int64_t
+#define lapack_int              long
 #else
-#define lapack_int        int32_t
-#endif
-#endif
-
-/*
- * Integer format string
- */
-#ifndef LAPACK_IFMT
-#if defined(LAPACK_ILP64)
-#define LAPACK_IFMT       PRId64
-#else
-#define LAPACK_IFMT       PRId32
+#define lapack_int              int
 #endif
 #endif
 
 #ifndef lapack_logical
-#define lapack_logical    lapack_int
+#define lapack_logical          lapack_int
 #endif
 
 #ifndef LAPACK_COMPLEX_CUSTOM
@@ -116,8 +80,8 @@ typedef struct { double real, imag; } _lapack_complex_double;
 
 #elif defined(LAPACK_COMPLEX_CPP)
 
-#define lapack_complex_float std::scomplex<float>
-#define lapack_complex_double std::scomplex<double>
+#define lapack_complex_float std::complex<float>
+#define lapack_complex_double std::complex<double>
 #define lapack_complex_float_real(z)       ((z).real())
 #define lapack_complex_float_imag(z)       ((z).imag())
 #define lapack_complex_double_real(z)       ((z).real())

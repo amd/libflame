@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function cgbequb
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cgbequb_work)( int matrix_layout, lapack_int m, lapack_int n,
+lapack_int LAPACKE_cgbequb_work( int matrix_layout, lapack_int m, lapack_int n,
                                  lapack_int kl, lapack_int ku,
                                  const lapack_complex_float* ab,
                                  lapack_int ldab, float* r, float* c,
@@ -52,7 +53,7 @@ lapack_int API_SUFFIX(LAPACKE_cgbequb_work)( int matrix_layout, lapack_int m, la
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgbequb_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgbequb_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -63,7 +64,7 @@ lapack_int API_SUFFIX(LAPACKE_cgbequb_work)( int matrix_layout, lapack_int m, la
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_cgb_trans)( matrix_layout, m, n, kl, ku, ab, ldab, ab_t, ldab_t );
+        LAPACKE_cgb_trans( matrix_layout, m, n, kl, ku, ab, ldab, ab_t, ldab_t );
         /* Call LAPACK function and adjust info */
         LAPACK_cgbequb( &m, &n, &kl, &ku, ab_t, &ldab_t, r, c, rowcnd, colcnd,
                         amax, &info );
@@ -74,11 +75,11 @@ lapack_int API_SUFFIX(LAPACKE_cgbequb_work)( int matrix_layout, lapack_int m, la
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgbequb_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgbequb_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgbequb_work", info );
+        LAPACKE_xerbla( "LAPACKE_cgbequb_work", info );
     }
     return info;
 }

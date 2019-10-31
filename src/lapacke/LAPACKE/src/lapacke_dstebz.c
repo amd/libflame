@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dstebz
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dstebz)( char range, char order, lapack_int n, double vl,
+lapack_int LAPACKE_dstebz( char range, char order, lapack_int n, double vl,
                            double vu, lapack_int il, lapack_int iu,
                            double abstol, const double* d, const double* e,
                            lapack_int* m, lapack_int* nsplit, double* w,
@@ -44,22 +45,22 @@ lapack_int API_SUFFIX(LAPACKE_dstebz)( char range, char order, lapack_int n, dou
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &abstol, 1 ) ) {
+        if( LAPACKE_d_nancheck( 1, &abstol, 1 ) ) {
             return -8;
         }
-        if( API_SUFFIX(LAPACKE_d_nancheck)( n, d, 1 ) ) {
+        if( LAPACKE_d_nancheck( n, d, 1 ) ) {
             return -9;
         }
-        if( API_SUFFIX(LAPACKE_d_nancheck)( n-1, e, 1 ) ) {
+        if( LAPACKE_d_nancheck( n-1, e, 1 ) ) {
             return -10;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( range, 'v' ) ) {
-            if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &vl, 1 ) ) {
+        if( LAPACKE_lsame( range, 'v' ) ) {
+            if( LAPACKE_d_nancheck( 1, &vl, 1 ) ) {
                 return -4;
             }
         }
-        if( API_SUFFIX(LAPACKE_lsame)( range, 'v' ) ) {
-            if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &vu, 1 ) ) {
+        if( LAPACKE_lsame( range, 'v' ) ) {
+            if( LAPACKE_d_nancheck( 1, &vu, 1 ) ) {
                 return -5;
             }
         }
@@ -77,7 +78,7 @@ lapack_int API_SUFFIX(LAPACKE_dstebz)( char range, char order, lapack_int n, dou
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_dstebz_work)( range, order, n, vl, vu, il, iu, abstol, d, e,
+    info = LAPACKE_dstebz_work( range, order, n, vl, vu, il, iu, abstol, d, e,
                                 m, nsplit, w, iblock, isplit, work, iwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -85,7 +86,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dstebz", info );
+        LAPACKE_xerbla( "LAPACKE_dstebz", info );
     }
     return info;
 }

@@ -28,39 +28,38 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function stfsm
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_stfsm)( int matrix_layout, char transr, char side, char uplo,
+lapack_int LAPACKE_stfsm( int matrix_layout, char transr, char side, char uplo,
                           char trans, char diag, lapack_int m, lapack_int n,
                           float alpha, const float* a, float* b,
                           lapack_int ldb )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_stfsm", -1 );
+        LAPACKE_xerbla( "LAPACKE_stfsm", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
-        lapack_int mn = m;
-        if( API_SUFFIX(LAPACKE_lsame)( side, 'r' ) ) mn = n;
         /* Optionally check input matrices for NaNs */
         if( IS_S_NONZERO(alpha) ) {
-            if( API_SUFFIX(LAPACKE_stf_nancheck)( matrix_layout, transr, uplo, diag, mn, a ) ) {
+            if( LAPACKE_stf_nancheck( matrix_layout, transr, uplo, diag, n, a ) ) {
                 return -10;
             }
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &alpha, 1 ) ) {
+        if( LAPACKE_s_nancheck( 1, &alpha, 1 ) ) {
             return -9;
         }
         if( IS_S_NONZERO(alpha) ) {
-            if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, m, n, b, ldb ) ) {
+            if( LAPACKE_sge_nancheck( matrix_layout, m, n, b, ldb ) ) {
                 return -11;
             }
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_stfsm_work)( matrix_layout, transr, side, uplo, trans, diag, m,
+    return LAPACKE_stfsm_work( matrix_layout, transr, side, uplo, trans, diag, m,
                                n, alpha, a, b, ldb );
 }

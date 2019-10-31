@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function cupgtr
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cupgtr)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_cupgtr( int matrix_layout, char uplo, lapack_int n,
                            const lapack_complex_float* ap,
                            const lapack_complex_float* tau,
                            lapack_complex_float* q, lapack_int ldq )
@@ -40,16 +41,16 @@ lapack_int API_SUFFIX(LAPACKE_cupgtr)( int matrix_layout, char uplo, lapack_int 
     lapack_int info = 0;
     lapack_complex_float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cupgtr", -1 );
+        LAPACKE_xerbla( "LAPACKE_cupgtr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_cpp_nancheck)( n, ap ) ) {
+        if( LAPACKE_cpp_nancheck( n, ap ) ) {
             return -4;
         }
-        if( API_SUFFIX(LAPACKE_c_nancheck)( n-1, tau, 1 ) ) {
+        if( LAPACKE_c_nancheck( n-1, tau, 1 ) ) {
             return -5;
         }
     }
@@ -62,12 +63,12 @@ lapack_int API_SUFFIX(LAPACKE_cupgtr)( int matrix_layout, char uplo, lapack_int 
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_cupgtr_work)( matrix_layout, uplo, n, ap, tau, q, ldq, work );
+    info = LAPACKE_cupgtr_work( matrix_layout, uplo, n, ap, tau, q, ldq, work );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cupgtr", info );
+        LAPACKE_xerbla( "LAPACKE_cupgtr", info );
     }
     return info;
 }

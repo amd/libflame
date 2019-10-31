@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function cptcon
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cptcon)( lapack_int n, const float* d,
+lapack_int LAPACKE_cptcon( lapack_int n, const float* d,
                            const lapack_complex_float* e, float anorm,
                            float* rcond )
 {
@@ -41,13 +42,13 @@ lapack_int API_SUFFIX(LAPACKE_cptcon)( lapack_int n, const float* d,
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &anorm, 1 ) ) {
+        if( LAPACKE_s_nancheck( 1, &anorm, 1 ) ) {
             return -4;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n, d, 1 ) ) {
+        if( LAPACKE_s_nancheck( n, d, 1 ) ) {
             return -2;
         }
-        if( API_SUFFIX(LAPACKE_c_nancheck)( n-1, e, 1 ) ) {
+        if( LAPACKE_c_nancheck( n-1, e, 1 ) ) {
             return -3;
         }
     }
@@ -59,12 +60,12 @@ lapack_int API_SUFFIX(LAPACKE_cptcon)( lapack_int n, const float* d,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_cptcon_work)( n, d, e, anorm, rcond, work );
+    info = LAPACKE_cptcon_work( n, d, e, anorm, rcond, work );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cptcon", info );
+        LAPACKE_xerbla( "LAPACKE_cptcon", info );
     }
     return info;
 }

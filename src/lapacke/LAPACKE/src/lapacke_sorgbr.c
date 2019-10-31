@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function sorgbr
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_sorgbr)( int matrix_layout, char vect, lapack_int m,
+lapack_int LAPACKE_sorgbr( int matrix_layout, char vect, lapack_int m,
                            lapack_int n, lapack_int k, float* a, lapack_int lda,
                            const float* tau )
 {
@@ -41,22 +42,22 @@ lapack_int API_SUFFIX(LAPACKE_sorgbr)( int matrix_layout, char vect, lapack_int 
     float* work = NULL;
     float work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sorgbr", -1 );
+        LAPACKE_xerbla( "LAPACKE_sorgbr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, m, n, a, lda ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, m, n, a, lda ) ) {
             return -6;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( MIN(m,k), tau, 1 ) ) {
+        if( LAPACKE_s_nancheck( MIN(m,k), tau, 1 ) ) {
             return -8;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_sorgbr_work)( matrix_layout, vect, m, n, k, a, lda, tau,
+    info = LAPACKE_sorgbr_work( matrix_layout, vect, m, n, k, a, lda, tau,
                                 &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -69,13 +70,13 @@ lapack_int API_SUFFIX(LAPACKE_sorgbr)( int matrix_layout, char vect, lapack_int 
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_sorgbr_work)( matrix_layout, vect, m, n, k, a, lda, tau, work,
+    info = LAPACKE_sorgbr_work( matrix_layout, vect, m, n, k, a, lda, tau, work,
                                 lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sorgbr", info );
+        LAPACKE_xerbla( "LAPACKE_sorgbr", info );
     }
     return info;
 }

@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function zpbstf
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zpbstf_work)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_zpbstf_work( int matrix_layout, char uplo, lapack_int n,
                                 lapack_int kb, lapack_complex_double* bb,
                                 lapack_int ldbb )
 {
@@ -49,7 +50,7 @@ lapack_int API_SUFFIX(LAPACKE_zpbstf_work)( int matrix_layout, char uplo, lapack
         /* Check leading dimension(s) */
         if( ldbb < n ) {
             info = -6;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zpbstf_work", info );
+            LAPACKE_xerbla( "LAPACKE_zpbstf_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -60,24 +61,24 @@ lapack_int API_SUFFIX(LAPACKE_zpbstf_work)( int matrix_layout, char uplo, lapack
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_zpb_trans)( matrix_layout, uplo, n, kb, bb, ldbb, bb_t, ldbb_t );
+        LAPACKE_zpb_trans( matrix_layout, uplo, n, kb, bb, ldbb, bb_t, ldbb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zpbstf( &uplo, &n, &kb, bb_t, &ldbb_t, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_zpb_trans)( LAPACK_COL_MAJOR, uplo, n, kb, bb_t, ldbb_t, bb,
+        LAPACKE_zpb_trans( LAPACK_COL_MAJOR, uplo, n, kb, bb_t, ldbb_t, bb,
                            ldbb );
         /* Release memory and exit */
         LAPACKE_free( bb_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zpbstf_work", info );
+            LAPACKE_xerbla( "LAPACKE_zpbstf_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zpbstf_work", info );
+        LAPACKE_xerbla( "LAPACKE_zpbstf_work", info );
     }
     return info;
 }

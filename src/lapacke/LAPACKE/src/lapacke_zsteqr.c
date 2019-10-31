@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zsteqr
 * Author: Intel Corporation
+* Generated June 2016
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zsteqr)( int matrix_layout, char compz, lapack_int n,
+lapack_int LAPACKE_zsteqr( int matrix_layout, char compz, lapack_int n,
                            double* d, double* e, lapack_complex_double* z,
                            lapack_int ldz )
 {
@@ -41,27 +42,27 @@ lapack_int API_SUFFIX(LAPACKE_zsteqr)( int matrix_layout, char compz, lapack_int
     lapack_int lwork;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zsteqr", -1 );
+        LAPACKE_xerbla( "LAPACKE_zsteqr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_d_nancheck)( n, d, 1 ) ) {
+        if( LAPACKE_d_nancheck( n, d, 1 ) ) {
             return -4;
         }
-        if( API_SUFFIX(LAPACKE_d_nancheck)( n-1, e, 1 ) ) {
+        if( LAPACKE_d_nancheck( n-1, e, 1 ) ) {
             return -5;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
-            if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, n, z, ldz ) ) {
+        if( LAPACKE_lsame( compz, 'v' ) ) {
+            if( LAPACKE_zge_nancheck( matrix_layout, n, n, z, ldz ) ) {
                 return -6;
             }
         }
     }
 #endif
     /* Additional scalars initializations for work arrays */
-    if( API_SUFFIX(LAPACKE_lsame)( compz, 'n' ) ) {
+    if( LAPACKE_lsame( compz, 'n' ) ) {
         lwork = 1;
     } else {
         lwork = MAX(1,2*n-2);
@@ -73,12 +74,12 @@ lapack_int API_SUFFIX(LAPACKE_zsteqr)( int matrix_layout, char compz, lapack_int
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_zsteqr_work)( matrix_layout, compz, n, d, e, z, ldz, work );
+    info = LAPACKE_zsteqr_work( matrix_layout, compz, n, d, e, z, ldz, work );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zsteqr", info );
+        LAPACKE_xerbla( "LAPACKE_zsteqr", info );
     }
     return info;
 }

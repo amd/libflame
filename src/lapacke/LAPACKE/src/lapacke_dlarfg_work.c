@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dlarfg
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dlarfg_work)( lapack_int n, double* alpha, double* x,
+lapack_int LAPACKE_dlarfg_work( lapack_int n, double* alpha, double* x,
                                 lapack_int incx, double* tau )
 {
     lapack_int info = 0;

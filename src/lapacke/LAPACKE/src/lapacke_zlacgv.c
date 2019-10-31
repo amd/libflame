@@ -28,20 +28,21 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zlacgv
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zlacgv)( lapack_int n, lapack_complex_double* x,
+lapack_int LAPACKE_zlacgv( lapack_int n, lapack_complex_double* x,
                            lapack_int incx )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_z_nancheck)( n, x, incx ) ) {
+        if( LAPACKE_z_nancheck( n, x, incx ) ) {
             return -2;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_zlacgv_work)( n, x, incx );
+    return LAPACKE_zlacgv_work( n, x, incx );
 }

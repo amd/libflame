@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function clatms
 * Author: Intel Corporation
+* Generated April, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_clatms_work)( int matrix_layout, lapack_int m, lapack_int n,
+lapack_int LAPACKE_clatms_work( int matrix_layout, lapack_int m, lapack_int n,
                                 char dist, lapack_int* iseed, char sym,
                                 float* d, lapack_int mode, float cond,
                                 float dmax, lapack_int kl, lapack_int ku,
@@ -53,7 +54,7 @@ lapack_int API_SUFFIX(LAPACKE_clatms_work)( int matrix_layout, lapack_int m, lap
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -15;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clatms_work", info );
+            LAPACKE_xerbla( "LAPACKE_clatms_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -64,7 +65,7 @@ lapack_int API_SUFFIX(LAPACKE_clatms_work)( int matrix_layout, lapack_int m, lap
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, m, n, a, lda, a_t, lda_t );
+        LAPACKE_cge_trans( matrix_layout, m, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_clatms( &m, &n, &dist, iseed, &sym, d, &mode, &cond, &dmax, &kl,
                        &ku, &pack, a_t, &lda_t, work, &info );
@@ -72,16 +73,16 @@ lapack_int API_SUFFIX(LAPACKE_clatms_work)( int matrix_layout, lapack_int m, lap
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
+        LAPACKE_cge_trans( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clatms_work", info );
+            LAPACKE_xerbla( "LAPACKE_clatms_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clatms_work", info );
+        LAPACKE_xerbla( "LAPACKE_clatms_work", info );
     }
     return info;
 }

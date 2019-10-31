@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function clarft
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_clarft_work)( int matrix_layout, char direct, char storev,
+lapack_int LAPACKE_clarft_work( int matrix_layout, char direct, char storev,
                                 lapack_int n, lapack_int k,
                                 const lapack_complex_float* v, lapack_int ldv,
                                 const lapack_complex_float* tau,
@@ -49,21 +50,21 @@ lapack_int API_SUFFIX(LAPACKE_clarft_work)( int matrix_layout, char direct, char
             info = info - 1;
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
-        nrows_v = API_SUFFIX(LAPACKE_lsame)( storev, 'c' ) ? n :
-                             ( API_SUFFIX(LAPACKE_lsame)( storev, 'r' ) ? k : 1);
-        ncols_v = API_SUFFIX(LAPACKE_lsame)( storev, 'c' ) ? k :
-                             ( API_SUFFIX(LAPACKE_lsame)( storev, 'r' ) ? n : 1);
+        nrows_v = LAPACKE_lsame( storev, 'c' ) ? n :
+                             ( LAPACKE_lsame( storev, 'r' ) ? k : 1);
+        ncols_v = LAPACKE_lsame( storev, 'c' ) ? k :
+                             ( LAPACKE_lsame( storev, 'r' ) ? n : 1);
         ldt_t = MAX(1,k);
         ldv_t = MAX(1,nrows_v);
         /* Check leading dimension(s) */
         if( ldt < k ) {
             info = -10;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clarft_work", info );
+            LAPACKE_xerbla( "LAPACKE_clarft_work", info );
             return info;
         }
         if( ldv < ncols_v ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clarft_work", info );
+            LAPACKE_xerbla( "LAPACKE_clarft_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -81,24 +82,24 @@ lapack_int API_SUFFIX(LAPACKE_clarft_work)( int matrix_layout, char direct, char
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, nrows_v, ncols_v, v, ldv, v_t, ldv_t );
+        LAPACKE_cge_trans( matrix_layout, nrows_v, ncols_v, v, ldv, v_t, ldv_t );
         /* Call LAPACK function and adjust info */
         LAPACK_clarft( &direct, &storev, &n, &k, v_t, &ldv_t, tau, t_t,
                        &ldt_t );
         info = 0;  /* LAPACK call is ok! */
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, k, k, t_t, ldt_t, t, ldt );
+        LAPACKE_cge_trans( LAPACK_COL_MAJOR, k, k, t_t, ldt_t, t, ldt );
         /* Release memory and exit */
         LAPACKE_free( t_t );
 exit_level_1:
         LAPACKE_free( v_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clarft_work", info );
+            LAPACKE_xerbla( "LAPACKE_clarft_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clarft_work", info );
+        LAPACKE_xerbla( "LAPACKE_clarft_work", info );
     }
     return info;
 }

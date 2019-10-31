@@ -28,6 +28,7 @@
 ******************************************************************************
 * Contents: Native C interface to LAPACK utility function
 * Author: Intel Corporation
+* Created in February, 2010
 *****************************************************************************/
 #include "lapacke_utils.h"
 
@@ -37,9 +38,9 @@
  * matrix_layout.
  */
 
-lapack_logical API_SUFFIX(LAPACKE_zpf_nancheck)( lapack_int n,
+lapack_logical LAPACKE_zpf_nancheck( lapack_int n,
                                       const lapack_complex_double *a )
 {
     lapack_int len = n*(n+1)/2;
-    return API_SUFFIX(LAPACKE_z_nancheck)( len, a, 1 );
+    return LAPACKE_z_nancheck( len, a, 1 );
 }

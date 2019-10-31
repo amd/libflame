@@ -83,8 +83,12 @@ double computeErrorComplex(int size, T *Out, T *Out_ref)
   int j;
   double diff = 0;
   for ( j = 0; j < size; j ++ ) {
-    diff += abs(creal(Out_ref[j]) - creal(Out[j])) ;
-	diff += abs(cimag(Out_ref[j]) - cimag(Out[j])) ;
+ // if((isnan(creal(Out_ref[j])) && isnan(creal(Out_ref[j])))
+ //   || (isnan(cimag(Out_ref[j])) && isnan(cimag(Out_ref[j]))))
+    {
+      diff += abs(creal(Out_ref[j]) - creal(Out[j])) ;
+      diff += abs(cimag(Out_ref[j]) - cimag(Out[j])) ;
+    }
   }
    return diff;
 }
@@ -93,7 +97,16 @@ FILE *fp;
    //fp = fopen("test/in","a+");
    //print(fp,m*m,aInBuff, aRefBuff);
    //fclose(fp);
-   
+   //  fp = fopen("test/out","a+");
+   //print(fp,m*m,aInBuff, aRefBuff);
+   //fclose(fp);
+   //  fp = fopen("test/out1","a+");
+   //print(fp,m*m,aInBuff, aInBuff);
+   //fclose(fp);
+   //  fp = fopen("test/out2","a+");
+   //print(fp,m*m,aRefBuff, aRefBuff);
+   //fclose(fp);
+
 void print(FILE *fp, int size, int *Out, int *Out_ref)
 {
   fprintf(fp, "\n****Starts*****\n");
@@ -124,20 +137,20 @@ void print(FILE *fp, int size, double *Out, double *Out_ref)
 void print(FILE *fp,int size, lapack_complex_float *Out, lapack_complex_float *Out_ref)
 {
   int j;
-  
+
   for ( j = 0; j < size; j ++ ) {
     fprintf(fp," %e %e %e %e \n",creal(Out_ref[j]) , creal(Out[j]),cimag(Out_ref[j]) , cimag(Out[j])) ;
-  }  
+  }
   fprintf(fp,"\n");
 }
 
 void print(FILE *fp, int size, lapack_complex_double *Out, lapack_complex_double *Out_ref)
 {
   int j;
-  
+
   for ( j = 0; j < size; j ++ ) {
     fprintf(fp," %e %e %e %e \n",creal(Out_ref[j]) , creal(Out[j]),cimag(Out_ref[j]) , cimag(Out[j])) ;
-  }  
+  }
   fprintf(fp,"\n");
 }
 

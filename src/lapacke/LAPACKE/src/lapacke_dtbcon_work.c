@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dtbcon
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dtbcon_work)( int matrix_layout, char norm, char uplo,
+lapack_int LAPACKE_dtbcon_work( int matrix_layout, char norm, char uplo,
                                 char diag, lapack_int n, lapack_int kd,
                                 const double* ab, lapack_int ldab,
                                 double* rcond, double* work, lapack_int* iwork )
@@ -51,7 +52,7 @@ lapack_int API_SUFFIX(LAPACKE_dtbcon_work)( int matrix_layout, char norm, char u
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -8;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtbcon_work", info );
+            LAPACKE_xerbla( "LAPACKE_dtbcon_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -61,7 +62,7 @@ lapack_int API_SUFFIX(LAPACKE_dtbcon_work)( int matrix_layout, char norm, char u
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_dtb_trans)( matrix_layout, uplo, diag, n, kd, ab, ldab, ab_t,
+        LAPACKE_dtb_trans( matrix_layout, uplo, diag, n, kd, ab, ldab, ab_t,
                            ldab_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dtbcon( &norm, &uplo, &diag, &n, &kd, ab_t, &ldab_t, rcond, work,
@@ -73,11 +74,11 @@ lapack_int API_SUFFIX(LAPACKE_dtbcon_work)( int matrix_layout, char norm, char u
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtbcon_work", info );
+            LAPACKE_xerbla( "LAPACKE_dtbcon_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtbcon_work", info );
+        LAPACKE_xerbla( "LAPACKE_dtbcon_work", info );
     }
     return info;
 }

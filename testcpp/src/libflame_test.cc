@@ -4075,52 +4075,37 @@ void unmbr_test()
 template< typename T >
 void steqr_test()
 {
-    #if 0
-  int m = 512;
   int n = 512;
-  int min_m_n = min( m, n );
   srand (time(NULL));
 
   FLA_Init( );
-  FLA_Obj aCIOObj, cCIOObj, tauqCOObj, taupCOObj;
-  T *aCPPIOBuff, *cCPPIOBuff, *aCIOBuff, *cCIOBuff ;
-  T *tauqCPPOBuff, *tauqCOBuff ;
-  T *taupCPPOBuff, *taupCOBuff ;
-  T *d, *e ;
-  char vect = 'Q';
-  char sideCPP = 'L';
-  char transCPP = 'T';
+  FLA_Obj dCIOObj, eCIOObj, zCIOObj;
+  T *dCPPIOBuff, *eCPPIOBuff, *zCPPIOBuff;
+  T *dCIOBuff, *eCIOBuff, *zCIOBuff;
+  char jobz = 'N';
   int datatype = getDatatype<T>();
 
   //Allocate and initialize buffers for C and CPP functions with random values
-  allocate_init_buffer(aCPPIOBuff, aCIOBuff, n*n);
-  allocate_init_buffer(cCPPIOBuff, cCIOBuff, n*n);
-  d =  new T [min_m_n];
-  e =  new T [min_m_n-1];
-  tauqCPPOBuff =  new T [min_m_n];
-  taupCPPOBuff =  new T [min_m_n];
-  tauqCOBuff =  new T [min_m_n];
-  taupCOBuff =  new T [min_m_n];
+  allocate_init_buffer(dCPPIOBuff, dCIOBuff, n);
+  allocate_init_buffer(eCPPIOBuff, eCIOBuff, (n-1));
+  allocate_init_buffer(zCPPIOBuff, zCIOBuff, n*n);
 
   //Call CPP function
-  libflame::gebrd( LAPACK_COL_MAJOR, &m, &n, aCPPIOBuff, &n, d, e, tauqCPPOBuff, taupCPPOBuff );
-  char jobz = 'N';
-  //( int matrix_layout, char* jobz, int* n, T* d, T* e, T* z, int* ldz )
-  libflame::steqr( LAPACK_COL_MAJOR, &jobz, &n, aCPPIOBuff, &m, &n, &m, aCPPIOBuff, &m, taupCPPOBuff, cCPPIOBuff, &m  );
+  libflame::steqr( LAPACK_COL_MAJOR, &jobz, &n, dCPPIOBuff, eCPPIOBuff, zCPPIOBuff, &n  );
+  
   //Allocate Object for C function and copy already allocated and filled buffer
-  FLA_Obj_create_without_buffer( datatype, m, n, &aCIOObj );
-  FLA_Obj_create_without_buffer( datatype, m, n, &cCIOObj );
-  FLA_Obj_create_without_buffer( datatype, min_m_n, 1, &tauqCOObj );
-  FLA_Obj_create_without_buffer( datatype, min_m_n, 1, &taupCOObj );
-  FLA_Obj_attach_buffer( aCIOBuff, 1, m, &aCIOObj );
-  FLA_Obj_attach_buffer( cCIOBuff, 1, m, &cCIOObj );
-  FLA_Obj_attach_buffer( tauqCOBuff, 1, min_m_n, &tauqCOObj );
-  FLA_Obj_attach_buffer( taupCOBuff, 1, min_m_n, &taupCOObj );
+  FLA_Obj_create_without_buffer( datatype, n, 1, &dCIOObj );
+  FLA_Obj_create_without_buffer( datatype, (n-1), 1, &eCIOObj );
+  FLA_Obj_create_without_buffer( datatype, n, n, &zCIOObj );
+  FLA_Obj_attach_buffer( dCIOBuff, 1, n, &dCIOObj );
+  FLA_Obj_attach_buffer( eCIOBuff, 1, (n-1), &eCIOObj );
+  FLA_Obj_attach_buffer( zCIOBuff, 1, n, &zCIOObj );
 
   //Call C function
-  FLA_Bidiag_blk_external( aCIOObj, tauqCOObj, taupCOObj );
-  FLA_Bidiag_apply_U_external( FLA_LEFT, FLA_TRANSPOSE, aCIOObj, taupCOObj, cCIOObj );
-  double diff =  computeError<T>( m, n, aCIOBuff, aCPPIOBuff );
+  FLA_Tevd_external( FLA_EVD_WITHOUT_VECTORS, dCIOObj, eCIOObj, zCIOObj);
+  double diff =  computeError<T>( n, 1, dCIOBuff, dCPPIOBuff );
+  diff +=  computeError<T>( (n-1), 1, eCIOBuff, eCPPIOBuff );
+  diff +=  computeError<T>( n, n, zCIOBuff, zCPPIOBuff );
 
   if(diff != 0.0)
   {
@@ -4130,15 +4115,347 @@ void steqr_test()
   }
 
   //Free up the buffers
-  delete aCPPIOBuff ;
-  delete tauqCPPOBuff ;
-  delete taupCPPOBuff ;
-  FLA_Obj_free( &aCIOObj );
-  FLA_Obj_free( &tauqCOObj );
-  FLA_Obj_free( &taupCOObj );
-#endif
+  delete dCPPIOBuff ;
+  delete eCPPIOBuff ;
+  delete zCPPIOBuff ;
+  FLA_Obj_free( &dCIOObj );
+  FLA_Obj_free( &eCIOObj );
+  FLA_Obj_free( &zCIOObj );
+
 }
 
+template< typename Ta, typename Tb >
+void steqr_test()
+{
+  int n = 512;
+  srand (time(NULL));
+
+  FLA_Init( );
+  FLA_Obj dCIOObj, eCIOObj, zCIOObj;
+  Tb *dCPPIOBuff, *eCPPIOBuff;
+  Ta *zCPPIOBuff;
+  Tb *dCIOBuff, *eCIOBuff;
+  Ta *zCIOBuff;
+  char jobz = 'N';
+  int datatype = getDatatype<Ta>();
+  int datatypeTb = getDatatype<Tb>();
+
+  //Allocate and initialize buffers for C and CPP functions with random values
+  allocate_init_buffer(dCPPIOBuff, dCIOBuff, n);
+  allocate_init_buffer(eCPPIOBuff, eCIOBuff, (n-1));
+  allocate_init_buffer(zCPPIOBuff, zCIOBuff, n*n);
+
+  //Call CPP function
+  libflame::steqr( LAPACK_COL_MAJOR, &jobz, &n, dCPPIOBuff, eCPPIOBuff, zCPPIOBuff, &n  );
+  
+  //Allocate Object for C function and copy already allocated and filled buffer
+  FLA_Obj_create_without_buffer( datatypeTb, n, 1, &dCIOObj );
+  FLA_Obj_create_without_buffer( datatypeTb, (n-1), 1, &eCIOObj );
+  FLA_Obj_create_without_buffer( datatype, n, n, &zCIOObj );
+  FLA_Obj_attach_buffer( dCIOBuff, 1, n, &dCIOObj );
+  FLA_Obj_attach_buffer( eCIOBuff, 1, (n-1), &eCIOObj );
+  FLA_Obj_attach_buffer( zCIOBuff, 1, n, &zCIOObj );
+
+  //Call C function
+  FLA_Tevd_external( FLA_EVD_WITHOUT_VECTORS, dCIOObj, eCIOObj, zCIOObj);
+  double diff =  computeError<Tb>( n, 1, dCIOBuff, dCPPIOBuff );
+  diff +=  computeError<Tb>( (n-1), 1, eCIOBuff, eCPPIOBuff );
+  diff +=  computeError<Ta>( n, n, zCIOBuff, zCPPIOBuff );
+
+  if(diff != 0.0)
+  {
+    printf( "steqr(): Failure Diff = %E\n", diff);
+  }else{
+    printf( "steqr(): Success\n");
+  }
+
+  //Free up the buffers
+  delete dCPPIOBuff ;
+  delete eCPPIOBuff ;
+  delete zCPPIOBuff ;
+  FLA_Obj_free( &dCIOObj );
+  FLA_Obj_free( &eCIOObj );
+  FLA_Obj_free( &zCIOObj );
+
+}
+
+template< typename T >
+void stedc_test()
+{
+  int n = 512;
+  srand (time(NULL));
+
+  FLA_Init( );
+  FLA_Obj dCIOObj, eCIOObj, zCIOObj;
+  T *dCPPIOBuff, *eCPPIOBuff, *zCPPIOBuff;
+  T *dCIOBuff, *eCIOBuff, *zCIOBuff;
+  char jobz = 'V';
+  int datatype = getDatatype<T>();
+
+  //Allocate and initialize buffers for C and CPP functions with random values
+  allocate_init_buffer(dCPPIOBuff, dCIOBuff, n);
+  allocate_init_buffer(eCPPIOBuff, eCIOBuff, (n-1));
+  allocate_init_buffer(zCPPIOBuff, zCIOBuff, n*n);
+
+  //Call CPP function
+  libflame::stedc( LAPACK_COL_MAJOR, &jobz, &n, dCPPIOBuff, eCPPIOBuff, zCPPIOBuff, &n  );
+  
+  //Allocate Object for C function and copy already allocated and filled buffer
+  FLA_Obj_create_without_buffer( datatype, n, 1, &dCIOObj );
+  FLA_Obj_create_without_buffer( datatype, (n-1), 1, &eCIOObj );
+  FLA_Obj_create_without_buffer( datatype, n, n, &zCIOObj );
+  FLA_Obj_attach_buffer( dCIOBuff, 1, n, &dCIOObj );
+  FLA_Obj_attach_buffer( eCIOBuff, 1, (n-1), &eCIOObj );
+  FLA_Obj_attach_buffer( zCIOBuff, 1, n, &zCIOObj );
+
+  //Call C function
+  FLA_Tevdd_external( FLA_EVD_WITH_VECTORS, dCIOObj, eCIOObj, zCIOObj);
+  double diff =  computeError<T>( n, 1, dCIOBuff, dCPPIOBuff );
+  diff +=  computeError<T>( (n-1), 1, eCIOBuff, eCPPIOBuff );
+  diff +=  computeError<T>( n, n, zCIOBuff, zCPPIOBuff );
+
+  if(diff != 0.0)
+  {
+    printf( "stedc(): Failure Diff = %E\n", diff);
+  }else{
+    printf( "stedc(): Success\n");
+  }
+
+  //Free up the buffers
+  delete dCPPIOBuff ;
+  delete eCPPIOBuff ;
+  delete zCPPIOBuff ;
+  FLA_Obj_free( &dCIOObj );
+  FLA_Obj_free( &eCIOObj );
+  FLA_Obj_free( &zCIOObj );
+}
+
+template< typename Ta, typename Tb >
+void stedc_test()
+{
+  int n = 512;
+  srand (time(NULL));
+
+  FLA_Init( );
+  FLA_Obj dCIOObj, eCIOObj, zCIOObj;
+  Tb *dCPPIOBuff, *eCPPIOBuff;
+  Ta *zCPPIOBuff;
+  Tb *dCIOBuff, *eCIOBuff;
+  Ta *zCIOBuff;
+  char jobz = 'V';
+  int datatype = getDatatype<Ta>();
+  int datatypeTb = getDatatype<Tb>();
+
+  //Allocate and initialize buffers for C and CPP functions with random values
+  allocate_init_buffer(dCPPIOBuff, dCIOBuff, n);
+  allocate_init_buffer(eCPPIOBuff, eCIOBuff, (n-1));
+  allocate_init_buffer(zCPPIOBuff, zCIOBuff, n*n);
+
+  //Call CPP function
+  libflame::stedc( LAPACK_COL_MAJOR, &jobz, &n, dCPPIOBuff, eCPPIOBuff, zCPPIOBuff, &n  );
+  
+  //Allocate Object for C function and copy already allocated and filled buffer
+  FLA_Obj_create_without_buffer( datatypeTb, n, 1, &dCIOObj );
+  FLA_Obj_create_without_buffer( datatypeTb, (n-1), 1, &eCIOObj );
+  FLA_Obj_create_without_buffer( datatype, n, n, &zCIOObj );
+  FLA_Obj_attach_buffer( dCIOBuff, 1, n, &dCIOObj );
+  FLA_Obj_attach_buffer( eCIOBuff, 1, (n-1), &eCIOObj );
+  FLA_Obj_attach_buffer( zCIOBuff, 1, n, &zCIOObj );
+
+  //Call C function
+  FLA_Tevdd_external( FLA_EVD_WITH_VECTORS, dCIOObj, eCIOObj, zCIOObj);
+  double diff =  computeError<Tb>( n, 1, dCIOBuff, dCPPIOBuff );
+  diff +=  computeError<Tb>( (n-1), 1, eCIOBuff, eCPPIOBuff );
+  diff +=  computeError<Ta>( n, n, zCIOBuff, zCPPIOBuff );
+
+  if(diff != 0.0)
+  {
+    printf( "stedc(): Failure Diff = %E\n", diff);
+  }else{
+    printf( "stedc(): Success\n");
+  }
+
+  //Free up the buffers
+  delete dCPPIOBuff ;
+  delete eCPPIOBuff ;
+  delete zCPPIOBuff ;
+  FLA_Obj_free( &dCIOObj );
+  FLA_Obj_free( &eCIOObj );
+  FLA_Obj_free( &zCIOObj );
+}
+
+//stedc_test();
+//stemr_test();
+
+template< typename T >
+void syev_test()
+{
+  int n = 512;
+  srand (time(NULL));
+
+  FLA_Init( );
+  FLA_Obj aCIOObj, wCOObj, lCIOObj;
+  T *aCPPIOBuff, *wCPPOBuff;
+  T *aCIOBuff, *wCOBuff, *lCIOBuff;
+  char jobz = 'N';
+  char uplo = 'U';
+  int datatype = getDatatype<T>();
+
+  //Allocate and initialize buffers for C and CPP functions with random values
+  allocate_init_buffer(aCPPIOBuff, aCIOBuff, n*n);
+  wCPPOBuff  = new T[n];
+  wCOBuff  = new T[n];
+  aCIOBuff  = new T[n*n];
+  lCIOBuff  = new T[n*n];
+  for(int j=0; j<n*n; j++)
+  {
+	  aCIOBuff[j] = 0;
+	  lCIOBuff[j] = 0;
+}
+
+  //Call CPP function
+  libflame::syev( LAPACK_COL_MAJOR, &jobz, &uplo, &n, aCPPIOBuff, &n, wCPPOBuff );
+
+  //Allocate Object for C function and copy already allocated and filled buffer
+  FLA_Obj_create_without_buffer( datatype, n, n, &aCIOObj );
+  FLA_Obj_create_without_buffer( datatype, n, 1, &wCOObj );
+  FLA_Obj_create_without_buffer( datatype, n, n, &lCIOObj );
+  FLA_Obj_attach_buffer( aCIOBuff, 1, n, &aCIOObj );
+  FLA_Obj_attach_buffer( wCOBuff, 1, n, &wCOObj );
+  FLA_Obj_attach_buffer( lCIOBuff, 1, n, &lCIOObj );
+
+  //Call C function
+ // FLA_Error FLA_Hevdr_external( FLA_Evd_type jobz, FLA_Uplo uplo, FLA_Obj A, FLA_Obj l, FLA_Obj Z )
+  FLA_Hevdr_external( FLA_EVD_WITHOUT_VECTORS, FLA_UPPER_TRIANGULAR, aCIOObj, wCOObj, lCIOObj );
+  
+  double diff =  computeError<T>( n, n, aCIOBuff, aCPPIOBuff );
+  //diff +=  computeError<T>( n, 1, wCOBuff, wCPPOBuff );
+
+  if(diff != 0.0)
+  {
+    printf( "syev(): Failure Diff = %E\n", diff);
+  }else{
+    printf( "syev(): Success\n");
+  }
+
+  //Free up the buffers
+  delete aCPPIOBuff ;
+  delete wCPPOBuff ;
+  FLA_Obj_free( &aCIOObj );
+  FLA_Obj_free( &wCOObj );
+  FLA_Obj_free( &lCIOObj );
+}
+
+template< typename Ta, typename Tb >
+void heev_test()
+{
+	#if 0
+  int n = 512;
+  srand (time(NULL));
+
+  FLA_Init( );
+  FLA_Obj aCIOObj, wCOObj, lCIOObj;
+  T *aCPPIOBuff, *wCPPOBuff;
+  T *aCIOBuff, *wCOBuff, *lCIOBuff;
+  char jobz = 'V';
+  char uplo = 'U';
+  int datatype = getDatatype<T>();
+
+  //Allocate and initialize buffers for C and CPP functions with random values
+  allocate_init_buffer(aCPPIOBuff, aCIOBuff, n*n);
+  wCPPOBuff  = new T[n];
+  wCOBuff  = new T[n];
+  aCIOBuff  = new T[n*n];
+
+  //Call CPP function
+  libflame::syev( LAPACK_COL_MAJOR, &jobz, &uplo, &n, aCPPIOBuff, &n, wCPPOBuff );
+
+  //Allocate Object for C function and copy already allocated and filled buffer
+  FLA_Obj_create_without_buffer( datatype, n, n, &aCIOObj );
+  FLA_Obj_create_without_buffer( datatype, n, 1, &wCOObj );
+  FLA_Obj_create_without_buffer( datatype, n, n, &lCIOObj );
+  FLA_Obj_attach_buffer( aCIOBuff, 1, n, &aCIOObj );
+  FLA_Obj_attach_buffer( wCOBuff, 1, n, &wCOObj );
+  FLA_Obj_attach_buffer( lCIOBuff, 1, n, &lCIOObj );
+
+  //Call C function
+ // FLA_Error FLA_Hevdr_external( FLA_Evd_type jobz, FLA_Uplo uplo, FLA_Obj A, FLA_Obj l, FLA_Obj Z )
+  FLA_Hevdr_external( FLA_EVD_WITH_VECTORS, FLA_UPPER_TRIANGULAR, aCIOObj, wCOObj, lCIOObj );
+  
+  double diff =  computeError<T>( n, n, aCIOBuff, aCPPIOBuff );
+  diff +=  computeError<T>( n, 1, wCOBuff, wCPPOBuff );
+
+  if(diff != 0.0)
+  {
+    printf( "syev(): Failure Diff = %E\n", diff);
+  }else{
+    printf( "syev(): Success\n");
+  }
+
+  //Free up the buffers
+  delete aCPPIOBuff ;
+  delete wCPPOBuff ;
+  FLA_Obj_free( &aCIOObj );
+  FLA_Obj_free( &wCOObj );
+  FLA_Obj_free( &lCIOObj );
+  #endif
+}
+
+template< typename T >
+void syevd_test()
+{
+  int n = 64;
+  srand (time(NULL));
+
+  FLA_Init( );
+  FLA_Obj aCIOObj, wCOObj, lCIOObj;
+  T *aCPPIOBuff, *wCPPOBuff;
+  T *aCIOBuff, *wCOBuff, *lCIOBuff;
+  char jobz = 'N';
+  char uplo = 'U';
+  int datatype = getDatatype<T>();
+
+  //Allocate and initialize buffers for C and CPP functions with random values
+  allocate_init_buffer(aCPPIOBuff, aCIOBuff, n*n);
+  wCPPOBuff  = new T[n];
+  wCOBuff  = new T[n];
+  aCIOBuff  = new T[n*n];
+  lCIOBuff  = new T[n*n];
+
+  //Call CPP function
+  libflame::syevd( LAPACK_COL_MAJOR, &jobz, &uplo, &n, aCPPIOBuff, &n, wCPPOBuff );
+
+  //Allocate Object for C function and copy already allocated and filled buffer
+  FLA_Obj_create_without_buffer( datatype, n, n, &aCIOObj );
+  FLA_Obj_create_without_buffer( datatype, n, 1, &wCOObj );
+  FLA_Obj_create_without_buffer( datatype, n, n, &lCIOObj );
+  FLA_Obj_attach_buffer( aCIOBuff, 1, n, &aCIOObj );
+  FLA_Obj_attach_buffer( wCOBuff, 1, n, &wCOObj );
+  FLA_Obj_attach_buffer( lCIOBuff, 1, n, &lCIOObj );
+
+  //Call C function
+  FLA_Hevdd_external( FLA_EVD_WITHOUT_VECTORS, FLA_UPPER_TRIANGULAR, aCIOObj, wCOObj );
+  
+  double diff =  computeError<T>( n, n, aCIOBuff, aCPPIOBuff );
+  //diff +=  computeError<T>( n, 1, wCOBuff, wCPPOBuff );
+FILE *fp = fopen("test/in.txt", "a+");
+print(fp, n, wCOBuff, wCPPOBuff);
+fclose(fp);
+
+  if(diff != 0.0)
+  {
+    printf( "syevd(): Failure Diff = %E\n", diff);
+  }else{
+    printf( "syevd(): Success\n");
+  }
+
+  //Free up the buffers
+  delete aCPPIOBuff ;
+  delete wCPPOBuff ;
+  FLA_Obj_free( &aCIOObj );
+  FLA_Obj_free( &wCOObj );
+  FLA_Obj_free( &lCIOObj );
+}
 
 void potrf_testall_variants(){
   potrf_test<float>();
@@ -4429,14 +4746,29 @@ void unmbr_testall_variants(){
 void steqr_testall_variants(){
   steqr_test<float>();
   steqr_test<double>();
-  //steqr_test<lapack_complex_float, float>();
-  //steqr_test<lapack_complex_double, double >();
+  steqr_test<lapack_complex_float, float>();
+  steqr_test<lapack_complex_double, double >();
+}
+void stedc_testall_variants(){
+  stedc_test<float>();
+  stedc_test<double>();
+  stedc_test<lapack_complex_float, float>();
+  stedc_test<lapack_complex_double, double >();
 }
 //stedc_testall_variants();
 //stemr_testall_variants();
-//syev_testall_variants();
-//heev_testall_variants();
-//syevd_testall_variants();
+void syev_testall_variants(){
+  syev_test<float>();
+  syev_test<double>();
+}
+void heev_testall_variants(){
+  heev_test<lapack_complex_float, float>();
+  heev_test<lapack_complex_double, double >();
+}
+void syevd_testall_variants(){
+  syevd_test<float>();
+  syevd_test<double>();
+}
 //heevd_testall_variants();
 //syevr_testall_variants();
 
@@ -4457,15 +4789,22 @@ void steqr_testall_variants(){
 
 int main(int argc, char *argv[])
 {
-  //steqr_testall_variants();
-  //stedc_testall_variants();
+  // steqr_testall_variants();//pass
+  // stedc_testall_variants();//pass
   //stemr_testall_variants();
-  //syev_testall_variants();
+  //syev_testall_variants(); //fail
   //heev_testall_variants();
-  //syevd_testall_variants();
+  //syevd_testall_variants(); // cout is zero
   //heevd_testall_variants();
   //syevr_testall_variants();
-
+  //heevr
+  //heevr
+  //bdsqr
+  //bdsdc
+  //gesvd
+  //gesdd
+  //laswp
+  //laset
 
 
 
@@ -4536,8 +4875,8 @@ int main(int argc, char *argv[])
   ungbr_testall_variants(); //pass
   ormbr_testall_variants(); //pass
   unmbr_testall_variants(); //pass
-  //steqr
-  //stedc
+  //steqr_testall_variants(); //pass
+  //stedc_testall_variants(); //pass
   //stemr
   //syev
   //heev

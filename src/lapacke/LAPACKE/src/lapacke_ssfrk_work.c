@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function ssfrk
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_ssfrk_work)( int matrix_layout, char transr, char uplo,
+lapack_int LAPACKE_ssfrk_work( int matrix_layout, char transr, char uplo,
                                char trans, lapack_int n, lapack_int k,
                                float alpha, const float* a, lapack_int lda,
                                float beta, float* c )
@@ -46,15 +47,15 @@ lapack_int API_SUFFIX(LAPACKE_ssfrk_work)( int matrix_layout, char transr, char 
             info = info - 1;
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
-        lapack_int na = API_SUFFIX(LAPACKE_lsame)( trans, 'n' ) ? n : k;
-        lapack_int ka = API_SUFFIX(LAPACKE_lsame)( trans, 'n' ) ? k : n;
+        lapack_int na = LAPACKE_lsame( trans, 'n' ) ? n : k;
+        lapack_int ka = LAPACKE_lsame( trans, 'n' ) ? k : n;
         lapack_int lda_t = MAX(1,na);
         float* a_t = NULL;
         float* c_t = NULL;
         /* Check leading dimension(s) */
         if( lda < ka ) {
             info = -9;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssfrk_work", info );
+            LAPACKE_xerbla( "LAPACKE_ssfrk_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -70,25 +71,25 @@ lapack_int API_SUFFIX(LAPACKE_ssfrk_work)( int matrix_layout, char transr, char 
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, na, ka, a, lda, a_t, lda_t );
-        API_SUFFIX(LAPACKE_spf_trans)( matrix_layout, transr, uplo, n, c, c_t );
+        LAPACKE_sge_trans( matrix_layout, na, ka, a, lda, a_t, lda_t );
+        LAPACKE_spf_trans( matrix_layout, transr, uplo, n, c, c_t );
         /* Call LAPACK function and adjust info */
         LAPACK_ssfrk( &transr, &uplo, &trans, &n, &k, &alpha, a_t, &lda_t,
                       &beta, c_t );
         info = 0;  /* LAPACK call is ok! */
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_spf_trans)( LAPACK_COL_MAJOR, transr, uplo, n, c_t, c );
+        LAPACKE_spf_trans( LAPACK_COL_MAJOR, transr, uplo, n, c_t, c );
         /* Release memory and exit */
         LAPACKE_free( c_t );
 exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssfrk_work", info );
+            LAPACKE_xerbla( "LAPACKE_ssfrk_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssfrk_work", info );
+        LAPACKE_xerbla( "LAPACKE_ssfrk_work", info );
     }
     return info;
 }

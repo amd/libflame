@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function zstein
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zstein_work)( int matrix_layout, lapack_int n, const double* d,
+lapack_int LAPACKE_zstein_work( int matrix_layout, lapack_int n, const double* d,
                                 const double* e, lapack_int m, const double* w,
                                 const lapack_int* iblock,
                                 const lapack_int* isplit,
@@ -54,7 +55,7 @@ lapack_int API_SUFFIX(LAPACKE_zstein_work)( int matrix_layout, lapack_int n, con
         /* Check leading dimension(s) */
         if( ldz < m ) {
             info = -10;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zstein_work", info );
+            LAPACKE_xerbla( "LAPACKE_zstein_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -71,16 +72,16 @@ lapack_int API_SUFFIX(LAPACKE_zstein_work)( int matrix_layout, lapack_int n, con
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, m, z_t, ldz_t, z, ldz );
+        LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, m, z_t, ldz_t, z, ldz );
         /* Release memory and exit */
         LAPACKE_free( z_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zstein_work", info );
+            LAPACKE_xerbla( "LAPACKE_zstein_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zstein_work", info );
+        LAPACKE_xerbla( "LAPACKE_zstein_work", info );
     }
     return info;
 }

@@ -28,15 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function ssbevx_2stage
 * Author: Intel Corporation
+* Generated December 2016
 *****************************************************************************/
-
-/*
- *     Modifications Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
- */
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_ssbevx_2stage_work)( int matrix_layout, char jobz, char range,
+lapack_int LAPACKE_ssbevx_2stage_work( int matrix_layout, char jobz, char range,
                                 char uplo, lapack_int n, lapack_int kd,
                                 float* ab, lapack_int ldab, float* q,
                                 lapack_int ldq, float vl, float vu,
@@ -55,9 +52,9 @@ lapack_int API_SUFFIX(LAPACKE_ssbevx_2stage_work)( int matrix_layout, char jobz,
             info = info - 1;
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
-        lapack_int ncols_z = ( API_SUFFIX(LAPACKE_lsame)( range, 'a' ) ||
-                             API_SUFFIX(LAPACKE_lsame)( range, 'v' ) ) ? n :
-                             ( API_SUFFIX(LAPACKE_lsame)( range, 'i' ) ? (iu-il+1) : 1);
+        lapack_int ncols_z = ( LAPACKE_lsame( range, 'a' ) ||
+                             LAPACKE_lsame( range, 'v' ) ) ? n :
+                             ( LAPACKE_lsame( range, 'i' ) ? (iu-il+1) : 1);
         lapack_int ldab_t = MAX(1,kd+1);
         lapack_int ldq_t = MAX(1,n);
         lapack_int ldz_t = MAX(1,n);
@@ -67,17 +64,17 @@ lapack_int API_SUFFIX(LAPACKE_ssbevx_2stage_work)( int matrix_layout, char jobz,
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -8;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssbevx_2stage_work", info );
+            LAPACKE_xerbla( "LAPACKE_ssbevx_2stage_work", info );
             return info;
         }
         if( ldq < n ) {
             info = -10;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssbevx_2stage_work", info );
+            LAPACKE_xerbla( "LAPACKE_ssbevx_2stage_work", info );
             return info;
         }
         if( ldz < ncols_z ) {
             info = -19;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssbevx_2stage_work", info );
+            LAPACKE_xerbla( "LAPACKE_ssbevx_2stage_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -86,14 +83,14 @@ lapack_int API_SUFFIX(LAPACKE_ssbevx_2stage_work)( int matrix_layout, char jobz,
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
+        if( LAPACKE_lsame( jobz, 'v' ) ) {
             q_t = (float*)LAPACKE_malloc( sizeof(float) * ldq_t * MAX(1,n) );
             if( q_t == NULL ) {
                 info = LAPACK_TRANSPOSE_MEMORY_ERROR;
                 goto exit_level_1;
             }
         }
-        if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
+        if( LAPACKE_lsame( jobz, 'v' ) ) {
             z_t = (float*)
                 LAPACKE_malloc( sizeof(float) * ldz_t * MAX(1,ncols_z) );
             if( z_t == NULL ) {
@@ -103,18 +100,13 @@ lapack_int API_SUFFIX(LAPACKE_ssbevx_2stage_work)( int matrix_layout, char jobz,
         }
         /* Query optimal working array(s) size if requested */
         if( lwork == -1 ) {
-            LAPACK_ssbevx_2stage( &jobz, &range, &uplo, &n, &kd, ab_t, &ldab_t, q_t,
+             LAPACK_ssbevx_2stage( &jobz, &range, &uplo, &n, &kd, ab_t, &ldab_t, q_t,
                        &ldq_t, &vl, &vu, &il, &iu, &abstol, m, w, z_t, &ldz_t,
                        work, &lwork, iwork, ifail, &info );
-            LAPACKE_free( ab_t );
-            if( LAPACKE_lsame( jobz, 'v' ) ) {
-                LAPACKE_free( q_t );
-                LAPACKE_free( z_t );
-            }
             return (info < 0) ? (info - 1) : info;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_ssb_trans)( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
+        LAPACKE_ssb_trans( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
         /* Call LAPACK function and adjust info */
         LAPACK_ssbevx_2stage( &jobz, &range, &uplo, &n, &kd, ab_t, &ldab_t, q_t,
                        &ldq_t, &vl, &vu, &il, &iu, &abstol, m, w, z_t, &ldz_t,
@@ -123,32 +115,32 @@ lapack_int API_SUFFIX(LAPACKE_ssbevx_2stage_work)( int matrix_layout, char jobz,
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_ssb_trans)( LAPACK_COL_MAJOR, uplo, n, kd, ab_t, ldab_t, ab,
+        LAPACKE_ssb_trans( LAPACK_COL_MAJOR, uplo, n, kd, ab_t, ldab_t, ab,
                            ldab );
-        if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
-            API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, n, n, q_t, ldq_t, q, ldq );
+        if( LAPACKE_lsame( jobz, 'v' ) ) {
+            LAPACKE_sge_trans( LAPACK_COL_MAJOR, n, n, q_t, ldq_t, q, ldq );
         }
-        if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
-            API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, n, ncols_z, z_t, ldz_t, z,
+        if( LAPACKE_lsame( jobz, 'v' ) ) {
+            LAPACKE_sge_trans( LAPACK_COL_MAJOR, n, ncols_z, z_t, ldz_t, z,
                                ldz );
         }
         /* Release memory and exit */
-        if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
+        if( LAPACKE_lsame( jobz, 'v' ) ) {
             LAPACKE_free( z_t );
         }
 exit_level_2:
-        if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
+        if( LAPACKE_lsame( jobz, 'v' ) ) {
             LAPACKE_free( q_t );
         }
 exit_level_1:
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssbevx_2stage_work", info );
+            LAPACKE_xerbla( "LAPACKE_ssbevx_2stage_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssbevx_2stage_work", info );
+        LAPACKE_xerbla( "LAPACKE_ssbevx_2stage_work", info );
     }
     return info;
 }

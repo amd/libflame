@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function ctrsen
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_ctrsen)( int matrix_layout, char job, char compq,
+lapack_int LAPACKE_ctrsen( int matrix_layout, char job, char compq,
                            const lapack_logical* select, lapack_int n,
                            lapack_complex_float* t, lapack_int ldt,
                            lapack_complex_float* q, lapack_int ldq,
@@ -44,24 +45,24 @@ lapack_int API_SUFFIX(LAPACKE_ctrsen)( int matrix_layout, char job, char compq,
     lapack_complex_float* work = NULL;
     lapack_complex_float work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctrsen", -1 );
+        LAPACKE_xerbla( "LAPACKE_ctrsen", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
-            if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, n, n, q, ldq ) ) {
+        if( LAPACKE_lsame( compq, 'v' ) ) {
+            if( LAPACKE_cge_nancheck( matrix_layout, n, n, q, ldq ) ) {
                 return -8;
             }
         }
-        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, n, n, t, ldt ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, n, n, t, ldt ) ) {
             return -6;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_ctrsen_work)( matrix_layout, job, compq, select, n, t, ldt, q,
+    info = LAPACKE_ctrsen_work( matrix_layout, job, compq, select, n, t, ldt, q,
                                 ldq, w, m, s, sep, &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -75,13 +76,13 @@ lapack_int API_SUFFIX(LAPACKE_ctrsen)( int matrix_layout, char job, char compq,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_ctrsen_work)( matrix_layout, job, compq, select, n, t, ldt, q,
+    info = LAPACKE_ctrsen_work( matrix_layout, job, compq, select, n, t, ldt, q,
                                 ldq, w, m, s, sep, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctrsen", info );
+        LAPACKE_xerbla( "LAPACKE_ctrsen", info );
     }
     return info;
 }

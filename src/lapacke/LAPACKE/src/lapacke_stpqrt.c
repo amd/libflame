@@ -28,11 +28,12 @@
 ******************************************************************************
 * Contents: Native middle-level C interface to LAPACK function zgeqrt
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_stpqrt)( int matrix_layout, lapack_int m, lapack_int n,
+lapack_int LAPACKE_stpqrt( int matrix_layout, lapack_int m, lapack_int n,
                            lapack_int l, lapack_int nb, float* a,
                            lapack_int lda, float* b, lapack_int ldb, float* t,
                            lapack_int ldt )
@@ -40,16 +41,16 @@ lapack_int API_SUFFIX(LAPACKE_stpqrt)( int matrix_layout, lapack_int m, lapack_i
     lapack_int info = 0;
     float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_stpqrt", -1 );
+        LAPACKE_xerbla( "LAPACKE_stpqrt", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, n, n, a, lda ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, n, a, lda ) ) {
             return -6;
         }
-        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, m, n, b, ldb ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, m, n, b, ldb ) ) {
             return -8;
         }
     }
@@ -61,13 +62,13 @@ lapack_int API_SUFFIX(LAPACKE_stpqrt)( int matrix_layout, lapack_int m, lapack_i
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_stpqrt_work)( matrix_layout, m, n, l, nb, a, lda, b, ldb, t,
+    info = LAPACKE_stpqrt_work( matrix_layout, m, n, l, nb, a, lda, b, ldb, t,
                                 ldt, work );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_stpqrt", info );
+        LAPACKE_xerbla( "LAPACKE_stpqrt", info );
     }
     return info;
 }

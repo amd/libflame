@@ -28,12 +28,13 @@
 ******************************************************************************
 * Contents: Native C interface to LAPACK utility function
 * Author: Intel Corporation
+* Created in February, 2010
 *****************************************************************************/
 #include "lapacke_utils.h"
 
 /* Check a matrix for NaN entries. */
 
-lapack_logical API_SUFFIX(LAPACKE_ztf_nancheck)( int matrix_layout, char transr,
+lapack_logical LAPACKE_ztf_nancheck( int matrix_layout, char transr,
                                       char uplo, char diag,
                                       lapack_int n,
                                       const lapack_complex_double *a )
@@ -45,15 +46,15 @@ lapack_logical API_SUFFIX(LAPACKE_ztf_nancheck)( int matrix_layout, char transr,
     if( a == NULL ) return (lapack_logical) 0;
 
     rowmaj = (matrix_layout == LAPACK_ROW_MAJOR);
-    ntr    = API_SUFFIX(LAPACKE_lsame)( transr, 'n' );
-    lower  = API_SUFFIX(LAPACKE_lsame)( uplo,   'l' );
-    unit   = API_SUFFIX(LAPACKE_lsame)( diag,   'u' );
+    ntr    = LAPACKE_lsame( transr, 'n' );
+    lower  = LAPACKE_lsame( uplo,   'l' );
+    unit   = LAPACKE_lsame( diag,   'u' );
 
     if( ( !rowmaj && ( matrix_layout != LAPACK_COL_MAJOR ) ) ||
-        ( !ntr    && !API_SUFFIX(LAPACKE_lsame)( transr, 't' )
-                  && !API_SUFFIX(LAPACKE_lsame)( transr, 'c' ) ) ||
-        ( !lower  && !API_SUFFIX(LAPACKE_lsame)( uplo,   'u' ) ) ||
-        ( !unit   && !API_SUFFIX(LAPACKE_lsame)( diag,   'n' ) ) ) {
+        ( !ntr    && !LAPACKE_lsame( transr, 't' )
+                  && !LAPACKE_lsame( transr, 'c' ) ) ||
+        ( !lower  && !LAPACKE_lsame( uplo,   'u' ) ) ||
+        ( !unit   && !LAPACKE_lsame( diag,   'n' ) ) ) {
         /* Just exit if any of input parameters are wrong */
         return (lapack_logical) 0;
     }
@@ -75,18 +76,18 @@ lapack_logical API_SUFFIX(LAPACKE_ztf_nancheck)( int matrix_layout, char transr,
             if( ( rowmaj || ntr ) && !( rowmaj && ntr ) ) {
                 /* N is odd and ( TRANSR = 'N' .XOR. ROWMAJOR) */
                 if( lower ) {
-                    return API_SUFFIX(LAPACKE_ztr_nancheck)( LAPACK_ROW_MAJOR, 'l', 'u',
+                    return LAPACKE_ztr_nancheck( LAPACK_ROW_MAJOR, 'l', 'u',
                                                  n1, &a[0], n )
-                        || API_SUFFIX(LAPACKE_zge_nancheck)( LAPACK_ROW_MAJOR, n2, n1,
+                        || LAPACKE_zge_nancheck( LAPACK_ROW_MAJOR, n2, n1,
                                                  &a[n1], n )
-                        || API_SUFFIX(LAPACKE_ztr_nancheck)( LAPACK_ROW_MAJOR, 'u', 'u',
+                        || LAPACKE_ztr_nancheck( LAPACK_ROW_MAJOR, 'u', 'u',
                                                  n2, &a[n], n );
                 } else {
-                    return API_SUFFIX(LAPACKE_ztr_nancheck)( LAPACK_ROW_MAJOR, 'l', 'u',
+                    return LAPACKE_ztr_nancheck( LAPACK_ROW_MAJOR, 'l', 'u',
                                                  n1, &a[n2], n )
-                        || API_SUFFIX(LAPACKE_zge_nancheck)( LAPACK_ROW_MAJOR, n1, n2,
+                        || LAPACKE_zge_nancheck( LAPACK_ROW_MAJOR, n1, n2,
                                                  &a[0], n )
-                        || API_SUFFIX(LAPACKE_ztr_nancheck)( LAPACK_ROW_MAJOR, 'u', 'u',
+                        || LAPACKE_ztr_nancheck( LAPACK_ROW_MAJOR, 'u', 'u',
                                                  n2, &a[n1], n );
                 }
             } else {
@@ -94,18 +95,18 @@ lapack_logical API_SUFFIX(LAPACKE_ztf_nancheck)( int matrix_layout, char transr,
                  * ( ( TRANSR = 'C' || TRANSR = 'T' ) .XOR. COLMAJOR )
                  */
                 if( lower ) {
-                    return API_SUFFIX(LAPACKE_ztr_nancheck)( LAPACK_ROW_MAJOR, 'u', 'u',
+                    return LAPACKE_ztr_nancheck( LAPACK_ROW_MAJOR, 'u', 'u',
                                                  n1, &a[0], n1 )
-                        || API_SUFFIX(LAPACKE_zge_nancheck)( LAPACK_ROW_MAJOR, n1, n2,
+                        || LAPACKE_zge_nancheck( LAPACK_ROW_MAJOR, n1, n2,
                                                  &a[1], n1 )
-                        || API_SUFFIX(LAPACKE_ztr_nancheck)( LAPACK_ROW_MAJOR, 'l', 'u',
+                        || LAPACKE_ztr_nancheck( LAPACK_ROW_MAJOR, 'l', 'u',
                                                  n2, &a[1], n1 );
                 } else {
-                    return API_SUFFIX(LAPACKE_ztr_nancheck)( LAPACK_ROW_MAJOR, 'u', 'u',
+                    return LAPACKE_ztr_nancheck( LAPACK_ROW_MAJOR, 'u', 'u',
                                                  n1, &a[(size_t)n2*n2], n2 )
-                        || API_SUFFIX(LAPACKE_zge_nancheck)( LAPACK_ROW_MAJOR, n2, n1,
+                        || LAPACKE_zge_nancheck( LAPACK_ROW_MAJOR, n2, n1,
                                                  &a[0], n2 )
-                        || API_SUFFIX(LAPACKE_ztr_nancheck)( LAPACK_ROW_MAJOR, 'l', 'u',
+                        || LAPACKE_ztr_nancheck( LAPACK_ROW_MAJOR, 'l', 'u',
                                                  n2, &a[(size_t)n1*n2], n2 );
                 }
             }
@@ -115,36 +116,36 @@ lapack_logical API_SUFFIX(LAPACKE_ztf_nancheck)( int matrix_layout, char transr,
             if( ( rowmaj || ntr ) && !( rowmaj && ntr ) ) {
                 /* N is even and ( TRANSR = 'N' .XOR. ROWMAJOR) */
                 if( lower ) {
-                    return API_SUFFIX(LAPACKE_ztr_nancheck)( LAPACK_ROW_MAJOR, 'l', 'u',
+                    return LAPACKE_ztr_nancheck( LAPACK_ROW_MAJOR, 'l', 'u',
                                                  k, &a[1], n+1 )
-                        || API_SUFFIX(LAPACKE_zge_nancheck)( LAPACK_ROW_MAJOR, k, k,
+                        || LAPACKE_zge_nancheck( LAPACK_ROW_MAJOR, k, k,
                                                  &a[k+1], n+1 )
-                        || API_SUFFIX(LAPACKE_ztr_nancheck)( LAPACK_ROW_MAJOR, 'u', 'u',
+                        || LAPACKE_ztr_nancheck( LAPACK_ROW_MAJOR, 'u', 'u',
                                                  k, &a[0], n+1 );
                 } else {
-                    return API_SUFFIX(LAPACKE_ztr_nancheck)( LAPACK_ROW_MAJOR, 'l', 'u',
+                    return LAPACKE_ztr_nancheck( LAPACK_ROW_MAJOR, 'l', 'u',
                                                  k, &a[k+1], n+1 )
-                        || API_SUFFIX(LAPACKE_zge_nancheck)( LAPACK_ROW_MAJOR, k, k,
+                        || LAPACKE_zge_nancheck( LAPACK_ROW_MAJOR, k, k,
                                                  &a[0], n+1 )
-                        || API_SUFFIX(LAPACKE_ztr_nancheck)( LAPACK_ROW_MAJOR, 'u', 'u',
+                        || LAPACKE_ztr_nancheck( LAPACK_ROW_MAJOR, 'u', 'u',
                                                  k, &a[k], n+1 );
                 }
             } else {
                 /* N is even and
                    ( ( TRANSR = 'C' || TRANSR = 'T' ) .XOR. COLMAJOR ) */
                 if( lower ) {
-                    return API_SUFFIX(LAPACKE_ztr_nancheck)( LAPACK_ROW_MAJOR, 'u', 'u',
+                    return LAPACKE_ztr_nancheck( LAPACK_ROW_MAJOR, 'u', 'u',
                                                  k, &a[k], k )
-                        || API_SUFFIX(LAPACKE_zge_nancheck)( LAPACK_ROW_MAJOR, k, k,
+                        || LAPACKE_zge_nancheck( LAPACK_ROW_MAJOR, k, k,
                                                  &a[(size_t)k*(k+1)], k )
-                        || API_SUFFIX(LAPACKE_ztr_nancheck)( LAPACK_ROW_MAJOR, 'l', 'u',
+                        || LAPACKE_ztr_nancheck( LAPACK_ROW_MAJOR, 'l', 'u',
                                                  k, &a[0], k );
                 } else {
-                    return API_SUFFIX(LAPACKE_ztr_nancheck)( LAPACK_ROW_MAJOR, 'u', 'u',
+                    return LAPACKE_ztr_nancheck( LAPACK_ROW_MAJOR, 'u', 'u',
                                                  k, &a[(size_t)k*(k+1)], k )
-                        || API_SUFFIX(LAPACKE_zge_nancheck)( LAPACK_ROW_MAJOR, k, k,
+                        || LAPACKE_zge_nancheck( LAPACK_ROW_MAJOR, k, k,
                                                  &a[0], k )
-                        || API_SUFFIX(LAPACKE_ztr_nancheck)( LAPACK_ROW_MAJOR, 'l', 'u',
+                        || LAPACKE_ztr_nancheck( LAPACK_ROW_MAJOR, 'l', 'u',
                                                  k, &a[(size_t)k*k], k );
                 }
             }
@@ -152,6 +153,6 @@ lapack_logical API_SUFFIX(LAPACKE_ztf_nancheck)( int matrix_layout, char transr,
     } else {
         /* Non-unit case - just check whole array for NaNs. */
         len = n*(n+1)/2;
-        return API_SUFFIX(LAPACKE_zge_nancheck)( LAPACK_COL_MAJOR, len, 1, a, len );
+        return LAPACKE_zge_nancheck( LAPACK_COL_MAJOR, len, 1, a, len );
     }
 }

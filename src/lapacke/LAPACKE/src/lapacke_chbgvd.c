@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function chbgvd
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_chbgvd)( int matrix_layout, char jobz, char uplo, lapack_int n,
+lapack_int LAPACKE_chbgvd( int matrix_layout, char jobz, char uplo, lapack_int n,
                            lapack_int ka, lapack_int kb,
                            lapack_complex_float* ab, lapack_int ldab,
                            lapack_complex_float* bb, lapack_int ldbb, float* w,
@@ -49,28 +50,28 @@ lapack_int API_SUFFIX(LAPACKE_chbgvd)( int matrix_layout, char jobz, char uplo, 
     float rwork_query;
     lapack_complex_float work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_chbgvd", -1 );
+        LAPACKE_xerbla( "LAPACKE_chbgvd", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_chb_nancheck)( matrix_layout, uplo, n, ka, ab, ldab ) ) {
+        if( LAPACKE_chb_nancheck( matrix_layout, uplo, n, ka, ab, ldab ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_chb_nancheck)( matrix_layout, uplo, n, kb, bb, ldbb ) ) {
+        if( LAPACKE_chb_nancheck( matrix_layout, uplo, n, kb, bb, ldbb ) ) {
             return -9;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_chbgvd_work)( matrix_layout, jobz, uplo, n, ka, kb, ab, ldab,
+    info = LAPACKE_chbgvd_work( matrix_layout, jobz, uplo, n, ka, kb, ab, ldab,
                                 bb, ldbb, w, z, ldz, &work_query, lwork,
                                 &rwork_query, lrwork, &iwork_query, liwork );
     if( info != 0 ) {
         goto exit_level_0;
     }
-    liwork = iwork_query;
+    liwork = (lapack_int)iwork_query;
     lrwork = (lapack_int)rwork_query;
     lwork = LAPACK_C2INT( work_query );
     /* Allocate memory for work arrays */
@@ -91,7 +92,7 @@ lapack_int API_SUFFIX(LAPACKE_chbgvd)( int matrix_layout, char jobz, char uplo, 
         goto exit_level_2;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_chbgvd_work)( matrix_layout, jobz, uplo, n, ka, kb, ab, ldab,
+    info = LAPACKE_chbgvd_work( matrix_layout, jobz, uplo, n, ka, kb, ab, ldab,
                                 bb, ldbb, w, z, ldz, work, lwork, rwork, lrwork,
                                 iwork, liwork );
     /* Release memory and exit */
@@ -102,7 +103,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_chbgvd", info );
+        LAPACKE_xerbla( "LAPACKE_chbgvd", info );
     }
     return info;
 }

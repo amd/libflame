@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function zpbtrs
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zpbtrs_work)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_zpbtrs_work( int matrix_layout, char uplo, lapack_int n,
                                 lapack_int kd, lapack_int nrhs,
                                 const lapack_complex_double* ab,
                                 lapack_int ldab, lapack_complex_double* b,
@@ -53,12 +54,12 @@ lapack_int API_SUFFIX(LAPACKE_zpbtrs_work)( int matrix_layout, char uplo, lapack
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zpbtrs_work", info );
+            LAPACKE_xerbla( "LAPACKE_zpbtrs_work", info );
             return info;
         }
         if( ldb < nrhs ) {
             info = -9;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zpbtrs_work", info );
+            LAPACKE_xerbla( "LAPACKE_zpbtrs_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -76,8 +77,8 @@ lapack_int API_SUFFIX(LAPACKE_zpbtrs_work)( int matrix_layout, char uplo, lapack
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_zpb_trans)( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_zpb_trans( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
+        LAPACKE_zge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zpbtrs( &uplo, &n, &kd, &nrhs, ab_t, &ldab_t, b_t, &ldb_t,
                        &info );
@@ -85,18 +86,18 @@ lapack_int API_SUFFIX(LAPACKE_zpbtrs_work)( int matrix_layout, char uplo, lapack
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
+        LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
         /* Release memory and exit */
         LAPACKE_free( b_t );
 exit_level_1:
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zpbtrs_work", info );
+            LAPACKE_xerbla( "LAPACKE_zpbtrs_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zpbtrs_work", info );
+        LAPACKE_xerbla( "LAPACKE_zpbtrs_work", info );
     }
     return info;
 }

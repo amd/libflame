@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function sgesvd
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_sgesvd_work)( int matrix_layout, char jobu, char jobvt,
+lapack_int LAPACKE_sgesvd_work( int matrix_layout, char jobu, char jobvt,
                                 lapack_int m, lapack_int n, float* a,
                                 lapack_int lda, float* s, float* u,
                                 lapack_int ldu, float* vt, lapack_int ldvt,
@@ -47,14 +48,12 @@ lapack_int API_SUFFIX(LAPACKE_sgesvd_work)( int matrix_layout, char jobu, char j
             info = info - 1;
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
-        lapack_int nrows_u = ( API_SUFFIX(LAPACKE_lsame)( jobu, 'a' ) ||
-                             API_SUFFIX(LAPACKE_lsame)( jobu, 's' ) ) ? m : 1;
-        lapack_int ncols_u = API_SUFFIX(LAPACKE_lsame)( jobu, 'a' ) ? m :
-                             ( API_SUFFIX(LAPACKE_lsame)( jobu, 's' ) ? MIN(m,n) : 1);
-        lapack_int nrows_vt = API_SUFFIX(LAPACKE_lsame)( jobvt, 'a' ) ? n :
-                              ( API_SUFFIX(LAPACKE_lsame)( jobvt, 's' ) ? MIN(m,n) : 1);
-        lapack_int ncols_vt = ( API_SUFFIX(LAPACKE_lsame)( jobvt, 'a' ) ||
-                               API_SUFFIX(LAPACKE_lsame)( jobvt, 's' ) ) ? n : 1;
+        lapack_int nrows_u = ( LAPACKE_lsame( jobu, 'a' ) ||
+                             LAPACKE_lsame( jobu, 's' ) ) ? m : 1;
+        lapack_int ncols_u = LAPACKE_lsame( jobu, 'a' ) ? m :
+                             ( LAPACKE_lsame( jobu, 's' ) ? MIN(m,n) : 1);
+        lapack_int nrows_vt = LAPACKE_lsame( jobvt, 'a' ) ? n :
+                              ( LAPACKE_lsame( jobvt, 's' ) ? MIN(m,n) : 1);
         lapack_int lda_t = MAX(1,m);
         lapack_int ldu_t = MAX(1,nrows_u);
         lapack_int ldvt_t = MAX(1,nrows_vt);
@@ -64,17 +63,17 @@ lapack_int API_SUFFIX(LAPACKE_sgesvd_work)( int matrix_layout, char jobu, char j
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgesvd_work", info );
+            LAPACKE_xerbla( "LAPACKE_sgesvd_work", info );
             return info;
         }
         if( ldu < ncols_u ) {
             info = -10;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgesvd_work", info );
+            LAPACKE_xerbla( "LAPACKE_sgesvd_work", info );
             return info;
         }
-        if( ldvt < ncols_vt ) {
+        if( ldvt < n ) {
             info = -12;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgesvd_work", info );
+            LAPACKE_xerbla( "LAPACKE_sgesvd_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -89,7 +88,7 @@ lapack_int API_SUFFIX(LAPACKE_sgesvd_work)( int matrix_layout, char jobu, char j
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( jobu, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobu, 's' ) ) {
+        if( LAPACKE_lsame( jobu, 'a' ) || LAPACKE_lsame( jobu, 's' ) ) {
             u_t = (float*)
                 LAPACKE_malloc( sizeof(float) * ldu_t * MAX(1,ncols_u) );
             if( u_t == NULL ) {
@@ -97,7 +96,7 @@ lapack_int API_SUFFIX(LAPACKE_sgesvd_work)( int matrix_layout, char jobu, char j
                 goto exit_level_1;
             }
         }
-        if( API_SUFFIX(LAPACKE_lsame)( jobvt, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobvt, 's' ) ) {
+        if( LAPACKE_lsame( jobvt, 'a' ) || LAPACKE_lsame( jobvt, 's' ) ) {
             vt_t = (float*)LAPACKE_malloc( sizeof(float) * ldvt_t * MAX(1,n) );
             if( vt_t == NULL ) {
                 info = LAPACK_TRANSPOSE_MEMORY_ERROR;
@@ -105,7 +104,7 @@ lapack_int API_SUFFIX(LAPACKE_sgesvd_work)( int matrix_layout, char jobu, char j
             }
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, m, n, a, lda, a_t, lda_t );
+        LAPACKE_sge_trans( matrix_layout, m, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_sgesvd( &jobu, &jobvt, &m, &n, a_t, &lda_t, s, u_t, &ldu_t, vt_t,
                        &ldvt_t, work, &lwork, &info );
@@ -113,32 +112,32 @@ lapack_int API_SUFFIX(LAPACKE_sgesvd_work)( int matrix_layout, char jobu, char j
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
-        if( API_SUFFIX(LAPACKE_lsame)( jobu, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobu, 's' ) ) {
-            API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, nrows_u, ncols_u, u_t, ldu_t,
+        LAPACKE_sge_trans( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
+        if( LAPACKE_lsame( jobu, 'a' ) || LAPACKE_lsame( jobu, 's' ) ) {
+            LAPACKE_sge_trans( LAPACK_COL_MAJOR, nrows_u, ncols_u, u_t, ldu_t,
                                u, ldu );
         }
-        if( API_SUFFIX(LAPACKE_lsame)( jobvt, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobvt, 's' ) ) {
-            API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, nrows_vt, n, vt_t, ldvt_t, vt,
+        if( LAPACKE_lsame( jobvt, 'a' ) || LAPACKE_lsame( jobvt, 's' ) ) {
+            LAPACKE_sge_trans( LAPACK_COL_MAJOR, nrows_vt, n, vt_t, ldvt_t, vt,
                                ldvt );
         }
         /* Release memory and exit */
-        if( API_SUFFIX(LAPACKE_lsame)( jobvt, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobvt, 's' ) ) {
+        if( LAPACKE_lsame( jobvt, 'a' ) || LAPACKE_lsame( jobvt, 's' ) ) {
             LAPACKE_free( vt_t );
         }
 exit_level_2:
-        if( API_SUFFIX(LAPACKE_lsame)( jobu, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobu, 's' ) ) {
+        if( LAPACKE_lsame( jobu, 'a' ) || LAPACKE_lsame( jobu, 's' ) ) {
             LAPACKE_free( u_t );
         }
 exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgesvd_work", info );
+            LAPACKE_xerbla( "LAPACKE_sgesvd_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgesvd_work", info );
+        LAPACKE_xerbla( "LAPACKE_sgesvd_work", info );
     }
     return info;
 }

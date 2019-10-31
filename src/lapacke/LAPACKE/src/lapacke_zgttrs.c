@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zgttrs
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zgttrs)( int matrix_layout, char trans, lapack_int n,
+lapack_int LAPACKE_zgttrs( int matrix_layout, char trans, lapack_int n,
                            lapack_int nrhs, const lapack_complex_double* dl,
                            const lapack_complex_double* d,
                            const lapack_complex_double* du,
@@ -41,29 +42,29 @@ lapack_int API_SUFFIX(LAPACKE_zgttrs)( int matrix_layout, char trans, lapack_int
                            lapack_int ldb )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgttrs", -1 );
+        LAPACKE_xerbla( "LAPACKE_zgttrs", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( LAPACKE_zge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
             return -10;
         }
-        if( API_SUFFIX(LAPACKE_z_nancheck)( n, d, 1 ) ) {
+        if( LAPACKE_z_nancheck( n, d, 1 ) ) {
             return -6;
         }
-        if( API_SUFFIX(LAPACKE_z_nancheck)( n-1, dl, 1 ) ) {
+        if( LAPACKE_z_nancheck( n-1, dl, 1 ) ) {
             return -5;
         }
-        if( API_SUFFIX(LAPACKE_z_nancheck)( n-1, du, 1 ) ) {
+        if( LAPACKE_z_nancheck( n-1, du, 1 ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_z_nancheck)( n-2, du2, 1 ) ) {
+        if( LAPACKE_z_nancheck( n-2, du2, 1 ) ) {
             return -8;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_zgttrs_work)( matrix_layout, trans, n, nrhs, dl, d, du, du2,
+    return LAPACKE_zgttrs_work( matrix_layout, trans, n, nrhs, dl, d, du, du2,
                                 ipiv, b, ldb );
 }

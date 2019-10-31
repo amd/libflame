@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zgtcon
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zgtcon)( char norm, lapack_int n,
+lapack_int LAPACKE_zgtcon( char norm, lapack_int n,
                            const lapack_complex_double* dl,
                            const lapack_complex_double* d,
                            const lapack_complex_double* du,
@@ -44,19 +45,19 @@ lapack_int API_SUFFIX(LAPACKE_zgtcon)( char norm, lapack_int n,
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &anorm, 1 ) ) {
+        if( LAPACKE_d_nancheck( 1, &anorm, 1 ) ) {
             return -8;
         }
-        if( API_SUFFIX(LAPACKE_z_nancheck)( n, d, 1 ) ) {
+        if( LAPACKE_z_nancheck( n, d, 1 ) ) {
             return -4;
         }
-        if( API_SUFFIX(LAPACKE_z_nancheck)( n-1, dl, 1 ) ) {
+        if( LAPACKE_z_nancheck( n-1, dl, 1 ) ) {
             return -3;
         }
-        if( API_SUFFIX(LAPACKE_z_nancheck)( n-1, du, 1 ) ) {
+        if( LAPACKE_z_nancheck( n-1, du, 1 ) ) {
             return -5;
         }
-        if( API_SUFFIX(LAPACKE_z_nancheck)( n-2, du2, 1 ) ) {
+        if( LAPACKE_z_nancheck( n-2, du2, 1 ) ) {
             return -6;
         }
     }
@@ -69,13 +70,13 @@ lapack_int API_SUFFIX(LAPACKE_zgtcon)( char norm, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_zgtcon_work)( norm, n, dl, d, du, du2, ipiv, anorm, rcond,
+    info = LAPACKE_zgtcon_work( norm, n, dl, d, du, du2, ipiv, anorm, rcond,
                                 work );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgtcon", info );
+        LAPACKE_xerbla( "LAPACKE_zgtcon", info );
     }
     return info;
 }

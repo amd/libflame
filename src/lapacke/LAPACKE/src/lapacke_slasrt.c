@@ -28,19 +28,20 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function slasrt
 * Author: Intel Corporation
+* Generated May, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_slasrt)( char id, lapack_int n, float* d )
+lapack_int LAPACKE_slasrt( char id, lapack_int n, float* d )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n, d, 1 ) ) {
+        if( LAPACKE_s_nancheck( n, d, 1 ) ) {
             return -3;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_slasrt_work)( id, n, d );
+    return LAPACKE_slasrt_work( id, n, d );
 }

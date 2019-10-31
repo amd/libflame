@@ -28,6 +28,7 @@
 ******************************************************************************
 * Contents: Native C interface to LAPACK utility function
 * Author: Intel Corporation
+* Created in February, 2010
 *****************************************************************************/
 
 #include "lapacke_utils.h"
@@ -36,7 +37,7 @@
  * layout or vice versa.
  */
 
-void API_SUFFIX(LAPACKE_shs_trans)( int matrix_layout, lapack_int n,
+void LAPACKE_shs_trans( int matrix_layout, lapack_int n,
                         const float *in, lapack_int ldin,
                         float *out, lapack_int ldout )
 {
@@ -44,15 +45,15 @@ void API_SUFFIX(LAPACKE_shs_trans)( int matrix_layout, lapack_int n,
 
     /* Convert subdiagonal first */
     if( matrix_layout == LAPACK_COL_MAJOR ) {
-        API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, 1, n-1, &in[1], ldin+1,
+        LAPACKE_sge_trans( LAPACK_COL_MAJOR, 1, n-1, &in[1], ldin+1,
                            &out[ldout], ldout+1 );
     } else if ( matrix_layout == LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_sge_trans)( LAPACK_ROW_MAJOR, n-1, 1, &in[ldin], ldin+1,
+        LAPACKE_sge_trans( LAPACK_ROW_MAJOR, n-1, 1, &in[ldin], ldin+1,
                            &out[1], ldout+1 );
     } else {
         return;
     }
 
     /* Convert upper triangular. */
-    API_SUFFIX(LAPACKE_str_trans)( matrix_layout, 'u', 'n', n, in, ldin, out, ldout);
+    LAPACKE_str_trans( matrix_layout, 'u', 'n', n, in, ldin, out, ldout);
 }

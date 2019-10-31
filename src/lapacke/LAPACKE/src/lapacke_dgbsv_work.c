@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dgbsv
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dgbsv_work)( int matrix_layout, lapack_int n, lapack_int kl,
+lapack_int LAPACKE_dgbsv_work( int matrix_layout, lapack_int n, lapack_int kl,
                                lapack_int ku, lapack_int nrhs, double* ab,
                                lapack_int ldab, lapack_int* ipiv, double* b,
                                lapack_int ldb )
@@ -52,12 +53,12 @@ lapack_int API_SUFFIX(LAPACKE_dgbsv_work)( int matrix_layout, lapack_int n, lapa
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgbsv_work", info );
+            LAPACKE_xerbla( "LAPACKE_dgbsv_work", info );
             return info;
         }
         if( ldb < nrhs ) {
             info = -10;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgbsv_work", info );
+            LAPACKE_xerbla( "LAPACKE_dgbsv_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -72,9 +73,9 @@ lapack_int API_SUFFIX(LAPACKE_dgbsv_work)( int matrix_layout, lapack_int n, lapa
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_dgb_trans)( matrix_layout, n, n, kl, kl+ku, ab, ldab, ab_t,
+        LAPACKE_dgb_trans( matrix_layout, n, n, kl, kl+ku, ab, ldab, ab_t,
                            ldab_t );
-        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_dge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dgbsv( &n, &kl, &ku, &nrhs, ab_t, &ldab_t, ipiv, b_t, &ldb_t,
                       &info );
@@ -82,20 +83,20 @@ lapack_int API_SUFFIX(LAPACKE_dgbsv_work)( int matrix_layout, lapack_int n, lapa
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_dgb_trans)( LAPACK_COL_MAJOR, n, n, kl, kl+ku, ab_t, ldab_t, ab,
+        LAPACKE_dgb_trans( LAPACK_COL_MAJOR, n, n, kl, kl+ku, ab_t, ldab_t, ab,
                            ldab );
-        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
+        LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
         /* Release memory and exit */
         LAPACKE_free( b_t );
 exit_level_1:
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgbsv_work", info );
+            LAPACKE_xerbla( "LAPACKE_dgbsv_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgbsv_work", info );
+        LAPACKE_xerbla( "LAPACKE_dgbsv_work", info );
     }
     return info;
 }

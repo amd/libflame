@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dbbcsd
 * Author: Intel Corporation
+* Generated June 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dbbcsd_work)( int matrix_layout, char jobu1, char jobu2,
+lapack_int LAPACKE_dbbcsd_work( int matrix_layout, char jobu1, char jobu2,
                                 char jobv1t, char jobv2t, char trans,
                                 lapack_int m, lapack_int p, lapack_int q,
                                 double* theta, double* phi, double* u1,
@@ -61,7 +62,7 @@ lapack_int API_SUFFIX(LAPACKE_dbbcsd_work)( int matrix_layout, char jobu1, char 
     if( matrix_layout == LAPACK_COL_MAJOR ||
         matrix_layout == LAPACK_ROW_MAJOR ) {
         char ltrans;
-        if( !API_SUFFIX(LAPACKE_lsame)( trans, 't' ) && matrix_layout == LAPACK_COL_MAJOR ) {
+        if( !LAPACKE_lsame( trans, 't' ) && matrix_layout == LAPACK_COL_MAJOR ) {
             ltrans = 'n';
         } else {
             ltrans = 't';
@@ -76,7 +77,7 @@ lapack_int API_SUFFIX(LAPACKE_dbbcsd_work)( int matrix_layout, char jobu1, char 
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dbbcsd_work", info );
+        LAPACKE_xerbla( "LAPACKE_dbbcsd_work", info );
     }
     return info;
 }

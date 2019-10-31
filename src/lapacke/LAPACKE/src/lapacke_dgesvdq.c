@@ -28,15 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dgesvdq
 * Author: Intel Corporation
+* Generated November 2018
 *****************************************************************************/
-
-/*
- *     Modifications Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
- */
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dgesvdq)( int matrix_layout, char joba, char jobp,
+lapack_int LAPACKE_dgesvdq( int matrix_layout, char joba, char jobp,
                            char jobr, char jobu, char jobv,
                            lapack_int m, lapack_int n, double* a,
                            lapack_int lda, double* s, double* u, lapack_int ldu,
@@ -52,27 +49,28 @@ lapack_int API_SUFFIX(LAPACKE_dgesvdq)( int matrix_layout, char joba, char jobp,
     lapack_int lrwork = -1;
     double* rwork = NULL;
     double rwork_query;
+    lapack_int i;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgesvdq", -1 );
+        LAPACKE_xerbla( "LAPACKE_dgesvdq", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, m, n, a, lda ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, m, n, a, lda ) ) {
             return -6;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_dgesvdq_work)( matrix_layout, joba, jobp, jobr, jobu, jobv,
+    info = LAPACKE_dgesvdq_work( matrix_layout, joba, jobp, jobr, jobu, jobv,
                                  m, n, a, lda, s, u, ldu, v, ldv, numrank,
                                  &iwork_query, liwork, &work_query, lwork,
                                  &rwork_query, lrwork );
     if( info != 0 ) {
         goto exit_level_0;
     }
-    liwork = iwork_query;
+    liwork = (lapack_int)iwork_query;
     lwork = (lapack_int)work_query;
     lrwork = (lapack_int)rwork_query;
     /* Allocate memory for work arrays */
@@ -84,27 +82,25 @@ lapack_int API_SUFFIX(LAPACKE_dgesvdq)( int matrix_layout, char joba, char jobp,
     work = (double*)LAPACKE_malloc( sizeof(double) * lwork );
     if( work == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
-        goto exit_level_1;
+        goto exit_level_0;
     }
     rwork = (double*)LAPACKE_malloc( sizeof(double) * lrwork );
     if( rwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
-        goto exit_level_2;
+        goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_dgesvdq_work)( matrix_layout, joba, jobp, jobr, jobu, jobv,
+    info = LAPACKE_dgesvdq_work( matrix_layout, joba, jobp, jobr, jobu, jobv,
                                  m, n, a, lda, s, u, ldu, v, ldv, numrank,
                                  iwork, liwork, work, lwork, rwork, lrwork );
 
     /* Release memory and exit */
-    LAPACKE_free( rwork );
-exit_level_2:
-    LAPACKE_free( work );
-exit_level_1:
     LAPACKE_free( iwork );
+    LAPACKE_free( work );
+    LAPACKE_free( rwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgesvdq", info );
+        LAPACKE_xerbla( "LAPACKE_dgesvdq", info );
     }
     return info;
 }

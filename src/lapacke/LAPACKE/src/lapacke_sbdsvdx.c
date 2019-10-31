@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function sbdsvdx
 * Author: Intel Corporation
+* Generated June 2016
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_sbdsvdx)( int matrix_layout, char uplo, char jobz, char range,
+lapack_int LAPACKE_sbdsvdx( int matrix_layout, char uplo, char jobz, char range,
                            lapack_int n, float* d, float* e,
                            float vl, float vu,
                            lapack_int il, lapack_int iu, lapack_int* ns,
@@ -45,16 +46,16 @@ lapack_int API_SUFFIX(LAPACKE_sbdsvdx)( int matrix_layout, char uplo, char jobz,
     lapack_int* iwork = NULL;
     lapack_int i;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sbdsvdx", -1 );
+        LAPACKE_xerbla( "LAPACKE_sbdsvdx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n, d, 1 ) ) {
+        if( LAPACKE_s_nancheck( n, d, 1 ) ) {
             return -6;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n - 1, e, 1 ) ) {
+        if( LAPACKE_s_nancheck( n - 1, e, 1 ) ) {
             return -7;
         }
     }
@@ -71,7 +72,7 @@ lapack_int API_SUFFIX(LAPACKE_sbdsvdx)( int matrix_layout, char uplo, char jobz,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_sbdsvdx_work)( matrix_layout, uplo, jobz,  range,
+    info = LAPACKE_sbdsvdx_work( matrix_layout, uplo, jobz,  range,
                                  n, d, e, vl, vu, il, iu, ns, s, z,
                                  ldz, work, iwork);
     /* Backup significant data from working array(s) */
@@ -84,7 +85,7 @@ exit_level_1:
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sbdsvdx", info );
+        LAPACKE_xerbla( "LAPACKE_sbdsvdx", info );
     }
     return info;
 }

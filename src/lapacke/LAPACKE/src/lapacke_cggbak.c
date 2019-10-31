@@ -28,33 +28,34 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function cggbak
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cggbak)( int matrix_layout, char job, char side, lapack_int n,
+lapack_int LAPACKE_cggbak( int matrix_layout, char job, char side, lapack_int n,
                            lapack_int ilo, lapack_int ihi, const float* lscale,
                            const float* rscale, lapack_int m,
                            lapack_complex_float* v, lapack_int ldv )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cggbak", -1 );
+        LAPACKE_xerbla( "LAPACKE_cggbak", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n, lscale, 1 ) ) {
+        if( LAPACKE_s_nancheck( n, lscale, 1 ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n, rscale, 1 ) ) {
+        if( LAPACKE_s_nancheck( n, rscale, 1 ) ) {
             return -8;
         }
-        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, n, m, v, ldv ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, n, m, v, ldv ) ) {
             return -10;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_cggbak_work)( matrix_layout, job, side, n, ilo, ihi, lscale,
+    return LAPACKE_cggbak_work( matrix_layout, job, side, n, ilo, ihi, lscale,
                                 rscale, m, v, ldv );
 }

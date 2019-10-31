@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zsprfs
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zsprfs)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_zsprfs( int matrix_layout, char uplo, lapack_int n,
                            lapack_int nrhs, const lapack_complex_double* ap,
                            const lapack_complex_double* afp,
                            const lapack_int* ipiv,
@@ -44,22 +45,22 @@ lapack_int API_SUFFIX(LAPACKE_zsprfs)( int matrix_layout, char uplo, lapack_int 
     double* rwork = NULL;
     lapack_complex_double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zsprfs", -1 );
+        LAPACKE_xerbla( "LAPACKE_zsprfs", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_zsp_nancheck)( n, afp ) ) {
+        if( LAPACKE_zsp_nancheck( n, afp ) ) {
             return -6;
         }
-        if( API_SUFFIX(LAPACKE_zsp_nancheck)( n, ap ) ) {
+        if( LAPACKE_zsp_nancheck( n, ap ) ) {
             return -5;
         }
-        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( LAPACKE_zge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
             return -8;
         }
-        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, nrhs, x, ldx ) ) {
+        if( LAPACKE_zge_nancheck( matrix_layout, n, nrhs, x, ldx ) ) {
             return -10;
         }
     }
@@ -77,7 +78,7 @@ lapack_int API_SUFFIX(LAPACKE_zsprfs)( int matrix_layout, char uplo, lapack_int 
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_zsprfs_work)( matrix_layout, uplo, n, nrhs, ap, afp, ipiv, b,
+    info = LAPACKE_zsprfs_work( matrix_layout, uplo, n, nrhs, ap, afp, ipiv, b,
                                 ldb, x, ldx, ferr, berr, work, rwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -85,7 +86,7 @@ exit_level_1:
     LAPACKE_free( rwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zsprfs", info );
+        LAPACKE_xerbla( "LAPACKE_zsprfs", info );
     }
     return info;
 }

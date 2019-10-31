@@ -28,12 +28,13 @@
 ******************************************************************************
 * Contents: Native C interface to LAPACK utility function
 * Author: Intel Corporation
+* Created in February, 2010
 *****************************************************************************/
 #include "lapacke_utils.h"
 
 /* Check a matrix for NaN entries. */
 
-lapack_logical API_SUFFIX(LAPACKE_ztb_nancheck)( int matrix_layout, char uplo, char diag,
+lapack_logical LAPACKE_ztb_nancheck( int matrix_layout, char uplo, char diag,
                                       lapack_int n, lapack_int kd,
                                       const lapack_complex_double* ab,
                                       lapack_int ldab )
@@ -43,12 +44,12 @@ lapack_logical API_SUFFIX(LAPACKE_ztb_nancheck)( int matrix_layout, char uplo, c
     if( ab == NULL ) return (lapack_logical) 0;
 
     colmaj = ( matrix_layout == LAPACK_COL_MAJOR );
-    upper  = API_SUFFIX(LAPACKE_lsame)( uplo, 'u' );
-    unit   = API_SUFFIX(LAPACKE_lsame)( diag, 'u' );
+    upper  = LAPACKE_lsame( uplo, 'u' );
+    unit   = LAPACKE_lsame( diag, 'u' );
 
     if( ( !colmaj && ( matrix_layout != LAPACK_ROW_MAJOR ) ) ||
-        ( !upper  && !API_SUFFIX(LAPACKE_lsame)( uplo, 'l' ) ) ||
-        ( !unit   && !API_SUFFIX(LAPACKE_lsame)( diag, 'n' ) ) ) {
+        ( !upper  && !LAPACKE_lsame( uplo, 'l' ) ) ||
+        ( !unit   && !LAPACKE_lsame( diag, 'n' ) ) ) {
         /* Just exit if any of input parameters are wrong */
         return (lapack_logical) 0;
     }
@@ -57,27 +58,27 @@ lapack_logical API_SUFFIX(LAPACKE_ztb_nancheck)( int matrix_layout, char uplo, c
         /* Unit case, diagonal should be excluded from the check for NaN. */
         if( colmaj ) {
             if( upper ) {
-                return API_SUFFIX(LAPACKE_zgb_nancheck)( matrix_layout, n-1, n-1, 0, kd-1,
+                return LAPACKE_zgb_nancheck( matrix_layout, n-1, n-1, 0, kd-1,
                                              &ab[ldab], ldab );
             } else {
-                return API_SUFFIX(LAPACKE_zgb_nancheck)( matrix_layout, n-1, n-1, kd-1, 0,
+                return LAPACKE_zgb_nancheck( matrix_layout, n-1, n-1, kd-1, 0,
                                              &ab[1], ldab );
             }
         } else {
             if( upper ) {
-                return API_SUFFIX(LAPACKE_zgb_nancheck)( matrix_layout, n-1, n-1, 0, kd-1,
+                return LAPACKE_zgb_nancheck( matrix_layout, n-1, n-1, 0, kd-1,
                                              &ab[1], ldab );
             } else {
-                return API_SUFFIX(LAPACKE_zgb_nancheck)( matrix_layout, n-1, n-1, kd-1, 0,
+                return LAPACKE_zgb_nancheck( matrix_layout, n-1, n-1, kd-1, 0,
                                              &ab[ldab], ldab );
             }
         }
     } else {
         /* Non-unit case */
         if( upper ) {
-            return API_SUFFIX(LAPACKE_zgb_nancheck)( matrix_layout, n, n, 0, kd, ab, ldab );
+            return LAPACKE_zgb_nancheck( matrix_layout, n, n, 0, kd, ab, ldab );
         } else {
-            return API_SUFFIX(LAPACKE_zgb_nancheck)( matrix_layout, n, n, kd, 0, ab, ldab );
+            return LAPACKE_zgb_nancheck( matrix_layout, n, n, kd, 0, ab, ldab );
         }
     }
 }

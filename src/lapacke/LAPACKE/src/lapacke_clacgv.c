@@ -28,20 +28,21 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function clacgv
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_clacgv)( lapack_int n, lapack_complex_float* x,
+lapack_int LAPACKE_clacgv( lapack_int n, lapack_complex_float* x,
                            lapack_int incx )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_c_nancheck)( n, x, incx ) ) {
+        if( LAPACKE_c_nancheck( n, x, incx ) ) {
             return -2;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_clacgv_work)( n, x, incx );
+    return LAPACKE_clacgv_work( n, x, incx );
 }

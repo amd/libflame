@@ -28,27 +28,28 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dsytrs2
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dsytrs2)( int matrix_layout, char uplo, lapack_int n,
-                            lapack_int nrhs, const double* a, lapack_int lda,
+lapack_int LAPACKE_dsytrs2( int matrix_layout, char uplo, lapack_int n,
+                            lapack_int nrhs, double* a, lapack_int lda,
                             const lapack_int* ipiv, double* b, lapack_int ldb )
 {
     lapack_int info = 0;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsytrs2", -1 );
+        LAPACKE_xerbla( "LAPACKE_dsytrs2", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_dsy_nancheck)( matrix_layout, uplo, n, a, lda ) ) {
+        if( LAPACKE_dsy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
             return -5;
         }
-        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
             return -8;
         }
     }
@@ -60,13 +61,13 @@ lapack_int API_SUFFIX(LAPACKE_dsytrs2)( int matrix_layout, char uplo, lapack_int
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_dsytrs2_work)( matrix_layout, uplo, n, nrhs, a, lda, ipiv, b,
+    info = LAPACKE_dsytrs2_work( matrix_layout, uplo, n, nrhs, a, lda, ipiv, b,
                                  ldb, work );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsytrs2", info );
+        LAPACKE_xerbla( "LAPACKE_dsytrs2", info );
     }
     return info;
 }

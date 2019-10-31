@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function cgbrfsx
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cgbrfsx)( int matrix_layout, char trans, char equed,
+lapack_int LAPACKE_cgbrfsx( int matrix_layout, char trans, char equed,
                             lapack_int n, lapack_int kl, lapack_int ku,
                             lapack_int nrhs, const lapack_complex_float* ab,
                             lapack_int ldab, const lapack_complex_float* afb,
@@ -48,37 +49,37 @@ lapack_int API_SUFFIX(LAPACKE_cgbrfsx)( int matrix_layout, char trans, char eque
     float* rwork = NULL;
     lapack_complex_float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgbrfsx", -1 );
+        LAPACKE_xerbla( "LAPACKE_cgbrfsx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_cgb_nancheck)( matrix_layout, n, n, kl, ku, ab, ldab ) ) {
+        if( LAPACKE_cgb_nancheck( matrix_layout, n, n, kl, ku, ab, ldab ) ) {
             return -8;
         }
-        if( API_SUFFIX(LAPACKE_cgb_nancheck)( matrix_layout, n, n, kl, kl+ku, afb, ldafb ) ) {
+        if( LAPACKE_cgb_nancheck( matrix_layout, n, n, kl, kl+ku, afb, ldafb ) ) {
             return -10;
         }
-        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
             return -15;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( equed, 'b' ) || API_SUFFIX(LAPACKE_lsame)( equed, 'c' ) ) {
-            if( API_SUFFIX(LAPACKE_s_nancheck)( n, c, 1 ) ) {
+        if( LAPACKE_lsame( equed, 'b' ) || LAPACKE_lsame( equed, 'c' ) ) {
+            if( LAPACKE_s_nancheck( n, c, 1 ) ) {
                 return -14;
             }
         }
         if( nparams>0 ) {
-            if( API_SUFFIX(LAPACKE_s_nancheck)( nparams, params, 1 ) ) {
+            if( LAPACKE_s_nancheck( nparams, params, 1 ) ) {
                 return -25;
             }
         }
-        if( API_SUFFIX(LAPACKE_lsame)( equed, 'b' ) || API_SUFFIX(LAPACKE_lsame)( equed, 'r' ) ) {
-            if( API_SUFFIX(LAPACKE_s_nancheck)( n, r, 1 ) ) {
+        if( LAPACKE_lsame( equed, 'b' ) || LAPACKE_lsame( equed, 'r' ) ) {
+            if( LAPACKE_s_nancheck( n, r, 1 ) ) {
                 return -13;
             }
         }
-        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, n, nrhs, x, ldx ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, n, nrhs, x, ldx ) ) {
             return -17;
         }
     }
@@ -96,7 +97,7 @@ lapack_int API_SUFFIX(LAPACKE_cgbrfsx)( int matrix_layout, char trans, char eque
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_cgbrfsx_work)( matrix_layout, trans, equed, n, kl, ku, nrhs,
+    info = LAPACKE_cgbrfsx_work( matrix_layout, trans, equed, n, kl, ku, nrhs,
                                  ab, ldab, afb, ldafb, ipiv, r, c, b, ldb, x,
                                  ldx, rcond, berr, n_err_bnds, err_bnds_norm,
                                  err_bnds_comp, nparams, params, work, rwork );
@@ -106,7 +107,7 @@ exit_level_1:
     LAPACKE_free( rwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgbrfsx", info );
+        LAPACKE_xerbla( "LAPACKE_cgbrfsx", info );
     }
     return info;
 }

@@ -28,6 +28,7 @@
 ******************************************************************************
 * Contents: Native C interface to LAPACK utility function
 * Author: Intel Corporation
+* Created in February, 2010
 *****************************************************************************/
 
 #include "lapacke_utils.h"
@@ -36,9 +37,9 @@
  * column-major(Fortran) layout or vice versa.
  */
 
-void API_SUFFIX(LAPACKE_zhp_trans)( int matrix_layout, char uplo, lapack_int n,
+void LAPACKE_zhp_trans( int matrix_layout, char uplo, lapack_int n,
                         const lapack_complex_double *in,
                         lapack_complex_double *out )
 {
-    API_SUFFIX(LAPACKE_ztp_trans)( matrix_layout, uplo, 'n', n, in, out );
+    LAPACKE_ztp_trans( matrix_layout, uplo, 'n', n, in, out );
 }

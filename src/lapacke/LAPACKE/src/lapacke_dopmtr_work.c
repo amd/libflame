@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dopmtr
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dopmtr_work)( int matrix_layout, char side, char uplo,
+lapack_int LAPACKE_dopmtr_work( int matrix_layout, char side, char uplo,
                                 char trans, lapack_int m, lapack_int n,
                                 const double* ap, const double* tau, double* c,
                                 lapack_int ldc, double* work )
@@ -49,12 +50,12 @@ lapack_int API_SUFFIX(LAPACKE_dopmtr_work)( int matrix_layout, char side, char u
             info = info - 1;
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
-        r = API_SUFFIX(LAPACKE_lsame)( side, 'l' ) ? m : n;
+        r = LAPACKE_lsame( side, 'l' ) ? m : n;
         ldc_t = MAX(1,m);
         /* Check leading dimension(s) */
         if( ldc < n ) {
             info = -10;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dopmtr_work", info );
+            LAPACKE_xerbla( "LAPACKE_dopmtr_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -70,8 +71,8 @@ lapack_int API_SUFFIX(LAPACKE_dopmtr_work)( int matrix_layout, char side, char u
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, m, n, c, ldc, c_t, ldc_t );
-        API_SUFFIX(LAPACKE_dsp_trans)( matrix_layout, uplo, r, ap, ap_t );
+        LAPACKE_dge_trans( matrix_layout, m, n, c, ldc, c_t, ldc_t );
+        LAPACKE_dsp_trans( matrix_layout, uplo, r, ap, ap_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dopmtr( &side, &uplo, &trans, &m, &n, ap_t, tau, c_t, &ldc_t,
                        work, &info );
@@ -79,18 +80,18 @@ lapack_int API_SUFFIX(LAPACKE_dopmtr_work)( int matrix_layout, char side, char u
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, m, n, c_t, ldc_t, c, ldc );
+        LAPACKE_dge_trans( LAPACK_COL_MAJOR, m, n, c_t, ldc_t, c, ldc );
         /* Release memory and exit */
         LAPACKE_free( ap_t );
 exit_level_1:
         LAPACKE_free( c_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dopmtr_work", info );
+            LAPACKE_xerbla( "LAPACKE_dopmtr_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dopmtr_work", info );
+        LAPACKE_xerbla( "LAPACKE_dopmtr_work", info );
     }
     return info;
 }

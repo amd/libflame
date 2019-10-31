@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function sbdsdc
 * Author: Intel Corporation
+* Generated June 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_sbdsdc)( int matrix_layout, char uplo, char compq,
+lapack_int LAPACKE_sbdsdc( int matrix_layout, char uplo, char compq,
                            lapack_int n, float* d, float* e, float* u,
                            lapack_int ldu, float* vt, lapack_int ldvt, float* q,
                            lapack_int* iq )
@@ -43,26 +44,26 @@ lapack_int API_SUFFIX(LAPACKE_sbdsdc)( int matrix_layout, char uplo, char compq,
     lapack_int* iwork = NULL;
     float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sbdsdc", -1 );
+        LAPACKE_xerbla( "LAPACKE_sbdsdc", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n, d, 1 ) ) {
+        if( LAPACKE_s_nancheck( n, d, 1 ) ) {
             return -5;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n-1, e, 1 ) ) {
+        if( LAPACKE_s_nancheck( n-1, e, 1 ) ) {
             return -6;
         }
     }
 #endif
     /* Additional scalars initializations for work arrays */
-    if( API_SUFFIX(LAPACKE_lsame)( compq, 'i' ) ) {
+    if( LAPACKE_lsame( compq, 'i' ) ) {
         lwork = (size_t)3*MAX(1,n)*MAX(1,n)+4*MAX(1,n);
-    } else if( API_SUFFIX(LAPACKE_lsame)( compq, 'p' ) ) {
+    } else if( LAPACKE_lsame( compq, 'p' ) ) {
         lwork = MAX(1,6*n);
-    } else if( API_SUFFIX(LAPACKE_lsame)( compq, 'n' ) ) {
+    } else if( LAPACKE_lsame( compq, 'n' ) ) {
         lwork = MAX(1,4*n);
     } else {
         lwork = 1; /* Any value */
@@ -79,7 +80,7 @@ lapack_int API_SUFFIX(LAPACKE_sbdsdc)( int matrix_layout, char uplo, char compq,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_sbdsdc_work)( matrix_layout, uplo, compq, n, d, e, u, ldu, vt,
+    info = LAPACKE_sbdsdc_work( matrix_layout, uplo, compq, n, d, e, u, ldu, vt,
                                 ldvt, q, iq, work, iwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -87,7 +88,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sbdsdc", info );
+        LAPACKE_xerbla( "LAPACKE_sbdsdc", info );
     }
     return info;
 }

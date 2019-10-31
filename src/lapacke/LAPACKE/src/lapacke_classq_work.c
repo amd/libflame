@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function classq
 * Author: Julien Langou
+* Generated February, 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_classq_work)( lapack_int n, lapack_complex_float* x, lapack_int incx, float* scale, float* sumsq )
+lapack_int LAPACKE_classq_work( lapack_int n, lapack_complex_float* x, lapack_int incx, float* scale, float* sumsq )
 {
     lapack_int info = 0;
     LAPACK_classq( &n, x, &incx, scale, sumsq );

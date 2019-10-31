@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dtrrfs
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dtrrfs)( int matrix_layout, char uplo, char trans, char diag,
+lapack_int LAPACKE_dtrrfs( int matrix_layout, char uplo, char trans, char diag,
                            lapack_int n, lapack_int nrhs, const double* a,
                            lapack_int lda, const double* b, lapack_int ldb,
                            const double* x, lapack_int ldx, double* ferr,
@@ -42,19 +43,19 @@ lapack_int API_SUFFIX(LAPACKE_dtrrfs)( int matrix_layout, char uplo, char trans,
     lapack_int* iwork = NULL;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtrrfs", -1 );
+        LAPACKE_xerbla( "LAPACKE_dtrrfs", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_dtr_nancheck)( matrix_layout, uplo, diag, n, a, lda ) ) {
+        if( LAPACKE_dtr_nancheck( matrix_layout, uplo, diag, n, a, lda ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
             return -9;
         }
-        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, n, nrhs, x, ldx ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, x, ldx ) ) {
             return -11;
         }
     }
@@ -71,7 +72,7 @@ lapack_int API_SUFFIX(LAPACKE_dtrrfs)( int matrix_layout, char uplo, char trans,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_dtrrfs_work)( matrix_layout, uplo, trans, diag, n, nrhs, a,
+    info = LAPACKE_dtrrfs_work( matrix_layout, uplo, trans, diag, n, nrhs, a,
                                 lda, b, ldb, x, ldx, ferr, berr, work, iwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -79,7 +80,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtrrfs", info );
+        LAPACKE_xerbla( "LAPACKE_dtrrfs", info );
     }
     return info;
 }

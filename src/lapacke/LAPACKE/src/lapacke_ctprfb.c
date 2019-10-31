@@ -28,11 +28,12 @@
 ******************************************************************************
 * Contents: Native high-level C interface to LAPACK function ctprfb
 * Author: Intel Corporation
+* Generated June 2016
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_ctprfb)( int matrix_layout, char side, char trans, char direct,
+lapack_int LAPACKE_ctprfb( int matrix_layout, char side, char trans, char direct,
                            char storev, lapack_int m, lapack_int n,
                            lapack_int k, lapack_int l,
                            const lapack_complex_float* v, lapack_int ldv,
@@ -46,7 +47,7 @@ lapack_int API_SUFFIX(LAPACKE_ctprfb)( int matrix_layout, char side, char trans,
     lapack_int work_size;
     lapack_complex_float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctprfb", -1 );
+        LAPACKE_xerbla( "LAPACKE_ctprfb", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
@@ -61,32 +62,32 @@ lapack_int API_SUFFIX(LAPACKE_ctprfb)( int matrix_layout, char side, char trans,
          *   or m-by-k (right)
          * B is m-by-n
          */
-        if( API_SUFFIX(LAPACKE_lsame)( storev, 'C' ) ) {
+        if( LAPACKE_lsame( storev, 'C' ) ) {
             ncols_v = k;
-            nrows_v = API_SUFFIX(LAPACKE_lsame)( side, 'L' ) ? m :
-                      API_SUFFIX(LAPACKE_lsame)( side, 'R' ) ? n : 0;
-        } else if( API_SUFFIX(LAPACKE_lsame)( storev, 'R' ) ) {
-            ncols_v = API_SUFFIX(LAPACKE_lsame)( side, 'L' ) ? m :
-                      API_SUFFIX(LAPACKE_lsame)( side, 'R' ) ? n : 0;
+            nrows_v = LAPACKE_lsame( side, 'L' ) ? m :
+                      LAPACKE_lsame( side, 'R' ) ? n : 0;
+        } else if( LAPACKE_lsame( storev, 'R' ) ) {
+            ncols_v = LAPACKE_lsame( side, 'L' ) ? m :
+                      LAPACKE_lsame( side, 'R' ) ? n : 0;
             nrows_v = k;
         } else {
             ncols_v = 0;
             nrows_v = 0;
         }
-        nrows_a = API_SUFFIX(LAPACKE_lsame)( side, 'L' ) ? k :
-                  API_SUFFIX(LAPACKE_lsame)( side, 'R' ) ? m : 0;
-        ncols_a = API_SUFFIX(LAPACKE_lsame)( side, 'L' ) ? n :
-                  API_SUFFIX(LAPACKE_lsame)( side, 'R' ) ? k : 0;
-        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, ncols_a, nrows_a, a, lda ) ) {
+        nrows_a = LAPACKE_lsame( side, 'L' ) ? k :
+                  LAPACKE_lsame( side, 'R' ) ? m : 0;
+        ncols_a = LAPACKE_lsame( side, 'L' ) ? n :
+                  LAPACKE_lsame( side, 'R' ) ? k : 0;
+        if( LAPACKE_cge_nancheck( matrix_layout, ncols_a, nrows_a, a, lda ) ) {
             return -14;
         }
-        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, m, n, b, ldb ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, m, n, b, ldb ) ) {
             return -16;
         }
-        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, k, k, t, ldt ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, k, k, t, ldt ) ) {
             return -12;
         }
-        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, nrows_v, ncols_v, v, ldv ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, nrows_v, ncols_v, v, ldv ) ) {
             return -10;
         }
     }
@@ -107,14 +108,14 @@ lapack_int API_SUFFIX(LAPACKE_ctprfb)( int matrix_layout, char side, char trans,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_ctprfb_work)( matrix_layout, side, trans, direct, storev, m, n,
+    info = LAPACKE_ctprfb_work( matrix_layout, side, trans, direct, storev, m, n,
                                 k, l, v, ldv, t, ldt, a, lda, b, ldb, work,
                                 ldwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctprfb", info );
+        LAPACKE_xerbla( "LAPACKE_ctprfb", info );
     }
     return info;
 }

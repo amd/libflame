@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dgels
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dgels_work)( int matrix_layout, char trans, lapack_int m,
+lapack_int LAPACKE_dgels_work( int matrix_layout, char trans, lapack_int m,
                                lapack_int n, lapack_int nrhs, double* a,
                                lapack_int lda, double* b, lapack_int ldb,
                                double* work, lapack_int lwork )
@@ -53,12 +54,12 @@ lapack_int API_SUFFIX(LAPACKE_dgels_work)( int matrix_layout, char trans, lapack
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgels_work", info );
+            LAPACKE_xerbla( "LAPACKE_dgels_work", info );
             return info;
         }
         if( ldb < nrhs ) {
             info = -9;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgels_work", info );
+            LAPACKE_xerbla( "LAPACKE_dgels_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -79,8 +80,8 @@ lapack_int API_SUFFIX(LAPACKE_dgels_work)( int matrix_layout, char trans, lapack
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, m, n, a, lda, a_t, lda_t );
-        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, MAX(m,n), nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_dge_trans( matrix_layout, m, n, a, lda, a_t, lda_t );
+        LAPACKE_dge_trans( matrix_layout, MAX(m,n), nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dgels( &trans, &m, &n, &nrhs, a_t, &lda_t, b_t, &ldb_t, work,
                       &lwork, &info );
@@ -88,8 +89,8 @@ lapack_int API_SUFFIX(LAPACKE_dgels_work)( int matrix_layout, char trans, lapack
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
-        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, MAX(m,n), nrhs, b_t, ldb_t, b,
+        LAPACKE_dge_trans( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
+        LAPACKE_dge_trans( LAPACK_COL_MAJOR, MAX(m,n), nrhs, b_t, ldb_t, b,
                            ldb );
         /* Release memory and exit */
         LAPACKE_free( b_t );
@@ -97,11 +98,11 @@ exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgels_work", info );
+            LAPACKE_xerbla( "LAPACKE_dgels_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgels_work", info );
+        LAPACKE_xerbla( "LAPACKE_dgels_work", info );
     }
     return info;
 }

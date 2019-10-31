@@ -28,11 +28,12 @@
 ******************************************************************************
 * Contents: Native middle-level C interface to LAPACK function cgeqrt2
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cgeqrt2_work)( int matrix_layout, lapack_int m, lapack_int n,
+lapack_int LAPACKE_cgeqrt2_work( int matrix_layout, lapack_int m, lapack_int n,
                                  lapack_complex_float* a, lapack_int lda,
                                  lapack_complex_float* t, lapack_int ldt )
 {
@@ -51,12 +52,12 @@ lapack_int API_SUFFIX(LAPACKE_cgeqrt2_work)( int matrix_layout, lapack_int m, la
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -5;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgeqrt2_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgeqrt2_work", info );
             return info;
         }
         if( ldt < n ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgeqrt2_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgeqrt2_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -73,26 +74,26 @@ lapack_int API_SUFFIX(LAPACKE_cgeqrt2_work)( int matrix_layout, lapack_int m, la
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, m, n, a, lda, a_t, lda_t );
+        LAPACKE_cge_trans( matrix_layout, m, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_cgeqrt2( &m, &n, a_t, &lda_t, t_t, &ldt_t, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
-        API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, n, n, t_t, ldt_t, t, ldt );
+        LAPACKE_cge_trans( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
+        LAPACKE_cge_trans( LAPACK_COL_MAJOR, n, n, t_t, ldt_t, t, ldt );
         /* Release memory and exit */
         LAPACKE_free( t_t );
 exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgeqrt2_work", info );
+            LAPACKE_xerbla( "LAPACKE_cgeqrt2_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgeqrt2_work", info );
+        LAPACKE_xerbla( "LAPACKE_cgeqrt2_work", info );
     }
     return info;
 }

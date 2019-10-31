@@ -28,27 +28,28 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dspgv
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dspgv)( int matrix_layout, lapack_int itype, char jobz,
+lapack_int LAPACKE_dspgv( int matrix_layout, lapack_int itype, char jobz,
                           char uplo, lapack_int n, double* ap, double* bp,
                           double* w, double* z, lapack_int ldz )
 {
     lapack_int info = 0;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dspgv", -1 );
+        LAPACKE_xerbla( "LAPACKE_dspgv", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_dsp_nancheck)( n, ap ) ) {
+        if( LAPACKE_dsp_nancheck( n, ap ) ) {
             return -6;
         }
-        if( API_SUFFIX(LAPACKE_dsp_nancheck)( n, bp ) ) {
+        if( LAPACKE_dsp_nancheck( n, bp ) ) {
             return -7;
         }
     }
@@ -60,13 +61,13 @@ lapack_int API_SUFFIX(LAPACKE_dspgv)( int matrix_layout, lapack_int itype, char 
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_dspgv_work)( matrix_layout, itype, jobz, uplo, n, ap, bp, w, z,
+    info = LAPACKE_dspgv_work( matrix_layout, itype, jobz, uplo, n, ap, bp, w, z,
                                ldz, work );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dspgv", info );
+        LAPACKE_xerbla( "LAPACKE_dspgv", info );
     }
     return info;
 }

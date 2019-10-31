@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function cpttrf
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_cpttrf_work)( lapack_int n, float* d,
+lapack_int LAPACKE_cpttrf_work( lapack_int n, float* d,
                                 lapack_complex_float* e )
 {
     lapack_int info = 0;

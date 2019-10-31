@@ -28,39 +28,40 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zhfrk
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zhfrk)( int matrix_layout, char transr, char uplo, char trans,
+lapack_int LAPACKE_zhfrk( int matrix_layout, char transr, char uplo, char trans,
                           lapack_int n, lapack_int k, double alpha,
                           const lapack_complex_double* a, lapack_int lda,
                           double beta, lapack_complex_double* c )
 {
     lapack_int ka, na;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhfrk", -1 );
+        LAPACKE_xerbla( "LAPACKE_zhfrk", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        ka = API_SUFFIX(LAPACKE_lsame)( trans, 'n' ) ? k : n;
-        na = API_SUFFIX(LAPACKE_lsame)( trans, 'n' ) ? n : k;
-        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, na, ka, a, lda ) ) {
+        ka = LAPACKE_lsame( trans, 'n' ) ? k : n;
+        na = LAPACKE_lsame( trans, 'n' ) ? n : k;
+        if( LAPACKE_zge_nancheck( matrix_layout, na, ka, a, lda ) ) {
             return -8;
         }
-        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &alpha, 1 ) ) {
+        if( LAPACKE_d_nancheck( 1, &alpha, 1 ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &beta, 1 ) ) {
+        if( LAPACKE_d_nancheck( 1, &beta, 1 ) ) {
             return -10;
         }
-        if( API_SUFFIX(LAPACKE_zpf_nancheck)( n, c ) ) {
+        if( LAPACKE_zpf_nancheck( n, c ) ) {
             return -11;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_zhfrk_work)( matrix_layout, transr, uplo, trans, n, k, alpha,
+    return LAPACKE_zhfrk_work( matrix_layout, transr, uplo, trans, n, k, alpha,
                                a, lda, beta, c );
 }

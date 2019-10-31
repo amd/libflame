@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function sstemr
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_sstemr)( int matrix_layout, char jobz, char range,
+lapack_int LAPACKE_sstemr( int matrix_layout, char jobz, char range,
                            lapack_int n, float* d, float* e, float vl, float vu,
                            lapack_int il, lapack_int iu, lapack_int* m,
                            float* w, float* z, lapack_int ldz, lapack_int nzc,
@@ -46,34 +47,34 @@ lapack_int API_SUFFIX(LAPACKE_sstemr)( int matrix_layout, char jobz, char range,
     lapack_int iwork_query;
     float work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sstemr", -1 );
+        LAPACKE_xerbla( "LAPACKE_sstemr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n, d, 1 ) ) {
+        if( LAPACKE_s_nancheck( n, d, 1 ) ) {
             return -5;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( n-1, e, 1 ) ) {
+        if( LAPACKE_s_nancheck( n-1, e, 1 ) ) {
             return -6;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &vl, 1 ) ) {
+        if( LAPACKE_s_nancheck( 1, &vl, 1 ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &vu, 1 ) ) {
+        if( LAPACKE_s_nancheck( 1, &vu, 1 ) ) {
             return -8;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_sstemr_work)( matrix_layout, jobz, range, n, d, e, vl, vu, il,
+    info = LAPACKE_sstemr_work( matrix_layout, jobz, range, n, d, e, vl, vu, il,
                                 iu, m, w, z, ldz, nzc, isuppz, tryrac,
                                 &work_query, lwork, &iwork_query, liwork );
     if( info != 0 ) {
         goto exit_level_0;
     }
-    liwork = iwork_query;
+    liwork = (lapack_int)iwork_query;
     lwork = (lapack_int)work_query;
     /* Allocate memory for work arrays */
     iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * liwork );
@@ -87,7 +88,7 @@ lapack_int API_SUFFIX(LAPACKE_sstemr)( int matrix_layout, char jobz, char range,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_sstemr_work)( matrix_layout, jobz, range, n, d, e, vl, vu, il,
+    info = LAPACKE_sstemr_work( matrix_layout, jobz, range, n, d, e, vl, vu, il,
                                 iu, m, w, z, ldz, nzc, isuppz, tryrac, work,
                                 lwork, iwork, liwork );
     /* Release memory and exit */
@@ -96,7 +97,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sstemr", info );
+        LAPACKE_xerbla( "LAPACKE_sstemr", info );
     }
     return info;
 }

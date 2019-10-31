@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function zunglq
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zunglq_work)( int matrix_layout, lapack_int m, lapack_int n,
+lapack_int LAPACKE_zunglq_work( int matrix_layout, lapack_int m, lapack_int n,
                                 lapack_int k, lapack_complex_double* a,
                                 lapack_int lda,
                                 const lapack_complex_double* tau,
@@ -51,7 +52,7 @@ lapack_int API_SUFFIX(LAPACKE_zunglq_work)( int matrix_layout, lapack_int m, lap
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zunglq_work", info );
+            LAPACKE_xerbla( "LAPACKE_zunglq_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -67,23 +68,23 @@ lapack_int API_SUFFIX(LAPACKE_zunglq_work)( int matrix_layout, lapack_int m, lap
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, m, n, a, lda, a_t, lda_t );
+        LAPACKE_zge_trans( matrix_layout, m, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zunglq( &m, &n, &k, a_t, &lda_t, tau, work, &lwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
+        LAPACKE_zge_trans( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zunglq_work", info );
+            LAPACKE_xerbla( "LAPACKE_zunglq_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zunglq_work", info );
+        LAPACKE_xerbla( "LAPACKE_zunglq_work", info );
     }
     return info;
 }

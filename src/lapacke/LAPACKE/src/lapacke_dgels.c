@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dgels
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dgels)( int matrix_layout, char trans, lapack_int m,
+lapack_int LAPACKE_dgels( int matrix_layout, char trans, lapack_int m,
                           lapack_int n, lapack_int nrhs, double* a,
                           lapack_int lda, double* b, lapack_int ldb )
 {
@@ -41,22 +42,22 @@ lapack_int API_SUFFIX(LAPACKE_dgels)( int matrix_layout, char trans, lapack_int 
     double* work = NULL;
     double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgels", -1 );
+        LAPACKE_xerbla( "LAPACKE_dgels", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, m, n, a, lda ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, m, n, a, lda ) ) {
             return -6;
         }
-        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, MAX(m,n), nrhs, b, ldb ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, MAX(m,n), nrhs, b, ldb ) ) {
             return -8;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_dgels_work)( matrix_layout, trans, m, n, nrhs, a, lda, b, ldb,
+    info = LAPACKE_dgels_work( matrix_layout, trans, m, n, nrhs, a, lda, b, ldb,
                                &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -69,13 +70,13 @@ lapack_int API_SUFFIX(LAPACKE_dgels)( int matrix_layout, char trans, lapack_int 
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_dgels_work)( matrix_layout, trans, m, n, nrhs, a, lda, b, ldb,
+    info = LAPACKE_dgels_work( matrix_layout, trans, m, n, nrhs, a, lda, b, ldb,
                                work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgels", info );
+        LAPACKE_xerbla( "LAPACKE_dgels", info );
     }
     return info;
 }

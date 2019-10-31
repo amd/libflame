@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function zhecon_3
 * Author: Intel Corporation
+* Generated December 2016
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zhecon_3_work)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_zhecon_3_work( int matrix_layout, char uplo, lapack_int n,
                                 const lapack_complex_double* a, lapack_int lda,
                                 const lapack_complex_double* e,
                                 const lapack_int* ipiv, double anorm,
@@ -51,7 +52,7 @@ lapack_int API_SUFFIX(LAPACKE_zhecon_3_work)( int matrix_layout, char uplo, lapa
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -5;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhecon_3_work", info );
+            LAPACKE_xerbla( "LAPACKE_zhecon_3_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -62,7 +63,7 @@ lapack_int API_SUFFIX(LAPACKE_zhecon_3_work)( int matrix_layout, char uplo, lapa
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_zhe_trans)( matrix_layout, uplo, n, a, lda, a_t, lda_t );
+        LAPACKE_zhe_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zhecon_3( &uplo, &n, a_t, &lda_t, e, ipiv, &anorm, rcond, work,
                        &info );
@@ -73,11 +74,11 @@ lapack_int API_SUFFIX(LAPACKE_zhecon_3_work)( int matrix_layout, char uplo, lapa
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhecon_3_work", info );
+            LAPACKE_xerbla( "LAPACKE_zhecon_3_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhecon_3_work", info );
+        LAPACKE_xerbla( "LAPACKE_zhecon_3_work", info );
     }
     return info;
 }

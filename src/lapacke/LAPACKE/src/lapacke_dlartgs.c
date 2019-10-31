@@ -28,26 +28,27 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dlartgs
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dlartgs)( double x, double y, double sigma, double* cs,
+lapack_int LAPACKE_dlartgs( double x, double y, double sigma, double* cs,
                             double* sn )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &sigma, 1 ) ) {
+        if( LAPACKE_d_nancheck( 1, &sigma, 1 ) ) {
             return -3;
         }
-        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &x, 1 ) ) {
+        if( LAPACKE_d_nancheck( 1, &x, 1 ) ) {
             return -1;
         }
-        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &y, 1 ) ) {
+        if( LAPACKE_d_nancheck( 1, &y, 1 ) ) {
             return -2;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_dlartgs_work)( x, y, sigma, cs, sn );
+    return LAPACKE_dlartgs_work( x, y, sigma, cs, sn );
 }

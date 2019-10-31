@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zlange
 * Author: Intel Corporation
+* Generated June 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-double API_SUFFIX(LAPACKE_zlange)( int matrix_layout, char norm, lapack_int m,
+double LAPACKE_zlange( int matrix_layout, char norm, lapack_int m,
                            lapack_int n, const lapack_complex_double* a,
                            lapack_int lda )
 {
@@ -40,19 +41,19 @@ double API_SUFFIX(LAPACKE_zlange)( int matrix_layout, char norm, lapack_int m,
     double res = 0.;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zlange", -1 );
+        LAPACKE_xerbla( "LAPACKE_zlange", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, m, n, a, lda ) ) {
+        if( LAPACKE_zge_nancheck( matrix_layout, m, n, a, lda ) ) {
             return -5;
         }
     }
 #endif
     /* Allocate memory for working array(s) */
-    if( API_SUFFIX(LAPACKE_lsame)( norm, 'i' ) ) {
+    if( LAPACKE_lsame( norm, 'i' ) ) {
         work = (double*)LAPACKE_malloc( sizeof(double) * MAX(1,m) );
         if( work == NULL ) {
             info = LAPACK_WORK_MEMORY_ERROR;
@@ -60,14 +61,14 @@ double API_SUFFIX(LAPACKE_zlange)( int matrix_layout, char norm, lapack_int m,
         }
     }
     /* Call middle-level interface */
-    res = API_SUFFIX(LAPACKE_zlange_work)( matrix_layout, norm, m, n, a, lda, work );
+    res = LAPACKE_zlange_work( matrix_layout, norm, m, n, a, lda, work );
     /* Release memory and exit */
-    if( API_SUFFIX(LAPACKE_lsame)( norm, 'i' ) ) {
+    if( LAPACKE_lsame( norm, 'i' ) ) {
         LAPACKE_free( work );
     }
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zlange", info );
+        LAPACKE_xerbla( "LAPACKE_zlange", info );
     }
     return res;
 }

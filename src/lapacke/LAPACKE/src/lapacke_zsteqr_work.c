@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function zsteqr
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zsteqr_work)( int matrix_layout, char compz, lapack_int n,
+lapack_int LAPACKE_zsteqr_work( int matrix_layout, char compz, lapack_int n,
                                 double* d, double* e, lapack_complex_double* z,
                                 lapack_int ldz, double* work )
 {
@@ -49,11 +50,11 @@ lapack_int API_SUFFIX(LAPACKE_zsteqr_work)( int matrix_layout, char compz, lapac
         /* Check leading dimension(s) */
         if( ldz < n ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zsteqr_work", info );
+            LAPACKE_xerbla( "LAPACKE_zsteqr_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
-        if( API_SUFFIX(LAPACKE_lsame)( compz, 'i' ) || API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
+        if( LAPACKE_lsame( compz, 'i' ) || LAPACKE_lsame( compz, 'v' ) ) {
             z_t = (lapack_complex_double*)
                 LAPACKE_malloc( sizeof(lapack_complex_double) *
                                 ldz_t * MAX(1,n) );
@@ -63,8 +64,8 @@ lapack_int API_SUFFIX(LAPACKE_zsteqr_work)( int matrix_layout, char compz, lapac
             }
         }
         /* Transpose input matrices */
-        if( API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
-            API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, n, z, ldz, z_t, ldz_t );
+        if( LAPACKE_lsame( compz, 'v' ) ) {
+            LAPACKE_zge_trans( matrix_layout, n, n, z, ldz, z_t, ldz_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_zsteqr( &compz, &n, d, e, z_t, &ldz_t, work, &info );
@@ -72,20 +73,20 @@ lapack_int API_SUFFIX(LAPACKE_zsteqr_work)( int matrix_layout, char compz, lapac
             info = info - 1;
         }
         /* Transpose output matrices */
-        if( API_SUFFIX(LAPACKE_lsame)( compz, 'i' ) || API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
-            API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, n, z_t, ldz_t, z, ldz );
+        if( LAPACKE_lsame( compz, 'i' ) || LAPACKE_lsame( compz, 'v' ) ) {
+            LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, n, z_t, ldz_t, z, ldz );
         }
         /* Release memory and exit */
-        if( API_SUFFIX(LAPACKE_lsame)( compz, 'i' ) || API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
+        if( LAPACKE_lsame( compz, 'i' ) || LAPACKE_lsame( compz, 'v' ) ) {
             LAPACKE_free( z_t );
         }
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zsteqr_work", info );
+            LAPACKE_xerbla( "LAPACKE_zsteqr_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zsteqr_work", info );
+        LAPACKE_xerbla( "LAPACKE_zsteqr_work", info );
     }
     return info;
 }

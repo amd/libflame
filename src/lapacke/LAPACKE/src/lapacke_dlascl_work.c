@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dlaswp
 * Author: Intel Corporation
+* Generated June 2016
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dlascl_work)( int matrix_layout, char type, lapack_int kl,
+lapack_int LAPACKE_dlascl_work( int matrix_layout, char type, lapack_int kl,
                            lapack_int ku, double cfrom, double cto,
                            lapack_int m, lapack_int n, double* a,
                            lapack_int lda )
@@ -45,15 +46,15 @@ lapack_int API_SUFFIX(LAPACKE_dlascl_work)( int matrix_layout, char type, lapack
             info = info - 1;
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
-        lapack_int nrows_a = API_SUFFIX(LAPACKE_lsame)(type, 'b') ? kl + 1 :
-                             API_SUFFIX(LAPACKE_lsame)(type, 'q') ? ku + 1 :
-                             API_SUFFIX(LAPACKE_lsame)(type, 'z') ? 2 * kl + ku + 1 : m;
+        lapack_int nrows_a = LAPACKE_lsame(type, 'b') ? kl + 1 :
+                             LAPACKE_lsame(type, 'q') ? ku + 1 :
+                             LAPACKE_lsame(type, 'z') ? 2 * kl + ku + 1 : m;
         lapack_int lda_t = MAX(1,nrows_a);
         double* a_t = NULL;
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -9;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlascl_work", info );
+            LAPACKE_xerbla( "LAPACKE_dlascl_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -63,23 +64,23 @@ lapack_int API_SUFFIX(LAPACKE_dlascl_work)( int matrix_layout, char type, lapack
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, nrows_a, n, a, lda, a_t, lda_t );
+        LAPACKE_dge_trans( matrix_layout, nrows_a, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dlascl( &type, &kl, &ku, &cfrom, &cto, &m, &n, a_t, &lda_t, &info);
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, nrows_a, n, a_t, lda_t, a, lda );
+        LAPACKE_dge_trans( LAPACK_COL_MAJOR, nrows_a, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlascl_work", info );
+            LAPACKE_xerbla( "LAPACKE_dlascl_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlascl_work", info );
+        LAPACKE_xerbla( "LAPACKE_dlascl_work", info );
     }
     return info;
 }

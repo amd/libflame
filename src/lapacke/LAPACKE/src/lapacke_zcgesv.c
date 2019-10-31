@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zcgesv
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zcgesv)( int matrix_layout, lapack_int n, lapack_int nrhs,
+lapack_int LAPACKE_zcgesv( int matrix_layout, lapack_int n, lapack_int nrhs,
                            lapack_complex_double* a, lapack_int lda,
                            lapack_int* ipiv, lapack_complex_double* b,
                            lapack_int ldb, lapack_complex_double* x,
@@ -43,16 +44,16 @@ lapack_int API_SUFFIX(LAPACKE_zcgesv)( int matrix_layout, lapack_int n, lapack_i
     lapack_complex_float* swork = NULL;
     lapack_complex_double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zcgesv", -1 );
+        LAPACKE_xerbla( "LAPACKE_zcgesv", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, n, a, lda ) ) {
+        if( LAPACKE_zge_nancheck( matrix_layout, n, n, a, lda ) ) {
             return -4;
         }
-        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( LAPACKE_zge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
             return -7;
         }
     }
@@ -78,7 +79,7 @@ lapack_int API_SUFFIX(LAPACKE_zcgesv)( int matrix_layout, lapack_int n, lapack_i
         goto exit_level_2;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_zcgesv_work)( matrix_layout, n, nrhs, a, lda, ipiv, b, ldb, x,
+    info = LAPACKE_zcgesv_work( matrix_layout, n, nrhs, a, lda, ipiv, b, ldb, x,
                                 ldx, work, swork, rwork, iter );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -88,7 +89,7 @@ exit_level_1:
     LAPACKE_free( rwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zcgesv", info );
+        LAPACKE_xerbla( "LAPACKE_zcgesv", info );
     }
     return info;
 }

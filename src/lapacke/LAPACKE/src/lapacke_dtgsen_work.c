@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dtgsen
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dtgsen_work)( int matrix_layout, lapack_int ijob,
+lapack_int LAPACKE_dtgsen_work( int matrix_layout, lapack_int ijob,
                                 lapack_logical wantq, lapack_logical wantz,
                                 const lapack_logical* select, lapack_int n,
                                 double* a, lapack_int lda, double* b,
@@ -64,22 +65,22 @@ lapack_int API_SUFFIX(LAPACKE_dtgsen_work)( int matrix_layout, lapack_int ijob,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -8;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtgsen_work", info );
+            LAPACKE_xerbla( "LAPACKE_dtgsen_work", info );
             return info;
         }
         if( ldb < n ) {
             info = -10;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtgsen_work", info );
+            LAPACKE_xerbla( "LAPACKE_dtgsen_work", info );
             return info;
         }
         if( ldq < n ) {
             info = -15;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtgsen_work", info );
+            LAPACKE_xerbla( "LAPACKE_dtgsen_work", info );
             return info;
         }
         if( ldz < n ) {
             info = -17;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtgsen_work", info );
+            LAPACKE_xerbla( "LAPACKE_dtgsen_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -116,13 +117,13 @@ lapack_int API_SUFFIX(LAPACKE_dtgsen_work)( int matrix_layout, lapack_int ijob,
             }
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, n, n, a, lda, a_t, lda_t );
-        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, n, n, b, ldb, b_t, ldb_t );
+        LAPACKE_dge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
+        LAPACKE_dge_trans( matrix_layout, n, n, b, ldb, b_t, ldb_t );
         if( wantq ) {
-            API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, n, n, q, ldq, q_t, ldq_t );
+            LAPACKE_dge_trans( matrix_layout, n, n, q, ldq, q_t, ldq_t );
         }
         if( wantz ) {
-            API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, n, n, z, ldz, z_t, ldz_t );
+            LAPACKE_dge_trans( matrix_layout, n, n, z, ldz, z_t, ldz_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_dtgsen( &ijob, &wantq, &wantz, select, &n, a_t, &lda_t, b_t,
@@ -132,13 +133,13 @@ lapack_int API_SUFFIX(LAPACKE_dtgsen_work)( int matrix_layout, lapack_int ijob,
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
-        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, n, b_t, ldb_t, b, ldb );
+        LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
+        LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, n, b_t, ldb_t, b, ldb );
         if( wantq ) {
-            API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, n, q_t, ldq_t, q, ldq );
+            LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, n, q_t, ldq_t, q, ldq );
         }
         if( wantz ) {
-            API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, n, z_t, ldz_t, z, ldz );
+            LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, n, z_t, ldz_t, z, ldz );
         }
         /* Release memory and exit */
         if( wantz ) {
@@ -154,11 +155,11 @@ exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtgsen_work", info );
+            LAPACKE_xerbla( "LAPACKE_dtgsen_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtgsen_work", info );
+        LAPACKE_xerbla( "LAPACKE_dtgsen_work", info );
     }
     return info;
 }

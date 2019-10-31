@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dppcon
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dppcon_work)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_dppcon_work( int matrix_layout, char uplo, lapack_int n,
                                 const double* ap, double anorm, double* rcond,
                                 double* work, lapack_int* iwork )
 {
@@ -53,7 +54,7 @@ lapack_int API_SUFFIX(LAPACKE_dppcon_work)( int matrix_layout, char uplo, lapack
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_dpp_trans)( matrix_layout, uplo, n, ap, ap_t );
+        LAPACKE_dpp_trans( matrix_layout, uplo, n, ap, ap_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dppcon( &uplo, &n, ap_t, &anorm, rcond, work, iwork, &info );
         if( info < 0 ) {
@@ -63,11 +64,11 @@ lapack_int API_SUFFIX(LAPACKE_dppcon_work)( int matrix_layout, char uplo, lapack
         LAPACKE_free( ap_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dppcon_work", info );
+            LAPACKE_xerbla( "LAPACKE_dppcon_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dppcon_work", info );
+        LAPACKE_xerbla( "LAPACKE_dppcon_work", info );
     }
     return info;
 }

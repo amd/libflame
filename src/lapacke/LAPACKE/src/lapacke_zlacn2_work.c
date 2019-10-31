@@ -28,11 +28,12 @@
 ******************************************************************************
 * Contents: Native middle-level C interface to LAPACK function zlacn2
 * Author: Intel Corporation
+* Generated October, 2012
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zlacn2_work)( lapack_int n, lapack_complex_double* v,
+lapack_int LAPACKE_zlacn2_work( lapack_int n, lapack_complex_double* v,
                                 lapack_complex_double* x,
                                 double* est, lapack_int* kase,
                                 lapack_int* isave )

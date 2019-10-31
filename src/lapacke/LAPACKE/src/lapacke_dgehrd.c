@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dgehrd
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dgehrd)( int matrix_layout, lapack_int n, lapack_int ilo,
+lapack_int LAPACKE_dgehrd( int matrix_layout, lapack_int n, lapack_int ilo,
                            lapack_int ihi, double* a, lapack_int lda,
                            double* tau )
 {
@@ -41,19 +42,19 @@ lapack_int API_SUFFIX(LAPACKE_dgehrd)( int matrix_layout, lapack_int n, lapack_i
     double* work = NULL;
     double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgehrd", -1 );
+        LAPACKE_xerbla( "LAPACKE_dgehrd", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, n, n, a, lda ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, n, n, a, lda ) ) {
             return -5;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = API_SUFFIX(LAPACKE_dgehrd_work)( matrix_layout, n, ilo, ihi, a, lda, tau,
+    info = LAPACKE_dgehrd_work( matrix_layout, n, ilo, ihi, a, lda, tau,
                                 &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -66,13 +67,13 @@ lapack_int API_SUFFIX(LAPACKE_dgehrd)( int matrix_layout, lapack_int n, lapack_i
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_dgehrd_work)( matrix_layout, n, ilo, ihi, a, lda, tau, work,
+    info = LAPACKE_dgehrd_work( matrix_layout, n, ilo, ihi, a, lda, tau, work,
                                 lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgehrd", info );
+        LAPACKE_xerbla( "LAPACKE_dgehrd", info );
     }
     return info;
 }

@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dppsvx
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dppsvx_work)( int matrix_layout, char fact, char uplo,
+lapack_int LAPACKE_dppsvx_work( int matrix_layout, char fact, char uplo,
                                 lapack_int n, lapack_int nrhs, double* ap,
                                 double* afp, char* equed, double* s, double* b,
                                 lapack_int ldb, double* x, lapack_int ldx,
@@ -57,12 +58,12 @@ lapack_int API_SUFFIX(LAPACKE_dppsvx_work)( int matrix_layout, char fact, char u
         /* Check leading dimension(s) */
         if( ldb < nrhs ) {
             info = -11;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dppsvx_work", info );
+            LAPACKE_xerbla( "LAPACKE_dppsvx_work", info );
             return info;
         }
         if( ldx < nrhs ) {
             info = -13;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dppsvx_work", info );
+            LAPACKE_xerbla( "LAPACKE_dppsvx_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -89,10 +90,10 @@ lapack_int API_SUFFIX(LAPACKE_dppsvx_work)( int matrix_layout, char fact, char u
             goto exit_level_3;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
-        API_SUFFIX(LAPACKE_dpp_trans)( matrix_layout, uplo, n, ap, ap_t );
-        if( API_SUFFIX(LAPACKE_lsame)( fact, 'f' ) ) {
-            API_SUFFIX(LAPACKE_dpp_trans)( matrix_layout, uplo, n, afp, afp_t );
+        LAPACKE_dge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_dpp_trans( matrix_layout, uplo, n, ap, ap_t );
+        if( LAPACKE_lsame( fact, 'f' ) ) {
+            LAPACKE_dpp_trans( matrix_layout, uplo, n, afp, afp_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_dppsvx( &fact, &uplo, &n, &nrhs, ap_t, afp_t, equed, s, b_t,
@@ -102,13 +103,13 @@ lapack_int API_SUFFIX(LAPACKE_dppsvx_work)( int matrix_layout, char fact, char u
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
-        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
-        if( API_SUFFIX(LAPACKE_lsame)( fact, 'e' ) && API_SUFFIX(LAPACKE_lsame)( *equed, 'y' ) ) {
-            API_SUFFIX(LAPACKE_dpp_trans)( LAPACK_COL_MAJOR, uplo, n, ap_t, ap );
+        LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
+        LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
+        if( LAPACKE_lsame( fact, 'e' ) && LAPACKE_lsame( *equed, 'y' ) ) {
+            LAPACKE_dpp_trans( LAPACK_COL_MAJOR, uplo, n, ap_t, ap );
         }
-        if( API_SUFFIX(LAPACKE_lsame)( fact, 'e' ) || API_SUFFIX(LAPACKE_lsame)( fact, 'n' ) ) {
-            API_SUFFIX(LAPACKE_dpp_trans)( LAPACK_COL_MAJOR, uplo, n, afp_t, afp );
+        if( LAPACKE_lsame( fact, 'e' ) || LAPACKE_lsame( fact, 'n' ) ) {
+            LAPACKE_dpp_trans( LAPACK_COL_MAJOR, uplo, n, afp_t, afp );
         }
         /* Release memory and exit */
         LAPACKE_free( afp_t );
@@ -120,11 +121,11 @@ exit_level_1:
         LAPACKE_free( b_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dppsvx_work", info );
+            LAPACKE_xerbla( "LAPACKE_dppsvx_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dppsvx_work", info );
+        LAPACKE_xerbla( "LAPACKE_dppsvx_work", info );
     }
     return info;
 }

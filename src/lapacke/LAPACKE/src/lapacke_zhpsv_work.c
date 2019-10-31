@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function zhpsv
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_zhpsv_work)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_zhpsv_work( int matrix_layout, char uplo, lapack_int n,
                                lapack_int nrhs, lapack_complex_double* ap,
                                lapack_int* ipiv, lapack_complex_double* b,
                                lapack_int ldb )
@@ -51,7 +52,7 @@ lapack_int API_SUFFIX(LAPACKE_zhpsv_work)( int matrix_layout, char uplo, lapack_
         /* Check leading dimension(s) */
         if( ldb < nrhs ) {
             info = -8;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhpsv_work", info );
+            LAPACKE_xerbla( "LAPACKE_zhpsv_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -70,27 +71,27 @@ lapack_int API_SUFFIX(LAPACKE_zhpsv_work)( int matrix_layout, char uplo, lapack_
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
-        API_SUFFIX(LAPACKE_zhp_trans)( matrix_layout, uplo, n, ap, ap_t );
+        LAPACKE_zge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_zhp_trans( matrix_layout, uplo, n, ap, ap_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zhpsv( &uplo, &n, &nrhs, ap_t, ipiv, b_t, &ldb_t, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
-        API_SUFFIX(LAPACKE_zhp_trans)( LAPACK_COL_MAJOR, uplo, n, ap_t, ap );
+        LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
+        LAPACKE_zhp_trans( LAPACK_COL_MAJOR, uplo, n, ap_t, ap );
         /* Release memory and exit */
         LAPACKE_free( ap_t );
 exit_level_1:
         LAPACKE_free( b_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhpsv_work", info );
+            LAPACKE_xerbla( "LAPACKE_zhpsv_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhpsv_work", info );
+        LAPACKE_xerbla( "LAPACKE_zhpsv_work", info );
     }
     return info;
 }

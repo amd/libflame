@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dlartgs
 * Author: Intel Corporation
+* Generated November, 2011
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dlartgs_work)( double x, double y, double sigma, double* cs,
+lapack_int LAPACKE_dlartgs_work( double x, double y, double sigma, double* cs,
                                  double* sn )
 {
     lapack_int info = 0;

@@ -28,12 +28,13 @@
 ******************************************************************************
 * Contents: Native C interface to LAPACK utility function
 * Author: Intel Corporation
+* Created in February, 2010
 *****************************************************************************/
 #include "lapacke_utils.h"
 
 /* Check a vector for NaN entries. */
 
-lapack_logical API_SUFFIX(LAPACKE_d_nancheck)( lapack_int n,
+lapack_logical LAPACKE_d_nancheck( lapack_int n,
                                     const double *x,
                                     lapack_int incx )
 {

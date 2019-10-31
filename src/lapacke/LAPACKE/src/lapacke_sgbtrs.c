@@ -28,30 +28,31 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function sgbtrs
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_sgbtrs)( int matrix_layout, char trans, lapack_int n,
+lapack_int LAPACKE_sgbtrs( int matrix_layout, char trans, lapack_int n,
                            lapack_int kl, lapack_int ku, lapack_int nrhs,
                            const float* ab, lapack_int ldab,
                            const lapack_int* ipiv, float* b, lapack_int ldb )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgbtrs", -1 );
+        LAPACKE_xerbla( "LAPACKE_sgbtrs", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_sgb_nancheck)( matrix_layout, n, n, kl, kl+ku, ab, ldab ) ) {
+        if( LAPACKE_sgb_nancheck( matrix_layout, n, n, kl, kl+ku, ab, ldab ) ) {
             return -7;
         }
-        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
             return -10;
         }
     }
 #endif
-    return API_SUFFIX(LAPACKE_sgbtrs_work)( matrix_layout, trans, n, kl, ku, nrhs, ab, ldab,
+    return LAPACKE_sgbtrs_work( matrix_layout, trans, n, kl, ku, nrhs, ab, ldab,
                                 ipiv, b, ldb );
 }

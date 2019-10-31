@@ -28,11 +28,12 @@
 ******************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dsysv_rook
 * Author: Intel Corporation
+* Generated January, 2012
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dsysv_rook_work)( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_dsysv_rook_work( int matrix_layout, char uplo, lapack_int n,
                                     lapack_int nrhs, double* a, lapack_int lda,
                                     lapack_int* ipiv, double* b, lapack_int ldb,
                                     double* work, lapack_int lwork )
@@ -53,12 +54,12 @@ lapack_int API_SUFFIX(LAPACKE_dsysv_rook_work)( int matrix_layout, char uplo, la
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsysv_rook_work", info );
+            LAPACKE_xerbla( "LAPACKE_dsysv_rook_work", info );
             return info;
         }
         if( ldb < nrhs ) {
             info = -9;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsysv_rook_work", info );
+            LAPACKE_xerbla( "LAPACKE_dsysv_rook_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -79,8 +80,8 @@ lapack_int API_SUFFIX(LAPACKE_dsysv_rook_work)( int matrix_layout, char uplo, la
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_dsy_trans)( matrix_layout, uplo, n, a, lda, a_t, lda_t );
-        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_dsy_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
+        LAPACKE_dge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dsysv_rook( &uplo, &n, &nrhs, a_t, &lda_t, ipiv, b_t, &ldb_t,
                            work, &lwork, &info );
@@ -88,19 +89,19 @@ lapack_int API_SUFFIX(LAPACKE_dsysv_rook_work)( int matrix_layout, char uplo, la
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_dsy_trans)( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
-        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
+        LAPACKE_dsy_trans( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
+        LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
         /* Release memory and exit */
         LAPACKE_free( b_t );
 exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsysv_rook_work", info );
+            LAPACKE_xerbla( "LAPACKE_dsysv_rook_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsysv_rook_work", info );
+        LAPACKE_xerbla( "LAPACKE_dsysv_rook_work", info );
     }
     return info;
 }

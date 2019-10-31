@@ -28,11 +28,12 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function ctpttf
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_ctpttf_work)( int matrix_layout, char transr, char uplo,
+lapack_int LAPACKE_ctpttf_work( int matrix_layout, char transr, char uplo,
                                 lapack_int n, const lapack_complex_float* ap,
                                 lapack_complex_float* arf )
 {
@@ -62,25 +63,25 @@ lapack_int API_SUFFIX(LAPACKE_ctpttf_work)( int matrix_layout, char transr, char
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_cpp_trans)( matrix_layout, uplo, n, ap, ap_t );
+        LAPACKE_cpp_trans( matrix_layout, uplo, n, ap, ap_t );
         /* Call LAPACK function and adjust info */
         LAPACK_ctpttf( &transr, &uplo, &n, ap_t, arf_t, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_cpf_trans)( LAPACK_COL_MAJOR, transr, uplo, n, arf_t, arf );
+        LAPACKE_cpf_trans( LAPACK_COL_MAJOR, transr, uplo, n, arf_t, arf );
         /* Release memory and exit */
         LAPACKE_free( arf_t );
 exit_level_1:
         LAPACKE_free( ap_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctpttf_work", info );
+            LAPACKE_xerbla( "LAPACKE_ctpttf_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctpttf_work", info );
+        LAPACKE_xerbla( "LAPACKE_ctpttf_work", info );
     }
     return info;
 }

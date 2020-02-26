@@ -470,14 +470,14 @@ FLA_Error FLA_Obj_create_constant_ext( float const_s, double const_d, FLA_Obj *o
   temp_c       = FLA_COMPLEX_PTR( *obj );
   temp_z       = FLA_DOUBLE_COMPLEX_PTR( *obj );
 
-  // This check safely allows the float to fla_dim_t typecast by saturation check
+  // This check safely allows the float to int typecast by saturation check
   if( const_s >= (float)(INT_MAX - 64)) // Comparing with float value equal to 0x7FFFFFFF
   {
       *temp_i      = INT_MAX;// equal to 0x7FFFFFFF
   }
   else
   {
-      *temp_i      = ( fla_dim_t   ) const_s;
+      *temp_i      = ( int   ) const_s;
   }
   *temp_s      =           const_s;
   *temp_d      =           const_d;

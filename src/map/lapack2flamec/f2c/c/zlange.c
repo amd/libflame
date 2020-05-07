@@ -1,290 +1,253 @@
-/*
-    Copyright (c) 2019-2023 Advanced Micro Devices, Inc.
-*/
-/* zlange.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-/*
- *     Modifications Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
- */
-#include "FLA_f2c.h" /* Table of constant values */
-
-static aocl_int64_t c__1 = 1;
-/* > \brief \b ZLANGE returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest
- * absolute value of any element of a general rectangular matrix. */
-/* =========== DOCUMENTATION =========== */
-/* Online html documentation available at */
-/* http://www.netlib.org/lapack/explore-html/ */
-/* > \htmlonly */
-/* > Download ZLANGE + dependencies */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlange.
- * f"> */
-/* > [TGZ]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlange.
- * f"> */
-/* > [ZIP]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlange.
- * f"> */
-/* > [TXT]</a> */
-/* > \endhtmlonly */
-/* Definition: */
-/* =========== */
-/* DOUBLE PRECISION FUNCTION ZLANGE( NORM, M, N, A, LDA, WORK ) */
-/* .. Scalar Arguments .. */
-/* CHARACTER NORM */
-/* INTEGER LDA, M, N */
-/* .. */
-/* .. Array Arguments .. */
-/* DOUBLE PRECISION WORK( * ) */
-/* COMPLEX*16 A( LDA, * ) */
-/* .. */
-/* > \par Purpose: */
-/* ============= */
-/* > */
-/* > \verbatim */
-/* > */
-/* > ZLANGE returns the value of the one norm, or the Frobenius norm, or */
-/* > the infinity norm, or the element of largest absolute value of a */
-/* > scomplex matrix A. */
-/* > \endverbatim */
-/* > */
-/* > \return ZLANGE */
-/* > \verbatim */
-/* > */
-/* > ZLANGE = ( max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
-/* > ( */
-/* > ( norm1(A), NORM = '1', 'O' or 'o' */
-/* > ( */
-/* > ( normI(A), NORM = 'I' or 'i' */
-/* > ( */
-/* > ( normF(A), NORM = 'F', 'f', 'E' or 'e' */
-/* > */
-/* > where norm1 denotes the one norm of a matrix (maximum column sum), */
-/* > normI denotes the infinity norm of a matrix (maximum row sum) and */
-/* > normF denotes the Frobenius norm of a matrix (square root of sum of */
-/* > squares). Note that max(f2c_abs(A(i,j))) is not a consistent matrix norm. */
-/* > \endverbatim */
-/* Arguments: */
-/* ========== */
-/* > \param[in] NORM */
-/* > \verbatim */
-/* > NORM is CHARACTER*1 */
-/* > Specifies the value to be returned in ZLANGE as described */
-/* > above. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] M */
-/* > \verbatim */
-/* > M is INTEGER */
-/* > The number of rows of the matrix A. M >= 0. When M = 0, */
-/* > ZLANGE is set to zero. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] N */
-/* > \verbatim */
-/* > N is INTEGER */
-/* > The number of columns of the matrix A. N >= 0. When N = 0, */
-/* > ZLANGE is set to zero. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] A */
-/* > \verbatim */
-/* > A is COMPLEX*16 array, dimension (LDA,N) */
-/* > The m by n matrix A. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] LDA */
-/* > \verbatim */
-/* > LDA is INTEGER */
-/* > The leading dimension of the array A. LDA >= fla_max(M,1). */
-/* > \endverbatim */
-/* > */
-/* > \param[out] WORK */
-/* > \verbatim */
-/* > WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK)), */
-/* > where LWORK >= M when NORM = 'I';
-otherwise, WORK is not */
-/* > referenced. */
-/* > \endverbatim */
-/* Authors: */
-/* ======== */
-/* > \author Univ. of Tennessee */
-/* > \author Univ. of California Berkeley */
-/* > \author Univ. of Colorado Denver */
-/* > \author NAG Ltd. */
-/* > \ingroup complex16GEauxiliary */
-/* ===================================================================== */
-/** Generated wrapper function */
-doublereal zlange_(char *norm, aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
-                   doublereal *work)
-{
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_zlange(norm, m, n, a, lda, work);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-
-    return aocl_lapack_zlange(norm, &m_64, &n_64, a, &lda_64, work);
-#endif
-}
-
-doublereal aocl_lapack_zlange(char *norm, aocl_int64_t *m, aocl_int64_t *n, dcomplex *a,
-                              aocl_int64_t *lda, doublereal *work)
-{
-    doublereal fla_get_max_zabs_element_vector(aocl_int64_t m, dcomplex * a,
-                                               aocl_int64_t a_dim);
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlange inputs: norm %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",
-                      *norm, *m, *n, *lda);
-    /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2;
-    doublereal ret_val;
-    /* Builtin functions */
-    double z_abs(dcomplex *), sqrt(doublereal);
-    /* Local variables */
-    aocl_int64_t i__, j, j_a_dim;
-    doublereal sum, temp, scale;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    doublereal value;
-    /* -- LAPACK auxiliary routine -- */
-    /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
-    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* .. Scalar Arguments .. */
-    /* .. */
-    /* .. Array Arguments .. */
-    /* .. */
-    /* ===================================================================== */
-    /* .. Parameters .. */
-    /* .. */
-    /* .. Local Scalars .. */
-    /* .. */
-    /* .. External Functions .. */
-    /* .. */
-    /* .. External Subroutines .. */
-    /* .. */
-    /* .. Intrinsic Functions .. */
-    /* .. */
-    /* .. Executable Statements .. */
-    /* Parameter adjustments */
-    a_dim1 = *lda;
-    a_offset = 1 + a_dim1;
-    a -= a_offset;
-    --work;
-    /* Function Body */
-    value = 0.;
-
-    /* initialize AOCL context */
-    aocl_fla_init();
-
-    if(fla_min(*m, *n) == 0)
-    {
-        value = 0.;
-    }
-    else if(lsame_(norm, "M", 1, 1))
-    {
-        /* Find max(f2c_abs(A(i,j))). */
-        value = 0.;
-        i__1 = *n;
-        for(j = 1; j <= i__1; ++j)
-        {
-            i__2 = *m;
-            j_a_dim = j * a_dim1;
-
-#if FLA_ENABLE_AMD_OPT
-            /* Select optimized path for AMD architecture*/
-            temp = fla_get_max_zabs_element_vector(i__2, a, j_a_dim);
-
-            if(value < temp || temp != temp)
-                value = temp;
-#else
-            for(i__ = 1; i__ <= i__2; ++i__)
-            {
-                temp = z_abs(&a[i__ + j * a_dim1]);
-                if(value < temp || temp != temp)
-                {
-                    value = temp;
-                }
-                /* L10: */
-            }
-#endif
-            /* L20: */
-        }
-    }
-    else if(lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1')
-    {
-        /* Find norm1(A). */
-        value = 0.;
-        i__1 = *n;
-        for(j = 1; j <= i__1; ++j)
-        {
-            sum = 0.;
-            i__2 = *m;
-            for(i__ = 1; i__ <= i__2; ++i__)
-            {
-                sum += z_abs(&a[i__ + j * a_dim1]);
-                /* L30: */
-            }
-            if(value < sum || sum != sum)
-            {
-                value = sum;
-            }
-            /* L40: */
-        }
-    }
-    else if(lsame_(norm, "I", 1, 1))
-    {
-        /* Find normI(A). */
-        i__1 = *m;
-        for(i__ = 1; i__ <= i__1; ++i__)
-        {
-            work[i__] = 0.;
-            /* L50: */
-        }
-        i__1 = *n;
-        for(j = 1; j <= i__1; ++j)
-        {
-            i__2 = *m;
-            for(i__ = 1; i__ <= i__2; ++i__)
-            {
-                work[i__] += z_abs(&a[i__ + j * a_dim1]);
-                /* L60: */
-            }
-            /* L70: */
-        }
-        value = 0.;
-        i__1 = *m;
-        for(i__ = 1; i__ <= i__1; ++i__)
-        {
-            temp = work[i__];
-            if(value < temp || temp != temp)
-            {
-                value = temp;
-            }
-            /* L80: */
-        }
-    }
-    else if(lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
-    {
-        /* Find normF(A). */
-        scale = 0.;
-        sum = 1.;
-        i__1 = *n;
-        for(j = 1; j <= i__1; ++j)
-        {
-            aocl_lapack_zlassq(m, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
-            /* L90: */
-        }
-        value = scale * sqrt(sum);
-    }
-    ret_val = value;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return ret_val;
-    /* End of ZLANGE */
-}
-/* zlange_ */
+/* ../netlib/v3.9.0/zlange.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+ #include "FLA_f2c.h" /* Table of constant values */
+ static integer c__1 = 1;
+ /* > \brief \b ZLANGE returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest absolute value of any element of a general rectangular matrix. */
+ /* =========== DOCUMENTATION =========== */
+ /* Online html documentation available at */
+ /* http://www.netlib.org/lapack/explore-html/ */
+ /* > \htmlonly */
+ /* > Download ZLANGE + dependencies */
+ /* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlange. f"> */
+ /* > [TGZ]</a> */
+ /* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlange. f"> */
+ /* > [ZIP]</a> */
+ /* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlange. f"> */
+ /* > [TXT]</a> */
+ /* > \endhtmlonly */
+ /* Definition: */
+ /* =========== */
+ /* DOUBLE PRECISION FUNCTION ZLANGE( NORM, M, N, A, LDA, WORK ) */
+ /* .. Scalar Arguments .. */
+ /* CHARACTER NORM */
+ /* INTEGER LDA, M, N */
+ /* .. */
+ /* .. Array Arguments .. */
+ /* DOUBLE PRECISION WORK( * ) */
+ /* COMPLEX*16 A( LDA, * ) */
+ /* .. */
+ /* > \par Purpose: */
+ /* ============= */
+ /* > */
+ /* > \verbatim */
+ /* > */
+ /* > ZLANGE returns the value of the one norm, or the Frobenius norm, or */
+ /* > the infinity norm, or the element of largest absolute value of a */
+ /* > complex matrix A. */
+ /* > \endverbatim */
+ /* > */
+ /* > \return ZLANGE */
+ /* > \verbatim */
+ /* > */
+ /* > ZLANGE = ( max(abs(A(i,j))), NORM = 'M' or 'm' */
+ /* > ( */
+ /* > ( norm1(A), NORM = '1', 'O' or 'o' */
+ /* > ( */
+ /* > ( normI(A), NORM = 'I' or 'i' */
+ /* > ( */
+ /* > ( normF(A), NORM = 'F', 'f', 'E' or 'e' */
+ /* > */
+ /* > where norm1 denotes the one norm of a matrix (maximum column sum), */
+ /* > normI denotes the infinity norm of a matrix (maximum row sum) and */
+ /* > normF denotes the Frobenius norm of a matrix (square root of sum of */
+ /* > squares). Note that max(abs(A(i,j))) is not a consistent matrix norm. */
+ /* > \endverbatim */
+ /* Arguments: */
+ /* ========== */
+ /* > \param[in] NORM */
+ /* > \verbatim */
+ /* > NORM is CHARACTER*1 */
+ /* > Specifies the value to be returned in ZLANGE as described */
+ /* > above. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] M */
+ /* > \verbatim */
+ /* > M is INTEGER */
+ /* > The number of rows of the matrix A. M >= 0. When M = 0, */
+ /* > ZLANGE is set to zero. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] N */
+ /* > \verbatim */
+ /* > N is INTEGER */
+ /* > The number of columns of the matrix A. N >= 0. When N = 0, */
+ /* > ZLANGE is set to zero. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] A */
+ /* > \verbatim */
+ /* > A is COMPLEX*16 array, dimension (LDA,N) */
+ /* > The m by n matrix A. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] LDA */
+ /* > \verbatim */
+ /* > LDA is INTEGER */
+ /* > The leading dimension of the array A. LDA >= max(M,1). */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[out] WORK */
+ /* > \verbatim */
+ /* > WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK)), */
+ /* > where LWORK >= M when NORM = 'I';
+ otherwise, WORK is not */
+ /* > referenced. */
+ /* > \endverbatim */
+ /* Authors: */
+ /* ======== */
+ /* > \author Univ. of Tennessee */
+ /* > \author Univ. of California Berkeley */
+ /* > \author Univ. of Colorado Denver */
+ /* > \author NAG Ltd. */
+ /* > \date December 2016 */
+ /* > \ingroup complex16GEauxiliary */
+ /* ===================================================================== */
+ doublereal zlange_(char *norm, integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *work) {
+ /* System generated locals */
+ integer a_dim1, a_offset, i__1, i__2;
+ doublereal ret_val;
+ /* Builtin functions */
+ double z_abs(doublecomplex *), sqrt(doublereal);
+ /* Local variables */
+ extern /* Subroutine */
+ int dcombssq_(doublereal *, doublereal *);
+ integer i__, j;
+ doublereal sum, ssq[2], temp;
+ extern logical lsame_(char *, char *);
+ doublereal value;
+ extern logical disnan_(doublereal *);
+ doublereal colssq[2];
+ extern /* Subroutine */
+ int zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
+ /* -- LAPACK auxiliary routine (version 3.7.0) -- */
+ /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
+ /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
+ /* December 2016 */
+ /* .. Scalar Arguments .. */
+ /* .. */
+ /* .. Array Arguments .. */
+ /* .. */
+ /* ===================================================================== */
+ /* .. Parameters .. */
+ /* .. */
+ /* .. Local Scalars .. */
+ /* .. */
+ /* .. Local Arrays .. */
+ /* .. */
+ /* .. External Functions .. */
+ /* .. */
+ /* .. External Subroutines .. */
+ /* .. */
+ /* .. Intrinsic Functions .. */
+ /* .. */
+ /* .. Executable Statements .. */
+ /* Parameter adjustments */
+ a_dim1 = *lda;
+ a_offset = 1 + a_dim1;
+ a -= a_offset;
+ --work;
+ /* Function Body */
+ if (min(*m,*n) == 0) {
+ value = 0.;
+ }
+ else if (lsame_(norm, "M")) {
+ /* Find max(abs(A(i,j))). */
+ value = 0.;
+ i__1 = *n;
+ for (j = 1;
+ j <= i__1;
+ ++j) {
+ i__2 = *m;
+ for (i__ = 1;
+ i__ <= i__2;
+ ++i__) {
+ temp = z_abs(&a[i__ + j * a_dim1]);
+ if (value < temp || disnan_(&temp)) {
+ value = temp;
+ }
+ /* L10: */
+ }
+ /* L20: */
+ }
+ }
+ else if (lsame_(norm, "O") || *(unsigned char *) norm == '1') {
+ /* Find norm1(A). */
+ value = 0.;
+ i__1 = *n;
+ for (j = 1;
+ j <= i__1;
+ ++j) {
+ sum = 0.;
+ i__2 = *m;
+ for (i__ = 1;
+ i__ <= i__2;
+ ++i__) {
+ sum += z_abs(&a[i__ + j * a_dim1]);
+ /* L30: */
+ }
+ if (value < sum || disnan_(&sum)) {
+ value = sum;
+ }
+ /* L40: */
+ }
+ }
+ else if (lsame_(norm, "I")) {
+ /* Find normI(A). */
+ i__1 = *m;
+ for (i__ = 1;
+ i__ <= i__1;
+ ++i__) {
+ work[i__] = 0.;
+ /* L50: */
+ }
+ i__1 = *n;
+ for (j = 1;
+ j <= i__1;
+ ++j) {
+ i__2 = *m;
+ for (i__ = 1;
+ i__ <= i__2;
+ ++i__) {
+ work[i__] += z_abs(&a[i__ + j * a_dim1]);
+ /* L60: */
+ }
+ /* L70: */
+ }
+ value = 0.;
+ i__1 = *m;
+ for (i__ = 1;
+ i__ <= i__1;
+ ++i__) {
+ temp = work[i__];
+ if (value < temp || disnan_(&temp)) {
+ value = temp;
+ }
+ /* L80: */
+ }
+ }
+ else if (lsame_(norm, "F") || lsame_(norm, "E")) {
+ /* Find normF(A). */
+ /* SSQ(1) is scale */
+ /* SSQ(2) is sum-of-squares */
+ /* For better accuracy, sum each column separately. */
+ ssq[0] = 0.;
+ ssq[1] = 1.;
+ i__1 = *n;
+ for (j = 1;
+ j <= i__1;
+ ++j) {
+ colssq[0] = 0.;
+ colssq[1] = 1.;
+ zlassq_(m, &a[j * a_dim1 + 1], &c__1, colssq, &colssq[1]);
+ dcombssq_(ssq, colssq);
+ /* L90: */
+ }
+ value = ssq[0] * sqrt(ssq[1]);
+ }
+ ret_val = value;
+ return ret_val;
+ /* End of ZLANGE */
+ }
+ /* zlange_ */
+ 

@@ -1,413 +1,341 @@
-/* ../netlib/dormql.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
-static aocl_int64_t c__2 = 2;
-static aocl_int64_t c__65 = 65;
-/* > \brief \b DORMQL */
-/* =========== DOCUMENTATION =========== */
-/* Online html documentation available at */
-/* http://www.netlib.org/lapack/explore-html/ */
-/* > \htmlonly */
-/* > Download DORMQL + dependencies */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dormql.
- * f"> */
-/* > [TGZ]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dormql.
- * f"> */
-/* > [ZIP]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormql.
- * f"> */
-/* > [TXT]</a> */
-/* > \endhtmlonly */
-/* Definition: */
-/* =========== */
-/* SUBROUTINE DORMQL( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC, */
-/* WORK, LWORK, INFO ) */
-/* .. Scalar Arguments .. */
-/* CHARACTER SIDE, TRANS */
-/* INTEGER INFO, K, LDA, LDC, LWORK, M, N */
-/* .. */
-/* .. Array Arguments .. */
-/* DOUBLE PRECISION A( LDA, * ), C( LDC, * ), TAU( * ), WORK( * ) */
-/* .. */
-/* > \par Purpose: */
-/* ============= */
-/* > */
-/* > \verbatim */
-/* > */
-/* > DORMQL overwrites the general real M-by-N matrix C with */
-/* > */
-/* > SIDE = 'L' SIDE = 'R' */
-/* > TRANS = 'N': Q * C C * Q */
-/* > TRANS = 'T': Q**T * C C * Q**T */
-/* > */
-/* > where Q is a real orthogonal matrix defined as the product of k */
-/* > elementary reflectors */
-/* > */
-/* > Q = H(k) . . . H(2) H(1) */
-/* > */
-/* > as returned by DGEQLF. Q is of order M if SIDE = 'L' and of order N */
-/* > if SIDE = 'R'. */
-/* > \endverbatim */
-/* Arguments: */
-/* ========== */
-/* > \param[in] SIDE */
-/* > \verbatim */
-/* > SIDE is CHARACTER*1 */
-/* > = 'L': apply Q or Q**T from the Left;
+/* ../netlib/v3.9.0/dormql.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+ #include "FLA_f2c.h" /* Table of constant values */
+ static integer c__1 = 1;
+ static integer c_n1 = -1;
+ static integer c__2 = 2;
+ static integer c__65 = 65;
+ /* > \brief \b DORMQL */
+ /* =========== DOCUMENTATION =========== */
+ /* Online html documentation available at */
+ /* http://www.netlib.org/lapack/explore-html/ */
+ /* > \htmlonly */
+ /* > Download DORMQL + dependencies */
+ /* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dormql. f"> */
+ /* > [TGZ]</a> */
+ /* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dormql. f"> */
+ /* > [ZIP]</a> */
+ /* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormql. f"> */
+ /* > [TXT]</a> */
+ /* > \endhtmlonly */
+ /* Definition: */
+ /* =========== */
+ /* SUBROUTINE DORMQL( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC, */
+ /* WORK, LWORK, INFO ) */
+ /* .. Scalar Arguments .. */
+ /* CHARACTER SIDE, TRANS */
+ /* INTEGER INFO, K, LDA, LDC, LWORK, M, N */
+ /* .. */
+ /* .. Array Arguments .. */
+ /* DOUBLE PRECISION A( LDA, * ), C( LDC, * ), TAU( * ), WORK( * ) */
+ /* .. */
+ /* > \par Purpose: */
+ /* ============= */
+ /* > */
+ /* > \verbatim */
+ /* > */
+ /* > DORMQL overwrites the general real M-by-N matrix C with */
+ /* > */
+ /* > SIDE = 'L' SIDE = 'R' */
+ /* > TRANS = 'N': Q * C C * Q */
+ /* > TRANS = 'T': Q**T * C C * Q**T */
+ /* > */
+ /* > where Q is a real orthogonal matrix defined as the product of k */
+ /* > elementary reflectors */
+ /* > */
+ /* > Q = H(k) . . . H(2) H(1) */
+ /* > */
+ /* > as returned by DGEQLF. Q is of order M if SIDE = 'L' and of order N */
+ /* > if SIDE = 'R'. */
+ /* > \endverbatim */
+ /* Arguments: */
+ /* ========== */
+ /* > \param[in] SIDE */
+ /* > \verbatim */
+ /* > SIDE is CHARACTER*1 */
+ /* > = 'L': apply Q or Q**T from the Left;
  */
-/* > = 'R': apply Q or Q**T from the Right. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] TRANS */
-/* > \verbatim */
-/* > TRANS is CHARACTER*1 */
-/* > = 'N': No transpose, apply Q;
+ /* > = 'R': apply Q or Q**T from the Right. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] TRANS */
+ /* > \verbatim */
+ /* > TRANS is CHARACTER*1 */
+ /* > = 'N': No transpose, apply Q;
  */
-/* > = 'T': Transpose, apply Q**T. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] M */
-/* > \verbatim */
-/* > M is INTEGER */
-/* > The number of rows of the matrix C. M >= 0. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] N */
-/* > \verbatim */
-/* > N is INTEGER */
-/* > The number of columns of the matrix C. N >= 0. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] K */
-/* > \verbatim */
-/* > K is INTEGER */
-/* > The number of elementary reflectors whose product defines */
-/* > the matrix Q. */
-/* > If SIDE = 'L', M >= K >= 0;
+ /* > = 'T': Transpose, apply Q**T. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] M */
+ /* > \verbatim */
+ /* > M is INTEGER */
+ /* > The number of rows of the matrix C. M >= 0. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] N */
+ /* > \verbatim */
+ /* > N is INTEGER */
+ /* > The number of columns of the matrix C. N >= 0. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] K */
+ /* > \verbatim */
+ /* > K is INTEGER */
+ /* > The number of elementary reflectors whose product defines */
+ /* > the matrix Q. */
+ /* > If SIDE = 'L', M >= K >= 0;
  */
-/* > if SIDE = 'R', N >= K >= 0. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] A */
-/* > \verbatim */
-/* > A is DOUBLE PRECISION array, dimension (LDA,K) */
-/* > The i-th column must contain the vector which defines the */
-/* > elementary reflector H(i), for i = 1,2,...,k, as returned by */
-/* > DGEQLF in the last k columns of its array argument A. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] LDA */
-/* > \verbatim */
-/* > LDA is INTEGER */
-/* > The leading dimension of the array A. */
-/* > If SIDE = 'L', LDA >= fla_max(1,M);
+ /* > if SIDE = 'R', N >= K >= 0. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] A */
+ /* > \verbatim */
+ /* > A is DOUBLE PRECISION array, dimension (LDA,K) */
+ /* > The i-th column must contain the vector which defines the */
+ /* > elementary reflector H(i), for i = 1,2,...,k, as returned by */
+ /* > DGEQLF in the last k columns of its array argument A. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] LDA */
+ /* > \verbatim */
+ /* > LDA is INTEGER */
+ /* > The leading dimension of the array A. */
+ /* > If SIDE = 'L', LDA >= max(1,M);
  */
-/* > if SIDE = 'R', LDA >= fla_max(1,N). */
-/* > \endverbatim */
-/* > */
-/* > \param[in] TAU */
-/* > \verbatim */
-/* > TAU is DOUBLE PRECISION array, dimension (K) */
-/* > TAU(i) must contain the scalar factor of the elementary */
-/* > reflector H(i), as returned by DGEQLF. */
-/* > \endverbatim */
-/* > */
-/* > \param[in,out] C */
-/* > \verbatim */
-/* > C is DOUBLE PRECISION array, dimension (LDC,N) */
-/* > On entry, the M-by-N matrix C. */
-/* > On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] LDC */
-/* > \verbatim */
-/* > LDC is INTEGER */
-/* > The leading dimension of the array C. LDC >= fla_max(1,M). */
-/* > \endverbatim */
-/* > */
-/* > \param[out] WORK */
-/* > \verbatim */
-/* > WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK)) */
-/* > On exit, if INFO = 0, WORK(1) returns the optimal LWORK. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] LWORK */
-/* > \verbatim */
-/* > LWORK is INTEGER */
-/* > The dimension of the array WORK. */
-/* > If SIDE = 'L', LWORK >= fla_max(1,N);
+ /* > if SIDE = 'R', LDA >= max(1,N). */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] TAU */
+ /* > \verbatim */
+ /* > TAU is DOUBLE PRECISION array, dimension (K) */
+ /* > TAU(i) must contain the scalar factor of the elementary */
+ /* > reflector H(i), as returned by DGEQLF. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in,out] C */
+ /* > \verbatim */
+ /* > C is DOUBLE PRECISION array, dimension (LDC,N) */
+ /* > On entry, the M-by-N matrix C. */
+ /* > On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] LDC */
+ /* > \verbatim */
+ /* > LDC is INTEGER */
+ /* > The leading dimension of the array C. LDC >= max(1,M). */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[out] WORK */
+ /* > \verbatim */
+ /* > WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK)) */
+ /* > On exit, if INFO = 0, WORK(1) returns the optimal LWORK. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] LWORK */
+ /* > \verbatim */
+ /* > LWORK is INTEGER */
+ /* > The dimension of the array WORK. */
+ /* > If SIDE = 'L', LWORK >= max(1,N);
  */
-/* > if SIDE = 'R', LWORK >= fla_max(1,M). */
-/* > For good performance, LWORK should generally be larger. */
-/* > */
-/* > If LWORK = -1, then a workspace query is assumed;
-the routine */
-/* > only calculates the optimal size of the WORK array, returns */
-/* > this value as the first entry of the WORK array, and no error */
-/* > message related to LWORK is issued by XERBLA. */
-/* > \endverbatim */
-/* > */
-/* > \param[out] INFO */
-/* > \verbatim */
-/* > INFO is INTEGER */
-/* > = 0: successful exit */
-/* > < 0: if INFO = -i, the i-th argument had an illegal value */
-/* > \endverbatim */
-/* Authors: */
-/* ======== */
-/* > \author Univ. of Tennessee */
-/* > \author Univ. of California Berkeley */
-/* > \author Univ. of Colorado Denver */
-/* > \author NAG Ltd. */
-/* > \date December 2016 */
-/* > \ingroup doubleOTHERcomputational */
-/* ===================================================================== */
-/* Subroutine */
-/** Generated wrapper function */
-void dormql_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a,
-             aocl_int_t *lda, doublereal *tau, doublereal *c__, aocl_int_t *ldc, doublereal *work,
-             aocl_int_t *lwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dormql(side, trans, m, n, k, a, lda, tau, c__, ldc, work, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dormql(side, trans, &m_64, &n_64, &k_64, a, &lda_64, tau, c__, &ldc_64, work,
-                       &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_dormql(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
-                        doublereal *a, aocl_int64_t *lda, doublereal *tau, doublereal *c__,
-                        aocl_int64_t *ldc, doublereal *work, aocl_int64_t *lwork,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dormql inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
-                      ", lda %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "",
-                      *side, *trans, *m, *n, *k, *lda, *ldc, *lwork);
-    /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
-    char ch__1[2];
-    /* Builtin functions */
-    /* Subroutine */
-
-    /* Local variables */
-    aocl_int64_t i__, i1, i2, i3, ib, nb, mi, ni, nq, nw, iwt;
-    logical left;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t nbmin, iinfo;
-    logical notran;
-    aocl_int64_t ldwork, lwkopt;
-    logical lquery;
-    /* -- LAPACK computational routine (version 3.7.0) -- */
-    /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
-    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* December 2016 */
-    /* .. Scalar Arguments .. */
-    /* .. */
-    /* .. Array Arguments .. */
-    /* .. */
-    /* ===================================================================== */
-    /* .. Parameters .. */
-    /* .. */
-    /* .. Local Scalars .. */
-    /* .. */
-    /* .. External Functions .. */
-    /* .. */
-    /* .. External Subroutines .. */
-    /* .. */
-    /* .. Intrinsic Functions .. */
-    /* .. */
-    /* .. Executable Statements .. */
-    /* Test the input arguments */
-    /* Parameter adjustments */
-    a_dim1 = *lda;
-    a_offset = 1 + a_dim1;
-    a -= a_offset;
-    --tau;
-    c_dim1 = *ldc;
-    c_offset = 1 + c_dim1;
-    c__ -= c_offset;
-    --work;
-    /* Function Body */
-    *info = 0;
-    nb = 0;
-    left = lsame_(side, "L", 1, 1);
-    notran = lsame_(trans, "N", 1, 1);
-    lquery = *lwork == -1;
-    /* NQ is the order of Q and NW is the minimum dimension of WORK */
-    if(left)
-    {
-        nq = *m;
-        nw = fla_max(1, *n);
-    }
-    else
-    {
-        nq = *n;
-        nw = fla_max(1, *m);
-    }
-    if(!left && !lsame_(side, "R", 1, 1))
-    {
-        *info = -1;
-    }
-    else if(!notran && !lsame_(trans, "T", 1, 1))
-    {
-        *info = -2;
-    }
-    else if(*m < 0)
-    {
-        *info = -3;
-    }
-    else if(*n < 0)
-    {
-        *info = -4;
-    }
-    else if(*k < 0 || *k > nq)
-    {
-        *info = -5;
-    }
-    else if(*lda < fla_max(1, nq))
-    {
-        *info = -7;
-    }
-    else if(*ldc < fla_max(1, *m))
-    {
-        *info = -10;
-    }
-    else if(*lwork < nw && !lquery)
-    {
-        *info = -12;
-    }
-    if(*info == 0)
-    {
-        /* Compute the workspace requirements */
-        if(*m == 0 || *n == 0)
-        {
-            lwkopt = 1;
-        }
-        else
-        {
-            /* Computing MIN */
-            i__1 = 64;
-            i__2 = aocl_lapack_ilaenv(&c__1, "DORMQL", ch__1, m, n, k, &c_n1); // , expr subst
-            nb = fla_min(i__1, i__2);
-            lwkopt = nw * nb + 4160;
-        }
-        work[1] = (doublereal)lwkopt;
-    }
-    if(*info != 0)
-    {
-        i__1 = -(*info);
-        aocl_blas_xerbla("DORMQL", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
-    }
-    else if(lquery)
-    {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
-    }
-    /* Quick return if possible */
-    if(*m == 0 || *n == 0)
-    {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
-    }
-    nbmin = 2;
-    ldwork = nw;
-    if(nb > 1 && nb < *k)
-    {
-        if(*lwork < nw * nb + 4160)
-        {
-            nb = (*lwork - 4160) / ldwork;
-            /* Computing MAX */
-            i__1 = 2;
-            i__2 = aocl_lapack_ilaenv(&c__2, "DORMQL", ch__1, m, n, k, &c_n1); // , expr subst
-            nbmin = fla_max(i__1, i__2);
-        }
-    }
-    if(nb < nbmin || nb >= *k)
-    {
-        /* Use unblocked code */
-        aocl_lapack_dorm2l(side, trans, m, n, k, &a[a_offset], lda, &tau[1], &c__[c_offset], ldc,
-                           &work[1], &iinfo);
-    }
-    else
-    {
-        /* Use blocked code */
-        iwt = nw * nb + 1;
-        if(left && notran || !left && !notran)
-        {
-            i1 = 1;
-            i2 = *k;
-            i3 = nb;
-        }
-        else
-        {
-            i1 = (*k - 1) / nb * nb + 1;
-            i2 = 1;
-            i3 = -nb;
-        }
-        if(left)
-        {
-            ni = *n;
-        }
-        else
-        {
-            mi = *m;
-        }
-        i__1 = i2;
-        i__2 = i3;
-        for(i__ = i1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
-        {
-            /* Computing MIN */
-            i__4 = nb;
-            i__5 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__4, i__5);
-            /* Form the triangular factor of the block reflector */
-            /* H = H(i+ib-1) . . . H(i+1) H(i) */
-            i__4 = nq - *k + i__ + ib - 1;
-            aocl_lapack_dlarft("Backward", "Columnwise", &i__4, &ib, &a[i__ * a_dim1 + 1], lda,
-                               &tau[i__], &work[iwt], &c__65);
-            if(left)
-            {
-                /* H or H**T is applied to C(1:m-k+i+ib-1,1:n) */
-                mi = *m - *k + i__ + ib - 1;
-            }
-            else
-            {
-                /* H or H**T is applied to C(1:m,1:n-k+i+ib-1) */
-                ni = *n - *k + i__ + ib - 1;
-            }
-            /* Apply H or H**T */
-            aocl_lapack_dlarfb(side, trans, "Backward", "Columnwise", &mi, &ni, &ib,
-                               &a[i__ * a_dim1 + 1], lda, &work[iwt], &c__65, &c__[c_offset], ldc,
-                               &work[1], &ldwork);
-            /* L10: */
-        }
-    }
-    work[1] = (doublereal)lwkopt;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
-    /* End of DORMQL */
-}
-/* dormql_ */
+ /* > if SIDE = 'R', LWORK >= max(1,M). */
+ /* > For good performance, LWORK should generally be larger. */
+ /* > */
+ /* > If LWORK = -1, then a workspace query is assumed;
+ the routine */
+ /* > only calculates the optimal size of the WORK array, returns */
+ /* > this value as the first entry of the WORK array, and no error */
+ /* > message related to LWORK is issued by XERBLA. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[out] INFO */
+ /* > \verbatim */
+ /* > INFO is INTEGER */
+ /* > = 0: successful exit */
+ /* > < 0: if INFO = -i, the i-th argument had an illegal value */
+ /* > \endverbatim */
+ /* Authors: */
+ /* ======== */
+ /* > \author Univ. of Tennessee */
+ /* > \author Univ. of California Berkeley */
+ /* > \author Univ. of Colorado Denver */
+ /* > \author NAG Ltd. */
+ /* > \date December 2016 */
+ /* > \ingroup doubleOTHERcomputational */
+ /* ===================================================================== */
+ /* Subroutine */
+ int dormql_(char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal * c__, integer *ldc, doublereal *work, integer *lwork, integer *info) {
+ /* System generated locals */
+ address a__1[2];
+ integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3[2], i__4, i__5;
+ char ch__1[2];
+ /* Builtin functions */
+ /* Subroutine */
+ 
+ /* Local variables */
+ integer i__, i1, i2, i3, ib, nb, mi, ni, nq, nw, iwt;
+ logical left;
+ extern logical lsame_(char *, char *);
+ integer nbmin, iinfo;
+ extern /* Subroutine */
+ int dorm2l_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(char *, integer *);
+ extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+ logical notran;
+ integer ldwork, lwkopt;
+ logical lquery;
+ /* -- LAPACK computational routine (version 3.7.0) -- */
+ /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
+ /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
+ /* December 2016 */
+ /* .. Scalar Arguments .. */
+ /* .. */
+ /* .. Array Arguments .. */
+ /* .. */
+ /* ===================================================================== */
+ /* .. Parameters .. */
+ /* .. */
+ /* .. Local Scalars .. */
+ /* .. */
+ /* .. External Functions .. */
+ /* .. */
+ /* .. External Subroutines .. */
+ /* .. */
+ /* .. Intrinsic Functions .. */
+ /* .. */
+ /* .. Executable Statements .. */
+ /* Test the input arguments */
+ /* Parameter adjustments */
+ a_dim1 = *lda;
+ a_offset = 1 + a_dim1;
+ a -= a_offset;
+ --tau;
+ c_dim1 = *ldc;
+ c_offset = 1 + c_dim1;
+ c__ -= c_offset;
+ --work;
+ /* Function Body */
+ *info = 0;
+ left = lsame_(side, "L");
+ notran = lsame_(trans, "N");
+ lquery = *lwork == -1;
+ /* NQ is the order of Q and NW is the minimum dimension of WORK */
+ if (left) {
+ nq = *m;
+ nw = max(1,*n);
+ }
+ else {
+ nq = *n;
+ nw = max(1,*m);
+ }
+ if (! left && ! lsame_(side, "R")) {
+ *info = -1;
+ }
+ else if (! notran && ! lsame_(trans, "T")) {
+ *info = -2;
+ }
+ else if (*m < 0) {
+ *info = -3;
+ }
+ else if (*n < 0) {
+ *info = -4;
+ }
+ else if (*k < 0 || *k > nq) {
+ *info = -5;
+ }
+ else if (*lda < max(1,nq)) {
+ *info = -7;
+ }
+ else if (*ldc < max(1,*m)) {
+ *info = -10;
+ }
+ else if (*lwork < nw && ! lquery) {
+ *info = -12;
+ }
+ if (*info == 0) {
+ /* Compute the workspace requirements */
+ if (*m == 0 || *n == 0) {
+ lwkopt = 1;
+ }
+ else {
+ /* Computing MIN */
+ i__1 = 64; i__2 = ilaenv_(&c__1, "DORMQL", ch__1, m, n, k, &c_n1); // , expr subst  
+ nb = min(i__1,i__2);
+ lwkopt = nw * nb + 4160;
+ }
+ work[1] = (doublereal) lwkopt;
+ }
+ if (*info != 0) {
+ i__1 = -(*info);
+ xerbla_("DORMQL", &i__1);
+ return 0;
+ }
+ else if (lquery) {
+ return 0;
+ }
+ /* Quick return if possible */
+ if (*m == 0 || *n == 0) {
+ return 0;
+ }
+ nbmin = 2;
+ ldwork = nw;
+ if (nb > 1 && nb < *k) {
+ if (*lwork < nw * nb + 4160) {
+ nb = (*lwork - 4160) / ldwork;
+ /* Computing MAX */
+ i__1 = 2; i__2 = ilaenv_(&c__2, "DORMQL", ch__1, m, n, k, &c_n1); // , expr subst  
+ nbmin = max(i__1,i__2);
+ }
+ }
+ if (nb < nbmin || nb >= *k) {
+ /* Use unblocked code */
+ dorm2l_(side, trans, m, n, k, &a[a_offset], lda, &tau[1], &c__[ c_offset], ldc, &work[1], &iinfo);
+ }
+ else {
+ /* Use blocked code */
+ iwt = nw * nb + 1;
+ if (left && notran || ! left && ! notran) {
+ i1 = 1;
+ i2 = *k;
+ i3 = nb;
+ }
+ else {
+ i1 = (*k - 1) / nb * nb + 1;
+ i2 = 1;
+ i3 = -nb;
+ }
+ if (left) {
+ ni = *n;
+ }
+ else {
+ mi = *m;
+ }
+ i__1 = i2;
+ i__2 = i3;
+ for (i__ = i1;
+ i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
+ i__ += i__2) {
+ /* Computing MIN */
+ i__4 = nb; i__5 = *k - i__ + 1; // , expr subst  
+ ib = min(i__4,i__5);
+ /* Form the triangular factor of the block reflector */
+ /* H = H(i+ib-1) . . . H(i+1) H(i) */
+ i__4 = nq - *k + i__ + ib - 1;
+ dlarft_("Backward", "Columnwise", &i__4, &ib, &a[i__ * a_dim1 + 1] , lda, &tau[i__], &work[iwt], &c__65);
+ if (left) {
+ /* H or H**T is applied to C(1:m-k+i+ib-1,1:n) */
+ mi = *m - *k + i__ + ib - 1;
+ }
+ else {
+ /* H or H**T is applied to C(1:m,1:n-k+i+ib-1) */
+ ni = *n - *k + i__ + ib - 1;
+ }
+ /* Apply H or H**T */
+ dlarfb_(side, trans, "Backward", "Columnwise", &mi, &ni, &ib, &a[ i__ * a_dim1 + 1], lda, &work[iwt], &c__65, &c__[c_offset] , ldc, &work[1], &ldwork);
+ /* L10: */
+ }
+ }
+ work[1] = (doublereal) lwkopt;
+ return 0;
+ /* End of DORMQL */
+ }
+ /* dormql_ */
+ 

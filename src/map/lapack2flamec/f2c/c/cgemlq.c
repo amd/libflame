@@ -1,353 +1,297 @@
-/*
-    Copyright (c) 2021-2023 Advanced Micro Devices, Inc. All rights reserved.
-*/
-/* ../netlib/v3.9.0/cgemlq.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CGEMLQ */
-/* Definition: */
-/* =========== */
-/* SUBROUTINE CGEMLQ( SIDE, TRANS, M, N, K, A, LDA, T, */
-/* $ TSIZE, C, LDC, WORK, LWORK, INFO ) */
-/* .. Scalar Arguments .. */
-/* CHARACTER SIDE, TRANS */
-/* INTEGER INFO, LDA, M, N, K, LDT, TSIZE, LWORK, LDC */
-/* .. */
-/* .. Array Arguments .. */
-/* COMPLEX A( LDA, * ), T( * ), C(LDC, * ), WORK( * ) */
-/* .. */
-/* > \par Purpose: */
-/* ============= */
-/* > */
-/* > \verbatim */
-/* > */
-/* > CGEMLQ overwrites the general real M-by-N matrix C with */
-/* > */
-/* > SIDE = 'L' SIDE = 'R' */
-/* > TRANS = 'N': Q * C C * Q */
-/* > TRANS = 'C': Q**H * C C * Q**H */
-/* > where Q is a scomplex unitary matrix defined as the product */
-/* > of blocked elementary reflectors computed by short wide */
-/* > LQ factorization (CGELQ) */
-/* > */
-/* > \endverbatim */
-/* Arguments: */
-/* ========== */
-/* > \param[in] SIDE */
-/* > \verbatim */
-/* > SIDE is CHARACTER*1 */
-/* > = 'L': apply Q or Q**T from the Left;
+/* ../netlib/v3.9.0/cgemlq.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+ #include "FLA_f2c.h" /* > \brief \b CGEMLQ */
+ /* Definition: */
+ /* =========== */
+ /* SUBROUTINE CGEMLQ( SIDE, TRANS, M, N, K, A, LDA, T, */
+ /* $ TSIZE, C, LDC, WORK, LWORK, INFO ) */
+ /* .. Scalar Arguments .. */
+ /* CHARACTER SIDE, TRANS */
+ /* INTEGER INFO, LDA, M, N, K, LDT, TSIZE, LWORK, LDC */
+ /* .. */
+ /* .. Array Arguments .. */
+ /* COMPLEX A( LDA, * ), T( * ), C(LDC, * ), WORK( * ) */
+ /* .. */
+ /* > \par Purpose: */
+ /* ============= */
+ /* > */
+ /* > \verbatim */
+ /* > */
+ /* > CGEMLQ overwrites the general real M-by-N matrix C with */
+ /* > */
+ /* > SIDE = 'L' SIDE = 'R' */
+ /* > TRANS = 'N': Q * C C * Q */
+ /* > TRANS = 'C': Q**H * C C * Q**H */
+ /* > where Q is a complex unitary matrix defined as the product */
+ /* > of blocked elementary reflectors computed by short wide */
+ /* > LQ factorization (CGELQ) */
+ /* > */
+ /* > \endverbatim */
+ /* Arguments: */
+ /* ========== */
+ /* > \param[in] SIDE */
+ /* > \verbatim */
+ /* > SIDE is CHARACTER*1 */
+ /* > = 'L': apply Q or Q**T from the Left;
  */
-/* > = 'R': apply Q or Q**T from the Right. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] TRANS */
-/* > \verbatim */
-/* > TRANS is CHARACTER*1 */
-/* > = 'N': No transpose, apply Q;
+ /* > = 'R': apply Q or Q**T from the Right. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] TRANS */
+ /* > \verbatim */
+ /* > TRANS is CHARACTER*1 */
+ /* > = 'N': No transpose, apply Q;
  */
-/* > = 'T': Transpose, apply Q**T. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] M */
-/* > \verbatim */
-/* > M is INTEGER */
-/* > The number of rows of the matrix A. M >=0. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] N */
-/* > \verbatim */
-/* > N is INTEGER */
-/* > The number of columns of the matrix C. N >= 0. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] K */
-/* > \verbatim */
-/* > K is INTEGER */
-/* > The number of elementary reflectors whose product defines */
-/* > the matrix Q. */
-/* > If SIDE = 'L', M >= K >= 0;
+ /* > = 'T': Transpose, apply Q**T. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] M */
+ /* > \verbatim */
+ /* > M is INTEGER */
+ /* > The number of rows of the matrix A. M >=0. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] N */
+ /* > \verbatim */
+ /* > N is INTEGER */
+ /* > The number of columns of the matrix C. N >= 0. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] K */
+ /* > \verbatim */
+ /* > K is INTEGER */
+ /* > The number of elementary reflectors whose product defines */
+ /* > the matrix Q. */
+ /* > If SIDE = 'L', M >= K >= 0;
  */
-/* > if SIDE = 'R', N >= K >= 0. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] A */
-/* > \verbatim */
-/* > A is COMPLEX array, dimension */
-/* > (LDA,M) if SIDE = 'L', */
-/* > (LDA,N) if SIDE = 'R' */
-/* > Part of the data structure to represent Q as returned by CGELQ. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] LDA */
-/* > \verbatim */
-/* > LDA is INTEGER */
-/* > The leading dimension of the array A. LDA >= fla_max(1,K). */
-/* > \endverbatim */
-/* > */
-/* > \param[in] T */
-/* > \verbatim */
-/* > T is COMPLEX array, dimension (MAX(5,TSIZE)). */
-/* > Part of the data structure to represent Q as returned by CGELQ. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] TSIZE */
-/* > \verbatim */
-/* > TSIZE is INTEGER */
-/* > The dimension of the array T. TSIZE >= 5. */
-/* > \endverbatim */
-/* > */
-/* > \param[in,out] C */
-/* > \verbatim */
-/* > C is COMPLEX array, dimension (LDC,N) */
-/* > On entry, the M-by-N matrix C. */
-/* > On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] LDC */
-/* > \verbatim */
-/* > LDC is INTEGER */
-/* > The leading dimension of the array C. LDC >= fla_max(1,M). */
-/* > \endverbatim */
-/* > */
-/* > \param[out] WORK */
-/* > \verbatim */
-/* > (workspace) COMPLEX array, dimension (MAX(1,LWORK)) */
-/* > \endverbatim */
-/* > */
-/* > \param[in] LWORK */
-/* > \verbatim */
-/* > LWORK is INTEGER */
-/* > The dimension of the array WORK. */
-/* > If LWORK = -1, then a workspace query is assumed. The routine */
-/* > only calculates the size of the WORK array, returns this */
-/* > value as WORK(1), and no error message related to WORK */
-/* > is issued by XERBLA. */
-/* > \endverbatim */
-/* > */
-/* > \param[out] INFO */
-/* > \verbatim */
-/* > INFO is INTEGER */
-/* > = 0: successful exit */
-/* > < 0: if INFO = -i, the i-th argument had an illegal value */
-/* > \endverbatim */
-/* Authors: */
-/* ======== */
-/* > \author Univ. of Tennessee */
-/* > \author Univ. of California Berkeley */
-/* > \author Univ. of Colorado Denver */
-/* > \author NAG Ltd. */
-/* > \par Further Details */
-/* ==================== */
-/* > */
-/* > \verbatim */
-/* > */
-/* > These details are particular for this LAPACK implementation. Users should not */
-/* > take them for granted. These details may change in the future, and are not likely */
-/* > true for another LAPACK implementation. These details are relevant if one wants */
-/* > to try to understand the code. They are not part of the interface. */
-/* > */
-/* > In this version, */
-/* > */
-/* > T(2): row block size (MB) */
-/* > T(3): column block size (NB) */
-/* > T(6:TSIZE): data structure needed for Q, computed by */
-/* > CLASWQR or CGELQT */
-/* > */
-/* > Depending on the matrix dimensions M and N, and row and column */
-/* > block sizes MB and NB returned by ILAENV, CGELQ will use either */
-/* > CLASWLQ (if the matrix is wide-and-short) or CGELQT to compute */
-/* > the LQ factorization. */
-/* > This version of CGEMLQ will use either CLAMSWLQ or CGEMLQT to */
-/* > multiply matrix Q by another matrix. */
-/* > Further Details in CLAMSWLQ or CGEMLQT. */
-/* > \endverbatim */
-/* > */
-/* ===================================================================== */
-/* Subroutine */
-/** Generated wrapper function */
-void cgemlq_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, scomplex *a,
-             aocl_int_t *lda, scomplex *t, aocl_int_t *tsize, scomplex *c__, aocl_int_t *ldc,
-             scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgemlq(side, trans, m, n, k, a, lda, t, tsize, c__, ldc, work, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t tsize_64 = *tsize;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgemlq(side, trans, &m_64, &n_64, &k_64, a, &lda_64, t, &tsize_64, c__, &ldc_64,
-                       work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgemlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
-                        scomplex *a, aocl_int64_t *lda, scomplex *t, aocl_int64_t *tsize,
-                        scomplex *c__, aocl_int64_t *ldc, scomplex *work, aocl_int64_t *lwork,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cgemlq inputs: side %c, trans %c, m %lld, n %lld, k %lld, lda %lld, tsize %lld, ldc "
-             "%lld, lwork %lld",
-             *side, *trans, *m, *n, *k, *lda, *tsize, *ldc, *lwork);
-#else
-    snprintf(
-        buffer, 256,
-        "cgemlq inputs: side %c, trans %c, m %d, n %d, k %d, lda %d, tsize %d, ldc %d, lwork %d",
-        *side, *trans, *m, *n, *k, *lda, *tsize, *ldc, *lwork);
-#endif
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
-    /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1;
-    real r__1;
-    /* Local variables */
-    aocl_int64_t mb, nb, mn, lw;
-    logical left, tran;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    logical right;
-    logical notran, lquery;
-    /* -- LAPACK computational routine (version 3.7.0) -- */
-    /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
-    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* December 2016 */
-    /* .. Scalar Arguments .. */
-    /* .. */
-    /* .. Array Arguments .. */
-    /* .. */
-    /* ===================================================================== */
-    /* .. */
-    /* .. Local Scalars .. */
-    /* .. */
-    /* .. External Functions .. */
-    /* .. */
-    /* .. External Subroutines .. */
-    /* .. */
-    /* .. Intrinsic Functions .. */
-    /* .. */
-    /* .. Executable Statements .. */
-    /* Test the input arguments */
-    /* Parameter adjustments */
-    a_dim1 = *lda;
-    a_offset = 1 + a_dim1;
-    a -= a_offset;
-    --t;
-    c_dim1 = *ldc;
-    c_offset = 1 + c_dim1;
-    c__ -= c_offset;
-    --work;
-    /* Function Body */
-    lquery = *lwork == -1;
-    notran = lsame_(trans, "N", 1, 1);
-    tran = lsame_(trans, "C", 1, 1);
-    left = lsame_(side, "L", 1, 1);
-    right = lsame_(side, "R", 1, 1);
-    mb = (integer)t[2].real;
-    nb = (integer)t[3].real;
-    if(left)
-    {
-        lw = *n * mb;
-        mn = *m;
-    }
-    else
-    {
-        lw = *m * mb;
-        mn = *n;
-    }
-    *info = 0;
-    if(!left && !right)
-    {
-        *info = -1;
-    }
-    else if(!tran && !notran)
-    {
-        *info = -2;
-    }
-    else if(*m < 0)
-    {
-        *info = -3;
-    }
-    else if(*n < 0)
-    {
-        *info = -4;
-    }
-    else if(*k < 0 || *k > mn)
-    {
-        *info = -5;
-    }
-    else if(*lda < fla_max(1, *k))
-    {
-        *info = -7;
-    }
-    else if(*tsize < 5)
-    {
-        *info = -9;
-    }
-    else if(*ldc < fla_max(1, *m))
-    {
-        *info = -11;
-    }
-    else if(*lwork < fla_max(1, lw) && !lquery)
-    {
-        *info = -13;
-    }
-    if(*info == 0)
-    {
-        r__1 = (real)lw;
-        work[1].real = r__1;
-        work[1].imag = 0.f; // , expr subst
-    }
-    if(*info != 0)
-    {
-        i__1 = -(*info);
-        aocl_blas_xerbla("CGEMLQ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
-    }
-    else if(lquery)
-    {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
-    }
-    /* Quick return if possible */
-    /* Computing MIN */
-    i__1 = fla_min(*m, *n);
-    if(fla_min(i__1, *k) == 0)
-    {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
-    }
-    /* Computing MAX */
-    i__1 = fla_max(*m, *n);
-    if(left && *m <= *k || right && *n <= *k || nb <= *k || nb >= fla_max(i__1, *k))
-    {
-        aocl_lapack_cgemlqt(side, trans, m, n, k, &mb, &a[a_offset], lda, &t[6], &mb,
-                            &c__[c_offset], ldc, &work[1], info);
-    }
-    else
-    {
-        aocl_lapack_clamswlq(side, trans, m, n, k, &mb, &nb, &a[a_offset], lda, &t[6], &mb,
-                             &c__[c_offset], ldc, &work[1], lwork, info);
-    }
-    r__1 = (real)lw;
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
-    /* End of CGEMLQ */
-}
-/* cgemlq_ */
+ /* > if SIDE = 'R', N >= K >= 0. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] A */
+ /* > \verbatim */
+ /* > A is COMPLEX array, dimension */
+ /* > (LDA,M) if SIDE = 'L', */
+ /* > (LDA,N) if SIDE = 'R' */
+ /* > Part of the data structure to represent Q as returned by CGELQ. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] LDA */
+ /* > \verbatim */
+ /* > LDA is INTEGER */
+ /* > The leading dimension of the array A. LDA >= max(1,K). */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] T */
+ /* > \verbatim */
+ /* > T is COMPLEX array, dimension (MAX(5,TSIZE)). */
+ /* > Part of the data structure to represent Q as returned by CGELQ. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] TSIZE */
+ /* > \verbatim */
+ /* > TSIZE is INTEGER */
+ /* > The dimension of the array T. TSIZE >= 5. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in,out] C */
+ /* > \verbatim */
+ /* > C is COMPLEX array, dimension (LDC,N) */
+ /* > On entry, the M-by-N matrix C. */
+ /* > On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] LDC */
+ /* > \verbatim */
+ /* > LDC is INTEGER */
+ /* > The leading dimension of the array C. LDC >= max(1,M). */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[out] WORK */
+ /* > \verbatim */
+ /* > (workspace) COMPLEX array, dimension (MAX(1,LWORK)) */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] LWORK */
+ /* > \verbatim */
+ /* > LWORK is INTEGER */
+ /* > The dimension of the array WORK. */
+ /* > If LWORK = -1, then a workspace query is assumed. The routine */
+ /* > only calculates the size of the WORK array, returns this */
+ /* > value as WORK(1), and no error message related to WORK */
+ /* > is issued by XERBLA. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[out] INFO */
+ /* > \verbatim */
+ /* > INFO is INTEGER */
+ /* > = 0: successful exit */
+ /* > < 0: if INFO = -i, the i-th argument had an illegal value */
+ /* > \endverbatim */
+ /* Authors: */
+ /* ======== */
+ /* > \author Univ. of Tennessee */
+ /* > \author Univ. of California Berkeley */
+ /* > \author Univ. of Colorado Denver */
+ /* > \author NAG Ltd. */
+ /* > \par Further Details */
+ /* ==================== */
+ /* > */
+ /* > \verbatim */
+ /* > */
+ /* > These details are particular for this LAPACK implementation. Users should not */
+ /* > take them for granted. These details may change in the future, and are not likely */
+ /* > true for another LAPACK implementation. These details are relevant if one wants */
+ /* > to try to understand the code. They are not part of the interface. */
+ /* > */
+ /* > In this version, */
+ /* > */
+ /* > T(2): row block size (MB) */
+ /* > T(3): column block size (NB) */
+ /* > T(6:TSIZE): data structure needed for Q, computed by */
+ /* > CLASWQR or CGELQT */
+ /* > */
+ /* > Depending on the matrix dimensions M and N, and row and column */
+ /* > block sizes MB and NB returned by ILAENV, CGELQ will use either */
+ /* > CLASWLQ (if the matrix is wide-and-short) or CGELQT to compute */
+ /* > the LQ factorization. */
+ /* > This version of CGEMLQ will use either CLAMSWLQ or CGEMLQT to */
+ /* > multiply matrix Q by another matrix. */
+ /* > Further Details in CLAMSWLQ or CGEMLQT. */
+ /* > \endverbatim */
+ /* > */
+ /* ===================================================================== */
+ /* Subroutine */
+ int cgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, complex *a, integer *lda, complex *t, integer *tsize, complex *c__, integer *ldc, complex *work, integer *lwork, integer * info) {
+ /* System generated locals */
+ integer a_dim1, a_offset, c_dim1, c_offset, i__1;
+ real r__1;
+ /* Local variables */
+ extern /* Subroutine */
+ int clamswlq_(char *, char *, integer *, integer * , integer *, integer *, integer *, complex *, integer *, complex * , integer *, complex *, integer *, complex *, integer *, integer * );
+ integer mb, nb, mn, lw;
+ logical left, tran;
+ extern logical lsame_(char *, char *);
+ logical right;
+ integer nblcks;
+ extern /* Subroutine */
+ int xerbla_(char *, integer *);
+ logical notran, lquery;
+ extern /* Subroutine */
+ int cgemlqt_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
+ /* -- LAPACK computational routine (version 3.7.0) -- */
+ /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
+ /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
+ /* December 2016 */
+ /* .. Scalar Arguments .. */
+ /* .. */
+ /* .. Array Arguments .. */
+ /* .. */
+ /* ===================================================================== */
+ /* .. */
+ /* .. Local Scalars .. */
+ /* .. */
+ /* .. External Functions .. */
+ /* .. */
+ /* .. External Subroutines .. */
+ /* .. */
+ /* .. Intrinsic Functions .. */
+ /* .. */
+ /* .. Executable Statements .. */
+ /* Test the input arguments */
+ /* Parameter adjustments */
+ a_dim1 = *lda;
+ a_offset = 1 + a_dim1;
+ a -= a_offset;
+ --t;
+ c_dim1 = *ldc;
+ c_offset = 1 + c_dim1;
+ c__ -= c_offset;
+ --work;
+ /* Function Body */
+ lquery = *lwork == -1;
+ notran = lsame_(trans, "N");
+ tran = lsame_(trans, "C");
+ left = lsame_(side, "L");
+ right = lsame_(side, "R");
+ mb = (integer) t[2].r;
+ nb = (integer) t[3].r;
+ if (left) {
+ lw = *n * mb;
+ mn = *m;
+ }
+ else {
+ lw = *m * mb;
+ mn = *n;
+ }
+ if (nb > *k && mn > *k) {
+ if ((mn - *k) % (nb - *k) == 0) {
+ nblcks = (mn - *k) / (nb - *k);
+ }
+ else {
+ nblcks = (mn - *k) / (nb - *k) + 1;
+ }
+ }
+ else {
+ nblcks = 1;
+ }
+ *info = 0;
+ if (! left && ! right) {
+ *info = -1;
+ }
+ else if (! tran && ! notran) {
+ *info = -2;
+ }
+ else if (*m < 0) {
+ *info = -3;
+ }
+ else if (*n < 0) {
+ *info = -4;
+ }
+ else if (*k < 0 || *k > mn) {
+ *info = -5;
+ }
+ else if (*lda < max(1,*k)) {
+ *info = -7;
+ }
+ else if (*tsize < 5) {
+ *info = -9;
+ }
+ else if (*ldc < max(1,*m)) {
+ *info = -11;
+ }
+ else if (*lwork < max(1,lw) && ! lquery) {
+ *info = -13;
+ }
+ if (*info == 0) {
+ r__1 = (real) lw;
+ work[1].r = r__1; work[1].i = 0.f; // , expr subst  
+ }
+ if (*info != 0) {
+ i__1 = -(*info);
+ xerbla_("CGEMLQ", &i__1);
+ return 0;
+ }
+ else if (lquery) {
+ return 0;
+ }
+ /* Quick return if possible */
+ /* Computing MIN */
+ i__1 = min(*m,*n);
+ if (min(i__1,*k) == 0) {
+ return 0;
+ }
+ /* Computing MAX */
+ i__1 = max(*m,*n);
+ if (left && *m <= *k || right && *n <= *k || nb <= *k || nb >= max(i__1,* k)) {
+ cgemlqt_(side, trans, m, n, k, &mb, &a[a_offset], lda, &t[6], &mb, & c__[c_offset], ldc, &work[1], info);
+ }
+ else {
+ clamswlq_(side, trans, m, n, k, &mb, &nb, &a[a_offset], lda, &t[6], & mb, &c__[c_offset], ldc, &work[1], lwork, info);
+ }
+ r__1 = (real) lw;
+ work[1].r = r__1; work[1].i = 0.f; // , expr subst  
+ return 0;
+ /* End of CGEMLQ */
+ }
+ /* cgemlq_ */
+ 

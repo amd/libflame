@@ -1,317 +1,310 @@
-/* slansy.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-/* > \brief \b SLANSY returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
- * or the ele ment of largest absolute value of a real symmetric matrix. */
-/* =========== DOCUMENTATION =========== */
-/* Online html documentation available at */
-/* http://www.netlib.org/lapack/explore-html/ */
-/* > \htmlonly */
-/* > Download SLANSY + dependencies */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slansy.
- * f"> */
-/* > [TGZ]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slansy.
- * f"> */
-/* > [ZIP]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slansy.
- * f"> */
-/* > [TXT]</a> */
-/* > \endhtmlonly */
-/* Definition: */
-/* =========== */
-/* REAL FUNCTION SLANSY( NORM, UPLO, N, A, LDA, WORK ) */
-/* .. Scalar Arguments .. */
-/* CHARACTER NORM, UPLO */
-/* INTEGER LDA, N */
-/* .. */
-/* .. Array Arguments .. */
-/* REAL A( LDA, * ), WORK( * ) */
-/* .. */
-/* > \par Purpose: */
-/* ============= */
-/* > */
-/* > \verbatim */
-/* > */
-/* > SLANSY returns the value of the one norm, or the Frobenius norm, or */
-/* > the infinity norm, or the element of largest absolute value of a */
-/* > real symmetric matrix A. */
-/* > \endverbatim */
-/* > */
-/* > \return SLANSY */
-/* > \verbatim */
-/* > */
-/* > SLANSY = ( max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
-/* > ( */
-/* > ( norm1(A), NORM = '1', 'O' or 'o' */
-/* > ( */
-/* > ( normI(A), NORM = 'I' or 'i' */
-/* > ( */
-/* > ( normF(A), NORM = 'F', 'f', 'E' or 'e' */
-/* > */
-/* > where norm1 denotes the one norm of a matrix (maximum column sum), */
-/* > normI denotes the infinity norm of a matrix (maximum row sum) and */
-/* > normF denotes the Frobenius norm of a matrix (square root of sum of */
-/* > squares). Note that max(f2c_abs(A(i,j))) is not a consistent matrix norm. */
-/* > \endverbatim */
-/* Arguments: */
-/* ========== */
-/* > \param[in] NORM */
-/* > \verbatim */
-/* > NORM is CHARACTER*1 */
-/* > Specifies the value to be returned in SLANSY as described */
-/* > above. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] UPLO */
-/* > \verbatim */
-/* > UPLO is CHARACTER*1 */
-/* > Specifies whether the upper or lower triangular part of the */
-/* > symmetric matrix A is to be referenced. */
-/* > = 'U': Upper triangular part of A is referenced */
-/* > = 'L': Lower triangular part of A is referenced */
-/* > \endverbatim */
-/* > */
-/* > \param[in] N */
-/* > \verbatim */
-/* > N is INTEGER */
-/* > The order of the matrix A. N >= 0. When N = 0, SLANSY is */
-/* > set to zero. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] A */
-/* > \verbatim */
-/* > A is REAL array, dimension (LDA,N) */
-/* > The symmetric matrix A. If UPLO = 'U', the leading n by n */
-/* > upper triangular part of A contains the upper triangular part */
-/* > of the matrix A, and the strictly lower triangular part of A */
-/* > is not referenced. If UPLO = 'L', the leading n by n lower */
-/* > triangular part of A contains the lower triangular part of */
-/* > the matrix A, and the strictly upper triangular part of A is */
-/* > not referenced. */
-/* > \endverbatim */
-/* > */
-/* > \param[in] LDA */
-/* > \verbatim */
-/* > LDA is INTEGER */
-/* > The leading dimension of the array A. LDA >= fla_max(N,1). */
-/* > \endverbatim */
-/* > */
-/* > \param[out] WORK */
-/* > \verbatim */
-/* > WORK is REAL array, dimension (MAX(1,LWORK)), */
-/* > where LWORK >= N when NORM = 'I' or '1' or 'O';
-otherwise, */
-/* > WORK is not referenced. */
-/* > \endverbatim */
-/* Authors: */
-/* ======== */
-/* > \author Univ. of Tennessee */
-/* > \author Univ. of California Berkeley */
-/* > \author Univ. of Colorado Denver */
-/* > \author NAG Ltd. */
-/* > \ingroup realSYauxiliary */
-/* ===================================================================== */
-/** Generated wrapper function */
-real slansy_(char *norm, char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, real *work)
-{
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_slansy(norm, uplo, n, a, lda, work);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-
-    return aocl_lapack_slansy(norm, uplo, &n_64, a, &lda_64, work);
-#endif
-}
-
-real aocl_lapack_slansy(char *norm, char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
-                        real *work)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slansy inputs: norm %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *norm,
-                      *uplo, *n, *lda);
-    /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2;
-    real ret_val, r__1;
-    /* Builtin functions */
-    double sqrt(doublereal);
-    /* Local variables */
-    aocl_int64_t i__, j;
-    real sum, absa, scale;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    real value;
-    /* -- LAPACK auxiliary routine -- */
-    /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
-    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* .. Scalar Arguments .. */
-    /* .. */
-    /* .. Array Arguments .. */
-    /* .. */
-    /* ===================================================================== */
-    /* .. Parameters .. */
-    /* .. */
-    /* .. Local Scalars .. */
-    /* .. */
-    /* .. External Subroutines .. */
-    /* .. */
-    /* .. External Functions .. */
-    /* .. */
-    /* .. Intrinsic Functions .. */
-    /* .. */
-    /* .. Executable Statements .. */
-    /* Parameter adjustments */
-    a_dim1 = *lda;
-    a_offset = 1 + a_dim1;
-    a -= a_offset;
-    --work;
-    /* Function Body */
-    value = 0.f;
-    if(*n == 0)
-    {
-        value = 0.f;
-    }
-    else if(lsame_(norm, "M", 1, 1))
-    {
-        /* Find max(f2c_abs(A(i,j))). */
-        value = 0.f;
-        if(lsame_(uplo, "U", 1, 1))
-        {
-            i__1 = *n;
-            for(j = 1; j <= i__1; ++j)
-            {
-                i__2 = j;
-                for(i__ = 1; i__ <= i__2; ++i__)
-                {
-                    sum = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
-                    if (value < sum || sisnan_(&sum))
-                    {
-                        value = sum;
-                    }
-                    /* L10: */
-                }
-                /* L20: */
-            }
-        }
-        else
-        {
-            i__1 = *n;
-            for(j = 1; j <= i__1; ++j)
-            {
-                i__2 = *n;
-                for(i__ = j; i__ <= i__2; ++i__)
-                {
-                    sum = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
-                    if (value < sum || sisnan_(&sum))
-                    {
-                        value = sum;
-                    }
-                    /* L30: */
-                }
-                /* L40: */
-            }
-        }
-    }
-    else if(lsame_(norm, "I", 1, 1) || lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1')
-    {
-        /* Find normI(A) ( = norm1(A), since A is symmetric). */
-        value = 0.f;
-        if(lsame_(uplo, "U", 1, 1))
-        {
-            i__1 = *n;
-            for(j = 1; j <= i__1; ++j)
-            {
-                sum = 0.f;
-                i__2 = j - 1;
-                for(i__ = 1; i__ <= i__2; ++i__)
-                {
-                    absa = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
-                    sum += absa;
-                    work[i__] += absa;
-                    /* L50: */
-                }
-                work[j] = sum + (r__1 = a[j + j * a_dim1], f2c_abs(r__1));
-                /* L60: */
-            }
-            i__1 = *n;
-            for(i__ = 1; i__ <= i__1; ++i__)
-            {
-                sum = work[i__];
-                if(value < sum || sum != sum)
-                {
-                    value = sum;
-                }
-                /* L70: */
-            }
-        }
-        else
-        {
-            i__1 = *n;
-            for(i__ = 1; i__ <= i__1; ++i__)
-            {
-                work[i__] = 0.f;
-                /* L80: */
-            }
-            i__1 = *n;
-            for(j = 1; j <= i__1; ++j)
-            {
-                sum = work[j] + (r__1 = a[j + j * a_dim1], f2c_abs(r__1));
-                i__2 = *n;
-                for(i__ = j + 1; i__ <= i__2; ++i__)
-                {
-                    absa = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
-                    sum += absa;
-                    work[i__] += absa;
-                    /* L90: */
-                }
-                if(value < sum || sum != sum)
-                {
-                    value = sum;
-                }
-                /* L100: */
-            }
-        }
-    }
-    else if(lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
-    {
-        /* Find normF(A). */
-        scale = 0.f;
-        sum = 1.f;
-        if(lsame_(uplo, "U", 1, 1))
-        {
-            i__1 = *n;
-            for(j = 2; j <= i__1; ++j)
-            {
-                i__2 = j - 1;
-                aocl_lapack_slassq(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
-                /* L110: */
-            }
-        }
-        else
-        {
-            i__1 = *n - 1;
-            for(j = 1; j <= i__1; ++j)
-            {
-                i__2 = *n - j;
-                aocl_lapack_slassq(&i__2, &a[j + 1 + j * a_dim1], &c__1, &scale, &sum);
-                /* L120: */
-            }
-        }
-        sum *= 2;
-        i__1 = *lda + 1;
-        aocl_lapack_slassq(n, &a[a_offset], &i__1, &scale, &sum);
-        value = scale * sqrt(sum);
-    }
-    ret_val = value;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return ret_val;
-    /* End of SLANSY */
-}
-/* slansy_ */
+/* ../netlib/v3.9.0/slansy.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+ #include "FLA_f2c.h" /* Table of constant values */
+ static integer c__1 = 1;
+ /* > \brief \b SLANSY returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the ele ment of largest absolute value of a real symmetric matrix. */
+ /* =========== DOCUMENTATION =========== */
+ /* Online html documentation available at */
+ /* http://www.netlib.org/lapack/explore-html/ */
+ /* > \htmlonly */
+ /* > Download SLANSY + dependencies */
+ /* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slansy. f"> */
+ /* > [TGZ]</a> */
+ /* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slansy. f"> */
+ /* > [ZIP]</a> */
+ /* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slansy. f"> */
+ /* > [TXT]</a> */
+ /* > \endhtmlonly */
+ /* Definition: */
+ /* =========== */
+ /* REAL FUNCTION SLANSY( NORM, UPLO, N, A, LDA, WORK ) */
+ /* .. Scalar Arguments .. */
+ /* CHARACTER NORM, UPLO */
+ /* INTEGER LDA, N */
+ /* .. */
+ /* .. Array Arguments .. */
+ /* REAL A( LDA, * ), WORK( * ) */
+ /* .. */
+ /* > \par Purpose: */
+ /* ============= */
+ /* > */
+ /* > \verbatim */
+ /* > */
+ /* > SLANSY returns the value of the one norm, or the Frobenius norm, or */
+ /* > the infinity norm, or the element of largest absolute value of a */
+ /* > real symmetric matrix A. */
+ /* > \endverbatim */
+ /* > */
+ /* > \return SLANSY */
+ /* > \verbatim */
+ /* > */
+ /* > SLANSY = ( max(abs(A(i,j))), NORM = 'M' or 'm' */
+ /* > ( */
+ /* > ( norm1(A), NORM = '1', 'O' or 'o' */
+ /* > ( */
+ /* > ( normI(A), NORM = 'I' or 'i' */
+ /* > ( */
+ /* > ( normF(A), NORM = 'F', 'f', 'E' or 'e' */
+ /* > */
+ /* > where norm1 denotes the one norm of a matrix (maximum column sum), */
+ /* > normI denotes the infinity norm of a matrix (maximum row sum) and */
+ /* > normF denotes the Frobenius norm of a matrix (square root of sum of */
+ /* > squares). Note that max(abs(A(i,j))) is not a consistent matrix norm. */
+ /* > \endverbatim */
+ /* Arguments: */
+ /* ========== */
+ /* > \param[in] NORM */
+ /* > \verbatim */
+ /* > NORM is CHARACTER*1 */
+ /* > Specifies the value to be returned in SLANSY as described */
+ /* > above. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] UPLO */
+ /* > \verbatim */
+ /* > UPLO is CHARACTER*1 */
+ /* > Specifies whether the upper or lower triangular part of the */
+ /* > symmetric matrix A is to be referenced. */
+ /* > = 'U': Upper triangular part of A is referenced */
+ /* > = 'L': Lower triangular part of A is referenced */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] N */
+ /* > \verbatim */
+ /* > N is INTEGER */
+ /* > The order of the matrix A. N >= 0. When N = 0, SLANSY is */
+ /* > set to zero. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] A */
+ /* > \verbatim */
+ /* > A is REAL array, dimension (LDA,N) */
+ /* > The symmetric matrix A. If UPLO = 'U', the leading n by n */
+ /* > upper triangular part of A contains the upper triangular part */
+ /* > of the matrix A, and the strictly lower triangular part of A */
+ /* > is not referenced. If UPLO = 'L', the leading n by n lower */
+ /* > triangular part of A contains the lower triangular part of */
+ /* > the matrix A, and the strictly upper triangular part of A is */
+ /* > not referenced. */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[in] LDA */
+ /* > \verbatim */
+ /* > LDA is INTEGER */
+ /* > The leading dimension of the array A. LDA >= max(N,1). */
+ /* > \endverbatim */
+ /* > */
+ /* > \param[out] WORK */
+ /* > \verbatim */
+ /* > WORK is REAL array, dimension (MAX(1,LWORK)), */
+ /* > where LWORK >= N when NORM = 'I' or '1' or 'O';
+ otherwise, */
+ /* > WORK is not referenced. */
+ /* > \endverbatim */
+ /* Authors: */
+ /* ======== */
+ /* > \author Univ. of Tennessee */
+ /* > \author Univ. of California Berkeley */
+ /* > \author Univ. of Colorado Denver */
+ /* > \author NAG Ltd. */
+ /* > \date December 2016 */
+ /* > \ingroup realSYauxiliary */
+ /* ===================================================================== */
+ real slansy_(char *norm, char *uplo, integer *n, real *a, integer *lda, real * work) {
+ /* System generated locals */
+ integer a_dim1, a_offset, i__1, i__2;
+ real ret_val, r__1;
+ /* Builtin functions */
+ double sqrt(doublereal);
+ /* Local variables */
+ extern /* Subroutine */
+ int scombssq_(real *, real *);
+ integer i__, j;
+ real sum, ssq[2], absa;
+ extern logical lsame_(char *, char *);
+ real value;
+ extern logical sisnan_(real *);
+ real colssq[2];
+ extern /* Subroutine */
+ int slassq_(integer *, real *, integer *, real *, real *);
+ /* -- LAPACK auxiliary routine (version 3.7.0) -- */
+ /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
+ /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
+ /* December 2016 */
+ /* .. Scalar Arguments .. */
+ /* .. */
+ /* .. Array Arguments .. */
+ /* .. */
+ /* ===================================================================== */
+ /* .. Parameters .. */
+ /* .. */
+ /* .. Local Scalars .. */
+ /* .. */
+ /* .. Local Arrays .. */
+ /* .. */
+ /* .. External Functions .. */
+ /* .. */
+ /* .. External Subroutines .. */
+ /* .. */
+ /* .. Intrinsic Functions .. */
+ /* .. */
+ /* .. Executable Statements .. */
+ /* Parameter adjustments */
+ a_dim1 = *lda;
+ a_offset = 1 + a_dim1;
+ a -= a_offset;
+ --work;
+ /* Function Body */
+ if (*n == 0) {
+ value = 0.f;
+ }
+ else if (lsame_(norm, "M")) {
+ /* Find max(abs(A(i,j))). */
+ value = 0.f;
+ if (lsame_(uplo, "U")) {
+ i__1 = *n;
+ for (j = 1;
+ j <= i__1;
+ ++j) {
+ i__2 = j;
+ for (i__ = 1;
+ i__ <= i__2;
+ ++i__) {
+ sum = (r__1 = a[i__ + j * a_dim1], abs(r__1));
+ if (value < sum || sisnan_(&sum)) {
+ value = sum;
+ }
+ /* L10: */
+ }
+ /* L20: */
+ }
+ }
+ else {
+ i__1 = *n;
+ for (j = 1;
+ j <= i__1;
+ ++j) {
+ i__2 = *n;
+ for (i__ = j;
+ i__ <= i__2;
+ ++i__) {
+ sum = (r__1 = a[i__ + j * a_dim1], abs(r__1));
+ if (value < sum || sisnan_(&sum)) {
+ value = sum;
+ }
+ /* L30: */
+ }
+ /* L40: */
+ }
+ }
+ }
+ else if (lsame_(norm, "I") || lsame_(norm, "O") || *(unsigned char *)norm == '1') {
+ /* Find normI(A) ( = norm1(A), since A is symmetric). */
+ value = 0.f;
+ if (lsame_(uplo, "U")) {
+ i__1 = *n;
+ for (j = 1;
+ j <= i__1;
+ ++j) {
+ sum = 0.f;
+ i__2 = j - 1;
+ for (i__ = 1;
+ i__ <= i__2;
+ ++i__) {
+ absa = (r__1 = a[i__ + j * a_dim1], abs(r__1));
+ sum += absa;
+ work[i__] += absa;
+ /* L50: */
+ }
+ work[j] = sum + (r__1 = a[j + j * a_dim1], abs(r__1));
+ /* L60: */
+ }
+ i__1 = *n;
+ for (i__ = 1;
+ i__ <= i__1;
+ ++i__) {
+ sum = work[i__];
+ if (value < sum || sisnan_(&sum)) {
+ value = sum;
+ }
+ /* L70: */
+ }
+ }
+ else {
+ i__1 = *n;
+ for (i__ = 1;
+ i__ <= i__1;
+ ++i__) {
+ work[i__] = 0.f;
+ /* L80: */
+ }
+ i__1 = *n;
+ for (j = 1;
+ j <= i__1;
+ ++j) {
+ sum = work[j] + (r__1 = a[j + j * a_dim1], abs(r__1));
+ i__2 = *n;
+ for (i__ = j + 1;
+ i__ <= i__2;
+ ++i__) {
+ absa = (r__1 = a[i__ + j * a_dim1], abs(r__1));
+ sum += absa;
+ work[i__] += absa;
+ /* L90: */
+ }
+ if (value < sum || sisnan_(&sum)) {
+ value = sum;
+ }
+ /* L100: */
+ }
+ }
+ }
+ else if (lsame_(norm, "F") || lsame_(norm, "E")) {
+ /* Find normF(A). */
+ /* SSQ(1) is scale */
+ /* SSQ(2) is sum-of-squares */
+ /* For better accuracy, sum each column separately. */
+ ssq[0] = 0.f;
+ ssq[1] = 1.f;
+ /* Sum off-diagonals */
+ if (lsame_(uplo, "U")) {
+ i__1 = *n;
+ for (j = 2;
+ j <= i__1;
+ ++j) {
+ colssq[0] = 0.f;
+ colssq[1] = 1.f;
+ i__2 = j - 1;
+ slassq_(&i__2, &a[j * a_dim1 + 1], &c__1, colssq, &colssq[1]);
+ scombssq_(ssq, colssq);
+ /* L110: */
+ }
+ }
+ else {
+ i__1 = *n - 1;
+ for (j = 1;
+ j <= i__1;
+ ++j) {
+ colssq[0] = 0.f;
+ colssq[1] = 1.f;
+ i__2 = *n - j;
+ slassq_(&i__2, &a[j + 1 + j * a_dim1], &c__1, colssq, &colssq[ 1]);
+ scombssq_(ssq, colssq);
+ /* L120: */
+ }
+ }
+ ssq[1] *= 2;
+ /* Sum diagonal */
+ colssq[0] = 0.f;
+ colssq[1] = 1.f;
+ i__1 = *lda + 1;
+ slassq_(n, &a[a_offset], &i__1, colssq, &colssq[1]);
+ scombssq_(ssq, colssq);
+ value = ssq[0] * sqrt(ssq[1]);
+ }
+ ret_val = value;
+ return ret_val;
+ /* End of SLANSY */
+ }
+ /* slansy_ */
+ 

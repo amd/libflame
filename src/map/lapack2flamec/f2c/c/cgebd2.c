@@ -299,10 +299,11 @@ void aocl_lapack_cgebd2(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
             i__2 = *m - i__ + 1;
             /* Computing MIN */
             i__3 = i__ + 1;
-            aocl_lapack_clarfg(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1,
-                               &tauq[i__]);
+		    printf("%d (%f %f) %d (%f %f), %d (%f %f)\n", i__2, alpha.r, alpha.i, min(i__3,*m) + i__ * a_dim1, a[min(i__3,*m) + i__ * a_dim1].r, a[min(i__3,*m) + i__ * a_dim1].i, c__1, tauq[i__].r, tauq[i__].i);
+            clarfg_(&i__2, &alpha, &a[min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
             i__2 = i__;
-            d__[i__2] = alpha.real;
+            d__[i__2] = alpha.r;
+			printf("1: %d %f\n", i__2, alpha.r);
             i__2 = i__ + i__ * a_dim1;
             a[i__2].real = 1.f;
             a[i__2].imag = 0.f; // , expr subst

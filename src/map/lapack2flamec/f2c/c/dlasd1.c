@@ -316,16 +316,16 @@ void aocl_lapack_dlasd1(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     idxp = coltyp + n;
     /* Scale. */
     /* Computing MAX */
-    d__1 = f2c_abs(*alpha);
-    d__2 = f2c_abs(*beta); // , expr subst
+    d__1 = f2c_dabs(*alpha);
+    d__2 = f2c_dabs(*beta); // , expr subst
     orgnrm = max(d__1,d__2);
     d__[*nl + 1] = 0.;
     i__1 = n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((d__1 = d__[i__], f2c_abs(d__1)) > orgnrm)
+        if ((d__1 = d__[i__], f2c_dabs(d__1)) > orgnrm)
         {
-            orgnrm = (d__1 = d__[i__], f2c_abs(d__1));
+            orgnrm = (d__1 = d__[i__], f2c_dabs(d__1));
         }
         /* L10: */
     }

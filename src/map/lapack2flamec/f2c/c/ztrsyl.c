@@ -352,7 +352,7 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                 z__1.i = a[i__2].i + z__2.i; // , expr subst
                 a11.r = z__1.r;
                 a11.i = z__1.i; // , expr subst
-                da11 = (d__1 = a11.r, f2c_abs(d__1)) + (d__2 = d_imag(&a11), f2c_abs( d__2));
+                da11 = (d__1 = a11.r, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs( d__2));
                 if (da11 <= smin)
                 {
                     a11.real = smin;
@@ -360,7 +360,7 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                     da11 = smin;
                     *info = 1;
                 }
-                db = (d__1 = vec.r, f2c_abs(d__1)) + (d__2 = d_imag(&vec), f2c_abs( d__2));
+                db = (d__1 = vec.r, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs( d__2));
                 if (da11 < 1. && db > 1.)
                 {
                     if(db > bignum * da11)
@@ -435,7 +435,7 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                 z__1.i = z__2.i + z__3.i; // , expr subst
                 a11.r = z__1.r;
                 a11.i = z__1.i; // , expr subst
-                da11 = (d__1 = a11.r, f2c_abs(d__1)) + (d__2 = d_imag(&a11), f2c_abs( d__2));
+                da11 = (d__1 = a11.r, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs( d__2));
                 if (da11 <= smin)
                 {
                     a11.real = smin;
@@ -443,7 +443,7 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                     da11 = smin;
                     *info = 1;
                 }
-                db = (d__1 = vec.r, f2c_abs(d__1)) + (d__2 = d_imag(&vec), f2c_abs( d__2));
+                db = (d__1 = vec.r, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs( d__2));
                 if (da11 < 1. && db > 1.)
                 {
                     if(db > bignum * da11)
@@ -527,7 +527,7 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                 d_cnjg(&z__1, &z__2);
                 a11.r = z__1.r;
                 a11.i = z__1.i; // , expr subst
-                da11 = (d__1 = a11.r, f2c_abs(d__1)) + (d__2 = d_imag(&a11), f2c_abs( d__2));
+                da11 = (d__1 = a11.r, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs( d__2));
                 if (da11 <= smin)
                 {
                     a11.real = smin;
@@ -535,7 +535,7 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                     da11 = smin;
                     *info = 1;
                 }
-                db = (d__1 = vec.r, f2c_abs(d__1)) + (d__2 = d_imag(&vec), f2c_abs( d__2));
+                db = (d__1 = vec.r, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs( d__2));
                 if (da11 < 1. && db > 1.)
                 {
                     if(db > bignum * da11)
@@ -619,7 +619,7 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                 z__1.i = a[i__1].i + z__2.i; // , expr subst
                 a11.r = z__1.r;
                 a11.i = z__1.i; // , expr subst
-                da11 = (d__1 = a11.r, f2c_abs(d__1)) + (d__2 = d_imag(&a11), f2c_abs( d__2));
+                da11 = (d__1 = a11.r, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs( d__2));
                 if (da11 <= smin)
                 {
                     a11.real = smin;
@@ -627,7 +627,7 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                     da11 = smin;
                     *info = 1;
                 }
-                db = (d__1 = vec.r, f2c_abs(d__1)) + (d__2 = d_imag(&vec), f2c_abs( d__2));
+                db = (d__1 = vec.r, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs( d__2));
                 if (da11 < 1. && db > 1.)
                 {
                     if(db > bignum * da11)

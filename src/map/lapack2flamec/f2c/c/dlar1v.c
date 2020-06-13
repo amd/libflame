@@ -372,7 +372,7 @@ L60:
         for(i__ = *b1; i__ <= i__1; ++i__)
         {
             dplus = d__[i__] + s;
-            if (f2c_abs(dplus) < *pivmin)
+            if (f2c_dabs(dplus) < *pivmin)
             {
                 dplus = -(*pivmin);
             }
@@ -393,7 +393,7 @@ L60:
         for(i__ = r1; i__ <= i__1; ++i__)
         {
             dplus = d__[i__] + s;
-            if (f2c_abs(dplus) < *pivmin)
+            if (f2c_dabs(dplus) < *pivmin)
             {
                 dplus = -(*pivmin);
             }
@@ -435,7 +435,7 @@ L60:
         for(i__ = *bn - 1; i__ >= i__1; --i__)
         {
             dminus = lld[i__] + work[indp + i__];
-            if (f2c_abs(dminus) < *pivmin)
+            if (f2c_dabs(dminus) < *pivmin)
             {
                 dminus = -(*pivmin);
             }
@@ -468,7 +468,7 @@ L60:
     {
         *negcnt = -1;
     }
-    if (f2c_abs(*mingma) == 0.)
+    if (f2c_dabs(*mingma) == 0.)
     {
         *mingma = eps * work[inds + r1 - 1];
     }
@@ -481,7 +481,7 @@ L60:
         {
             tmp = eps * work[inds + i__];
         }
-        if (f2c_abs(tmp) <= f2c_abs(*mingma))
+        if (f2c_dabs(tmp) <= f2c_dabs(*mingma))
         {
             *mingma = tmp;
             *r__ = i__ + 1;
@@ -500,7 +500,7 @@ L60:
         for(i__ = *r__ - 1; i__ >= i__1; --i__)
         {
             z__[i__] = -(work[indlpl + i__] * z__[i__ + 1]);
-            if (((d__1 = z__[i__], f2c_abs(d__1)) + (d__2 = z__[i__ + 1], f2c_abs( d__2))) * (d__3 = ld[i__], f2c_abs(d__3)) < *gaptol)
+            if (((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs( d__2))) * (d__3 = ld[i__], f2c_dabs(d__3)) < *gaptol)
             {
                 z__[i__] = 0.;
                 isuppz[1] = (aocl_int_t)(i__ + 1);
@@ -525,7 +525,7 @@ L60:
             {
                 z__[i__] = -(work[indlpl + i__] * z__[i__ + 1]);
             }
-            if (((d__1 = z__[i__], f2c_abs(d__1)) + (d__2 = z__[i__ + 1], f2c_abs( d__2))) * (d__3 = ld[i__], f2c_abs(d__3)) < *gaptol)
+            if (((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs( d__2))) * (d__3 = ld[i__], f2c_dabs(d__3)) < *gaptol)
             {
                 z__[i__] = 0.;
                 isuppz[1] = (aocl_int_t)(i__ + 1);
@@ -543,7 +543,7 @@ L60:
         for(i__ = *r__; i__ <= i__1; ++i__)
         {
             z__[i__ + 1] = -(work[indumn + i__] * z__[i__]);
-            if (((d__1 = z__[i__], f2c_abs(d__1)) + (d__2 = z__[i__ + 1], f2c_abs( d__2))) * (d__3 = ld[i__], f2c_abs(d__3)) < *gaptol)
+            if (((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs( d__2))) * (d__3 = ld[i__], f2c_dabs(d__3)) < *gaptol)
             {
                 z__[i__ + 1] = 0.;
                 isuppz[2] = (aocl_int_t)(i__);
@@ -568,7 +568,7 @@ L60:
             {
                 z__[i__ + 1] = -(work[indumn + i__] * z__[i__]);
             }
-            if (((d__1 = z__[i__], f2c_abs(d__1)) + (d__2 = z__[i__ + 1], f2c_abs( d__2))) * (d__3 = ld[i__], f2c_abs(d__3)) < *gaptol)
+            if (((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs( d__2))) * (d__3 = ld[i__], f2c_dabs(d__3)) < *gaptol)
             {
                 z__[i__ + 1] = 0.;
                 isuppz[2] = (aocl_int_t)(i__);
@@ -582,7 +582,7 @@ L60:
     /* Compute quantities for convergence test */
     tmp = 1. / *ztz;
     *nrminv = sqrt(tmp);
-    *resid = f2c_abs(*mingma) * *nrminv;
+    *resid = f2c_dabs(*mingma) * *nrminv;
     *rqcorr = *mingma * tmp;
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -284,7 +284,7 @@ void aocl_lapack_dsteqr(char *compz, aocl_int64_t *n, doublereal *d__, doublerea
 
         for(i = 1; i <= N; i++)
         {
-            tst = (d__1 = e[m], f2c_abs(d__1));
+            tst = (d__1 = e[m], f2c_dabs(d__1));
             if (tst == 0.)
             {
                 tst = (d__1 = e[m], f2c_dabs(d__1));
@@ -300,7 +300,7 @@ void aocl_lapack_dsteqr(char *compz, aocl_int64_t *n, doublereal *d__, doublerea
                 }
                 /* L20: */
             }
-            if (tst <= sqrt((d__1 = d__[m], f2c_abs(d__1))) * sqrt((d__2 = d__[m + 1], f2c_abs(d__2))) * eps)
+            if (tst <= sqrt((d__1 = d__[m], f2c_dabs(d__1))) * sqrt((d__2 = d__[m + 1], f2c_dabs(d__2))) * eps)
             {
                 e[m] = 0.;
             }
@@ -343,7 +343,7 @@ L30:
         dlascl_("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info);
     }
     /* Choose between QL and QR iteration */
-    if ((d__1 = d__[lend], f2c_abs(d__1)) < (d__2 = d__[l], f2c_abs(d__2)))
+    if ((d__1 = d__[lend], f2c_dabs(d__1)) < (d__2 = d__[l], f2c_dabs(d__2)))
     {
         lend = lsv;
         l = lendsv;
@@ -362,9 +362,9 @@ L40:
                     ++m)
             {
                 /* Computing 2nd power */
-                d__2 = (d__1 = e[m], f2c_abs(d__1));
+                d__2 = (d__1 = e[m], f2c_dabs(d__1));
                 tst = d__2 * d__2;
-                if (tst <= eps2 * (d__1 = d__[m], f2c_abs(d__1)) * (d__2 = d__[m + 1], f2c_abs(d__2)) + safmin)
+                if (tst <= eps2 * (d__1 = d__[m], f2c_dabs(d__1)) * (d__2 = d__[m + 1], f2c_dabs(d__2)) + safmin)
                 {
                     dlaev2_(&d__[l], &e[l], &d__[l + 1], &rt1, &rt2, &c__, &s);
                     work[l] = c__;
@@ -499,9 +499,9 @@ L90:
                     --m)
             {
                 /* Computing 2nd power */
-                d__2 = (d__1 = e[m - 1], f2c_abs(d__1));
+                d__2 = (d__1 = e[m - 1], f2c_dabs(d__1));
                 tst = d__2 * d__2;
-                if (tst <= eps2 * (d__1 = d__[m], f2c_abs(d__1)) * (d__2 = d__[m - 1], f2c_abs(d__2)) + safmin)
+                if (tst <= eps2 * (d__1 = d__[m], f2c_dabs(d__1)) * (d__2 = d__[m - 1], f2c_dabs(d__2)) + safmin)
                 {
                     /* Computing 2nd power */
                     d__2 = (d__1 = e[m - 1], f2c_dabs(d__1));

@@ -257,7 +257,7 @@ doublereal aocl_lapack_zla_gercond_x(char *trans, aocl_int64_t *n, dcomplex *a,
                 z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4] .r; // , expr subst
                 z__1.r = z__2.r;
                 z__1.i = z__2.i; // , expr subst
-                tmp += (d__1 = z__1.r, f2c_abs(d__1)) + (d__2 = d_imag(&z__1), f2c_abs(d__2));
+                tmp += (d__1 = z__1.r, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2));
             }
             rwork[i__] = tmp;
             anorm = fla_max(anorm, tmp);
@@ -278,7 +278,7 @@ doublereal aocl_lapack_zla_gercond_x(char *trans, aocl_int64_t *n, dcomplex *a,
                 z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4] .r; // , expr subst
                 z__1.r = z__2.r;
                 z__1.i = z__2.i; // , expr subst
-                tmp += (d__1 = z__1.r, f2c_abs(d__1)) + (d__2 = d_imag(&z__1), f2c_abs(d__2));
+                tmp += (d__1 = z__1.r, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2));
             }
             rwork[i__] = tmp;
             anorm = fla_max(anorm, tmp);

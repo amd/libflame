@@ -418,7 +418,7 @@ void aocl_lapack_dggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     i__1 = fla_min(*p, *n);
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((d__1 = b[i__ + i__ * b_dim1], f2c_abs(d__1)) > *tolb)
+        if ((d__1 = b[i__ + i__ * b_dim1], f2c_dabs(d__1)) > *tolb)
         {
             ++(*l);
         }
@@ -508,7 +508,7 @@ void aocl_lapack_dggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     i__1 = fla_min(i__2, i__3);
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((d__1 = a[i__ + i__ * a_dim1], f2c_abs(d__1)) > *tola)
+        if ((d__1 = a[i__ + i__ * a_dim1], f2c_dabs(d__1)) > *tola)
         {
             ++(*k);
         }

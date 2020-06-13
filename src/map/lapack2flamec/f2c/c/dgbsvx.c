@@ -696,7 +696,7 @@ void aocl_lapack_dgbsvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
                 {
                     /* Computing MAX */
                     d__2 = anorm;
-                    d__3 = (d__1 = ab[i__ + j * ab_dim1], f2c_abs( d__1)); // , expr subst
+                    d__3 = (d__1 = ab[i__ + j * ab_dim1], f2c_dabs( d__1)); // , expr subst
                     anorm = max(d__2,d__3);
                     /* L80: */
                 }

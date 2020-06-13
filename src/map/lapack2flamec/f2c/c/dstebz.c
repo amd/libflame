@@ -489,7 +489,7 @@ void aocl_lapack_dstebz(char *range, char *order, aocl_int64_t *n, doublereal *v
         tmp1 = d__1 * d__1;
         /* Computing 2nd power */
         d__2 = ulp;
-        if ((d__1 = d__[j] * d__[j - 1], f2c_abs(d__1)) * (d__2 * d__2) + safemn > tmp1)
+        if ((d__1 = d__[j] * d__[j - 1], f2c_dabs(d__1)) * (d__2 * d__2) + safemn > tmp1)
         {
             isplit[*nsplit] = (aocl_int_t)(j - 1);
             ++(*nsplit);
@@ -538,8 +538,8 @@ void aocl_lapack_dstebz(char *range, char *order, aocl_int64_t *n, doublereal *v
         d__2 = d__[*n] - tmp1; // , expr subst
         gl = fla_min(d__1, d__2);
         /* Computing MAX */
-        d__1 = f2c_abs(gl);
-        d__2 = f2c_abs(gu); // , expr subst
+        d__1 = f2c_dabs(gl);
+        d__2 = f2c_dabs(gu); // , expr subst
         tnorm = max(d__1,d__2);
         gl = gl - tnorm * 2.1 * ulp * *n - pivmin * 4.2000000000000002;
         gu = gu + tnorm * 2.1 * ulp * *n + pivmin * 2.1;
@@ -597,15 +597,15 @@ void aocl_lapack_dstebz(char *range, char *order, aocl_int64_t *n, doublereal *v
     {
         /* RANGE='A' or 'V' -- Set ATOLI */
         /* Computing MAX */
-        d__3 = f2c_abs(d__[1]) + f2c_abs(e[1]);
-        d__4 = (d__1 = d__[*n], f2c_abs(d__1)) + ( d__2 = e[*n - 1], f2c_abs(d__2)); // , expr subst
+        d__3 = f2c_dabs(d__[1]) + f2c_dabs(e[1]);
+        d__4 = (d__1 = d__[*n], f2c_dabs(d__1)) + ( d__2 = e[*n - 1], f2c_dabs(d__2)); // , expr subst
         tnorm = max(d__3,d__4);
         i__1 = *n - 1;
         for(j = 2; j <= i__1; ++j)
         {
             /* Computing MAX */
             d__4 = tnorm;
-            d__5 = (d__1 = d__[j], f2c_abs(d__1)) + (d__2 = e[j - 1] , f2c_abs(d__2)) + (d__3 = e[j], f2c_abs(d__3)); // , expr subst
+            d__5 = (d__1 = d__[j], f2c_dabs(d__1)) + (d__2 = e[j - 1] , f2c_dabs(d__2)) + (d__3 = e[j], f2c_dabs(d__3)); // , expr subst
             tnorm = max(d__4,d__5);
             /* L30: */
         }
@@ -672,7 +672,7 @@ void aocl_lapack_dstebz(char *range, char *order, aocl_int64_t *n, doublereal *v
             i__2 = iend - 1;
             for(j = ibegin; j <= i__2; ++j)
             {
-                tmp2 = (d__1 = e[j], f2c_abs(d__1));
+                tmp2 = (d__1 = e[j], f2c_dabs(d__1));
                 /* Computing MAX */
                 d__1 = gu;
                 d__2 = d__[j] + tmp1 + tmp2; // , expr subst
@@ -693,8 +693,8 @@ void aocl_lapack_dstebz(char *range, char *order, aocl_int64_t *n, doublereal *v
             d__2 = d__[iend] - tmp1; // , expr subst
             gl = fla_min(d__1, d__2);
             /* Computing MAX */
-            d__1 = f2c_abs(gl);
-            d__2 = f2c_abs(gu); // , expr subst
+            d__1 = f2c_dabs(gl);
+            d__2 = f2c_dabs(gu); // , expr subst
             bnorm = max(d__1,d__2);
             gl = gl - bnorm * 2.1 * ulp * in - pivmin * 2.1;
             gu = gu + bnorm * 2.1 * ulp * in + pivmin * 2.1;
@@ -702,8 +702,8 @@ void aocl_lapack_dstebz(char *range, char *order, aocl_int64_t *n, doublereal *v
             if(*abstol <= 0.)
             {
                 /* Computing MAX */
-                d__1 = f2c_abs(gl);
-                d__2 = f2c_abs(gu); // , expr subst
+                d__1 = f2c_dabs(gl);
+                d__2 = f2c_dabs(gu); // , expr subst
                 atoli = ulp * max(d__1,d__2);
             }
             else

@@ -305,9 +305,9 @@ void aocl_lapack_dlaexc(logical *wantq, aocl_int64_t *n, doublereal *t, aocl_int
         aocl_lapack_dlarfx("R", &c__3, &c__3, u, &tau, d__, &c__4, &work[1]);
         /* Test whether to reject swap. */
         /* Computing MAX */
-        d__2 = f2c_abs(d__[2]), d__3 = f2c_abs(d__[6]);
+        d__2 = f2c_dabs(d__[2]), d__3 = f2c_dabs(d__[6]);
         d__2 = max(d__2,d__3);
-        d__3 = (d__1 = d__[10] - t11, f2c_abs(d__1)); // ; expr subst
+        d__3 = (d__1 = d__[10] - t11, f2c_dabs(d__1)); // ; expr subst
         if (max(d__2,d__3) > thresh)
         {
             goto L50;
@@ -340,9 +340,9 @@ void aocl_lapack_dlaexc(logical *wantq, aocl_int64_t *n, doublereal *t, aocl_int
         aocl_lapack_dlarfx("R", &c__3, &c__3, u, &tau, d__, &c__4, &work[1]);
         /* Test whether to reject swap. */
         /* Computing MAX */
-        d__2 = f2c_abs(d__[1]), d__3 = f2c_abs(d__[2]);
+        d__2 = f2c_dabs(d__[1]), d__3 = f2c_dabs(d__[2]);
         d__2 = max(d__2,d__3);
-        d__3 = (d__1 = d__[0] - t33, f2c_abs(d__1)); // ; expr subst
+        d__3 = (d__1 = d__[0] - t33, f2c_dabs(d__1)); // ; expr subst
         if (max(d__2,d__3) > thresh)
         {
             goto L50;
@@ -384,9 +384,9 @@ void aocl_lapack_dlaexc(logical *wantq, aocl_int64_t *n, doublereal *t, aocl_int
         aocl_lapack_dlarfx("R", &c__4, &c__3, u2, &tau2, &d__[4], &c__4, &work[1]);
         /* Test whether to reject swap. */
         /* Computing MAX */
-        d__1 = f2c_abs(d__[2]), d__2 = f2c_abs(d__[6]), d__1 = max(d__1,d__2), d__2 = f2c_abs(d__[3]);
+        d__1 = f2c_dabs(d__[2]), d__2 = f2c_dabs(d__[6]), d__1 = max(d__1,d__2), d__2 = f2c_dabs(d__[3]);
         d__1 = max(d__1,d__2);
-        d__2 = f2c_abs(d__[7]); // ; expr subst
+        d__2 = f2c_dabs(d__[7]); // ; expr subst
         if (max(d__1,d__2) > thresh)
         {
             goto L50;

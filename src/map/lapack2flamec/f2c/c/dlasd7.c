@@ -474,11 +474,11 @@ void aocl_lapack_dlasd7(aocl_int64_t *icompq, aocl_int64_t *nl, aocl_int64_t *nr
     /* Calculate the allowable deflation tolerence */
     eps = dlamch_("Epsilon");
     /* Computing MAX */
-    d__1 = f2c_abs(*alpha);
-    d__2 = f2c_abs(*beta); // , expr subst
+    d__1 = f2c_dabs(*alpha);
+    d__2 = f2c_dabs(*beta); // , expr subst
     tol = max(d__1,d__2);
     /* Computing MAX */
-    d__2 = (d__1 = d__[n], f2c_abs(d__1));
+    d__2 = (d__1 = d__[n], f2c_dabs(d__1));
     tol = eps * 64. * max(d__2,tol);
     /* There are 2 kinds of deflation -- first a value in the z-vector */
     /* is small, second two (or more) singular values are very close */
@@ -500,7 +500,7 @@ void aocl_lapack_dlasd7(aocl_int64_t *icompq, aocl_int64_t *nl, aocl_int64_t *nr
     i__1 = n;
     for(j = 2; j <= i__1; ++j)
     {
-        if ((d__1 = z__[j], f2c_abs(d__1)) <= tol)
+        if ((d__1 = z__[j], f2c_dabs(d__1)) <= tol)
         {
             /* Deflate due to small z component. */
             --k2;
@@ -525,7 +525,7 @@ L80:
     {
         goto L90;
     }
-    if ((d__1 = z__[j], f2c_abs(d__1)) <= tol)
+    if ((d__1 = z__[j], f2c_dabs(d__1)) <= tol)
     {
         /* Deflate due to small z component. */
         --k2;
@@ -534,7 +534,7 @@ L80:
     else
     {
         /* Check if singular values are close enough to allow deflation. */
-        if ((d__1 = d__[j] - d__[jprev], f2c_abs(d__1)) <= tol)
+        if ((d__1 = d__[j] - d__[jprev], f2c_dabs(d__1)) <= tol)
         {
             /* Deflation is possible. */
             *s = z__[jprev];
@@ -620,7 +620,7 @@ L100: /* Sort the singular values into DSIGMA. The singular values which */
     /* VL(M). */
     dsigma[1] = 0.;
     hlftol = tol / 2.;
-    if (f2c_abs(dsigma[2]) <= hlftol)
+    if (f2c_dabs(dsigma[2]) <= hlftol)
     {
         dsigma[2] = hlftol;
     }
@@ -643,7 +643,7 @@ L100: /* Sort the singular values into DSIGMA. The singular values which */
     }
     else
     {
-        if (f2c_abs(z1) <= tol)
+        if (f2c_dabs(z1) <= tol)
         {
             z__[1] = tol;
         }

@@ -263,7 +263,7 @@ void aocl_lapack_dsptri(char *uplo, aocl_int64_t *n, doublereal *ap, aocl_int_t 
         {
             /* 2 x 2 diagonal block */
             /* Invert the diagonal block. */
-            t = (d__1 = ap[kcnext + k - 1], f2c_abs(d__1));
+            t = (d__1 = ap[kcnext + k - 1], f2c_dabs(d__1));
             ak = ap[kc + k - 1] / t;
             akp1 = ap[kcnext + k] / t;
             akkp1 = ap[kcnext + k - 1] / t;
@@ -294,7 +294,7 @@ void aocl_lapack_dsptri(char *uplo, aocl_int64_t *n, doublereal *ap, aocl_int_t 
             kstep = 2;
             kcnext = kcnext + k + 1;
         }
-        kp = (i__1 = ipiv[k], f2c_abs(i__1));
+        kp = (i__1 = ipiv[k], f2c_dabs(i__1));
         if (kp != k)
         {
             /* Interchange rows and columns K and KP in the leading */
@@ -363,7 +363,7 @@ void aocl_lapack_dsptri(char *uplo, aocl_int64_t *n, doublereal *ap, aocl_int_t 
         {
             /* 2 x 2 diagonal block */
             /* Invert the diagonal block. */
-            t = (d__1 = ap[kcnext + 1], f2c_abs(d__1));
+            t = (d__1 = ap[kcnext + 1], f2c_dabs(d__1));
             ak = ap[kcnext] / t;
             akp1 = ap[kc] / t;
             akkp1 = ap[kcnext + 1] / t;
@@ -394,7 +394,7 @@ void aocl_lapack_dsptri(char *uplo, aocl_int64_t *n, doublereal *ap, aocl_int_t 
             kstep = 2;
             kcnext -= *n - k + 3;
         }
-        kp = (i__1 = ipiv[k], f2c_abs(i__1));
+        kp = (i__1 = ipiv[k], f2c_dabs(i__1));
         if (kp != k)
         {
             /* Interchange rows and columns K and KP in the trailing */

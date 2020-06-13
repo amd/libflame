@@ -126,9 +126,9 @@ void dlas2_(doublereal *f, doublereal *g, doublereal *h__, doublereal *ssmin, do
     /* .. Intrinsic Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    fa = f2c_abs(*f);
-    ga = f2c_abs(*g);
-    ha = f2c_abs(*h__);
+    fa = f2c_dabs(*f);
+    ga = f2c_dabs(*g);
+    ha = f2c_dabs(*h__);
     fhmn = min(fa,ha);
     fhmx = max(fa,ha);
     if (fhmn == 0.)

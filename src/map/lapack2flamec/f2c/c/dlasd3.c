@@ -365,7 +365,7 @@ void aocl_lapack_dlasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     /* Quick return if possible */
     if(*k == 1)
     {
-        d__[1] = f2c_abs(z__[1]);
+        d__[1] = f2c_dabs(z__[1]);
         dcopy_(&m, &vt2[vt2_dim1 + 1], ldvt2, &vt[vt_dim1 + 1], ldvt);
         if (z__[1] > 0.)
         {
@@ -422,7 +422,7 @@ void aocl_lapack_dlasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
                         / (dsigma[i__] + dsigma[j + 1]);
             /* L50: */
         }
-        d__2 = sqrt((d__1 = z__[i__], f2c_abs(d__1)));
+        d__2 = sqrt((d__1 = z__[i__], f2c_dabs(d__1)));
         z__[i__] = d_sign(&d__2, &q[i__ + q_dim1]);
         /* L60: */
     }

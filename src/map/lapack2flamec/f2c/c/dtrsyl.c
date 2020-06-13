@@ -398,14 +398,14 @@ void aocl_lapack_dtrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
                     scaloc = 1.;
                     a11 = a[k1 + k1 * a_dim1] + sgn * b[l1 + l1 * b_dim1];
-                    da11 = f2c_abs(a11);
+                    da11 = f2c_dabs(a11);
                     if (da11 <= smin)
                     {
                         a11 = smin;
                         da11 = smin;
                         *info = 1;
                     }
-                    db = f2c_abs(vec[0]);
+                    db = f2c_dabs(vec[0]);
                     if (da11 < 1. && db > 1.)
                     {
                         if(db > bignum * da11)
@@ -670,14 +670,14 @@ void aocl_lapack_dtrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
                     scaloc = 1.;
                     a11 = a[k1 + k1 * a_dim1] + sgn * b[l1 + l1 * b_dim1];
-                    da11 = f2c_abs(a11);
+                    da11 = f2c_dabs(a11);
                     if (da11 <= smin)
                     {
                         a11 = smin;
                         da11 = smin;
                         *info = 1;
                     }
-                    db = f2c_abs(vec[0]);
+                    db = f2c_dabs(vec[0]);
                     if (da11 < 1. && db > 1.)
                     {
                         if(db > bignum * da11)
@@ -913,14 +913,14 @@ void aocl_lapack_dtrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
                     scaloc = 1.;
                     a11 = a[k1 + k1 * a_dim1] + sgn * b[l1 + l1 * b_dim1];
-                    da11 = f2c_abs(a11);
+                    da11 = f2c_dabs(a11);
                     if (da11 <= smin)
                     {
                         a11 = smin;
                         da11 = smin;
                         *info = 1;
                     }
-                    db = f2c_abs(vec[0]);
+                    db = f2c_dabs(vec[0]);
                     if (da11 < 1. && db > 1.)
                     {
                         if(db > bignum * da11)
@@ -1191,14 +1191,14 @@ void aocl_lapack_dtrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
                     scaloc = 1.;
                     a11 = a[k1 + k1 * a_dim1] + sgn * b[l1 + l1 * b_dim1];
-                    da11 = f2c_abs(a11);
+                    da11 = f2c_dabs(a11);
                     if (da11 <= smin)
                     {
                         a11 = smin;
                         da11 = smin;
                         *info = 1;
                     }
-                    db = f2c_abs(vec[0]);
+                    db = f2c_dabs(vec[0]);
                     if (da11 < 1. && db > 1.)
                     {
                         if(db > bignum * da11)

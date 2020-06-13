@@ -154,14 +154,14 @@ doublereal aocl_lapack_dla_gerpvgrw(aocl_int64_t *n, aocl_int64_t *ncols, double
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
-            d__2 = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
+            d__2 = (d__1 = a[i__ + j * a_dim1], f2c_dabs(d__1));
             amax = max(d__2,amax);
         }
         i__2 = j;
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
-            d__2 = (d__1 = af[i__ + j * af_dim1], f2c_abs(d__1));
+            d__2 = (d__1 = af[i__ + j * af_dim1], f2c_dabs(d__1));
             umax = max(d__2,umax);
         }
         if(umax != 0.)

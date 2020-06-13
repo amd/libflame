@@ -536,7 +536,7 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
         /* Computing MAX */
         i__2 = j;
         d__3 = xmax;
-        d__4 = (d__1 = x[i__2].r / 2., f2c_abs(d__1)) + (d__2 = d_imag(&x[j]) / 2., f2c_abs(d__2)); // , expr subst
+        d__4 = (d__1 = x[i__2].r / 2., f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]) / 2., f2c_dabs(d__2)); // , expr subst
         xmax = max(d__3,d__4);
         /* L30: */
     }
@@ -582,10 +582,10 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 i__3 = j + j * a_dim1;
                 tjjs.r = a[i__3].r;
                 tjjs.i = a[i__3].i; // , expr subst
-                tjj = (d__1 = tjjs.r, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs( d__2));
+                tjj = (d__1 = tjjs.r, f2c_dabs(d__1)) + (d__2 = d_imag(&tjjs), f2c_dabs( d__2));
                 if (tjj >= smlnum)
                 {
-                    /* M(j) = G(j-1) / f2c_abs(A(j,j)) */
+                    /* M(j) = G(j-1) / f2c_dabs(A(j,j)) */
                     /* Computing MIN */
                     d__1 = xbnd;
                     d__2 = fla_min(1., tjj) * grow; // , expr subst
@@ -598,7 +598,7 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 }
                 if(tjj + cnorm[j] >= smlnum)
                 {
-                    /* G(j) = G(j-1)*( 1 + CNORM(j) / f2c_abs(A(j,j)) ) */
+                    /* G(j) = G(j-1)*( 1 + CNORM(j) / f2c_dabs(A(j,j)) ) */
                     grow *= tjj / (tjj + cnorm[j]);
                 }
                 else
@@ -683,10 +683,10 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 i__3 = j + j * a_dim1;
                 tjjs.r = a[i__3].r;
                 tjjs.i = a[i__3].i; // , expr subst
-                tjj = (d__1 = tjjs.r, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs( d__2));
+                tjj = (d__1 = tjjs.r, f2c_dabs(d__1)) + (d__2 = d_imag(&tjjs), f2c_dabs( d__2));
                 if (tjj >= smlnum)
                 {
-                    /* M(j) = M(j-1)*( 1 + CNORM(j) ) / f2c_abs(A(j,j)) */
+                    /* M(j) = M(j-1)*( 1 + CNORM(j) ) / f2c_dabs(A(j,j)) */
                     if (xj > tjj)
                     {
                         xbnd *= tjj / xj;
@@ -758,7 +758,7 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
             {
                 /* Compute x(j) = b(j) / A(j,j), scaling x if necessary. */
                 i__3 = j;
-                xj = (d__1 = x[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2));
+                xj = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]), f2c_dabs(d__2));
                 if (nounit)
                 {
                     i__3 = j + j * a_dim1;
@@ -776,10 +776,10 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         goto L110;
                     }
                 }
-                tjj = (d__1 = tjjs.r, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs( d__2));
+                tjj = (d__1 = tjjs.r, f2c_dabs(d__1)) + (d__2 = d_imag(&tjjs), f2c_dabs( d__2));
                 if (tjj > smlnum)
                 {
-                    /* f2c_abs(A(j,j)) > SMLNUM: */
+                    /* f2c_dabs(A(j,j)) > SMLNUM: */
                     if (tjj < 1.)
                     {
                         if(xj > tjj * bignum)
@@ -796,14 +796,14 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     x[i__3].real = z__1.real;
                     x[i__3].imag = z__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (d__1 = x[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]) , f2c_abs(d__2));
+                    xj = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]) , f2c_dabs(d__2));
                 }
                 else if(tjj > 0.)
                 {
-                    /* 0 < f2c_abs(A(j,j)) <= SMLNUM: */
+                    /* 0 < f2c_dabs(A(j,j)) <= SMLNUM: */
                     if (xj > tjj * bignum)
                     {
-                        /* Scale x by (1/f2c_abs(x(j)))*f2c_abs(A(j,j))*BIGNUM */
+                        /* Scale x by (1/f2c_dabs(x(j)))*f2c_dabs(A(j,j))*BIGNUM */
                         /* to avoid overflow when dividing by A(j,j). */
                         rec = tjj * bignum / xj;
                         if(cnorm[j] > 1.)
@@ -821,7 +821,7 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     x[i__3].real = z__1.real;
                     x[i__3].imag = z__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (d__1 = x[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]) , f2c_abs(d__2));
+                    xj = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]) , f2c_dabs(d__2));
                 }
                 else
                 {
@@ -849,7 +849,7 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     rec = 1. / xj;
                     if(cnorm[j] > (bignum - xmax) * rec)
                     {
-                        /* Scale x by 1/(2*f2c_abs(x(j))). */
+                        /* Scale x by 1/(2*f2c_dabs(x(j))). */
                         rec *= .5;
                         aocl_blas_zdscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
@@ -877,7 +877,7 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         i__3 = j - 1;
                         i__ = aocl_blas_izamax(&i__3, &x[1], &c__1);
                         i__3 = i__;
-                        xmax = (d__1 = x[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag( &x[i__]), f2c_abs(d__2));
+                        xmax = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag( &x[i__]), f2c_dabs(d__2));
                     }
                 }
                 else
@@ -897,7 +897,7 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         i__3 = *n - j;
                         i__ = j + aocl_blas_izamax(&i__3, &x[j + 1], &c__1);
                         i__3 = i__;
-                        xmax = (d__1 = x[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag( &x[i__]), f2c_abs(d__2));
+                        xmax = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag( &x[i__]), f2c_dabs(d__2));
                     }
                 }
                 /* L120: */
@@ -913,7 +913,7 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 /* Compute x(j) = b(j) - sum A(k,j)*x(k). */
                 /* k<>j */
                 i__3 = j;
-                xj = (d__1 = x[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2));
+                xj = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]), f2c_dabs(d__2));
                 uscal.r = tscal;
                 uscal.i = 0.; // , expr subst
                 rec = 1. / max(xmax,1.);
@@ -934,7 +934,7 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         tjjs.real = tscal;
                         tjjs.imag = 0.; // , expr subst
                     }
-                    tjj = (d__1 = tjjs.r, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs(d__2));
+                    tjj = (d__1 = tjjs.r, f2c_dabs(d__1)) + (d__2 = d_imag(&tjjs), f2c_dabs(d__2));
                     if (tjj > 1.)
                     {
                         /* Divide by A(j,j) when scaling x if A(j,j) > 1. */
@@ -1027,7 +1027,7 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     x[i__3].real = z__1.real;
                     x[i__3].imag = z__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (d__1 = x[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]) , f2c_abs(d__2));
+                    xj = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]) , f2c_dabs(d__2));
                     if (nounit)
                     {
                         i__3 = j + j * a_dim1;
@@ -1046,15 +1046,15 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         }
                     }
                     /* Compute x(j) = x(j) / A(j,j), scaling if necessary. */
-                    tjj = (d__1 = tjjs.r, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs(d__2));
+                    tjj = (d__1 = tjjs.r, f2c_dabs(d__1)) + (d__2 = d_imag(&tjjs), f2c_dabs(d__2));
                     if (tjj > smlnum)
                     {
-                        /* f2c_abs(A(j,j)) > SMLNUM: */
+                        /* f2c_dabs(A(j,j)) > SMLNUM: */
                         if (tjj < 1.)
                         {
                             if(xj > tjj * bignum)
                             {
-                                /* Scale X by 1/f2c_abs(x(j)). */
+                                /* Scale X by 1/f2c_dabs(x(j)). */
                                 rec = 1. / xj;
                                 aocl_blas_zdscal(n, &rec, &x[1], &c__1);
                                 *scale *= rec;
@@ -1068,10 +1068,10 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     }
                     else if(tjj > 0.)
                     {
-                        /* 0 < f2c_abs(A(j,j)) <= SMLNUM: */
+                        /* 0 < f2c_dabs(A(j,j)) <= SMLNUM: */
                         if (xj > tjj * bignum)
                         {
-                            /* Scale x by (1/f2c_abs(x(j)))*f2c_abs(A(j,j))*BIGNUM. */
+                            /* Scale x by (1/f2c_dabs(x(j)))*f2c_dabs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
                             aocl_blas_zdscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
@@ -1116,7 +1116,7 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 /* Computing MAX */
                 i__3 = j;
                 d__3 = xmax;
-                d__4 = (d__1 = x[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2)); // , expr subst
+                d__4 = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]), f2c_dabs(d__2)); // , expr subst
                 xmax = max(d__3,d__4);
                 /* L170: */
             }
@@ -1131,7 +1131,7 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 /* Compute x(j) = b(j) - sum A(k,j)*x(k). */
                 /* k<>j */
                 i__3 = j;
-                xj = (d__1 = x[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2));
+                xj = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]), f2c_dabs(d__2));
                 uscal.r = tscal;
                 uscal.i = 0.; // , expr subst
                 rec = 1. / max(xmax,1.);
@@ -1152,7 +1152,7 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         tjjs.real = tscal;
                         tjjs.imag = 0.; // , expr subst
                     }
-                    tjj = (d__1 = tjjs.r, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs(d__2));
+                    tjj = (d__1 = tjjs.r, f2c_dabs(d__1)) + (d__2 = d_imag(&tjjs), f2c_dabs(d__2));
                     if (tjj > 1.)
                     {
                         /* Divide by A(j,j) when scaling x if A(j,j) > 1. */
@@ -1245,7 +1245,7 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     x[i__3].real = z__1.real;
                     x[i__3].imag = z__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (d__1 = x[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]) , f2c_abs(d__2));
+                    xj = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]) , f2c_dabs(d__2));
                     if (nounit)
                     {
                         d_cnjg(&z__2, &a[j + j * a_dim1]);
@@ -1264,15 +1264,15 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         }
                     }
                     /* Compute x(j) = x(j) / A(j,j), scaling if necessary. */
-                    tjj = (d__1 = tjjs.r, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs(d__2));
+                    tjj = (d__1 = tjjs.r, f2c_dabs(d__1)) + (d__2 = d_imag(&tjjs), f2c_dabs(d__2));
                     if (tjj > smlnum)
                     {
-                        /* f2c_abs(A(j,j)) > SMLNUM: */
+                        /* f2c_dabs(A(j,j)) > SMLNUM: */
                         if (tjj < 1.)
                         {
                             if(xj > tjj * bignum)
                             {
-                                /* Scale X by 1/f2c_abs(x(j)). */
+                                /* Scale X by 1/f2c_dabs(x(j)). */
                                 rec = 1. / xj;
                                 aocl_blas_zdscal(n, &rec, &x[1], &c__1);
                                 *scale *= rec;
@@ -1286,10 +1286,10 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     }
                     else if(tjj > 0.)
                     {
-                        /* 0 < f2c_abs(A(j,j)) <= SMLNUM: */
+                        /* 0 < f2c_dabs(A(j,j)) <= SMLNUM: */
                         if (xj > tjj * bignum)
                         {
-                            /* Scale x by (1/f2c_abs(x(j)))*f2c_abs(A(j,j))*BIGNUM. */
+                            /* Scale x by (1/f2c_dabs(x(j)))*f2c_dabs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
                             aocl_blas_zdscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
@@ -1334,7 +1334,7 @@ void aocl_lapack_zlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 /* Computing MAX */
                 i__3 = j;
                 d__3 = xmax;
-                d__4 = (d__1 = x[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2)); // , expr subst
+                d__4 = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]), f2c_dabs(d__2)); // , expr subst
                 xmax = max(d__3,d__4);
                 /* L220: */
             }

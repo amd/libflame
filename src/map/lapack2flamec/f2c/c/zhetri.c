@@ -360,7 +360,7 @@ void aocl_lapack_zhetri(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
             }
             kstep = 2;
         }
-        kp = (i__1 = ipiv[k], f2c_abs(i__1));
+        kp = (i__1 = ipiv[k], f2c_dabs(i__1));
         if (kp != k)
         {
             /* Interchange rows and columns K and KP in the leading */
@@ -533,7 +533,7 @@ void aocl_lapack_zhetri(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
             }
             kstep = 2;
         }
-        kp = (i__1 = ipiv[k], f2c_abs(i__1));
+        kp = (i__1 = ipiv[k], f2c_dabs(i__1));
         if (kp != k)
         {
             /* Interchange rows and columns K and KP in the trailing */

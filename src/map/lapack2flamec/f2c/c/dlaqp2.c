@@ -288,7 +288,7 @@ void aocl_lapack_dlaqp2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, 
                 /* NOTE: The following 4 lines follow from the analysis in */
                 /* Lapack Working Note 176. */
                 /* Computing 2nd power */
-                d__2 = (d__1 = a[offpi + j * a_dim1], f2c_abs(d__1)) / vn1[j];
+                d__2 = (d__1 = a[offpi + j * a_dim1], f2c_dabs(d__1)) / vn1[j];
                 temp = 1. - d__2 * d__2;
                 temp = fla_max(temp, 0.);
                 /* Computing 2nd power */

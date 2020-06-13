@@ -40,9 +40,9 @@ static doublereal c_b4 = 1.;
 /* > triangular matrix */
 /* > [ F G ] */
 /* > [ 0 H ]. */
-/* > On return, f2c_abs(SSMAX) is the larger singular value, f2c_abs(SSMIN) is the */
+/* > On return, f2c_dabs(SSMAX) is the larger singular value, f2c_dabs(SSMIN) is the */
 /* > smaller singular value, and (CSL,SNL) and (CSR,SNR) are the left and */
-/* > right singular vectors for f2c_abs(SSMAX), giving the decomposition */
+/* > right singular vectors for f2c_dabs(SSMAX), giving the decomposition */
 /* > */
 /* > [ CSL SNL ] [ F G ] [ CSR -SNR ] = [ SSMAX 0 ] */
 /* > [-SNL CSL ] [ 0 H ] [ SNR CSR ] [ 0 SSMIN ]. */
@@ -70,13 +70,13 @@ static doublereal c_b4 = 1.;
 /* > \param[out] SSMIN */
 /* > \verbatim */
 /* > SSMIN is DOUBLE PRECISION */
-/* > f2c_abs(SSMIN) is the smaller singular value. */
+/* > f2c_dabs(SSMIN) is the smaller singular value. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] SSMAX */
 /* > \verbatim */
 /* > SSMAX is DOUBLE PRECISION */
-/* > f2c_abs(SSMAX) is the larger singular value. */
+/* > f2c_dabs(SSMAX) is the larger singular value. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] SNL */
@@ -88,7 +88,7 @@ static doublereal c_b4 = 1.;
 /* > \verbatim */
 /* > CSL is DOUBLE PRECISION */
 /* > The vector (CSL, SNL) is a unit left singular vector for the */
-/* > singular value f2c_abs(SSMAX). */
+/* > singular value f2c_dabs(SSMAX). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] SNR */
@@ -100,7 +100,7 @@ static doublereal c_b4 = 1.;
 /* > \verbatim */
 /* > CSR is DOUBLE PRECISION */
 /* > The vector (CSR, SNR) is a unit right singular vector for the */
-/* > singular value f2c_abs(SSMAX). */
+/* > singular value f2c_dabs(SSMAX). */
 /* > \endverbatim */
 /* Authors: */
 /* ======== */
@@ -170,9 +170,9 @@ void dlasv2_(doublereal *f, doublereal *g, doublereal *h__, doublereal *ssmin, d
     /* .. */
     /* .. Executable Statements .. */
     ft = *f;
-    fa = f2c_abs(ft);
+    fa = f2c_dabs(ft);
     ht = *h__;
-    ha = f2c_abs(*h__);
+    ha = f2c_dabs(*h__);
     /* PMAX points to the maximum absolute element of matrix */
     /* PMAX = 1 if F largest in absolute values */
     /* PMAX = 2 if G largest in absolute values */
@@ -191,7 +191,7 @@ void dlasv2_(doublereal *f, doublereal *g, doublereal *h__, doublereal *ssmin, d
         /* Now FA .ge. HA */
     }
     gt = *g;
-    ga = f2c_abs(gt);
+    ga = f2c_dabs(gt);
     if (ga == 0.)
     {
         /* Diagonal matrix */
@@ -242,7 +242,7 @@ void dlasv2_(doublereal *f, doublereal *g, doublereal *h__, doublereal *ssmin, d
             }
             /* Note that 0 .le. L .le. 1 */
             m = gt / ft;
-            /* Note that f2c_abs(M) .le. 1/macheps */
+            /* Note that f2c_dabs(M) .le. 1/macheps */
             t = 2. - l;
             /* Note that T .ge. 1 */
             mm = m * m;
@@ -251,7 +251,7 @@ void dlasv2_(doublereal *f, doublereal *g, doublereal *h__, doublereal *ssmin, d
             /* Note that 1 .le. S .le. 1 + 1/macheps */
             if(l == 0.)
             {
-                r__ = f2c_abs(m);
+                r__ = f2c_dabs(m);
             }
             else
             {
@@ -259,7 +259,7 @@ void dlasv2_(doublereal *f, doublereal *g, doublereal *h__, doublereal *ssmin, d
             }
             /* Note that 0 .le. R .le. 1 + 1/macheps */
             a = (s + r__) * .5;
-            /* Note that 1 .le. A .le. 1 + f2c_abs(M) */
+            /* Note that 1 .le. A .le. 1 + f2c_dabs(M) */
             *ssmin = ha / a;
             *ssmax = fa * a;
             if(mm == 0.)

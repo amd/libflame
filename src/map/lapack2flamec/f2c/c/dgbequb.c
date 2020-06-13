@@ -286,7 +286,7 @@ void aocl_lapack_dgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
         {
             /* Computing MAX */
             d__2 = r__[i__];
-            d__3 = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs(d__1)); // , expr subst
+            d__3 = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs(d__1)); // , expr subst
             r__[i__] = max(d__2,d__3);
             /* L20: */
         }
@@ -370,7 +370,7 @@ void aocl_lapack_dgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
         {
             /* Computing MAX */
             d__2 = c__[j];
-            d__3 = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs( d__1)) * r__[i__]; // , expr subst
+            d__3 = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs( d__1)) * r__[i__]; // , expr subst
             c__[j] = max(d__2,d__3);
             /* L80: */
         }

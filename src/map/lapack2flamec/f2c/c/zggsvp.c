@@ -436,7 +436,7 @@ void aocl_lapack_zggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__ + i__ * b_dim1;
-        if ((d__1 = b[i__2].r, f2c_abs(d__1)) + (d__2 = d_imag(&b[i__ + i__ * b_dim1]), f2c_abs(d__2)) > *tolb)
+        if ((d__1 = b[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&b[i__ + i__ * b_dim1]), f2c_dabs(d__2)) > *tolb)
         {
             ++(*l);
         }
@@ -531,7 +531,7 @@ void aocl_lapack_zggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__ + i__ * a_dim1;
-        if ((d__1 = a[i__2].r, f2c_abs(d__1)) + (d__2 = d_imag(&a[i__ + i__ * a_dim1]), f2c_abs(d__2)) > *tola)
+        if ((d__1 = a[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[i__ + i__ * a_dim1]), f2c_dabs(d__2)) > *tola)
         {
             ++(*k);
         }

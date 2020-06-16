@@ -43,6 +43,36 @@ void z_exp(dcomplex *r, dcomplex *z)
 }
 #endif
 
+#ifdef _WIN32
+    void c_exp(complex *r, complex *z)
+    {
+        _Dcomplex z_ = { z->r, z->i };
+        _Dcomplex ret_val = cexp(z_);
+        r->r = creal(ret_val);
+        r->i = cimag(ret_val);
+    }
+    void z_exp(doublecomplex *r, doublecomplex *z)
+    {
+        _Dcomplex z_ = { z->r, z->i };
+        _Dcomplex ret_val = cexp(z_);
+        r->r = creal(ret_val);
+        r->i = cimag(ret_val);
+    }
+#else
+    void c_exp(complex *r, complex *z)
+    {
+        double _Complex ret_val = cexp(z->r + I*z->i);
+        r->r = creal(ret_val);
+        r->i = cimag(ret_val);
+    }
+    void z_exp(doublecomplex *r, doublecomplex *z)
+    {
+        double _Complex ret_val = cexp(z->r + I*z->i);
+        r->r = creal(ret_val);
+        r->i = cimag(ret_val);
+    }
+#endif
+
 #ifdef __cplusplus
 }
 #endif

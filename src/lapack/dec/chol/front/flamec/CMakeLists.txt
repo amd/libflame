@@ -1,7 +1,4 @@
-
-# Copyright (C) 2020-2026, Advanced Micro Devices, Inc. All rights reserved. #
-
-
+##Copyright (C) 2020, Advanced Micro Devices, Inc.## 
 target_sources("${PROJECT_NAME}" 
      PRIVATE
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_Chol.c
@@ -12,5 +9,4 @@ ${CMAKE_CURRENT_SOURCE_DIR}/FLA_Chol_solve.c
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_Chol_u.c
 ${CMAKE_CURRENT_SOURCE_DIR}/FLASH_Chol.c
 ${CMAKE_CURRENT_SOURCE_DIR}/FLASH_Chol_solve.c
-
 )

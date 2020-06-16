@@ -1,5 +1,5 @@
-##Copyright (C) 2020-2026, Advanced Micro Devices, Inc. All rights reserved.##
-target_sources("${PROJECT_NAME}"
+##Copyright (C) 2020, Advanced Micro Devices, Inc.## 
+target_sources("${PROJECT_NAME}" 
      PRIVATE
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_Trinv_lu.h
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_Trinv_lu_blk_var1.c

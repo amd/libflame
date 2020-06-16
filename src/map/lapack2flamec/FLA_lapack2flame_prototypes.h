@@ -1362,75 +1362,28 @@ int dhseqr_check(char *job, char *compz, aocl_int64_t *n, aocl_int64_t *ilo, aoc
                  aocl_int64_t *ldh, double *wr, double *wi, double *z__, aocl_int64_t *ldz, double *work,
                  aocl_int64_t *lwork, aocl_int64_t *info);
 logical disnan_check(double *din);
-int dla_gbamv_check(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku, double *alpha,
-                    double *ab, aocl_int64_t *ldab, double *x, aocl_int64_t *incx, double *beta, double *y,
-                    aocl_int64_t *incy);
-double dla_gbrcond_check(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku, double *ab,
-                         aocl_int64_t *ldab, double *afb, aocl_int64_t *ldafb, aocl_int_t *ipiv, aocl_int64_t *cmode,
-                         double *c__, aocl_int64_t *info, double *work, aocl_int64_t *iwork);
-int dla_gbrfsx_extended_check(aocl_int64_t *prec_type__, aocl_int64_t *trans_type__, aocl_int64_t *n, aocl_int64_t *kl,
-                              aocl_int64_t *ku, aocl_int64_t *nrhs, double *ab, aocl_int64_t *ldab, double *afb,
-                              aocl_int64_t *ldafb, aocl_int_t *ipiv, logical *colequ, double *c__,
-                              double *b, aocl_int64_t *ldb, double *y, aocl_int64_t *ldy, double *berr_out__,
-                              aocl_int64_t *n_norms__, double *err_bnds_norm__, double *err_bnds_comp__,
-                              double *res, double *ayb, double *dy, double *y_tail__, double *rcond,
-                              aocl_int64_t *ithresh, double *rthresh, double *dz_ub__,
-                              logical *ignore_cwise__, aocl_int64_t *info);
-double dla_gbrpvgrw_check(aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku, aocl_int64_t *ncols, double *ab,
-                          aocl_int64_t *ldab, double *afb, aocl_int64_t *ldafb);
-int dla_geamv_check(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n, double *alpha, double *a, aocl_int64_t *lda,
-                    double *x, aocl_int64_t *incx, double *beta, double *y, aocl_int64_t *incy);
-double dla_gercond_check(char *trans, aocl_int64_t *n, double *a, aocl_int64_t *lda, double *af,
-                         aocl_int64_t *ldaf, aocl_int_t *ipiv, aocl_int64_t *cmode, double *c__, aocl_int64_t *info,
-                         double *work, aocl_int64_t *iwork);
-int dla_gerfsx_extended_check(aocl_int64_t *prec_type__, aocl_int64_t *trans_type__, aocl_int64_t *n,
-                              aocl_int64_t *nrhs, double *a, aocl_int64_t *lda, double *af, aocl_int64_t *ldaf,
-                              aocl_int_t *ipiv, logical *colequ, double *c__, double *b, aocl_int64_t *ldb,
-                              double *y, aocl_int64_t *ldy, double *berr_out__, aocl_int64_t *n_norms__,
-                              double *errs_n__, double *errs_c__, double *res, double *ayb,
-                              double *dy, double *y_tail__, double *rcond, aocl_int64_t *ithresh,
-                              double *rthresh, double *dz_ub__, logical *ignore_cwise__,
-                              aocl_int64_t *info);
-double dla_gerpvgrw_check(aocl_int64_t *n, aocl_int64_t *ncols, double *a, aocl_int64_t *lda, double *af,
-                          aocl_int64_t *ldaf);
-int dla_lin_berr_check(aocl_int64_t *n, aocl_int64_t *nz, aocl_int64_t *nrhs, double *res, double *ayb,
-                       double *berr);
-double dla_porcond_check(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, double *af, aocl_int64_t *ldaf,
-                         aocl_int64_t *cmode, double *c__, aocl_int64_t *info, double *work, aocl_int64_t *iwork);
-int dla_porfsx_extended_check(aocl_int64_t *prec_type__, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs,
-                              double *a, aocl_int64_t *lda, double *af, aocl_int64_t *ldaf, logical *colequ,
-                              double *c__, double *b, aocl_int64_t *ldb, double *y, aocl_int64_t *ldy,
-                              double *berr_out__, aocl_int64_t *n_norms__, double *err_bnds_norm__,
-                              double *err_bnds_comp__, double *res, double *ayb, double *dy,
-                              double *y_tail__, double *rcond, aocl_int64_t *ithresh, double *rthresh,
-                              double *dz_ub__, logical *ignore_cwise__, aocl_int64_t *info);
-double dla_porpvgrw_check(char *uplo, aocl_int64_t *ncols, double *a, aocl_int64_t *lda, double *af,
-                          aocl_int64_t *ldaf, double *work);
-int dla_syamv_check(aocl_int64_t *uplo, aocl_int64_t *n, double *alpha, double *a, aocl_int64_t *lda, double *x,
-                    aocl_int64_t *incx, double *beta, double *y, aocl_int64_t *incy);
-double dla_syrcond_check(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, double *af, aocl_int64_t *ldaf,
-                         aocl_int_t *ipiv, aocl_int64_t *cmode, double *c__, aocl_int64_t *info, double *work,
-                         aocl_int64_t *iwork);
-int dla_syrfsx_extended_check(aocl_int64_t *prec_type__, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs,
-                              double *a, aocl_int64_t *lda, double *af, aocl_int64_t *ldaf, aocl_int_t *ipiv,
-                              logical *colequ, double *c__, double *b, aocl_int64_t *ldb, double *y,
-                              aocl_int64_t *ldy, double *berr_out__, aocl_int64_t *n_norms__,
-                              double *err_bnds_norm__, double *err_bnds_comp__, double *res,
-                              double *ayb, double *dy, double *y_tail__, double *rcond,
-                              aocl_int64_t *ithresh, double *rthresh, double *dz_ub__,
-                              logical *ignore_cwise__, aocl_int64_t *info);
-double dla_syrpvgrw_check(char *uplo, aocl_int64_t *n, aocl_int64_t *info, double *a, aocl_int64_t *lda,
-                          double *af, aocl_int64_t *ldaf, aocl_int_t *ipiv, double *work);
-int dla_wwaddw_check(aocl_int64_t *n, double *x, double *y, double *w);
+int dla_gbamv_check(int *trans, int *m, int *n, int *kl, int *ku, double *alpha, double *ab, int * ldab, double *x, int *incx, double *beta, double *y, int *incy);
+double dla_gbrcond_check(char *trans, int *n, int *kl, int *ku, double *ab, int *ldab, double *afb, int *ldafb, int *ipiv, int *cmode, double *c__, int *info, double *work, int *iwork);
+int dla_gbrfsx_extended_check(int *prec_type__, int * trans_type__, int *n, int *kl, int *ku, int *nrhs, double *ab, int *ldab, double *afb, int *ldafb, int *ipiv, logical *colequ, double *c__, double *b, int *ldb, double *y, int *ldy, double *berr_out__, int *n_norms__, double *err_bnds_norm__, double * err_bnds_comp__, double *res, double *ayb, double *dy, double *y_tail__, double *rcond, int *ithresh, double *rthresh, double *dz_ub__, logical *ignore_cwise__, int *info);
+double dla_gbrpvgrw_check(int *n, int *kl, int *ku, int * ncols, double *ab, int *ldab, double *afb, int *ldafb);
+int dla_geamv_check(int *trans, int *m, int *n, double *alpha, double *a, int *lda, double *x, int *incx, double *beta, double *y, int *incy);
+double dla_gercond_check(char *trans, int *n, double *a, int *lda, double *af, int *ldaf, int *ipiv, int *cmode, double *c__, int *info, double *work, int *iwork);
+int dla_gerfsx_extended_check(int *prec_type__, int * trans_type__, int *n, int *nrhs, double *a, int *lda, double *af, int *ldaf, int *ipiv, logical *colequ, double *c__, double *b, int *ldb, double *y, int * ldy, double *berr_out__, int *n_norms__, double *errs_n__, double *errs_c__, double *res, double *ayb, double * dy, double *y_tail__, double *rcond, int *ithresh, double *rthresh, double *dz_ub__, logical *ignore_cwise__, int *info);
+double dla_gerpvgrw_check(int *n, int *ncols, double *a, int * lda, double *af, int *ldaf);
+int dla_lin_berr_check(int *n, int *nz, int *nrhs, double *res, double *ayb, double *berr);
+double dla_porcond_check(char *uplo, int *n, double *a, int *lda, double *af, int *ldaf, int *cmode, double *c__, int *info, double *work, int *iwork);
+int dla_porfsx_extended_check(int *prec_type__, char *uplo, int *n, int *nrhs, double *a, int *lda, double * af, int *ldaf, logical *colequ, double *c__, double *b, int *ldb, double *y, int *ldy, double *berr_out__, int *n_norms__, double *err_bnds_norm__, double * err_bnds_comp__, double *res, double *ayb, double *dy, double *y_tail__, double *rcond, int *ithresh, double *rthresh, double *dz_ub__, logical *ignore_cwise__, int *info);
+double dla_porpvgrw_check(char *uplo, int *ncols, double *a, int * lda, double *af, int *ldaf, double *work);
+int dla_syamv_check(int *uplo, int *n, double *alpha, double *a, int *lda, double *x, int *incx, double *beta, double *y, int *incy);
+double dla_syrcond_check(char *uplo, int *n, double *a, int *lda, double *af, int *ldaf, int *ipiv, int *cmode, double *c__, int *info, double *work, int *iwork);
+int dla_syrfsx_extended_check(int *prec_type__, char *uplo, int *n, int *nrhs, double *a, int *lda, double * af, int *ldaf, int *ipiv, logical *colequ, double *c__, double *b, int *ldb, double *y, int *ldy, double * berr_out__, int *n_norms__, double *err_bnds_norm__, double *err_bnds_comp__, double *res, double *ayb, double *dy, double *y_tail__, double *rcond, int * ithresh, double *rthresh, double *dz_ub__, logical * ignore_cwise__, int *info);
+double dla_syrpvgrw_check(char *uplo, int *n, int *info, double * a, int *lda, double *af, int *ldaf, int *ipiv, double *work);
+int dla_wwaddw_check(int *n, double *x, double *y, double *w);
 int dlabad_check(double *small_, double *large);
-int dlabrd_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, double *a, aocl_int64_t *lda, double *d__,
-                 double *e, double *tauq, double *taup, double *x, aocl_int64_t *ldx, double *y,
-                 aocl_int64_t *ldy);
-int dlacn2_check(aocl_int64_t *n, double *v, double *x, aocl_int64_t *isgn, double *est, aocl_int64_t *kase,
-                 aocl_int64_t *isave);
-int dlacon_check(aocl_int64_t *n, double *v, double *x, aocl_int64_t *isgn, double *est, aocl_int64_t *kase);
-int dlacpy_check(char *uplo, aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda, double *b,
-                 aocl_int64_t *ldb);
+int dlabrd_check(int *m, int *n, int *nb, double * a, int *lda, double *d__, double *e, double *tauq, double *taup, double *x, int *ldx, double *y, int *ldy);
+int dlacn2_check(int *n, double *v, double *x, int *isgn, double *est, int *kase, int *isave);
+int dlacon_check(int *n, double *v, double *x, int *isgn, double *est, int *kase);
+int dlacpy_check(char *uplo, int *m, int *n, double * a, int *lda, double *b, int *ldb);
 int dladiv_check(double *a, double *b, double *c__, double *d__, double *p, double *q);
 int dlae2_check(double *a, double *b, double *c__, double *rt1, double *rt2);
 int dlaebz_check(aocl_int64_t *ijob, aocl_int64_t *nitmax, aocl_int64_t *n, aocl_int64_t *mmax, aocl_int64_t *minp,
@@ -2486,72 +2439,28 @@ int shseqr_check(char *job, char *compz, aocl_int64_t *n, aocl_int64_t *ilo, aoc
                  aocl_int64_t *ldh, float *wr, float *wi, float *z__, aocl_int64_t *ldz, float *work,
                  aocl_int64_t *lwork, aocl_int64_t *info);
 logical sisnan_check(float *sin__);
-int sla_gbamv_check(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku, float *alpha,
-                    float *ab, aocl_int64_t *ldab, float *x, aocl_int64_t *incx, float *beta, float *y,
-                    aocl_int64_t *incy);
-float sla_gbrcond_check(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku, float *ab, aocl_int64_t *ldab,
-                        float *afb, aocl_int64_t *ldafb, aocl_int_t *ipiv, aocl_int64_t *cmode, float *c__,
-                        aocl_int64_t *info, float *work, aocl_int64_t *iwork);
-int sla_gbrfsx_extended_check(aocl_int64_t *prec_type__, aocl_int64_t *trans_type__, aocl_int64_t *n, aocl_int64_t *kl,
-                              aocl_int64_t *ku, aocl_int64_t *nrhs, float *ab, aocl_int64_t *ldab, float *afb,
-                              aocl_int64_t *ldafb, aocl_int_t *ipiv, logical *colequ, float *c__, float *b,
-                              aocl_int64_t *ldb, float *y, aocl_int64_t *ldy, float *berr_out__,
-                              aocl_int64_t *n_norms__, float *err_bnds_norm__, float *err_bnds_comp__,
-                              float *res, float *ayb, float *dy, float *y_tail__, float *rcond,
-                              aocl_int64_t *ithresh, float *rthresh, float *dz_ub__,
-                              logical *ignore_cwise__, aocl_int64_t *info);
-float sla_gbrpvgrw_check(aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku, aocl_int64_t *ncols, float *ab,
-                         aocl_int64_t *ldab, float *afb, aocl_int64_t *ldafb);
-int sla_geamv_check(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n, float *alpha, float *a, aocl_int64_t *lda,
-                    float *x, aocl_int64_t *incx, float *beta, float *y, aocl_int64_t *incy);
-float sla_gercond_check(char *trans, aocl_int64_t *n, float *a, aocl_int64_t *lda, float *af, aocl_int64_t *ldaf,
-                        aocl_int_t *ipiv, aocl_int64_t *cmode, float *c__, aocl_int64_t *info, float *work,
-                        aocl_int64_t *iwork);
-int sla_gerfsx_extended_check(aocl_int64_t *prec_type__, aocl_int64_t *trans_type__, aocl_int64_t *n,
-                              aocl_int64_t *nrhs, float *a, aocl_int64_t *lda, float *af, aocl_int64_t *ldaf,
-                              aocl_int_t *ipiv, logical *colequ, float *c__, float *b, aocl_int64_t *ldb,
-                              float *y, aocl_int64_t *ldy, float *berr_out__, aocl_int64_t *n_norms__,
-                              float *errs_n__, float *errs_c__, float *res, float *ayb, float *dy,
-                              float *y_tail__, float *rcond, aocl_int64_t *ithresh, float *rthresh,
-                              float *dz_ub__, logical *ignore_cwise__, aocl_int64_t *info);
-float sla_gerpvgrw_check(aocl_int64_t *n, aocl_int64_t *ncols, float *a, aocl_int64_t *lda, float *af,
-                         aocl_int64_t *ldaf);
-int sla_lin_berr_check(aocl_int64_t *n, aocl_int64_t *nz, aocl_int64_t *nrhs, float *res, float *ayb, float *berr);
-float sla_porcond_check(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, float *af, aocl_int64_t *ldaf,
-                        aocl_int64_t *cmode, float *c__, aocl_int64_t *info, float *work, aocl_int64_t *iwork);
-int sla_porfsx_extended_check(aocl_int64_t *prec_type__, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, float *a,
-                              aocl_int64_t *lda, float *af, aocl_int64_t *ldaf, logical *colequ, float *c__,
-                              float *b, aocl_int64_t *ldb, float *y, aocl_int64_t *ldy, float *berr_out__,
-                              aocl_int64_t *n_norms__, float *err_bnds_norm__, float *err_bnds_comp__,
-                              float *res, float *ayb, float *dy, float *y_tail__, float *rcond,
-                              aocl_int64_t *ithresh, float *rthresh, float *dz_ub__,
-                              logical *ignore_cwise__, aocl_int64_t *info);
-float sla_porpvgrw_check(char *uplo, aocl_int64_t *ncols, float *a, aocl_int64_t *lda, float *af,
-                         aocl_int64_t *ldaf, float *work);
-int sla_syamv_check(aocl_int64_t *uplo, aocl_int64_t *n, float *alpha, float *a, aocl_int64_t *lda, float *x,
-                    aocl_int64_t *incx, float *beta, float *y, aocl_int64_t *incy);
-float sla_syrcond_check(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, float *af, aocl_int64_t *ldaf,
-                        aocl_int_t *ipiv, aocl_int64_t *cmode, float *c__, aocl_int64_t *info, float *work,
-                        aocl_int64_t *iwork);
-int sla_syrfsx_extended_check(aocl_int64_t *prec_type__, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, float *a,
-                              aocl_int64_t *lda, float *af, aocl_int64_t *ldaf, aocl_int_t *ipiv,
-                              logical *colequ, float *c__, float *b, aocl_int64_t *ldb, float *y,
-                              aocl_int64_t *ldy, float *berr_out__, aocl_int64_t *n_norms__,
-                              float *err_bnds_norm__, float *err_bnds_comp__, float *res,
-                              float *ayb, float *dy, float *y_tail__, float *rcond,
-                              aocl_int64_t *ithresh, float *rthresh, float *dz_ub__,
-                              logical *ignore_cwise__, aocl_int64_t *info);
-float sla_syrpvgrw_check(char *uplo, aocl_int64_t *n, aocl_int64_t *info, float *a, aocl_int64_t *lda, float *af,
-                         aocl_int64_t *ldaf, aocl_int_t *ipiv, float *work);
-int sla_wwaddw_check(aocl_int64_t *n, float *x, float *y, float *w);
+int sla_gbamv_check(int *trans, int *m, int *n, int *kl, int *ku, float *alpha, float *ab, int *ldab, float * x, int *incx, float *beta, float *y, int *incy);
+float sla_gbrcond_check(char *trans, int *n, int *kl, int *ku, float * ab, int *ldab, float *afb, int *ldafb, int *ipiv, int * cmode, float *c__, int *info, float *work, int *iwork);
+int sla_gbrfsx_extended_check(int *prec_type__, int * trans_type__, int *n, int *kl, int *ku, int *nrhs, float *ab, int *ldab, float *afb, int *ldafb, int *ipiv, logical *colequ, float *c__, float *b, int *ldb, float *y, int * ldy, float *berr_out__, int *n_norms__, float *err_bnds_norm__, float *err_bnds_comp__, float *res, float *ayb, float *dy, float *y_tail__, float *rcond, int *ithresh, float *rthresh, float *dz_ub__, logical *ignore_cwise__, int *info);
+float sla_gbrpvgrw_check(int *n, int *kl, int *ku, int *ncols, float *ab, int *ldab, float *afb, int *ldafb);
+int sla_geamv_check(int *trans, int *m, int *n, float *alpha, float *a, int *lda, float *x, int *incx, float *beta, float *y, int *incy);
+float sla_gercond_check(char *trans, int *n, float *a, int *lda, float *af, int *ldaf, int *ipiv, int *cmode, float *c__, int * info, float *work, int *iwork);
+int sla_gerfsx_extended_check(int *prec_type__, int * trans_type__, int *n, int *nrhs, float *a, int *lda, float * af, int *ldaf, int *ipiv, logical *colequ, float *c__, float *b, int *ldb, float *y, int *ldy, float *berr_out__, int * n_norms__, float *errs_n__, float *errs_c__, float *res, float *ayb, float *dy, float *y_tail__, float *rcond, int *ithresh, float *rthresh, float *dz_ub__, logical *ignore_cwise__, int *info);
+float sla_gerpvgrw_check(int *n, int *ncols, float *a, int *lda, float * af, int *ldaf);
+int sla_lin_berr_check(int *n, int *nz, int *nrhs, float *res, float *ayb, float *berr);
+float sla_porcond_check(char *uplo, int *n, float *a, int *lda, float *af, int *ldaf, int *cmode, float *c__, int *info, float *work, int *iwork);
+int sla_porfsx_extended_check(int *prec_type__, char *uplo, int *n, int *nrhs, float *a, int *lda, float *af, int * ldaf, logical *colequ, float *c__, float *b, int *ldb, float *y, int *ldy, float *berr_out__, int *n_norms__, float * err_bnds_norm__, float *err_bnds_comp__, float *res, float *ayb, float * dy, float *y_tail__, float *rcond, int *ithresh, float *rthresh, float *dz_ub__, logical *ignore_cwise__, int *info);
+float sla_porpvgrw_check(char *uplo, int *ncols, float *a, int *lda, float * af, int *ldaf, float *work);
+int sla_syamv_check(int *uplo, int *n, float *alpha, float *a, int *lda, float *x, int *incx, float *beta, float *y, int *incy);
+float sla_syrcond_check(char *uplo, int *n, float *a, int *lda, float *af, int *ldaf, int *ipiv, int *cmode, float *c__, int * info, float *work, int *iwork);
+int sla_syrfsx_extended_check(int *prec_type__, char *uplo, int *n, int *nrhs, float *a, int *lda, float *af, int * ldaf, int *ipiv, logical *colequ, float *c__, float *b, int * ldb, float *y, int *ldy, float *berr_out__, int *n_norms__, float *err_bnds_norm__, float *err_bnds_comp__, float *res, float *ayb, float *dy, float *y_tail__, float *rcond, int *ithresh, float * rthresh, float *dz_ub__, logical *ignore_cwise__, int *info);
+float sla_syrpvgrw_check(char *uplo, int *n, int *info, float *a, int * lda, float *af, int *ldaf, int *ipiv, float *work);
+int sla_wwaddw_check(int *n, float *x, float *y, float *w);
 int slabad_check(float *small_, float *large);
-int slabrd_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, float *a, aocl_int64_t *lda, float *d__, float *e,
-                 float *tauq, float *taup, float *x, aocl_int64_t *ldx, float *y, aocl_int64_t *ldy);
-int slacn2_check(aocl_int64_t *n, float *v, float *x, aocl_int64_t *isgn, float *est, aocl_int64_t *kase,
-                 aocl_int64_t *isave);
-int slacon_check(aocl_int64_t *n, float *v, float *x, aocl_int64_t *isgn, float *est, aocl_int64_t *kase);
-int slacpy_check(char *uplo, aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, float *b,
-                 aocl_int64_t *ldb);
+int slabrd_check(int *m, int *n, int *nb, float *a, int *lda, float *d__, float *e, float *tauq, float *taup, float *x, int *ldx, float *y, int *ldy);
+int slacn2_check(int *n, float *v, float *x, int *isgn, float *est, int *kase, int *isave);
+int slacon_check(int *n, float *v, float *x, int *isgn, float *est, int *kase);
+int slacpy_check(char *uplo, int *m, int *n, float *a, int *lda, float *b, int *ldb);
 int sladiv_check(float *a, float *b, float *c__, float *d__, float *p, float *q);
 int slae2_check(float *a, float *b, float *c__, float *rt1, float *rt2);
 int slaebz_check(aocl_int64_t *ijob, aocl_int64_t *nitmax, aocl_int64_t *n, aocl_int64_t *mmax, aocl_int64_t *minp,

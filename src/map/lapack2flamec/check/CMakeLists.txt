@@ -57,7 +57,6 @@ ${CMAKE_CURRENT_SOURCE_DIR}/dgeqr2p_check.c
 ${CMAKE_CURRENT_SOURCE_DIR}/dgeqrf_check.c
 ${CMAKE_CURRENT_SOURCE_DIR}/dgeqrfp_check.c
 ${CMAKE_CURRENT_SOURCE_DIR}/dgesdd_check.c
-${CMAKE_CURRENT_SOURCE_DIR}/dgesdd_fla_check.c
 ${CMAKE_CURRENT_SOURCE_DIR}/dgesvd_check.c
 ${CMAKE_CURRENT_SOURCE_DIR}/dgetf2_check.c
 ${CMAKE_CURRENT_SOURCE_DIR}/dgetrf_check.c
@@ -99,7 +98,6 @@ ${CMAKE_CURRENT_SOURCE_DIR}/sgeqr2p_check.c
 ${CMAKE_CURRENT_SOURCE_DIR}/sgeqrf_check.c
 ${CMAKE_CURRENT_SOURCE_DIR}/sgeqrfp_check.c
 ${CMAKE_CURRENT_SOURCE_DIR}/sgesdd_check.c
-${CMAKE_CURRENT_SOURCE_DIR}/sgesdd_fla_check.c
 ${CMAKE_CURRENT_SOURCE_DIR}/sgesvd_check.c
 ${CMAKE_CURRENT_SOURCE_DIR}/sgetf2_check.c
 ${CMAKE_CURRENT_SOURCE_DIR}/sgetrf_check.c
@@ -167,21 +165,4 @@ ${CMAKE_CURRENT_SOURCE_DIR}/zunml2_check.c
 ${CMAKE_CURRENT_SOURCE_DIR}/zunmlq_check.c
 ${CMAKE_CURRENT_SOURCE_DIR}/zunmqr_check.c
 ${CMAKE_CURRENT_SOURCE_DIR}/zunmtr_check.c
-${CMAKE_CURRENT_SOURCE_DIR}/cgetrfnp_check.c
-${CMAKE_CURRENT_SOURCE_DIR}/dgetrfnp_check.c
-${CMAKE_CURRENT_SOURCE_DIR}/sgetrfnp_check.c
-${CMAKE_CURRENT_SOURCE_DIR}/zgetrfnp_check.c
-${CMAKE_CURRENT_SOURCE_DIR}/cgetrfnpi_check.c
-${CMAKE_CURRENT_SOURCE_DIR}/dgetrfnpi_check.c
-${CMAKE_CURRENT_SOURCE_DIR}/sgetrfnpi_check.c
-${CMAKE_CURRENT_SOURCE_DIR}/zgetrfnpi_check.c
-${CMAKE_CURRENT_SOURCE_DIR}/cspffrt2_check.c
-${CMAKE_CURRENT_SOURCE_DIR}/cspffrtx_check.c
-${CMAKE_CURRENT_SOURCE_DIR}/dspffrt2_check.c
-${CMAKE_CURRENT_SOURCE_DIR}/dspffrtx_check.c
-${CMAKE_CURRENT_SOURCE_DIR}/sspffrt2_check.c
-${CMAKE_CURRENT_SOURCE_DIR}/sspffrtx_check.c
-${CMAKE_CURRENT_SOURCE_DIR}/zspffrt2_check.c
-${CMAKE_CURRENT_SOURCE_DIR}/zspffrtx_check.c
-
    )

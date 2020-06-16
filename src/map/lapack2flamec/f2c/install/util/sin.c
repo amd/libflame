@@ -4,42 +4,42 @@
 extern "C" {
 #endif
 
-double r_sin(real *x)
-{
-    return (sin(*x));
-}
-double d_sin(doublereal *x)
-{
-    return (sin(*x));
-}
+    double r_sin(real *x)
+    {
+        return( sin(*x) );
+    }
+    double d_sin(doublereal *x)
+    {
+        return( sin(*x) );
+    }
 #ifdef _WIN32
-void c_sin(scomplex *r, scomplex *z)
-{
-    _Fcomplex z_ = {z->real, z->imag};
-    _Fcomplex ret_val = csinf(z_);
-    r->real = crealf(ret_val);
-    r->imag = cimagf(ret_val);
-}
-void z_sin(dcomplex *r, dcomplex *z)
-{
-    _Dcomplex z_ = {z->real, z->imag};
-    _Dcomplex ret_val = csin(z_);
-    r->real = creal(ret_val);
-    r->imag = cimag(ret_val);
-}
+    void c_sin(complex *r, complex *z)
+    {
+        _Dcomplex z_ = { z->r, z->i };
+        _Dcomplex ret_val = csin(z_);
+        r->r = creal(ret_val);
+        r->i = cimag(ret_val);
+    }
+    void z_sin(doublecomplex *r, doublecomplex *z)
+    {
+        _Dcomplex z_ = { z->r, z->i };
+        _Dcomplex ret_val = csin(z_);
+        r->r = creal(ret_val);
+        r->i = cimag(ret_val);
+    }
 #else
-void c_sin(scomplex *r, scomplex *z)
-{
-    double _Complex ret_val = csin(z->real + I * z->imag);
-    r->real = creal(ret_val);
-    r->imag = cimag(ret_val);
-}
-void z_sin(dcomplex *r, dcomplex *z)
-{
-    double _Complex ret_val = csin(z->real + I * z->imag);
-    r->real = creal(ret_val);
-    r->imag = cimag(ret_val);
-}
+    void c_sin(complex *r, complex *z)
+    {
+        double _Complex ret_val = csin(z->r + I*z->i);
+        r->r = creal(ret_val);
+        r->i = cimag(ret_val);
+    }
+    void z_sin(doublecomplex *r, doublecomplex *z)
+    {
+        double _Complex ret_val = csin(z->r + I*z->i);
+        r->r = creal(ret_val);
+        r->i = cimag(ret_val);
+    }
 #endif
 
 #ifdef __cplusplus

@@ -1,12 +1,11 @@
-##Copyright (C) 2020-2022, Advanced Micro Devices, Inc.##
-target_sources("${PROJECT_NAME}"
+##Copyright (C) 2020, Advanced Micro Devices, Inc.##
+target_sources("${PROJECT_NAME}" 
      PRIVATE
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_blas_var_prototypes.h
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_blas1_prototypes.h
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_blas2_prototypes.h
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_blas3_prototypes.h
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_config_check.h
-${CMAKE_CURRENT_SOURCE_DIR}/FLA_Context.h
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_extern_defs.h
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_f2c.h
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_f77_name_mangling.h
@@ -20,7 +19,4 @@ ${CMAKE_CURRENT_SOURCE_DIR}/FLA_type_defs.h
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_util_base_prototypes.h
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_util_lapack_prototypes.h
 ${CMAKE_CURRENT_SOURCE_DIR}/FLAME.h
-${CMAKE_CURRENT_SOURCE_DIR}/aocl_lapack.h
-${CMAKE_CURRENT_SOURCE_DIR}/aocl_blas.h
-${CMAKE_CURRENT_SOURCE_DIR}/aocl_fla_lapack.h
 	)

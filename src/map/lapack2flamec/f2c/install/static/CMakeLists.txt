@@ -1,4 +1,4 @@
-##Copyright (C) 2020-2026, Advanced Micro Devices, Inc. All rights reserved.## 
+##Copyright (C) 2020, Advanced Micro Devices, Inc.## 
 target_sources("${PROJECT_NAME}" 
      PRIVATE
 ${CMAKE_CURRENT_SOURCE_DIR}/dlamch.c
@@ -8,12 +8,10 @@ ${CMAKE_CURRENT_SOURCE_DIR}/dsecnd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/ieeeck.c
 ${CMAKE_CURRENT_SOURCE_DIR}/ilaenv.c
 ${CMAKE_CURRENT_SOURCE_DIR}/iparmq.c
+${CMAKE_CURRENT_SOURCE_DIR}/lsame.c
 ${CMAKE_CURRENT_SOURCE_DIR}/lsamen.c
 ${CMAKE_CURRENT_SOURCE_DIR}/maxloc.c
 ${CMAKE_CURRENT_SOURCE_DIR}/second.c
 ${CMAKE_CURRENT_SOURCE_DIR}/slamch.c
-${CMAKE_CURRENT_SOURCE_DIR}/xerbla_array.c
-${CMAKE_CURRENT_SOURCE_DIR}/aocl_set_progress.c
-${CMAKE_CURRENT_SOURCE_DIR}/droundup_lwork.c
-${CMAKE_CURRENT_SOURCE_DIR}/sroundup_lwork.c
-)
+${CMAKE_CURRENT_SOURCE_DIR}/xerbla.c
+	)

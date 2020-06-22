@@ -487,7 +487,7 @@ void aocl_lapack_cbdsqr(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_in
     if(tol >= 0.f)
     {
         /* Relative accuracy desired */
-        sminoa = f2c_abs(d__[1]);
+        sminoa = f2c_dabs(d__[1]);
         if (sminoa == 0.f)
         {
             goto L50;

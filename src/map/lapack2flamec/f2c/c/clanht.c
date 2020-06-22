@@ -177,11 +177,11 @@ real aocl_lapack_clanht(char *norm, aocl_int64_t *n, real *d__, scomplex *e)
         /* Find norm1(A). */
         if(*n == 1)
         {
-            anorm = f2c_abs(d__[1]);
+            anorm = f2c_dabs(d__[1]);
         }
         else
         {
-            anorm = f2c_abs(d__[1]) + c_abs(&e[1]);
+            anorm = f2c_dabs(d__[1]) + c_abs(&e[1]);
             sum = c_abs(&e[*n - 1]) + (r__1 = d__[*n], f2c_abs(r__1));
             if (anorm < sum || sisnan_(&sum))
             {

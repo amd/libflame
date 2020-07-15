@@ -20,18 +20,8 @@
 #include <math.h>
 #ifndef __cplusplus
 #include <complex.h>
-#endif
-#include "FLA_config.h"
-#include "FLA_macro_defs.h"
-#include "FLA_type_defs.h"
+#undef complex
 #include "aocldtl.h"
-#include "FLA_progress.h"
-#include "FLA_Context.h"
-#include "FLA_Threads.h"
-#include "aocl_lapack.h"
-#include "aocl_fla_lapack.h"
-#include "aocl_blas.h"
-#include "FLA_lapack_f77_prototypes.h"
 
 #ifndef F2C_INCLUDE
 #define F2C_INCLUDE

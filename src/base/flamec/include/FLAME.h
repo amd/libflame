@@ -83,6 +83,8 @@ extern "C" {
    // Include other api formats from wrapper code
   #include "libflame_api_wrapper.h"
 
+  #include "aocldtl.h"
+
 // End extern "C" construct block.
 #ifdef __cplusplus
 }

@@ -12,9 +12,9 @@
 
 #ifdef FLA_ENABLE_LAPACK2FLAME
 
-#include "FLA_lapack2flame_prototypes.h"
-#include "FLA_lapack2flame_return_defs.h"
 #include "FLA_lapack2flame_util_defs.h"
+#include "FLA_lapack2flame_return_defs.h"
+#include "FLA_lapack2flame_prototypes.h"
 
 /*
   GETRFNP computes an LU factorization of a general M-by-N matrix A
@@ -29,181 +29,80 @@
   to solve a system of equations.
 */
 
-extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileName,
-                      const int8 *pi8FunctionName, uint32 ui32LineNumber, const int8 *pi8Message);
 
+#define LAPACK_getrfnp(prefix)                                            \
+  int F77_ ## prefix ## getrfnp( int* m,                                  \
+                               int* n,                                  \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, int* ldim_A, \
+                               int* info )
 
-/** Generated wrapper function */
-void sgetrfnp_(aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgetrfnp(m, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgetrfnp(&m_64, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void dgetrfnp_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgetrfnp(m, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dgetrfnp(&m_64, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void cgetrfnp_(aocl_int_t *m, aocl_int_t *n, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgetrfnp(m, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgetrfnp(&m_64, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void zgetrfnp_(aocl_int_t *m, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgetrfnp(m, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgetrfnp(&m_64, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-
-#define LAPACK_getrfnp(prefix)                                                                 \
-    void aocl_lapack_##prefix##getrfnp(aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                               aocl_int64_t * ldim_A, aocl_int64_t * info)
-
-#define LAPACK_getrfnp_body(prefix)                        \
-    FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix); \
-    FLA_Obj A;                                             \
-    FLA_Error e_val;                                       \
-    FLA_Error init_result;                                 \
-    extern TLS_CLASS_SPEC fla_lu_t *fla_lu_nopiv_cntl2;    \
-                                                           \
-    FLA_Init_safe(&init_result);                           \
-                                                           \
-    FLA_Obj_create_without_buffer(datatype, *m, *n, &A);   \
-    FLA_Obj_attach_buffer(buff_A, 1, *ldim_A, &A);         \
-                                                           \
-    e_val = FLA_LU_nopiv_internal(A, fla_lu_nopiv_cntl2);  \
-                                                           \
-    FLA_Obj_free_without_buffer(&A);                       \
-                                                           \
-    FLA_Finalize_safe(init_result);                        \
-                                                           \
-    if(e_val != FLA_SUCCESS)                               \
-        *info = e_val + 1;                                 \
-    else                                                   \
-        *info = 0;
+#define LAPACK_getrfnp_body(prefix)                               \
+  FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);        \
+  FLA_Obj      A;                                            \
+  FLA_Error    e_val;                                           \
+  FLA_Error    init_result;                                     \
+  extern TLS_CLASS_SPEC fla_lu_t*  fla_lu_nopiv_cntl2; 		\
+  								\
+  FLA_Init_safe( &init_result );                                \
+                                                                \
+  FLA_Obj_create_without_buffer( datatype, *m, *n, &A );        \
+  FLA_Obj_attach_buffer( buff_A, 1, *ldim_A, &A );              \
+  								\
+  e_val = FLA_LU_nopiv_internal( A,  fla_lu_nopiv_cntl2);       \
+                                                                \
+  FLA_Obj_free_without_buffer( &A );                            \
+                                                                \
+  FLA_Finalize_safe( init_result );                             \
+                                                                \
+  if ( e_val != FLA_SUCCESS ) *info = e_val + 1;                \
+  else                        *info = 0;                        \
+                                                                \
+  return 0;
 
 LAPACK_getrfnp(s)
 {
-    int fla_error = LAPACK_SUCCESS;
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgetrfnp inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(sgetrfnp_check(m, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK( sgetrfnp_check( m, n,
+                                           buff_A, ldim_A,
+                                           info ) )
     }
-    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_getrfnp_body(s)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
 LAPACK_getrfnp(d)
 {
-    int fla_error = LAPACK_SUCCESS;
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgetrfnp inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(dgetrfnp_check(m, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK( dgetrfnp_check( m, n,
+                                           buff_A, ldim_A,
+                                           info ) )
     }
-    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_getrfnp_body(d)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
 LAPACK_getrfnp(c)
 {
-    int fla_error = LAPACK_SUCCESS;
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cgetrfnp inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(cgetrfnp_check(m, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK( cgetrfnp_check( m, n,
+                                           buff_A, ldim_A,
+                                           info ) )
     }
-    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_getrfnp_body(c)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
 LAPACK_getrfnp(z)
 {
-    int fla_error = LAPACK_SUCCESS;
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgetrfnp inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(zgetrfnp_check(m, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK( zgetrfnp_check( m, n,
+                                           buff_A, ldim_A,
+                                           info ) )
     }
-    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_getrfnp_body(z)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
+
 
 #endif

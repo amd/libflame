@@ -293,10 +293,6 @@ void libfla_test_read_operation_file( char* input_filename, test_ops_t* ops )
 	libfla_test_read_tests_for_op_ext( input_stream, &(ops->lu_nopiv) );
 	libfla_test_output_op_struct_ext( "lu_nopiv", ops->lu_nopiv );
 
-	//Read the operation tests for LU_nopiv_i factorization
-	libfla_test_read_tests_for_op_fla_ext( input_stream, &(ops->lu_nopiv_i) );
-	libfla_test_output_op_struct_fla_ext( "lu_nopiv_i", ops->lu_nopiv_i );
-
 	// Read the operation tests for LU_piv factorization.
 	libfla_test_read_tests_for_op_ext( input_stream, &(ops->lu_piv) );
 	libfla_test_output_op_struct_ext( "lu_piv", ops->lu_piv );
@@ -521,6 +517,54 @@ void libfla_test_read_tests_for_op_ext( FILE* input_stream, test_op_t* op )
 	int  fla_opt_vars;
 	int  fla_blk_vars;
 	int  fla_blk_ext;
+
+	// Read the line for the overall operation switch.
+	libfla_test_read_next_line( buffer, input_stream );
+	sscanf( buffer, "%d ", &op_switch );
+
+	// Read the line for the FLASH front-end.
+	libfla_test_read_next_line( buffer, input_stream );
+	sscanf( buffer, "%d ", &flash_front );
+
+	// Read the line for the FLA front-end.
+	libfla_test_read_next_line( buffer, input_stream );
+	sscanf( buffer, "%d ", &fla_front );
+
+	// Read the line for the unblocked variants.
+	libfla_test_read_next_line( buffer, input_stream );
+	sscanf( buffer, "%d ", &fla_unb_vars );
+
+	// Read the line for the optimized unblocked variants.
+	libfla_test_read_next_line( buffer, input_stream );
+	sscanf( buffer, "%d ", &fla_opt_vars );
+
+	// Read the line for the blocked variants.
+	libfla_test_read_next_line( buffer, input_stream );
+	sscanf( buffer, "%d ", &fla_blk_vars );
+
+	// Read the line for the blocked external variant.
+	libfla_test_read_next_line( buffer, input_stream );
+	sscanf( buffer, "%d ", &fla_blk_ext );
+
+	if ( op_switch == DISABLE_ALL )
+	{
+		op->flash_front  = DISABLE;
+		op->fla_front    = DISABLE;
+		op->fla_unb_vars = DISABLE;
+		op->fla_opt_vars = DISABLE;
+		op->fla_blk_vars = DISABLE;
+		op->fla_blk_ext  = DISABLE;
+	}
+	else
+	{
+		op->flash_front  = flash_front;
+		op->fla_front    = fla_front;
+		op->fla_unb_vars = fla_unb_vars;
+		op->fla_opt_vars = fla_opt_vars;
+		op->fla_blk_vars = fla_blk_vars;
+		op->fla_blk_ext  = fla_blk_ext;
+	}
+}
 
 	// Read the line for the overall operation switch.
 	libfla_test_read_next_line( buffer, input_stream );

@@ -63,7 +63,7 @@ typedef struct
 	dim_t         p_first;
 	dim_t         p_max;
 	dim_t         p_inc;
-	dim_t         p_nfact;
+	int           p_nfact;
 	unsigned int  n_threads;
 	char          reaction_to_failure;
 } test_params_t;
@@ -100,6 +100,7 @@ typedef struct
 	test_op_t lu_piv;
 	test_op_t lu_incpiv;
 	test_op_t ldlt_nopiv_part;
+	test_op_t lu_nopiv_i;
 	test_op_t qrut;
 	test_op_t qrutinc;
 	test_op_t lqut;

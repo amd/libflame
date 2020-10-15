@@ -1,14 +1,14 @@
 /*
- *  Copyright (c) 2020-21 Advanced Micro Devices, Inc. All rights reserved.
+ *  Copyright (c) 2020 Advanced Micro Devices, Inc. All rights reserved.
  * */
 
 #include "FLAME.h"
 
 #ifdef FLA_ENABLE_LAPACK2FLAME
 
-#include "FLA_lapack2flame_prototypes.h"
-#include "FLA_lapack2flame_return_defs.h"
 #include "FLA_lapack2flame_util_defs.h"
+#include "FLA_lapack2flame_return_defs.h"
+#include "FLA_lapack2flame_prototypes.h"
 
 /*
   GETRFNPI computes an LU factorization(complete/incomplete) based on given parameter
@@ -27,230 +27,96 @@
   n
   INTEGER. The number of columns in matrix A; n≥ 0.
   nfact
-  INTEGER. The number of rows and columns to factor; 0 ≤nfact≤ fla_min(m, n). Note that if nfact <
-  fla_min(m, n), incomplete factorization is performed.
+  INTEGER. The number of rows and columns to factor; 0 ≤nfact≤ min(m, n). Note that if nfact < min(m, n), incomplete factorization is performed.
 
    A
    REAL for sgetrfnpi
    DOUBLE PRECISION for dgetrfnpi
    COMPLEX for cgetrfnpi
    DOUBLE COMPLEX for zgetrfnpi
-   Array of size (lda,*). Contains the matrix A. The second dimension of a must be at least
-  fla_max(1, n). lda INTEGER. The leading dimension of array a. lda≥ fla_max(1, m).
+   Array of size (lda,*). Contains the matrix A. The second dimension of a must be at least max(1, n).
+   lda
+   INTEGER. The leading dimension of array a. lda≥ max(1, m).
 
 */
 
-extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileName,
-                      const int8 *pi8FunctionName, uint32 ui32LineNumber, const int8 *pi8Message);
 
-/** Generated wrapper function */
-void sgetrfnpi_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nfact, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgetrfnpi(m, n, nfact, buff_A, ldim_A, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nfact_64 = *nfact;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
+#define LAPACK_getrfnpi(prefix)                                                       \
+  int F77_ ## prefix ## getrfnpi( int* m,                                             \
+                                  int* n,                                             \
+                                  int* nfact,                                         \
+                                  PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, int* ldim_A, \
+                                  int* info )
 
-    aocl_lapack_sgetrfnpi(&m_64, &n_64, &nfact_64, buff_A, &ldim_A_64, &info_64);
+#define LAPACK_getrfnpi_body(prefix)                            \
+  FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);        \
+  FLA_Obj      A;                                               \
+  FLA_Error    e_val;                                           \
+  FLA_Error    init_result;                                     \
+                                                                \
+  FLA_Init_safe( &init_result);                                 \
+                                                                \
+  FLA_Obj_create_without_buffer( datatype, *m, *n, &A );        \
+  FLA_Obj_attach_buffer( buff_A, 1, *ldim_A, &A );              \
+                                                                \
+  e_val = FLA_LU_nopiv_blk_var6( A, *nfact);                    \
+                                                                \
+  FLA_Obj_free_without_buffer( &A );                            \
+                                                                \
+  FLA_Finalize_safe( init_result );                             \
+                                                                \
+  if ( e_val != FLA_SUCCESS ) *info = e_val + 1;                \
+  else                        *info = 0;                        \
+                                                                \
+  return 0;
 
-    *info = (aocl_int_t)info_64;
-#endif
-}
 
-/** Generated wrapper function */
-void dgetrfnpi_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nfact, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgetrfnpi(m, n, nfact, buff_A, ldim_A, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nfact_64 = *nfact;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
 
-    aocl_lapack_dgetrfnpi(&m_64, &n_64, &nfact_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void cgetrfnpi_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nfact, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgetrfnpi(m, n, nfact, buff_A, ldim_A, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nfact_64 = *nfact;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgetrfnpi(&m_64, &n_64, &nfact_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void zgetrfnpi_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nfact, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgetrfnpi(m, n, nfact, buff_A, ldim_A, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nfact_64 = *nfact;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgetrfnpi(&m_64, &n_64, &nfact_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-#define LAPACK_getrfnpi(prefix)                                                           \
-    void aocl_lapack_##prefix##getrfnpi(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nfact,                   \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A, \
-                                aocl_int64_t * info)
-
-#define LAPACK_getrfnpi_body(prefix)                                                               \
-    FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                                         \
-    FLA_Error e_val;                                                                               \
-                                                                                                   \
-    if((datatype == FLA_DOUBLE) && ((*m) * (*n) <= FLA_MN_SIZE)                                    \
-       && ((*nfact) <= (FLA_NFACT_PERCENT * (*m))) && ((*m) == (*n)))                              \
-    {                                                                                              \
-        if((*n) * (*nfact) - (*nfact - 1) / 4 <= FLA_FULL_DGER_CONSTANT)                           \
-            e_val = FLA_LU_nopiv_id_unblk_var2(*m, *n, (double *)buff_A, *nfact, 1, *ldim_A);      \
-        else                                                                                       \
-            e_val = FLA_LU_nopiv_id_unblk_var1(*m, *n, (double *)buff_A, *nfact, 1, *ldim_A);      \
-    }                                                                                              \
-    else                                                                                           \
-    {                                                                                              \
-        FLA_Obj A;                                                                                 \
-        FLA_Error init_result;                                                                     \
-        FLA_Init_safe(&init_result);                                                               \
-        FLA_Obj_create_without_buffer(datatype, *m, *n, &A);                                       \
-        FLA_Obj_attach_buffer(buff_A, 1, *ldim_A, &A);                                             \
-        switch(datatype)                                                                           \
-        {                                                                                          \
-            case FLA_FLOAT:                                                                        \
-            {                                                                                      \
-                e_val = FLA_LU_nopiv_is_blk_var1(*m, *n, A, (float *)buff_A, *nfact, 1, *ldim_A);  \
-                break;                                                                             \
-            }                                                                                      \
-            case FLA_DOUBLE:                                                                       \
-            {                                                                                      \
-                e_val = FLA_LU_nopiv_id_blk_var1(*m, *n, A, (double *)buff_A, *nfact, 1, *ldim_A); \
-                break;                                                                             \
-            }                                                                                      \
-            case FLA_COMPLEX:                                                                      \
-            {                                                                                      \
-                e_val                                                                              \
-                    = FLA_LU_nopiv_ic_blk_var1(*m, *n, A, (scomplex *)buff_A, *nfact, 1, *ldim_A); \
-                break;                                                                             \
-            }                                                                                      \
-            case FLA_DOUBLE_COMPLEX:                                                               \
-            {                                                                                      \
-                e_val                                                                              \
-                    = FLA_LU_nopiv_iz_blk_var1(*m, *n, A, (dcomplex *)buff_A, *nfact, 1, *ldim_A); \
-                break;                                                                             \
-            }                                                                                      \
-        }                                                                                          \
-        FLA_Obj_free_without_buffer(&A);                                                           \
-        FLA_Finalize_safe(init_result);                                                            \
-    }                                                                                              \
-    if(e_val != FLA_SUCCESS)                                                                       \
-        *info = e_val + 1;                                                                         \
-    else                                                                                           \
-        *info = 0;
 
 LAPACK_getrfnpi(s)
 {
-    int fla_error = LAPACK_SUCCESS;
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgetrfnpi inputs: m %" FLA_IS ", n %" FLA_IS ", nfact %" FLA_IS
-                      ", lda %" FLA_IS "",
-                      *m, *n, *nfact, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(sgetrfnpi_check(m, n, nfact, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK( sgetrfnpi_check( m, n, nfact,
+                                              buff_A, ldim_A,
+                                              info ) )
     }
-    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_getrfnpi_body(s)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
 LAPACK_getrfnpi(d)
 {
-    int fla_error = LAPACK_SUCCESS;
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgetrfnpi inputs: m %" FLA_IS ", n %" FLA_IS ", nfact %" FLA_IS
-                      ", lda %" FLA_IS "",
-                      *m, *n, *nfact, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(dgetrfnpi_check(m, n, nfact, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK( dgetrfnpi_check( m, n, nfact,
+                                              buff_A, ldim_A,
+                                              info ) )
     }
-    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_getrfnpi_body(d)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
 LAPACK_getrfnpi(c)
 {
-    int fla_error = LAPACK_SUCCESS;
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cgetrfnpi inputs: m %" FLA_IS ", n %" FLA_IS ", nfact %" FLA_IS
-                      ", lda %" FLA_IS "",
-                      *m, *n, *nfact, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(cgetrfnpi_check(m, n, nfact, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK( cgetrfnpi_check( m, n, nfact,
+                                              buff_A, ldim_A,
+                                              info ) )
     }
-    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_getrfnpi_body(c)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
 LAPACK_getrfnpi(z)
 {
-    int fla_error = LAPACK_SUCCESS;
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgetrfnpi inputs: m %" FLA_IS ", n %" FLA_IS ", nfact %" FLA_IS
-                      ", lda %" FLA_IS "",
-                      *m, *n, *nfact, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(zgetrfnpi_check(m, n, nfact, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK( zgetrfnpi_check( m, n, nfact,
+                                              buff_A, ldim_A,
+                                              info ) )
     }
-    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_getrfnpi_body(z)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
+
 
 #endif

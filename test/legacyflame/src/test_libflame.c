@@ -65,6 +65,8 @@ char libfla_test_storage_format_string[ 100 ];
 char libfla_test_stor_chars[ NUM_STORAGE_CHARS + 1 ];
 void libfla_test_read_tests_for_op_ext( FILE* input_stream, test_op_t* op );
 void libfla_test_output_op_struct_ext( char* op_str, test_op_t op );
+void libfla_test_read_tests_for_op_fla_ext( FILE* input_stream, test_op_t* op );
+void libfla_test_output_op_struct_fla_ext( char* op_str, test_op_t op );
 
 int main( int argc, char** argv )
 {
@@ -147,7 +149,7 @@ void libfla_test_lapack_suite( FILE* output_stream, test_params_t params, test_o
 	libfla_test_output_info( "\n" );
 	libfla_test_output_info( "--- LAPACK-level operation tests ---------------------\n" );
 	libfla_test_output_info( "\n" );
-	
+
   // Cholesky factorization.
 	libfla_test_chol( output_stream, params, ops.chol );
 
@@ -290,6 +292,10 @@ void libfla_test_read_operation_file( char* input_filename, test_ops_t* ops )
 	// Read the operation tests for LU_nopiv factorization.
 	libfla_test_read_tests_for_op_ext( input_stream, &(ops->lu_nopiv) );
 	libfla_test_output_op_struct_ext( "lu_nopiv", ops->lu_nopiv );
+
+	//Read the operation tests for LU_nopiv_i factorization
+	libfla_test_read_tests_for_op_fla_ext( input_stream, &(ops->lu_nopiv_i) );
+	libfla_test_output_op_struct_fla_ext( "lu_nopiv_i", ops->lu_nopiv_i );
 
 	// Read the operation tests for LU_piv factorization.
 	libfla_test_read_tests_for_op_ext( input_stream, &(ops->lu_piv) );
@@ -515,54 +521,6 @@ void libfla_test_read_tests_for_op_ext( FILE* input_stream, test_op_t* op )
 	int  fla_opt_vars;
 	int  fla_blk_vars;
 	int  fla_blk_ext;
-
-	// Read the line for the overall operation switch.
-	libfla_test_read_next_line( buffer, input_stream );
-	sscanf( buffer, "%d ", &op_switch );
-
-	// Read the line for the FLASH front-end.
-	libfla_test_read_next_line( buffer, input_stream );
-	sscanf( buffer, "%d ", &flash_front );
-
-	// Read the line for the FLA front-end.
-	libfla_test_read_next_line( buffer, input_stream );
-	sscanf( buffer, "%d ", &fla_front );
-
-	// Read the line for the unblocked variants.
-	libfla_test_read_next_line( buffer, input_stream );
-	sscanf( buffer, "%d ", &fla_unb_vars );
-
-	// Read the line for the optimized unblocked variants.
-	libfla_test_read_next_line( buffer, input_stream );
-	sscanf( buffer, "%d ", &fla_opt_vars );
-
-	// Read the line for the blocked variants.
-	libfla_test_read_next_line( buffer, input_stream );
-	sscanf( buffer, "%d ", &fla_blk_vars );
-
-	// Read the line for the blocked external variant.
-	libfla_test_read_next_line( buffer, input_stream );
-	sscanf( buffer, "%d ", &fla_blk_ext );
-
-	if ( op_switch == DISABLE_ALL )
-	{
-		op->flash_front  = DISABLE;
-		op->fla_front    = DISABLE;
-		op->fla_unb_vars = DISABLE;
-		op->fla_opt_vars = DISABLE;
-		op->fla_blk_vars = DISABLE;
-		op->fla_blk_ext  = DISABLE;
-	}
-	else
-	{
-		op->flash_front  = flash_front;
-		op->fla_front    = fla_front;
-		op->fla_unb_vars = fla_unb_vars;
-		op->fla_opt_vars = fla_opt_vars;
-		op->fla_blk_vars = fla_blk_vars;
-		op->fla_blk_ext  = fla_blk_ext;
-	}
-}
 
 	// Read the line for the overall operation switch.
 	libfla_test_read_next_line( buffer, input_stream );
@@ -958,10 +916,10 @@ void libfla_test_read_parameter_file( char* input_filename, test_params_t* param
     #endif
 
 	// Read the partial number of matrix size for incomplete factorization.
-	libfla_test_read_next_line( buffer, input_stream );
-	sscanf( buffer, "%lu ", &(params->p_nfact) );
+        libfla_test_read_next_line( buffer, input_stream );
+	sscanf( buffer, "%d ", &(params->p_nfact) );
 
-	// Read the number of SuperMatrix threads to test with.
+        // Read the number of SuperMatrix threads to test with.
 	libfla_test_read_next_line( buffer, input_stream );
 	sscanf( buffer, "%u ", &(params->n_threads) );
 
@@ -1402,7 +1360,7 @@ void libfla_test_op_driver( char*         func_str,
 						  perf = residual = 0.0f;
 						}
 						else
-						{							
+						{
 						  f_exp( params,
 						       var,
 						       sc_str[sci],
@@ -1534,10 +1492,10 @@ void fill_string_with_n_spaces( char* str, unsigned int n_spaces )
 
 void libfla_test_obj_create( FLA_Datatype dt, FLA_Trans trans, char storage, fla_dim_t m, fla_dim_t n, FLA_Obj* A )
 {
-	fla_dim_t m_trans = m;
-	fla_dim_t n_trans = n;
-	fla_dim_t rs_g;
-	fla_dim_t cs_g;
+	dim_t m_trans = m;
+	dim_t n_trans = n;
+	dim_t rs_g;
+	dim_t cs_g;
 
 	if ( trans == FLA_TRANSPOSE || trans == FLA_CONJ_TRANSPOSE )
 	{

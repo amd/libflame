@@ -53,8 +53,8 @@ void libfla_test_lu_piv_impl( int         impl,
 void libfla_test_lu_piv_cntl_create( unsigned int var,
                                      fla_dim_t        b_alg_flat );
 void libfla_test_lu_piv_cntl_free( void );
-void FLA_GETRF( integer m,
-                integer n,
+void FLA_GETRF( int m,
+                int n,
                 FLA_Obj A_save,
                 FLA_Obj A,
                 FLA_Obj p_obj,
@@ -230,7 +230,7 @@ void libfla_test_lu_piv_experiment( test_params_t params,
 			libfla_test_lu_piv_impl( impl, A_test, p_test );
 		
 			time = FLA_Clock() - time;
-			time_min = fla_min( time_min, time );
+			time_min = min( time_min, time );
 		}
 	}
 
@@ -382,8 +382,8 @@ void libfla_test_lu_piv_impl( int     impl,
  *  FLA_GETRF calls LAPACK interface of
  *  LU Factorization with pivoting - getrf
  *  */
-void FLA_GETRF( integer m,
-                integer n,
+void FLA_GETRF( int m,
+                int n,
                 FLA_Obj A_save,
                 FLA_Obj A,
                 FLA_Obj p_obj,
@@ -391,18 +391,16 @@ void FLA_GETRF( integer m,
                 unsigned int n_repeats,
                 double* time_min_ )
 {
-        integer      info;
+        int          info;
         unsigned int i;
         double       time;
         double       time_min   = 1e9;
-	integer lda;
-	integer* p;
-	fla_dim_t* p_buff; 
+	int lda;
+	int* p;
 
-	lda     = (integer)FLA_Obj_col_stride( A );
-    p     = ( integer * ) FLA_malloc( fla_min( m, n ) * sizeof( integer ) );
-	p_buff = ( fla_dim_t * ) FLA_INT_PTR( p_obj );
-	        
+	lda     = (int)FLA_Obj_col_stride( A );
+        p     = ( int * ) FLA_INT_PTR( p_obj );
+        
         switch( datatype )
         {
                 case FLA_FLOAT:
@@ -417,7 +415,7 @@ void FLA_GETRF( integer m,
                            sgetrf_(&m, &n, buff_A, &lda, p, &info);
 
                            time = FLA_Clock() - time;
-                           time_min = fla_min( time_min, time );
+                           time_min = min( time_min, time );
                         }
                         break;
                 }
@@ -433,7 +431,7 @@ void FLA_GETRF( integer m,
                            dgetrf_(&m, &n, buff_A, &lda, p, &info);
 
                            time = FLA_Clock() - time;
-                           time_min = fla_min( time_min, time );
+                           time_min = min( time_min, time );
                         }
                         break;
                 }
@@ -449,7 +447,7 @@ void FLA_GETRF( integer m,
                            cgetrf_(&m, &n, buff_A, &lda, p, &info);
 
                            time = FLA_Clock() - time;
-                           time_min = fla_min( time_min, time );
+                           time_min = min( time_min, time );
                         }
                         break;
                 }
@@ -465,17 +463,11 @@ void FLA_GETRF( integer m,
                            zgetrf_(&m, &n, buff_A, &lda, p, &info);
 
                            time = FLA_Clock() - time;
-                           time_min = fla_min( time_min, time );
+                           time_min = min( time_min, time );
                         }
                         break;
                 }
         }
-		/* copy p to p_buff using explicit for */
-		for( i = 0; i < fla_min( m, n ); i++ )
-		{
-			p_buff[i] = (fla_dim_t)p[i];
-		}
-		FLA_free( p );
         *time_min_ = time_min;
 }
 

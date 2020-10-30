@@ -53,11 +53,11 @@ void libfla_test_chol_impl( int         impl,
 void libfla_test_chol_cntl_create( unsigned int var,
                                    fla_dim_t        b_alg_flat );
 void libfla_test_chol_cntl_free( void );
-void FLA_POTRF( char uplo,
-                integer n,
+void FLA_POTRF( char* uplo,
+                int n,
                 FLA_Obj A_save,
                 FLA_Obj A,
-                integer lda,
+                int lda,
                 FLA_Datatype datatype,
                 unsigned int n_repeats,
                 double* time_min_ );
@@ -160,9 +160,9 @@ void libfla_test_chol_experiment( test_params_t params,
 	double       time_min   = 1e9;
 	double       time;
 	unsigned int i;
-	uinteger m;
-	uinteger lda;
-	integer   m_input    = -1;
+	unsigned int m;
+	unsigned int lda;
+	signed int   m_input    = -1;
 	FLA_Uplo     uplo;
 	FLA_Obj      A, x, b, norm;
 	FLA_Obj      A_save;
@@ -233,7 +233,7 @@ void libfla_test_chol_experiment( test_params_t params,
 			libfla_test_chol_impl( impl, uplo, A_test );
 		
 			time = FLA_Clock() - time;
-			time_min = fla_min( time_min, time );
+			time_min = min( time_min, time );
 		}
 	}
 	// Perform a linear solve with the result.
@@ -370,16 +370,16 @@ void libfla_test_chol_impl( int impl,
  *  * FLA_POTRF calls LAPACK interface 
  *  Cholesky Factorization - potrf 
  *    * */
-void FLA_POTRF( char uplo,
-                integer n,
+void FLA_POTRF( char* uplo,
+                int n,
                 FLA_Obj A_save,
                 FLA_Obj A,
-                integer lda,
+                int lda,
                 FLA_Datatype datatype,
                 unsigned int n_repeats,
                 double* time_min_ )
 {
-        integer      info;
+        int          info;
         unsigned int i;
         double       time;
         double       time_min   = 1e9;
@@ -398,7 +398,7 @@ void FLA_POTRF( char uplo,
                            spotrf_(&uplo, &n, buff_A, &lda, &info);
 
                            time = FLA_Clock() - time;
-                           time_min = fla_min( time_min, time );
+                           time_min = min( time_min, time );
                         }
                         break;
                 }
@@ -414,7 +414,7 @@ void FLA_POTRF( char uplo,
                            dpotrf_(&uplo, &n, buff_A, &lda, &info);
 
                            time = FLA_Clock() - time;
-                           time_min = fla_min( time_min, time );
+                           time_min = min( time_min, time );
                         }
                         break;
                 }
@@ -430,7 +430,7 @@ void FLA_POTRF( char uplo,
                            cpotrf_(&uplo, &n, buff_A, &lda, &info);
 
                            time = FLA_Clock() - time;
-                           time_min = fla_min( time_min, time );
+                           time_min = min( time_min, time );
                         }
                         break;
                 }
@@ -446,7 +446,7 @@ void FLA_POTRF( char uplo,
                            zpotrf_(&uplo, &n, buff_A, &lda, &info);
 
                            time = FLA_Clock() - time;
-                           time_min = fla_min( time_min, time );
+                           time_min = min( time_min, time );
                         }
                         break;
                 }

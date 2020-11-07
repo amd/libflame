@@ -147,8 +147,8 @@ void libfla_test_lapack_suite( FILE* output_stream, test_params_t params, test_o
 	libfla_test_output_info( "\n" );
 	libfla_test_output_info( "--- LAPACK-level operation tests ---------------------\n" );
 	libfla_test_output_info( "\n" );
-
-    // Cholesky factorization.
+	
+  // Cholesky factorization.
 	libfla_test_chol( output_stream, params, ops.chol );
 
 	// LU factorization without pivoting.
@@ -958,10 +958,10 @@ void libfla_test_read_parameter_file( char* input_filename, test_params_t* param
     #endif
 
 	// Read the partial number of matrix size for incomplete factorization.
-        libfla_test_read_next_line( buffer, input_stream );
-	sscanf( buffer, "%d ", &(params->p_nfact) );
+	libfla_test_read_next_line( buffer, input_stream );
+	sscanf( buffer, "%lu ", &(params->p_nfact) );
 
-        // Read the number of SuperMatrix threads to test with.
+	// Read the number of SuperMatrix threads to test with.
 	libfla_test_read_next_line( buffer, input_stream );
 	sscanf( buffer, "%u ", &(params->n_threads) );
 
@@ -1460,22 +1460,29 @@ void libfla_test_op_driver( char*         func_str,
 void libfla_test_print_result_info(char  *func_param_str,
                                    char  *datatype_char,
                                    char  *sc_str,
-                                   integer    p_cur,
+                                   int    p_cur,
                                    double perf,
-                                   double time,
                                    double residual,
                                    char  *pass_str,
                                    int    nfact )
 {
 	char blank_str[32];
-	integer  n_spaces;
+	int  n_spaces;
 
 	n_spaces = MAX_FUNC_STRING_LENGTH - strlen( func_param_str );
 	fill_string_with_n_spaces( blank_str, n_spaces );
-  libfla_test_output_info( "   %s%s  %c|%-6s  %5u  %6.3lf  %6.10lf  %9.2le   %s for nfact=%d\n",
-                                 func_param_str, blank_str,
-                                 datatype_char, sc_str,
-                                 p_cur, perf, time, residual, pass_str, nfact );
+
+  if( pass_str[0] == 'P' )
+     libfla_test_output_info( "   %s%s  %c|%-6s  %5u  %6.3lf  %9.2le   %s\n",
+                                      func_param_str, blank_str,
+                                      datatype_char, sc_str,
+                                      p_cur, perf, residual, pass_str );
+  else
+     libfla_test_output_info( "   %s%s  %c|%-6s  %5u  %6.3lf  %9.2le   %s for nfact=%d\n",
+                                      func_param_str, blank_str,
+                                      datatype_char, sc_str,
+                                      p_cur, perf, residual, pass_str, nfact );
+
 }
 
 

@@ -1,17 +1,19 @@
 /*
-    Copyright (c) 2020-2025 Advanced Micro Devices, Inc.  All rights reserved.
+    Copyright (c) 2020 Advanced Micro Devices, Inc.  All rights reserved.
+    Oct 09, 2020
 */
 
 #include "FLA_f2c.h"
 
-extern void c_div(scomplex *, scomplex *, scomplex *);
+extern void c_div(complex *, complex *, complex *);
+extern integer cspr_(char *, integer *, complex *, complex *, integer *, complex *);
 
 /*! @brief Partial LDL' factorization without pivoting
     *
     * @details
     * \b Purpose:
     * \verbatim
-        CSPFFRT2 computes the partial factorization of a scomplex symmetric matrix A
+        CSPFFRT2 computes the partial factorization of a complex symmetric matrix A
         stored in packed format.
         The factorization has the form
             A = L*D*L**T
@@ -23,7 +25,7 @@ extern void c_div(scomplex *, scomplex *, scomplex *);
 
     * @param[in,out] ap
     ap is COMPLEX array, dimension (N*(N+1)/2)
-    On entry, the lower triangle of the symmetric matrix A, packed columnwise in a
+    On entry, the lower triangle of the symmetric matrix A, packed columnwise in a 
     linear array. The j-th column of A is stored in the array AP as follows:
             AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.
     On exit, the block diagonal matrix D and the multipliers used
@@ -67,48 +69,41 @@ extern void c_div(scomplex *, scomplex *, scomplex *);
 
     \endverbatim
     *  */
-
-void cspffrt2_fla(scomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, scomplex *work, scomplex *work2)
+void  cspffrt2_fla(complex *ap, integer *n, integer *ncolm, complex *work, complex *work2 )
 {
-    scomplex c__1;
-    aocl_int64_t i__1, k, kc;
-    scomplex r1;
-    scomplex c_b1 = {1., 0.};
-    aocl_int64_t ic__1 = 1;
+    complex c__1;
+    integer i__1, k, kc;
+    complex r1;
+    complex c_b1 =
+    {
+        1.,0.
+    };
+    integer ic__1 = 1;
 
     --ap;
     /* Factorize A as L*D*L**T using the lower triangle of A */
     /* K is the main loop index, increasing from 1 to ncolm in steps of 1 */
     kc = 1;
-    for(k = 1; k <= *ncolm; k++)
+    for( k = 1; k <= *ncolm; k++ )
     {
-        /* Update the trailing submatrix */
-        /* W(k) = L(k)*D(k) */
-        /* where L(k) is the k-th column of L */
+       /* Update the trailing submatrix */
+       /* W(k) = L(k)*D(k) */
+       /* where L(k) is the k-th column of L */
 
-        /* Skip trailing matrix update if zero diagonal element is encountered */
-        if(ap[kc].real == 0 && ap[kc].imag == 0)
-        {
-            c__1.real = 0;
-            c__1.imag = 0;
-        }
-        else
-        {
-            c_div(&c__1, &c_b1, &ap[kc]);
-        }
+       c_div(&c__1, &c_b1, &ap[kc]);
 
-        r1.real = -c__1.real;
-        r1.imag = -c__1.imag;
+       r1.r = -c__1.r;
+       r1.i = -c__1.i;
 
-        /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
-        /* A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T */
-        i__1 = *n - k;
-        aocl_lapack_cspr("Lower", &i__1, &r1, &ap[kc + 1], &ic__1, &ap[kc + *n - k + 1]);
+       /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
+       /* A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T */
+       i__1 = *n - k;
+       cspr_("Lower", &i__1, &r1, &ap[kc + 1], &ic__1, &ap[kc + *n - k + 1]);
 
-        ap[kc].real = c__1.real;
-        ap[kc].imag = c__1.imag;
+       ap[kc].r = c__1.r;
+       ap[kc].i = c__1.i;
 
-        kc = kc + *n - k + 1;
+       kc = kc + *n - k + 1;
     }
     return;
 }

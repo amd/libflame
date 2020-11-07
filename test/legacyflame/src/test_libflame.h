@@ -57,13 +57,13 @@ typedef struct
 	unsigned int  n_datatypes;
 	char          datatype_char[ MAX_NUM_DATATYPES + 1 ];
 	FLA_Datatype  datatype[ MAX_NUM_DATATYPES + 1 ];
-	fla_dim_t         b_flash;
-	fla_dim_t         b_alg_hier;
-	fla_dim_t         b_alg_flat;
-	fla_dim_t         p_first;
-	fla_dim_t         p_max;
-	fla_dim_t         p_inc;
-	int           p_nfact;
+	dim_t         b_flash;
+	dim_t         b_alg_hier;
+	dim_t         b_alg_flat;
+	dim_t         p_first;
+	dim_t         p_max;
+	dim_t         p_inc;
+	dim_t         p_nfact;
 	unsigned int  n_threads;
 	char          reaction_to_failure;
 } test_params_t;
@@ -100,7 +100,6 @@ typedef struct
 	test_op_t lu_piv;
 	test_op_t lu_incpiv;
 	test_op_t ldlt_nopiv_part;
-	test_op_t lu_nopiv_i;
 	test_op_t qrut;
 	test_op_t qrutinc;
 	test_op_t lqut;
@@ -202,9 +201,8 @@ void libfla_test_op_driver( char*         func_str,
 void libfla_test_print_result_info( char  *func_param_str,
                                     char  *datatype_char,
                                     char  *sc_str,
-                                    integer    p_cur,
+                                    int    p_cur,
                                     double perf,
-				    double time_min,
                                     double residual,
                                     char  *pass_str,
                                     int    nfact );

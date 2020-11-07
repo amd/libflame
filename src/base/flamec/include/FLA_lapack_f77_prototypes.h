@@ -2294,6 +2294,16 @@
 #define F77_claset F77_FUNC( claset , CLASET )
 #define F77_zlaset F77_FUNC( zlaset , ZLASET )
       
+      
+#define F77_sspffrt2 F77_FUNC( sspffrt2 , SSPFFRT2 )
+#define F77_dspffrt2 F77_FUNC( dspffrt2 , DSPFFRT2 )
+#define F77_cspffrt2 F77_FUNC( cspffrt2 , CSPFFRT2 )
+#define F77_zspffrt2 F77_FUNC( zspffrt2 , ZSPFFRT2 )
+      
+#define F77_sspffrtx F77_FUNC( sspffrtx , SSPFFRTX )
+#define F77_dspffrtx F77_FUNC( dspffrtx , DSPFFRTX )
+#define F77_cspffrtx F77_FUNC( cspffrtx , CSPFFRTX )
+#define F77_zspffrtx F77_FUNC( zspffrtx , ZSPFFRTX )
 
 // --- Cholesky factorization ---
 
@@ -2625,21 +2635,13 @@ int F77_dlaset( char* uplo, int* m, int* n, double*   alpha, double*   beta, dou
 int F77_claset( char* uplo, int* m, int* n, scomplex* alpha, scomplex* beta, scomplex* a, int* lda );
 int F77_zlaset( char* uplo, int* m, int* n, dcomplex* alpha, dcomplex* beta, dcomplex* a, int* lda );
 
-void LAPACK_EXPORT_sopgtr(char *uplo, aocl_int_t *n, float *ap, float *tau, float *q, aocl_int_t *ldq, float *work, aocl_int_t *info);
-void LAPACK_EXPORT_dopgtr(char *uplo, aocl_int_t *n, double *ap, double *tau, double *q, aocl_int_t *ldq, double *work, aocl_int_t *info);
-void LAPACK_EXPORT_sorcsd(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, char *signs, aocl_int_t *m, aocl_int_t *p, aocl_int_t *q, float *x11, aocl_int_t *ldx11, float *x12, aocl_int_t *ldx12, float *x21, aocl_int_t *ldx21, float *x22, aocl_int_t *ldx22, float *theta, float *u1, aocl_int_t *ldu1, float *u2, aocl_int_t *ldu2, float *v1t, aocl_int_t *ldv1t, float *v2t, aocl_int_t *ldv2t, float *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *info);
-void LAPACK_EXPORT_dorcsd(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, char *signs, aocl_int_t *m, aocl_int_t *p, aocl_int_t *q, double *x11, aocl_int_t *ldx11, double *x12, aocl_int_t *ldx12, double *x21, aocl_int_t *ldx21, double *x22, aocl_int_t *ldx22, double *theta, double *u1, aocl_int_t *ldu1, double *u2, aocl_int_t *ldu2, double *v1t, aocl_int_t *ldv1t, double *v2t, aocl_int_t *ldv2t, double *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *info);
-void LAPACK_EXPORT_sorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int_t *m, aocl_int_t *p, aocl_int_t *q, float *x11, aocl_int_t *ldx11, float * x21, aocl_int_t *ldx21, float *theta, float *u1, aocl_int_t *ldu1, float *u2, aocl_int_t *ldu2, float *v1t, aocl_int_t *ldv1t, float *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *info);
-void LAPACK_EXPORT_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int_t *m, aocl_int_t *p, aocl_int_t *q, double *x11, aocl_int_t *ldx11, double *x21, aocl_int_t *ldx21, double *theta, double *u1, aocl_int_t *ldu1, double *u2, aocl_int_t *ldu2, double *v1t, aocl_int_t *ldv1t, double *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *info);
-void LAPACK_EXPORT_sorghr(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, float *a, aocl_int_t *lda, float *tau, float *work, aocl_int_t *lwork, aocl_int_t *info);
-void LAPACK_EXPORT_dorghr(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, double *a, aocl_int_t *lda, double *tau, double *work, aocl_int_t *lwork, aocl_int_t *info);
-void LAPACK_EXPORT_sormhr(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, float *a, aocl_int_t *lda, float *tau, float * c__, aocl_int_t *ldc, float *work, aocl_int_t *lwork, aocl_int_t *info);
-void LAPACK_EXPORT_dormhr(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, double *a, aocl_int_t *lda, double * tau, double *c__, aocl_int_t *ldc, double *work, aocl_int_t *lwork, aocl_int_t *info);
-void LAPACK_EXPORT_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int_t *whtsvd, aocl_int_t *m, aocl_int_t *n, real *x, aocl_int_t *ldx, real *y, aocl_int_t *ldy, aocl_int_t *nrnk, real *tol, aocl_int_t *k, real *reig, real *imeig, real *z__, aocl_int_t *ldz, real *res, real *b, aocl_int_t *ldb, real *w, aocl_int_t *ldw, real *s, aocl_int_t *lds, real *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info);
-void LAPACK_EXPORT_dgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int_t *whtsvd, aocl_int_t *m, aocl_int_t *n, doublereal *x, aocl_int_t *ldx, doublereal *y, aocl_int_t *ldy, aocl_int_t *nrnk, doublereal *tol, aocl_int_t *k, doublereal *reig, doublereal *imeig, doublereal *z__, aocl_int_t *ldz, doublereal *res, doublereal *b, aocl_int_t *ldb, doublereal *w, aocl_int_t *ldw, doublereal *s, aocl_int_t *lds, doublereal *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info);
-void LAPACK_EXPORT_cgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int_t *whtsvd, aocl_int_t *m, aocl_int_t *n, scomplex *x, aocl_int_t *ldx, scomplex *y, aocl_int_t *ldy, aocl_int_t *nrnk, real *tol, aocl_int_t *k, scomplex *eigs, scomplex *z__, aocl_int_t *ldz, real *res, scomplex *b, aocl_int_t *ldb, scomplex *w, aocl_int_t *ldw, scomplex *s, aocl_int_t *lds, scomplex *zwork, aocl_int_t *lzwork, real *rwork, aocl_int_t *lrwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info);
-void LAPACK_EXPORT_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int_t *whtsvd, aocl_int_t *m, aocl_int_t *n, dcomplex *x, aocl_int_t *ldx, dcomplex *y, aocl_int_t *ldy, aocl_int_t *nrnk, doublereal *tol, aocl_int_t *k, dcomplex *eigs, dcomplex *z__, aocl_int_t *ldz, doublereal *res, dcomplex *b, aocl_int_t *ldb, dcomplex *w, aocl_int_t *ldw, dcomplex *s, aocl_int_t *lds, dcomplex *zwork, aocl_int_t *lzwork, doublereal *rwork, aocl_int_t *lrwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info);
-void LAPACK_EXPORT_sgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, aocl_int_t *whtsvd, aocl_int_t *m, aocl_int_t *n, real *f, aocl_int_t *ldf, real *x, aocl_int_t *ldx, real *y, aocl_int_t *ldy, aocl_int_t *nrnk, real *tol, aocl_int_t *k, real *reig, real *imeig, real *z__, aocl_int_t *ldz, real *res, real *b, aocl_int_t *ldb, real *v, aocl_int_t *ldv, real *s, aocl_int_t *lds, real *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info);
-void LAPACK_EXPORT_dgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, aocl_int_t *whtsvd, aocl_int_t *m, aocl_int_t *n, doublereal *f, aocl_int_t *ldf, doublereal *x, aocl_int_t *ldx, doublereal *y, aocl_int_t *ldy, aocl_int_t *nrnk, doublereal *tol, aocl_int_t *k, doublereal *reig, doublereal *imeig, doublereal *z__, aocl_int_t *ldz, doublereal *res, doublereal *b, aocl_int_t *ldb, doublereal *v, aocl_int_t *ldv, doublereal *s, aocl_int_t *lds, doublereal *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info);
-void LAPACK_EXPORT_cgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, aocl_int_t *whtsvd, aocl_int_t *m, aocl_int_t *n, scomplex *f, aocl_int_t *ldf, scomplex *x, aocl_int_t *ldx, scomplex *y, aocl_int_t *ldy, aocl_int_t *nrnk, real *tol, aocl_int_t *k, scomplex *eigs, scomplex *z__, aocl_int_t *ldz, real *res, scomplex *b, aocl_int_t *ldb, scomplex *v, aocl_int_t *ldv, scomplex *s, aocl_int_t *lds, scomplex *zwork, aocl_int_t *lzwork, real *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info);
-void LAPACK_EXPORT_zgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, aocl_int_t *whtsvd, aocl_int_t *m, aocl_int_t *n, dcomplex *f, aocl_int_t *ldf, dcomplex *x, aocl_int_t *ldx, dcomplex *y, aocl_int_t *ldy, aocl_int_t *nrnk, doublereal *tol, aocl_int_t *k, dcomplex *eigs, dcomplex *z__, aocl_int_t *ldz, doublereal *res, dcomplex *b, aocl_int_t *ldb, dcomplex *v, aocl_int_t *ldv, dcomplex *s, aocl_int_t *lds, dcomplex *zwork, aocl_int_t *lzwork, doublereal *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info);
+int F77_sspffrt2(float *ap, int *n, int * ncolm, float *work, float *work2);
+int F77_dspffrt2(double *ap, int *n, int * ncolm, double *work, double *work2);
+int F77_cspffrt2(scomplex *ap, int *n, int *ncolm, scomplex *work, scomplex *work2 );
+int F77_zspffrt2(dcomplex *ap, int *n, int *ncolm, dcomplex *work, dcomplex *work2 );
+
+int F77_sspffrtx(float *ap, int *n, int * ncolm, float *work, float *work2);
+int F77_dspffrtx(double *ap, int *n, int * ncolm, double *work, double *work2);
+int F77_cspffrtx(scomplex *ap, int *n, int *ncolm, scomplex *work, scomplex *work2 );
+int F77_zspffrtx(dcomplex *ap, int *n, int *ncolm, dcomplex *work, dcomplex *work2 );
+

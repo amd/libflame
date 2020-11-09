@@ -169,7 +169,8 @@ FLA_Error FLA_Househ2_UT_l_ops( fla_dim_t       m_x2,
   float    norm_x_2;
   float    norm_x;
   float    abs_chi_1_minus_alpha;
-  float    safmin, rsafmn, lchi1;
+  float    norm_x_2_div_abs_chi_1_minus_alpha;
+  float    safmin, rsafmn, sclf, lchi1;
   int      i_one = 1;
   int      i_two = 2;
   int      kn;
@@ -233,10 +234,8 @@ FLA_Error FLA_Househ2_UT_l_ops( fla_dim_t       m_x2,
   // if norm factor is very less
   //
   safmin = fla_slamch("S", 1) / fla_slamch("E", 1);
-  abs_chi_1_minus_alpha = fabs( chi_1_minus_alpha );
   kn = 0;
-
-  if( abs_chi_1_minus_alpha < safmin )
+  if( fabs( chi_1_minus_alpha ) < safmin )
   {
     rsafmn = 1.0F / safmin;
 
@@ -287,6 +286,8 @@ FLA_Error FLA_Househ2_UT_l_ops( fla_dim_t       m_x2,
     *tau = (1.0F + *tau) / 2.0F;
   }
 
+  *tau = -1.0F * alpha / chi_1_minus_alpha;
+
   //
   // Scale back alpha
   //
@@ -307,7 +308,7 @@ FLA_Error FLA_Househ2_UT_l_ops( fla_dim_t       m_x2,
 }
 
 
-FLA_Error FLA_Househ2_UT_l_opd( fla_dim_t       m_x2,
+FLA_Error FLA_Househ2_UT_l_opd( int       m_x2,
                                 double*   chi_1,
                                 double*   x2, fla_dim_t inc_x2,
                                 double*   tau )
@@ -318,8 +319,8 @@ FLA_Error FLA_Househ2_UT_l_opd( fla_dim_t       m_x2,
   double   chi_1_minus_alpha;
   double   norm_x_2;
   double   norm_x;
-  double   abs_chi_1_minus_alpha;
-  double   safmin, rsafmn, lchi1;
+  double   norm_x_2_div_abs_chi_1_minus_alpha;
+  double   safmin, rsafmn, sclf, lchi1;
   int      i_one = 1;
   int      i_two = 2;
   int      kn;
@@ -383,10 +384,8 @@ FLA_Error FLA_Househ2_UT_l_opd( fla_dim_t       m_x2,
   // if norm factor is very less
   //
   safmin = fla_dlamch("S", 1) / fla_dlamch("E", 1);
-  abs_chi_1_minus_alpha = fabs( chi_1_minus_alpha );
   kn = 0;
-
-  if( abs_chi_1_minus_alpha < safmin )
+  if( fabs( chi_1_minus_alpha ) < safmin )
   {
     rsafmn = 1. / safmin;
 
@@ -419,24 +418,7 @@ FLA_Error FLA_Househ2_UT_l_opd( fla_dim_t       m_x2,
   //        = alpha / ( alpha - chi_1 )
   //
 
-  if( abs_chi_1_minus_alpha >= safmin )
-  {
-    *tau = -1.0 * alpha / chi_1_minus_alpha;
-  }
-  else
-  {
-    //
-    // Brute force calculation for tau in case of low magnitude inputs
-    // to get desired accuracy:
-    //   tau := ( 1 + u_2' * u_2 ) / 2
-    //
-    bl1_ddot( BLIS1_NO_CONJUGATE,
-              m_x2,
-              x2, inc_x2,
-              x2, inc_x2,
-              tau );
-    *tau = (1.0 + *tau) / 2.0;
-  }
+  *tau = -1.0 * alpha / chi_1_minus_alpha;
 
   //
   // Scale back alpha
@@ -458,7 +440,7 @@ FLA_Error FLA_Househ2_UT_l_opd( fla_dim_t       m_x2,
 }
 
 
-FLA_Error FLA_Househ2_UT_l_opc( fla_dim_t       m_x2,
+FLA_Error FLA_Househ2_UT_l_opc( int       m_x2,
                                 scomplex* chi_1,
                                 scomplex* x2, fla_dim_t inc_x2,
                                 scomplex* tau )

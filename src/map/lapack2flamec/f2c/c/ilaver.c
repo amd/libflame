@@ -35,6 +35,7 @@
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
+/* > \date November 2019 */
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
@@ -66,7 +67,7 @@ void aocl_lapack_ilaver(aocl_int64_t *vers_major__, aocl_int64_t *vers_minor__, 
     /* ===================================================================== */
     /* ===================================================================== */
     *vers_major__ = 3;
-    *vers_minor__ = 5;
+    *vers_minor__ = 9;
     *vers_patch__ = 0;
     /* ===================================================================== */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

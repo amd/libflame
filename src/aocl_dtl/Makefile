@@ -8,8 +8,8 @@
 .PHONY: generate clean
 
 generate:
-	$(CC) -fPIC -c *.h *.c
-	$(CC) -shared -o libaocldtl.so *.o
+	gcc -fPIC -c *.h *.c
+	gcc -shared -o libaocldtl.so *.o
 	ar -rc libaocldtl.a *.o
 
 clean: cleanx

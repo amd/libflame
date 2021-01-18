@@ -38,298 +38,24 @@
   to solve a system of equations.
 */
 
-extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileName,
-                      const int8 *pi8FunctionName, uint32 ui32LineNumber, const int8 *pi8Message);
-int fla_thread_get_num_threads(void);
-/** Generated wrapper function */
-void sgetrf_(aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgetrf(m, n, buff_A, ldim_A, buff_p, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
+extern void DTL_Trace(
+		    uint8 ui8LogLevel,
+		    uint8 ui8LogType,
+		    const int8 *pi8FileName,
+		    const int8 *pi8FunctionName,
+		    uint32 ui32LineNumber,
+		    const int8 *pi8Message);
 
-    aocl_lapack_sgetrf(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void dgetrf_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgetrf(m, n, buff_A, ldim_A, buff_p, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dgetrf(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void cgetrf_(aocl_int_t *m, aocl_int_t *n, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgetrf(m, n, buff_A, ldim_A, buff_p, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgetrf(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void zgetrf_(aocl_int_t *m, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgetrf(m, n, buff_A, ldim_A, buff_p, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgetrf(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void sgetf2_(aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgetf2(m, n, buff_A, ldim_A, buff_p, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgetf2(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void dgetf2_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgetf2(m, n, buff_A, ldim_A, buff_p, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dgetf2(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void cgetf2_(aocl_int_t *m, aocl_int_t *n, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgetf2(m, n, buff_A, ldim_A, buff_p, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgetf2(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void zgetf2_(aocl_int_t *m, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgetf2(m, n, buff_A, ldim_A, buff_p, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgetf2(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-#define LAPACK_getrf(prefix)                                                                 \
-    void aocl_lapack_##prefix##getrf(aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                             aocl_int64_t * ldim_A, aocl_int_t * buff_p, aocl_int64_t * info)
-
-#ifndef FLA_ENABLE_SUPERMATRIX
-
-#if FLA_ENABLE_AMD_OPT /* FLA_ENABLE_AMD_OPT */
-/* FLA_ENABLE_AMD_OPT enables the code which selects algorithm variants based on size */
-#define LAPACK_getrf_body_d(prefix)                                                         \
-    extern fla_context fla_global_context;                                                  \
-    aocl_int64_t i = 0;                                                                     \
-    if(*m == 2 && *n == 2)                                                                  \
-    {                                                                                       \
-        FLA_LU_PIV_SMALL_D_2x2(i, *n, buff_A, ldim_A, buff_p, *info);                       \
-    }                                                                                       \
-    else if(*m == 3 && *n == 3)                                                             \
-    {                                                                                       \
-        FLA_LU_PIV_SMALL_D_3x3(i, *n, buff_A, ldim_A, buff_p, *info);                       \
-    }                                                                                       \
-    else if(*m == 4 && *n == 4)                                                             \
-    {                                                                                       \
-        FLA_LU_PIV_SMALL_D_4x4(i, *n, buff_A, ldim_A, buff_p, *info);                       \
-    }                                                                                       \
-    else if(*m <= FLA_DGETRF_SMALL_THRESH0 && *n <= FLA_DGETRF_SMALL_THRESH0)               \
-    {                                                                                       \
-        FLA_LU_piv_small_d_var0(m, n, buff_A, ldim_A, buff_p, info);                        \
-    }                                                                                       \
-    else                                                                                    \
-    {                                                                                       \
-        /* Initialize global context data */                                                \
-        aocl_fla_init();                                                                    \
-        if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2) && *m < FLA_DGETRF_SMALL_AVX2_THRESH0          \
-           && *n < FLA_DGETRF_SMALL_AVX2_THRESH0)                                           \
-        {                                                                                   \
-            /* Calling vectorized code when avx2 supported architecture detected */         \
-            fla_dgetrf_small_avx2(m, n, buff_A, ldim_A, buff_p, info);                      \
-        }                                                                                   \
-        else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *m < FLA_DGETRF_SMALL_AVX512_THRESH0 \
-                && *n < FLA_DGETRF_SMALL_AVX512_THRESH0)                                    \
-        {                                                                                   \
-            if(fla_thread_get_num_threads() != 1 && *m < FLA_DGETRF_SMALL_AVX512_THRESH1    \
-               && *n < FLA_DGETRF_SMALL_AVX512_THRESH1)                                     \
-            {                                                                               \
-                fla_dgetrf_small_avx512(m, n, buff_A, ldim_A, buff_p, info);                \
-            }                                                                               \
-            else                                                                            \
-            {                                                                               \
-                aocl_lapack_dgetrf2(m, n, buff_A, ldim_A, buff_p, info);                    \
-            }                                                                               \
-        }                                                                                   \
-        else                                                                                \
-        {                                                                                   \
-            FLA_LU_piv_d_parallel(m, n, buff_A, ldim_A, buff_p, info);                      \
-        }                                                                                   \
-    }
-
-#ifdef FLA_OPENMP_MULTITHREADING
-
-#define LAPACK_getrf_body_z(prefix)                                    \
-    if(*m <= FLA_ZGETRF_SMALL_THRESH && *n <= FLA_ZGETRF_SMALL_THRESH) \
-    {                                                                  \
-        FLA_LU_piv_z_var0(m, n, buff_A, ldim_A, buff_p, info);         \
-    }                                                                  \
-    else                                                               \
-    {                                                                  \
-        FLA_LU_piv_z_parallel(m, n, buff_A, ldim_A, buff_p, info);     \
-    }
-
-#else
-
-#define LAPACK_getrf_body_z(prefix) FLA_LU_piv_z_var0(m, n, buff_A, ldim_A, buff_p, info);
-
-#endif
-
-#define LAPACK_getrf_body_s(prefix)                                                         \
-    extern fla_context fla_global_context;                                                  \
-    integer i = 0;                                                                          \
-    if(*m == 2 && *n == 2)                                                                  \
-    {                                                                                       \
-        FLA_LU_PIV_SMALL_S_2x2(i, *n, buff_A, ldim_A, buff_p, *info);                         \
-    }                                                                                       \
-    else if(*m == 3 && *n == 3)                                                             \
-    {                                                                                       \
-        FLA_LU_PIV_SMALL_S_3x3(i, *n, buff_A, ldim_A, buff_p, *info);                         \
-    }                                                                                       \
-    else if(*m == 4 && *n == 4)                                                             \
-    {                                                                                       \
-        FLA_LU_PIV_SMALL_S_4x4(i, *n, buff_A, ldim_A, buff_p, *info);                         \
-    }                                                                                       \
-    else if(*m <= FLA_SGETRF_SMALL_THRESH0 && *n <= FLA_SGETRF_SMALL_THRESH0)               \
-    {                                                                                       \
-        FLA_LU_piv_small_s_var0(m, n, buff_A, ldim_A, buff_p, info);                        \
-    }                                                                                       \
-    else                                                                                    \
-    {                                                                                       \
-        /* Initialize global context data */                                                \
-        aocl_fla_init();                                                                    \
-        if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2) && *m < FLA_SGETRF_SMALL_AVX2_THRESH0          \
-           && *n < FLA_SGETRF_SMALL_AVX2_THRESH0)                                           \
-        {                                                                                   \
-            /* Calling vectorized code when avx2 supported architecture detected */         \
-            fla_sgetrf_small_avx2(m, n, buff_A, ldim_A, buff_p, info);                      \
-        }                                                                                   \
-        else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *m < FLA_SGETRF_SMALL_AVX512_THRESH0 \
-                && *n < FLA_SGETRF_SMALL_AVX512_THRESH0)                                    \
-        {                                                                                   \
-            /* Calling vectorized code when avx512 supported architecture detected */       \
-            fla_sgetrf_small_avx512(m, n, buff_A, ldim_A, buff_p, info);                    \
-        }                                                                                   \
-        else                                                                                \
-        {                                                                                   \
-            FLA_LU_piv_s_parallel(m, n, buff_A, ldim_A, buff_p, info);                      \
-        }                                                                                   \
-    }
-
-#else /* FLA_ENABLE_AMD_OPT */
-
-#define LAPACK_getrf_body_z LAPACK_getrf_body
-
-#define LAPACK_getrf_body_s LAPACK_getrf_body
-
-/* Original FLA path */
-#define LAPACK_getrf_body_d(prefix)                         \
-    FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);  \
-    FLA_Obj A, p;                                           \
-    integer min_m_n = fla_min(*m, *n);                      \
-    FLA_Error e_val = FLA_SUCCESS;                          \
-    FLA_Error init_result;                                  \
-    FLA_Bool skip = FALSE;                                  \
-                                                            \
-    FLA_Init_safe(&init_result);                            \
-                                                            \
-    FLA_Obj_create_without_buffer(datatype, *m, *n, &A);    \
-    FLA_Obj_attach_buffer(buff_A, 1, *ldim_A, &A);          \
-                                                            \
-    FLA_Obj_create_without_buffer(FLA_INT, min_m_n, 1, &p); \
-    FLA_Obj_attach_buffer(buff_p, 1, min_m_n, &p);          \
-                                                            \
-    e_val = FLA_LU_piv(A, p);                               \
-    FLA_Shift_pivots_to(FLA_LAPACK_PIVOTS, p);              \
-                                                            \
-    FLA_Obj_free_without_buffer(&A);                        \
-    FLA_Obj_free_without_buffer(&p);                        \
-                                                            \
-    FLA_Finalize_safe(init_result);                         \
-                                                            \
-    if(e_val != FLA_SUCCESS)                                \
-        *info = e_val + 1;
-
-#endif /* FLA_ENABLE_AMD_OPT */
+#define LAPACK_getrf(prefix)                                            \
+  int F77_ ## prefix ## getrf( int* m,                                  \
+                               int* n,                                  \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, int* ldim_A, \
+                               int* buff_p,                             \
+                               int* info )
 
 // Note that p should be set zero.
 #define LAPACK_getrf_body(prefix)                               \
+  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5); 		\
   FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);        \
   FLA_Obj      A, p;                                            \
   int          min_m_n    = min( *m, *n );                      \
@@ -356,6 +82,7 @@ void zgetf2_(aocl_int_t *m, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A,
   if ( e_val != FLA_SUCCESS ) *info = e_val + 1;                \
   else                        *info = 0;                        \
                                                                 \
+  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                  \
   return 0;
 
 LAPACK_getrf(s)

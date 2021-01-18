@@ -34,217 +34,46 @@
   completed.
 */
 
-extern int spotrf_check(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int64_t *info);
-extern int dpotrf_check(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *info);
-extern int cpotrf_check(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int64_t *info);
-extern int zpotrf_check(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int64_t *info);
-extern int lapack_spotrf(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int64_t *info);
-extern int lapack_dpotrf(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *info);
-extern int spotf2_check(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int64_t *info);
-extern int dpotf2_check(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *info);
-extern int cpotf2_check(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int64_t *info);
-extern int zpotf2_check(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int64_t *info);
-extern int lapack_spotf2(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int64_t *info);
-extern int lapack_dpotf2(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *info);
-extern int lapack_dpotrf_var1(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *info);
+extern void DTL_Trace(
+		    uint8 ui8LogLevel,
+		    uint8 ui8LogType,
+		    const int8 *pi8FileName,
+		    const int8 *pi8FunctionName,
+		    uint32 ui32LineNumber,
+		    const int8 *pi8Message);
 
-extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileName,
-                      const int8 *pi8FunctionName, uint32 ui32LineNumber, const int8 *pi8Message);
+#define LAPACK_potrf(prefix)                                    \
+  int F77_ ## prefix ## potrf( char* uplo,                      \
+                               int*  n,                         \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, \
+                               int*  ldim_A,                    \
+                               int*  info )
 
-/** Generated wrapper function */
-void spotrf_(char *uplo, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_spotrf(uplo, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_spotrf(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void dpotrf_(char *uplo, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dpotrf(uplo, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dpotrf(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void cpotrf_(char *uplo, aocl_int_t *n, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cpotrf(uplo, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cpotrf(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void zpotrf_(char *uplo, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zpotrf(uplo, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zpotrf(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void spotf2_(char *uplo, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_spotf2(uplo, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_spotf2(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void dpotf2_(char *uplo, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dpotf2(uplo, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dpotf2(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void cpotf2_(char *uplo, aocl_int_t *n, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cpotf2(uplo, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cpotf2(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void zpotf2_(char *uplo, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zpotf2(uplo, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zpotf2(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-#define LAPACK_potrf(prefix)                                                                 \
-    void aocl_lapack_##prefix##potrf(char *uplo, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                             aocl_int64_t * ldim_A, aocl_int64_t * info)
-
-#if FLA_ENABLE_AMD_OPT
-#define LAPACK_potrf_body_s(prefix)                   \
-    if(*n < FLA_POTRF_FLOAT_SMALL)                    \
-        lapack_spotf2(uplo, n, buff_A, ldim_A, info); \
-    else                                              \
-        lapack_spotrf(uplo, n, buff_A, ldim_A, info);
-
-#ifdef FLA_OPENMP_MULTITHREADING
-#define LAPACK_potrf_body_d(prefix)                                               \
-    {                                                                             \
-        /* Initialize global context data */                                      \
-        aocl_fla_init();                                                          \
-        if(*n < FLA_POTRF_DOUBLE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))    \
-            fla_dpotrf_small_avx512(uplo, n, buff_A, ldim_A, info);               \
-        else if(*n < FLA_POTRF_DOUBLE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) \
-            fla_dpotrf_small_avx2(uplo, n, buff_A, ldim_A, info);                 \
-        else if((*n >= FLA_POTRF_BLOCK_SIZE))                                     \
-            lapack_dpotrf_var1(uplo, n, buff_A, ldim_A, info);                    \
-        else if(*n < FLA_POTRF_DOUBLE_SMALL)                                      \
-            lapack_dpotf2(uplo, n, buff_A, ldim_A, info);                         \
-        else                                                                      \
-            lapack_dpotrf(uplo, n, buff_A, ldim_A, info);                         \
-    }
-#else
-#define LAPACK_potrf_body_d(prefix)                                               \
-    {                                                                             \
-        /* Initialize global context data */                                      \
-        aocl_fla_init();                                                          \
-        if(*n < FLA_POTRF_DOUBLE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))    \
-            fla_dpotrf_small_avx512(uplo, n, buff_A, ldim_A, info);               \
-        else if(*n < FLA_POTRF_DOUBLE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) \
-            fla_dpotrf_small_avx2(uplo, n, buff_A, ldim_A, info);                 \
-        else if(*n < FLA_POTRF_DOUBLE_SMALL)                                      \
-            lapack_dpotf2(uplo, n, buff_A, ldim_A, info);                         \
-        else                                                                      \
-            lapack_dpotrf(uplo, n, buff_A, ldim_A, info);                         \
-    }
-#endif
-#endif
-
-#define LAPACK_potrf_body(prefix)                          \
-    FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix); \
-    FLA_Uplo uplo_fla;                                     \
-    FLA_Obj A;                                             \
-    FLA_Error e_val = FLA_SUCCESS;                         \
-    FLA_Error init_result;                                 \
-    FLA_Init_safe(&init_result);                           \
-    FLA_Param_map_netlib_to_flame_uplo(uplo, &uplo_fla);   \
-                                                           \
-    FLA_Obj_create_without_buffer(datatype, *n, *n, &A);   \
-    FLA_Obj_attach_buffer(buff_A, 1, *ldim_A, &A);         \
-                                                           \
-    e_val = FLA_Chol(uplo_fla, A);                         \
-                                                           \
-    FLA_Obj_free_without_buffer(&A);                       \
-                                                           \
-    FLA_Finalize_safe(init_result);                        \
-                                                           \
-    if(e_val != FLA_SUCCESS)                               \
-        *info = e_val + 1;                                 \
-    else                                                   \
-        *info = 0;
+#define LAPACK_potrf_body(prefix)                               \
+  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5); 		\
+  FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);        \
+  FLA_Uplo     uplo_fla;                                        \
+  FLA_Obj      A;                                               \
+  FLA_Error    e_val;                                           \
+  FLA_Error    init_result;                                     \
+                                                                \
+  FLA_Init_safe( &init_result );                                \
+  FLA_Param_map_netlib_to_flame_uplo( uplo, &uplo_fla );        \
+                                                                \
+  FLA_Obj_create_without_buffer( datatype, *n, *n, &A );        \
+  FLA_Obj_attach_buffer( buff_A, 1, *ldim_A, &A );              \
+                                                                \
+  e_val = FLA_Chol( uplo_fla, A );                              \
+                                                                \
+  FLA_Obj_free_without_buffer( &A );                            \
+                                                                \
+  FLA_Finalize_safe( init_result );                             \
+                                                                \
+  if ( e_val != FLA_SUCCESS ) *info = e_val + 1;                \
+  else                        *info = 0;                        \
+                                                                \
+  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                  \
+  return 0;
 
 LAPACK_potrf(s)
 {

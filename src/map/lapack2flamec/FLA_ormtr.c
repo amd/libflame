@@ -211,19 +211,7 @@ LAPACK_ormtr(s, orm)
                       *side, *uplo, *trans, *m, *n, *ldim_A, *ldim_C);
 #if FLA_ENABLE_AMD_OPT
     {
-        sormtr_fla(side, uplo, trans, m, n, buff_A, ldim_A, buff_t, buff_C, ldim_C, buff_w, lwork,
-                   info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
-    }
-#else
-    {
-        int fla_error = LAPACK_SUCCESS;
-        LAPACK_RETURN_CHECK_VAR1(sormtr_check(side, uplo, trans, m, n, buff_A, ldim_A, buff_t,
-                                              buff_C, ldim_C, buff_w, lwork, info),
-                                 fla_error)
-
-        if(fla_error == LAPACK_SUCCESS)
+        if ( *uplo == 'U' || *uplo == 'u' )
         {
             LAPACK_ormtr_body(s)
                 /** fla_error set to 0 on LAPACK_SUCCESS */
@@ -243,19 +231,7 @@ LAPACK_ormtr(d, orm)
                       *side, *uplo, *trans, *m, *n, *ldim_A, *ldim_C);
 #if FLA_ENABLE_AMD_OPT
     {
-        dormtr_fla(side, uplo, trans, m, n, buff_A, ldim_A, buff_t, buff_C, ldim_C, buff_w, lwork,
-                   info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
-    }
-#else
-    {
-        int fla_error = LAPACK_SUCCESS;
-        LAPACK_RETURN_CHECK_VAR1(dormtr_check(side, uplo, trans, m, n, buff_A, ldim_A, buff_t,
-                                              buff_C, ldim_C, buff_w, lwork, info),
-                                 fla_error)
-
-        if(fla_error == LAPACK_SUCCESS)
+        if ( *uplo == 'U' || *uplo == 'u' )
         {
             LAPACK_ormtr_body(d)
                 /** fla_error set to 0 on LAPACK_SUCCESS */
@@ -277,7 +253,7 @@ LAPACK_ormtr(c, unm)
                       ", lda %" FLA_IS ", ldc %" FLA_IS "\n",
                       *side, *uplo, *trans, *m, *n, *ldim_A, *ldim_C);
     {
-        if(*uplo == 'U' || *uplo == 'u')
+        if ( *uplo == 'U' || *uplo == 'u' )
         {
             cunmtr_fla(side, uplo, trans, m, n, (scomplex *)buff_A, ldim_A, (scomplex *)buff_t,
                        (scomplex *)buff_C, ldim_C, (scomplex *)buff_w, lwork, info);
@@ -308,7 +284,7 @@ LAPACK_ormtr(z, unm)
                       ", lda %" FLA_IS ", ldc %" FLA_IS "\n",
                       *side, *uplo, *trans, *m, *n, *ldim_A, *ldim_C);
     {
-        if(*uplo == 'U' || *uplo == 'u')
+        if ( *uplo == 'U' || *uplo == 'u' )
         {
             zunmtr_fla(side, uplo, trans, m, n, (dcomplex *)buff_A, ldim_A,
                        (dcomplex *)buff_t, (dcomplex *)buff_C, ldim_C,

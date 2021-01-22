@@ -166,18 +166,7 @@ LAPACK_orgtr(s, org)
     AOCL_DTL_SNPRINTF("sorgtr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *m, *ldim_A);
 #if FLA_ENABLE_AMD_OPT
     {
-        sorgtr_fla(uplo, m, buff_A, ldim_A, buff_t, buff_w, lwork, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
-    }
-#else
-    {
-
-        int fla_error = LAPACK_SUCCESS;
-        LAPACK_RETURN_CHECK_VAR1(sorgtr_check(uplo, m, buff_A, ldim_A, buff_t, buff_w, lwork, info),
-                                 fla_error)
-
-        if(fla_error == LAPACK_SUCCESS)
+        if ( *uplo == 'U' || *uplo == 'u' )
         {
             LAPACK_orgtr_body(s)
                 /** fla_error set to 0 on LAPACK_SUCCESS */
@@ -196,16 +185,7 @@ LAPACK_orgtr(d, org)
     AOCL_DTL_SNPRINTF("dorgtr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *m, *ldim_A);
 #if FLA_ENABLE_AMD_OPT
     {
-        dorgtr_fla(uplo, m, buff_A, ldim_A, buff_t, buff_w, lwork, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
-    }
-#else
-    {
-        int fla_error = LAPACK_SUCCESS;
-        LAPACK_RETURN_CHECK_VAR1(dorgtr_check(uplo, m, buff_A, ldim_A, buff_t, buff_w, lwork, info),
-                                 fla_error)
-        if(fla_error == LAPACK_SUCCESS)
+        if ( *uplo == 'U' || *uplo == 'u' )
         {
             LAPACK_orgtr_body(d)
                 /** fla_error set to 0 on LAPACK_SUCCESS */
@@ -225,7 +205,7 @@ LAPACK_orgtr(c, ung)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cungtr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *m, *ldim_A);
     {
-        if(*uplo == 'U' || *uplo == 'u')
+        if ( *uplo == 'U' || *uplo == 'u' )
         {
             cungtr_fla(uplo, m, (scomplex *)buff_A, ldim_A, (scomplex *)buff_t, (scomplex *)buff_w,
                        lwork, info);
@@ -253,7 +233,7 @@ LAPACK_orgtr(z, ung)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zungtr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *m, *ldim_A);
     {
-        if(*uplo == 'U' || *uplo == 'u')
+        if ( *uplo == 'U' || *uplo == 'u' )
         {
             zungtr_fla(uplo, m, (dcomplex *)buff_A, ldim_A, (dcomplex *)buff_t,
                        (dcomplex *)buff_w, lwork, info);

@@ -232,9 +232,7 @@ LAPACK_hetrd(s, sy)
                       *ldim_A);
 #if FLA_ENABLE_AMD_OPT
     {
-        // Workspace query (lwork < 1): ssytd2_fla needs no workspace,
-        // but delegate to ssytrd_fla so work[0] gets a consistent optimal size.
-        if(*m <= FLA_SSYTD2_SMALL_THRESH)
+        if ( *uplo == 'U' || *uplo == 'u' )
         {
             if(*lwork < 1)
             {
@@ -281,18 +279,7 @@ LAPACK_hetrd(d, sy)
                       *ldim_A);
 #if FLA_ENABLE_AMD_OPT
     {
-        dsytrd_fla(uplo, m, buff_A, ldim_A, buff_d, buff_e, buff_t, buff_w, lwork, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
-    }
-#else // Code below is unreachable if FLA_ENABLE_AMD_OPT is true
-    {
-        int fla_error = LAPACK_SUCCESS;
-        LAPACK_RETURN_CHECK_VAR1(
-            dsytrd_check(uplo, m, buff_A, ldim_A, buff_d, buff_e, buff_t, buff_w, lwork, info),
-            fla_error)
-
-        if(fla_error == LAPACK_SUCCESS)
+        if ( *uplo == 'U' || *uplo == 'u' )
         {
             LAPACK_hetrd_body(d)
                 /** fla_error set to 0 on LAPACK_SUCCESS */
@@ -312,7 +299,7 @@ LAPACK_hetrd(c, he)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("chetrd inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *m, *ldim_A);
     {
-        if(*uplo == 'U' || *uplo == 'u')
+        if ( *uplo == 'U' || *uplo == 'u' )
         {
             chetrd_fla(uplo, m, (scomplex *)buff_A, ldim_A, (real *)buff_d, (real *)buff_e,
                        (scomplex *)buff_t, (scomplex *)buff_w, lwork, info);
@@ -341,7 +328,7 @@ LAPACK_hetrd(z, he)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetrd inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *m, *ldim_A);
     {
-        if(*uplo == 'U' || *uplo == 'u')
+        if ( *uplo == 'U' || *uplo == 'u' )
         {
             zhetrd_fla(uplo, m, (dcomplex *)buff_A, ldim_A, (doublereal *)buff_d,
                        (doublereal *)buff_e, (dcomplex *)buff_t, (dcomplex *)buff_w,
@@ -380,7 +367,7 @@ LAPACK_hetd2(s, sy)
     AOCL_DTL_SNPRINTF("hetd2-ssytd2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *m,
                       *ldim_A);
     {
-        if(*uplo == 'U' || *uplo == 'u')
+        if ( *uplo == 'U' || *uplo == 'u' )
         {
             ssytd2_fla(uplo, m, buff_A, ldim_A, buff_d, buff_e, buff_t, info);
             AOCL_DTL_TRACE_LOG_EXIT
@@ -408,7 +395,7 @@ LAPACK_hetd2(d, sy)
     AOCL_DTL_SNPRINTF("hetd2-dsytd2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *m,
                       *ldim_A);
     {
-        if(*uplo == 'U' || *uplo == 'u')
+        if ( *uplo == 'U' || *uplo == 'u' )
         {
             dsytd2_fla(uplo, m, buff_A, ldim_A, buff_d, buff_e, buff_t, info);
             AOCL_DTL_TRACE_LOG_EXIT
@@ -437,7 +424,7 @@ LAPACK_hetd2(c, he)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("chetd2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *m, *ldim_A);
     {
-        if(*uplo == 'U' || *uplo == 'u')
+        if ( *uplo == 'U' || *uplo == 'u' )
         {
             chetd2_fla(uplo, m, (scomplex *)buff_A, ldim_A, (real *)buff_d, (real *)buff_e,
                        (scomplex *)buff_t, info);
@@ -465,7 +452,7 @@ LAPACK_hetd2(z, he)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetd2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *m, *ldim_A);
     {
-        if(*uplo == 'U' || *uplo == 'u')
+        if ( *uplo == 'U' || *uplo == 'u' )
         {
             zhetd2_fla(uplo, m, (dcomplex *)buff_A, ldim_A, (doublereal *)buff_d,
                        (doublereal *)buff_e, (dcomplex *)buff_t, info);

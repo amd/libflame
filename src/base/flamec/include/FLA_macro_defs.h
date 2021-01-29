@@ -221,112 +221,13 @@
 #define FLA_BIDIAG_INNER_TO_OUTER_B_RATIO  (0.25)
 #define FLA_CAQR_INNER_TO_OUTER_B_RATIO    (0.25)
 
-// Matrix size thresholds for choosing unbloked non-FLA variant of QR for
-// small matrices
-#define FLA_GEQRF_STHRESH (32)
-#define FLA_GEQRF_BLOCK_SIZE (32)
-
-// Matrix size thresholds for choosing multithreaded QR for large matrices
-#define FLA_DGEQRF_MT_LARGE_M_THRESH (128)
-#define FLA_DGEQRF_MT_LARGE_N_THRESH (128)
-#define FLA_DGEQRF_MT_LARGE_PANEL_SIZE (16)
-#define FLA_DGEQRF_MT_THRESHOLD_8_THREADS (15848840)
-
-// Matrix size thresholds for choosing transposed QR for LQ
-#define FLA_DELQF_TRAN_THRESH (1280)
-
-//POTRF, threshold numbers to chose paths for performance
-#define FLA_POTRF_FLOAT_SMALL         (70)
-#define FLA_POTRF_DOUBLE_SMALL        (75)
-#define FLA_DPOTRF_LOWER_SMALL        (18)
-#define FLA_DPOTRF_LOWER_MEDIUM       (75)
-#define FLA_DPOTRF_UPPER_MEDIUM       (50)
-#define FLA_POTRF_BLOCK_SIZE          (256)
-
-// POTRI threshold numbers to chose paths for performance
-#define FLA_POTRI_DOUBLE_SMALL        (65)
-
-//GETRF , threshold numbers to chose paths for performance
-#define TALL_RATIO_THRESHOLD 1.5
-#define WIDE_RATIO_THRESHOLD 0.67
-#define FLA_GETRF_SMALL               (85)
-#define FLA_GETRF_FLOAT               (1440)
-#define FLA_GETRF_COMPLEX             (670)
-#define FLA_GETRF_DOUBLE_COMPLEX      (1630)
-
-#define FLA_SGETRF_SMALL_THRESH1      (117)
-#define FLA_SGETRF_MEDIUM_THRESH0     (480)
-
-#define FLA_SGETRF_SMALL_THRESH0      (7)
-#define FLA_SGETRF_SMALL_AVX2_THRESH0      (31)
-#define FLA_SGETRF_SMALL_AVX512_THRESH0    (156)
-
-#define FLA_DGETRF_SMALL_THRESH0      (8)
-#define FLA_DGETRF_SMALL_AVX2_THRESH0      (81)
-#define FLA_DGETRF_SMALL_AVX512_THRESH0    (160)
-#define FLA_DGETRF_SMALL_AVX512_THRESH1    (128)
-
-#define FLA_ZGETRF_SMALL_THRESH      (100)
-
-#define FLA_SSYTD2_SMALL_THRESH      (256)
-// GETRFNPI , these thresholds are used to chose between 3 algorithms to get best
-// results in terms of perfmormance
-#define FLA_MN_SIZE            (373321)
-#define FLA_NFACT_PERCENT      (0.51)
-#define FLA_FULL_DGER_CONSTANT (200)
-
-// ORGQR , threshold numbers to chose paths for performance
-#define FLA_DGEMV_DGER_SIMD_SMALL_THRESH   (128)
-#define FLA_DGEMV_DGER_SIMD_SMALL_THRESH_M (6)
-#define FLA_DGEMV_DGER_SIMD_AVX512_THRESH_M (25)
-#define FLA_ZGEMV_ZGER_SIMD_AXV2_THRESH_M (8)
-#define FLA_ZGEMV_ZGER_SIMD_AXV512_THRESH_M (49)
-#define FLA_SSCAL_INLINE_SMALL          (512)
-#define FLA_DSCAL_INLINE_SMALL          (512)
-#define FLA_ZGERC_INLINE_SMALL_THRESH0  (128)
-#define FLA_ZGERC_INLINE_SMALL_THRESH1  (32)
-#define FLA_ZSCAL_INLINE_SMALL          (128)
-#define FLA_ZUNGQR_BLOCK_SMALL_THRESH   (32)
-
-/* DLARF , threshold numbers to choose paths for performance */
-#define FLA_DLARF_L_ST_BLOCKED_THRESH_M (1000)
-#define FLA_DLARF_L_ST_BLOCKED_THRESH_N (100)
-#define FLA_DLARF_L_THRESH_UNBLOCKED (213760)
-#define FLA_DLARF_L_THRESH_THREAD_8 (1048576)
-#define FLA_DLARF_L_THRESH_THREAD_64 (45198729)
-
-#define FLA_DLARF_R_THRESH_UNBLOCKED (15000)
-#define FLA_DLARF_R_THRESH_THREAD_8 (6553600)
-#define FLA_DLARF_R_THRESH_THREAD_64 (45198729)
-#define FLA_DLARF_R_BLOCK_SIZE (16)
-
-/* DLARFT , threshold numbers to chose paths for performance */
-#define FLA_DLARFT_BLOCK_NB (16)
-
-
-#define FLA_ZLANGEM_SIMD_AVX512_THRESH_M (15)
-#define FLA_CLANGEM_SIMD_AVX512_THRESH_M (15)
-
-// DNRM2 threshold numbers to chose AVX kernel
-#define FLA_DNRM2_SMALL_THRESH0  (15)
-
-// GEQP3 , threshold numbers to chose paths for performance
-#define FLA_IDAMAX_INLINE_SMALL_THRESH   (128)
-#define FLA_DGEQP3_BLOCK_SMALL_THRESH    (32)
-#define FLA_ZGEQP3_BLOCK_SMALL_THRESH    (32)
-
-// DGESVD, DGESDD thresholds for small size optimization
-#define FLA_DGESVD_SMALL_SIZE_THRESH0    (16)
-#define FLA_DGESVD_SMALL_SIZE_THRESH1    (128)
-#define FLA_DGESVD_SMALL_SIZE_THRESH2    (386)
-#define FLA_DGESDD_SMALL_SIZE_THRESH     (40)
-
-// TRTRI, threshold numbers to chose paths for performance
-#define FLA_TRTRI_SMALL_THRESH0      (60)
-
-// DGEBRD and DGEBD2 thresholds for lapack_API based code path for small sizes
-#define FLA_DGEBRD_SMALL_SIZE_THRESH    (128)
-#define FLA_DGEBD2_SMALL_SIZE_THRESH   (140)
+// LDLT Factorization for packed matrices uses different threshold to choose
+// between blocked /  unblocked variants and also the blocksize for the blocked
+// variant. The thresholds are defined here
+#define FLA_SPFFRT2__NTHRESH    (201)
+#define FLA_SPFFRT2__NCOLTHRESH (3)
+#define FLA_SPFFRT2__BSIZE_NL1  (256)
+#define FLA_SPFFRT2__BSIZE_NL2  (4096)
 
 // --- Error-related macro definitions -----------------------------------------
 

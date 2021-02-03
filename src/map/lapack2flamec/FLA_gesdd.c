@@ -54,83 +54,56 @@ void sgesdd_(char *jobz, aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t 
 
     aocl_lapack_sgesdd(jobz, &m_64, &n_64, buff_A, &ldim_A_64, buff_s, buff_U, &ldim_U_64, buff_Vh, &ldim_Vh_64, buff_w, &lwork_64, buff_i, &info_64);
 
-    *info = (aocl_int_t)info_64;
-#endif
-}
+#define LAPACK_gesdd_real_body(prefix)                                  \
+  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                 	\
+  char jobu[1], jobv[1];                                                \
+                                                                        \
+  if ( *jobz == 'O' ) {                                                 \
+    if ( *m >= *n ) {                                                   \
+      jobu[0] = 'O'; jobv[0] = 'A';                                     \
+    } else {                                                            \
+      jobu[0] = 'A'; jobv[0] = 'O';                                     \
+    }                                                                   \
+  } else {                                                              \
+    jobu[0] = *jobz; jobv[0] = *jobz;                                   \
+  }                                                                     \
+                                                                        \
+  F77_ ## prefix ## gesvd( jobu, jobv,                                  \
+                           m, n,                                        \
+                           buff_A,  ldim_A,                             \
+                           buff_s,                                      \
+                           buff_U,  ldim_U,                             \
+                           buff_Vh, ldim_Vh,                            \
+                           buff_w,  lwork,                              \
+                           info );                                      \
+  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                  	\
+  return 0;
 
-/** Generated wrapper function */
-void dgesdd_(char *jobz, aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_s, doublereal *buff_U, aocl_int_t *ldim_U, doublereal *buff_Vh, aocl_int_t *ldim_Vh, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *buff_i, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgesdd(jobz, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, ldim_Vh, buff_w, lwork, buff_i, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t ldim_U_64 = *ldim_U;
-    aocl_int64_t ldim_Vh_64 = *ldim_Vh;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dgesdd(jobz, &m_64, &n_64, buff_A, &ldim_A_64, buff_s, buff_U, &ldim_U_64, buff_Vh, &ldim_Vh_64, buff_w, &lwork_64, buff_i, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-extern int lapack_sgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda,
-                         real *s, real *u, aocl_int64_t *ldu, real *vt, aocl_int64_t *ldvt, real *work,
-                         aocl_int64_t *lwork, aocl_int64_t *info);
-extern int lapack_dgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, doublereal *a,
-                         aocl_int64_t *lda, doublereal *s, doublereal *u, aocl_int64_t *ldu, doublereal *vt,
-                         aocl_int64_t *ldvt, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
-
-#define LAPACK_gesdd_real(prefix)                                                   \
-    void aocl_lapack_##prefix##gesdd(                                                       \
-        char *jobz, aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-        aocl_int64_t * ldim_A, PREFIX2LAPACK_REALDEF(prefix) * buff_s,                   \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_U, aocl_int64_t * ldim_U,                   \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_Vh, aocl_int64_t * ldim_Vh,                 \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork, aocl_int_t * buff_i, aocl_int64_t * info)
-
-#define LAPACK_gesdd_complex(prefix)                                                \
-    void F77_##prefix##gesdd(                                                       \
-        char *jobz, integer *m, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-        integer * ldim_A, PREFIX2LAPACK_REALDEF(prefix) * buff_s,                   \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_U, integer * ldim_U,                   \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_Vh, integer * ldim_Vh,                 \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork,                    \
-        PREFIX2LAPACK_REALDEF(prefix) * buff_r, integer * buff_i, integer * info)
-
-#define LAPACK_gesdd_real_body(prefix)                                                        \
-                                                                                              \
-    lapack_##prefix##gesvd(jobu, jobv, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, \
-                           ldim_Vh, buff_w, lwork, info);
-
-#define LAPACK_gesdd_complex_body(prefix)                                                  \
-    char jobu[1], jobv[1];                                                                 \
-                                                                                           \
-    if(lsame_(jobz, "O", 1, 1))                                                            \
-    {                                                                                      \
-        if(*m >= *n)                                                                       \
-        {                                                                                  \
-            jobu[0] = 'O';                                                                 \
-            jobv[0] = 'A';                                                                 \
-        }                                                                                  \
-        else                                                                               \
-        {                                                                                  \
-            jobu[0] = 'A';                                                                 \
-            jobv[0] = 'O';                                                                 \
-        }                                                                                  \
-    }                                                                                      \
-    else                                                                                   \
-    {                                                                                      \
-        jobu[0] = *jobz;                                                                   \
-        jobv[0] = *jobz;                                                                   \
-    }                                                                                      \
-                                                                                           \
-    F77_##prefix##gesvd(jobu, jobv, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, \
-                        ldim_Vh, buff_w, lwork, buff_r, info);
+#define LAPACK_gesdd_complex_body(prefix)                               \
+  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                         \
+  char jobu[1], jobv[1];                                                \
+                                                                        \
+  if ( *jobz == 'O' ) {                                                 \
+    if ( *m >= *n ) {                                                   \
+      jobu[0] = 'O'; jobv[0] = 'A';                                     \
+    } else {                                                            \
+      jobu[0] = 'A'; jobv[0] = 'O';                                     \
+    }                                                                   \
+  } else {                                                              \
+    jobu[0] = *jobz; jobv[0] = *jobz;                                   \
+  }                                                                     \
+                                                                        \
+  F77_ ## prefix ## gesvd( jobu, jobv,                                  \
+                           m, n,                                        \
+                           buff_A,  ldim_A,                             \
+                           buff_s,                                      \
+                           buff_U,  ldim_U,                             \
+                           buff_Vh, ldim_Vh,                            \
+                           buff_w,  lwork,                              \
+                           buff_r,                                      \
+                           info );                                      \
+  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                          \
+  return 0;
 
 LAPACK_gesdd_real(s)
 {

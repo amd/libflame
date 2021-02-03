@@ -18,6 +18,12 @@ int cungbr_check(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, 
     aocl_int64_t lwkopt;
     logical lquery;
 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    sprintf(buffer, "cungbr inputs: vect %c, m %d, n %d, k %d, lda %d\n", *vect, *m, *n, *k, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
+
     /* Parameter adjustments */
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;

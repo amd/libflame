@@ -60,7 +60,82 @@ void ssytrd_(char *uplo, aocl_int_t *m, real *buff_A, aocl_int_t *ldim_A, real *
     aocl_int64_t lwork_64 = *lwork;
     aocl_int64_t info_64 = *info;
 
-    aocl_lapack_ssytrd(uplo, &m_64, buff_A, &ldim_A_64, buff_d, buff_e, buff_t, buff_w, &lwork_64, &info_64);
+#define LAPACK_hetrd_body(prefix)                                     \
+  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                       \
+  FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);              \
+  FLA_Datatype dtype_re = PREFIX2FLAME_REALTYPE(prefix);              \
+  dim_t        m_d      = *m;                                         \
+  dim_t        m_e      = m_d - 1;                                    \
+  FLA_Uplo     uplo_fla;                                              \
+  FLA_Obj      A, d, e, t, T;                                         \
+  FLA_Error    init_result;                                           \
+                                                                      \
+  FLA_Init_safe( &init_result );                                      \
+                                                                      \
+  FLA_Param_map_netlib_to_flame_uplo( uplo, &uplo_fla );              \
+                                                                      \
+  FLA_Obj_create_without_buffer( datatype, *m, *m, &A );              \
+  FLA_Obj_attach_buffer( buff_A, 1, *ldim_A, &A );                    \
+                                                                      \
+  FLA_Obj_create_without_buffer( dtype_re, m_d, 1, &d );              \
+  FLA_Obj_attach_buffer( buff_d, 1, m_d, &d );                        \
+                                                                      \
+  if ( m_e > 0 ) {                                                      \
+    FLA_Obj_create_without_buffer( dtype_re, m_e, 1, &e );              \
+    FLA_Obj_attach_buffer( buff_e, 1, m_e, &e );                        \
+                                                                        \
+    FLA_Obj_create_without_buffer( datatype, m_e, 1, &t );              \
+    FLA_Obj_attach_buffer( buff_t, 1, m_e, &t );                        \
+  }                                                                     \
+                                                                        \
+  FLA_Tridiag_UT_create_T( A, &T );                                     \
+  FLA_Set( FLA_ZERO, T );                                               \
+  FLA_Tridiag_UT( uplo_fla, A, T );                                     \
+                                                                        \
+  if ( FLA_Obj_is_complex( A ) == TRUE && m_e > 0 ) {                   \
+    FLA_Obj d2, e2, r;                                                  \
+                                                                        \
+    /* Temporary vectors to store the subidagonal */                    \
+    FLA_Obj_create( datatype, m_d, 1, 0, 0, &d2 );                      \
+    FLA_Obj_create( datatype, m_e, 1, 0, 0, &e2 );                      \
+                                                                        \
+    /* Temporary vectors to store realifying transformation */          \
+    FLA_Obj_create( datatype, m_d, 1, 0, 0, &r );                       \
+                                                                        \
+    /* Do not touch factors in A */                                     \
+    FLA_Tridiag_UT_extract_diagonals( uplo_fla, A, d2, e2 );            \
+    FLA_Tridiag_UT_realify_subdiagonal( e2, r );                        \
+                                                                        \
+    FLA_Obj_extract_real_part( d2, d );                                 \
+    FLA_Obj_extract_real_part( e2, e );                                 \
+                                                                        \
+    /* Clean up */                                                      \
+    FLA_Obj_free( &r  );                                                \
+    FLA_Obj_free( &e2 );                                                \
+    FLA_Obj_free( &d2 );                                                \
+  } else {                                                              \
+    FLA_Tridiag_UT_extract_real_diagonals( uplo_fla, A, d, e );         \
+  }                                                                     \
+                                                                        \
+  if ( m_e > 0 ) {                                                      \
+    FLA_Tridiag_UT_recover_tau( T, t );                                 \
+    PREFIX2FLAME_INVERT_TAU(prefix,t);                                  \
+  }                                                                     \
+  FLA_Obj_free( &T );                                                   \
+                                                                        \
+  if ( m_e > 0 ) {                                                      \
+    FLA_Obj_free_without_buffer( &e );                                  \
+    FLA_Obj_free_without_buffer( &t );                                  \
+  }                                                                     \
+  FLA_Obj_free_without_buffer( &d );                                    \
+  FLA_Obj_free_without_buffer( &A );                                    \
+                                                                        \
+  FLA_Finalize_safe( init_result );                                     \
+                                                                        \
+  *info = 0;                                                            \
+                                                                        \
+  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                          \
+  return 0;
 
     *info = (aocl_int_t)info_64;
 #endif

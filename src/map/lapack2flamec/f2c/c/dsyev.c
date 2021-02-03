@@ -184,9 +184,13 @@ void aocl_lapack_dsyev(char *jobz, char *uplo, aocl_int64_t *n, doublereal *a, a
     doublereal smlnum;
     aocl_int64_t lwkopt;
     logical lquery;
-
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsyev inputs: jobz %c, uplo %c, n %d, lda %d\n", *jobz, *uplo, *n, *lda);
+    
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    sprintf(buffer, "dsyev inputs: jobz %c, uplo %c, n %d, lda %d\n", *jobz, *uplo, *n, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
 
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -339,9 +343,9 @@ void aocl_lapack_dsyev(char *jobz, char *uplo, aocl_int64_t *n, doublereal *a, a
         aocl_blas_dscal(&imax, &d__1, &w[1], &c__1);
     }
     /* Set WORK(1) to optimal workspace size. */
-    work[1] = (doublereal)lwkopt;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    work[1] = (doublereal) lwkopt;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DSYEV */
 }
 /* dsyev_ */

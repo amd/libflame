@@ -21,11 +21,46 @@
   an unitary similarity transformation: Q**H * A * Q = H .
 */
 
-#define LAPACK_gehrd(prefix)                                                            \
-    void F77_##prefix##gehrd(                                                           \
-        integer *m, integer *ilo, integer *ihi, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-        integer * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                       \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork, integer * info)
+#define LAPACK_gehrd(prefix)                                            \
+  int F77_ ## prefix ## gehrd( int* m,                                  \
+                               int* ilo,                                \
+                               int* ihi,                                \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, int* ldim_A, \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_t,   \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_w, int* lwork, \
+                               int* info )
+
+#define LAPACK_gehrd_body(prefix)                               \
+  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                 \
+  FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);        \
+  dim_t        m_t      = ( *m - 1 );                           \
+  FLA_Obj      A, t, T;                                         \
+  FLA_Error    init_result;                                     \
+                                                                \
+  FLA_Init_safe( &init_result );                                \
+                                                                \
+  FLA_Obj_create_without_buffer( datatype, *m, *m, &A );        \
+  FLA_Obj_attach_buffer( buff_A, 1, *ldim_A, &A );              \
+                                                                \
+  FLA_Obj_create_without_buffer( datatype, m_t, 1, &t );        \
+  if ( m_t > 0 ) FLA_Obj_attach_buffer( buff_t, 1, m_t, &t );   \
+                                                                \
+  FLA_Hess_UT_create_T( A, &T );                                \
+  FLA_Hess_UT( A, T );                                          \
+  FLA_Hess_UT_recover_tau( T, t );                              \
+  FLA_Obj_free( &T );                                           \
+                                                                \
+  PREFIX2FLAME_INVERT_TAU(prefix,t);                            \
+  FLA_Obj_free_without_buffer( &t );                            \
+                                                                \
+  FLA_Obj_free_without_buffer( &A );                            \
+                                                                \
+  FLA_Finalize_safe( init_result );                             \
+                                                                \
+  *info = 0;                                                    \
+                                                                \
+  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                  \
+  return 0;
 
 #define LAPACK_gehrd_body(prefix)                          \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix); \

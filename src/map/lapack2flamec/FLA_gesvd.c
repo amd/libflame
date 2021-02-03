@@ -51,9 +51,73 @@ void sgesvd_(char *jobu, char *jobv, aocl_int_t *m, aocl_int_t *n, real *buff_A,
 
     aocl_lapack_sgesvd(jobu, jobv, &m_64, &n_64, buff_A, &ldim_A_64, buff_s, buff_U, &ldim_U_64, buff_Vh, &ldim_Vh_64, buff_w, &lwork_64, &info_64);
 
-    *info = (aocl_int_t)info_64;
-#endif
-}
+#define LAPACK_gesvd_body(prefix)                                       \
+  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                         \
+  FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                \
+  FLA_Datatype dtype_re = PREFIX2FLAME_REALTYPE(prefix);                \
+  dim_t        min_m_n  = min( *m, *n );                                \
+  FLA_Svd_type jobu_fla;                                                \
+  FLA_Svd_type jobv_fla;                                                \
+  FLA_Bool     create_U;                                                \
+  FLA_Bool     create_V;                                                \
+  dim_t        m_U, n_U;                                                \
+  dim_t        m_V, n_V;                                                \
+  FLA_Obj      A, s, U, V;                                              \
+  FLA_Error    e_val, init_result;                                      \
+                                                                        \
+  FLA_Init_safe( &init_result );                                        \
+                                                                        \
+  /* Parameters */                                                      \
+  FLA_Param_map_netlib_to_flame_svd_type( jobu, &jobu_fla );            \
+  FLA_Param_map_netlib_to_flame_svd_type( jobv, &jobv_fla );            \
+                                                                        \
+  m_U = *m; n_U = ( jobu_fla == FLA_SVD_VECTORS_ALL ? *m : min_m_n );   \
+  n_V = *n; m_V = ( jobv_fla == FLA_SVD_VECTORS_ALL ? *n : min_m_n );   \
+                                                                        \
+  create_U = ( jobu_fla == FLA_SVD_VECTORS_ALL         ||               \
+               jobu_fla == FLA_SVD_VECTORS_MIN_COPY );                  \
+  create_V = ( jobv_fla == FLA_SVD_VECTORS_ALL         ||               \
+               jobv_fla == FLA_SVD_VECTORS_MIN_COPY );                  \
+                                                                        \
+  /* Given A */                                                         \
+  FLA_Obj_create_without_buffer( datatype, *m, *n, &A );                \
+  FLA_Obj_attach_buffer( buff_A, 1, *ldim_A, &A );                      \
+                                                                        \
+  /* Singular values are stored in s */                                 \
+  FLA_Obj_create_without_buffer( dtype_re, min_m_n, 1, &s );            \
+  FLA_Obj_attach_buffer( buff_s, 1, min_m_n, &s );                      \
+                                                                        \
+  /* U */                                                               \
+  if ( create_U ) {                                                     \
+    FLA_Obj_create_without_buffer( datatype, m_U, n_U, &U );            \
+    FLA_Obj_attach_buffer( buff_U, 1, *ldim_U, &U );                    \
+  } else {                                                              \
+    FLA_Obj_nullify( &U );                                              \
+  }                                                                     \
+  /* V^H */                                                             \
+  if ( create_V ) {                                                     \
+    FLA_Obj_create_without_buffer( datatype, m_V, n_V, &V );            \
+    FLA_Obj_attach_buffer( buff_Vh, 1, *ldim_Vh, &V );                  \
+  } else {                                                              \
+    FLA_Obj_nullify( &V );                                              \
+  }                                                                     \
+  /* Compute SVD */                                                     \
+  e_val = FLA_Svd_ext( jobu_fla, FLA_NO_TRANSPOSE,                      \
+                       jobv_fla, FLA_CONJ_TRANSPOSE,                    \
+                       A, s, U, V );                                    \
+                                                                        \
+  /* Clean up */                                                        \
+  if ( create_U ) FLA_Obj_free_without_buffer( &U );                    \
+  if ( create_V ) FLA_Obj_free_without_buffer( &V );                    \
+                                                                        \
+  FLA_Obj_free_without_buffer( &A );                                    \
+  FLA_Obj_free_without_buffer( &s );                                    \
+                                                                        \
+  FLA_Finalize_safe( init_result );                                     \
+  *info = 0;                                                            \
+                                                                        \
+  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                          \
+  return e_val;
 
 /** Generated wrapper function */
 void dgesvd_(char *jobu, char *jobv, aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_s, doublereal *buff_U, aocl_int_t *ldim_U, doublereal *buff_Vh, aocl_int_t *ldim_Vh, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)

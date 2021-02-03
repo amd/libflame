@@ -120,61 +120,58 @@ extern void dgeqpf_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int
 // Notation for LAPACK column pvioting is not consistent to pivoting in LU.
 // This does not perform pre-ordering when jpiv include non-zero pivots.
 //
-#define LAPACK_geqpf_body(prefix)                                            \
-    FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                   \
-    FLA_Obj A, t, T, w, p, jpiv;                                             \
-    fla_dim_t min_m_n = fla_min(*m, *n);                                     \
-    FLA_Error init_result;                                                   \
-    fla_dim_t *buff_p64 = (fla_dim_t *) FLA_malloc( sizeof(fla_dim_t) * min_m_n ); \
-    if(buff_p64 == NULL) { return; }                                         \
-    for(aocl_int64_t i = 0; i < *n; i++)                                     \
-        buff_p64[i] = (aocl_int64_t) buff_p[i];                               \
-                                                                             \
-    FLA_Init_safe(&init_result);                                             \
-                                                                             \
-    FLA_Obj_create_without_buffer(datatype, *m, *n, &A);                     \
-    FLA_Obj_attach_buffer(buff_A, 1, *ldim_A, &A);                           \
-                                                                             \
-    FLA_Obj_create_without_buffer(datatype, min_m_n, 1, &t);                 \
-    FLA_Obj_attach_buffer(buff_t, 1, min_m_n, &t);                           \
-    FLA_Set(FLA_ZERO, t);                                                    \
-                                                                             \
-    FLA_Obj_create_without_buffer(PREFIX2FLAME_REALTYPE(prefix), *n, 1, &w); \
-    FLA_Obj_attach_buffer(buff_w, 1, *n, &w);                                \
-                                                                             \
-    /* LAPACK pivot storage */                                               \
-    FLA_Obj_create_without_buffer(FLA_INT, *n, 1, &jpiv);                    \
-    FLA_Obj_attach_buffer(buff_p64, 1, *n, &jpiv);                           \
-                                                                             \
-    /* FLAME pivot storage */                                                \
-    FLA_Obj_create(FLA_INT, *n, 1, 0, 0, &p);                                \
-    FLA_Set(FLA_ZERO, p);                                                    \
-                                                                             \
-    /* QR_UT_piv */                                                          \
-    FLA_QR_UT_create_T(A, &T);                                               \
-    FLA_Set(FLA_ZERO, T);                                                    \
-                                                                             \
-    FLA_QR_UT_piv(A, T, w, p);                                               \
-    FLA_QR_UT_recover_tau(T, t);                                             \
-    PREFIX2FLAME_INVERT_TAU(prefix, t);                                      \
-                                                                             \
-    /* Transform FLAME column pivots to LAPACK pivots */                     \
-    FLA_Apply_pivots(FLA_LEFT, FLA_NO_TRANSPOSE, p, jpiv);                   \
-                                                                             \
-    /* Cleaning */                                                           \
-    FLA_Obj_free_without_buffer(&A);                                         \
-    FLA_Obj_free_without_buffer(&t);                                         \
-    FLA_Obj_free_without_buffer(&w);                                         \
-    FLA_Obj_free_without_buffer(&jpiv);                                      \
-    FLA_Obj_free(&p);                                                        \
-    FLA_Obj_free(&T);                                                        \
-                                                                             \
-    FLA_Finalize_safe(init_result);                                          \
-    for(aocl_int64_t i = 0; i < *n; i++)                                     \
-            buff_p[i] = (aocl_int_t)buff_p64[i];                             \
-    FLA_free(buff_p64);                                                      \
-                                                                             \
-    *info = 0;
+#define LAPACK_geqpf_body(prefix)                                       \
+  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                         \
+  FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                \
+  FLA_Obj      A, t, T, w, p, jpiv;                                     \
+  dim_t        min_m_n  = min( *m, *n );                                \
+  FLA_Error    init_result;                                             \
+                                                                        \
+  FLA_Init_safe( &init_result );                                        \
+                                                                        \
+  FLA_Obj_create_without_buffer( datatype, *m, *n, &A );                \
+  FLA_Obj_attach_buffer( buff_A, 1, *ldim_A, &A );                      \
+                                                                        \
+  FLA_Obj_create_without_buffer( datatype, min_m_n, 1, &t );            \
+  FLA_Obj_attach_buffer( buff_t, 1, min_m_n, &t );                      \
+  FLA_Set( FLA_ZERO, t );                                               \
+                                                                        \
+  FLA_Obj_create_without_buffer( PREFIX2FLAME_REALTYPE(prefix), *n, 1, &w ); \
+  FLA_Obj_attach_buffer( buff_w, 1, *n, &w );                           \
+                                                                        \
+  /* LAPACK pivot storage */                                            \
+  FLA_Obj_create_without_buffer( FLA_INT, *n, 1, &jpiv );               \
+  FLA_Obj_attach_buffer( buff_p, 1, *n, &jpiv );                        \
+                                                                        \
+  /* FLAME pivot storage */                                             \
+  FLA_Obj_create( FLA_INT, *n, 1, 0, 0, &p );                           \
+  FLA_Set( FLA_ZERO, p );                                               \
+                                                                        \
+  /* QR_UT_piv */                                                       \
+  FLA_QR_UT_create_T( A, &T );                                          \
+  FLA_Set( FLA_ZERO, T );                                               \
+                                                                        \
+  FLA_QR_UT_piv( A, T, w, p );                                          \
+  FLA_QR_UT_recover_tau( T, t );                                        \
+  PREFIX2FLAME_INVERT_TAU(prefix,t);                                    \
+                                                                        \
+  /* Transform FLAME column pivots to LAPACK pivots */                  \
+  FLA_Apply_pivots( FLA_LEFT, FLA_NO_TRANSPOSE, p, jpiv );              \
+                                                                        \
+  /* Cleaning */                                                        \
+  FLA_Obj_free_without_buffer( &A );                                    \
+  FLA_Obj_free_without_buffer( &t );                                    \
+  FLA_Obj_free_without_buffer( &w );                                    \
+  FLA_Obj_free_without_buffer( &jpiv );                                 \
+  FLA_Obj_free( &p );                                                   \
+  FLA_Obj_free( &T );                                                   \
+                                                                        \
+  FLA_Finalize_safe( init_result );                                     \
+                                                                        \
+  *info = 0;                                                            \
+                                                                        \
+  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                          \
+  return 0;
 
 /*
     LAPACK path is enabled for both {S,D}GEQPF when FLA_ENABLE_AMD_OPT

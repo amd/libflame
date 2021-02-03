@@ -19,9 +19,12 @@ int sgesvd_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, floa
     aocl_int64_t bdspac;
     aocl_int64_t minwrk, maxwrk;
     logical lquery, wntuas, wntvas;
-    aocl_int64_t lwork_sorgbr_p__, lwork_sorgbr_q__, lwork_sorglq_m__, lwork_sorglq_n__,
-        lwork_sorgqr_m__, lwork_sorgqr_n__;
-
+    int lwork_sorgbr_p__, lwork_sorgbr_q__, lwork_sorglq_m__, lwork_sorglq_n__, lwork_sorgqr_m__, lwork_sorgqr_n__;
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    sprintf(buffer, "sgesvd inputs: jobu %c, jobvt %c, m %d, n %d, lda %d, ldu %d, ldvt %d\n", *jobu, *jobvt, *m, *n, *lda, *ldu, *ldvt);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     /* Parameter adjustments */
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;

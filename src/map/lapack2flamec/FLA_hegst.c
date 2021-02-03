@@ -180,32 +180,36 @@ extern void zhegs2_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcomple
                                  PREFIX2LAPACK_TYPEDEF(prefix) * buff_B, aocl_int64_t * ldim_B, \
                                  aocl_int64_t * info)
 
-#define LAPACK_hegst_body(prefix)                              \
-    FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);     \
-    FLA_Inv inv_fla;                                           \
-    FLA_Uplo uplo_fla;                                         \
-    FLA_Obj A, B;                                              \
-    FLA_Error init_result;                                     \
-                                                               \
-    FLA_Init_safe(&init_result);                               \
-                                                               \
-    FLA_Param_map_netlib_to_flame_inv((int *)itype, &inv_fla); \
-    FLA_Param_map_netlib_to_flame_uplo(uplo, &uplo_fla);       \
-                                                               \
-    FLA_Obj_create_without_buffer(datatype, *m, *m, &A);       \
-    FLA_Obj_attach_buffer(buff_A, 1, *ldim_A, &A);             \
-                                                               \
-    FLA_Obj_create_without_buffer(datatype, *m, *m, &B);       \
-    FLA_Obj_attach_buffer(buff_B, 1, *ldim_B, &B);             \
-                                                               \
-    FLA_Eig_gest(inv_fla, uplo_fla, A, B);                     \
-                                                               \
-    FLA_Obj_free_without_buffer(&A);                           \
-    FLA_Obj_free_without_buffer(&B);                           \
-                                                               \
-    FLA_Finalize_safe(init_result);                            \
-                                                               \
-    *info = 0;
+#define LAPACK_hegst_body(prefix)                               \
+  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                 \
+  FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);        \
+  FLA_Inv      inv_fla;                                         \
+  FLA_Uplo     uplo_fla;                                        \
+  FLA_Obj      A, B;                                            \
+  FLA_Error    init_result;                                     \
+                                                                \
+  FLA_Init_safe( &init_result );                                \
+                                                                \
+  FLA_Param_map_netlib_to_flame_inv( itype, &inv_fla );         \
+  FLA_Param_map_netlib_to_flame_uplo( uplo, &uplo_fla );        \
+                                                                \
+  FLA_Obj_create_without_buffer( datatype, *m, *m, &A );        \
+  FLA_Obj_attach_buffer( buff_A, 1, *ldim_A, &A );              \
+                                                                \
+  FLA_Obj_create_without_buffer( datatype, *m, *m, &B );        \
+  FLA_Obj_attach_buffer( buff_B, 1, *ldim_B, &B );              \
+                                                                \
+  FLA_Eig_gest( inv_fla, uplo_fla, A, B );                      \
+                                                                \
+  FLA_Obj_free_without_buffer( &A );                            \
+  FLA_Obj_free_without_buffer( &B );                            \
+                                                                \
+  FLA_Finalize_safe( init_result );                             \
+                                                                \
+  *info = 0;                                                    \
+                                                                \
+  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                  \
+  return 0;
 
 LAPACK_hegst(s, sy)
 {

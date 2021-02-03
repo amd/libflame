@@ -12,9 +12,10 @@
 
 #ifdef FLA_ENABLE_LAPACK2FLAME
 
-#include "FLA_lapack2flame_prototypes.h"
-#include "FLA_lapack2flame_return_defs.h"
+
 #include "FLA_lapack2flame_util_defs.h"
+#include "FLA_lapack2flame_return_defs.h"
+#include "FLA_lapack2flame_prototypes.h"
 
 /*
    TRTRI computes the inverse of a upper or lower triangular
@@ -31,346 +32,139 @@
    Hence, if the routine passes above error checking, FLA_Trinv should not produce any error.
 */
 
-/** Generated wrapper function */
-void strtri_(char *uplo, char *diag, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_strtri(uplo, diag, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
+#define LAPACK_trtri(prefix)                                    \
+  int F77_ ## prefix ## trtri( char* uplo,                      \
+                               char* diag,                      \
+                               int* n,                          \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, \
+                               int* ldim_A,                     \
+                               int* info )
 
-    aocl_lapack_strtri(uplo, diag, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void dtrtri_(char *uplo, char *diag, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dtrtri(uplo, diag, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dtrtri(uplo, diag, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void ctrtri_(char *uplo, char *diag, aocl_int_t *n, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ctrtri(uplo, diag, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ctrtri(uplo, diag, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void ztrtri_(char *uplo, char *diag, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ztrtri(uplo, diag, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ztrtri(uplo, diag, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void strti2_(char *uplo, char *diag, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_strti2(uplo, diag, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_strti2(uplo, diag, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void dtrti2_(char *uplo, char *diag, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dtrti2(uplo, diag, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dtrti2(uplo, diag, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void ctrti2_(char *uplo, char *diag, aocl_int_t *n, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ctrti2(uplo, diag, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ctrti2(uplo, diag, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void ztrti2_(char *uplo, char *diag, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ztrti2(uplo, diag, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ztrti2(uplo, diag, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-#define LAPACK_trtri(prefix)                                                           \
-    void aocl_lapack_##prefix##trtri(char *uplo, char *diag, aocl_int64_t *n,                       \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A, \
-                             aocl_int64_t * info)
-
-#define LAPACK_trtri_body(prefix)                          \
-    FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix); \
-    FLA_Uplo uplo_fla;                                     \
-    FLA_Diag diag_fla;                                     \
-    FLA_Obj A;                                             \
-    FLA_Error init_result;                                 \
-                                                           \
-    FLA_Init_safe(&init_result);                           \
-                                                           \
-    FLA_Param_map_netlib_to_flame_uplo(uplo, &uplo_fla);   \
-    FLA_Param_map_netlib_to_flame_diag(diag, &diag_fla);   \
-                                                           \
-    FLA_Obj_create_without_buffer(datatype, *n, *n, &A);   \
-    FLA_Obj_attach_buffer(buff_A, 1, *ldim_A, &A);         \
-                                                           \
-    FLA_Trinv(uplo_fla, diag_fla, A);                      \
-                                                           \
-    FLA_Obj_free_without_buffer(&A);                       \
-                                                           \
-    FLA_Finalize_safe(init_result);                        \
-                                                           \
-    *info = 0;
+#define LAPACK_trtri_body(prefix)                               \
+  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                 \
+  FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);        \
+  FLA_Uplo     uplo_fla;                                        \
+  FLA_Diag     diag_fla;                                        \
+  FLA_Obj      A;                                               \
+  FLA_Error    init_result;                                     \
+                                                                \
+  FLA_Init_safe( &init_result );                                        \
+                                                                        \
+  FLA_Param_map_netlib_to_flame_uplo( uplo, &uplo_fla );                \
+  FLA_Param_map_netlib_to_flame_diag( diag, &diag_fla );                \
+                                                                        \
+  FLA_Obj_create_without_buffer( datatype, *n, *n, &A );                \
+  FLA_Obj_attach_buffer( buff_A, 1, *ldim_A, &A );                      \
+                                                                        \
+  FLA_Trinv( uplo_fla, diag_fla, A );                                   \
+                                                                        \
+  FLA_Obj_free_without_buffer( &A );                                    \
+                                                                        \
+  FLA_Finalize_safe( init_result );                                     \
+                                                                        \
+  *info = 0;                                                            \
+  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                  	      \
+                                                                        \
+  return 0;
 
 LAPACK_trtri(s)
 {
-    int fla_error = LAPACK_SUCCESS;
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("strtri inputs: uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo,
-                      *diag, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(strtri_check(uplo, diag, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK( strtri_check( uplo, diag, n,
+                                           buff_A, ldim_A,
+                                           info ) )
     }
-    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_trtri_body(s)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
 LAPACK_trtri(d)
 {
-    int fla_error = LAPACK_SUCCESS;
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dtrtri inputs: uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo,
-                      *diag, *n, *ldim_A);
-
     {
-        LAPACK_RETURN_CHECK_VAR1(dtrtri_check(uplo, diag, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK( dtrtri_check( uplo, diag, n,
+                                           buff_A, ldim_A,
+                                           info ) )
     }
-    if(fla_error == LAPACK_SUCCESS)
     {
-#if FLA_ENABLE_AMD_OPT
-        lapack_dtrtri(uplo, diag, n, buff_A, ldim_A, info);
-#else
         LAPACK_trtri_body(d)
-#endif
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
 LAPACK_trtri(c)
 {
-    int fla_error = LAPACK_SUCCESS;
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ctrtri inputs: uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo,
-                      *diag, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(ctrtri_check(uplo, diag, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK( ctrtri_check( uplo, diag, n,
+                                           buff_A, ldim_A,
+                                           info ) )
     }
-    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_trtri_body(c)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
 LAPACK_trtri(z)
 {
-    int fla_error = LAPACK_SUCCESS;
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztrtri inputs: uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo,
-                      *diag, *n, *ldim_A);
-
-#if FLA_ENABLE_AMD_OPT
-    if(*n <= FLA_TRTRI_SMALL_THRESH0)
     {
-        lapack_ztrtri(uplo, diag, n, buff_A, ldim_A, info);
+        LAPACK_RETURN_CHECK( ztrtri_check( uplo, diag, n,
+                                           buff_A, ldim_A,
+                                           info ) )
     }
-    else
-#endif
     {
-        {
-            LAPACK_RETURN_CHECK_VAR1(ztrtri_check(uplo, diag, n, buff_A, ldim_A, info), fla_error)
-        }
-        if(fla_error == LAPACK_SUCCESS)
-        {
-            LAPACK_trtri_body(z)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-           fla_error = 0;
-        }
+        LAPACK_trtri_body(z)
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
 
-#define LAPACK_trti2(prefix)                                                           \
-    void aocl_lapack_##prefix##trti2(char *uplo, char *diag, aocl_int64_t *n,                       \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A, \
-                             aocl_int64_t * info)
+
+#define LAPACK_trti2(prefix)                                    \
+  int F77_ ## prefix ## trti2( char* uplo,                      \
+                               char* diag,                      \
+                               int* n,                          \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, \
+                               int* ldim_A,                     \
+                               int* info )
 
 LAPACK_trti2(s)
 {
-    int fla_error = LAPACK_SUCCESS;
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("strti2 inputs: uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo,
-                      *diag, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(strti2_check(uplo, diag, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK( strti2_check( uplo, diag, n,
+                                           buff_A, ldim_A,
+                                           info ) )
     }
-    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_trtri_body(s)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
 LAPACK_trti2(d)
 {
-    int fla_error = LAPACK_SUCCESS;
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dtrti2 inputs: uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo,
-                      *diag, *n, *ldim_A);
-
     {
-        LAPACK_RETURN_CHECK_VAR1(dtrti2_check(uplo, diag, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK( dtrti2_check( uplo, diag, n,
+                                           buff_A, ldim_A,
+                                           info ) )
     }
-    if(fla_error == LAPACK_SUCCESS)
     {
-#if FLA_ENABLE_AMD_OPT
-        lapack_dtrti2(uplo, diag, n, buff_A, ldim_A, info);
-#else
         LAPACK_trtri_body(d)
-#endif
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
 LAPACK_trti2(c)
 {
-    int fla_error = LAPACK_SUCCESS;
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ctrti2 inputs: uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo,
-                      *diag, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(ctrti2_check(uplo, diag, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK( ctrti2_check( uplo, diag, n,
+                                           buff_A, ldim_A,
+                                           info ) )
     }
-    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_trtri_body(c)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
 LAPACK_trti2(z)
 {
-    int fla_error = LAPACK_SUCCESS;
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztrti2 inputs: uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo,
-                      *diag, *n, *ldim_A);
-#if FLA_ENABLE_AMD_OPT
-    if(*n <= FLA_TRTRI_SMALL_THRESH0)
     {
-        lapack_ztrti2(uplo, diag, n, buff_A, ldim_A, info);
+        LAPACK_RETURN_CHECK( ztrti2_check( uplo, diag, n,
+                                           buff_A, ldim_A,
+                                           info ) )
     }
-    else
-#endif
     {
-        {
-            LAPACK_RETURN_CHECK_VAR1(ztrti2_check(uplo, diag, n, buff_A, ldim_A, info), fla_error)
-        }
-        if(fla_error == LAPACK_SUCCESS)
-        {
-            LAPACK_trtri_body(z)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error = 0;
-        }
+        LAPACK_trtri_body(z)
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
+
 
 #endif

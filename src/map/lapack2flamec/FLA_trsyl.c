@@ -44,58 +44,54 @@
                              PREFIX2LAPACK_TYPEDEF(prefix) * buff_C, aocl_int64_t * ldim_C,         \
                              PREFIX2LAPACK_REALDEF(prefix) * scale, aocl_int64_t * info)
 
-#define LAPACK_trsyl_body(prefix, srname)                                  \
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                          \
-    FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                 \
-    FLA_Datatype datatype_scale = PREFIX2FLAME_REALTYPE(prefix);           \
-    FLA_Trans transa_fla;                                                  \
-    FLA_Trans transb_fla;                                                  \
-    FLA_Obj sgn_fla;                                                       \
-    FLA_Obj A, B, C;                                                       \
-    FLA_Obj scale_fla;                                                     \
-    FLA_Error e_val;                                                       \
-    FLA_Error init_result;                                                 \
-                                                                           \
-    LAPACK_trsyl_op_check(prefix, srname)                                  \
-                                                                           \
-        FLA_Init_safe(&init_result);                                       \
-                                                                           \
-    FLA_Param_map_netlib_to_flame_trans(transa, &transa_fla);              \
-    FLA_Param_map_netlib_to_flame_trans(transb, &transb_fla);              \
-                                                                           \
-    if(*sgn == 1)                                                          \
-        sgn_fla = FLA_ONE;                                                 \
-    else                                                                   \
-        sgn_fla = FLA_MINUS_ONE;                                           \
-                                                                           \
-    FLA_Obj_create_without_buffer(datatype, *m, *m, &A);                   \
-    FLA_Obj_attach_buffer(buff_A, 1, *ldim_A, &A);                         \
-                                                                           \
-    FLA_Obj_create_without_buffer(datatype, *n, *n, &B);                   \
-    FLA_Obj_attach_buffer(buff_B, 1, *ldim_B, &B);                         \
-                                                                           \
-    FLA_Obj_create_without_buffer(datatype, *m, *n, &C);                   \
-    FLA_Obj_attach_buffer(buff_C, 1, *ldim_C, &C);                         \
-                                                                           \
-    FLA_Obj_create_without_buffer(datatype_scale, 1, 1, &scale_fla);       \
-    FLA_Obj_attach_buffer(&scale, 1, 1, &scale_fla);                       \
-                                                                           \
-    e_val = FLA_Sylv(transa_fla, transb_fla, sgn_fla, A, B, C, scale_fla); \
-                                                                           \
-    FLA_Obj_free_without_buffer(&A);                                       \
-    FLA_Obj_free_without_buffer(&B);                                       \
-    FLA_Obj_free_without_buffer(&C);                                       \
-    FLA_Obj_free_without_buffer(&scale_fla);                               \
-                                                                           \
-    FLA_Finalize_safe(init_result);                                        \
-                                                                           \
-    if(e_val != FLA_SUCCESS)                                               \
-        *info = 1;                                                         \
-    else                                                                   \
-        *info = 0;                                                         \
-                                                                           \
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                           \
-    return;
+#define LAPACK_trsyl_body(prefix, srname)                       \
+  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                 \
+  FLA_Datatype datatype       =  PREFIX2FLAME_DATATYPE(prefix); \
+  FLA_Datatype datatype_scale =  PREFIX2FLAME_REALTYPE(prefix); \
+  FLA_Trans    transa_fla;                                      \
+  FLA_Trans    transb_fla;                                      \
+  FLA_Obj      sgn_fla;                                         \
+  FLA_Obj      A, B, C;                                         \
+  FLA_Obj      scale_fla;                                       \
+  FLA_Error    e_val;                                           \
+  FLA_Error    init_result;                                     \
+                                                                \
+  LAPACK_trsyl_op_check(prefix,srname)                                 \
+                                                                       \
+  FLA_Init_safe( &init_result );                                       \
+                                                                       \
+  FLA_Param_map_netlib_to_flame_trans( transa, &transa_fla );          \
+  FLA_Param_map_netlib_to_flame_trans( transb, &transb_fla );          \
+                                                                       \
+  if ( *sgn == 1 ) sgn_fla = FLA_ONE;                                  \
+  else             sgn_fla = FLA_MINUS_ONE;                            \
+                                                                       \
+  FLA_Obj_create_without_buffer( datatype, *m, *m, &A );               \
+  FLA_Obj_attach_buffer( buff_A, 1, *ldim_A, &A );                     \
+                                                                       \
+  FLA_Obj_create_without_buffer( datatype, *n, *n, &B );               \
+  FLA_Obj_attach_buffer( buff_B, 1, *ldim_B, &B );                     \
+                                                                       \
+  FLA_Obj_create_without_buffer( datatype, *m, *n, &C );                \
+  FLA_Obj_attach_buffer( buff_C, 1, *ldim_C, &C );                      \
+                                                                        \
+  FLA_Obj_create_without_buffer( datatype_scale, 1, 1, &scale_fla );    \
+  FLA_Obj_attach_buffer( &scale, 1, 1, &scale_fla );                    \
+                                                                        \
+  e_val = FLA_Sylv( transa_fla, transb_fla, sgn_fla, A, B, C, scale_fla ); \
+                                                                        \
+  FLA_Obj_free_without_buffer( &A );                                    \
+  FLA_Obj_free_without_buffer( &B );                                    \
+  FLA_Obj_free_without_buffer( &C );                                    \
+  FLA_Obj_free_without_buffer( &scale_fla );                            \
+                                                                        \
+  FLA_Finalize_safe( init_result );                                     \
+                                                                        \
+  if ( e_val != FLA_SUCCESS ) *info = 1;                                \
+  else                        *info = 0;                                \
+                                                                        \
+  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                  	      \
+  return 0;
 
 LAPACK_trsyl(s){LAPACK_trsyl_body(s, STRSYL)} LAPACK_trsyl(d){
     LAPACK_trsyl_body(d, DTRSYL)} LAPACK_trsyl(c){LAPACK_trsyl_body(c, CTRSYL)} LAPACK_trsyl(z)

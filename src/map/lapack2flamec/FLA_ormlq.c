@@ -52,7 +52,57 @@ void sormlq_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     aocl_int64_t lwork_64 = *lwork;
     aocl_int64_t info_64 = *info;
 
-    aocl_lapack_sormlq(side, trans, &m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_B, &ldim_B_64, buff_w, &lwork_64, &info_64);
+#define LAPACK_ormlq_body(prefix)                                       \
+  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                         \
+  FLA_Datatype datatype   = PREFIX2FLAME_DATATYPE(prefix);              \
+  FLA_Side     side_fla;                                                \
+  FLA_Trans    trans_fla;                                               \
+  FLA_Error    init_result;                                             \
+  dim_t        /*mq, */ nq;                                             \
+                                                                        \
+  FLA_Init_safe( &init_result );                                        \
+                                                                        \
+  FLA_Param_map_netlib_to_flame_side( side, &side_fla );                \
+  FLA_Param_map_netlib_to_flame_trans( trans, &trans_fla );             \
+                                                                        \
+  if    ( side_fla == FLA_LEFT )      { /* mq = *n; */ nq = *m; }       \
+  else /* side_fla == FLA_RIGHT ) */  { /* mq = *m; */ nq = *n; }       \
+                                                                        \
+  if ( *k > 0 && !( PREFIX2FLAME_IS_ZERO(prefix, buff_t) ) )            \
+    {                                                                   \
+      FLA_Obj      A, t, B, T, W;                                       \
+      FLA_Obj_create_without_buffer( datatype, *k, nq, &A );            \
+      FLA_Obj_attach_buffer( buff_A, 1, *ldim_A, &A );                  \
+                                                                        \
+      FLA_Obj_create_without_buffer( datatype, *m, *n, &B );            \
+      FLA_Obj_attach_buffer( buff_B, 1, *ldim_B, &B );                  \
+                                                                        \
+      FLA_Obj_create_without_buffer( datatype, *k, 1, &t );             \
+      FLA_Obj_attach_buffer( buff_t, 1, *k, &t );                       \
+      PREFIX2FLAME_INVERT_TAU(prefix,t);                                \
+                                                                        \
+      FLA_LQ_UT_create_T( A, &T );                                      \
+      FLA_Set( FLA_ZERO, T );                                           \
+      FLA_Apply_Q_UT_create_workspace_side( side_fla, T, B, &W);        \
+                                                                        \
+      FLA_Accum_T_UT( FLA_FORWARD, FLA_ROWWISE, A, t, T );              \
+      FLA_Apply_Q_UT( side_fla, trans_fla, FLA_BACKWARD, FLA_ROWWISE,   \
+                      A, T, W, B );                                     \
+                                                                        \
+      FLA_Obj_free( &W );                                               \
+      FLA_Obj_free( &T );                                               \
+                                                                        \
+      PREFIX2FLAME_INVERT_TAU(prefix,t);                                \
+      FLA_Obj_free_without_buffer( &t );                                \
+      FLA_Obj_free_without_buffer( &B );                                \
+      FLA_Obj_free_without_buffer( &A );                                \
+    }                                                                   \
+  FLA_Finalize_safe( init_result );                                     \
+                                                                        \
+  *info = 0;                                                            \
+  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                          \
+                                                                        \
+  return 0;
 
     *info = (aocl_int_t)info_64;
 #endif

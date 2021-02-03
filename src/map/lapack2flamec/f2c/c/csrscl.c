@@ -108,7 +108,15 @@ void aocl_lapack_csrscl(aocl_int64_t *n, real *sa, scomplex *sx, aocl_int64_t *i
     real cnum, cden1, cnum1;
     extern real slamch_(char *);
     real bignum, smlnum;
-    /* -- LAPACK auxiliary routine -- */
+    
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    sprintf(buffer, "csrscl inputs: n %d, incx %d\n", *n, *incx);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
+
+    /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -172,7 +180,7 @@ L10:
         goto L10;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CSRSCL */
 }
 /* csrscl_ */

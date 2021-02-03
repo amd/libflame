@@ -9,7 +9,11 @@ int strtri_check(char *uplo, char *diag, aocl_int64_t *n, float *a, aocl_int64_t
     /* Local variables */
     logical upper;
     logical nounit;
-
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    sprintf(buffer, "strtri inputs: uplo %c, diag %c, n %d, lda %d\n", *uplo, *diag, *n, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     /* Parameter adjustments */
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;

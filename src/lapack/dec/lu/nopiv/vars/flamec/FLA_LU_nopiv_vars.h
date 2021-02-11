@@ -96,22 +96,11 @@ FLA_Error FLA_LU_nopiv_opz_var5( fla_dim_t m_A,
                                  fla_dim_t n_A,
                                  dcomplex* A, fla_dim_t rs_A, fla_dim_t cs_A );
 
-FLA_Error FLA_LU_nopiv_is_blk_var1( fla_dim_t m_A, fla_dim_t n_A,FLA_Obj A, float* buff_A, fla_dim_t nfact, fla_dim_t rs_A, fla_dim_t cs_A );
-FLA_Error FLA_LU_nopiv_id_blk_var1( fla_dim_t m_A, fla_dim_t n_A,FLA_Obj A, double* buff_A, fla_dim_t nfact, fla_dim_t rs_A, fla_dim_t cs_A );
-FLA_Error FLA_LU_nopiv_ic_blk_var1( fla_dim_t m_A, fla_dim_t n_A,FLA_Obj A, scomplex* buff_A, fla_dim_t nfact, fla_dim_t rs_A, fla_dim_t cs_A );
-FLA_Error FLA_LU_nopiv_iz_blk_var1( fla_dim_t m_A, fla_dim_t n_A,FLA_Obj A, dcomplex* buff_A, fla_dim_t nfact, fla_dim_t rs_A, fla_dim_t cs_A );
-FLA_Error FLA_LU_nopiv_is_unblk_var1( fla_dim_t m_A,
-                                      fla_dim_t n_A,
-                                      float* A, fla_dim_t nfact, fla_dim_t rs_A, fla_dim_t cs_A );
-FLA_Error FLA_LU_nopiv_id_unblk_var1( fla_dim_t m_A,
-                                      fla_dim_t n_A,
-                                      double* A, fla_dim_t nfact, fla_dim_t rs_A, fla_dim_t cs_A );
-FLA_Error FLA_LU_nopiv_ic_unblk_var1( fla_dim_t m_A,
-                                      fla_dim_t n_A,
-                                      scomplex* A, fla_dim_t nfact, fla_dim_t rs_A, fla_dim_t cs_A );
-FLA_Error FLA_LU_nopiv_iz_unblk_var1( fla_dim_t m_A,
-                                      fla_dim_t n_A,
-                                      dcomplex* A, fla_dim_t nfact, fla_dim_t rs_A, fla_dim_t cs_A );
-FLA_Error FLA_LU_nopiv_id_unblk_var2( fla_dim_t m_A,
-                                      fla_dim_t n_A,
-                                      double* A, fla_dim_t nfact, fla_dim_t rs_A, fla_dim_t cs_A );
+
+FLA_Error FLA_LU_nopiv_i_blk_var1( FLA_Obj A, dim_t nfact );
+FLA_Error FLA_LU_nopiv_id_unblk_var1( int m_A,
+                                      int n_A,
+                                      double* A, int nfact, int rs_A, int cs_A );
+FLA_Error FLA_LU_nopiv_id_unblk_var2( int m_A,
+                                      int n_A,
+                                      double* A, int nfact, int rs_A, int cs_A );

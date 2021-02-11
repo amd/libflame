@@ -1,11 +1,8 @@
 /*
- *  Copyright (c) 2021-2023 Advanced Micro Devices, Inc. All rights reserved.
+ *  Copyright (c) 2021 Advanced Micro Devices, Inc. All rights reserved.
  * */
 
 #include "FLAME.h"
-#if FLA_ENABLE_AOCL_BLAS
-#include "blis.h"
-#endif
 
 /*******************************************************************************************
  This algorithm uses noncrecursive nonpivot based LU factorization using same logic as getrf
@@ -17,11 +14,14 @@
  nfact*(m or n) <= 200+45+45 nfact>8 and nfact<=12 etc
 *******************************************************************************************/
 
-FLA_Error FLA_LU_nopiv_id_unblk_var2( fla_dim_t m_A, fla_dim_t n_A, double* A, fla_dim_t nfact, fla_dim_t rs_A, fla_dim_t cs_A )
+FLA_Error FLA_LU_nopiv_id_unblk_var2( int m_A, int n_A, double* A, int nfact, int rs_A, int cs_A )
 {
   double rminusone = bl1_dm1();
   double *Minusone = &rminusone;
-  fla_dim_t inc_x, inc_y, i, mdiff, ndiff;
+  double rone = bl1_d1();
+  double *One = &rone;
+  double rzero = bl1_d0();
+  int inc_x, inc_y, i, mdiff, ndiff;
   double alpha_inv;
   double *alpha;
   FLA_Error e_val = FLA_SUCCESS;
@@ -34,15 +34,14 @@ FLA_Error FLA_LU_nopiv_id_unblk_var2( fla_dim_t m_A, fla_dim_t n_A, double* A, f
      alpha = A + i + i * cs_A;
      mdiff = m_A - i - 1;
      ndiff = n_A - i - 1;
-     if( *alpha == 0.0 ) break;
      if( *alpha != 1.0 )
      {
         alpha_inv = 1.0 / *alpha;
-        aocl_blas_dscal( &mdiff, &alpha_inv, (A + i + 1 + i * cs_A), &rs_A );                  // rank 1 update
+        dscal_( &mdiff, &alpha_inv, (A + i + 1 + i * cs_A), &rs_A );                  // rank 1 update
      }
      inc_x = (i == m_A - 2) ? cs_A : rs_A;                                            // the vector will be 1 and equal to column stride for m_A - 2 aka row vector
      inc_y = cs_A;                                                                    // always equal to column stride
-     aocl_blas_dger( &ndiff, &mdiff, Minusone, (A + i + 1 + i * cs_A), &inc_x, (A + i + (i + 1) * cs_A), &inc_y, (A + i + 1 + (i + 1) * cs_A), &cs_A ); // rank 1 update
+     dger_( &ndiff, &mdiff, Minusone, (A + i + 1 + i * cs_A), &inc_x, (A + i + (i + 1) * cs_A), &inc_y, (A + i + 1 + (i + 1) * cs_A), &cs_A ); // rank 1 update
   }
   // Singular check  and info population
   for( i = 0; i < nfact; i++ )

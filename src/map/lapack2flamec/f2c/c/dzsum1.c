@@ -112,9 +112,12 @@ doublereal aocl_lapack_dzsum1(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx)
     /* .. */
     /* .. Executable Statements .. */
     /* Logging and tracing code */
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dzsum1 inputs: n %d, incx %d \n", *n, *incx);
-
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+    #if AOCL_DTL_LOG_ENABLE
+      char buffer[256];
+      sprintf(buffer, "dzsum1 inputs: n %d, incx %d \n", *n, *incx);
+      AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+    #endif
     /* Parameter adjustments */
     --cx;
     /* Function Body */
@@ -122,7 +125,7 @@ doublereal aocl_lapack_dzsum1(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx)
     stemp = 0.;
     if(*n <= 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return ret_val;
     }
     if(*incx == 1)
@@ -140,7 +143,7 @@ doublereal aocl_lapack_dzsum1(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx)
         /* L10: */
     }
     ret_val = stemp;
-    AOCL_DTL_TRACE_LOG_EXIT
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return ret_val;
     /* CODE FOR INCREMENT EQUAL TO 1 */
 L20:
@@ -152,7 +155,7 @@ L20:
         /* L30: */
     }
     ret_val = stemp;
-    AOCL_DTL_TRACE_LOG_EXIT
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return ret_val;
     /* End of DZSUM1 */
 }

@@ -235,7 +235,13 @@ void aocl_lapack_cgbcon(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aocl_int6
     --ipiv;
     --work;
     --rwork;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    sprintf(buffer, "cgbcon inputs: norm %c, n %d, kl %d, ku %d, ldab %d, ipiv %d\n", *norm, *n, *kl, *ku, *ldab, *ipiv);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     *info = 0;
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
     if(!onenrm && !lsame_(norm, "I", 1, 1))
@@ -400,7 +406,7 @@ L10:
     }
 L40:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGBCON */
 }
 /* cgbcon_ */

@@ -223,7 +223,13 @@ void aocl_lapack_cgbsv(aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku, aocl
     b_dim1 = *ldb;
     b_offset = 1 + b_dim1;
     b -= b_offset;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    sprintf(buffer, "cgbsv inputs: n %d, kl %d, ku %d, nrhs %d, ldab %d, ipiv %d, ldb %d\n", *n, *kl, *ku, *nrhs, *ldab, *ipiv, *ldb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     *info = 0;
     if(*n < 0)
     {
@@ -265,7 +271,7 @@ void aocl_lapack_cgbsv(aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku, aocl
                            &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGBSV */
 }
 /* cgbsv_ */

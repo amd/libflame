@@ -227,7 +227,13 @@ void aocl_lapack_cgbequ(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
     ab -= ab_offset;
     --r__;
     --c__;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    sprintf(buffer, "cgbequ inputs: m %d, n %d, kl %d, ku %d, ldab %d\n", *m, *n, *kl, *ku, *ldab);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     *info = 0;
     if(*m < 0)
     {
@@ -421,7 +427,7 @@ void aocl_lapack_cgbequ(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
         *colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGBEQU */
 }
 /* cgbequ_ */

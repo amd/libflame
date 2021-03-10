@@ -216,11 +216,13 @@ void aocl_lapack_cgbtf2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
     ab_offset = 1 + ab_dim1;
     ab -= ab_offset;
     --ipiv;
-#if AOCL_FLA_PROGRESS_H
-    AOCL_FLA_PROGRESS_VAR;
-#endif
-
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    sprintf(buffer, "cgbtf2 inputs: m %d, n %d, kl %d, ku %d, ldab %d, ipiv %d\n", *m, *n, *kl, *ku, *ldab, *ipiv);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     kv = *ku + *kl;
     /* Test the input parameters. */
     *info = 0;
@@ -368,7 +370,7 @@ void aocl_lapack_cgbtf2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
         /* L40: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGBTF2 */
 }
 /* cgbtf2_ */

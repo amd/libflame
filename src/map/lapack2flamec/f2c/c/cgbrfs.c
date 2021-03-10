@@ -320,7 +320,13 @@ void aocl_lapack_cgbrfs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int
     --berr;
     --work;
     --rwork;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    sprintf(buffer, "cgbrfs inputs: trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, ipiv %d, ldb %d, ldx %d\n", *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ipiv, *ldb, *ldx);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
     if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
@@ -607,7 +613,7 @@ void aocl_lapack_cgbrfs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int
         /* L140: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGBRFS */
 }
 /* cgbrfs_ */

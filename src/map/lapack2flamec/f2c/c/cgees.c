@@ -291,7 +291,13 @@ void aocl_lapack_cgees(char *jobvs, char *sort, L_fp1 select, aocl_int64_t *n, s
     --work;
     --rwork;
     --bwork;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    sprintf(buffer, "cgees inputs: jobvs %c, sort %c, n %d, lda %d, sdim %d, ldvs %d\n", *jobvs, *sort, *n, *lda, *sdim, *ldvs);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     *info = 0;
     lquery = *lwork == -1;
     wantvs = lsame_(jobvs, "V", 1, 1);
@@ -475,11 +481,10 @@ void aocl_lapack_cgees(char *jobvs, char *sort, L_fp1 select, aocl_int64_t *n, s
         i__1 = *lda + 1;
         aocl_blas_ccopy(n, &a[a_offset], &i__1, &w[1], &c__1);
     }
-    r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    work[1].r = (real) maxwrk;
+    work[1].i = 0.f; // , expr subst
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of CGEES */
 }
 /* cgees_ */

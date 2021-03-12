@@ -206,7 +206,13 @@ void aocl_lapack_cgeequ(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
     a -= a_offset;
     --r__;
     --c__;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    sprintf(buffer, "cgeequ inputs: m %d, n %d, lda %d\n", *m, *n, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     *info = 0;
     if(*m < 0)
     {
@@ -382,7 +388,7 @@ void aocl_lapack_cgeequ(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
         *colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGEEQU */
 }
 /* cgeequ_ */

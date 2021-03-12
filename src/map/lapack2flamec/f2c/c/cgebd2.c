@@ -265,7 +265,13 @@ void aocl_lapack_cgebd2(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
     --tauq;
     --taup;
     --work;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    sprintf(buffer, "cgebd2 inputs: m %d, n %d, lda %d\n", *m, *n, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     *info = 0;
     if(*m < 0)
     {
@@ -432,7 +438,7 @@ void aocl_lapack_cgebd2(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGEBD2 */
 }
 /* cgebd2_ */

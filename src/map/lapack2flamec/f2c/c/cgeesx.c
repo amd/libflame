@@ -339,7 +339,13 @@ void aocl_lapack_cgeesx(char *jobvs, char *sort, L_fp1 select, char *sense, aocl
     --work;
     --rwork;
     --bwork;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    sprintf(buffer, "cgeesx inputs: jobvs %c, sort %c, sense %c, n %d, lda %d, sdim %d, ldvs %d\n", *jobvs, *sort, *sense, *n, *lda, *sdim, *ldvs);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     *info = 0;
     wantvs = lsame_(jobvs, "V", 1, 1);
     wantst = lsame_(sort, "S", 1, 1);
@@ -563,11 +569,10 @@ void aocl_lapack_cgeesx(char *jobvs, char *sort, L_fp1 select, char *sense, aocl
             *rcondv = dum[0];
         }
     }
-    r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    work[1].r = (real) maxwrk;
+    work[1].i = 0.f; // , expr subst
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of CGEESX */
 }
 /* cgeesx_ */

@@ -9,7 +9,8 @@
 */
 
 /*
-    Modifications Copyright (c) 2021-2025 Advanced Micro Devices, Inc.  All rights reserved.
+    Copyright (c) 2021 Advanced Micro Devices, Inc.  All rights reserved.
+    Mar 16, 2021
 */
 
 

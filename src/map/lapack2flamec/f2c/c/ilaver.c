@@ -42,26 +42,9 @@
 /** Generated wrapper function */
 void ilaver_(aocl_int_t *vers_major__, aocl_int_t *vers_minor__, aocl_int_t *vers_patch__)
 {
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_ilaver(vers_major__, vers_minor__, vers_patch__);
-#else
-    aocl_int64_t vers_major___64 = *vers_major__;
-    aocl_int64_t vers_minor___64 = *vers_minor__;
-    aocl_int64_t vers_patch___64 = *vers_patch__;
-
-    aocl_lapack_ilaver(&vers_major___64, &vers_minor___64, &vers_patch___64);
-
-    *vers_major__ = (aocl_int_t)vers_major___64;
-    *vers_minor__ = (aocl_int_t)vers_minor___64;
-    *vers_patch__ = (aocl_int_t)vers_patch___64;
-#endif
-}
-
-void aocl_lapack_ilaver(aocl_int64_t *vers_major__, aocl_int64_t *vers_minor__, aocl_int64_t *vers_patch__)
-{
     /* Logging and tracing code */
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-    /* -- LAPACK computational routine-- */
+    /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* ===================================================================== */
@@ -71,5 +54,6 @@ void aocl_lapack_ilaver(aocl_int64_t *vers_major__, aocl_int64_t *vers_minor__, 
     *vers_patch__ = 0;
     /* ===================================================================== */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
 }
 /* ilaver_ */

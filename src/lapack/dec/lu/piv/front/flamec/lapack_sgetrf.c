@@ -1,27 +1,27 @@
 /*
-    Copyright (c) 2021-2023 Advanced Micro Devices, Inc.  All rights reserved.
+    Copyright (c) 2021 Advanced Micro Devices, Inc.  All rights reserved.
 */
 
 #include "FLAME.h"
-#if FLA_ENABLE_AOCL_BLAS
-#include "blis.h"
-#endif
-
 /* Table of constant values */
 
-static TLS_CLASS_SPEC fla_dim_t c__1 = 1;
-static TLS_CLASS_SPEC fla_dim_t c_n1 = -1;
-static TLS_CLASS_SPEC real c_b11 = -1.f;
-static TLS_CLASS_SPEC real c_b12 = 1.f;
+static integer c__1 = 1;
+static integer c_n1 = -1;
+static real c_b11 = -1.f;
+static real c_b12 = 1.f;
 
-/* Subroutine */ fla_dim_t lapack_sgetrf(fla_dim_t *m, fla_dim_t *n, real *a, fla_dim_t *lda,
-	aocl_int_t *ipiv, fla_dim_t *info)
+/* Subroutine */ int lapack_sgetrf(integer *m, integer *n, real *a, integer *lda,
+	integer *ipiv, integer *info)
 {
     /* System generated locals */
-    fla_dim_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
 
     /* Local variables */
-    fla_dim_t i__, j, jb, nb, iinfo;
+    integer i__, j, jb, nb, iinfo;
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *,
+	    integer *, integer *);
+    extern /* Subroutine */ int slaswp_(integer *, real *, integer *, integer
+	    *, integer *, integer *, integer *);
 
 
 /*  ======= */
@@ -52,10 +52,10 @@ static TLS_CLASS_SPEC real c_b12 = 1.f;
 /*          A = P*L*U; the unit diagonal elements of L are not stored. */
 
 /*  LDA     (input) INTEGER */
-/*          The leading dimension of the array A.  LDA >= fla_max(1,M). */
+/*          The leading dimension of the array A.  LDA >= max(1,M). */
 
-/*  IPIV    (output) INTEGER array, dimension (fla_min(M,N)) */
-/*          The pivot indices; for 1 <= i <= fla_min(M,N), row i of the */
+/*  IPIV    (output) INTEGER array, dimension (min(M,N)) */
+/*          The pivot indices; for 1 <= i <= min(M,N), row i of the */
 /*          matrix was interchanged with row IPIV(i). */
 
 /*  INFO    (output) INTEGER */
@@ -87,10 +87,6 @@ static TLS_CLASS_SPEC real c_b12 = 1.f;
     a_offset = 1 + a_dim1;
     a -= a_offset;
     --ipiv;
-    #if AOCL_FLA_PROGRESS_H
-        AOCL_FLA_PROGRESS_VAR;
-    #endif
-
 
     /* Function Body */
     *info = 0;
@@ -98,12 +94,12 @@ static TLS_CLASS_SPEC real c_b12 = 1.f;
 	*info = -1;
     } else if (*n < 0) {
 	*info = -2;
-    } else if (*lda < fla_max(1,*m)) {
+    } else if (*lda < max(1,*m)) {
 	*info = -4;
     }
     if (*info != 0) {
 	i__1 = -(*info);
-	aocl_blas_xerbla("LAPACK_SGETRF", &i__1, (ftnlen)13);
+	xerbla_("LAPACK_SGETRF", &i__1);
 	return *info;
     }
 
@@ -115,55 +111,28 @@ static TLS_CLASS_SPEC real c_b12 = 1.f;
 
 /*     Determine the block size for this environment. */
 
-    nb = aocl_lapack_ilaenv(&c__1, "SGETRF", " ", m, n, &c_n1, &c_n1);
-    if (nb <= 1 || nb >= fla_min(*m,*n)) {
+    nb = ilaenv_(&c__1, "SGETRF", " ", m, n, &c_n1, &c_n1);
+    if (nb <= 1 || nb >= min(*m,*n)) {
 
 /*        Use unblocked code. */
-        #if AOCL_FLA_PROGRESS_H
-
-	    #ifndef FLA_ENABLE_WINDOWS_BUILD
-                if(!aocl_fla_progress_ptr)
-                        aocl_fla_progress_ptr=aocl_fla_progress;
-            #endif
-                    if(aocl_fla_progress_ptr){
-                        progress_step_count= fla_min(*m,*n);
-                        AOCL_FLA_PROGRESS_FUNC_PTR("SGETRF",6,&progress_step_count,&progress_thread_id,&progress_total_threads);
-                    }
-         #endif
 
 	lapack_sgetf2(m, n, &a[a_offset], lda, &ipiv[1], info);
     } else {
 
 /*        Use blocked code. */
-	#if AOCL_FLA_PROGRESS_H
-            progress_step_count = 0;
-    #endif
 
-
-	i__1 = fla_min(*m,*n);
+	i__1 = min(*m,*n);
 	i__2 = nb;
 	for (j = 1; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
 /* Computing MIN */
-	    i__3 = fla_min(*m,*n) - j + 1;
-	    jb = fla_min(i__3,nb);
+	    i__3 = min(*m,*n) - j + 1;
+	    jb = min(i__3,nb);
 
 /*           Update current block. */
-	    #if AOCL_FLA_PROGRESS_H
-
-	      #ifndef FLA_ENABLE_WINDOWS_BUILD
-                if(!aocl_fla_progress_ptr)
-                        aocl_fla_progress_ptr=aocl_fla_progress;
-              #endif
-                    if(aocl_fla_progress_ptr){
-                	progress_step_count+=jb;
-                	AOCL_FLA_PROGRESS_FUNC_PTR("SGETRF",6,&progress_step_count,&progress_thread_id,&progress_total_threads);
-                    }
-  	    #endif
-
 
 	    i__3 = *m - j + 1;
 	    i__4 = j - 1;
-	    aocl_blas_sgemm("No transpose", "No transpose", &i__3, &jb, &i__4, &c_b11,
+	    sgemm_("No transpose", "No transpose", &i__3, &jb, &i__4, &c_b11,
 		    &a[j + a_dim1], lda, &a[j * a_dim1 + 1], lda, &c_b12, &a[
 		    j + j * a_dim1], lda);
 
@@ -171,7 +140,8 @@ static TLS_CLASS_SPEC real c_b12 = 1.f;
 /*           singularity. */
 
 	    i__3 = *m - j + 1;
-	    aocl_lapack_sgetrf2(&i__3, &jb, &a[j + j * a_dim1], lda, &ipiv[j], &iinfo);
+	    sgetrf2_(&i__3, &jb, &a[j + j * a_dim1], lda, &ipiv[j], &iinfo);
+
 /*           Adjust INFO and the pivot indices. */
 
 	    if (*info == 0 && iinfo > 0) {
@@ -179,9 +149,9 @@ static TLS_CLASS_SPEC real c_b12 = 1.f;
 	    }
 /* Computing MIN */
 	    i__4 = *m, i__5 = j + jb - 1;
-	    i__3 = fla_min(i__4,i__5);
+	    i__3 = min(i__4,i__5);
 	    for (i__ = j; i__ <= i__3; ++i__) {
-		ipiv[i__] = (aocl_int_t)(j - 1 + ipiv[i__]);
+		ipiv[i__] = j - 1 + ipiv[i__];
 /* L10: */
 	    }
 
@@ -189,7 +159,7 @@ static TLS_CLASS_SPEC real c_b12 = 1.f;
 
 	    i__3 = j - 1;
 	    i__4 = j + jb - 1;
-	    aocl_lapack_slaswp(&i__3, &a[a_offset], lda, &j, &i__4, &ipiv[1], &c__1);
+	    slaswp_(&i__3, &a[a_offset], lda, &j, &i__4, &ipiv[1], &c__1);
 
 	    if (j + jb <= *n) {
 
@@ -197,19 +167,19 @@ static TLS_CLASS_SPEC real c_b12 = 1.f;
 
 		i__3 = *n - j - jb + 1;
 		i__4 = j + jb - 1;
-		aocl_lapack_slaswp(&i__3, &a[(j + jb) * a_dim1 + 1], lda, &j, &i__4, &
+		slaswp_(&i__3, &a[(j + jb) * a_dim1 + 1], lda, &j, &i__4, &
 			ipiv[1], &c__1);
 
 		i__3 = *n - j - jb + 1;
 		i__4 = j - 1;
-		aocl_blas_sgemm("No transpose", "No transpose", &jb, &i__3, &i__4, &
+		sgemm_("No transpose", "No transpose", &jb, &i__3, &i__4, &
 			c_b11, &a[j + a_dim1], lda, &a[(j + jb) * a_dim1 + 1],
 			 lda, &c_b12, &a[j + (j + jb) * a_dim1], lda);
 
 /*              Compute block row of U. */
 
 		i__3 = *n - j - jb + 1;
-		aocl_blas_strsm("Left", "Lower", "No transpose", "Unit", &jb, &i__3, &
+		strsm_("Left", "Lower", "No transpose", "Unit", &jb, &i__3, &
 			c_b12, &a[j + j * a_dim1], lda, &a[j + (j + jb) *
 			a_dim1], lda);
 	    }

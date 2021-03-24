@@ -1,14 +1,11 @@
 /*
-    Copyright (c) 2021-2023 Advanced Micro Devices, Inc.  All rights reserved.
+    Copyright (c) 2021 Advanced Micro Devices, Inc.  All rights reserved.
 */
 
 #include "FLAME.h"
-#if FLA_ENABLE_AOCL_BLAS
-#include "blis.h"
-#endif
 
-/* Subroutine */ fla_dim_t lapack_zgetf2(fla_dim_t *m, fla_dim_t *n, dcomplex *a,
-	fla_dim_t *lda, aocl_int_t *ipiv, fla_dim_t *info)
+/* Subroutine */ int lapack_zgetf2(integer *m, integer *n, doublecomplex *a,
+	integer *lda, integer *ipiv, integer *info)
 {
 
 /*
@@ -41,10 +38,10 @@
             A = P*L*U; the unit diagonal elements of L are not stored.
 
     LDA     (input) INTEGER
-            The leading dimension of the array A.  LDA >= fla_max(1,M).
+            The leading dimension of the array A.  LDA >= max(1,M).
 
-    IPIV    (output) INTEGER array, dimension (fla_min(M,N))
-            The pivot indices; for 1 <= i <= fla_min(M,N), row i of the
+    IPIV    (output) INTEGER array, dimension (min(M,N))
+            The pivot indices; for 1 <= i <= min(M,N), row i of the
             matrix was interchanged with row IPIV(i).
 
     INFO    (output) INTEGER
@@ -62,18 +59,19 @@
 
        Parameter adjustments */
     /* Table of constant values */
-    static TLS_CLASS_SPEC dcomplex c_b1 = {1.,0.};
-    static TLS_CLASS_SPEC fla_dim_t c__1 = 1;
+    static doublecomplex c_b1 = {1.,0.};
+    static integer c__1 = 1;
 
     /* System generated locals */
-    fla_dim_t a_dim1, a_offset, i__1, i__2, i__3;
-    dcomplex z__1;
+    integer a_dim1, a_offset, i__1, i__2, i__3;
+    doublecomplex z__1;
     /* Builtin functions */
-    void z_div(dcomplex *, dcomplex *, dcomplex *);
+    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
     /* Local variables */
-    static TLS_CLASS_SPEC fla_dim_t j;
+    static integer j;
 
-    static TLS_CLASS_SPEC fla_dim_t jp;
+    static integer jp;
+    extern /* Subroutine */ int xerbla_(char *, integer *);
 #define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
 #define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]
 
@@ -89,12 +87,12 @@
 	*info = -1;
     } else if (*n < 0) {
 	*info = -2;
-    } else if (*lda < fla_max(1,*m)) {
+    } else if (*lda < max(1,*m)) {
 	*info = -4;
     }
     if (*info != 0) {
 	i__1 = -(*info);
-	aocl_blas_xerbla("LAPACK_ZGETF2", &i__1, (ftnlen)13);
+	xerbla_("LAPACK_ZGETF2", &i__1);
 	return 0;
     }
 
@@ -104,21 +102,21 @@
 	return 0;
     }
 
-    i__1 = fla_min(*m,*n);
+    i__1 = min(*m,*n);
     for (j = 1; j <= i__1; ++j) {
 
 /*        Find pivot and test for singularity. */
 
 	i__2 = *m - j + 1;
-	jp = j - 1 + aocl_blas_izamax(&i__2, &a_ref(j, j), &c__1);
-	ipiv[j] = (aocl_int_t)(jp);
+	jp = j - 1 + izamax_(&i__2, &a_ref(j, j), &c__1);
+	ipiv[j] = jp;
 	i__2 = a_subscr(jp, j);
-	if (a[i__2].real != 0. || a[i__2].imag != 0.) {
+	if (a[i__2].r != 0. || a[i__2].i != 0.) {
 
 /*           Apply the interchange to columns 1:N. */
 
 	    if (jp != j) {
-		aocl_blas_zswap(n, &a_ref(j, 1), lda, &a_ref(jp, 1), lda);
+		zswap_(n, &a_ref(j, 1), lda, &a_ref(jp, 1), lda);
 	    }
 
 /*           Compute elements J+1:M of J-th column. */
@@ -126,7 +124,7 @@
 	    if (j < *m) {
 		i__2 = *m - j;
 		z_div(&z__1, &c_b1, &a_ref(j, j));
-		aocl_blas_zscal(&i__2, &z__1, &a_ref(j + 1, j), &c__1);
+		zscal_(&i__2, &z__1, &a_ref(j + 1, j), &c__1);
 	    }
 
 	} else if (*info == 0) {
@@ -134,14 +132,14 @@
 	    *info = j;
 	}
 
-	if (j < fla_min(*m,*n)) {
+	if (j < min(*m,*n)) {
 
 /*           Update trailing submatrix. */
 
 	    i__2 = *m - j;
 	    i__3 = *n - j;
-	    z__1.real = -1., z__1.imag = 0.;
-	    aocl_blas_zgeru(&i__2, &i__3, &z__1, &a_ref(j + 1, j), &c__1, &a_ref(j, j
+	    z__1.r = -1., z__1.i = 0.;
+	    zgeru_(&i__2, &i__3, &z__1, &a_ref(j + 1, j), &c__1, &a_ref(j, j
 		    + 1), lda, &a_ref(j + 1, j + 1), lda);
 	}
 /* L10: */

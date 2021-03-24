@@ -1,14 +1,11 @@
 /*
-    Copyright (c) 2021-2023 Advanced Micro Devices, Inc.  All rights reserved.
+    Copyright (c) 2021 Advanced Micro Devices, Inc.  All rights reserved.
 */
 
 #include "FLAME.h"
-#if FLA_ENABLE_AOCL_BLAS
-#include "blis.h"
-#endif
 
-/* Subroutine */ fla_dim_t lapack_sgetf2(fla_dim_t *m, fla_dim_t *n, real *a, fla_dim_t *lda,
-	aocl_int_t *ipiv, fla_dim_t *info)
+/* Subroutine */ int lapack_sgetf2(integer *m, integer *n, real *a, integer *lda,
+	integer *ipiv, integer *info)
 {
 
 
@@ -41,10 +38,10 @@
             A = P*L*U; the unit diagonal elements of L are not stored.
 
     LDA     (input) INTEGER
-            The leading dimension of the array A.  LDA >= fla_max(1,M).
+            The leading dimension of the array A.  LDA >= max(1,M).
 
-    IPIV    (output) INTEGER array, dimension (fla_min(M,N))
-            The pivot indices; for 1 <= i <= fla_min(M,N), row i of the
+    IPIV    (output) INTEGER array, dimension (min(M,N))
+            The pivot indices; for 1 <= i <= min(M,N), row i of the
             matrix was interchanged with row IPIV(i).
 
     INFO    (output) INTEGER
@@ -62,18 +59,17 @@
 
        Parameter adjustments */
     /* Table of constant values */
-    static TLS_CLASS_SPEC fla_dim_t c__1 = 1;
-    static TLS_CLASS_SPEC real c_b6 = -1.f;
+    static integer c__1 = 1;
+    static real c_b6 = -1.f;
 
     /* System generated locals */
-    fla_dim_t a_dim1, a_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, i__1, i__2, i__3;
     real r__1;
     /* Local variables */
-	static TLS_CLASS_SPEC fla_dim_t j;
-    static TLS_CLASS_SPEC fla_dim_t jp;
-    int kn;
-    float safmin;
-    float a_piv;
+	static integer j;
+    static integer jp;
+    extern /* Subroutine */ int xerbla_(char *, integer *);
+    extern integer isamax_(integer *, real *, integer *);
 #define a_ref(a_1,a_2) a[(a_2)*a_dim1 + a_1]
 
 
@@ -88,12 +84,12 @@
 	*info = -1;
     } else if (*n < 0) {
 	*info = -2;
-    } else if (*lda < fla_max(1,*m)) {
+    } else if (*lda < max(1,*m)) {
 	*info = -4;
     }
     if (*info != 0) {
 	i__1 = -(*info);
-	aocl_blas_xerbla("LAPACK_SGETF2", &i__1, (ftnlen)13);
+	xerbla_("LAPACK_SGETF2", &i__1);
 	return 0;
     }
 
@@ -103,56 +99,42 @@
 	return 0;
     }
 
-    i__1 = fla_min(*m,*n);
+    i__1 = min(*m,*n);
     for (j = 1; j <= i__1; ++j) {
 
 /*        Find pivot and test for singularity. */
 
 	i__2 = *m - j + 1;
-	jp = j - 1 + aocl_blas_isamax(&i__2, &a_ref(j, j), &c__1);
+	jp = j - 1 + isamax_(&i__2, &a_ref(j, j), &c__1);
 	ipiv[j] = jp;
 	if (a_ref(jp, j) != 0.f) {
 
 /*           Apply the interchange to columns 1:N. */
 
 	    if (jp != j) {
-		aocl_blas_sswap(n, &a_ref(j, 1), lda, &a_ref(jp, 1), lda);
+		sswap_(n, &a_ref(j, 1), lda, &a_ref(jp, 1), lda);
 	    }
 
 /*           Compute elements J+1:M of J-th column. */
 
-           if (j < *m) {
-            i__2 = *m - j;
-            
-	    safmin = FLT_MIN;
-            a_piv = a_ref(j, j);
-            
-            if (fabs(a_piv) < safmin)
-            {
-                for (kn = 1; kn <= i__2; kn++) 
-                {
-                    a_ref(j + kn, j) = a_ref(j + kn, j) / a_piv;
-                }
-            }
-            else 
-            {
-                r__1 = 1.f / a_piv;
-                aocl_blas_sscal(&i__2, &r__1, &a_ref(j + 1, j), &c__1);
-            }
-           }
+	    if (j < *m) {
+		i__2 = *m - j;
+		r__1 = 1.f / a_ref(j, j);
+		sscal_(&i__2, &r__1, &a_ref(j + 1, j), &c__1);
+	    }
 
 	} else if (*info == 0) {
 
 	    *info = j;
 	}
 
-	if (j < fla_min(*m,*n)) {
+	if (j < min(*m,*n)) {
 
 /*           Update trailing submatrix. */
 
 	    i__2 = *m - j;
 	    i__3 = *n - j;
-	    aocl_blas_sger(&i__2, &i__3, &c_b6, &a_ref(j + 1, j), &c__1, &a_ref(j, j +
+	    sger_(&i__2, &i__3, &c_b6, &a_ref(j + 1, j), &c__1, &a_ref(j, j +
 		    1), lda, &a_ref(j + 1, j + 1), lda);
 	}
 /* L10: */

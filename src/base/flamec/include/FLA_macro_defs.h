@@ -1,4 +1,4 @@
-			/*
+/*
 
     Copyright (C) 2014, The University of Texas at Austin
 
@@ -16,8 +16,6 @@
 
 
 // --- Miscellaneous macro definitions -----------------------------------------
-#ifndef FLA_MACRO_DEFS_H
-#define FLA_MACRO_DEFS_H
 
 #undef  NULL
 #define NULL 0
@@ -135,7 +133,7 @@
 #define FLA_REAL_DOMAIN      1200
 #define FLA_COMPLEX_DOMAIN   1201
 
-// FLA_Inv
+// FLA_Inv    
 #define FLA_NO_INVERSE       1300
 #define FLA_INVERSE          1301
 
@@ -190,7 +188,6 @@
 #define FLA_Z_INDEX             3
 #define FLA_DTYPE_INDEX_MASK  0x3
 
-#define FLA_SMALL_LU_BLOCKSIZE 64
 // Default blocksize if none are available.
 #ifndef FLA_DEFAULT_M_BLOCKSIZE
   #define FLA_DEFAULT_M_BLOCKSIZE  128
@@ -237,6 +234,12 @@
 #define FLA_SPFFRT2__BSIZE1           (8)
 #define FLA_SPFFRT2__BSIZE2           (32)
 #define FLA_SPFFRT2__BSIZE3           (64)
+
+//GETRF , threshold numbers to chose paths for performance
+#define FLA_GETRF_SMALL               (85)
+#define FLA_GETRF_FLOAT               (1440)
+#define FLA_GETRF_COMPLEX             (670)
+#define FLA_GETRF_DOUBLE_COMPLEX      (1630)
 
 // GETRFNPI , these thresholds are used to chose between 3 algorithms to get best
 // results in terms of perfmormance
@@ -362,34 +365,21 @@
 
 // --- Common functions implemented as macros ----------------------------------
 
-#define fla_min( x, y )    \
-({                         \
-   __typeof__(x) _x = (x); \
-   __typeof__(y) _y = (y); \
-   _x < _y ? _x : _y;      \
-})
+#undef min
+#define min( x, y ) ( (x) < (y) ? (x) : (y) )
 
-#define fla_max( x, y )    \
-({                         \
-   __typeof__(x) _x = (x); \
-   __typeof__(y) _y = (y); \
-   _x > _y ? _x : _y;      \
-})
+#undef max
+#define max( x, y ) ( (x) > (y) ? (x) : (y) )
 
 #undef signof
 #define signof( a, b ) ( (b) >= 0 ? (a) : -(a) )
 
-#ifndef __cplusplus
-
- #undef exchange
- #define exchange( a, b, temp ) { temp = a; a = b; b = temp; }
-
-#endif
+#undef exchange
+#define exchange( a, b, temp ) { temp = a; a = b; b = temp; }
 
 // --- Other macro definitions -------------------------------------------------
 
 #define FLA_NEGATE( a ) \
         ( a.base == FLA_ONE.base ? FLA_MINUS_ONE : FLA_ONE )
 
-#endif
 

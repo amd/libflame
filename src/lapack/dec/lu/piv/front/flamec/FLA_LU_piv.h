@@ -42,17 +42,3 @@ FLA_Error FLA_LU_piv_solve( FLA_Obj A, FLA_Obj p, FLA_Obj B, FLA_Obj X );
 
 FLA_Error FLASH_LU_piv_solve( FLA_Obj A, FLA_Obj p, FLA_Obj B, FLA_Obj X );
 
-fla_dim_t lapack_cgetf2(fla_dim_t *m, fla_dim_t *n, scomplex *a, fla_dim_t *lda,
-	 aocl_int_t *ipiv, fla_dim_t *info);
-fla_dim_t lapack_cgetrf(fla_dim_t *m, fla_dim_t *n, scomplex *a, fla_dim_t *lda,
-	 aocl_int_t *ipiv, fla_dim_t *info);
-fla_dim_t lapack_dgetrf(fla_dim_t *m, fla_dim_t *n, doublereal *a, fla_dim_t *
-	lda, aocl_int_t *ipiv, fla_dim_t *info);
-fla_dim_t lapack_sgetf2(fla_dim_t *m, fla_dim_t *n, real *a, fla_dim_t *lda,
-	aocl_int_t *ipiv, fla_dim_t *info);
-fla_dim_t lapack_sgetrf(fla_dim_t *m, fla_dim_t *n, real *a, fla_dim_t *lda,
-	aocl_int_t *ipiv, fla_dim_t *info);
-fla_dim_t lapack_zgetf2(fla_dim_t *m, fla_dim_t *n, dcomplex *a,
-	fla_dim_t *lda, aocl_int_t *ipiv, fla_dim_t *info);
-fla_dim_t lapack_zgetrf(fla_dim_t *m, fla_dim_t *n, dcomplex *a,
-	fla_dim_t *lda, aocl_int_t *ipiv, fla_dim_t *info);

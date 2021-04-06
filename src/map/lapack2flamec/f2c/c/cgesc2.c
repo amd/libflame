@@ -182,7 +182,13 @@ void aocl_lapack_cgesc2(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomple
     --rhs;
     --ipiv;
     --jpiv;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256, "cgesc2 inputs: n %d, lda %d, ipiv %d, jpiv %d\n", *n, *lda, *ipiv, *jpiv);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     eps = slamch_("P");
     smlnum = slamch_("S") / eps;
     /* Apply permutations IPIV to RHS */
@@ -255,9 +261,9 @@ void aocl_lapack_cgesc2(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomple
     }
     /* Apply permutations JPIV to the solution (RHS) */
     i__1 = *n - 1;
-    aocl_lapack_claswp(&c__1, &rhs[1], lda, &c__1, &i__1, &jpiv[1], &c_n1);
+    claswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &jpiv[1], &c_n1);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGESC2 */
 }
 /* cgesc2_ */

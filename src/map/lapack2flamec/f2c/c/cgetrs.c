@@ -190,7 +190,13 @@ void aocl_lapack_cgetrs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scompl
     b_dim1 = *ldb;
     b_offset = 1 + b_dim1;
     b -= b_offset;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256, "cgetrs inputs: trans %c, n %d, nrhs %d, lda %d, ipiv %d, ldb %d\n", *trans, *n, *nrhs, *lda, *ipiv, *ldb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
     if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
@@ -216,15 +222,15 @@ void aocl_lapack_cgetrs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scompl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGETRS", &i__1, (ftnlen)6);
+        xerbla_("CGETRS", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(notran)
     {
@@ -251,7 +257,7 @@ void aocl_lapack_cgetrs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scompl
         aocl_lapack_claswp(nrhs, &b[b_offset], ldb, &c__1, n, &ipiv[1], &c_n1);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGETRS */
 }
 /* cgetrs_ */

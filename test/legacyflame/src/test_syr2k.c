@@ -302,9 +302,9 @@ void libfla_test_syr2k_experiment( test_params_t params,
 
 
 
-extern TLS_CLASS_SPEC fla_scalr_t* fla_scalr_cntl_blas;
-extern TLS_CLASS_SPEC fla_gemm_t*  fla_gemm_cntl_blas;
-extern TLS_CLASS_SPEC fla_syr2k_t* fla_syr2k_cntl_blas;
+extern LIBFLAME_IMPORT TLS_CLASS_SPEC fla_scalr_t* fla_scalr_cntl_blas;
+extern LIBFLAME_IMPORT TLS_CLASS_SPEC fla_gemm_t*  fla_gemm_cntl_blas;
+extern LIBFLAME_IMPORT TLS_CLASS_SPEC fla_syr2k_t* fla_syr2k_cntl_blas;
 
 void libfla_test_syr2k_cntl_create( unsigned int var,
                                     fla_dim_t        b_alg_flat )

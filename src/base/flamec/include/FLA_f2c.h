@@ -40,15 +40,56 @@
 #define zdotc_f2c_ zdotc_
 #endif
 
-/* typedef long int integer; */
-typedef int integer; 
+// LDLT Factorization for packed matrices uses different threshold to choose
+// between blocked /  unblocked variants and also the blocksize for the blocked
+// variant. The thresholds and blocksizes re defined here
+#define FLA_SPFFRT2__NTHRESH1         (64)
+#define FLA_SPFFRT2__NTHRESH2         (201)
+#define FLA_SPFFRT2__NTHRESH3         (4096)
+#define FLA_SPFFRT2__NCOLTHRESH       (3)
+#define FLA_SPFFRT2__NCOLFRAC_THRESH1 (25)
+#define FLA_SPFFRT2__NCOLFRAC_THRESH2 (80)
+#define FLA_SPFFRT2__NCOLFRAC_THRESH3 (20)
+#define FLA_SPFFRT2__BSIZE_NL1        (256)
+#define FLA_SPFFRT2__BSIZE_NL2        (4096)
+#define FLA_SPFFRT2__BSIZE1           (8)
+#define FLA_SPFFRT2__BSIZE2           (32)
+#define FLA_SPFFRT2__BSIZE3           (64)
 
-/* DTL purpose */
-#ifdef _WIN32
-	#define FLA_IS "lld"
+
+/* typedef long integer integer; */
+#ifdef __cplusplus
+  // For C++, include stdint.h.
+#include <stdint.h> // skipped
+#elif __STDC_VERSION__ >= 199901L
+  // For C99 (or later), include stdint.h.
+#include <stdint.h> // skipped
 #else
-	#define FLA_IS "ld"
+  // When stdint.h is not available, manually typedef the types we will use.
+#ifdef _WIN32
+typedef          __int32  int32_t;
+typedef unsigned __int32 uint32_t;
+typedef          __int64  int64_t;
+typedef unsigned __int64 uint64_t;
+#else
+#error "Attempting to compile on pre-C99 system without stdint.h."
 #endif
+#endif
+/* typedef long integer integer; */
+#ifdef FLA_ENABLE_ILP64
+typedef int64_t integer;
+typedef uint64_t uinteger;
+#else
+typedef int integer;
+typedef unsigned long int uinteger;
+#endif
+
+typedef char *address;
+typedef short int shortint;
+typedef float real;
+typedef double doublereal;
+typedef struct { real r, i; } complex;
+typedef struct { doublereal r, i; } doublecomplex;
 
 #ifdef FLA_ENABLE_ILP64
   #ifdef _WIN32
@@ -350,54 +391,8 @@ typedef struct Namelist Namelist;
 #endif
 #endif
 
-#ifndef FLA_ENABLE_EXTRA_SYMBOLS
 #if (defined(_WIN32) || defined(_WIN64))
 #ifdef UPPER
-#define  cgelst_   CGELST
-#define  clatrs3_  CLATRS3
-#define  ctrsyl3_  CTRSYL3
-#define  dlarmm_   DLARMM
-#define  dgelst_   DGELST
-#define  dlatrs3_  DLATRS3
-#define  dtrsyl3_  DTRSYL3
-#define  slarmm_   SLARMM
-#define  sgelst_   SGELST
-#define  slatrs3_  SLATRS3
-#define  strsyl3_  STRSYL3
-#define  zgelst_   ZGELST
-#define  zlatrs3_  ZLATRS3
-#define  ztrsyl3_  ZTRSYL3
-#define  cgetsqrhrt_  CGETSQRHRT
-#define  claqz0_  CLAQZ0
-#define  claqz1_  CLAQZ1
-#define  claqz2_  CLAQZ2
-#define  claqz3_  CLAQZ3
-#define  clarfb_gett_  CLARFB_GETT
-#define  cungtsqr_row_  CUNGTSQR_ROW
-#define  dgetsqrhrt_  DGETSQRHRT
-#define  dlaqz0_  DLAQZ0
-#define  dlaqz1_  DLAQZ1
-#define  dlaqz2_  DLAQZ2
-#define  dlaqz3_  DLAQZ3
-#define  dlaqz4_  DLAQZ4
-#define  dlarfb_gett_  DLARFB_GETT
-#define  dorgtsqr_row_  DORGTSQR_ROW
-#define  sgetsqrhrt_  SGETSQRHRT
-#define  slaqz0_  SLAQZ0
-#define  slaqz1_  SLAQZ1
-#define  slaqz2_  SLAQZ2
-#define  slaqz3_  SLAQZ3
-#define  slaqz4_  SLAQZ4
-#define  slarfb_gett_  SLARFB_GETT
-#define  sorgtsqr_row_  SORGTSQR_ROW
-#define  zgetsqrhrt_  ZGETSQRHRT
-#define  zlaqz0_  ZLAQZ0
-#define  zlaqz1_  ZLAQZ1
-#define  zlaqz2_  ZLAQZ2
-#define  zlaqz3_  ZLAQZ3
-#define  zlarfb_gett_  ZLARFB_GETT
-#define	 zungtsqr_row_  ZUNGTSQR_ROW
-
 #define  isamax_   ISAMAX     
 #define  idamax_   IDAMAX     
 #define  icamax_   ICAMAX     
@@ -1742,7 +1737,6 @@ typedef struct Namelist Namelist;
 #define slar1v_                  SLAR1V 
 #define slar2v_                  SLAR2V 
 #define slarf_                   SLARF 
-#define slarf1f_                 SLARF1F
 #define slarfb_                  SLARFB 
 #define slarfg_                  SLARFG 
 #define slarfgp_                 SLARFGP 
@@ -1836,7 +1830,7 @@ typedef struct Namelist Namelist;
 #define sorgrq_                  SORGRQ 
 #define sorgtr_                  SORGTR 
 #define sorgtsqr_                SORGTSQR 
-#define sorhr_col_               SORHR_COL 
+#define sorhr_col_               SORHR_OL 
 #define sorm22_                  SORM22 
 #define sorm2l_                  SORM2L 
 #define sorm2r_                  SORM2R 
@@ -2029,7 +2023,7 @@ typedef struct Namelist Namelist;
 #define strttp_                  STRTTP 
 #define stzrqf_                  STZRQF 
 #define stzrzf_                  STZRZF 
-#define xerbla_array_            XERBLA_ARRAY
+#define xerbla_array_            XERBLA_ARRAY  
 #define zbbcsd_                  ZBBCSD 
 #define zbdsqr_                  ZBDSQR 
 #define zcgesv_                  ZCGESV 
@@ -2541,53 +2535,6 @@ typedef struct Namelist Namelist;
 #define cgetrfnpi_               CGETRFNPI
 #define zgetrfnpi_               ZGETRFNPI
 #else
-#define  cgelst_   cgelst
-#define  clatrs3_  clatrs3
-#define  ctrsyl3_  ctrsyl3
-#define  dlarmm_   dlarmm
-#define  dgelst_   dgelst
-#define  dlatrs3_  dlatrs3
-#define  dtrsyl3_  dtrsyl3
-#define  slarmm_   slarmm
-#define  sgelst_   sgelst
-#define  slatrs3_  slatrs3
-#define  strsyl3_  strsyl3
-#define  zgelst_   zgelst
-#define  zlatrs3_  zlatrs3
-#define  ztrsyl3_  ztrsyl3
-#define  cgetsqrhrt_  cgetsqrhrt
-#define  claqz0_  claqz0
-#define  claqz1_  claqz1
-#define  claqz2_  claqz2
-#define  claqz3_  claqz3
-#define  clarfb_gett_  clarfb_gett
-#define  cungtsqr_row_  cungtsqr_row
-#define  dgetsqrhrt_  dgetsqrhrt
-#define  dlaqz0_  dlaqz0
-#define  dlaqz1_  dlaqz1
-#define  dlaqz2_  dlaqz2
-#define  dlaqz3_  dlaqz3
-#define  dlaqz4_  dlaqz4
-#define  dlarfb_gett_  dlarfb_gett
-#define  dorgtsqr_row_  dorgtsqr_row
-#define  sgetsqrhrt_  sgetsqrhrt
-#define  slaqz0_  slaqz0
-#define  slaqz1_  slaqz1
-#define  slaqz2_  slaqz2
-#define  slaqz3_  slaqz3
-#define  slaqz4_  slaqz4
-#define  slarfb_gett_  slarfb_gett
-#define  sorgtsqr_row_  sorgtsqr_row
-#define  zgetsqrhrt_  zgetsqrhrt
-#define  zlaqz0_  zlaqz0
-#define  zlaqz1_  zlaqz1
-#define  zlaqz2_  zlaqz2
-#define  zlaqz3_  zlaqz3
-#define  zlarfb_gett_  zlarfb_gett
-#define	 zungtsqr_row_  zungtsqr_row
-#define sroundup_lwork sroundup_lwork
-#define droundup_lwork droundup_lwork
-
 #define  isamax_   isamax     
 #define  idamax_   idamax     
 #define  icamax_   icamax     
@@ -3932,7 +3879,6 @@ typedef struct Namelist Namelist;
 #define slar1v_                  slar1v 
 #define slar2v_                  slar2v 
 #define slarf_                   slarf 
-#define slarf1f_                 slarf1f
 #define slarfb_                  slarfb 
 #define slarfg_                  slarfg 
 #define slarfgp_                 slarfgp 
@@ -4026,7 +3972,7 @@ typedef struct Namelist Namelist;
 #define sorgrq_                  sorgrq 
 #define sorgtr_                  sorgtr 
 #define sorgtsqr_                sorgtsqr 
-#define sorhr_col_               sorhr_col 
+#define sorhr_col_               sorhr_ol 
 #define sorm22_                  sorm22 
 #define sorm2l_                  sorm2l 
 #define sorm2r_                  sorm2r 
@@ -4219,7 +4165,7 @@ typedef struct Namelist Namelist;
 #define strttp_                  strttp 
 #define stzrqf_                  stzrqf 
 #define stzrzf_                  stzrzf 
-#define xerbla_array_            xerbla_array
+#define xerbla_array_            xerbla_array  
 #define zbbcsd_                  zbbcsd 
 #define zbdsqr_                  zbdsqr 
 #define zcgesv_                  zcgesv 
@@ -4731,5 +4677,4 @@ typedef struct Namelist Namelist;
 #define cgetrfnpi_               cgetrfnpi
 #define zgetrfnpi_               zgetrfnpi
 #endif
-#endif 
 #endif

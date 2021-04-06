@@ -18,9 +18,9 @@ FLA_Error FLA_LU_piv_unb_external( FLA_Obj A, FLA_Obj p )
 {
   FLA_Error    r_val = FLA_SUCCESS;
 #ifdef FLA_ENABLE_EXTERNAL_LAPACK_INTERFACES
-  fla_dim_t          info;
+  integer          info;
   FLA_Datatype datatype;
-  fla_dim_t          m_A, n_A, cs_A;
+  integer          m_A, n_A, cs_A;
 
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
     FLA_LU_piv_check( A, p );
@@ -40,9 +40,7 @@ FLA_Error FLA_LU_piv_unb_external( FLA_Obj A, FLA_Obj p )
   case FLA_FLOAT:
   {
     float *buff_A = ( float * ) FLA_FLOAT_PTR( A );
-    fla_dim_t   *buff_p = ( fla_dim_t   * ) FLA_INT_PTR( p );
-    fla_dim_t buff_plen = FLA_Obj_length(p);
-    aocl_int_t* ipiv = FLA_Intlp_get_array(buff_p, buff_plen);
+    integer   *buff_p = ( integer   * ) FLA_INT_PTR( p );
 
     F77_sgetf2( &m_A,
                 &n_A,
@@ -57,9 +55,7 @@ FLA_Error FLA_LU_piv_unb_external( FLA_Obj A, FLA_Obj p )
   case FLA_DOUBLE:
   {
     double *buff_A = ( double * ) FLA_DOUBLE_PTR( A );
-    fla_dim_t    *buff_p = ( fla_dim_t    * ) FLA_INT_PTR( p );
-    fla_dim_t buff_plen = FLA_Obj_length(p);
-    aocl_int_t* ipiv = FLA_Intlp_get_array(buff_p, buff_plen);
+    integer    *buff_p = ( integer    * ) FLA_INT_PTR( p );
 
     F77_dgetf2( &m_A,
                 &n_A,
@@ -74,9 +70,7 @@ FLA_Error FLA_LU_piv_unb_external( FLA_Obj A, FLA_Obj p )
   case FLA_COMPLEX:
   {
     scomplex *buff_A = ( scomplex * ) FLA_COMPLEX_PTR( A );
-    fla_dim_t      *buff_p = ( fla_dim_t      * ) FLA_INT_PTR( p );
-    fla_dim_t buff_plen = FLA_Obj_length(p);
-    aocl_int_t* ipiv = FLA_Intlp_get_array(buff_p, buff_plen);
+    integer      *buff_p = ( integer      * ) FLA_INT_PTR( p );
 
     F77_cgetf2( &m_A,
                 &n_A,
@@ -91,9 +85,7 @@ FLA_Error FLA_LU_piv_unb_external( FLA_Obj A, FLA_Obj p )
   case FLA_DOUBLE_COMPLEX:
   {
     dcomplex *buff_A = ( dcomplex * ) FLA_DOUBLE_COMPLEX_PTR( A );
-    fla_dim_t      *buff_p = ( fla_dim_t      * ) FLA_INT_PTR( p );
-    fla_dim_t buff_plen = FLA_Obj_length(p);
-    aocl_int_t* ipiv = FLA_Intlp_get_array(buff_p, buff_plen);
+    integer      *buff_p = ( integer      * ) FLA_INT_PTR( p );
 
     F77_zgetf2( &m_A,
                 &n_A,

@@ -13,8 +13,8 @@
 FLA_Error FLA_Invert( FLA_Conj conj, FLA_Obj x )
 {
   FLA_Datatype datatype;
-  fla_dim_t          n_elem;
-  fla_dim_t          inc_x;
+  integer          n_elem;
+  integer          inc_x;
   conj1_t       blis_conj;
 
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING ) 

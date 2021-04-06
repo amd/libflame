@@ -54,10 +54,10 @@ void libfla_test_chol_cntl_create( unsigned int var,
                                    fla_dim_t        b_alg_flat );
 void libfla_test_chol_cntl_free( void );
 void FLA_POTRF( char* uplo,
-                int n,
+                integer n,
                 FLA_Obj A_save,
                 FLA_Obj A,
-                int lda,
+                integer lda,
                 FLA_Datatype datatype,
                 unsigned int n_repeats,
                 double* time_min_ );
@@ -159,9 +159,9 @@ void libfla_test_chol_experiment( test_params_t params,
 	double       time_min   = 1e9;
 	double       time;
 	unsigned int i;
-	unsigned int m;
-	unsigned int lda;
-	signed int   m_input    = -1;
+	uinteger m;
+	uinteger lda;
+	integer   m_input    = -1;
 	FLA_Uplo     uplo;
 	FLA_Obj      A, x, b, norm;
 	FLA_Obj      A_save;
@@ -283,9 +283,9 @@ void libfla_test_chol_experiment( test_params_t params,
 
 
 
-extern TLS_CLASS_SPEC fla_herk_t* fla_herk_cntl_blas;
-extern TLS_CLASS_SPEC fla_trsm_t* fla_trsm_cntl_blas;
-extern TLS_CLASS_SPEC fla_gemm_t* fla_gemm_cntl_blas;
+extern LIBFLAME_IMPORT TLS_CLASS_SPEC fla_herk_t* fla_herk_cntl_blas;
+extern LIBFLAME_IMPORT TLS_CLASS_SPEC fla_trsm_t* fla_trsm_cntl_blas;
+extern LIBFLAME_IMPORT TLS_CLASS_SPEC fla_gemm_t* fla_gemm_cntl_blas;
 
 void libfla_test_chol_cntl_create( unsigned int var,
                                    fla_dim_t        b_alg_flat )
@@ -370,15 +370,15 @@ void libfla_test_chol_impl( int impl,
  *  Cholesky Factorization - potrf 
  *    * */
 void FLA_POTRF( char* uplo,
-                int n,
+                integer n,
                 FLA_Obj A_save,
                 FLA_Obj A,
-                int lda,
+                integer lda,
                 FLA_Datatype datatype,
                 unsigned int n_repeats,
                 double* time_min_ )
 {
-        int          info;
+        integer      info;
         unsigned int i;
         double       time;
         double       time_min   = 1e9;

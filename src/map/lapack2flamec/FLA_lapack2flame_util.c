@@ -30,19 +30,19 @@ void F77_fla_finalize()
 {
     FLA_Finalize();
 }
-void F77_fla_initialized(integer *ok)
+void F77_fla_initialized( integer* ok )
 {
     *ok = (FLA_Initialized() ? 1 : 0);
 }
-void F77_fla_memory_leak_counter_status(integer *stat)
+void F77_fla_memory_leak_counter_status( integer* stat )
 {
     *stat = (FLA_Memory_leak_counter_status() ? 1 : 0);
 }
-void F77_fla_memory_leak_counter_set(integer *stat)
+void F77_fla_memory_leak_counter_set( integer* stat )
 {
     FLA_Memory_leak_counter_set((*stat ? TRUE : FALSE));
 }
-void F77_fla_obj_show(char *prefix, integer *m, integer *n, void *buffer, integer *ldim)
+void F77_fla_obj_show( char* prefix, integer* m, integer* n, void* buffer, integer* ldim )
 {
     FLA_Error init_result;
     FLA_Datatype datatype;

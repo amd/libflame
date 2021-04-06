@@ -1,10 +1,8 @@
 #include "FLA_f2c.h"
-#include "FLA_lapack2flame_return_defs.h"
-int cungl2_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, aocl_int64_t *lda, scomplex *tau,
-                 scomplex *work, aocl_int64_t *info)
+int cungl2_check(integer *m, integer *n, integer *k, scomplex *a, integer *lda, scomplex *tau, scomplex *work, integer *info)
 {
     /* System generated locals */
-    int a_dim1, a_offset, i__1;
+    integer a_dim1, a_offset, i__1;
 
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];

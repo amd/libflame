@@ -12,15 +12,15 @@
 
 FLA_Error FLA_Test_blk_external( FLA_Side side, FLA_Trans trans, FLA_Store storev, FLA_Obj A, FLA_Obj t, FLA_Obj B )
 {
-  aocl_int64_t          info = 0;
+  integer          info = 0;
 #ifdef FLA_ENABLE_EXTERNAL_LAPACK_INTERFACES
   FLA_Datatype datatype;
   // integer          m_A, n_A;
-  aocl_int64_t          m_B, n_B;
-  aocl_int64_t          cs_A;
-  aocl_int64_t          cs_B;
-  aocl_int64_t          k_t;
-  aocl_int64_t          lwork;
+  integer          m_B, n_B;
+  integer          cs_A;
+  integer          cs_B;
+  integer          k_t;
+  integer          lwork;
   char         blas_side;
   char         blas_trans;
   FLA_Obj      work_obj, d, e, tu, tv;

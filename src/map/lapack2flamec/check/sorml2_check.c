@@ -1,15 +1,10 @@
 #include "FLA_f2c.h"
-#include "FLA_lapack2flame_return_defs.h"
-
-int zunml2_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
-                 aocl_int64_t *lda, dcomplex *tau, dcomplex *c__, aocl_int64_t *ldc, dcomplex *work,
-                 aocl_int64_t *info)
+int sorml2_check(char *side, char *trans, integer *m, integer *n, integer *k, float *a, integer *lda, float *tau, float *c__, integer *ldc, float *work, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1;
-
+    integer a_dim1, a_offset, c_dim1, c_offset, i__1;
     /* Local variables */
-    aocl_int64_t nq;
+    integer nq;
     logical left;
     logical notran;
 

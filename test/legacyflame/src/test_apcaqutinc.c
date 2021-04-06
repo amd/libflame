@@ -95,9 +95,10 @@ void libfla_test_apcaqutinc_experiment( test_params_t params,
 	double       time;
 	unsigned int i;
 	uinteger m, n;
-	uinteger p = 4;  // Default panel size, will be set based on storev
-	integer   m_input;  // Will be set based on storev
-	integer   n_input;  // Will be set based on storev
+	uinteger min_m_n, k;
+	uinteger p;
+	integer   m_input;
+	integer   n_input;
 	FLA_Side     side;
 	FLA_Trans    trans;
 	FLA_Direct   direct;

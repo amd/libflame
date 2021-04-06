@@ -1,13 +1,13 @@
 #include "FLA_f2c.h" /* Table of constant values */
 #include "FLA_lapack2flame_return_defs.h"
 
-int sorm2r_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, float *a,
-                 aocl_int64_t *lda, float *tau, float *c__, aocl_int64_t *ldc, float *work, aocl_int64_t *info)
+int zunm2r_check(char *side, char *trans, integer *m, integer *n, integer *k, dcomplex *a, integer *lda, dcomplex *tau, dcomplex *c__, integer *ldc, dcomplex *work, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1;
+    integer a_dim1, a_offset, c_dim1, c_offset, i__1;
+
     /* Local variables */
-    aocl_int64_t nq;
+    integer nq;
     logical left;
     logical notran;
 

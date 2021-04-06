@@ -26,12 +26,16 @@
   as returned by SGEQRF.
 */
 
-extern int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a, aocl_int64_t *lda,
-                         doublereal *tau, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
-extern void sorgqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real *a, aocl_int64_t *lda, real *tau,
-                       real *work, aocl_int64_t *lwork, aocl_int64_t *info);
-extern void dorg2r_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a, aocl_int64_t *lda,
-                       doublereal *tau, doublereal *work, aocl_int64_t *info);
+#define LAPACK_orgqr(prefix, name)                                      \
+  int F77_ ## prefix ## name ## qr( integer* m,                             \
+                                    integer* n,                             \
+                                    integer* k,                             \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, \
+                                    integer* ldim_A,                        \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_t, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_w, \
+                                    integer* lwork,                         \
+                                    integer* info)
 
 #define LAPACK_orgqr_body(prefix)                                       \
   AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                         \
@@ -172,11 +176,15 @@ LAPACK_orgqr(z, ung)
 }
 #endif
 
-#define LAPACK_org2r(prefix, name)                                                        \
-    void aocl_lapack_##prefix##name##2r(aocl_int64_t * m, aocl_int64_t * n, aocl_int64_t * k,                    \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A, \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                   \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * info)
+#define LAPACK_org2r(prefix, name)                                      \
+  int F77_ ## prefix ## name ## 2r( integer* m,                                  \
+                                    integer* n,                             \
+                                    integer* k,                             \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, \
+                                    integer* ldim_A,                        \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_t, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_w, \
+                                    integer* info)
 
 LAPACK_org2r(s, org)
 {

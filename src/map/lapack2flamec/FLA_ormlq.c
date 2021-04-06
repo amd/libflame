@@ -38,19 +38,17 @@ extern int lapack_sormlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t 
   if SIDE = 'R'.
 */
 
-/** Generated wrapper function */
-void sormlq_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_B, aocl_int_t *ldim_B, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sormlq(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t ldim_B_64 = *ldim_B;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
+#define LAPACK_ormlq(prefix, name)                                      \
+  int F77_ ## prefix ## name ## lq( char* side,                         \
+                                    char* trans,                        \
+                                    integer* m,                             \
+                                    integer* n,                             \
+                                    integer* k,                             \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_t, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_B, integer* ldim_B, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_w, integer* lwork, \
+                                    integer* info )
 
 #define LAPACK_ormlq_body(prefix)                                       \
   AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                         \
@@ -335,12 +333,17 @@ LAPACK_ormlq(z, unm)
 }
 #endif
 
-#define LAPACK_orml2(prefix, name)                                                           \
-    void aocl_lapack_##prefix##name##l2(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A,    \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                      \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_B, aocl_int64_t * ldim_B,    \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * info)
+#define LAPACK_orml2(prefix, name)                                      \
+  int F77_ ## prefix ## name ## l2( char* side,                         \
+                                    char* trans,                        \
+                                    integer* m,                             \
+                                    integer* n,                             \
+                                    integer* k,                             \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_t, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_B, integer* ldim_B, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_w, \
+                                    integer* info )
 
 LAPACK_orml2(s, orm)
 {

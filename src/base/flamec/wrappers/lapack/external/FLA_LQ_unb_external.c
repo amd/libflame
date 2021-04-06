@@ -15,7 +15,7 @@ FLA_Error FLA_LQ_unb_external( FLA_Obj A, FLA_Obj t )
   fla_dim_t      info = 0;
 #ifdef FLA_ENABLE_EXTERNAL_LAPACK_INTERFACES
   FLA_Datatype datatype;
-  fla_dim_t          m_A, n_A, cs_A;
+  integer          m_A, n_A, cs_A;
   FLA_Obj      work_obj;
 
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )

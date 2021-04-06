@@ -16,7 +16,7 @@
 #include "blis.h"
 #endif
 
-void bl1_sinvscalv( conj1_t conj, fla_dim_t n, float* alpha, float* x, fla_dim_t incx )
+void bl1_sinvscalv( conj1_t conj, integer n, float* alpha, float* x, integer incx )
 {
 	float alpha_inv;
 
@@ -29,7 +29,7 @@ void bl1_sinvscalv( conj1_t conj, fla_dim_t n, float* alpha, float* x, fla_dim_t
 	           x, incx );
 }
 
-void bl1_dinvscalv( conj1_t conj, fla_dim_t n, double* alpha, double* x, fla_dim_t incx )
+void bl1_dinvscalv( conj1_t conj, integer n, double* alpha, double* x, integer incx )
 {
 	double alpha_inv;
 
@@ -42,7 +42,7 @@ void bl1_dinvscalv( conj1_t conj, fla_dim_t n, double* alpha, double* x, fla_dim
 	           x, incx );
 }
 
-void bl1_csinvscalv( conj1_t conj, fla_dim_t n, float* alpha, scomplex* x, fla_dim_t incx )
+void bl1_csinvscalv( conj1_t conj, integer n, float* alpha, scomplex* x, integer incx )
 {
 	float alpha_inv;
 
@@ -55,7 +55,7 @@ void bl1_csinvscalv( conj1_t conj, fla_dim_t n, float* alpha, scomplex* x, fla_d
 	            x, incx );
 }
 
-void bl1_cinvscalv( conj1_t conj, fla_dim_t n, scomplex* alpha, scomplex* x, fla_dim_t incx )
+void bl1_cinvscalv( conj1_t conj, integer n, scomplex* alpha, scomplex* x, integer incx )
 {
 	scomplex alpha_inv;
 
@@ -68,7 +68,7 @@ void bl1_cinvscalv( conj1_t conj, fla_dim_t n, scomplex* alpha, scomplex* x, fla
 	           x, incx );
 }
 
-void bl1_zdinvscalv( conj1_t conj, fla_dim_t n, double* alpha, dcomplex* x, fla_dim_t incx )
+void bl1_zdinvscalv( conj1_t conj, integer n, double* alpha, dcomplex* x, integer incx )
 {
 	double alpha_inv;
 
@@ -81,7 +81,7 @@ void bl1_zdinvscalv( conj1_t conj, fla_dim_t n, double* alpha, dcomplex* x, fla_
 	            x, incx );
 }
 
-void bl1_zinvscalv( conj1_t conj, fla_dim_t n, dcomplex* alpha, dcomplex* x, fla_dim_t incx )
+void bl1_zinvscalv( conj1_t conj, integer n, dcomplex* alpha, dcomplex* x, integer incx )
 {
 	dcomplex alpha_inv;
 

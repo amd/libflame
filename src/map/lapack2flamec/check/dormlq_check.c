@@ -1,20 +1,17 @@
 #include "FLA_f2c.h"
-#include "FLA_lapack2flame_return_defs.h"
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c_n1 = -1;
 
-int dormlq_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double *a,
-                 aocl_int64_t *lda, double *tau, double *c__, aocl_int64_t *ldc, double *work, aocl_int64_t *lwork,
-                 aocl_int64_t *info)
+int dormlq_check(char *side, char *trans, integer *m, integer *n, integer *k, double *a, integer *lda, double *tau, double * c__, integer *ldc, double *work, integer *lwork, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
+    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
     char ch__1[2];
     /* Local variables */
-    aocl_int64_t nb, nq, nw;
+    integer nb, nq, nw;
     logical left;
     logical notran;
-    aocl_int64_t lwkopt;
+    integer lwkopt;
     logical lquery;
     
 #if AOCL_DTL_LOG_ENABLE

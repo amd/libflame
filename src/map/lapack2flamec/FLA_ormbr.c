@@ -46,12 +46,18 @@
   Here dimenions m and n are defined w.r.t C.
 */
 
-extern void sormbr_fla(char *vect, char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
-                       real *a, aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc, real *work,
-                       aocl_int64_t *lwork, aocl_int64_t *info);
-extern void dormbr_fla(char *vect, char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
-                       doublereal *a, aocl_int64_t *lda, doublereal *tau, doublereal *c__, aocl_int64_t *ldc,
-                       doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
+#define LAPACK_ormbr(prefix, name)                                      \
+  int F77_ ## prefix ## name ## br( char* vect,                         \
+                                    char* side,                         \
+                                    char* trans,                        \
+                                    integer*  m,                            \
+                                    integer*  n,                            \
+                                    integer*  k,                            \
+                                    PREFIX2LAPACK_TYPEDEF(prefix) *buff_A, integer *ldim_A, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix) *buff_t, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix) *buff_C, integer *ldim_C, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix) *buff_w, integer *lwork, \
+                                    integer *info )
 
 #define LAPACK_ormbr_body(prefix)                                       \
   AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                         \

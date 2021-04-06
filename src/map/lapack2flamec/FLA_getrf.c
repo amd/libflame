@@ -48,11 +48,11 @@ extern void DTL_Trace(
 		    const int8 *pi8Message);
 
 #define LAPACK_getrf(prefix)                                            \
-  int F77_ ## prefix ## getrf( int* m,                                  \
-                               int* n,                                  \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, int* ldim_A, \
-                               int* buff_p,                             \
-                               int* info )
+  int F77_ ## prefix ## getrf( integer* m,                                  \
+                               integer* n,                                  \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
+                               integer* buff_p,                             \
+                               integer* info )
 
 #ifndef FLA_ENABLE_MULTITHREADING
 
@@ -61,7 +61,7 @@ extern void DTL_Trace(
   AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                 \
   FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);        \
   FLA_Obj      A, p;                                            \
-  int          min_m_n    = min( *m, *n );                      \
+  integer          min_m_n    = min( *m, *n );                      \
   FLA_Error    e_val;                                           \
   FLA_Error    init_result;                                     \
   FLA_Bool skip = FALSE;                                        \
@@ -71,14 +71,14 @@ extern void DTL_Trace(
     switch(datatype)                                                                                                \
     {                                                                                                               \
        case FLA_FLOAT:                                                                                              \
-       { e_val = lapack_sgetrf( m, n, buff_A, ldim_A, buff_p, info); break; }                                       \
+       { lapack_sgetrf( m, n, buff_A, ldim_A, buff_p, info); break; }                                       \
        case FLA_DOUBLE:                                                                                             \
-       { e_val = lapack_dgetrf( m, n, buff_A, ldim_A, buff_p, info); break; }                                       \
+       { lapack_dgetrf( m, n, buff_A, ldim_A, buff_p, info); break; }                                       \
        case FLA_COMPLEX:                                                                                            \
-       { e_val = lapack_cgetrf( m, n, buff_A, ldim_A, buff_p, info); break; }                                       \
+       { lapack_cgetrf( m, n, buff_A, ldim_A, buff_p, info); break; }                                       \
        case FLA_DOUBLE_COMPLEX:                                                                                     \
-       { e_val = lapack_zgetrf( m, n, buff_A, ldim_A, buff_p, info); break; }                                       \
-       e_val--;                                                                                                     \
+       { lapack_zgetrf( m, n, buff_A, ldim_A, buff_p, info); break; }                                       \
+       if ( *info != 0 ) skip  = TRUE;                                                                              \
     }                                                                                                               \
   }                                                                                                                 \
   else if( ( datatype == FLA_FLOAT && *m < FLA_GETRF_FLOAT && * n < FLA_GETRF_FLOAT  )||                            \
@@ -92,7 +92,6 @@ extern void DTL_Trace(
                                                                                        \
     FLA_Obj_create_without_buffer( FLA_INT, min_m_n, 1, &p );                          \
     FLA_Obj_attach_buffer( buff_p, 1, min_m_n, &p );                                   \
-    FLA_Set( FLA_ZERO, p );                                                            \
                                                                                        \
     e_val = FLA_LU_piv( A, p );                                                        \
     FLA_Shift_pivots_to( FLA_LAPACK_PIVOTS, p );                                       \
@@ -130,7 +129,7 @@ extern void DTL_Trace(
   AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                 \
   FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);        \
   FLA_Obj      A, p, AH, ph;                                    \
-  int          min_m_n    = min( *m, *n );                      \
+  integer      min_m_n    = min( *m, *n );                      \
   dim_t        nth, b_flash;                                    \
   FLA_Error    e_val;                                           \
   FLA_Error    init_result;                                     \
@@ -262,9 +261,13 @@ LAPACK_getrf(z)
     return;
 }
 
-#define LAPACK_getf2(prefix)                                                                 \
-    void aocl_lapack_##prefix##getf2(aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                             aocl_int64_t * ldim_A, aocl_int_t * buff_p, aocl_int64_t * info)
+
+#define LAPACK_getf2(prefix)                                            \
+  int F77_ ## prefix ## getf2( integer* m,                                  \
+                               integer* n,                                  \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
+                               integer* buff_p,                             \
+                               integer* info )
 
 LAPACK_getf2(s)
 {

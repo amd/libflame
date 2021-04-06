@@ -1,21 +1,20 @@
 #include "FLA_f2c.h" /* Table of constant values */
-#include "FLA_lapack2flame_return_defs.h"
-static aocl_int64_t c_n1 = -1;
+static integer c_n1 = -1;
 
-int cungbr_check(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, aocl_int64_t *lda,
-                 scomplex *tau, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
+int cungbr_check(char *vect, integer *m, integer *n, integer *k, scomplex *a, integer *lda, scomplex *tau, scomplex *work, integer *lwork, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    aocl_int64_t mn;
-    aocl_int64_t iinfo;
+    integer mn;
+    integer iinfo;
     logical wantq;
-    extern integer cunglq_check(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, scomplex *, aocl_int64_t *, scomplex *,
-                                scomplex *, aocl_int64_t *, aocl_int64_t *),
-        cungqr_check(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, scomplex *, aocl_int64_t *, scomplex *, scomplex *,
-                     aocl_int64_t *, aocl_int64_t *);
-    aocl_int64_t lwkopt;
+    extern integer 
+      cunglq_check( integer *, integer *, integer *, scomplex *, 
+                    integer *, scomplex *, scomplex *, integer *, integer *), 
+      cungqr_check(integer *, integer *, integer *, scomplex *, 
+              integer *, scomplex *, scomplex *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
 
 #if AOCL_DTL_LOG_ENABLE

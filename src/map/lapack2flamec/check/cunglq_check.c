@@ -1,16 +1,14 @@
 #include "FLA_f2c.h"
-#include "FLA_lapack2flame_return_defs.h"
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c_n1 = -1;
 
-int cungqr_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, aocl_int64_t *lda, scomplex *tau,
-                 scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
+int cunglq_check(integer *m, integer *n, integer *k, scomplex *a, integer *lda, scomplex *tau, scomplex *work, integer *lwork, integer * info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1;
+    integer a_dim1, a_offset, i__1;
     /* Local variables */
-    aocl_int64_t nb;
-    aocl_int64_t lwkopt;
+    integer nb;
+    integer lwkopt;
     logical lquery;
     
 #if AOCL_DTL_LOG_ENABLE

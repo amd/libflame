@@ -1,16 +1,15 @@
 #include "FLA_f2c.h" /* Table of constant values */
-#include "FLA_lapack2flame_return_defs.h"
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c_n1 = -1;
 
-int zunglq_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a, aocl_int64_t *lda, dcomplex *tau,
-                 dcomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
+int zungqr_check(integer *m, integer *n, integer *k, dcomplex *a, integer *lda, dcomplex *tau, dcomplex * work, integer *lwork, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1;
+    integer a_dim1, a_offset, i__1;
 
     /* Local variables */
-    aocl_int64_t nb;
+    integer nb;
+    integer lwkopt;
     logical lquery;
     aocl_int64_t lwkopt;
 

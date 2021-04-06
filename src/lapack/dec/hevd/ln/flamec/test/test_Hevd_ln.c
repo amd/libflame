@@ -18,14 +18,14 @@
 void fill_eigenvalues( FLA_Obj l );
 
 void time_Hevd_ln(
-               aocl_int64_t variant, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t m, aocl_int64_t b_alg,
+               integer variant, integer type, integer n_repeats, integer m, integer b_alg,
                FLA_Obj A, FLA_Obj l,
                double *dtime, double *diff, double *gflops );
 
 
 int main(int argc, char *argv[])
 {
-  aocl_int64_t 
+  integer 
     m_input,
     m,
     p_first, p_last, p_inc,

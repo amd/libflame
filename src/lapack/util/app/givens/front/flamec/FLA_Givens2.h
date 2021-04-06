@@ -25,7 +25,7 @@ FLA_Error FLA_Givens2_opd( double* chi_1,
 	float  chi_2_orig = *(chi_2); \
 	float  g, s; \
 	float  norm_x; \
-  float  nscl; \
+	float  nscl; \
 \
   nscl = fabs( chi_1_orig ) + fabs( chi_2_orig ); \
   if ( nscl == 0.0F ) \
@@ -61,7 +61,7 @@ FLA_Error FLA_Givens2_opd( double* chi_1,
 	double chi_2_orig = *(chi_2); \
 	double g, s; \
 	double norm_x; \
-  double nscl; \
+	double nscl; \
 \
   nscl = fabs( chi_1_orig ) + fabs( chi_2_orig ); \
   if ( nscl == 0.0 ) \

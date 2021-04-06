@@ -48,28 +48,9 @@
         }                                                                 \
     }
 
-#define LAPACK_RETURN_CHECK_VAR1(r_check, fla_error) \
-    {                                                \
-        int r_val = r_check;                         \
-        switch(r_val)                                \
-        {                                            \
-            case LAPACK_FAILURE:                     \
-                fla_error = FLA_FAILURE;             \
-                break;                               \
-            case LAPACK_QUERY_RETURN:;               \
-            case LAPACK_QUICK_RETURN:                \
-                fla_error = 0;                       \
-                break;                               \
-            case LAPACK_SUCCESS:;                    \
-            default:;                                \
-                if(r_val > 0)                        \
-                {                                    \
-                    ;                                \
-                }                                    \
-                else                                 \
-                    fla_error = FLA_FAILURE;         \
-        }                                            \
-    }
+extern int lsame_(char *, char *);
+extern int xerbla_(char *, integer *);
+extern int ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
 
 #ifndef FLA_ENABLE_AOCL_BLAS
 extern int lsame_(char *, char *, integer a, integer b);

@@ -1,25 +1,29 @@
 #include "FLA_f2c.h"
-#include "FLA_lapack2flame_return_defs.h"
-static aocl_int64_t c__6 = 6;
-static aocl_int64_t c__0 = 0;
-static aocl_int64_t c_n1 = -1;
+static integer c__6 = 6;
+static integer c__0 = 0;
+static integer c_n1 = -1;
 
-int sgesvd_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, float *s,
-                 float *u, aocl_int64_t *ldu, float *vt, aocl_int64_t *ldvt, float *work, aocl_int64_t *lwork,
-                 aocl_int64_t *info)
+int sgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, float *a, integer *lda, float *s, float *u, integer *ldu, float *vt, integer *ldvt, float *work, integer *lwork, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__2, i__3;
+    integer a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__2, i__3;
     char ch__1[2];
     /* Local variables */
     float dum[1];
-    aocl_int64_t ierr, lwork_sgebrd__, lwork_sgelqf__, lwork_sgeqrf__;
-    aocl_int64_t minmn, wrkbl, mnthr;
+    integer ierr, lwork_sgebrd__, lwork_sgelqf__, lwork_sgeqrf__;
+    integer minmn, wrkbl, mnthr;
     logical wntua, wntva, wntun, wntuo, wntvn, wntvo, wntus, wntvs;
-    aocl_int64_t bdspac;
-    aocl_int64_t minwrk, maxwrk;
+    integer bdspac;
+    extern int 
+      sgebrd_(integer *, integer *, float *, integer *, float *, float *, float *, float *, float *, integer *, integer *),
+      sgelqf_(integer *, integer *, float *, integer *, float *, float *, integer *, integer *), 
+      sgeqrf_(integer *, integer *, float *, integer *, float *, float *, integer *, integer *), 
+      sorgbr_(char *, integer *, integer *, integer *, float *, integer *, float * , float *, integer *, integer *), 
+      sorglq_(integer *, integer *, integer *, float *, integer *, float *, float *, integer *, integer *),
+      sorgqr_(integer *, integer *, integer *, float *, integer *, float *, float *, integer *, integer *);
+    integer minwrk, maxwrk;
     logical lquery, wntuas, wntvas;
-    int lwork_sorgbr_p__, lwork_sorgbr_q__, lwork_sorglq_m__, lwork_sorglq_n__, lwork_sorgqr_m__, lwork_sorgqr_n__;
+    integer lwork_sorgbr_p__, lwork_sorgbr_q__, lwork_sorglq_m__, lwork_sorglq_n__, lwork_sorgqr_m__, lwork_sorgqr_n__;
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
     sprintf(buffer, "sgesvd inputs: jobu %c, jobvt %c, m %d, n %d, lda %d, ldu %d, ldvt %d\n", *jobu, *jobvt, *m, *n, *lda, *ldu, *ldvt);
@@ -95,23 +99,23 @@ int sgesvd_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, floa
             mnthr = aocl_lapack_ilaenv(&c__6, "SGESVD", ch__1, m, n, &c__0, &c__0);
             bdspac = *n * 5;
             /* Compute space needed for SGEQRF */
-            aocl_lapack_sgeqrf(m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
+            sgeqrf_(m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
             lwork_sgeqrf__ = (integer)dum[0];
             /* Compute space needed for SORGQR */
-            aocl_lapack_sorgqr(m, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
+            sorgqr_(m, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
             lwork_sorgqr_n__ = (integer)dum[0];
-            aocl_lapack_sorgqr(m, m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
+            sorgqr_(m, m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
             lwork_sorgqr_m__ = (integer)dum[0];
             /* Compute space needed for SGEBRD */
-            aocl_lapack_sgebrd(n, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, &ierr);
+            sgebrd_(n, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, &ierr);
             lwork_sgebrd__ = (integer)dum[0];
             /* Compute space needed for SORGBR P */
-            aocl_lapack_sorgbr("P", n, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
+            sorgbr_("P", n, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
             lwork_sorgbr_p__ = (integer)dum[0];
             /* Compute space needed for SORGBR Q */
-            aocl_lapack_sorgbr("Q", n, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
+            sorgbr_("Q", n, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
             lwork_sorgbr_q__ = (integer)dum[0];
-            if(*m >= mnthr)
+            if (*m >= mnthr)
             {
                 if(wntun)
                 {
@@ -342,12 +346,12 @@ int sgesvd_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, floa
             else
             {
                 /* Path 10 (M at least N, but not much larger) */
-                aocl_lapack_sgebrd(m, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, &ierr);
+                sgebrd_(m, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, & c_n1, &ierr);
                 lwork_sgebrd__ = (integer)dum[0];
                 maxwrk = *n * 3 + lwork_sgebrd__;
                 if(wntus || wntuo)
                 {
-                    aocl_lapack_sorgbr("Q", m, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
+                    sorgbr_("Q", m, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
                     lwork_sorgbr_q__ = (integer)dum[0];
                     /* Computing MAX */
                     i__2 = maxwrk;
@@ -356,7 +360,7 @@ int sgesvd_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, floa
                 }
                 if(wntua)
                 {
-                    aocl_lapack_sorgbr("Q", m, m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
+                    sorgbr_("Q", m, m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
                     lwork_sorgbr_q__ = (integer)dum[0];
                     /* Computing MAX */
                     i__2 = maxwrk;
@@ -382,23 +386,23 @@ int sgesvd_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, floa
             mnthr = aocl_lapack_ilaenv(&c__6, "SGESVD", ch__1, m, n, &c__0, &c__0);
             bdspac = *m * 5;
             /* Compute space needed for SGELQF */
-            aocl_lapack_sgelqf(m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
+            sgelqf_(m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
             lwork_sgelqf__ = (integer)dum[0];
             /* Compute space needed for SORGLQ */
-            aocl_lapack_sorglq(n, n, m, dum, n, dum, dum, &c_n1, &ierr);
+            sorglq_(n, n, m, dum, n, dum, dum, &c_n1, &ierr);
             lwork_sorglq_n__ = (integer)dum[0];
-            aocl_lapack_sorglq(m, n, m, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
+            sorglq_(m, n, m, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
             lwork_sorglq_m__ = (integer)dum[0];
             /* Compute space needed for SGEBRD */
-            aocl_lapack_sgebrd(m, m, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, &ierr);
+            sgebrd_(m, m, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, &ierr);
             lwork_sgebrd__ = (integer)dum[0];
             /* Compute space needed for SORGBR P */
-            aocl_lapack_sorgbr("P", m, m, m, &a[a_offset], n, dum, dum, &c_n1, &ierr);
+            sorgbr_("P", m, m, m, &a[a_offset], n, dum, dum, &c_n1, &ierr);
             lwork_sorgbr_p__ = (integer)dum[0];
             /* Compute space needed for SORGBR Q */
-            aocl_lapack_sorgbr("Q", m, m, m, &a[a_offset], n, dum, dum, &c_n1, &ierr);
+            sorgbr_("Q", m, m, m, &a[a_offset], n, dum, dum, &c_n1, &ierr);
             lwork_sorgbr_q__ = (integer)dum[0];
-            if(*n >= mnthr)
+            if (*n >= mnthr)
             {
                 if(wntvn)
                 {
@@ -630,13 +634,13 @@ int sgesvd_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, floa
             else
             {
                 /* Path 10t(N greater than M, but not much larger) */
-                aocl_lapack_sgebrd(m, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, &ierr);
+                sgebrd_(m, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, & c_n1, &ierr);
                 lwork_sgebrd__ = (integer)dum[0];
                 maxwrk = *m * 3 + lwork_sgebrd__;
                 if(wntvs || wntvo)
                 {
                     /* Compute space needed for SORGBR P */
-                    aocl_lapack_sorgbr("P", m, n, m, &a[a_offset], n, dum, dum, &c_n1, &ierr);
+                    sorgbr_("P", m, n, m, &a[a_offset], n, dum, dum, &c_n1, & ierr);
                     lwork_sorgbr_p__ = (integer)dum[0];
                     /* Computing MAX */
                     i__2 = maxwrk;
@@ -645,7 +649,7 @@ int sgesvd_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, floa
                 }
                 if(wntva)
                 {
-                    aocl_lapack_sorgbr("P", n, n, m, &a[a_offset], n, dum, dum, &c_n1, &ierr);
+                    sorgbr_("P", n, n, m, &a[a_offset], n, dum, dum, &c_n1, & ierr);
                     lwork_sorgbr_p__ = (integer)dum[0];
                     /* Computing MAX */
                     i__2 = maxwrk;

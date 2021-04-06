@@ -15,16 +15,17 @@ FLA_Error FLA_Tridiag_apply_Q_external( FLA_Side side, FLA_Uplo uplo, FLA_Trans 
   fla_dim_t      info = 0;
 #ifdef FLA_ENABLE_EXTERNAL_LAPACK_INTERFACES
   FLA_Datatype datatype;
-  // fla_dim_t          m_A, n_A;
-  fla_dim_t          m_B, n_B;
-  fla_dim_t          cs_A;
-  fla_dim_t          cs_B;
-  fla_dim_t          lwork;
+  // integer          m_A, n_A;
+  integer          m_B, n_B;
+  integer          cs_A;
+  integer          cs_B;
+  integer          k_t;
+  integer          lwork;
   char         blas_side;
   char         blas_uplo;
   char         blas_trans;
   FLA_Obj      work;
-  fla_dim_t          i;
+  integer          i;
 
   //if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
   //  FLA_Apply_Q_check( side, trans, storev, A, t, B );
@@ -58,9 +59,9 @@ FLA_Error FLA_Tridiag_apply_Q_external( FLA_Side side, FLA_Uplo uplo, FLA_Trans 
       // Grab the queried ideal workspace size from the work array, free the
       // work object, and then re-allocate the workspace with the ideal size.
       if      ( datatype == FLA_FLOAT || datatype == FLA_COMPLEX )
-        lwork = ( fla_dim_t ) *FLA_FLOAT_PTR( work );
+        lwork = ( integer ) *FLA_FLOAT_PTR( work );
       else if ( datatype == FLA_DOUBLE || datatype == FLA_DOUBLE_COMPLEX )
-        lwork = ( fla_dim_t ) *FLA_DOUBLE_PTR( work );
+        lwork = ( integer ) *FLA_DOUBLE_PTR( work );
 
       FLA_Obj_free( &work );
       FLA_Obj_create( datatype, lwork, 1, 0, 0, &work );

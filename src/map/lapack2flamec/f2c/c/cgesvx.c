@@ -459,7 +459,13 @@ void aocl_lapack_cgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     --berr;
     --work;
     --rwork;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
+#if AOCL_DTL_LOG_ENABLE
+ char buffer[256];
+ snprintf(buffer, 256, "cgesvx inputs: fact %c, trans %c, n %d, nrhs %d, lda %d, ldaf %d, ipiv %d, equed %c, ldb %d, ldx %d\n", *fact, *trans, *n, *nrhs, *lda, *ldaf, *ipiv, *equed, *ldb, *ldx);
+ AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     *info = 0;
     nofact = lsame_(fact, "N", 1, 1);
     equil = lsame_(fact, "E", 1, 1);
@@ -585,9 +591,9 @@ void aocl_lapack_cgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGESVX", &i__1, (ftnlen)6);
+        xerbla_("CGESVX", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(equil)
     {
@@ -669,7 +675,7 @@ void aocl_lapack_cgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
             rwork[1] = rpvgrw;
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
     }
     /* Compute the norm of the matrix A and the */
@@ -766,7 +772,7 @@ void aocl_lapack_cgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     }
     rwork[1] = rpvgrw;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGESVX */
 }
 /* cgesvx_ */

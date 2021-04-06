@@ -183,7 +183,13 @@ void aocl_lapack_cgetri(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_in
     a -= a_offset;
     --ipiv;
     --work;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
+#if AOCL_DTL_LOG_ENABLE
+   char buffer[256];
+   snprintf(buffer, 256, "cgetri inputs: n %d, lda %d, ipiv %d\n", *n, *lda, *ipiv);
+   AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     *info = 0;
     nb = aocl_lapack_ilaenv(&c__1, "CGETRI", " ", n, &c_n1, &c_n1, &c_n1);
     lwkopt = *n * nb;
@@ -206,20 +212,20 @@ void aocl_lapack_cgetri(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_in
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGETRI", &i__1, (ftnlen)6);
+        xerbla_("CGETRI", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Form inv(U). If INFO > 0 from CTRTRI, then U is singular, */
     /* and the inverse is not computed. */
@@ -335,11 +341,10 @@ void aocl_lapack_cgetri(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_in
         }
         /* L60: */
     }
-    r__1 = aocl_lapack_sroundup_lwork(&iws);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
+    work[1].r = (real) iws;
+    work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGETRI */
 }
 /* cgetri_ */

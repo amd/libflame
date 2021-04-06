@@ -1,10 +1,10 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int dpotrf_check(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *info)
+int dpotrf_check(char *uplo, integer *n, double *a, integer * lda, integer *info)
 {
     /* System generated locals */
-    int a_dim1, a_offset, i__1;    
+    integer a_dim1, a_offset, i__1;    
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
     sprintf(buffer, "dpotrf inputs: uplo %c, n %d, lda %d\n", *uplo, *n, *lda);

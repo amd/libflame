@@ -16,10 +16,10 @@
 #include "blis.h"
 #endif
 
-void bl1_sscalediag( conj1_t conj, fla_dim_t offset, fla_dim_t m, fla_dim_t n, float* sigma, float* a, fla_dim_t a_rs, fla_dim_t a_cs )
+void bl1_sscalediag( conj1_t conj, integer offset, integer m, integer n, float* sigma, float* a, integer a_rs, integer a_cs )
 {
 	float* alpha;
-	fla_dim_t    i, j;
+	integer    i, j;
 
 	i = j = 0;
 
@@ -37,10 +37,10 @@ void bl1_sscalediag( conj1_t conj, fla_dim_t offset, fla_dim_t m, fla_dim_t n, f
 	}
 }
 
-void bl1_dscalediag( conj1_t conj, fla_dim_t offset, fla_dim_t m, fla_dim_t n, double* sigma, double* a, fla_dim_t a_rs, fla_dim_t a_cs )
+void bl1_dscalediag( conj1_t conj, integer offset, integer m, integer n, double* sigma, double* a, integer a_rs, integer a_cs )
 {
 	double* alpha;
-	fla_dim_t     i, j;
+	integer     i, j;
 
 	i = j = 0;
 
@@ -58,10 +58,10 @@ void bl1_dscalediag( conj1_t conj, fla_dim_t offset, fla_dim_t m, fla_dim_t n, d
 	}
 }
 
-void bl1_csscalediag( conj1_t conj, fla_dim_t offset, fla_dim_t m, fla_dim_t n, float* sigma, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
+void bl1_csscalediag( conj1_t conj, integer offset, integer m, integer n, float* sigma, scomplex* a, integer a_rs, integer a_cs )
 {
 	scomplex* alpha;
-	fla_dim_t       i, j;
+	integer       i, j;
 
 	i = j = 0;
 
@@ -80,10 +80,10 @@ void bl1_csscalediag( conj1_t conj, fla_dim_t offset, fla_dim_t m, fla_dim_t n, 
 	}
 }
 
-void bl1_zdscalediag( conj1_t conj, fla_dim_t offset, fla_dim_t m, fla_dim_t n, double* sigma, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
+void bl1_zdscalediag( conj1_t conj, integer offset, integer m, integer n, double* sigma, dcomplex* a, integer a_rs, integer a_cs )
 {
 	dcomplex* alpha;
-	fla_dim_t       i, j;
+	integer       i, j;
 
 	i = j = 0;
 
@@ -102,11 +102,11 @@ void bl1_zdscalediag( conj1_t conj, fla_dim_t offset, fla_dim_t m, fla_dim_t n, 
 	}
 }
 
-void bl1_cscalediag( conj1_t conj, fla_dim_t offset, fla_dim_t m, fla_dim_t n, scomplex* sigma, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
+void bl1_cscalediag( conj1_t conj, integer offset, integer m, integer n, scomplex* sigma, scomplex* a, integer a_rs, integer a_cs )
 {
 	scomplex* alpha;
 	scomplex  sigma_conj;
-	fla_dim_t       i, j;
+	integer       i, j;
 
 	bl1_ccopys( conj, sigma, &sigma_conj );
 
@@ -126,11 +126,11 @@ void bl1_cscalediag( conj1_t conj, fla_dim_t offset, fla_dim_t m, fla_dim_t n, s
 	}
 }
 
-void bl1_zscalediag( conj1_t conj, fla_dim_t offset, fla_dim_t m, fla_dim_t n, dcomplex* sigma, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
+void bl1_zscalediag( conj1_t conj, integer offset, integer m, integer n, dcomplex* sigma, dcomplex* a, integer a_rs, integer a_cs )
 {
 	dcomplex* alpha;
 	dcomplex  sigma_conj;
-	fla_dim_t       i, j;
+	integer       i, j;
 
 	bl1_zcopys( conj, sigma, &sigma_conj );
 

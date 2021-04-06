@@ -14,11 +14,11 @@ FLA_Error FLA_Eig_gest_blk_external( FLA_Inv inv, FLA_Uplo uplo, FLA_Obj A, FLA_
 {
   FLA_Error    r_val = FLA_SUCCESS;
 #ifdef FLA_ENABLE_EXTERNAL_LAPACK_INTERFACES
-  fla_dim_t          itype;
-  fla_dim_t          info;
+  integer          itype;
+  integer          info;
   FLA_Datatype datatype;
-  fla_dim_t          m_A, cs_A;
-  fla_dim_t          cs_B;
+  integer          m_A, cs_A;
+  integer          cs_B;
   char         blas_uplo;
 
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )

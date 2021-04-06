@@ -16,11 +16,11 @@
 #include "blis.h"
 #endif
 
-void bl1_sewinvscalv( conj1_t conj, fla_dim_t n, float* x, fla_dim_t incx, float* y, fla_dim_t incy )
+void bl1_sewinvscalv( conj1_t conj, integer n, float* x, integer incx, float* y, integer incy )
 {
 	float*    chi;
 	float*    psi;
-	fla_dim_t       i;
+	integer       i;
 
 	for ( i = 0; i < n; ++i )
 	{
@@ -31,11 +31,11 @@ void bl1_sewinvscalv( conj1_t conj, fla_dim_t n, float* x, fla_dim_t incx, float
 	}
 }
 
-void bl1_dewinvscalv( conj1_t conj, fla_dim_t n, double* x, fla_dim_t incx, double* y, fla_dim_t incy )
+void bl1_dewinvscalv( conj1_t conj, integer n, double* x, integer incx, double* y, integer incy )
 {
 	double*   chi;
 	double*   psi;
-	fla_dim_t       i;
+	integer       i;
 
 	for ( i = 0; i < n; ++i )
 	{
@@ -46,11 +46,11 @@ void bl1_dewinvscalv( conj1_t conj, fla_dim_t n, double* x, fla_dim_t incx, doub
 	}
 }
 
-void bl1_csewinvscalv( conj1_t conj, fla_dim_t n, float* x, fla_dim_t incx, scomplex* y, fla_dim_t incy )
+void bl1_csewinvscalv( conj1_t conj, integer n, float* x, integer incx, scomplex* y, integer incy )
 {
 	float*    chi;
 	scomplex* psi;
-	fla_dim_t       i;
+	integer       i;
 
 	for ( i = 0; i < n; ++i )
 	{
@@ -61,12 +61,12 @@ void bl1_csewinvscalv( conj1_t conj, fla_dim_t n, float* x, fla_dim_t incx, scom
 	}
 }
 
-void bl1_cewinvscalv( conj1_t conj, fla_dim_t n, scomplex* x, fla_dim_t incx, scomplex* y, fla_dim_t incy )
+void bl1_cewinvscalv( conj1_t conj, integer n, scomplex* x, integer incx, scomplex* y, integer incy )
 {
 	scomplex* chi;
 	scomplex* psi;
 	scomplex  conjchi;
-	fla_dim_t       i;
+	integer       i;
 
 	if ( bl1_is_conj( conj ) )
 	{
@@ -91,11 +91,11 @@ void bl1_cewinvscalv( conj1_t conj, fla_dim_t n, scomplex* x, fla_dim_t incx, sc
 	}
 }
 
-void bl1_zdewinvscalv( conj1_t conj, fla_dim_t n, double* x, fla_dim_t incx, dcomplex* y, fla_dim_t incy )
+void bl1_zdewinvscalv( conj1_t conj, integer n, double* x, integer incx, dcomplex* y, integer incy )
 {
 	double*   chi;
 	dcomplex* psi;
-	fla_dim_t       i;
+	integer       i;
 
 	for ( i = 0; i < n; ++i )
 	{
@@ -106,12 +106,12 @@ void bl1_zdewinvscalv( conj1_t conj, fla_dim_t n, double* x, fla_dim_t incx, dco
 	}
 }
 
-void bl1_zewinvscalv( conj1_t conj, fla_dim_t n, dcomplex* x, fla_dim_t incx, dcomplex* y, fla_dim_t incy )
+void bl1_zewinvscalv( conj1_t conj, integer n, dcomplex* x, integer incx, dcomplex* y, integer incy )
 {
 	dcomplex* chi;
 	dcomplex* psi;
 	dcomplex  conjchi;
-	fla_dim_t       i;
+	integer       i;
 
 	if ( bl1_is_conj( conj ) )
 	{

@@ -74,11 +74,11 @@ real fla_slamch(char *cmach, ftnlen cmach_len)
     static TLS_CLASS_SPEC logical lrnd;
     static TLS_CLASS_SPEC real rmin, rmax, t, rmach;
     extern logical fla_lsame(char *, char *, ftnlen, ftnlen);
-    static TLS_CLASS_SPEC real small_val, sfmin;
-    extern /* Subroutine */ fla_dim_t fla_slamc2(fla_dim_t *, fla_dim_t *, logical *, real 
-	    *, fla_dim_t *, real *, fla_dim_t *, real *);
-    static TLS_CLASS_SPEC fla_dim_t it;
-    static TLS_CLASS_SPEC real rnd, eps;
+    static real small, sfmin;
+    extern /* Subroutine */ integer fla_slamc2(integer *, integer *, logical *, real 
+	    *, integer *, real *, integer *, real *);
+    static integer it;
+    static real rnd, eps;
 
 
 /*  -- LAPACK auxiliary routine (version 3.2) -- */
@@ -198,7 +198,7 @@ real fla_slamch(char *cmach, ftnlen cmach_len)
 
 /* *********************************************************************** */
 
-/* Subroutine */ fla_dim_t fla_slamc1(fla_dim_t *beta, fla_dim_t *t, logical *rnd, logical 
+/* Subroutine */ integer fla_slamc1(integer *beta, integer *t, logical *rnd, logical 
 	*ieee1)
 {
     /* Initialized data */
@@ -406,8 +406,8 @@ L30:
 
 /* *********************************************************************** */
 
-/* Subroutine */ fla_dim_t fla_slamc2(fla_dim_t *beta, fla_dim_t *t, logical *rnd, real *
-	eps, fla_dim_t *emin, real *rmin, fla_dim_t *emax, real *rmax)
+/* Subroutine */ integer fla_slamc2(integer *beta, integer *t, logical *rnd, real *
+	eps, integer *emin, real *rmin, integer *emax, real *rmax)
 {
     /* Initialized data */
 
@@ -430,22 +430,22 @@ explicitly.\002,/)";
     //fla_dim_t s_wsfe(cilist *), do_fio(fla_dim_t *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
-    static TLS_CLASS_SPEC logical ieee;
-    static TLS_CLASS_SPEC real half;
-    static TLS_CLASS_SPEC logical lrnd;
-    static TLS_CLASS_SPEC real leps, zero, a, b, c__;
-    static TLS_CLASS_SPEC fla_dim_t i__, lbeta;
-    static TLS_CLASS_SPEC real rbase;
-    static TLS_CLASS_SPEC fla_dim_t lemin, lemax, gnmin;
-    static TLS_CLASS_SPEC real small_val;
-    static TLS_CLASS_SPEC fla_dim_t gpmin;
-    static TLS_CLASS_SPEC real third, lrmin, lrmax, sixth;
-    static TLS_CLASS_SPEC logical lieee1;
-    extern /* Subroutine */ fla_dim_t fla_slamc1(fla_dim_t *, fla_dim_t *, logical *, 
+    static logical ieee;
+    static real half;
+    static logical lrnd;
+    static real leps, zero, a, b, c__;
+    static integer i__, lbeta;
+    static real rbase;
+    static integer lemin, lemax, gnmin;
+    static real small;
+    static integer gpmin;
+    static real third, lrmin, lrmax, sixth;
+    static logical lieee1;
+    extern /* Subroutine */ integer fla_slamc1(integer *, integer *, logical *, 
 	    logical *);
     extern real fla_slamc3(real *, real *);
-    extern /* Subroutine */ fla_dim_t fla_slamc4(fla_dim_t *, real *, fla_dim_t *), 
-	    fla_slamc5(fla_dim_t *, fla_dim_t *, fla_dim_t *, logical *, fla_dim_t *, 
+    extern /* Subroutine */ integer fla_slamc4(integer *, real *, integer *), 
+	    fla_slamc5(integer *, integer *, integer *, logical *, integer *, 
 	    real *);
     static TLS_CLASS_SPEC fla_dim_t lt, ngnmin, ngpmin;
     static TLS_CLASS_SPEC real one, two;
@@ -760,7 +760,7 @@ real fla_slamc3(real *a, real *b)
 
 /* *********************************************************************** */
 
-/* Subroutine */ fla_dim_t fla_slamc4(fla_dim_t *emin, real *start, fla_dim_t *base)
+/* Subroutine */ integer fla_slamc4(integer *emin, real *start, integer *base)
 {
     /* System generated locals */
     fla_dim_t i__1;
@@ -858,8 +858,8 @@ L10:
 
 /* *********************************************************************** */
 
-/* Subroutine */ fla_dim_t fla_slamc5(fla_dim_t *beta, fla_dim_t *p, fla_dim_t *emin, 
-	logical *ieee, fla_dim_t *emax, real *rmax)
+/* Subroutine */ integer fla_slamc5(integer *beta, integer *p, integer *emin, 
+	logical *ieee, integer *emax, real *rmax)
 {
     /* System generated locals */
     fla_dim_t i__1;

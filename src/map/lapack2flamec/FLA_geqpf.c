@@ -111,11 +111,14 @@ extern void dgeqpf_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int
                        doublereal *tau, doublereal *work, aocl_int64_t *info);
 
 // GEQPF
-#define LAPACK_geqpf(prefix)                                                                 \
-    void aocl_lapack_##prefix##geqpf(aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                             aocl_int64_t * ldim_A, aocl_int_t * buff_p,                             \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                         \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * info)
+#define LAPACK_geqpf(prefix)                                            \
+  int F77_ ## prefix ## geqpf( integer* m,                                   \
+                               integer* n,                                  \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
+                               integer* buff_p,                             \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_t,   \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_w,   \
+                               integer* info )
 
 // Notation for LAPACK column pvioting is not consistent to pivoting in LU.
 // This does not perform pre-ordering when jpiv include non-zero pivots.
@@ -209,42 +212,15 @@ LAPACK_geqpf(s)
 #endif
 }
 
-LAPACK_geqpf(d)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
-#if !FLA_ENABLE_AMD_OPT
-    int fla_error = LAPACK_SUCCESS;
-    {
-        for(aocl_int64_t i = 0; i < *n; ++i)
-            buff_p[i] = (i + 1);
-    }
-    {
-        LAPACK_RETURN_CHECK_VAR1(dgeqpf_check(m, n, buff_A, ldim_A, buff_p, buff_t, buff_w, info),
-                                 fla_error)
-    }
-    if(fla_error == LAPACK_SUCCESS)
-    {
-        LAPACK_geqpf_body(d) fla_error = 0;
-    }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
-#else
-    {
-        dgeqpf_fla(m, n, buff_A, ldim_A, buff_p, buff_t, buff_w, info);
-    }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
-#endif
-}
-
-#define LAPACK_geqpf_complex(prefix)                                                         \
-    void aocl_lapack_##prefix##geqpf(aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                             aocl_int64_t * ldim_A, aocl_int_t * buff_p,                             \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                         \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_w,                         \
-                             PREFIX2LAPACK_REALDEF(prefix) * buff_r, aocl_int64_t * info)
+#define LAPACK_geqpf_complex(prefix)                                    \
+  int F77_ ## prefix ## geqpf( integer* m,                                  \
+                               integer* n,                                  \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
+                               integer* buff_p,                             \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_t,   \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_w,   \
+                               PREFIX2LAPACK_REALDEF(prefix)* buff_r,   \
+                               integer* info )
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
 LAPACK_geqpf_complex(c)
@@ -292,37 +268,17 @@ LAPACK_geqpf_complex(z)
 #endif
 
 // GEQP3
-#define LAPACK_geqp3(prefix)                                                              \
-    void aocl_lapack_##prefix##geqp3(                                                             \
-        aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A, \
-        aocl_int_t * buff_p, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                         \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork, aocl_int64_t * info)
+#define LAPACK_geqp3(prefix)                                            \
+  int F77_ ## prefix ## geqp3( integer* m,                                  \
+                               integer* n,                                  \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
+                               integer* buff_p,                             \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_t,   \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_w, integer* lwork, \
+                               integer* info )
 LAPACK_geqp3(s)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgeqp3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
-    extern void sgeqp3_fla(aocl_int64_t * m, aocl_int64_t * n, real * a, aocl_int64_t * lda, aocl_int_t * jpvt,
-                           real * tau, real * work, aocl_int64_t * lwork, aocl_int64_t * info);
-
-#if !FLA_ENABLE_AMD_OPT
-    int fla_error = LAPACK_SUCCESS;
-    {LAPACK_RETURN_CHECK_VAR1(
-        sgeqp3_check(m, n, buff_A, ldim_A, buff_p, buff_t, buff_w, lwork, info), fla_error)} {
-        if(*lwork == -1)
-        {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
-        }
-        for(int i = 0; i < *n; ++i)
-            buff_p[i] = (i + 1);
-        if(*m == 0 || *n == 0)
-        {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
-        }
-    }
-    if(fla_error == LAPACK_SUCCESS)
+  
     {
         LAPACK_geqpf_body(s) fla_error = 0;
     }
@@ -330,59 +286,56 @@ LAPACK_geqp3(s)
     return;
 #else
     {
-        sgeqp3_fla(m, n, buff_A, ldim_A, buff_p, buff_t, buff_w, lwork, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        for (int i = 0; i < *n; ++i) buff_p[i] = (i + 1);
+        if( *m == 0 || *n == 0 )
+        {
+            return 0;
+        }
+    }
+    {
+        LAPACK_geqpf_body(s)
     }
 #endif
 }
 
 LAPACK_geqp3(d)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgeqp3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
-    extern void dgeqp3_fla(aocl_int64_t * m, aocl_int64_t * n, doublereal * a, aocl_int64_t * lda, aocl_int_t * jpvt,
-                           doublereal * tau, doublereal * work, aocl_int64_t * lwork, aocl_int64_t * info);
-
-#if !FLA_ENABLE_AMD_OPT
-    int fla_error = LAPACK_SUCCESS;
-    {LAPACK_RETURN_CHECK_VAR1(
-        dgeqp3_check(m, n, buff_A, ldim_A, buff_p, buff_t, buff_w, lwork, info), fla_error)} {
-        if(*lwork == -1)
-        {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
-        }
-        for(aocl_int64_t i = 0; i < *n; ++i)
-            buff_p[i] = (i + 1);
-        if(*m == 0 || *n == 0)
-        {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
-        }
-    }
-    if(fla_error == LAPACK_SUCCESS)
-    {
-        LAPACK_geqpf_body(d) fla_error = 0;
+   {
+        LAPACK_RETURN_CHECK( dgeqp3_check( m, n,
+                                           buff_A, ldim_A,
+                                           buff_p,
+                                           buff_t,
+                                           buff_w, lwork,
+                                           info ) )
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;
 #else
     {
-        dgeqp3_fla(m, n, buff_A, ldim_A, buff_p, buff_t, buff_w, lwork, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        for (int i = 0; i < *n; ++i) buff_p[i] = (i + 1);
+        if( *m == 0 || *n == 0 )
+        {
+            return 0;
+        }
+    }
+
+    {
+        LAPACK_geqpf_body(d)
     }
 #endif
 }
 
-#define LAPACK_geqp3_complex(prefix)                                                         \
-    void aocl_lapack_##prefix##geqp3(aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                             aocl_int64_t * ldim_A, aocl_int64_t * buff_p,                             \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                         \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork,        \
-                             PREFIX2LAPACK_REALDEF(prefix) * buff_r, aocl_int64_t * info)
+
+#define LAPACK_geqp3_complex(prefix)                                            \
+  int F77_ ## prefix ## geqp3( integer* m,                                  \
+                               integer* n,                                  \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
+                               integer* buff_p,                             \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_t,   \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_w, integer* lwork, \
+                               PREFIX2LAPACK_REALDEF(prefix)* buff_r,   \
+                               integer* info )
+
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
 LAPACK_geqp3_complex(c)

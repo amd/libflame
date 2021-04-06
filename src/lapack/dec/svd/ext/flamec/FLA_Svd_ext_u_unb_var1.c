@@ -20,13 +20,13 @@ FLA_Error FLA_Svd_ext_u_unb_var1(FLA_Svd_type jobu, FLA_Svd_type jobv,
     FLA_Datatype dt;
     FLA_Datatype dt_real;
     FLA_Datatype dt_comp;
-    FLA_Obj scale, T, S, rL, rR, d, e, G, H, C; // C is dummy.
-    fla_dim_t m_A, n_A, min_m_n;
-    fla_dim_t n_GH;
-    double crossover_ratio = 17.0 / 9.0;
-    FLA_Bool u_is_formed = FALSE,
-             v_is_formed = FALSE;
-    fla_dim_t apply_scale;
+    FLA_Obj      scale, T, S, rL, rR, d, e, G, H, C; // C is dummy.
+    dim_t        m_A, n_A, min_m_n;
+    dim_t        n_GH;
+    double       crossover_ratio = 17.0 / 9.0;
+    FLA_Bool     u_is_formed = FALSE, 
+                 v_is_formed = FALSE;
+    integer          apply_scale;
 
     n_GH = k_accum;
 

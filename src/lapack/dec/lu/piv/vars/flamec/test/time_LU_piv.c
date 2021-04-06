@@ -16,17 +16,17 @@
 
 
 void time_LU_piv(
-                  aocl_int64_t variant, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t n, aocl_int64_t nb_alg,
+                  integer variant, integer type, integer nrepeats, integer n, integer nb_alg,
                   FLA_Obj A, FLA_Obj b, FLA_Obj b_orig, FLA_Obj p, FLA_Obj norm, 
                   double *dtime, double *diff, double *gflops );
 
 
 void time_LU_piv(
-                  aocl_int64_t variant, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t n, aocl_int64_t nb_alg,
+                  integer variant, integer type, integer nrepeats, integer n, integer nb_alg,
                   FLA_Obj A, FLA_Obj b, FLA_Obj b_orig, FLA_Obj p, FLA_Obj norm,
                   double *dtime, double *diff, double *gflops )
 {
-  aocl_int64_t
+  integer
     irep;
 
   double

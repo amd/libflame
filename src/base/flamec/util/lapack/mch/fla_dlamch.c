@@ -73,11 +73,11 @@ doublereal fla_dlamch(char *cmach, ftnlen cmach_len)
     static TLS_CLASS_SPEC logical lrnd;
     static TLS_CLASS_SPEC doublereal rmin, rmax, t, rmach;
     extern logical fla_lsame(char *, char *, ftnlen, ftnlen);
-    static TLS_CLASS_SPEC doublereal small_val, sfmin;
-    extern /* Subroutine */ fla_dim_t fla_dlamc2(fla_dim_t *, fla_dim_t *, logical *, 
-	    doublereal *, fla_dim_t *, doublereal *, fla_dim_t *, doublereal *);
-    static TLS_CLASS_SPEC fla_dim_t it;
-    static TLS_CLASS_SPEC doublereal rnd, eps;
+    static doublereal small, sfmin;
+    extern /* Subroutine */ integer fla_dlamc2(integer *, integer *, logical *, 
+	    doublereal *, integer *, doublereal *, integer *, doublereal *);
+    static integer it;
+    static doublereal rnd, eps;
 
 
 /*  -- LAPACK auxiliary routine (version 3.2) -- */
@@ -197,7 +197,7 @@ doublereal fla_dlamch(char *cmach, ftnlen cmach_len)
 
 /* *********************************************************************** */
 
-/* Subroutine */ fla_dim_t fla_dlamc1(fla_dim_t *beta, fla_dim_t *t, logical *rnd, logical 
+/* Subroutine */ integer fla_dlamc1(integer *beta, integer *t, logical *rnd, logical 
 	*ieee1)
 {
     /* Initialized data */
@@ -407,8 +407,8 @@ L30:
 
 /* *********************************************************************** */
 
-/* Subroutine */ fla_dim_t fla_dlamc2(fla_dim_t *beta, fla_dim_t *t, logical *rnd, 
-	doublereal *eps, fla_dim_t *emin, doublereal *rmin, fla_dim_t *emax, 
+/* Subroutine */ integer fla_dlamc2(integer *beta, integer *t, logical *rnd, 
+	doublereal *eps, integer *emin, doublereal *rmin, integer *emax, 
 	doublereal *rmax)
 {
     /* Initialized data */
@@ -432,22 +432,22 @@ explicitly.\002,/)";
     //fla_dim_t s_wsfe(cilist *), do_fio(fla_dim_t *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
-    static TLS_CLASS_SPEC logical ieee;
-    static TLS_CLASS_SPEC doublereal half;
-    static TLS_CLASS_SPEC logical lrnd;
-    static TLS_CLASS_SPEC doublereal leps, zero, a, b, c__;
-    static TLS_CLASS_SPEC fla_dim_t i__, lbeta;
-    static TLS_CLASS_SPEC doublereal rbase;
-    static TLS_CLASS_SPEC fla_dim_t lemin, lemax, gnmin;
-    static TLS_CLASS_SPEC doublereal small_val;
-    static TLS_CLASS_SPEC fla_dim_t gpmin;
-    static TLS_CLASS_SPEC doublereal third, lrmin, lrmax, sixth;
-    extern /* Subroutine */ fla_dim_t fla_dlamc1(fla_dim_t *, fla_dim_t *, logical *, 
+    static logical ieee;
+    static doublereal half;
+    static logical lrnd;
+    static doublereal leps, zero, a, b, c__;
+    static integer i__, lbeta;
+    static doublereal rbase;
+    static integer lemin, lemax, gnmin;
+    static doublereal small;
+    static integer gpmin;
+    static doublereal third, lrmin, lrmax, sixth;
+    extern /* Subroutine */ integer fla_dlamc1(integer *, integer *, logical *, 
 	    logical *);
     extern doublereal fla_dlamc3(doublereal *, doublereal *);
-    static TLS_CLASS_SPEC logical lieee1;
-    extern /* Subroutine */ fla_dim_t fla_dlamc4(fla_dim_t *, doublereal *, fla_dim_t *), 
-	    fla_dlamc5(fla_dim_t *, fla_dim_t *, fla_dim_t *, logical *, fla_dim_t *, 
+    static logical lieee1;
+    extern /* Subroutine */ integer fla_dlamc4(integer *, doublereal *, integer *), 
+	    fla_dlamc5(integer *, integer *, integer *, logical *, integer *, 
 	    doublereal *);
     static TLS_CLASS_SPEC fla_dim_t lt, ngnmin, ngpmin;
     static TLS_CLASS_SPEC doublereal one, two;
@@ -764,7 +764,7 @@ doublereal fla_dlamc3(doublereal *a, doublereal *b)
 
 /* *********************************************************************** */
 
-/* Subroutine */ fla_dim_t fla_dlamc4(fla_dim_t *emin, doublereal *start, fla_dim_t *base)
+/* Subroutine */ integer fla_dlamc4(integer *emin, doublereal *start, integer *base)
 {
     /* System generated locals */
     fla_dim_t i__1;
@@ -862,8 +862,8 @@ L10:
 
 /* *********************************************************************** */
 
-/* Subroutine */ fla_dim_t fla_dlamc5(fla_dim_t *beta, fla_dim_t *p, fla_dim_t *emin, 
-	logical *ieee, fla_dim_t *emax, doublereal *rmax)
+/* Subroutine */ integer fla_dlamc5(integer *beta, integer *p, integer *emin, 
+	logical *ieee, integer *emax, doublereal *rmax)
 {
     /* System generated locals */
     fla_dim_t i__1;

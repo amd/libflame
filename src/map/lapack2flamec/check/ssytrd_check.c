@@ -1,17 +1,15 @@
 #include "FLA_f2c.h"
-#include "FLA_lapack2flame_return_defs.h"
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c_n1 = -1;
 
-int ssytrd_check(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, float *d__, float *e, float *tau,
-                 float *work, aocl_int64_t *lwork, aocl_int64_t *info)
+int ssytrd_check(char *uplo, integer *n, float *a, integer *lda, float *d__, float *e, float *tau, float *work, integer *lwork, integer * info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1;
+    integer a_dim1, a_offset, i__1;
     /* Local variables */
-    aocl_int64_t nb;
+    integer nb;
     logical upper;
-    aocl_int64_t lwkopt;
+    integer lwkopt;
     logical lquery;
 
 #if AOCL_DTL_LOG_ENABLE

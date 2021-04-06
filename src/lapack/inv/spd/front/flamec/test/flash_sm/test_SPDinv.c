@@ -18,14 +18,14 @@
 char* pc_str[N_PARAM_COMBOS] = { "l", "u" };
 
 void time_SPDinv(
-                aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t n,
+                integer param_combo, integer type, integer n_repeats, integer n,
                 FLA_Obj C, FLA_Obj C_ref,
                 double *dtime, double *diff, double *gflops );
 
 
 int main(int argc, char *argv[])
 {
-  aocl_int64_t 
+  integer 
     datatype,
     n_threads,
     m_input,

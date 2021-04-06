@@ -239,139 +239,132 @@ extern "C" {
 // --- Level-1 BLAS prototypes -------------------
 
 // --- amax ---
-aocl_int_t  BL1_EXPORT_isamax ( aocl_int_t* n, float*    x, aocl_int_t* incx );
-aocl_int_t  BL1_EXPORT_idamax ( aocl_int_t* n, double*   x, aocl_int_t* incx );
-aocl_int_t  BL1_EXPORT_icamax ( aocl_int_t* n, scomplex* x, aocl_int_t* incx );
-aocl_int_t  BL1_EXPORT_izamax ( aocl_int_t* n, dcomplex* x, aocl_int_t* incx );
+integer  F77_isamax ( integer* n, float*    x, integer* incx );
+integer  F77_idamax ( integer* n, double*   x, integer* incx );
+integer  F77_icamax ( integer* n, scomplex* x, integer* incx );
+integer  F77_izamax ( integer* n, dcomplex* x, integer* incx );
 // --- asum ---
-float    BL1_EXPORT_sasum  ( aocl_int_t* n, float*    x, aocl_int_t* incx );
-double   BL1_EXPORT_dasum  ( aocl_int_t* n, double*   x, aocl_int_t* incx );
-float    BL1_EXPORT_scasum ( aocl_int_t* n, scomplex* x, aocl_int_t* incx );
-double   BL1_EXPORT_dzasum ( aocl_int_t* n, dcomplex* x, aocl_int_t* incx );
+float    F77_sasum  ( integer* n, float*    x, integer* incx );
+double   F77_dasum  ( integer* n, double*   x, integer* incx );
+float    F77_scasum ( integer* n, scomplex* x, integer* incx );
+double   F77_dzasum ( integer* n, dcomplex* x, integer* incx );
 // --- axpy ---
-void     BL1_EXPORT_saxpy  ( aocl_int_t* n, float*    alpha, float*    x, aocl_int_t* incx,  float*    y, aocl_int_t* incy );
-void     BL1_EXPORT_daxpy  ( aocl_int_t* n, double*   alpha, double*   x, aocl_int_t* incx,  double*   y, aocl_int_t* incy );
-void     BL1_EXPORT_caxpy  ( aocl_int_t* n, scomplex* alpha, scomplex* x, aocl_int_t* incx,  scomplex* y, aocl_int_t* incy );
-void     BL1_EXPORT_zaxpy  ( aocl_int_t* n, dcomplex* alpha, dcomplex* x, aocl_int_t* incx,  dcomplex* y, aocl_int_t* incy );
+void     F77_saxpy  ( integer* n, float*    alpha, float*    x, integer* incx,  float*    y, integer* incy );
+void     F77_daxpy  ( integer* n, double*   alpha, double*   x, integer* incx,  double*   y, integer* incy );
+void     F77_caxpy  ( integer* n, scomplex* alpha, scomplex* x, integer* incx,  scomplex* y, integer* incy );
+void     F77_zaxpy  ( integer* n, dcomplex* alpha, dcomplex* x, integer* incx,  dcomplex* y, integer* incy );
 // --- copy ---
-void     BL1_EXPORT_scopy  ( aocl_int_t* n, float*    x, aocl_int_t* incx, float*    y, aocl_int_t* incy );
-void     BL1_EXPORT_dcopy  ( aocl_int_t* n, double*   x, aocl_int_t* incx, double*   y, aocl_int_t* incy );
-void     BL1_EXPORT_ccopy  ( aocl_int_t* n, scomplex* x, aocl_int_t* incx, scomplex* y, aocl_int_t* incy );
-void     BL1_EXPORT_zcopy  ( aocl_int_t* n, dcomplex* x, aocl_int_t* incx, dcomplex* y, aocl_int_t* incy );
+void     F77_scopy  ( integer* n, float*    x, integer* incx, float*    y, integer* incy );
+void     F77_dcopy  ( integer* n, double*   x, integer* incx, double*   y, integer* incy );
+void     F77_ccopy  ( integer* n, scomplex* x, integer* incx, scomplex* y, integer* incy );
+void     F77_zcopy  ( integer* n, dcomplex* x, integer* incx, dcomplex* y, integer* incy );
 // --- dot ---
-float    BL1_EXPORT_sdot   ( aocl_int_t* n, float*    x, aocl_int_t* incx, float*    y, aocl_int_t* incy );
-double   BL1_EXPORT_ddot   ( aocl_int_t* n, double*   x, aocl_int_t* incx, double*   y, aocl_int_t* incy );
-scomplex BL1_EXPORT_cdotu  ( aocl_int_t* n, scomplex* x, aocl_int_t* incx, scomplex* y, aocl_int_t* incy );
-scomplex BL1_EXPORT_cdotc  ( aocl_int_t* n, scomplex* x, aocl_int_t* incx, scomplex* y, aocl_int_t* incy );
-dcomplex BL1_EXPORT_zdotu  ( aocl_int_t* n, dcomplex* x, aocl_int_t* incx, dcomplex* y, aocl_int_t* incy );
-dcomplex BL1_EXPORT_zdotc  ( aocl_int_t* n, dcomplex* x, aocl_int_t* incx, dcomplex* y, aocl_int_t* incy );
+float    F77_sdot   ( integer* n, float*    x, integer* incx, float*    y, integer* incy );
+double   F77_ddot   ( integer* n, double*   x, integer* incx, double*   y, integer* incy );
+scomplex F77_cdotu  ( integer* n, scomplex* x, integer* incx, scomplex* y, integer* incy );
+scomplex F77_cdotc  ( integer* n, scomplex* x, integer* incx, scomplex* y, integer* incy );
+dcomplex F77_zdotu  ( integer* n, dcomplex* x, integer* incx, dcomplex* y, integer* incy );
+dcomplex F77_zdotc  ( integer* n, dcomplex* x, integer* incx, dcomplex* y, integer* incy );
 // --- nrm2 ---
-float    BL1_EXPORT_snrm2  ( aocl_int_t* n, float*    x, aocl_int_t* incx );
-double   BL1_EXPORT_dnrm2  ( aocl_int_t* n, double*   x, aocl_int_t* incx );
-float    BL1_EXPORT_scnrm2 ( aocl_int_t* n, scomplex* x, aocl_int_t* incx );
-double   BL1_EXPORT_dznrm2 ( aocl_int_t* n, dcomplex* x, aocl_int_t* incx );
+float    F77_snrm2  ( integer* n, float*    x, integer* incx );
+double   F77_dnrm2  ( integer* n, double*   x, integer* incx );
+float    F77_scnrm2 ( integer* n, scomplex* x, integer* incx );
+double   F77_dznrm2 ( integer* n, dcomplex* x, integer* incx );
 // --- scal ---
-void     BL1_EXPORT_sscal  ( aocl_int_t* n, float*    alpha, float*    y, aocl_int_t* incy );
-void     BL1_EXPORT_dscal  ( aocl_int_t* n, double*   alpha, double*   y, aocl_int_t* incy );
-void     BL1_EXPORT_cscal  ( aocl_int_t* n, scomplex* alpha, scomplex* y, aocl_int_t* incy );
-void     BL1_EXPORT_csscal ( aocl_int_t* n, float*    alpha, scomplex* y, aocl_int_t* incy );
-void     BL1_EXPORT_zscal  ( aocl_int_t* n, dcomplex* alpha, dcomplex* y, aocl_int_t* incy );
-void     BL1_EXPORT_zdscal ( aocl_int_t* n, double*   alpha, dcomplex* y, aocl_int_t* incy );
+void     F77_sscal  ( integer* n, float*    alpha, float*    y, integer* incy );
+void     F77_dscal  ( integer* n, double*   alpha, double*   y, integer* incy );
+void     F77_cscal  ( integer* n, scomplex* alpha, scomplex* y, integer* incy );
+void     F77_csscal ( integer* n, float*    alpha, scomplex* y, integer* incy );
+void     F77_zscal  ( integer* n, dcomplex* alpha, dcomplex* y, integer* incy );
+void     F77_zdscal ( integer* n, double*   alpha, dcomplex* y, integer* incy );
 // --- swap ---
-void     BL1_EXPORT_sswap  ( aocl_int_t* n, float*    x, aocl_int_t* incx, float*    y, aocl_int_t* incy );
-void     BL1_EXPORT_dswap  ( aocl_int_t* n, double*   x, aocl_int_t* incx, double*   y, aocl_int_t* incy );
-void     BL1_EXPORT_cswap  ( aocl_int_t* n, scomplex* x, aocl_int_t* incx, scomplex* y, aocl_int_t* incy );
-void     BL1_EXPORT_zswap  ( aocl_int_t* n, dcomplex* x, aocl_int_t* incx, dcomplex* y, aocl_int_t* incy );
+void     F77_sswap  ( integer* n, float*    x, integer* incx, float*    y, integer* incy );
+void     F77_dswap  ( integer* n, double*   x, integer* incx, double*   y, integer* incy );
+void     F77_cswap  ( integer* n, scomplex* x, integer* incx, scomplex* y, integer* incy );
+void     F77_zswap  ( integer* n, dcomplex* x, integer* incx, dcomplex* y, integer* incy );
 
 // --- Level-2 BLAS prototypes -------------------
 
 // --- gemv ---
-void     BL1_EXPORT_sgemv  ( char* transa, aocl_int_t* m, aocl_int_t* n, float*    alpha, float*    a, aocl_int_t* lda, float*    x, aocl_int_t* incx, float*    beta, float*    y, aocl_int_t* incy );
-void     BL1_EXPORT_dgemv  ( char* transa, aocl_int_t* m, aocl_int_t* n, double*   alpha, double*   a, aocl_int_t* lda, double*   x, aocl_int_t* incx, double*   beta, double*   y, aocl_int_t* incy );
-void     BL1_EXPORT_cgemv  ( char* transa, aocl_int_t* m, aocl_int_t* n, scomplex* alpha, scomplex* a, aocl_int_t* lda, scomplex* x, aocl_int_t* incx, scomplex* beta, scomplex* y, aocl_int_t* incy );
-void     BL1_EXPORT_zgemv  ( char* transa, aocl_int_t* m, aocl_int_t* n, dcomplex* alpha, dcomplex* a, aocl_int_t* lda, dcomplex* x, aocl_int_t* incx, dcomplex* beta, dcomplex* y, aocl_int_t* incy );
+void     F77_sgemv  ( char* transa, integer* m, integer* n, float*    alpha, float*    a, integer* lda, float*    x, integer* incx, float*    beta, float*    y, integer* incy );
+void     F77_dgemv  ( char* transa, integer* m, integer* n, double*   alpha, double*   a, integer* lda, double*   x, integer* incx, double*   beta, double*   y, integer* incy );
+void     F77_cgemv  ( char* transa, integer* m, integer* n, scomplex* alpha, scomplex* a, integer* lda, scomplex* x, integer* incx, scomplex* beta, scomplex* y, integer* incy );
+void     F77_zgemv  ( char* transa, integer* m, integer* n, dcomplex* alpha, dcomplex* a, integer* lda, dcomplex* x, integer* incx, dcomplex* beta, dcomplex* y, integer* incy );
 // --- ger ---
-void     BL1_EXPORT_sger   ( aocl_int_t* m, aocl_int_t* n, float*    alpha, float*    x, aocl_int_t* incx, float*    y, aocl_int_t* incy, float*    a, aocl_int_t* lda );
-void     BL1_EXPORT_dger   ( aocl_int_t* m, aocl_int_t* n, double*   alpha, double*   x, aocl_int_t* incx, double*   y, aocl_int_t* incy, double*   a, aocl_int_t* lda );
-void     BL1_EXPORT_cgerc  ( aocl_int_t* m, aocl_int_t* n, scomplex* alpha, scomplex* x, aocl_int_t* incx, scomplex* y, aocl_int_t* incy, scomplex* a, aocl_int_t* lda );
-void     BL1_EXPORT_cgeru  ( aocl_int_t* m, aocl_int_t* n, scomplex* alpha, scomplex* x, aocl_int_t* incx, scomplex* y, aocl_int_t* incy, scomplex* a, aocl_int_t* lda );
-void     BL1_EXPORT_zgerc  ( aocl_int_t* m, aocl_int_t* n, dcomplex* alpha, dcomplex* x, aocl_int_t* incx, dcomplex* y, aocl_int_t* incy, dcomplex* a, aocl_int_t* lda );
-void     BL1_EXPORT_zgeru  ( aocl_int_t* m, aocl_int_t* n, dcomplex* alpha, dcomplex* x, aocl_int_t* incx, dcomplex* y, aocl_int_t* incy, dcomplex* a, aocl_int_t* lda );
+void     F77_sger   ( integer* m, integer* n, float*    alpha, float*    x, integer* incx, float*    y, integer* incy, float*    a, integer* lda );
+void     F77_dger   ( integer* m, integer* n, double*   alpha, double*   x, integer* incx, double*   y, integer* incy, double*   a, integer* lda );
+void     F77_cgerc  ( integer* m, integer* n, scomplex* alpha, scomplex* x, integer* incx, scomplex* y, integer* incy, scomplex* a, integer* lda );
+void     F77_cgeru  ( integer* m, integer* n, scomplex* alpha, scomplex* x, integer* incx, scomplex* y, integer* incy, scomplex* a, integer* lda );
+void     F77_zgerc  ( integer* m, integer* n, dcomplex* alpha, dcomplex* x, integer* incx, dcomplex* y, integer* incy, dcomplex* a, integer* lda );
+void     F77_zgeru  ( integer* m, integer* n, dcomplex* alpha, dcomplex* x, integer* incx, dcomplex* y, integer* incy, dcomplex* a, integer* lda );
 // --- hemv ---
-void     BL1_EXPORT_chemv  ( char* uplo, aocl_int_t* n, scomplex* alpha, scomplex* a, aocl_int_t* lda, scomplex* x, aocl_int_t* incx, scomplex* beta, scomplex* y, aocl_int_t* incy );
-void     BL1_EXPORT_zhemv  ( char* uplo, aocl_int_t* n, dcomplex* alpha, dcomplex* a, aocl_int_t* lda, dcomplex* x, aocl_int_t* incx, dcomplex* beta, dcomplex* y, aocl_int_t* incy );
+void     F77_chemv  ( char* uplo, integer* n, scomplex* alpha, scomplex* a, integer* lda, scomplex* x, integer* incx, scomplex* beta, scomplex* y, integer* incy );
+void     F77_zhemv  ( char* uplo, integer* n, dcomplex* alpha, dcomplex* a, integer* lda, dcomplex* x, integer* incx, dcomplex* beta, dcomplex* y, integer* incy );
 // --- her ---
-void     BL1_EXPORT_cher   ( char* uplo, aocl_int_t* n, float*    alpha, scomplex* x, aocl_int_t* incx, scomplex* a, aocl_int_t* lda );
-void     BL1_EXPORT_zher   ( char* uplo, aocl_int_t* n, double*   alpha, dcomplex* x, aocl_int_t* incx, dcomplex* a, aocl_int_t* lda );
+void     F77_cher   ( char* uplo, integer* n, float*    alpha, scomplex* x, integer* incx, scomplex* a, integer* lda );
+void     F77_zher   ( char* uplo, integer* n, double*   alpha, dcomplex* x, integer* incx, dcomplex* a, integer* lda );
 // --- her2 ---
-void     BL1_EXPORT_cher2  ( char* uplo, aocl_int_t* n, scomplex* alpha, scomplex* x, aocl_int_t* incx, scomplex* y, aocl_int_t* incy, scomplex* a, aocl_int_t* lda );
-void     BL1_EXPORT_zher2  ( char* uplo, aocl_int_t* n, dcomplex* alpha, dcomplex* x, aocl_int_t* incx, dcomplex* y, aocl_int_t* incy, dcomplex* a, aocl_int_t* lda );
+void     F77_cher2  ( char* uplo, integer* n, scomplex* alpha, scomplex* x, integer* incx, scomplex* y, integer* incy, scomplex* a, integer* lda );
+void     F77_zher2  ( char* uplo, integer* n, dcomplex* alpha, dcomplex* x, integer* incx, dcomplex* y, integer* incy, dcomplex* a, integer* lda );
 // --- symv ---
-void     BL1_EXPORT_ssymv  ( char* uplo, aocl_int_t* n, float*    alpha, float*    a, aocl_int_t* lda, float*    x, aocl_int_t* incx, float*    beta, float*    y, aocl_int_t* incy );
-void     BL1_EXPORT_dsymv  ( char* uplo, aocl_int_t* n, double*   alpha, double*   a, aocl_int_t* lda, double*   x, aocl_int_t* incx, double*   beta, double*   y, aocl_int_t* incy );
+void     F77_ssymv  ( char* uplo, integer* n, float*    alpha, float*    a, integer* lda, float*    x, integer* incx, float*    beta, float*    y, integer* incy );
+void     F77_dsymv  ( char* uplo, integer* n, double*   alpha, double*   a, integer* lda, double*   x, integer* incx, double*   beta, double*   y, integer* incy );
 // --- syr ---
-void     BL1_EXPORT_ssyr   ( char* uplo, aocl_int_t* n, float*    alpha, float*    x, aocl_int_t* incx, float*    a, aocl_int_t* lda );
-void     BL1_EXPORT_dsyr   ( char* uplo, aocl_int_t* n, double*   alpha, double*   x, aocl_int_t* incx, double*   a, aocl_int_t* lda );
+void     F77_ssyr   ( char* uplo, integer* n, float*    alpha, float*    x, integer* incx, float*    a, integer* lda );
+void     F77_dsyr   ( char* uplo, integer* n, double*   alpha, double*   x, integer* incx, double*   a, integer* lda );
 // --- syr2 ---
-void     BL1_EXPORT_ssyr2  ( char* uplo, aocl_int_t* n, float*    alpha, float*    x, aocl_int_t* incx, float*    y, aocl_int_t* incy, float*    a, aocl_int_t* lda );
-void     BL1_EXPORT_dsyr2  ( char* uplo, aocl_int_t* n, double*   alpha, double*   x, aocl_int_t* incx, double*   y, aocl_int_t* incy, double*   a, aocl_int_t* lda );
+void     F77_ssyr2  ( char* uplo, integer* n, float*    alpha, float*    x, integer* incx, float*    y, integer* incy, float*    a, integer* lda );
+void     F77_dsyr2  ( char* uplo, integer* n, double*   alpha, double*   x, integer* incx, double*   y, integer* incy, double*   a, integer* lda );
 // --- trmv ---
-void     BL1_EXPORT_strmv  ( char* uplo, char* transa, char* diag, aocl_int_t* n,  float*    a, aocl_int_t* lda, float*    y, aocl_int_t* incy );
-void     BL1_EXPORT_dtrmv  ( char* uplo, char* transa, char* diag, aocl_int_t* n,  double*   a, aocl_int_t* lda, double*   y, aocl_int_t* incy );
-void     BL1_EXPORT_ctrmv  ( char* uplo, char* transa, char* diag, aocl_int_t* n,  scomplex* a, aocl_int_t* lda, scomplex* y, aocl_int_t* incy );
-void     BL1_EXPORT_ztrmv  ( char* uplo, char* transa, char* diag, aocl_int_t* n,  dcomplex* a, aocl_int_t* lda, dcomplex* y, aocl_int_t* incy );
+void     F77_strmv  ( char* uplo, char* transa, char* diag, integer* n,  float*    a, integer* lda, float*    y, integer* incy );
+void     F77_dtrmv  ( char* uplo, char* transa, char* diag, integer* n,  double*   a, integer* lda, double*   y, integer* incy );
+void     F77_ctrmv  ( char* uplo, char* transa, char* diag, integer* n,  scomplex* a, integer* lda, scomplex* y, integer* incy );
+void     F77_ztrmv  ( char* uplo, char* transa, char* diag, integer* n,  dcomplex* a, integer* lda, dcomplex* y, integer* incy );
 // --- trsv ---
-void     BL1_EXPORT_strsv  ( char* uplo, char* transa, char* diag, aocl_int_t* n,  float*    a, aocl_int_t* lda, float*    y, aocl_int_t* incy );
-void     BL1_EXPORT_dtrsv  ( char* uplo, char* transa, char* diag, aocl_int_t* n,  double*   a, aocl_int_t* lda, double*   y, aocl_int_t* incy );
-void     BL1_EXPORT_ctrsv  ( char* uplo, char* transa, char* diag, aocl_int_t* n,  scomplex* a, aocl_int_t* lda, scomplex* y, aocl_int_t* incy );
-void     BL1_EXPORT_ztrsv  ( char* uplo, char* transa, char* diag, aocl_int_t* n,  dcomplex* a, aocl_int_t* lda, dcomplex* y, aocl_int_t* incy );
+void     F77_strsv  ( char* uplo, char* transa, char* diag, integer* n,  float*    a, integer* lda, float*    y, integer* incy );
+void     F77_dtrsv  ( char* uplo, char* transa, char* diag, integer* n,  double*   a, integer* lda, double*   y, integer* incy );
+void     F77_ctrsv  ( char* uplo, char* transa, char* diag, integer* n,  scomplex* a, integer* lda, scomplex* y, integer* incy );
+void     F77_ztrsv  ( char* uplo, char* transa, char* diag, integer* n,  dcomplex* a, integer* lda, dcomplex* y, integer* incy );
 
 // --- Level-3 BLAS prototypes -------------------
 
 // --- gemm ---
-void     BL1_EXPORT_sgemm  ( char* transa, char* transb, aocl_int_t* m, aocl_int_t* n, aocl_int_t* k, float*    alpha, float*    a, aocl_int_t* lda, float*    b, aocl_int_t* ldb, float*    beta, float*    c, aocl_int_t* ldc );
-void     BL1_EXPORT_dgemm  ( char* transa, char* transb, aocl_int_t* m, aocl_int_t* n, aocl_int_t* k, double*   alpha, double*   a, aocl_int_t* lda, double*   b, aocl_int_t* ldb, double*   beta, double*   c, aocl_int_t* ldc );
-void     BL1_EXPORT_cgemm  ( char* transa, char* transb, aocl_int_t* m, aocl_int_t* n, aocl_int_t* k, scomplex* alpha, scomplex* a, aocl_int_t* lda, scomplex* b, aocl_int_t* ldb, scomplex* beta, scomplex* c, aocl_int_t* ldc );
-void     BL1_EXPORT_zgemm  ( char* transa, char* transb, aocl_int_t* m, aocl_int_t* n, aocl_int_t* k, dcomplex* alpha, dcomplex* a, aocl_int_t* lda, dcomplex* b, aocl_int_t* ldb, dcomplex* beta, dcomplex* c, aocl_int_t* ldc );
+void     F77_sgemm  ( char* transa, char* transb, integer* m, integer* n, integer* k, float*    alpha, float*    a, integer* lda, float*    b, integer* ldb, float*    beta, float*    c, integer* ldc );
+void     F77_dgemm  ( char* transa, char* transb, integer* m, integer* n, integer* k, double*   alpha, double*   a, integer* lda, double*   b, integer* ldb, double*   beta, double*   c, integer* ldc );
+void     F77_cgemm  ( char* transa, char* transb, integer* m, integer* n, integer* k, scomplex* alpha, scomplex* a, integer* lda, scomplex* b, integer* ldb, scomplex* beta, scomplex* c, integer* ldc );
+void     F77_zgemm  ( char* transa, char* transb, integer* m, integer* n, integer* k, dcomplex* alpha, dcomplex* a, integer* lda, dcomplex* b, integer* ldb, dcomplex* beta, dcomplex* c, integer* ldc );
 // --- hemm ---
-void     BL1_EXPORT_chemm  ( char* side, char* uplo, aocl_int_t* m, aocl_int_t* n, scomplex* alpha, scomplex* a, aocl_int_t* lda, scomplex* b, aocl_int_t* ldb, scomplex* beta, scomplex* c, aocl_int_t* ldc );
-void     BL1_EXPORT_zhemm  ( char* side, char* uplo, aocl_int_t* m, aocl_int_t* n, dcomplex* alpha, dcomplex* a, aocl_int_t* lda, dcomplex* b, aocl_int_t* ldb, dcomplex* beta, dcomplex* c, aocl_int_t* ldc );
+void     F77_chemm  ( char* side, char* uplo, integer* m, integer* n, scomplex* alpha, scomplex* a, integer* lda, scomplex* b, integer* ldb, scomplex* beta, scomplex* c, integer* ldc );
+void     F77_zhemm  ( char* side, char* uplo, integer* m, integer* n, dcomplex* alpha, dcomplex* a, integer* lda, dcomplex* b, integer* ldb, dcomplex* beta, dcomplex* c, integer* ldc );
 // --- herk ---
-void     BL1_EXPORT_cherk  ( char* uplo, char* transa, aocl_int_t* n, aocl_int_t* k, float*  alpha, scomplex* a, aocl_int_t* lda, float*  beta, scomplex* c, aocl_int_t* ldc );
-void     BL1_EXPORT_zherk  ( char* uplo, char* transa, aocl_int_t* n, aocl_int_t* k, double* alpha, dcomplex* a, aocl_int_t* lda, double* beta, dcomplex* c, aocl_int_t* ldc );
+void     F77_cherk  ( char* uplo, char* transa, integer* n, integer* k, float*  alpha, scomplex* a, integer* lda, float*  beta, scomplex* c, integer* ldc );
+void     F77_zherk  ( char* uplo, char* transa, integer* n, integer* k, double* alpha, dcomplex* a, integer* lda, double* beta, dcomplex* c, integer* ldc );
 // --- her2k ---
-void     BL1_EXPORT_cher2k ( char* uplo, char* transa, aocl_int_t* n, aocl_int_t* k, scomplex* alpha, scomplex* a, aocl_int_t* lda, scomplex* b, aocl_int_t* ldb, float*  beta, scomplex* c, aocl_int_t* ldc );
-void     BL1_EXPORT_zher2k ( char* uplo, char* transa, aocl_int_t* n, aocl_int_t* k, dcomplex* alpha, dcomplex* a, aocl_int_t* lda, dcomplex* b, aocl_int_t* ldb, double* beta, dcomplex* c, aocl_int_t* ldc );
+void     F77_cher2k ( char* uplo, char* transa, integer* n, integer* k, scomplex* alpha, scomplex* a, integer* lda, scomplex* b, integer* ldb, float*  beta, scomplex* c, integer* ldc );
+void     F77_zher2k ( char* uplo, char* transa, integer* n, integer* k, dcomplex* alpha, dcomplex* a, integer* lda, dcomplex* b, integer* ldb, double* beta, dcomplex* c, integer* ldc );
 // --- symm ---
-void     BL1_EXPORT_ssymm  ( char* side, char* uplo, aocl_int_t* m, aocl_int_t* n, float*    alpha, float*    a, aocl_int_t* lda, float*    b, aocl_int_t* ldb, float*    beta, float*    c, aocl_int_t* ldc );
-void     BL1_EXPORT_dsymm  ( char* side, char* uplo, aocl_int_t* m, aocl_int_t* n, double*   alpha, double*   a, aocl_int_t* lda, double*   b, aocl_int_t* ldb, double*   beta, double*   c, aocl_int_t* ldc );
-void     BL1_EXPORT_csymm  ( char* side, char* uplo, aocl_int_t* m, aocl_int_t* n, scomplex* alpha, scomplex* a, aocl_int_t* lda, scomplex* b, aocl_int_t* ldb, scomplex* beta, scomplex* c, aocl_int_t* ldc );
-void     BL1_EXPORT_zsymm  ( char* side, char* uplo, aocl_int_t* m, aocl_int_t* n, dcomplex* alpha, dcomplex* a, aocl_int_t* lda, dcomplex* b, aocl_int_t* ldb, dcomplex* beta, dcomplex* c, aocl_int_t* ldc );
+void     F77_ssymm  ( char* side, char* uplo, integer* m, integer* n, float*    alpha, float*    a, integer* lda, float*    b, integer* ldb, float*    beta, float*    c, integer* ldc );
+void     F77_dsymm  ( char* side, char* uplo, integer* m, integer* n, double*   alpha, double*   a, integer* lda, double*   b, integer* ldb, double*   beta, double*   c, integer* ldc );
+void     F77_csymm  ( char* side, char* uplo, integer* m, integer* n, scomplex* alpha, scomplex* a, integer* lda, scomplex* b, integer* ldb, scomplex* beta, scomplex* c, integer* ldc );
+void     F77_zsymm  ( char* side, char* uplo, integer* m, integer* n, dcomplex* alpha, dcomplex* a, integer* lda, dcomplex* b, integer* ldb, dcomplex* beta, dcomplex* c, integer* ldc );
 // --- syrk ---
-void     BL1_EXPORT_ssyrk  ( char* uplo, char* transa, aocl_int_t* n, aocl_int_t* k, float*    alpha, float*    a, aocl_int_t* lda, float*    beta, float*    c, aocl_int_t* ldc );
-void     BL1_EXPORT_dsyrk  ( char* uplo, char* transa, aocl_int_t* n, aocl_int_t* k, double*   alpha, double*   a, aocl_int_t* lda, double*   beta, double*   c, aocl_int_t* ldc );
-void     BL1_EXPORT_csyrk  ( char* uplo, char* transa, aocl_int_t* n, aocl_int_t* k, scomplex* alpha, scomplex* a, aocl_int_t* lda, scomplex* beta, scomplex* c, aocl_int_t* ldc );
-void     BL1_EXPORT_zsyrk  ( char* uplo, char* transa, aocl_int_t* n, aocl_int_t* k, dcomplex* alpha, dcomplex* a, aocl_int_t* lda, dcomplex* beta, dcomplex* c, aocl_int_t* ldc );
+void     F77_ssyrk  ( char* uplo, char* transa, integer* n, integer* k, float*    alpha, float*    a, integer* lda, float*    beta, float*    c, integer* ldc );
+void     F77_dsyrk  ( char* uplo, char* transa, integer* n, integer* k, double*   alpha, double*   a, integer* lda, double*   beta, double*   c, integer* ldc );
+void     F77_csyrk  ( char* uplo, char* transa, integer* n, integer* k, scomplex* alpha, scomplex* a, integer* lda, scomplex* beta, scomplex* c, integer* ldc );
+void     F77_zsyrk  ( char* uplo, char* transa, integer* n, integer* k, dcomplex* alpha, dcomplex* a, integer* lda, dcomplex* beta, dcomplex* c, integer* ldc );
 // --- syr2k ---
-void     BL1_EXPORT_ssyr2k ( char* uplo, char* transa, aocl_int_t* n, aocl_int_t* k, float*    alpha, float*    a, aocl_int_t* lda, float*    b, aocl_int_t* ldb, float*    beta, float*    c, aocl_int_t* ldc );
-void     BL1_EXPORT_dsyr2k ( char* uplo, char* transa, aocl_int_t* n, aocl_int_t* k, double*   alpha, double*   a, aocl_int_t* lda, double*   b, aocl_int_t* ldb, double*   beta, double*   c, aocl_int_t* ldc );
-void     BL1_EXPORT_csyr2k ( char* uplo, char* transa, aocl_int_t* n, aocl_int_t* k, scomplex* alpha, scomplex* a, aocl_int_t* lda, scomplex* b, aocl_int_t* ldb, scomplex* beta, scomplex* c, aocl_int_t* ldc );
-void     BL1_EXPORT_zsyr2k ( char* uplo, char* transa, aocl_int_t* n, aocl_int_t* k, dcomplex* alpha, dcomplex* a, aocl_int_t* lda, dcomplex* b, aocl_int_t* ldb, dcomplex* beta, dcomplex* c, aocl_int_t* ldc );
+void     F77_ssyr2k ( char* uplo, char* transa, integer* n, integer* k, float*    alpha, float*    a, integer* lda, float*    b, integer* ldb, float*    beta, float*    c, integer* ldc );
+void     F77_dsyr2k ( char* uplo, char* transa, integer* n, integer* k, double*   alpha, double*   a, integer* lda, double*   b, integer* ldb, double*   beta, double*   c, integer* ldc );
+void     F77_csyr2k ( char* uplo, char* transa, integer* n, integer* k, scomplex* alpha, scomplex* a, integer* lda, scomplex* b, integer* ldb, scomplex* beta, scomplex* c, integer* ldc );
+void     F77_zsyr2k ( char* uplo, char* transa, integer* n, integer* k, dcomplex* alpha, dcomplex* a, integer* lda, dcomplex* b, integer* ldb, dcomplex* beta, dcomplex* c, integer* ldc );
 // --- trmm ---
-void     BL1_EXPORT_strmm  ( char* side, char* uplo, char* transa, char* diag, aocl_int_t* m, aocl_int_t* n, float*    alpha, float*    a, aocl_int_t* lda, float*    b, aocl_int_t* ldb );
-void     BL1_EXPORT_dtrmm  ( char* side, char* uplo, char* transa, char* diag, aocl_int_t* m, aocl_int_t* n, double*   alpha, double*   a, aocl_int_t* lda, double*   b, aocl_int_t* ldb );
-void     BL1_EXPORT_ctrmm  ( char* side, char* uplo, char* transa, char* diag, aocl_int_t* m, aocl_int_t* n, scomplex* alpha, scomplex* a, aocl_int_t* lda, scomplex* b, aocl_int_t* ldb );
-void     BL1_EXPORT_ztrmm  ( char* side, char* uplo, char* transa, char* diag, aocl_int_t* m, aocl_int_t* n, dcomplex* alpha, dcomplex* a, aocl_int_t* lda, dcomplex* b, aocl_int_t* ldb );
+void     F77_strmm  ( char* side, char* uplo, char* transa, char* diag, integer* m, integer* n, float*    alpha, float*    a, integer* lda, float*    b, integer* ldb );
+void     F77_dtrmm  ( char* side, char* uplo, char* transa, char* diag, integer* m, integer* n, double*   alpha, double*   a, integer* lda, double*   b, integer* ldb );
+void     F77_ctrmm  ( char* side, char* uplo, char* transa, char* diag, integer* m, integer* n, scomplex* alpha, scomplex* a, integer* lda, scomplex* b, integer* ldb );
+void     F77_ztrmm  ( char* side, char* uplo, char* transa, char* diag, integer* m, integer* n, dcomplex* alpha, dcomplex* a, integer* lda, dcomplex* b, integer* ldb );
 // --- trsm ---
-void     BL1_EXPORT_strsm  ( char* side, char* uplo, char* transa, char* diag, aocl_int_t* m, aocl_int_t* n, float*    alpha, float*    a, aocl_int_t* lda, float*    b, aocl_int_t* ldb );
-void     BL1_EXPORT_dtrsm  ( char* side, char* uplo, char* transa, char* diag, aocl_int_t* m, aocl_int_t* n, double*   alpha, double*   a, aocl_int_t* lda, double*   b, aocl_int_t* ldb );
-void     BL1_EXPORT_ctrsm  ( char* side, char* uplo, char* transa, char* diag, aocl_int_t* m, aocl_int_t* n, scomplex* alpha, scomplex* a, aocl_int_t* lda, scomplex* b, aocl_int_t* ldb );
-void     BL1_EXPORT_ztrsm  ( char* side, char* uplo, char* transa, char* diag, aocl_int_t* m, aocl_int_t* n, dcomplex* alpha, dcomplex* a, aocl_int_t* lda, dcomplex* b, aocl_int_t* ldb );
-
-#endif
-
-// End extern "C" construct block.
-#ifdef __cplusplus
-}
-#endif
+void     F77_strsm  ( char* side, char* uplo, char* transa, char* diag, integer* m, integer* n, float*    alpha, float*    a, integer* lda, float*    b, integer* ldb );
+void     F77_dtrsm  ( char* side, char* uplo, char* transa, char* diag, integer* m, integer* n, double*   alpha, double*   a, integer* lda, double*   b, integer* ldb );
+void     F77_ctrsm  ( char* side, char* uplo, char* transa, char* diag, integer* m, integer* n, scomplex* alpha, scomplex* a, integer* lda, scomplex* b, integer* ldb );
+void     F77_ztrsm  ( char* side, char* uplo, char* transa, char* diag, integer* m, integer* n, dcomplex* alpha, dcomplex* a, integer* lda, dcomplex* b, integer* ldb );
 

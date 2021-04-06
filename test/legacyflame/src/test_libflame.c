@@ -1420,14 +1420,14 @@ void libfla_test_op_driver( char*         func_str,
 void libfla_test_print_result_info(char  *func_param_str,
                                    char  *datatype_char,
                                    char  *sc_str,
-                                   int    p_cur,
+                                   integer    p_cur,
                                    double perf,
                                    double residual,
                                    char  *pass_str,
                                    int    nfact )
 {
 	char blank_str[32];
-	int  n_spaces;
+	integer  n_spaces;
 
 	n_spaces = MAX_FUNC_STRING_LENGTH - strlen( func_param_str );
 	fill_string_with_n_spaces( blank_str, n_spaces );

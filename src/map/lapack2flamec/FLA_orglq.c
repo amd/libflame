@@ -30,18 +30,16 @@ extern void dorglq_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double
   as returned by SGELQF.
 */
 
-/** Generated wrapper function */
-void sorglq_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sorglq(m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
+#define LAPACK_orglq(prefix, name)                                      \
+  int F77_ ## prefix ## name ## lq( integer* m,                             \
+                                    integer* n,                             \
+                                    integer* k,                             \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, \
+                                    integer* ldim_A,                        \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_t, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_w, \
+                                    integer* lwork,                         \
+                                    integer* info)
 
 #define LAPACK_orglq_body(prefix)                                       \
   AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                         \
@@ -284,11 +282,15 @@ LAPACK_orglq(z, ung)
 }
 #endif
 
-#define LAPACK_orgl2(prefix, name)                                                        \
-    void aocl_lapack_##prefix##name##l2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,                       \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A, \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                   \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * info)
+#define LAPACK_orgl2(prefix, name)                                      \
+  int F77_ ## prefix ## name ## l2( integer* m,                                  \
+                                    integer* n,                             \
+                                    integer* k,                             \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, \
+                                    integer* ldim_A,                        \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_t, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_w, \
+                                    integer* info)
 
 LAPACK_orgl2(s, org)
 {

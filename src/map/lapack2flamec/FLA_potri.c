@@ -30,15 +30,12 @@
    computed by ZPOTRF.
 */
 
-/** Generated wrapper function */
-void spotri_(char *uplo, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_spotri(uplo, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
+#define LAPACK_potri(prefix)                                    \
+  int F77_ ## prefix ## potri( char* uplo,                      \
+                               integer*  n,                         \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, \
+                               integer*  ldim_A,                         \
+                               integer*  info )
 
     aocl_lapack_spotri(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
 

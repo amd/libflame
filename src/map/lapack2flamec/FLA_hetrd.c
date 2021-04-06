@@ -49,16 +49,15 @@
   holder vectors backward) is required.
 */
 
-/** Generated wrapper function */
-void ssytrd_(char *uplo, aocl_int_t *m, real *buff_A, aocl_int_t *ldim_A, real *buff_d, real *buff_e, real *buff_t, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ssytrd(uplo, m, buff_A, ldim_A, buff_d, buff_e, buff_t, buff_w, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
+#define LAPACK_hetrd(prefix, name)                                      \
+  int F77_ ## prefix ## name ## trd( char* uplo,                        \
+                                     integer*  m,                           \
+                                     PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
+                                     PREFIX2LAPACK_REALDEF(prefix)* buff_d, \
+                                     PREFIX2LAPACK_REALDEF(prefix)* buff_e, \
+                                     PREFIX2LAPACK_TYPEDEF(prefix)* buff_t, \
+                                     PREFIX2LAPACK_TYPEDEF(prefix)* buff_w, integer* lwork, \
+                                     integer*  info )
 
 #define LAPACK_hetrd_body(prefix)                                     \
   AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                       \
@@ -429,11 +428,14 @@ LAPACK_hetrd(z, he)
 }
 #endif
 
-#define LAPACK_hetd2(prefix, name)                                                               \
-    void aocl_lapack_##prefix##name##td2(char *uplo, aocl_int64_t *m, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                                 aocl_int64_t * ldim_A, PREFIX2LAPACK_REALDEF(prefix) * buff_d,       \
-                                 PREFIX2LAPACK_REALDEF(prefix) * buff_e,                         \
-                                 PREFIX2LAPACK_TYPEDEF(prefix) * buff_t, aocl_int64_t * info)
+#define LAPACK_hetd2(prefix, name)                                      \
+  int F77_ ## prefix ## name ## td2( char* uplo,                        \
+                                     integer*  m,                           \
+                                     PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
+                                     PREFIX2LAPACK_REALDEF(prefix)* buff_d, \
+                                     PREFIX2LAPACK_REALDEF(prefix)* buff_e, \
+                                     PREFIX2LAPACK_TYPEDEF(prefix)* buff_t, \
+                                     integer*  info )
 
 LAPACK_hetd2(s, sy)
 {

@@ -1,10 +1,10 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int zpotf2_check(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int64_t *info)
+int zpotf2_check(char *uplo, integer *n, dcomplex *a, integer *lda, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1;
+    integer a_dim1, a_offset, i__1;
 
     /* Local variables */
     logical upper;

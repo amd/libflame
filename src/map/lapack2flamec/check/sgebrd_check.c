@@ -1,16 +1,14 @@
 #include "FLA_f2c.h"
-#include "FLA_lapack2flame_return_defs.h"
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c_n1 = -1;
 
-int sgebrd_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, float *d__, float *e, float *tauq,
-                 float *taup, float *work, aocl_int64_t *lwork, aocl_int64_t *info)
+int sgebrd_check(integer *m, integer *n, float *a, integer *lda, float *d__, float *e, float *tauq, float *taup, float *work, integer * lwork, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2;
+    integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    aocl_int64_t nb, minmn;
-    aocl_int64_t lwkopt;
+    integer nb, minmn;
+    integer lwkopt;
     logical lquery;
 
 #if AOCL_DTL_LOG_ENABLE

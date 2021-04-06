@@ -107,20 +107,8 @@ array.f"> */
 /* > \ingroup auxOTHERauxiliary */
 
 /*  ===================================================================== */
-/* Subroutine */ /** Generated wrapper function */
-int xerbla_array_(char *srname_array__, aocl_int_t *srname_len__, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_xerbla_array(srname_array__, srname_len__, info);
-#else
-    aocl_int64_t srname_len___64 = *srname_len__;
-    aocl_int64_t info_64 = *info;
-
-    return aocl_lapack_xerbla_array(srname_array__, &srname_len___64, &info_64);
-#endif
-}
-
-int aocl_lapack_xerbla_array(char *srname_array__, aocl_int64_t *srname_len__, aocl_int64_t *info)
+/* Subroutine */ int xerbla_array_(char *srname_array__, integer *
+                                    srname_len__, integer *info)
 {
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;

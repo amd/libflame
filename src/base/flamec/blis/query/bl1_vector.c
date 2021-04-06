@@ -16,13 +16,13 @@
 #include "blis.h"
 #endif
 
-int bl1_vector_dim( fla_dim_t m, fla_dim_t n )
+int bl1_vector_dim( integer m, integer n )
 {
 	if ( m == 1 ) return n;
 	else          return m;
 }
 
-int bl1_vector_inc( trans1_t trans, fla_dim_t m, fla_dim_t n, fla_dim_t rs, fla_dim_t cs )
+int bl1_vector_inc( trans1_t trans, integer m, integer n, integer rs, integer cs )
 {
 	if ( bl1_does_notrans( trans ) )
 	{

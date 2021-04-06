@@ -19,14 +19,14 @@
 char* pc_str[N_PARAM_COMBOS] = { "" };
 
 void time_QR_UT_inc(
-               aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m, aocl_int64_t n,
+               integer param_combo, integer type, integer nrepeats, integer m, integer n,
                FLA_Obj A, FLA_Obj TW, FLA_Obj b, FLA_Obj x,
                double *dtime, double *diff, double *gflops );
 
 
 int main(int argc, char *argv[])
 {
-  aocl_int64_t 
+  integer 
     datatype,
     n_threads,
     m_input,

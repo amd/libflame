@@ -311,9 +311,9 @@ void libfla_test_trsm_experiment( test_params_t params,
 
 
 
-extern TLS_CLASS_SPEC fla_scal_t* fla_scal_cntl_blas;
-extern TLS_CLASS_SPEC fla_gemm_t* fla_gemm_cntl_blas;
-extern TLS_CLASS_SPEC fla_trsm_t* fla_trsm_cntl_blas;
+extern LIBFLAME_IMPORT TLS_CLASS_SPEC fla_scal_t* fla_scal_cntl_blas;
+extern LIBFLAME_IMPORT TLS_CLASS_SPEC fla_gemm_t* fla_gemm_cntl_blas;
+extern LIBFLAME_IMPORT TLS_CLASS_SPEC fla_trsm_t* fla_trsm_cntl_blas;
 
 void libfla_test_trsm_cntl_create( unsigned int var,
                                    fla_dim_t        b_alg_flat )

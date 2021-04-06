@@ -15,8 +15,8 @@ FLA_Error FLA_Tridiag_blk_external( FLA_Uplo uplo, FLA_Obj A, FLA_Obj t )
   fla_dim_t      info = 0;
 #ifdef FLA_ENABLE_EXTERNAL_LAPACK_INTERFACES
   FLA_Datatype datatype;
-  fla_dim_t          n_A, cs_A;
-  fla_dim_t          lwork;
+  integer          n_A, cs_A;
+  integer          lwork;
   FLA_Obj      d, e, work_obj;
   char         blas_uplo;
 

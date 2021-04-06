@@ -35,21 +35,30 @@
   Note that the routine returns V**T, not V.
 */
 
-/** Generated wrapper function */
-void sgesvd_(char *jobu, char *jobv, aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, real *buff_s, real *buff_U, aocl_int_t *ldim_U, real *buff_Vh, aocl_int_t *ldim_Vh, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgesvd(jobu, jobv, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, ldim_Vh, buff_w, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t ldim_U_64 = *ldim_U;
-    aocl_int64_t ldim_Vh_64 = *ldim_Vh;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
+#define LAPACK_gesvd_real(prefix)                                       \
+  int F77_ ## prefix ## gesvd( char* jobu,                              \
+                               char* jobv,                              \
+                               integer*  m,                                 \
+                               integer*  n,                                 \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A,  integer* ldim_A, \
+                               PREFIX2LAPACK_REALDEF(prefix)* buff_s,   \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_U,  integer* ldim_U, \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_Vh, integer* ldim_Vh, \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_w,  integer* lwork, \
+                               integer* info )
 
-    aocl_lapack_sgesvd(jobu, jobv, &m_64, &n_64, buff_A, &ldim_A_64, buff_s, buff_U, &ldim_U_64, buff_Vh, &ldim_Vh_64, buff_w, &lwork_64, &info_64);
+#define LAPACK_gesvd_complex(prefix)                                    \
+  int F77_ ## prefix ## gesvd( char* jobu,                              \
+                               char* jobv,                              \
+                               integer*  m,                                 \
+                               integer*  n,                                 \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A,  integer* ldim_A, \
+                               PREFIX2LAPACK_REALDEF(prefix)* buff_s,   \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_U,  integer* ldim_U, \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_Vh, integer* ldim_Vh, \
+                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_w,  integer* lwork, \
+                               PREFIX2LAPACK_REALDEF(prefix)* buff_r,   \
+                               integer* info )
 
 #define LAPACK_gesvd_body(prefix)                                       \
   AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                         \

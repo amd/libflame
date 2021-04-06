@@ -1,11 +1,10 @@
 #include "FLA_f2c.h" /* Table of constant values */
 #include "FLA_lapack2flame_return_defs.h"
 
-int zgeqr2p_check(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomplex *tau, dcomplex *work,
-                  aocl_int64_t *info)
+int zgeqr2p_check(integer *m, integer *n, dcomplex *a, integer *lda, dcomplex *tau, dcomplex *work, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1;
+    integer a_dim1, a_offset, i__1;
 
     /* Parameter adjustments */
     a_dim1 = *lda;

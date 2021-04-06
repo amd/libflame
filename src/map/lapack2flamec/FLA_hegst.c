@@ -174,11 +174,13 @@ extern void zhegs2_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcomple
   eigenproblem to standard form.
 */
 
-#define LAPACK_hegst(prefix, name)                                                         \
-    void aocl_lapack_##prefix##name##gst(aocl_int64_t *itype, char *uplo, aocl_int64_t *m,                   \
-                                 PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A, \
-                                 PREFIX2LAPACK_TYPEDEF(prefix) * buff_B, aocl_int64_t * ldim_B, \
-                                 aocl_int64_t * info)
+#define LAPACK_hegst(prefix, name)                                      \
+  int F77_ ## prefix ## name ## gst( integer*  itype,                       \
+                                     char* uplo,                        \
+                                     integer*  m,                           \
+                                     PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
+                                     PREFIX2LAPACK_TYPEDEF(prefix)* buff_B, integer* ldim_B, \
+                                     integer*  info )
 
 #define LAPACK_hegst_body(prefix)                               \
   AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                 \
@@ -319,7 +321,15 @@ LAPACK_hegst(z, he)
                                  PREFIX2LAPACK_TYPEDEF(prefix) * buff_B, aocl_int64_t * ldim_B, \
                                  aocl_int64_t * info)
 
-LAPACK_hegs2(s, sy)
+#define LAPACK_hegs2(prefix, name)                                      \
+  int F77_ ## prefix ## name ## gs2(integer*  itype,                        \
+                                    char* uplo,                         \
+                                    integer*  m,                            \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_B, integer* ldim_B, \
+                                    integer*  info )
+
+LAPACK_hegs2(s,sy)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT

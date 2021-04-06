@@ -1,11 +1,10 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int chegst_check(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *b,
-                 aocl_int64_t *ldb, aocl_int64_t *info)
+int dsygst_check(integer *itype, char *uplo, integer *n, double *a, integer *lda, double *b, integer *ldb, integer * info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
+    integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     logical upper;
 

@@ -1,10 +1,8 @@
 #include "FLA_f2c.h"
-#include "FLA_lapack2flame_return_defs.h"
-int cgeqr2_check(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *tau, scomplex *work,
-                 aocl_int64_t *info)
+int cgeqr2_check(integer *m, integer *n, scomplex *a, integer *lda, scomplex *tau, scomplex *work, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1;
+    integer a_dim1, a_offset, i__1;
     /* Parameter adjustments */
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;

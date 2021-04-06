@@ -29,14 +29,13 @@
 
 */
 
-extern void sorgtr_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau, real *work,
-                       aocl_int64_t *lwork, aocl_int64_t *info);
-extern void dorgtr_fla(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *tau,
-                       doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
-extern void cungtr_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *tau,
-                       scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info);
-extern void zungtr_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomplex *tau,
-                       dcomplex *work, aocl_int64_t *lwork, aocl_int64_t *info);
+#define LAPACK_orgtr(prefix, name)                                      \
+  int F77_ ## prefix ## name ## tr( char* uplo,                         \
+                                    integer*  m,                            \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer *ldim_A, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_t, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix)* buff_w, integer *lwork, \
+                                    integer *info )
 
 #define LAPACK_orgtr_body(prefix)                                       \
   AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                         \

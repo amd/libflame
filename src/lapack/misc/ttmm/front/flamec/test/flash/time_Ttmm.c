@@ -19,17 +19,17 @@
 FLA_Error REF_Ttmm( FLA_Trans trans, FLA_Obj A );
 
 void time_Ttmm(
-                aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m,
+                integer param_combo, integer type, integer nrepeats, integer m,
                 FLA_Obj A, FLA_Obj A_ref,
                 double *dtime, double *diff, double *gflops );
 
 
 void time_Ttmm(
-                aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m,
+                integer param_combo, integer type, integer nrepeats, integer m,
                 FLA_Obj A, FLA_Obj A_ref,
                 double *dtime, double *diff, double *gflops )
 {
-  aocl_int64_t
+  integer
     irep;
 
   double

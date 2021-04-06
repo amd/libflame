@@ -23,11 +23,11 @@ FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opt_var1(FLA_Obj delta, FLA_Obj U, FLA_Obj Y, FL
      t = U' u;
   */
   FLA_Datatype datatype;
-  fla_dim_t m_U, n_U;
-  fla_dim_t rs_U, cs_U;
-  fla_dim_t rs_Y, cs_Y;
-  fla_dim_t rs_Z, cs_Z;
-  fla_dim_t inc_u, inc_y, inc_z, inc_t;
+  integer          m_U, n_U;
+  integer          rs_U, cs_U;
+  integer          rs_Y, cs_Y;
+  integer          rs_Z, cs_Z;
+  integer          inc_u, inc_y, inc_z, inc_t;
 
   datatype = FLA_Obj_datatype(U);
 
@@ -154,18 +154,20 @@ FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opt_var1(FLA_Obj delta, FLA_Obj U, FLA_Obj Y, FL
   return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Fused_Uhu_Yhu_Zhu_ops_var1(fla_dim_t m_U,
-                                         fla_dim_t n_U,
-                                         float *buff_delta,
-                                         float *buff_U, fla_dim_t rs_U, fla_dim_t cs_U,
-                                         float *buff_Y, fla_dim_t rs_Y, fla_dim_t cs_Y,
-                                         float *buff_Z, fla_dim_t rs_Z, fla_dim_t cs_Z,
-                                         float *buff_t, fla_dim_t inc_t,
-                                         float *buff_u, fla_dim_t inc_u,
-                                         float *buff_y, fla_dim_t inc_y,
-                                         float *buff_z, fla_dim_t inc_z)
+
+
+FLA_Error FLA_Fused_Uhu_Yhu_Zhu_ops_var1( integer m_U,
+                                          integer n_U,
+                                          float* buff_delta, 
+                                          float* buff_U, integer rs_U, integer cs_U, 
+                                          float* buff_Y, integer rs_Y, integer cs_Y, 
+                                          float* buff_Z, integer rs_Z, integer cs_Z, 
+                                          float* buff_t, integer inc_t, 
+                                          float* buff_u, integer inc_u, 
+                                          float* buff_y, integer inc_y, 
+                                          float* buff_z, integer inc_z ) 
 {
-  fla_dim_t i;
+  integer       i;
 
   for (i = 0; i < n_U; ++i)
   {
@@ -396,16 +398,18 @@ FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opc_var1(fla_dim_t m_U,
   return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opz_var1(fla_dim_t m_U,
-                                         fla_dim_t n_U,
-                                         dcomplex *buff_delta,
-                                         dcomplex *buff_U, fla_dim_t rs_U, fla_dim_t cs_U,
-                                         dcomplex *buff_Y, fla_dim_t rs_Y, fla_dim_t cs_Y,
-                                         dcomplex *buff_Z, fla_dim_t rs_Z, fla_dim_t cs_Z,
-                                         dcomplex *buff_t, fla_dim_t inc_t,
-                                         dcomplex *buff_u, fla_dim_t inc_u,
-                                         dcomplex *buff_y, fla_dim_t inc_y,
-                                         dcomplex *buff_z, fla_dim_t inc_z)
+
+
+FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opd_var1( integer m_U,
+                                          integer n_U,
+                                          double* buff_delta, 
+                                          double* buff_U, integer rs_U, integer cs_U, 
+                                          double* buff_Y, integer rs_Y, integer cs_Y, 
+                                          double* buff_Z, integer rs_Z, integer cs_Z, 
+                                          double* buff_t, integer inc_t, 
+                                          double* buff_u, integer inc_u, 
+                                          double* buff_y, integer inc_y, 
+                                          double* buff_z, integer inc_z ) 
 {
   dcomplex zero = bl1_z0();
 
@@ -423,13 +427,15 @@ FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opz_var1(fla_dim_t m_U,
   dcomplex beta = (dcomplex){.real = 0., .imag = 0.};
   dcomplex gamma = (dcomplex){.real = 0., .imag = 0.};
 
-  fla_dim_t i;
+  integer       i;
 
-  fla_dim_t n_run = n_U / 1;
-  fla_dim_t step_u1 = 1 * cs_U;
-  fla_dim_t step_y1 = 1 * cs_Y;
-  fla_dim_t step_z1 = 1 * cs_Z;
-  fla_dim_t step_tau1 = 1 * inc_t;
+  integer       n_run         = n_U / 1;
+  //integer       n_left        = n_U % 1;
+  integer       step_u1       = 1*cs_U;
+  integer       step_y1       = 1*cs_Y;
+  integer       step_z1       = 1*cs_Z;
+  integer       step_upsilon1 = 1*inc_u;
+  integer       step_tau1     = 1*inc_t;
 
   u1 = buff_U;
   y1 = buff_Y;
@@ -460,6 +466,204 @@ FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opz_var1(fla_dim_t m_U,
                  &alpha,
                  &beta,
                  y1, rs_Y,
+                 z1, rs_Z,
+                 u,  inc_u,
+                 &zero,
+                 &beta,
+                 &gamma );
+
+    bl1_ddotaxmyv2( m_U,
+                    &gamma,
+                    &beta,
+                    u1, rs_U,
+                    u,  inc_u,
+                    &alpha,
+                    y,  inc_y,
+                    z,  inc_z );
+
+    *tau1 = alpha;
+
+    bl1_dscals( delta, &alpha );
+    bl1_daxpyv( BLIS1_NO_CONJUGATE,
+                m_U,
+                &alpha,
+                y1, rs_Y,
+                y,  inc_y );
+    bl1_daxpyv( BLIS1_NO_CONJUGATE,
+                m_U,
+                &alpha,
+                z1, rs_Z,
+                z,  inc_z );
+
+
+    /*------------------------------------------------------------*/
+
+    u1       += step_u1;
+    y1       += step_y1;
+    z1       += step_z1;
+    upsilon1 += step_upsilon1;
+    tau1     += step_tau1;
+  }
+
+
+  return FLA_SUCCESS;
+}
+
+
+
+FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opc_var1( integer m_U,
+                                          integer n_U,
+                                          scomplex* buff_delta, 
+                                          scomplex* buff_U, integer rs_U, integer cs_U, 
+                                          scomplex* buff_Y, integer rs_Y, integer cs_Y, 
+                                          scomplex* buff_Z, integer rs_Z, integer cs_Z, 
+                                          scomplex* buff_t, integer inc_t, 
+                                          scomplex* buff_u, integer inc_u, 
+                                          scomplex* buff_y, integer inc_y, 
+                                          scomplex* buff_z, integer inc_z ) 
+{
+  integer       i;
+
+  for ( i = 0; i < n_U; ++i )
+  {
+    scomplex* u1       = buff_U + (i  )*cs_U + (0  )*rs_U;
+    scomplex* y1       = buff_Y + (i  )*cs_Y + (0  )*rs_Y;
+    scomplex* z1       = buff_Z + (i  )*cs_Z + (0  )*rs_Z;
+    scomplex* delta    = buff_delta;
+    scomplex* tau1     = buff_t + (i  )*inc_t;
+    scomplex* u        = buff_u;
+    scomplex* y        = buff_y;
+    scomplex* z        = buff_z;
+    scomplex  alpha;
+    scomplex  beta;
+    scomplex  gamma;
+
+    /*------------------------------------------------------------*/
+
+    bl1_cdot( BLIS1_CONJUGATE,
+              m_U,
+              u1, rs_U,
+              u,  inc_u,
+              &alpha );
+
+    bl1_cdot( BLIS1_CONJUGATE,
+              m_U,
+              z1, rs_Z,
+              u,  inc_u,
+              &beta );
+
+    bl1_cdot( BLIS1_CONJUGATE,
+              m_U,
+              y1, rs_Y,
+              u,  inc_u,
+              &gamma );
+
+    *tau1 = alpha;
+
+    bl1_cscals( delta, &alpha );
+    bl1_cscals( delta, &beta );
+    bl1_cscals( delta, &gamma );
+
+    bl1_caxpyv( BLIS1_NO_CONJUGATE,
+                m_U,
+                &alpha,
+                y1, rs_Y,
+                y,  inc_y );
+    //F77_caxpy( &m_U,
+    //           &alpha,
+    //           y1, &rs_Y,
+    //           y,  &inc_y );
+
+    bl1_caxpyv( BLIS1_NO_CONJUGATE,
+                m_U,
+                &beta,
+                u1, rs_U,
+                y,  inc_y );
+    //F77_caxpy( &m_U,
+    //           &beta,
+    //           u1, &rs_U,
+    //           y,  &inc_y );
+
+    bl1_caxpyv( BLIS1_NO_CONJUGATE,
+                m_U,
+                &alpha,
+                z1, rs_Z,
+                z,  inc_z );
+    //F77_caxpy( &m_U,
+    //           &alpha,
+    //           z1, &rs_Z,
+    //           z,  &inc_z );
+
+    bl1_caxpyv( BLIS1_NO_CONJUGATE,
+                m_U,
+                &gamma,
+                u1, rs_U,
+                z,  inc_z );
+    //F77_caxpy( &m_U,
+    //           &gamma,
+    //           u1, &rs_U,
+    //           z,  &inc_z );
+
+    /*------------------------------------------------------------*/
+
+  }
+
+  return FLA_SUCCESS;
+}
+
+
+
+FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opz_var1( integer m_U,
+                                          integer n_U,
+                                          dcomplex* buff_delta, 
+                                          dcomplex* buff_U, integer rs_U, integer cs_U, 
+                                          dcomplex* buff_Y, integer rs_Y, integer cs_Y, 
+                                          dcomplex* buff_Z, integer rs_Z, integer cs_Z, 
+                                          dcomplex* buff_t, integer inc_t, 
+                                          dcomplex* buff_u, integer inc_u, 
+                                          dcomplex* buff_y, integer inc_y, 
+                                          dcomplex* buff_z, integer inc_z ) 
+{
+  dcomplex           zero  = bl1_z0();
+
+  dcomplex* restrict delta = buff_delta;
+  dcomplex* restrict u     = buff_u;
+  dcomplex* restrict y     = buff_y;
+  dcomplex* restrict z     = buff_z;
+
+  dcomplex* restrict u1;
+  dcomplex* restrict y1;
+  dcomplex* restrict z1;
+  dcomplex* restrict upsilon1;
+  dcomplex* restrict tau1;
+
+  dcomplex  alpha;
+  dcomplex  beta;
+  dcomplex  gamma;
+
+  integer       i;
+
+  integer       n_run         = n_U / 1;
+  //integer       n_left        = n_U % 1;
+  integer       step_u1       = 1*cs_U;
+  integer       step_y1       = 1*cs_Y;
+  integer       step_z1       = 1*cs_Z;
+  integer       step_upsilon1 = 1*inc_u;
+  integer       step_tau1     = 1*inc_t;
+
+  u1       = buff_U;
+  y1       = buff_Y;
+  z1       = buff_Z;
+  upsilon1 = buff_u;
+  tau1     = buff_t;
+
+  for ( i = 0; i < n_run; ++i )
+  {
+    /*------------------------------------------------------------*/
+
+
+    bl1_zdotsv3( BLIS1_CONJUGATE,
+                 m_U,
                  u1, rs_U,
                  y, inc_y);
     bl1_zaxpyv2b(m_U,

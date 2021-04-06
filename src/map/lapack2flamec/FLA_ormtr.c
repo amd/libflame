@@ -35,18 +35,17 @@
   TODO:: Complete FLA_Accum_T_UT for FLA_BACKWARD.
 */
 
-extern void sormtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n, real *a,
-                       aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc, real *work, aocl_int64_t *lwork,
-                       aocl_int64_t *info);
-extern void dormtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n, doublereal *a,
-                       aocl_int64_t *lda, doublereal *tau, doublereal *c__, aocl_int64_t *ldc,
-                       doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
-extern void cunmtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n, scomplex *a,
-                       aocl_int64_t *lda, scomplex *tau, scomplex *c__, aocl_int64_t *ldc, scomplex *work,
-                       aocl_int64_t *lwork, aocl_int64_t *info);
-extern void zunmtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n,
-                       dcomplex *a, aocl_int64_t *lda, dcomplex *tau, dcomplex *c__,
-                       aocl_int64_t *ldc, dcomplex *work, aocl_int64_t *lwork, aocl_int64_t *info);
+#define LAPACK_ormtr(prefix, name)                                      \
+  int F77_ ## prefix ## name ## tr( char* side,                         \
+                                    char* uplo,                         \
+                                    char* trans,                        \
+                                    integer*  m,                            \
+                                    integer*  n,                            \
+                                    PREFIX2LAPACK_TYPEDEF(prefix) *buff_A, integer* ldim_A, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix) *buff_t, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix) *buff_C, integer* ldim_C, \
+                                    PREFIX2LAPACK_TYPEDEF(prefix) *buff_w, integer* lwork, \
+                                    integer* info )
 
 #define LAPACK_ormtr_body(prefix)                                       \
   AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                         \

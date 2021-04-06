@@ -1,10 +1,10 @@
 #include "FLA_f2c.h" /* Table of constant values */
 #include "FLA_lapack2flame_return_defs.h"
 
-int strti2_check(char *uplo, char *diag, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int64_t *info)
+int strti2_check(char *uplo, char *diag, integer *n, float *a, integer *lda, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1;
+    integer a_dim1, a_offset, i__1;
     /* Local variables */
     logical upper;
     logical nounit;

@@ -1,27 +1,24 @@
 #include "FLA_f2c.h" /* Table of constant values */
-#include "FLA_lapack2flame_return_defs.h"
-static aocl_int64_t c__9 = 9;
-static aocl_int64_t c__0 = 0;
-static aocl_int64_t c__6 = 6;
-static aocl_int64_t c_n1 = -1;
-static aocl_int64_t c__1 = 1;
+static integer c__9 = 9;
+static integer c__0 = 0;
+static integer c__6 = 6;
+static integer c_n1 = -1;
+static integer c__1 = 1;
 
-int zgelsd_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *a, aocl_int64_t *lda, dcomplex *b,
-                 aocl_int64_t *ldb, double *s, double *rcond, aocl_int64_t *rank, dcomplex *work,
-                 aocl_int64_t *lwork, double *rwork, aocl_int64_t *iwork, aocl_int64_t *info)
+int zgelsd_check(integer *m, integer *n, integer *nrhs, dcomplex *a, integer *lda, dcomplex *b, integer *ldb, double *s, double *rcond, integer *rank, dcomplex *work, integer *lwork, double *rwork, integer *iwork, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
+    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     /* Builtin functions */
     double log(double);
     /* Local variables */
-    aocl_int64_t mm;
-    aocl_int64_t nlvl;
-    aocl_int64_t minmn, maxmn, mnthr;
-    aocl_int64_t liwork, minwrk, maxwrk;
-    aocl_int64_t lrwork;
+    integer mm;
+    integer nlvl;
+    integer minmn, maxmn, mnthr;
+    integer liwork, minwrk, maxwrk;
+    integer lrwork;
     logical lquery;
-    aocl_int64_t smlsiz;
+    integer smlsiz;
 
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
@@ -82,8 +79,8 @@ int zgelsd_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex 
             smlsiz = aocl_lapack_ilaenv(&c__9, "ZGELSD", " ", &c__0, &c__0, &c__0, &c__0);
             mnthr = aocl_lapack_ilaenv(&c__6, "ZGELSD", " ", m, n, nrhs, &c_n1);
             /* Computing MAX */
-            i__1 = (integer)(log((double)minmn / (double)(smlsiz + 1)) / log(2.)) + 1;
-            nlvl = fla_max(i__1, 0);
+            i__1 = (integer) (log((double) minmn / (double) (smlsiz + 1)) / log(2.)) + 1;
+            nlvl = max(i__1,0);
             liwork = minmn * 3 * nlvl + minmn * 11;
             mm = *m;
             if(*m >= *n && *m >= mnthr)

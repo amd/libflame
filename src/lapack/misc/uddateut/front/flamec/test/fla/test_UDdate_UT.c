@@ -14,14 +14,14 @@
 #define FLA_ALG_FRONT     1
 
 void time_UDdate_UT(
-                 aocl_int64_t variant, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t mB, aocl_int64_t mC, aocl_int64_t mD, aocl_int64_t n,
+                 integer variant, integer type, integer n_repeats, integer mB, integer mC, integer mD, integer n,
                  FLA_Obj B, FLA_Obj C, FLA_Obj D, FLA_Obj T, FLA_Obj R, FLA_Obj E,
                  double *dtime, double *diff, double *gflops );
 
 
 int main(int argc, char *argv[])
 {
-  aocl_int64_t 
+  integer 
     datatype,
     n_input,
     mB_input, mC_input, mD_input,

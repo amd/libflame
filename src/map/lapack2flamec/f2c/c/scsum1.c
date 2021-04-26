@@ -77,20 +77,12 @@
 /** Generated wrapper function */
 real scsum1_(aocl_int_t *n, scomplex *cx, aocl_int_t *incx)
 {
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_scsum1(n, cx, incx);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-
-    return aocl_lapack_scsum1(&n_64, cx, &incx_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"scsum1 inputs: n %d, incx %d",*n, *incx);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-real aocl_lapack_scsum1(aocl_int64_t *n, scomplex *cx, aocl_int64_t *incx)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("scsum1 inputs: n %" FLA_IS ", incx %" FLA_IS "", *n, *incx);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     real ret_val;
@@ -120,7 +112,7 @@ real aocl_lapack_scsum1(aocl_int64_t *n, scomplex *cx, aocl_int64_t *incx)
     stemp = 0.f;
     if(*n <= 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return ret_val;
     }
     if(*incx == 1)
@@ -138,7 +130,7 @@ real aocl_lapack_scsum1(aocl_int64_t *n, scomplex *cx, aocl_int64_t *incx)
         /* L10: */
     }
     ret_val = stemp;
-    AOCL_DTL_TRACE_LOG_EXIT
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return ret_val;
     /* CODE FOR INCREMENT EQUAL TO 1 */
 L20:
@@ -150,7 +142,7 @@ L20:
         /* L30: */
     }
     ret_val = stemp;
-    AOCL_DTL_TRACE_LOG_EXIT
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return ret_val;
     /* End of SCSUM1 */
 }

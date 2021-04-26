@@ -208,38 +208,12 @@ void sgbrfs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
              aocl_int_t *ldb, real *x, aocl_int_t *ldx, real *ferr, real *berr, real *work,
              aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgbrfs(trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, b, ldb, x, ldx, ferr,
-                       berr, work, iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldafb_64 = *ldafb;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgbrfs(trans, &n_64, &kl_64, &ku_64, &nrhs_64, ab, &ldab_64, afb, &ldafb_64, ipiv,
-                       b, &ldb_64, x, &ldx_64, ferr, berr, work, iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"sgbrfs inputs: trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, ipiv %d, ldb %d, ldx %d",*trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ipiv, *ldb, *ldx);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_sgbrfs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
-                        aocl_int64_t *nrhs, real *ab, aocl_int64_t *ldab, real *afb,
-                        aocl_int64_t *ldafb, aocl_int_t *ipiv, real *b, aocl_int64_t *ldb, real *x,
-                        aocl_int64_t *ldx, real *ferr, real *berr, real *work, aocl_int_t *iwork,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgbrfs inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
-                      ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ldb %" FLA_IS
-                      ", ldx %" FLA_IS "",
-                      *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldx);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2, i__3, i__4, i__5, i__6, i__7;
@@ -344,9 +318,9 @@ void aocl_lapack_sgbrfs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGBRFS", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SGBRFS", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -358,8 +332,8 @@ void aocl_lapack_sgbrfs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int
             berr[j] = 0.f;
             /* L10: */
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(notran)
     {
@@ -563,8 +537,8 @@ void aocl_lapack_sgbrfs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int
         }
         /* L140: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SGBRFS */
 }
 /* sgbrfs_ */

@@ -149,24 +149,12 @@ IPIV(i) = i indicates a row interchange was not */
 void sgtcon_(char *norm, aocl_int_t *n, real *dl, real *d__, real *du, real *du2, aocl_int_t *ipiv,
              real *anorm, real *rcond, real *work, aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgtcon(norm, n, dl, d__, du, du2, ipiv, anorm, rcond, work, iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgtcon(norm, &n_64, dl, d__, du, du2, ipiv, anorm, rcond, work, iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"sgtcon inputs: norm %c, n %d, ipiv %d",*norm, *n, *ipiv);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_sgtcon(char *norm, aocl_int64_t *n, real *dl, real *d__, real *du, real *du2,
-                        aocl_int_t *ipiv, real *anorm, real *rcond, real *work, aocl_int_t *iwork,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgtcon inputs: norm %c, n %" FLA_IS "", *norm, *n);
     /* System generated locals */
     aocl_int64_t i__1;
     /* Local variables */
@@ -222,22 +210,22 @@ void aocl_lapack_sgtcon(char *norm, aocl_int64_t *n, real *dl, real *d__, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGTCON", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SGTCON", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     *rcond = 0.f;
     if(*n == 0)
     {
         *rcond = 1.f;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(*anorm == 0.f)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Check that D(1:N) is non-zero. */
     i__1 = *n;
@@ -245,8 +233,8 @@ void aocl_lapack_sgtcon(char *norm, aocl_int64_t *n, real *dl, real *d__, real *
     {
         if(d__[i__] == 0.f)
         {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         /* L10: */
     }
@@ -283,8 +271,8 @@ L20:
     {
         *rcond = 1.f / ainvnm / *anorm;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SGTCON */
 }
 /* sgtcon_ */

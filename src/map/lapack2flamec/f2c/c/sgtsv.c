@@ -126,26 +126,12 @@
 void sgtsv_(aocl_int_t *n, aocl_int_t *nrhs, real *dl, real *d__, real *du, real *b,
             aocl_int_t *ldb, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgtsv(n, nrhs, dl, d__, du, b, ldb, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgtsv(&n_64, &nrhs_64, dl, d__, du, b, &ldb_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"sgtsv inputs: n %d, nrhs %d, ldb %d",*n, *nrhs, *ldb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_sgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, real *dl, real *d__, real *du, real *b,
-                       aocl_int64_t *ldb, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgtsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n, *nrhs,
-                      *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2;
     real r__1, r__2;
@@ -194,14 +180,14 @@ void aocl_lapack_sgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, real *dl, real *d__,
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGTSV ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SGTSV ", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*nrhs == 1)
     {
@@ -220,8 +206,8 @@ void aocl_lapack_sgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, real *dl, real *d__,
                 else
                 {
                     *info = i__;
-                    AOCL_DTL_TRACE_LOG_EXIT
-                    return;
+                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    return 0;
                 }
                 dl[i__] = 0.f;
             }
@@ -255,8 +241,8 @@ void aocl_lapack_sgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, real *dl, real *d__,
                 else
                 {
                     *info = i__;
-                    AOCL_DTL_TRACE_LOG_EXIT
-                    return;
+                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    return 0;
                 }
             }
             else
@@ -274,8 +260,8 @@ void aocl_lapack_sgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, real *dl, real *d__,
         if(d__[*n] == 0.f)
         {
             *info = *n;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
     }
     else
@@ -300,8 +286,8 @@ void aocl_lapack_sgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, real *dl, real *d__,
                 else
                 {
                     *info = i__;
-                    AOCL_DTL_TRACE_LOG_EXIT
-                    return;
+                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    return 0;
                 }
                 dl[i__] = 0.f;
             }
@@ -345,8 +331,8 @@ void aocl_lapack_sgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, real *dl, real *d__,
                 else
                 {
                     *info = i__;
-                    AOCL_DTL_TRACE_LOG_EXIT
-                    return;
+                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    return 0;
                 }
             }
             else
@@ -369,8 +355,8 @@ void aocl_lapack_sgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, real *dl, real *d__,
         if(d__[*n] == 0.f)
         {
             *info = *n;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
     }
     /* Back solve with the matrix U from the factorization. */
@@ -418,8 +404,8 @@ void aocl_lapack_sgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, real *dl, real *d__,
             /* L100: */
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SGTSV */
 }
 /* sgtsv_ */

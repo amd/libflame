@@ -145,26 +145,12 @@ otherwise, */
 void slagtm_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *alpha, real *dl, real *d__,
              real *du, real *x, aocl_int_t *ldx, real *beta, real *b, aocl_int_t *ldb)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slagtm(trans, n, nrhs, alpha, dl, d__, du, x, ldx, beta, b, ldb);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t ldb_64 = *ldb;
-
-    aocl_lapack_slagtm(trans, &n_64, &nrhs_64, alpha, dl, d__, du, x, &ldx_64, beta, b, &ldb_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"slagtm_ inputs: *trans %c, *n %d, *nrhs %d, *ldx %d, *ldb %d",*trans, *n, *nrhs, *ldx, *ldb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_slagtm(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *alpha, real *dl,
-                        real *d__, real *du, real *x, aocl_int64_t *ldx, real *beta, real *b,
-                        aocl_int64_t *ldb)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slagtm_ inputs: *trans %c, *n %" FLA_IS ", *nrhs %" FLA_IS ", *ldx %" FLA_IS
-                      ", *ldb %" FLA_IS "",
-                      *trans, *n, *nrhs, *ldx, *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
     /* Local variables */
@@ -199,8 +185,8 @@ void aocl_lapack_slagtm(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
     /* Function Body */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Multiply B by BETA if BETA.NE.1. */
     if(*beta == 0.f)
@@ -349,8 +335,8 @@ void aocl_lapack_slagtm(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SLAGTM */
 }
 /* slagtm_ */

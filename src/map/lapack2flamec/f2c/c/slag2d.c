@@ -103,28 +103,12 @@
 void slag2d_(aocl_int_t *m, aocl_int_t *n, real *sa, aocl_int_t *ldsa, doublereal *a,
              aocl_int_t *lda, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slag2d(m, n, sa, ldsa, a, lda, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldsa_64 = *ldsa;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slag2d(&m_64, &n_64, sa, &ldsa_64, a, &lda_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"slag2d_ inputs: *m %d, *n %d, *ldsa %d, *lda %d",*m, *n, *ldsa, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_slag2d(aocl_int64_t *m, aocl_int64_t *n, real *sa, aocl_int64_t *ldsa,
-                        doublereal *a, aocl_int64_t *lda, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slag2d_ inputs: *m %" FLA_IS ", *n %" FLA_IS ", *ldsa %" FLA_IS
-                      ", *lda %" FLA_IS "",
-                      *m, *n, *ldsa, *lda);
     /* System generated locals */
     aocl_int64_t sa_dim1, sa_offset, a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -161,8 +145,8 @@ void aocl_lapack_slag2d(aocl_int64_t *m, aocl_int64_t *n, real *sa, aocl_int64_t
         }
         /* L20: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SLAG2D */
 }
 /* slag2d_ */

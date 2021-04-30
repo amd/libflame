@@ -100,19 +100,12 @@ static aocl_int64_t c__1 = 1;
 /** Generated wrapper function */
 real slanst_(char *norm, aocl_int_t *n, real *d__, real *e)
 {
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_slanst(norm, n, d__, e);
-#else
-    aocl_int64_t n_64 = *n;
-
-    return aocl_lapack_slanst(norm, &n_64, d__, e);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"slanst inputs: norm %c, n %d",*norm, *n);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-real aocl_lapack_slanst(char *norm, aocl_int64_t *n, real *d__, real *e)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slanst inputs: norm %c, n %" FLA_IS "", *norm, *n);
     /* System generated locals */
     aocl_int64_t i__1;
     real ret_val, r__1, r__2, r__3;
@@ -215,7 +208,7 @@ real aocl_lapack_slanst(char *norm, aocl_int64_t *n, real *d__, real *e)
         anorm = scale * sqrt(sum);
     }
     ret_val = anorm;
-    AOCL_DTL_TRACE_LOG_EXIT
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return ret_val;
     /* End of SLANST */
 }

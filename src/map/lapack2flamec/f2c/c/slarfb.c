@@ -202,33 +202,12 @@ void slarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
              aocl_int_t *k, real *v, aocl_int_t *ldv, real *t, aocl_int_t *ldt, real *c__,
              aocl_int_t *ldc, real *work, aocl_int_t *ldwork)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slarfb(side, trans, direct, storev, m, n, k, v, ldv, t, ldt, c__, ldc, work,
-                       ldwork);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t ldv_64 = *ldv;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t ldwork_64 = *ldwork;
-
-    aocl_lapack_slarfb(side, trans, direct, storev, &m_64, &n_64, &k_64, v, &ldv_64, t, &ldt_64,
-                       c__, &ldc_64, work, &ldwork_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"slarfb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, ldv %d, ldt %d, ldc %d",*side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_slarfb(char *side, char *trans, char *direct, char *storev, aocl_int64_t *m,
-                        aocl_int64_t *n, aocl_int64_t *k, real *v, aocl_int64_t *ldv, real *t,
-                        aocl_int64_t *ldt, real *c__, aocl_int64_t *ldc, real *work,
-                        aocl_int64_t *ldwork)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slarfb inputs: side %c, trans %c, direct %c, storev %c, m %" FLA_IS
-                      ", n %" FLA_IS ", k %" FLA_IS ", ldv %" FLA_IS ", "
-                      "ldt %" FLA_IS ", ldc %" FLA_IS "",
-                      *side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc);
     /* System generated locals */
     aocl_int64_t c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
         i__2;
@@ -271,8 +250,8 @@ void aocl_lapack_slarfb(char *side, char *trans, char *direct, char *storev, aoc
     /* Function Body */
     if(*m <= 0 || *n <= 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(lsame_(trans, "N", 1, 1))
     {
@@ -717,8 +696,8 @@ void aocl_lapack_slarfb(char *side, char *trans, char *direct, char *storev, aoc
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SLARFB */
 }
 /* slarfb_ */

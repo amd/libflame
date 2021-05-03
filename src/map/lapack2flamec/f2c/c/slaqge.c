@@ -139,22 +139,12 @@
 void slaqge_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *r__, real *c__,
              real *rowcnd, real *colcnd, real *amax, char *equed)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slaqge(m, n, a, lda, r__, c__, rowcnd, colcnd, amax, equed);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-
-    aocl_lapack_slaqge(&m_64, &n_64, a, &lda_64, r__, c__, rowcnd, colcnd, amax, equed);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"slaqge inputs: m %d, n %d, lda %d",*m, *n, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_slaqge(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *r__,
-                        real *c__, real *rowcnd, real *colcnd, real *amax, char *equed)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slaqge inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -188,8 +178,8 @@ void aocl_lapack_slaqge(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     if(*m <= 0 || *n <= 0)
     {
         *(unsigned char *)equed = 'N';
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Initialize LARGE and SMALL. */
     small_val = slamch_("Safe minimum") / slamch_("Precision");
@@ -253,8 +243,8 @@ void aocl_lapack_slaqge(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
         }
         *(unsigned char *)equed = 'B';
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SLAQGE */
 }
 /* slaqge_ */

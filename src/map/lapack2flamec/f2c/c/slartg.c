@@ -105,8 +105,10 @@ static real c_b2 = 1.f;
 /* Subroutine */
 void slartg_(real *f, real *g, real *c__, real *s, real *r__)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slartg inputs : f %f, g %f", *f, *g);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+    /* System generated locals */
+    integer i__1;
+    real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal), r_sign(real *, real *);
     /* System generated locals */
@@ -234,7 +236,8 @@ L30:
             *r__ = -(*r__);
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
+    /* End of SLARTG */
 }
 /* slartg_ */

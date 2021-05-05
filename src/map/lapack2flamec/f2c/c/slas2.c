@@ -104,7 +104,7 @@
 /* Subroutine */
 void slas2_(real *f, real *g, real *h__, real *ssmin, real *ssmax)
 {
-    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
     real r__1, r__2;
     /* Builtin functions */
@@ -183,8 +183,8 @@ void slas2_(real *f, real *g, real *h__, real *ssmin, real *ssmax)
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SLAS2 */
 }
 /* slas2_ */

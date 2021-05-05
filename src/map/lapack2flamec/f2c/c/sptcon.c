@@ -119,23 +119,12 @@ static aocl_int64_t c__1 = 1;
 void sptcon_(aocl_int_t *n, real *d__, real *e, real *anorm, real *rcond, real *work,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sptcon(n, d__, e, anorm, rcond, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sptcon(&n_64, d__, e, anorm, rcond, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"sptcon inputs: n %" FLA_IS "",*n);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_sptcon(aocl_int64_t *n, real *d__, real *e, real *anorm, real *rcond, real *work,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sptcon inputs: n %" FLA_IS "", *n);
     /* System generated locals */
     aocl_int64_t i__1;
     real r__1;
@@ -180,22 +169,22 @@ void aocl_lapack_sptcon(aocl_int64_t *n, real *d__, real *e, real *anorm, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SPTCON", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SPTCON", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     *rcond = 0.f;
     if(*n == 0)
     {
         *rcond = 1.f;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(*anorm == 0.f)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Check that D(1:N) is positive. */
     i__1 = *n;
@@ -203,8 +192,8 @@ void aocl_lapack_sptcon(aocl_int64_t *n, real *d__, real *e, real *anorm, real *
     {
         if(d__[i__] <= 0.f)
         {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         /* L10: */
     }
@@ -235,8 +224,8 @@ void aocl_lapack_sptcon(aocl_int64_t *n, real *d__, real *e, real *anorm, real *
     {
         *rcond = 1.f / ainvnm / *anorm;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SPTCON */
 }
 /* sptcon_ */

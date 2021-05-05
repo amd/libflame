@@ -162,31 +162,12 @@ static aocl_int64_t c__1 = 1;
 void sorm2l_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *a,
              aocl_int_t *lda, real *tau, real *c__, aocl_int_t *ldc, real *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sorm2l(side, trans, m, n, k, a, lda, tau, c__, ldc, work, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sorm2l(side, trans, &m_64, &n_64, &k_64, a, &lda_64, tau, c__, &ldc_64, work,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"sorm2l inputs: side %c, trans %c, m %d, n %d, k %d, lda %d, ldc %d",*side, *trans, *m, *n, *k, *lda, *ldc);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_sorm2l(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
-                        real *a, aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc,
-                        real *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sorm2l inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
-                      ", lda %" FLA_IS ", ldc %" FLA_IS "",
-                      *side, *trans, *m, *n, *k, *lda, *ldc);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
     /* Local variables */
@@ -269,15 +250,15 @@ void aocl_lapack_sorm2l(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SORM2L", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SORM2L", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || *k == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(left && notran || !left && !notran)
     {
@@ -321,8 +302,8 @@ void aocl_lapack_sorm2l(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         a[nq - *k + i__ + i__ * a_dim1] = aii;
         /* L10: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SORM2L */
 }
 /* sorm2l_ */

@@ -111,24 +111,12 @@
 void spoequ_(aocl_int_t *n, real *a, aocl_int_t *lda, real *s, real *scond, real *amax,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_spoequ(n, a, lda, s, scond, amax, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_spoequ(&n_64, a, &lda_64, s, scond, amax, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"spoequ inputs: n %d, lda %d",*n, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_spoequ(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *s, real *scond,
-                        real *amax, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("spoequ inputs: n %" FLA_IS ", lda %" FLA_IS "", *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
     real r__1, r__2;
@@ -174,17 +162,17 @@ void aocl_lapack_spoequ(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *s, re
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SPOEQU", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SPOEQU", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *scond = 1.f;
         *amax = 0.f;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Find the minimum and maximum diagonal elements. */
     s[1] = a[a_dim1 + 1];
@@ -213,8 +201,8 @@ void aocl_lapack_spoequ(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *s, re
             if(s[i__] <= 0.f)
             {
                 *info = i__;
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             /* L20: */
         }
@@ -232,8 +220,8 @@ void aocl_lapack_spoequ(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *s, re
         /* Compute SCOND = fla_min(S(I)) / fla_max(S(I)) */
         *scond = sqrt(smin) / sqrt(*amax);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SPOEQU */
 }
 /* spoequ_ */

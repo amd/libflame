@@ -146,26 +146,12 @@ static real c_b5 = 1.f;
 void slarz_(char *side, aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, real *v, aocl_int_t *incv,
             real *tau, real *c__, aocl_int_t *ldc, real *work)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slarz(side, m, n, l, v, incv, tau, c__, ldc, work);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t l_64 = *l;
-    aocl_int64_t incv_64 = *incv;
-    aocl_int64_t ldc_64 = *ldc;
-
-    aocl_lapack_slarz(side, &m_64, &n_64, &l_64, v, &incv_64, tau, c__, &ldc_64, work);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"slarz inputs: side %c, m %d, n %d, l %d, incv %d, ldc %d",*side, *m, *n, *l, *incv, *ldc);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_slarz(char *side, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, real *v,
-                       aocl_int64_t *incv, real *tau, real *c__, aocl_int64_t *ldc, real *work)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slarz inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS
-                      ", incv %" FLA_IS ", ldc %" FLA_IS "",
-                      *side, *m, *n, *l, *incv, *ldc);
     /* System generated locals */
     aocl_int64_t c_dim1, c_offset;
     real r__1;
@@ -234,8 +220,8 @@ void aocl_lapack_slarz(char *side, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_
                            &c__[(*n - *l + 1) * c_dim1 + 1], ldc);
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SLARZ */
 }
 /* slarz_ */

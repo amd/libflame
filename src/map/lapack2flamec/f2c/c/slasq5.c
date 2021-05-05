@@ -131,26 +131,12 @@ void slasq5_(aocl_int_t *i0, aocl_int_t *n0, real *z__, aocl_int_t *pp, real *ta
              real *dmin__, real *dmin1, real *dmin2, real *dn, real *dnm1, real *dnm2,
              logical *ieee, real *eps)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slasq5(i0, n0, z__, pp, tau, sigma, dmin__, dmin1, dmin2, dn, dnm1, dnm2, ieee,
-                       eps);
-#else
-    aocl_int64_t i0_64 = *i0;
-    aocl_int64_t n0_64 = *n0;
-    aocl_int64_t pp_64 = *pp;
-
-    aocl_lapack_slasq5(&i0_64, &n0_64, z__, &pp_64, tau, sigma, dmin__, dmin1, dmin2, dn, dnm1,
-                       dnm2, ieee, eps);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"slasq5 inputs: i0 %d, n0 %d, pp %d",*i0, *n0, *pp);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_slasq5(aocl_int64_t *i0, aocl_int64_t *n0, real *z__, aocl_int64_t *pp, real *tau,
-                        real *sigma, real *dmin__, real *dmin1, real *dmin2, real *dn, real *dnm1,
-                        real *dnm2, logical *ieee, real *eps)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slasq5 inputs: i0 %" FLA_IS ", n0 %" FLA_IS ", pp %" FLA_IS "", *i0, *n0,
-                      *pp);
     /* System generated locals */
     aocl_int64_t i__1;
     real r__1, r__2;
@@ -179,8 +165,8 @@ void aocl_lapack_slasq5(aocl_int64_t *i0, aocl_int64_t *n0, real *z__, aocl_int6
     /* Function Body */
     if(*n0 - *i0 - 1 <= 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     dthresh = *eps * (*sigma + *tau);
     if(*tau < dthresh * .5f)
@@ -257,8 +243,8 @@ void aocl_lapack_slasq5(aocl_int64_t *i0, aocl_int64_t *n0, real *z__, aocl_int6
                     z__[j4 - 2] = d__ + z__[j4 - 1];
                     if(d__ < 0.f)
                     {
-                        AOCL_DTL_TRACE_LOG_EXIT
-                        return;
+                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        return 0;
                     }
                     else
                     {
@@ -281,8 +267,8 @@ void aocl_lapack_slasq5(aocl_int64_t *i0, aocl_int64_t *n0, real *z__, aocl_int6
                     z__[j4 - 3] = d__ + z__[j4];
                     if(d__ < 0.f)
                     {
-                        AOCL_DTL_TRACE_LOG_EXIT
-                        return;
+                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        return 0;
                     }
                     else
                     {
@@ -305,8 +291,8 @@ void aocl_lapack_slasq5(aocl_int64_t *i0, aocl_int64_t *n0, real *z__, aocl_int6
             z__[j4 - 2] = *dnm2 + z__[j4p2];
             if(*dnm2 < 0.f)
             {
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             else
             {
@@ -320,8 +306,8 @@ void aocl_lapack_slasq5(aocl_int64_t *i0, aocl_int64_t *n0, real *z__, aocl_int6
             z__[j4 - 2] = *dnm1 + z__[j4p2];
             if(*dnm1 < 0.f)
             {
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             else
             {
@@ -410,8 +396,8 @@ void aocl_lapack_slasq5(aocl_int64_t *i0, aocl_int64_t *n0, real *z__, aocl_int6
                     z__[j4 - 2] = d__ + z__[j4 - 1];
                     if(d__ < 0.f)
                     {
-                        AOCL_DTL_TRACE_LOG_EXIT
-                        return;
+                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        return 0;
                     }
                     else
                     {
@@ -438,8 +424,8 @@ void aocl_lapack_slasq5(aocl_int64_t *i0, aocl_int64_t *n0, real *z__, aocl_int6
                     z__[j4 - 3] = d__ + z__[j4];
                     if(d__ < 0.f)
                     {
-                        AOCL_DTL_TRACE_LOG_EXIT
-                        return;
+                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        return 0;
                     }
                     else
                     {
@@ -466,8 +452,8 @@ void aocl_lapack_slasq5(aocl_int64_t *i0, aocl_int64_t *n0, real *z__, aocl_int6
             z__[j4 - 2] = *dnm2 + z__[j4p2];
             if(*dnm2 < 0.f)
             {
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             else
             {
@@ -481,8 +467,8 @@ void aocl_lapack_slasq5(aocl_int64_t *i0, aocl_int64_t *n0, real *z__, aocl_int6
             z__[j4 - 2] = *dnm1 + z__[j4p2];
             if(*dnm1 < 0.f)
             {
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             else
             {
@@ -494,8 +480,8 @@ void aocl_lapack_slasq5(aocl_int64_t *i0, aocl_int64_t *n0, real *z__, aocl_int6
     }
     z__[j4 + 2] = *dn;
     z__[(*n0 << 2) - *pp] = emin;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SLASQ5 */
 }
 /* slasq5_ */

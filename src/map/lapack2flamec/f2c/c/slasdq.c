@@ -213,37 +213,12 @@ void slasdq_(char *uplo, aocl_int_t *sqre, aocl_int_t *n, aocl_int_t *ncvt, aocl
              aocl_int_t *ncc, real *d__, real *e, real *vt, aocl_int_t *ldvt, real *u,
              aocl_int_t *ldu, real *c__, aocl_int_t *ldc, real *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slasdq(uplo, sqre, n, ncvt, nru, ncc, d__, e, vt, ldvt, u, ldu, c__, ldc, work,
-                       info);
-#else
-    aocl_int64_t sqre_64 = *sqre;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ncvt_64 = *ncvt;
-    aocl_int64_t nru_64 = *nru;
-    aocl_int64_t ncc_64 = *ncc;
-    aocl_int64_t ldvt_64 = *ldvt;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slasdq(uplo, &sqre_64, &n_64, &ncvt_64, &nru_64, &ncc_64, d__, e, vt, &ldvt_64, u,
-                       &ldu_64, c__, &ldc_64, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"slasdq inputs: uplo %c, sqre %d, n %d, ncvt %d, nru %d, ncc %d, ldvt %d, ldu %d, ldc %d",*uplo, *sqre, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_slasdq(char *uplo, aocl_int64_t *sqre, aocl_int64_t *n, aocl_int64_t *ncvt,
-                        aocl_int64_t *nru, aocl_int64_t *ncc, real *d__, real *e, real *vt,
-                        aocl_int64_t *ldvt, real *u, aocl_int64_t *ldu, real *c__,
-                        aocl_int64_t *ldc, real *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slasdq inputs: uplo %c, sqre %" FLA_IS ", n %" FLA_IS ", ncvt %" FLA_IS
-                      ", nru %" FLA_IS ", ncc %" FLA_IS ", ldvt %" FLA_IS ", ldu %" FLA_IS
-                      ", ldc %" FLA_IS "",
-                      *uplo, *sqre, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
     /* System generated locals */
     aocl_int64_t c_dim1, c_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
     /* Local variables */
@@ -340,14 +315,14 @@ void aocl_lapack_slasdq(char *uplo, aocl_int64_t *sqre, aocl_int64_t *n, aocl_in
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SLASDQ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SLASDQ", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* ROTATE is true if any singular vectors desired, false otherwise */
     rotate = *ncvt > 0 || *nru > 0 || *ncc > 0;
@@ -486,8 +461,8 @@ void aocl_lapack_slasdq(char *uplo, aocl_int64_t *sqre, aocl_int64_t *n, aocl_in
         }
         /* L40: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SLASDQ */
 }
 /* slasdq_ */

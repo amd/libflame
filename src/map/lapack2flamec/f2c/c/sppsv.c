@@ -145,26 +145,12 @@
 void sppsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *ap, real *b, aocl_int_t *ldb,
             aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sppsv(uplo, n, nrhs, ap, b, ldb, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sppsv(uplo, &n_64, &nrhs_64, ap, b, &ldb_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"sppsv inputs: uplo %c, n %d, nrhs %d, ldb %d",*uplo, *n, *nrhs, *ldb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_sppsv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, real *ap, real *b,
-                       aocl_int64_t *ldb, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sppsv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",
-                      *uplo, *n, *nrhs, *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
@@ -212,9 +198,9 @@ void aocl_lapack_sppsv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, real *ap
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SPPSV ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SPPSV ", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Compute the Cholesky factorization A = U**T*U or A = L*L**T. */
     aocl_lapack_spptrf(uplo, n, &ap[1], info);
@@ -223,8 +209,8 @@ void aocl_lapack_sppsv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, real *ap
         /* Solve the system A*X = B, overwriting B with X. */
         aocl_lapack_spptrs(uplo, n, nrhs, &ap[1], &b[b_offset], ldb, info);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SPPSV */
 }
 /* sppsv_ */

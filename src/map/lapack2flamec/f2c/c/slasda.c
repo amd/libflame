@@ -281,37 +281,12 @@ void slasda_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
              aocl_int_t *perm, real *givnum, real *c__, real *s, real *work, aocl_int_t *iwork,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slasda(icompq, smlsiz, n, sqre, d__, e, u, ldu, vt, k, difl, difr, z__, poles,
-                       givptr, givcol, ldgcol, perm, givnum, c__, s, work, iwork, info);
-#else
-    aocl_int64_t icompq_64 = *icompq;
-    aocl_int64_t smlsiz_64 = *smlsiz;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t sqre_64 = *sqre;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t ldgcol_64 = *ldgcol;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slasda(&icompq_64, &smlsiz_64, &n_64, &sqre_64, d__, e, u, &ldu_64, vt, k, difl,
-                       difr, z__, poles, givptr, givcol, &ldgcol_64, perm, givnum, c__, s, work,
-                       iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"slasda inputs: icompq %d, smlsiz %d, n %d, sqre %d, ldu %d, ldgcol %d",*icompq, *smlsiz, *n, *sqre, *ldu, *ldgcol);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_slasda(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t *n,
-                        aocl_int64_t *sqre, real *d__, real *e, real *u, aocl_int64_t *ldu,
-                        real *vt, aocl_int_t *k, real *difl, real *difr, real *z__, real *poles,
-                        aocl_int_t *givptr, aocl_int_t *givcol, aocl_int64_t *ldgcol,
-                        aocl_int_t *perm, real *givnum, real *c__, real *s, real *work,
-                        aocl_int_t *iwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slasda inputs: icompq %" FLA_IS ", smlsiz %" FLA_IS ", n %" FLA_IS
-                      ", sqre %" FLA_IS ", ldu %" FLA_IS ", ldgcol %" FLA_IS "",
-                      *icompq, *smlsiz, *n, *sqre, *ldu, *ldgcol);
     /* System generated locals */
     aocl_int64_t givcol_dim1, givcol_offset, perm_dim1, perm_offset, difl_dim1, difl_offset,
         difr_dim1, difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, u_dim1,
@@ -410,9 +385,9 @@ void aocl_lapack_slasda(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SLASDA", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SLASDA", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     m = *n + *sqre;
     /* If the input matrix is too small, call SLASDQ to find the SVD. */
@@ -428,8 +403,8 @@ void aocl_lapack_slasda(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t
             aocl_lapack_slasdq("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldu,
                                &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Book-keeping and set up the computation tree. */
     inode = 1;
@@ -489,8 +464,8 @@ void aocl_lapack_slasda(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t
         }
         if(*info != 0)
         {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         i__2 = nl;
         for(j = 1; j <= i__2; ++j)
@@ -532,8 +507,8 @@ void aocl_lapack_slasda(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t
         }
         if(*info != 0)
         {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         i__2 = nr;
         for(j = 1; j <= i__2; ++j)
@@ -613,15 +588,15 @@ void aocl_lapack_slasda(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t
             }
             if(*info != 0)
             {
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             /* L40: */
         }
         /* L50: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SLASDA */
 }
 /* slasda_ */

@@ -104,28 +104,12 @@
 void slasdt_(aocl_int_t *n, aocl_int_t *lvl, aocl_int_t *nd, aocl_int_t *inode, aocl_int_t *ndiml,
              aocl_int_t *ndimr, aocl_int_t *msub)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slasdt(n, lvl, nd, inode, ndiml, ndimr, msub);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lvl_64 = *lvl;
-    aocl_int64_t nd_64 = *nd;
-    aocl_int64_t msub_64 = *msub;
-
-    aocl_lapack_slasdt(&n_64, &lvl_64, &nd_64, inode, ndiml, ndimr, &msub_64);
-
-    *lvl = (aocl_int_t)lvl_64;
-    *nd = (aocl_int_t)nd_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"slasdt inputs: n %d, ndiml %d, ndimr %d, msub %d",*n,  *ndiml, *ndimr, *msub);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_slasdt(aocl_int64_t *n, aocl_int64_t *lvl, aocl_int64_t *nd, aocl_int_t *inode,
-                        aocl_int_t *ndiml, aocl_int_t *ndimr, aocl_int64_t *msub)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slasdt inputs: n %" FLA_IS ", ndiml %" FLA_IS ", ndimr %" FLA_IS
-                      ", msub %" FLA_IS "",
-                      *n, *ndiml, *ndimr, *msub);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     /* Builtin functions */
@@ -189,8 +173,8 @@ void aocl_lapack_slasdt(aocl_int64_t *n, aocl_int64_t *lvl, aocl_int64_t *nd, ao
         /* L20: */
     }
     *nd = (llst << 1) - 1;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SLASDT */
 }
 /* slasdt_ */

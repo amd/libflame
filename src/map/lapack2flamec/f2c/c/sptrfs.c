@@ -164,30 +164,12 @@ void sptrfs_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *df, real
              aocl_int_t *ldb, real *x, aocl_int_t *ldx, real *ferr, real *berr, real *work,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sptrfs(n, nrhs, d__, e, df, ef, b, ldb, x, ldx, ferr, berr, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sptrfs(&n_64, &nrhs_64, d__, e, df, ef, b, &ldb_64, x, &ldx_64, ferr, berr, work,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"sptrfs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*n, *nrhs, *ldb, *ldx);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_sptrfs(aocl_int64_t *n, aocl_int64_t *nrhs, real *d__, real *e, real *df, real *ef,
-                        real *b, aocl_int64_t *ldb, real *x, aocl_int64_t *ldx, real *ferr,
-                        real *berr, real *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sptrfs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS
-                      ", ldx %" FLA_IS "",
-                      *n, *nrhs, *ldb, *ldx);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
     real r__1, r__2, r__3;
@@ -256,9 +238,9 @@ void aocl_lapack_sptrfs(aocl_int64_t *n, aocl_int64_t *nrhs, real *d__, real *e,
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SPTRFS", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SPTRFS", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -270,8 +252,8 @@ void aocl_lapack_sptrfs(aocl_int64_t *n, aocl_int64_t *nrhs, real *d__, real *e,
             berr[j] = 0.f;
             /* L10: */
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* NZ = maximum number of nonzero elements in each row of A, plus 1 */
     nz = 4;
@@ -429,8 +411,8 @@ void aocl_lapack_sptrfs(aocl_int64_t *n, aocl_int64_t *nrhs, real *d__, real *e,
         }
         /* L90: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SPTRFS */
 }
 /* sptrfs_ */

@@ -121,23 +121,12 @@ static aocl_int64_t c__1 = 1;
 void sppcon_(char *uplo, aocl_int_t *n, real *ap, real *anorm, real *rcond, real *work,
              aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sppcon(uplo, n, ap, anorm, rcond, work, iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sppcon(uplo, &n_64, ap, anorm, rcond, work, iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"sppcon inputs: uplo %c, n %d",*uplo, *n);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_sppcon(char *uplo, aocl_int64_t *n, real *ap, real *anorm, real *rcond, real *work,
-                        aocl_int_t *iwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sppcon inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1;
     real r__1;
@@ -198,22 +187,22 @@ void aocl_lapack_sppcon(char *uplo, aocl_int64_t *n, real *ap, real *anorm, real
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SPPCON", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SPPCON", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     *rcond = 0.f;
     if(*n == 0)
     {
         *rcond = 1.f;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(*anorm == 0.f)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     smlnum = slamch_("Safe minimum");
     /* Estimate the 1-norm of the inverse. */
@@ -262,8 +251,8 @@ L10:
         *rcond = 1.f / ainvnm / *anorm;
     }
 L20:
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SPPCON */
 }
 /* sppcon_ */

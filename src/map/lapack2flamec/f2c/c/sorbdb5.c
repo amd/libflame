@@ -154,35 +154,12 @@ void sorbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, real *x1, aocl_int_
               aocl_int_t *incx2, real *q1, aocl_int_t *ldq1, real *q2, aocl_int_t *ldq2, real *work,
               aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sorbdb5(m1, m2, n, x1, incx1, x2, incx2, q1, ldq1, q2, ldq2, work, lwork, info);
-#else
-    aocl_int64_t m1_64 = *m1;
-    aocl_int64_t m2_64 = *m2;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx1_64 = *incx1;
-    aocl_int64_t incx2_64 = *incx2;
-    aocl_int64_t ldq1_64 = *ldq1;
-    aocl_int64_t ldq2_64 = *ldq2;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sorbdb5(&m1_64, &m2_64, &n_64, x1, &incx1_64, x2, &incx2_64, q1, &ldq1_64, q2,
-                        &ldq2_64, work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"sorbdb5 inputs: m1 %d, m2 %d, n %d, incx1 %d, incx2 %d, ldq1 %d, ldq2 %d",*m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_sorbdb5(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, real *x1,
-                         aocl_int64_t *incx1, real *x2, aocl_int64_t *incx2, real *q1,
-                         aocl_int64_t *ldq1, real *q2, aocl_int64_t *ldq2, real *work,
-                         aocl_int64_t *lwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sorbdb5 inputs: m1 %" FLA_IS ", m2 %" FLA_IS ", n %" FLA_IS
-                      ", incx1 %" FLA_IS ", incx2 %" FLA_IS ", ldq1 %" FLA_IS ", ldq2 %" FLA_IS "",
-                      *m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2);
     /* System generated locals */
     aocl_int64_t q1_dim1, q1_offset, q2_dim1, q2_offset, i__1, i__2;
     real r__1;
@@ -259,9 +236,9 @@ void aocl_lapack_sorbdb5(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, re
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SORBDB5", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SORBDB5", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     eps = slamch_("Precision");
     /* Project X onto the orthogonal complement of Q if X is nonzero */
@@ -272,23 +249,8 @@ void aocl_lapack_sorbdb5(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, re
     norm = scl * sqrt(ssq);
     if(norm > (*n * eps))
     {
-        /* Scale vector to unit norm to avoid problems in the caller code. */
-        /* Computing the reciprocal is undesirable but */
-        /* * xLASCL cannot be used because of the vector increments and */
-        /* * the round-off error has a negligible impact on */
-        /* orthogonalization. */
-        r__1 = 1.f / norm;
-        aocl_blas_sscal(m1, &r__1, &x1[1], incx1);
-        r__1 = 1.f / norm;
-        aocl_blas_sscal(m2, &r__1, &x2[1], incx2);
-        aocl_lapack_sorbdb6(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1,
-                            &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
-        /* If the projection is nonzero, then return */
-        if(aocl_blas_snrm2(m1, &x1[1], incx1) != 0.f || aocl_blas_snrm2(m2, &x2[1], incx2) != 0.f)
-        {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
-        }
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Project each standard basis vector e_1,...,e_M1 in turn, stopping */
     /* when a nonzero projection is found */
@@ -310,8 +272,8 @@ void aocl_lapack_sorbdb5(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, re
                             &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
         if(aocl_blas_snrm2(m1, &x1[1], incx1) != 0.f || aocl_blas_snrm2(m2, &x2[1], incx2) != 0.f)
         {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
     }
     /* Project each standard basis vector e_(M1+1),...,e_(M1+M2) in turn, */
@@ -334,12 +296,12 @@ void aocl_lapack_sorbdb5(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, re
                             &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
         if(aocl_blas_snrm2(m1, &x1[1], incx1) != 0.f || aocl_blas_snrm2(m2, &x2[1], incx2) != 0.f)
         {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SORBDB5 */
 }
 /* sorbdb5_ */

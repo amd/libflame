@@ -167,28 +167,12 @@ static aocl_int64_t c__1 = 1;
 void sspgv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *ap, real *bp, real *w,
             real *z__, aocl_int_t *ldz, real *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sspgv(itype, jobz, uplo, n, ap, bp, w, z__, ldz, work, info);
-#else
-    aocl_int64_t itype_64 = *itype;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sspgv(&itype_64, jobz, uplo, &n_64, ap, bp, w, z__, &ldz_64, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"sspgv inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",*itype, *jobz, *uplo, *n, *ldz);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_sspgv(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t *n, real *ap,
-                       real *bp, real *w, real *z__, aocl_int64_t *ldz, real *work,
-                       aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sspgv inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
-                      ", ldz %" FLA_IS "",
-                      *itype, *jobz, *uplo, *n, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1;
     /* Local variables */
@@ -249,23 +233,23 @@ void aocl_lapack_sspgv(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SSPGV ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SSPGV ", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Form a Cholesky factorization of B. */
     aocl_lapack_spptrf(uplo, n, &bp[1], info);
     if(*info != 0)
     {
         *info = *n + *info;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     aocl_lapack_sspgst(itype, uplo, n, &ap[1], &bp[1], info);
@@ -319,8 +303,8 @@ void aocl_lapack_sspgv(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SSPGV */
 }
 /* sspgv_ */

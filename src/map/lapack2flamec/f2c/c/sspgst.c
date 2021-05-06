@@ -118,25 +118,12 @@ static real c_b11 = 1.f;
 /** Generated wrapper function */
 void sspgst_(aocl_int_t *itype, char *uplo, aocl_int_t *n, real *ap, real *bp, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sspgst(itype, uplo, n, ap, bp, info);
-#else
-    aocl_int64_t itype_64 = *itype;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sspgst(&itype_64, uplo, &n_64, ap, bp, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"sspgst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS "",*itype, *uplo, *n);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_sspgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, real *ap, real *bp,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sspgst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS "", *itype, *uplo,
-                      *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     real r__1;
@@ -189,9 +176,9 @@ void aocl_lapack_sspgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SSPGST", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SSPGST", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*itype == 1)
     {
@@ -314,8 +301,8 @@ void aocl_lapack_sspgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, real *
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SSPGST */
 }
 /* sspgst_ */

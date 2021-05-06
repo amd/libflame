@@ -165,24 +165,12 @@
 void ssfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k, real *alpha,
             real *a, aocl_int_t *lda, real *beta, real *c__)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ssfrk(transr, uplo, trans, n, k, alpha, a, lda, beta, c__);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t lda_64 = *lda;
-
-    aocl_lapack_ssfrk(transr, uplo, trans, &n_64, &k_64, alpha, a, &lda_64, beta, c__);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"ssfrk inputs: transr %c, uplo %c, trans %c, n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",*transr, *uplo, *trans, *n, *k, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_ssfrk(char *transr, char *uplo, char *trans, aocl_int64_t *n, aocl_int64_t *k,
-                       real *alpha, real *a, aocl_int64_t *lda, real *beta, real *c__)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ssfrk inputs: transr %c, uplo %c, trans %c, n %" FLA_IS ", k %" FLA_IS
-                      ", lda %" FLA_IS "",
-                      *transr, *uplo, *trans, *n, *k, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
@@ -258,17 +246,17 @@ void aocl_lapack_ssfrk(char *transr, char *uplo, char *trans, aocl_int64_t *n, a
     if(info != 0)
     {
         i__1 = -info;
-        aocl_blas_xerbla("SSFRK ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SSFRK ", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible. */
     /* The quick return case: ((ALPHA.EQ.0).AND.(BETA.NE.ZERO)) is not */
     /* done (it is in SSYRK for example) and left in the general case. */
     if(*n == 0 || (*alpha == 0.f || *k == 0) && *beta == 1.f)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*alpha == 0.f && *beta == 0.f)
     {
@@ -277,8 +265,8 @@ void aocl_lapack_ssfrk(char *transr, char *uplo, char *trans, aocl_int64_t *n, a
         {
             c__[j] = 0.f;
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* C is N-by-N. */
     /* If N is odd, set NISODD = .TRUE., and N1 and N2. */
@@ -529,8 +517,8 @@ void aocl_lapack_ssfrk(char *transr, char *uplo, char *trans, aocl_int64_t *n, a
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SSFRK */
 }
 /* ssfrk_ */

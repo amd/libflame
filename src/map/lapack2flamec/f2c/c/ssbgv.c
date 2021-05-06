@@ -180,32 +180,12 @@ void ssbgv_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *k
             aocl_int_t *ldab, real *bb, aocl_int_t *ldbb, real *w, real *z__, aocl_int_t *ldz,
             real *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ssbgv(jobz, uplo, n, ka, kb, ab, ldab, bb, ldbb, w, z__, ldz, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ka_64 = *ka;
-    aocl_int64_t kb_64 = *kb;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldbb_64 = *ldbb;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ssbgv(jobz, uplo, &n_64, &ka_64, &kb_64, ab, &ldab_64, bb, &ldbb_64, w, z__,
-                      &ldz_64, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"ssbgv inputs: jobz %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS ", ldab %" FLA_IS ", ldbb %" FLA_IS "",*jobz, *uplo, *n, *ka, *kb, *ldab, *ldbb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_ssbgv(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *ka, aocl_int64_t *kb,
-                       real *ab, aocl_int64_t *ldab, real *bb, aocl_int64_t *ldbb, real *w,
-                       real *z__, aocl_int64_t *ldz, real *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ssbgv inputs: jobz %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS
-                      ", ldab %" FLA_IS ", ldbb %" FLA_IS "",
-                      *jobz, *uplo, *n, *ka, *kb, *ldab, *ldbb);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, bb_dim1, bb_offset, z_dim1, z_offset, i__1;
     /* Local variables */
@@ -282,23 +262,23 @@ void aocl_lapack_ssbgv(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *ka
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SSBGV", &i__1, (ftnlen)5);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SSBGV ", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Form a split Cholesky factorization of B. */
     aocl_lapack_spbstf(uplo, n, kb, &bb[bb_offset], ldbb, info);
     if(*info != 0)
     {
         *info = *n + *info;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Transform problem to standard eigenvalue problem. */
     inde = 1;
@@ -325,8 +305,8 @@ void aocl_lapack_ssbgv(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *ka
     {
         aocl_lapack_ssteqr(jobz, n, &w[1], &work[inde], &z__[z_offset], ldz, &work[indwrk], info);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SSBGV */
 }
 /* ssbgv_ */

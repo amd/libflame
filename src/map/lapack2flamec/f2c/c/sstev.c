@@ -120,24 +120,12 @@ i */
 void sstev_(char *jobz, aocl_int_t *n, real *d__, real *e, real *z__, aocl_int_t *ldz, real *work,
             aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sstev(jobz, n, d__, e, z__, ldz, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sstev(jobz, &n_64, d__, e, z__, &ldz_64, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"sstev inputs: jobz %c, n %" FLA_IS ", ldz %" FLA_IS "",*jobz, *n, *ldz);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_sstev(char *jobz, aocl_int64_t *n, real *d__, real *e, real *z__,
-                       aocl_int64_t *ldz, real *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sstev inputs: jobz %c, n %" FLA_IS ", ldz %" FLA_IS "", *jobz, *n, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1;
     real r__1;
@@ -200,15 +188,15 @@ void aocl_lapack_sstev(char *jobz, aocl_int64_t *n, real *d__, real *e, real *z_
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SSTEV ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SSTEV ", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*n == 1)
     {
@@ -216,8 +204,8 @@ void aocl_lapack_sstev(char *jobz, aocl_int64_t *n, real *d__, real *e, real *z_
         {
             z__[z_dim1 + 1] = 1.f;
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -269,8 +257,8 @@ void aocl_lapack_sstev(char *jobz, aocl_int64_t *n, real *d__, real *e, real *z_
         r__1 = 1.f / sigma;
         aocl_blas_sscal(&imax, &r__1, &d__[1], &c__1);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SSTEV */
 }
 /* sstev_ */

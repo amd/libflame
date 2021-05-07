@@ -327,38 +327,12 @@ void sstemr_(char *jobz, char *range, aocl_int_t *n, real *d__, real *e, real *v
              aocl_int_t *nzc, aocl_int_t *isuppz, logical *tryrac, real *work, aocl_int_t *lwork,
              aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sstemr(jobz, range, n, d__, e, vl, vu, il, iu, m, w, z__, ldz, nzc, isuppz, tryrac,
-                       work, lwork, iwork, liwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t il_64 = *il;
-    aocl_int64_t iu_64 = *iu;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t nzc_64 = *nzc;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t liwork_64 = *liwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sstemr(jobz, range, &n_64, d__, e, vl, vu, &il_64, &iu_64, &m_64, w, z__, &ldz_64,
-                       &nzc_64, isuppz, tryrac, work, &lwork_64, iwork, &liwork_64, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"sstemr inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS ", nzc %" FLA_IS "",*jobz, *range, *n, *il, *iu, *ldz, *nzc);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_sstemr(char *jobz, char *range, aocl_int64_t *n, real *d__, real *e, real *vl,
-                        real *vu, aocl_int64_t *il, aocl_int64_t *iu, aocl_int64_t *m, real *w,
-                        real *z__, aocl_int64_t *ldz, aocl_int64_t *nzc, aocl_int_t *isuppz,
-                        logical *tryrac, real *work, aocl_int64_t *lwork, aocl_int_t *iwork,
-                        aocl_int64_t *liwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sstemr inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS
-                      ", ldz %" FLA_IS ", nzc %" FLA_IS "",
-                      *jobz, *range, *n, *il, *iu, *ldz, *nzc);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1, i__2;
     real r__1, r__2;
@@ -563,21 +537,21 @@ void aocl_lapack_sstemr(char *jobz, char *range, aocl_int64_t *n, real *d__, rea
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SSTEMR", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SSTEMR", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery || zquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Handle N = 0, 1, and 2 cases immediately */
     *m = 0;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*n == 1)
     {
@@ -600,8 +574,8 @@ void aocl_lapack_sstemr(char *jobz, char *range, aocl_int64_t *n, real *d__, rea
             isuppz[1] = 1;
             isuppz[2] = 1;
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*n == 2)
     {
@@ -813,6 +787,7 @@ void aocl_lapack_sstemr(char *jobz, char *range, aocl_int64_t *n, real *d__, rea
         if(iinfo != 0)
         {
             *info = f2c_abs(iinfo) + 10;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return 0;
         }
         /* Note that if RANGE .NE. 'V', SLARRE computes bounds on the desired */
@@ -829,6 +804,7 @@ void aocl_lapack_sstemr(char *jobz, char *range, aocl_int64_t *n, real *d__, rea
             if(iinfo != 0)
             {
                 *info = f2c_abs(iinfo) + 20;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return 0;
             }
         }
@@ -904,8 +880,8 @@ void aocl_lapack_sstemr(char *jobz, char *range, aocl_int64_t *n, real *d__, rea
             if(iinfo != 0)
             {
                 *info = 3;
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
         }
         else
@@ -945,10 +921,10 @@ void aocl_lapack_sstemr(char *jobz, char *range, aocl_int64_t *n, real *d__, rea
             }
         }
     }
-    work[1] = aocl_lapack_sroundup_lwork(&lwmin);
-    iwork[1] = (aocl_int_t)(liwmin);
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    work[1] = (real) lwmin;
+    iwork[1] = liwmin;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SSTEMR */
 }
 /* sstemr_ */

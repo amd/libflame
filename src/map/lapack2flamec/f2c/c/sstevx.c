@@ -232,34 +232,12 @@ void sstevx_(char *jobz, char *range, aocl_int_t *n, real *d__, real *e, real *v
              aocl_int_t *il, aocl_int_t *iu, real *abstol, aocl_int_t *m, real *w, real *z__,
              aocl_int_t *ldz, real *work, aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sstevx(jobz, range, n, d__, e, vl, vu, il, iu, abstol, m, w, z__, ldz, work, iwork,
-                       ifail, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t il_64 = *il;
-    aocl_int64_t iu_64 = *iu;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sstevx(jobz, range, &n_64, d__, e, vl, vu, &il_64, &iu_64, abstol, &m_64, w, z__,
-                       &ldz_64, work, iwork, ifail, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"sstevx inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",*jobz, *range, *n, *il, *iu, *ldz);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_sstevx(char *jobz, char *range, aocl_int64_t *n, real *d__, real *e, real *vl,
-                        real *vu, aocl_int64_t *il, aocl_int64_t *iu, real *abstol, aocl_int64_t *m,
-                        real *w, real *z__, aocl_int64_t *ldz, real *work, aocl_int_t *iwork,
-                        aocl_int_t *ifail, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sstevx inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS
-                      ", ldz %" FLA_IS "",
-                      *jobz, *range, *n, *il, *iu, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1, i__2;
     real r__1, r__2;
@@ -364,16 +342,16 @@ void aocl_lapack_sstevx(char *jobz, char *range, aocl_int64_t *n, real *d__, rea
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SSTEVX", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SSTEVX", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*n == 1)
     {
@@ -394,8 +372,8 @@ void aocl_lapack_sstevx(char *jobz, char *range, aocl_int64_t *n, real *d__, rea
         {
             z__[z_dim1 + 1] = 1.f;
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -553,8 +531,8 @@ L20:
             /* L40: */
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SSTEVX */
 }
 /* sstevx_ */

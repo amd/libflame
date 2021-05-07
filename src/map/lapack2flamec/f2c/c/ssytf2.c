@@ -195,24 +195,12 @@ static aocl_int64_t c__1 = 1;
 void ssytf2_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ipiv,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ssytf2(uplo, n, a, lda, ipiv, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ssytf2(uplo, &n_64, a, &lda_64, ipiv, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"ssytf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_ssytf2(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t *ipiv,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ssytf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real r__1, r__2, r__3;
@@ -277,9 +265,9 @@ void aocl_lapack_ssytf2(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SSYTF2", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SSYTF2", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.f) + 1.f) / 8.f;
@@ -618,8 +606,8 @@ void aocl_lapack_ssytf2(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
         goto L40;
     }
 L70:
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SSYTF2 */
 }
 /* ssytf2_ */

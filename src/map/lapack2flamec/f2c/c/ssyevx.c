@@ -262,37 +262,12 @@ void ssyevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *a, aocl_i
              real *z__, aocl_int_t *ldz, real *work, aocl_int_t *lwork, aocl_int_t *iwork,
              aocl_int_t *ifail, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ssyevx(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z__, ldz, work,
-                       lwork, iwork, ifail, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t il_64 = *il;
-    aocl_int64_t iu_64 = *iu;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ssyevx(jobz, range, uplo, &n_64, a, &lda_64, vl, vu, &il_64, &iu_64, abstol, &m_64,
-                       w, z__, &ldz_64, work, &lwork_64, iwork, ifail, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"ssyevx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",*jobz, *range, *uplo, *n, *lda, *il, *iu, *ldz);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_ssyevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, real *a,
-                        aocl_int64_t *lda, real *vl, real *vu, aocl_int64_t *il, aocl_int64_t *iu,
-                        real *abstol, aocl_int64_t *m, real *w, real *z__, aocl_int64_t *ldz,
-                        real *work, aocl_int64_t *lwork, aocl_int_t *iwork, aocl_int_t *ifail,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ssyevx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
-                      ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",
-                      *jobz, *range, *uplo, *n, *lda, *il, *iu, *ldz);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, z_dim1, z_offset, i__1, i__2;
     real r__1, r__2;
@@ -442,21 +417,21 @@ void aocl_lapack_ssyevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, re
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SSYEVX", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SSYEVX", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*n == 1)
     {
@@ -477,8 +452,8 @@ void aocl_lapack_ssyevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, re
         {
             z__[z_dim1 + 1] = 1.f;
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -674,9 +649,9 @@ L40:
         }
     }
     /* Set WORK(1) to optimal workspace size. */
-    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    work[1] = (real) lwkopt;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SSYEVX */
 }
 /* ssyevx_ */

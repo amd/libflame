@@ -182,31 +182,12 @@ the routine */
 void ssygv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda,
             real *b, aocl_int_t *ldb, real *w, real *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ssygv(itype, jobz, uplo, n, a, lda, b, ldb, w, work, lwork, info);
-#else
-    aocl_int64_t itype_64 = *itype;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ssygv(&itype_64, jobz, uplo, &n_64, a, &lda_64, b, &ldb_64, w, work, &lwork_64,
-                      &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"ssygv inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*itype, *jobz, *uplo, *n, *lda, *ldb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_ssygv(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t *n, real *a,
-                       aocl_int64_t *lda, real *b, aocl_int64_t *ldb, real *w, real *work,
-                       aocl_int64_t *lwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ssygv inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
-                      ", lda %" FLA_IS ", ldb %" FLA_IS "",
-                      *itype, *jobz, *uplo, *n, *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
@@ -296,28 +277,28 @@ void aocl_lapack_ssygv(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SSYGV ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SSYGV ", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Form a Cholesky factorization of B. */
     aocl_lapack_spotrf(uplo, n, &b[b_offset], ldb, info);
     if(*info != 0)
     {
         *info = *n + *info;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     aocl_lapack_ssygst(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
@@ -363,9 +344,9 @@ void aocl_lapack_ssygv(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t
                             &a[a_offset], lda);
         }
     }
-    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    work[1] = (real) lwkopt;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SSYGV */
 }
 /* ssygv_ */

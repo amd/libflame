@@ -226,38 +226,12 @@ void stgexc_(logical *wantq, logical *wantz, aocl_int_t *n, real *a, aocl_int_t 
              aocl_int_t *ldb, real *q, aocl_int_t *ldq, real *z__, aocl_int_t *ldz,
              aocl_int_t *ifst, aocl_int_t *ilst, real *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_stgexc(wantq, wantz, n, a, lda, b, ldb, q, ldq, z__, ldz, ifst, ilst, work, lwork,
-                       info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t ifst_64 = *ifst;
-    aocl_int64_t ilst_64 = *ilst;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_stgexc(wantq, wantz, &n_64, a, &lda_64, b, &ldb_64, q, &ldq_64, z__, &ldz_64,
-                       &ifst_64, &ilst_64, work, &lwork_64, &info_64);
-
-    *ifst = (aocl_int_t)ifst_64;
-    *ilst = (aocl_int_t)ilst_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"stgexc inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %%" FLA_IS ", ldz %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS "",*n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_stgexc(logical *wantq, logical *wantz, aocl_int64_t *n, real *a, aocl_int64_t *lda,
-                        real *b, aocl_int64_t *ldb, real *q, aocl_int64_t *ldq, real *z__,
-                        aocl_int64_t *ldz, aocl_int64_t *ifst, aocl_int64_t *ilst, real *work,
-                        aocl_int64_t *lwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("stgexc inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS
-                      ", ldz %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS "",
-                      *n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1;
     /* Local variables */
@@ -348,20 +322,20 @@ void aocl_lapack_stgexc(logical *wantq, logical *wantz, aocl_int64_t *n, real *a
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("STGEXC", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("STGEXC", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n <= 1)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Determine the first row of the specified block and find out */
     /* if it is 1-by-1 or 2-by-2. */
@@ -399,8 +373,8 @@ void aocl_lapack_stgexc(logical *wantq, logical *wantz, aocl_int64_t *n, real *a
     }
     if(*ifst == *ilst)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*ifst < *ilst)
     {
@@ -432,8 +406,8 @@ void aocl_lapack_stgexc(logical *wantq, logical *wantz, aocl_int64_t *n, real *a
             if(*info != 0)
             {
                 *ilst = here;
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             here += nbnext;
             /* Test if 2-by-2 block breaks into two 1-by-1 blocks. */
@@ -464,8 +438,8 @@ void aocl_lapack_stgexc(logical *wantq, logical *wantz, aocl_int64_t *n, real *a
             if(*info != 0)
             {
                 *ilst = here;
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             if(nbnext == 1)
             {
@@ -476,8 +450,8 @@ void aocl_lapack_stgexc(logical *wantq, logical *wantz, aocl_int64_t *n, real *a
                 if(*info != 0)
                 {
                     *ilst = here;
-                    AOCL_DTL_TRACE_LOG_EXIT
-                    return;
+                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    return 0;
                 }
                 ++here;
             }
@@ -497,8 +471,8 @@ void aocl_lapack_stgexc(logical *wantq, logical *wantz, aocl_int64_t *n, real *a
                     if(*info != 0)
                     {
                         *ilst = here;
-                        AOCL_DTL_TRACE_LOG_EXIT
-                        return;
+                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        return 0;
                     }
                     here += 2;
                 }
@@ -511,8 +485,8 @@ void aocl_lapack_stgexc(logical *wantq, logical *wantz, aocl_int64_t *n, real *a
                     if(*info != 0)
                     {
                         *ilst = here;
-                        AOCL_DTL_TRACE_LOG_EXIT
-                        return;
+                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        return 0;
                     }
                     ++here;
                     aocl_lapack_stgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
@@ -521,8 +495,8 @@ void aocl_lapack_stgexc(logical *wantq, logical *wantz, aocl_int64_t *n, real *a
                     if(*info != 0)
                     {
                         *ilst = here;
-                        AOCL_DTL_TRACE_LOG_EXIT
-                        return;
+                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        return 0;
                     }
                     ++here;
                 }
@@ -555,8 +529,8 @@ void aocl_lapack_stgexc(logical *wantq, logical *wantz, aocl_int64_t *n, real *a
             if(*info != 0)
             {
                 *ilst = here;
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             here -= nbnext;
             /* Test if 2-by-2 block breaks into two 1-by-1 blocks. */
@@ -587,8 +561,8 @@ void aocl_lapack_stgexc(logical *wantq, logical *wantz, aocl_int64_t *n, real *a
             if(*info != 0)
             {
                 *ilst = here;
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             if(nbnext == 1)
             {
@@ -599,8 +573,8 @@ void aocl_lapack_stgexc(logical *wantq, logical *wantz, aocl_int64_t *n, real *a
                 if(*info != 0)
                 {
                     *ilst = here;
-                    AOCL_DTL_TRACE_LOG_EXIT
-                    return;
+                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    return 0;
                 }
                 --here;
             }
@@ -621,8 +595,8 @@ void aocl_lapack_stgexc(logical *wantq, logical *wantz, aocl_int64_t *n, real *a
                     if(*info != 0)
                     {
                         *ilst = here;
-                        AOCL_DTL_TRACE_LOG_EXIT
-                        return;
+                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        return 0;
                     }
                     here += -2;
                 }
@@ -635,8 +609,8 @@ void aocl_lapack_stgexc(logical *wantq, logical *wantz, aocl_int64_t *n, real *a
                     if(*info != 0)
                     {
                         *ilst = here;
-                        AOCL_DTL_TRACE_LOG_EXIT
-                        return;
+                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        return 0;
                     }
                     --here;
                     aocl_lapack_stgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
@@ -645,8 +619,8 @@ void aocl_lapack_stgexc(logical *wantq, logical *wantz, aocl_int64_t *n, real *a
                     if(*info != 0)
                     {
                         *ilst = here;
-                        AOCL_DTL_TRACE_LOG_EXIT
-                        return;
+                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        return 0;
                     }
                     --here;
                 }
@@ -658,9 +632,9 @@ void aocl_lapack_stgexc(logical *wantq, logical *wantz, aocl_int64_t *n, real *a
         }
     }
     *ilst = here;
-    work[1] = aocl_lapack_sroundup_lwork(&lwmin);
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    work[1] = (real) lwmin;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of STGEXC */
 }
 /* stgexc_ */

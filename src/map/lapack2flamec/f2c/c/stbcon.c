@@ -147,28 +147,12 @@ static aocl_int64_t c__1 = 1;
 void stbcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, aocl_int_t *kd, real *ab,
              aocl_int_t *ldab, real *rcond, real *work, aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_stbcon(norm, uplo, diag, n, kd, ab, ldab, rcond, work, iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kd_64 = *kd;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_stbcon(norm, uplo, diag, &n_64, &kd_64, ab, &ldab_64, rcond, work, iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"stbcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",*norm, *uplo, *diag, *n, *kd, *ldab);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_stbcon(char *norm, char *uplo, char *diag, aocl_int64_t *n, aocl_int64_t *kd,
-                        real *ab, aocl_int64_t *ldab, real *rcond, real *work, aocl_int_t *iwork,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("stbcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", kd %" FLA_IS
-                      ", ldab %" FLA_IS "",
-                      *norm, *uplo, *diag, *n, *kd, *ldab);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1;
     real r__1;
@@ -247,16 +231,16 @@ void aocl_lapack_stbcon(char *norm, char *uplo, char *diag, aocl_int64_t *n, aoc
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("STBCON", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("STBCON", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *rcond = 1.f;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     *rcond = 0.f;
     smlnum = slamch_("Safe minimum") * (real)fla_max(1, *n);
@@ -314,8 +298,8 @@ void aocl_lapack_stbcon(char *norm, char *uplo, char *diag, aocl_int64_t *n, aoc
         }
     }
 L20:
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of STBCON */
 }
 /* stbcon_ */

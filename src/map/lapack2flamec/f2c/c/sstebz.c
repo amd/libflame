@@ -270,35 +270,12 @@ void sstebz_(char *range, char *order, aocl_int_t *n, real *vl, real *vu, aocl_i
              real *w, aocl_int_t *iblock, aocl_int_t *isplit, real *work, aocl_int_t *iwork,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sstebz(range, order, n, vl, vu, il, iu, abstol, d__, e, m, nsplit, w, iblock,
-                       isplit, work, iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t il_64 = *il;
-    aocl_int64_t iu_64 = *iu;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t nsplit_64 = *nsplit;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sstebz(range, order, &n_64, vl, vu, &il_64, &iu_64, abstol, d__, e, &m_64,
-                       &nsplit_64, w, iblock, isplit, work, iwork, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *nsplit = (aocl_int_t)nsplit_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"sstebz inputs: range %c, order %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS "",*range, *order, *n, *il, *iu);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_sstebz(char *range, char *order, aocl_int64_t *n, real *vl, real *vu,
-                        aocl_int64_t *il, aocl_int64_t *iu, real *abstol, real *d__, real *e,
-                        aocl_int64_t *m, aocl_int64_t *nsplit, real *w, aocl_int_t *iblock,
-                        aocl_int_t *isplit, real *work, aocl_int_t *iwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sstebz inputs: range %c, order %c, n %" FLA_IS ", il %" FLA_IS
-                      ", iu %" FLA_IS "",
-                      *range, *order, *n, *il, *iu);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
     real r__1, r__2, r__3, r__4, r__5;
@@ -427,9 +404,9 @@ void aocl_lapack_sstebz(char *range, char *order, aocl_int64_t *n, real *vl, rea
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SSTEBZ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SSTEBZ", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Initialize error flags */
     *info = 0;
@@ -439,8 +416,8 @@ void aocl_lapack_sstebz(char *range, char *order, aocl_int64_t *n, real *vl, rea
     *m = 0;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Simplifications: */
     if(irange == 3 && *il == 1 && *iu == *n)
@@ -473,8 +450,8 @@ void aocl_lapack_sstebz(char *range, char *order, aocl_int64_t *n, real *vl, rea
             iblock[1] = 1;
             *m = 1;
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Compute Splitting Points */
     *nsplit = 1;
@@ -588,8 +565,8 @@ void aocl_lapack_sstebz(char *range, char *order, aocl_int64_t *n, real *vl, rea
         if(nwl < 0 || nwl >= *n || nwu < 1 || nwu > *n)
         {
             *info = 4;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
     }
     else
@@ -910,8 +887,8 @@ void aocl_lapack_sstebz(char *range, char *order, aocl_int64_t *n, real *vl, rea
     {
         *info += 2;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SSTEBZ */
 }
 /* sstebz_ */

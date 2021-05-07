@@ -138,24 +138,12 @@ on exit, D */
 void ssteqr_(char *compz, aocl_int_t *n, real *d__, real *e, real *z__, aocl_int_t *ldz, real *work,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ssteqr(compz, n, d__, e, z__, ldz, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ssteqr(compz, &n_64, d__, e, z__, &ldz_64, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"ssteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_ssteqr(char *compz, aocl_int64_t *n, real *d__, real *e, real *z__,
-                        aocl_int64_t *ldz, real *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ssteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1, i__2;
     real r__1, r__2;
@@ -249,15 +237,15 @@ void aocl_lapack_ssteqr(char *compz, aocl_int64_t *n, real *d__, real *e, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SSTEQR", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SSTEQR", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*n == 1)
     {
@@ -265,8 +253,8 @@ void aocl_lapack_ssteqr(char *compz, aocl_int64_t *n, real *d__, real *e, real *
         {
             z__[z_dim1 + 1] = 1.f;
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Determine the unit roundoff and over/underflow thresholds. */
     eps = slamch_("E");
@@ -656,8 +644,8 @@ L160:
         }
     }
 L190:
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of SSTEQR */
 }
 /* ssteqr_ */

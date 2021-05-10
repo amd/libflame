@@ -236,34 +236,12 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
              real *vl, aocl_int_t *ldvl, real *vr, aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m,
              real *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_strevc(side, howmny, select, n, t, ldt, vl, ldvl, vr, ldvr, mm, m, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t ldvl_64 = *ldvl;
-    aocl_int64_t ldvr_64 = *ldvr;
-    aocl_int64_t mm_64 = *mm;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_strevc(side, howmny, select, &n_64, t, &ldt_64, vl, &ldvl_64, vr, &ldvr_64, &mm_64,
-                       &m_64, work, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"strevc inputs: side %c, howmny %c, n %d, ldt %d, ldvl %d, ldvr %d, mm %d",*side, *howmny, *n, *ldt, *ldvl, *ldvr, *mm);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t *n, real *t,
-                        aocl_int64_t *ldt, real *vl, aocl_int64_t *ldvl, real *vr,
-                        aocl_int64_t *ldvr, aocl_int64_t *mm, aocl_int64_t *m, real *work,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("strevc inputs: side %c, howmny %c, n %" FLA_IS ", ldt %" FLA_IS
-                      ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",
-                      *side, *howmny, *n, *ldt, *ldvl, *ldvr, *mm);
     /* System generated locals */
     aocl_int64_t t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3;
     real r__1, r__2, r__3, r__4;
@@ -420,15 +398,15 @@ void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("STREVC", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("STREVC", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible. */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Set the constants to control overflow. */
     unfl = slamch_("Safe minimum");
@@ -1255,8 +1233,8 @@ void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t 
             /* L260: */
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of STREVC */
 }
 /* strevc_ */

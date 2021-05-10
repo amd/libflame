@@ -173,32 +173,12 @@ void strsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
              aocl_int_t *lda, real *b, aocl_int_t *ldb, real *c__, aocl_int_t *ldc, real *scale,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_strsyl(trana, tranb, isgn, m, n, a, lda, b, ldb, c__, ldc, scale, info);
-#else
-    aocl_int64_t isgn_64 = *isgn;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_strsyl(trana, tranb, &isgn_64, &m_64, &n_64, a, &lda_64, b, &ldb_64, c__, &ldc_64,
-                       scale, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"strsyl inputs: trana %c, tranb %c, isgn %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS "",*trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_strsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64_t *m,
-                        aocl_int64_t *n, real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb,
-                        real *c__, aocl_int64_t *ldc, real *scale, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("strsyl inputs: trana %c, tranb %c, isgn %" FLA_IS ", m %" FLA_IS
-                      ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS "",
-                      *trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2;
@@ -291,16 +271,16 @@ void aocl_lapack_strsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("STRSYL", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("STRSYL", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     *scale = 1.f;
     if(*m == 0 || *n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Set constants to control overflow */
     eps = slamch_("P");
@@ -1414,8 +1394,8 @@ void aocl_lapack_strsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
         L250:;
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of STRSYL */
 }
 /* strsyl_ */

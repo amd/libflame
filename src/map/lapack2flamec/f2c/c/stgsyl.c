@@ -305,41 +305,12 @@ void stgsyl_(char *trans, aocl_int_t *ijob, aocl_int_t *m, aocl_int_t *n, real *
              real *e, aocl_int_t *lde, real *f, aocl_int_t *ldf, real *scale, real *dif, real *work,
              aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_stgsyl(trans, ijob, m, n, a, lda, b, ldb, c__, ldc, d__, ldd, e, lde, f, ldf, scale,
-                       dif, work, lwork, iwork, info);
-#else
-    aocl_int64_t ijob_64 = *ijob;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t ldd_64 = *ldd;
-    aocl_int64_t lde_64 = *lde;
-    aocl_int64_t ldf_64 = *ldf;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_stgsyl(trans, &ijob_64, &m_64, &n_64, a, &lda_64, b, &ldb_64, c__, &ldc_64, d__,
-                       &ldd_64, e, &lde_64, f, &ldf_64, scale, dif, work, &lwork_64, iwork,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"stgsyl inputs: trans %c, ijob %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS ", ldd %" FLA_IS ", lde %" FLA_IS ", ldf %" FLA_IS "",*trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_stgsyl(char *trans, aocl_int64_t *ijob, aocl_int64_t *m, aocl_int64_t *n, real *a,
-                        aocl_int64_t *lda, real *b, aocl_int64_t *ldb, real *c__, aocl_int64_t *ldc,
-                        real *d__, aocl_int64_t *ldd, real *e, aocl_int64_t *lde, real *f,
-                        aocl_int64_t *ldf, real *scale, real *dif, real *work, aocl_int64_t *lwork,
-                        aocl_int_t *iwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("stgsyl inputs: trans %c, ijob %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS
-                      ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS ", ldd %" FLA_IS
-                      ", lde %" FLA_IS ", ldf %" FLA_IS "",
-                      *trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1,
         e_offset, f_dim1, f_offset, i__1, i__2, i__3, i__4;
@@ -482,14 +453,14 @@ void aocl_lapack_stgsyl(char *trans, aocl_int64_t *ijob, aocl_int64_t *m, aocl_i
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("STGSYL", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("STGSYL", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
@@ -502,8 +473,8 @@ void aocl_lapack_stgsyl(char *trans, aocl_int64_t *ijob, aocl_int64_t *m, aocl_i
                 *dif = 0.f;
             }
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Determine optimal block sizes MB and NB */
     mb = aocl_lapack_ilaenv(&c__2, "STGSYL", trans, m, n, &c_n1, &c_n1);
@@ -566,8 +537,8 @@ void aocl_lapack_stgsyl(char *trans, aocl_int64_t *ijob, aocl_int64_t *m, aocl_i
             }
             /* L30: */
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Determine block structure of A */
     p = 0;
@@ -844,9 +815,9 @@ L70:
             /* L210: */
         }
     }
-    work[1] = aocl_lapack_sroundup_lwork(&lwmin);
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    work[1] = (real) lwmin;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of STGSYL */
 }
 /* stgsyl_ */

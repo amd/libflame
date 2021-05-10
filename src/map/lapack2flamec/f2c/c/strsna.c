@@ -276,36 +276,12 @@ void strsna_(char *job, char *howmny, logical *select, aocl_int_t *n, real *t, a
              aocl_int_t *mm, aocl_int_t *m, real *work, aocl_int_t *ldwork, aocl_int_t *iwork,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_strsna(job, howmny, select, n, t, ldt, vl, ldvl, vr, ldvr, s, sep, mm, m, work,
-                       ldwork, iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t ldvl_64 = *ldvl;
-    aocl_int64_t ldvr_64 = *ldvr;
-    aocl_int64_t mm_64 = *mm;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t ldwork_64 = *ldwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_strsna(job, howmny, select, &n_64, t, &ldt_64, vl, &ldvl_64, vr, &ldvr_64, s, sep,
-                       &mm_64, &m_64, work, &ldwork_64, iwork, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"strsna inputs: job %c, howmny %c, n %" FLA_IS ", ldt %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", ldwork %" FLA_IS "" ,*job, *howmny, *n, *ldt, *ldvl, *ldvr, *mmt, *ldwork);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_strsna(char *job, char *howmny, logical *select, aocl_int64_t *n, real *t,
-                        aocl_int64_t *ldt, real *vl, aocl_int64_t *ldvl, real *vr,
-                        aocl_int64_t *ldvr, real *s, real *sep, aocl_int64_t *mm, aocl_int64_t *m,
-                        real *work, aocl_int64_t *ldwork, aocl_int_t *iwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("strsna inputs: job %c, howmny %c, n %" FLA_IS ", ldt %" FLA_IS
-                      ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", ldwork %" FLA_IS "",
-                      *job, *howmny, *n, *ldt, *ldvl, *ldvr, *mm, *ldwork);
     /* System generated locals */
     aocl_int64_t t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, work_dim1, work_offset,
         i__1, i__2;
@@ -469,15 +445,15 @@ void aocl_lapack_strsna(char *job, char *howmny, logical *select, aocl_int64_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("STRSNA", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("STRSNA", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*n == 1)
     {
@@ -485,8 +461,8 @@ void aocl_lapack_strsna(char *job, char *howmny, logical *select, aocl_int64_t *
         {
             if(!select[1])
             {
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
         }
         if(wants)
@@ -497,8 +473,8 @@ void aocl_lapack_strsna(char *job, char *howmny, logical *select, aocl_int64_t *
         {
             sep[1] = (r__1 = t[t_dim1 + 1], f2c_abs(r__1));
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Get machine constants */
     eps = slamch_("P");
@@ -717,8 +693,8 @@ void aocl_lapack_strsna(char *job, char *howmny, logical *select, aocl_int64_t *
         }
     L60:;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of STRSNA */
 }
 /* strsna_ */

@@ -329,35 +329,12 @@ void strsen_(char *job, char *compq, logical *select, aocl_int_t *n, real *t, ao
              real *q, aocl_int_t *ldq, real *wr, real *wi, aocl_int_t *m, real *s, real *sep,
              real *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_strsen(job, compq, select, n, t, ldt, q, ldq, wr, wi, m, s, sep, work, lwork, iwork,
-                       liwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t liwork_64 = *liwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_strsen(job, compq, select, &n_64, t, &ldt_64, q, &ldq_64, wr, wi, &m_64, s, sep,
-                       work, &lwork_64, iwork, &liwork_64, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"strsen inputs: job %c, compq %c, n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*job, *compq, *n, *ldt, *ldq, *lwork, *liwork);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_strsen(char *job, char *compq, logical *select, aocl_int64_t *n, real *t,
-                        aocl_int64_t *ldt, real *q, aocl_int64_t *ldq, real *wr, real *wi,
-                        aocl_int64_t *m, real *s, real *sep, real *work, aocl_int64_t *lwork,
-                        aocl_int_t *iwork, aocl_int64_t *liwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("strsen inputs: job %c, compq %c, n %" FLA_IS ", ldt %" FLA_IS
-                      ", ldq %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",
-                      *job, *compq, *n, *ldt, *ldq, *lwork, *liwork);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, t_dim1, t_offset, i__1, i__2;
     real r__1, r__2;
@@ -523,14 +500,14 @@ void aocl_lapack_strsen(char *job, char *compq, logical *select, aocl_int64_t *n
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("STRSEN", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("STRSEN", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible. */
     if(*m == *n || *m == 0)
@@ -663,10 +640,10 @@ L40: /* Store the output eigenvalues in WR and WI. */
         }
         /* L60: */
     }
-    work[1] = aocl_lapack_sroundup_lwork(&lwmin);
-    iwork[1] = (aocl_int_t)(liwmin);
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    work[1] = (real) lwmin;
+    iwork[1] = liwmin;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of STRSEN */
 }
 /* strsen_ */

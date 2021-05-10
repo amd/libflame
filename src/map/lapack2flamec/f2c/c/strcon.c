@@ -140,26 +140,12 @@ static aocl_int64_t c__1 = 1;
 void strcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, real *a, aocl_int_t *lda,
              real *rcond, real *work, aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_strcon(norm, uplo, diag, n, a, lda, rcond, work, iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_strcon(norm, uplo, diag, &n_64, a, &lda_64, rcond, work, iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"strcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", lda %%" FLA_IS "",*norm, *uplo, *diag, *n, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_strcon(char *norm, char *uplo, char *diag, aocl_int64_t *n, real *a,
-                        aocl_int64_t *lda, real *rcond, real *work, aocl_int_t *iwork,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("strcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "",
-                      *norm, *uplo, *diag, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
     real r__1;
@@ -234,16 +220,16 @@ void aocl_lapack_strcon(char *norm, char *uplo, char *diag, aocl_int64_t *n, rea
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("STRCON", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("STRCON", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *rcond = 1.f;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     *rcond = 0.f;
     smlnum = slamch_("Safe minimum") * (real)fla_max(1, *n);
@@ -301,8 +287,8 @@ void aocl_lapack_strcon(char *norm, char *uplo, char *diag, aocl_int64_t *n, rea
         }
     }
 L20:
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of STRCON */
 }
 /* strcon_ */

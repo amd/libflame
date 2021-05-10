@@ -186,33 +186,12 @@ void strrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
              aocl_int_t *lda, real *b, aocl_int_t *ldb, real *x, aocl_int_t *ldx, real *ferr,
              real *berr, real *work, aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_strrfs(uplo, trans, diag, n, nrhs, a, lda, b, ldb, x, ldx, ferr, berr, work, iwork,
-                       info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_strrfs(uplo, trans, diag, &n_64, &nrhs_64, a, &lda_64, b, &ldb_64, x, &ldx_64, ferr,
-                       berr, work, iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"strrfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *trans, *diag, *n, *nrhs, *lda, *ldb, *ldx);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_strrfs(char *uplo, char *trans, char *diag, aocl_int64_t *n, aocl_int64_t *nrhs,
-                        real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, real *x,
-                        aocl_int64_t *ldx, real *ferr, real *berr, real *work, aocl_int_t *iwork,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("strrfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS
-                      ", lda %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
-                      *uplo, *trans, *diag, *n, *nrhs, *lda, *ldb, *ldx);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3;
     real r__1, r__2, r__3;
@@ -309,9 +288,9 @@ void aocl_lapack_strrfs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("STRRFS", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("STRRFS", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -323,8 +302,8 @@ void aocl_lapack_strrfs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
             berr[j] = 0.f;
             /* L10: */
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(notran)
     {
@@ -605,8 +584,8 @@ void aocl_lapack_strrfs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
         }
         /* L250: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of STRRFS */
 }
 /* strrfs_ */

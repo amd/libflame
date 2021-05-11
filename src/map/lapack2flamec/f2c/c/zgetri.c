@@ -121,27 +121,12 @@ the matrix is */
 void zgetri_(aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
              dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgetri(n, a, lda, ipiv, work, lwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgetri(&n_64, a, &lda_64, ipiv, work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zgetri inputs: n %d, lda %d, ipiv %d",*n, *lda, *ipiv);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zgetri(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int_t *ipiv,
-                        dcomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgetri inputs: n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "", *n, *lda,
-                      *lwork);
-
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     dcomplex z__1;
@@ -198,28 +183,28 @@ void aocl_lapack_zgetri(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_in
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGETRI", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZGETRI", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Form inv(U). If INFO > 0 from ZTRTRI, then U is singular, */
     /* and the inverse is not computed. */
     aocl_lapack_ztrtri("Upper", "Non-unit", n, &a[a_offset], lda, info);
     if(*info > 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     nbmin = 2;
     ldwork = *n;
@@ -327,10 +312,10 @@ void aocl_lapack_zgetri(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_in
         }
         /* L60: */
     }
-    work[1].real = (doublereal)iws;
-    work[1].imag = 0.; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    work[1].r = (doublereal) iws;
+    work[1].i = 0.; // , expr subst
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZGETRI */
 }
 /* zgetri_ */

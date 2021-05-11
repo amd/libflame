@@ -125,26 +125,12 @@ v(i+1:m) is stored on exit in A(i+1:m,i), */
 void zgeqr2p_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomplex *tau,
               dcomplex *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgeqr2p(m, n, a, lda, tau, work, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgeqr2p(&m_64, &n_64, a, &lda_64, tau, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"zgeqr2p inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zgeqr2p(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
-                         dcomplex *tau, dcomplex *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgeqr2p inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     dcomplex z__1;
@@ -195,9 +181,9 @@ void aocl_lapack_zgeqr2p(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGEQR2P", &i__1, (ftnlen)7);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZGEQR2P", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     k = fla_min(*m, *n);
     i__1 = k;
@@ -229,8 +215,8 @@ void aocl_lapack_zgeqr2p(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
         }
         /* L10: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZGEQR2P */
 }
 /* zgeqr2p_ */

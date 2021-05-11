@@ -202,27 +202,12 @@ void zgebd2_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doubler
              doublereal *e, dcomplex *tauq, dcomplex *taup, dcomplex *work,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgebd2(m, n, a, lda, d__, e, tauq, taup, work, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgebd2(&m_64, &n_64, a, &lda_64, d__, e, tauq, taup, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zgebd2 inputs: m %d, n %d, lda %d",*m, *n, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zgebd2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
-                        doublereal *d__, doublereal *e, dcomplex *tauq, dcomplex *taup,
-                        dcomplex *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgebd2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
-
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     dcomplex z__1;
@@ -276,9 +261,9 @@ void aocl_lapack_zgebd2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
     if(*info < 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGEBD2", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZGEBD2", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*m >= *n)
     {
@@ -426,8 +411,8 @@ void aocl_lapack_zgebd2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
             /* L20: */
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZGEBD2 */
 }
 /* zgebd2_ */

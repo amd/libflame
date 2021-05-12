@@ -123,27 +123,12 @@
 void zgtsv_(aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl, dcomplex *d__,
             dcomplex *du, dcomplex *b, aocl_int_t *ldb, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgtsv(n, nrhs, dl, d__, du, b, ldb, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgtsv(&n_64, &nrhs_64, dl, d__, du, b, &ldb_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zgtsv inputs: n %d, nrhs %d, ldb %d",*n, *nrhs, *ldb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *dl, dcomplex *d__,
-                       dcomplex *du, dcomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgtsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n, *nrhs,
-                      *ldb);
-
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
     doublereal d__1, d__2, d__3, d__4;
@@ -200,14 +185,14 @@ void aocl_lapack_zgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *dl, dcompl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGTSV ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZGTSV ", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     i__1 = *n - 1;
     for(k = 1; k <= i__1; ++k)
@@ -223,8 +208,8 @@ void aocl_lapack_zgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *dl, dcompl
                 a unique */
                 /* solution can not be found. */
                 *info = k;
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
         }
         else /* if(complicated condition) */
@@ -334,8 +319,8 @@ void aocl_lapack_zgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *dl, dcompl
     if(d__[i__1].real == 0. && d__[i__1].imag == 0.)
     {
         *info = *n;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Back solve with the matrix U from the factorization. */
     i__1 = *nrhs;
@@ -382,8 +367,8 @@ void aocl_lapack_zgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *dl, dcompl
         }
         /* L50: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZGTSV */
 }
 /* zgtsv_ */

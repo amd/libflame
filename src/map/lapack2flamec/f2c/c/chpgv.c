@@ -172,34 +172,10 @@ static aocl_int64_t c__1 = 1;
 void chpgv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex *ap, scomplex *bp,
             real *w, scomplex *z__, aocl_int_t *ldz, scomplex *work, real *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_chpgv(itype, jobz, uplo, n, ap, bp, w, z__, ldz, work, rwork, info);
-#else
-    aocl_int64_t itype_64 = *itype;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_chpgv(&itype_64, jobz, uplo, &n_64, ap, bp, w, z__, &ldz_64, work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_chpgv(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t *n, scomplex *ap,
-                       scomplex *bp, real *w, scomplex *z__, aocl_int64_t *ldz, scomplex *work,
-                       real *rwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "chpgv inputs: itype %lld, jobz %c, uplo %c, n %lld, ldz %lld", *itype,
-             *jobz, *uplo, *n, *ldz);
-#else
-    snprintf(buffer, 256, "chpgv inputs: itype %d, jobz %c, uplo %c, n %d, ldz %d", *itype, *jobz,
-             *uplo, *n, *ldz);
-#endif
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"chpgv inputs: itype %d, jobz %c, uplo %c, n %d, ldz %d\n",*itype, *jobz, *uplo, *n, *ldz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -263,15 +239,15 @@ void aocl_lapack_chpgv(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHPGV ", &i__1, (ftnlen)6);
+        xerbla_("CHPGV ", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Form a Cholesky factorization of B. */
     aocl_lapack_cpptrf(uplo, n, &bp[1], info);
@@ -279,7 +255,7 @@ void aocl_lapack_chpgv(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     aocl_lapack_chpgst(itype, uplo, n, &ap[1], &bp[1], info);
@@ -334,7 +310,7 @@ void aocl_lapack_chpgv(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CHPGV */
 }
 /* chpgv_ */

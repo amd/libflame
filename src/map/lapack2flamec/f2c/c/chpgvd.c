@@ -234,34 +234,12 @@ void chpgvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex 
              real *w, scomplex *z__, aocl_int_t *ldz, scomplex *work, aocl_int_t *lwork, real *rwork,
              aocl_int_t *lrwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_chpgvd(itype, jobz, uplo, n, ap, bp, w, z__, ldz, work, lwork, rwork, lrwork, iwork,
-                       liwork, info);
-#else
-    aocl_int64_t itype_64 = *itype;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t lrwork_64 = *lrwork;
-    aocl_int64_t liwork_64 = *liwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_chpgvd(&itype_64, jobz, uplo, &n_64, ap, bp, w, z__, &ldz_64, work, &lwork_64,
-                       rwork, &lrwork_64, iwork, &liwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"chpgvd inputs: itype %d, jobz %c, uplo %c, n %d, ldz %d\n",*itype, *jobz, *uplo, *n, *ldz);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_chpgvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t *n, scomplex *ap,
-                        scomplex *bp, real *w, scomplex *z__, aocl_int64_t *ldz, scomplex *work,
-                        aocl_int64_t *lwork, real *rwork, aocl_int64_t *lrwork, aocl_int_t *iwork,
-                        aocl_int64_t *liwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("chpgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
-                      ", ldz %" FLA_IS "",
-                      *itype, *jobz, *uplo, *n, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1;
     real r__1, r__2;
@@ -373,28 +351,28 @@ void aocl_lapack_chpgvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHPGVD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("CHPGVD", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Form a Cholesky factorization of B. */
     aocl_lapack_cpptrf(uplo, n, &bp[1], info);
     if(*info != 0)
     {
         *info = *n + *info;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     aocl_lapack_chpgst(itype, uplo, n, &ap[1], &bp[1], info);
@@ -460,13 +438,12 @@ void aocl_lapack_chpgvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_
             }
         }
     }
-    r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
-    rwork[1] = (real)lrwmin;
-    iwork[1] = (aocl_int_t)(liwmin);
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    work[1].r = (real) lwmin;
+    work[1].i = 0.f; // , expr subst
+    rwork[1] = (real) lrwmin;
+    iwork[1] = liwmin;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of CHPGVD */
 }
 /* chpgvd_ */

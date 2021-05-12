@@ -167,30 +167,10 @@
 void chfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k, real *alpha,
             scomplex *a, aocl_int_t *lda, real *beta, scomplex *c__)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_chfrk(transr, uplo, trans, n, k, alpha, a, lda, beta, c__);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t lda_64 = *lda;
-
-    aocl_lapack_chfrk(transr, uplo, trans, &n_64, &k_64, alpha, a, &lda_64, beta, c__);
-#endif
-}
-
-void aocl_lapack_chfrk(char *transr, char *uplo, char *trans, aocl_int64_t *n, aocl_int64_t *k,
-                       real *alpha, scomplex *a, aocl_int64_t *lda, real *beta, scomplex *c__)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "chfrk inputs: transr %c, uplo %c, trans %c, n %lld, k %lld, lda %lld",
-             *transr, *uplo, *trans, *n, *k, *lda);
-#else
-    snprintf(buffer, 256, "chfrk inputs: transr %c, uplo %c, trans %c, n %d, k %d, lda %d", *transr,
-             *uplo, *trans, *n, *k, *lda);
-#endif
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"chfrk inputs: transr %c, uplo %c, trans %c, n %d, k %d, lda %d\n",*transr, *uplo, *trans, *n, *k, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -272,9 +252,9 @@ void aocl_lapack_chfrk(char *transr, char *uplo, char *trans, aocl_int64_t *n, a
     if(info != 0)
     {
         i__1 = -info;
-        aocl_blas_xerbla("CHFRK ", &i__1, (ftnlen)6);
+        xerbla_("CHFRK ", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible. */
     /* The quick return case: ((ALPHA.EQ.0).AND.(BETA.NE.ZERO)) is not */
@@ -282,7 +262,7 @@ void aocl_lapack_chfrk(char *transr, char *uplo, char *trans, aocl_int64_t *n, a
     if(*n == 0 || (*alpha == 0.f || *k == 0) && *beta == 1.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*alpha == 0.f && *beta == 0.f)
     {
@@ -294,7 +274,7 @@ void aocl_lapack_chfrk(char *transr, char *uplo, char *trans, aocl_int64_t *n, a
             c__[i__2].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     q__1.real = *alpha;
     q__1.imag = 0.f; // , expr subst
@@ -554,7 +534,7 @@ void aocl_lapack_chfrk(char *transr, char *uplo, char *trans, aocl_int64_t *n, a
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CHFRK */
 }
 /* chfrk_ */

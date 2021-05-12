@@ -143,31 +143,10 @@ i */
 void chpev_(char *jobz, char *uplo, aocl_int_t *n, scomplex *ap, real *w, scomplex *z__,
             aocl_int_t *ldz, scomplex *work, real *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_chpev(jobz, uplo, n, ap, w, z__, ldz, work, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_chpev(jobz, uplo, &n_64, ap, w, z__, &ldz_64, work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_chpev(char *jobz, char *uplo, aocl_int64_t *n, scomplex *ap, real *w, scomplex *z__,
-                       aocl_int64_t *ldz, scomplex *work, real *rwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "chpev inputs: jobz %c, uplo %c, n %lld, ldz %lld", *jobz, *uplo, *n,
-             *ldz);
-#else
-    snprintf(buffer, 256, "chpev inputs: jobz %c, uplo %c, n %d, ldz %d", *jobz, *uplo, *n, *ldz);
-#endif
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"chpev inputs: jobz %c, uplo %c, n %d, ldz %d\n",*jobz, *uplo, *n, *ldz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -242,15 +221,15 @@ void aocl_lapack_chpev(char *jobz, char *uplo, aocl_int64_t *n, scomplex *ap, re
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHPEV ", &i__1, (ftnlen)6);
+        xerbla_("CHPEV ", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*n == 1)
     {
@@ -263,7 +242,7 @@ void aocl_lapack_chpev(char *jobz, char *uplo, aocl_int64_t *n, scomplex *ap, re
             z__[i__1].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -323,7 +302,7 @@ void aocl_lapack_chpev(char *jobz, char *uplo, aocl_int64_t *n, scomplex *ap, re
         aocl_blas_sscal(&imax, &r__1, &w[1], &c__1);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CHPEV */
 }
 /* chpev_ */

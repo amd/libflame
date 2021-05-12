@@ -118,30 +118,10 @@ static aocl_int64_t c__1 = 1;
 void chpgst_(aocl_int_t *itype, char *uplo, aocl_int_t *n, scomplex *ap, scomplex *bp,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_chpgst(itype, uplo, n, ap, bp, info);
-#else
-    aocl_int64_t itype_64 = *itype;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_chpgst(&itype_64, uplo, &n_64, ap, bp, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_chpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomplex *ap, scomplex *bp,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "chpgst inputs: itype %lld, uplo %c, n %lld", *itype, *uplo, *n);
-#else
-    snprintf(buffer, 256, "chpgst inputs: itype %d, uplo %c, n %d", *itype, *uplo, *n);
-#endif
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"chpgst inputs: itype %d, uplo %c, n %d\n",*itype, *uplo, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -200,9 +180,9 @@ void aocl_lapack_chpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scompl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHPGST", &i__1, (ftnlen)6);
+        xerbla_("CHPGST", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*itype == 1)
     {
@@ -367,7 +347,7 @@ void aocl_lapack_chpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scompl
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CHPGST */
 }
 /* chpgst_ */

@@ -187,31 +187,12 @@ void zlahef_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dco
                   aocl_int_t *lda, aocl_int_t *ipiv, dcomplex *w, aocl_int_t *ldw,
                   aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlahef_rook(uplo, n, nb, kb, a, lda, ipiv, w, ldw, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nb_64 = *nb;
-    aocl_int64_t kb_64 = *kb;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldw_64 = *ldw;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zlahef_rook(uplo, &n_64, &nb_64, &kb_64, a, &lda_64, ipiv, w, &ldw_64, &info_64);
-
-    *kb = (aocl_int_t)kb_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"zlahef_rook inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldw %" FLA_IS "",*uplo, *n, *nb, *lda, *ldw);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zlahef_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl_int64_t *kb,
-                             dcomplex *a, aocl_int64_t *lda, aocl_int_t *ipiv,
-                             dcomplex *w, aocl_int64_t *ldw, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlahef_rook inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
-                      ", ldw %" FLA_IS "",
-                      *uplo, *n, *nb, *lda, *ldw);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2;
@@ -1339,8 +1320,8 @@ void aocl_lapack_zlahef_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
         /* Set KB to the number of columns factorized */
         *kb = k - 1;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZLAHEF_ROOK */
 }
 /* zlahef_rook__ */

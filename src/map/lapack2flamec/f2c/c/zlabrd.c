@@ -264,6 +264,12 @@ void fla_zlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, dcomplex *a,
                 dcomplex *taup, dcomplex *x, aocl_int64_t *ldx, dcomplex *y,
                 aocl_int64_t *ldy)
 {
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"zlabrd inputs: m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldx %" FLA_IS ", ldy %" FLA_IS "",*m, *n, *nb, *lda, *ldx, *ldy);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3;
     dcomplex z__1;
@@ -316,7 +322,8 @@ void fla_zlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, dcomplex *a,
     /* Function Body */
     if(*m <= 0 || *n <= 0)
     {
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
 
 #ifdef FLA_OPENMP_MULTITHREADING
@@ -709,7 +716,8 @@ void fla_zlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, dcomplex *a,
             }
         }
     }
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZLABRD */
 }
 /* zlabrd_ */

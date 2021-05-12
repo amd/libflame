@@ -164,23 +164,12 @@ static aocl_int64_t c__1 = 1;
 /** Generated wrapper function */
 void zhptrf_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zhptrf(uplo, n, ap, ipiv, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zhptrf(uplo, &n_64, ap, ipiv, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"zhptrf inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zhptrf(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *ipiv,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhptrf inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1, d__2, d__3, d__4;
@@ -256,9 +245,9 @@ void aocl_lapack_zhptrf(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZHPTRF", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZHPTRF", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.) + 1.) / 8.;
@@ -886,8 +875,8 @@ void aocl_lapack_zhptrf(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
         goto L60;
     }
 L110:
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZHPTRF */
 }
 /* zhptrf_ */

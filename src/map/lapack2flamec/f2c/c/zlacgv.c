@@ -72,20 +72,12 @@
 /** Generated wrapper function */
 void zlacgv_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlacgv(n, x, incx);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-
-    aocl_lapack_zlacgv(&n_64, x, &incx_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"zlacgv inputs: n %" FLA_IS ", incx %%" FLA_IS "",*n, *incx);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zlacgv(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlacgv inputs: n %" FLA_IS ", incx %" FLA_IS "", *n, *incx);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     dcomplex z__1;
@@ -140,8 +132,8 @@ void aocl_lapack_zlacgv(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx)
             /* L20: */
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZLACGV */
 }
 /* zlacgv_ */

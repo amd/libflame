@@ -119,25 +119,12 @@ the matrix is singular and its */
 void zhetri_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
              dcomplex *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zhetri(uplo, n, a, lda, ipiv, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zhetri(uplo, &n_64, a, &lda_64, ipiv, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zhetri inputs: uplo %c, n %d, lda %d",*uplo, *n, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zhetri(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
-                        aocl_int_t *ipiv, dcomplex *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhetri inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
-
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1;
@@ -200,15 +187,15 @@ void aocl_lapack_zhetri(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZHETRI", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZHETRI", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if(upper)
@@ -219,8 +206,8 @@ void aocl_lapack_zhetri(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
             i__1 = *info + *info * a_dim1;
             if(ipiv[*info] > 0 && (a[i__1].real == 0. && a[i__1].imag == 0.))
             {
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             /* L10: */
         }
@@ -234,8 +221,8 @@ void aocl_lapack_zhetri(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
             i__2 = *info + *info * a_dim1;
             if(ipiv[*info] > 0 && (a[i__2].real == 0. && a[i__2].imag == 0.))
             {
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             /* L20: */
         }
@@ -591,8 +578,8 @@ void aocl_lapack_zhetri(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
         goto L60;
     L80:;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZHETRI */
 }
 /* zhetri_ */

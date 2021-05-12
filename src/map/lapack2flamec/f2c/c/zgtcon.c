@@ -145,25 +145,12 @@ void zgtcon_(char *norm, aocl_int_t *n, dcomplex *dl, dcomplex *d__, dcomplex *d
              dcomplex *du2, aocl_int_t *ipiv, doublereal *anorm, doublereal *rcond,
              dcomplex *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgtcon(norm, n, dl, d__, du, du2, ipiv, anorm, rcond, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgtcon(norm, &n_64, dl, d__, du, du2, ipiv, anorm, rcond, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zgtcon inputs: norm %c, n %d",*norm, *n);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zgtcon(char *norm, aocl_int64_t *n, dcomplex *dl, dcomplex *d__,
-                        dcomplex *du, dcomplex *du2, aocl_int_t *ipiv, doublereal *anorm,
-                        doublereal *rcond, dcomplex *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgtcon inputs: norm %c, n %" FLA_IS "", *norm, *n);
-
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     /* Local variables */
@@ -220,22 +207,22 @@ void aocl_lapack_zgtcon(char *norm, aocl_int64_t *n, dcomplex *dl, dcomplex *d__
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGTCON", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZGTCON", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     *rcond = 0.;
     if(*n == 0)
     {
         *rcond = 1.;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(*anorm == 0.)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Check that D(1:N) is non-zero. */
     i__1 = *n;
@@ -244,8 +231,8 @@ void aocl_lapack_zgtcon(char *norm, aocl_int64_t *n, dcomplex *dl, dcomplex *d__
         i__2 = i__;
         if(d__[i__2].real == 0. && d__[i__2].imag == 0.)
         {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         /* L10: */
     }
@@ -282,8 +269,8 @@ L20:
     {
         *rcond = 1. / ainvnm / *anorm;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZGTCON */
 }
 /* zgtcon_ */

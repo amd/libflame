@@ -101,20 +101,12 @@ static aocl_int64_t c__1 = 1;
 /** Generated wrapper function */
 doublereal zlanht_(char *norm, aocl_int_t *n, doublereal *d__, dcomplex *e)
 {
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_zlanht(norm, n, d__, e);
-#else
-    aocl_int64_t n_64 = *n;
-
-    return aocl_lapack_zlanht(norm, &n_64, d__, e);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zlanht inputs: norm %c, n %d",*norm, *n);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-doublereal aocl_lapack_zlanht(char *norm, aocl_int64_t *n, doublereal *d__, dcomplex *e)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlanht inputs: norm %c, n %" FLA_IS "", *norm, *n);
-
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal ret_val, d__1;
@@ -217,7 +209,7 @@ doublereal aocl_lapack_zlanht(char *norm, aocl_int64_t *n, doublereal *d__, dcom
         anorm = scale * sqrt(sum);
     }
     ret_val = anorm;
-    AOCL_DTL_TRACE_LOG_EXIT
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return ret_val;
     /* End of ZLANHT */
 }

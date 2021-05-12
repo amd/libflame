@@ -157,23 +157,12 @@ v(i+2:n) is stored on exit in AP, */
 void chptrd_(char *uplo, aocl_int_t *n, scomplex *ap, real *d__, real *e, scomplex *tau,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_chptrd(uplo, n, ap, d__, e, tau, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_chptrd(uplo, &n_64, ap, d__, e, tau, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"chptrd inputs: uplo %c, n %d\n",*uplo, *n);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_chptrd(char *uplo, aocl_int64_t *n, scomplex *ap, real *d__, real *e, scomplex *tau,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("chptrd inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
     real r__1;
@@ -223,15 +212,15 @@ void aocl_lapack_chptrd(char *uplo, aocl_int64_t *n, scomplex *ap, real *d__, re
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHPTRD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("CHPTRD", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n <= 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(upper)
     {
@@ -357,8 +346,8 @@ void aocl_lapack_chptrd(char *uplo, aocl_int64_t *n, scomplex *ap, real *d__, re
         i__1 = ii;
         d__[*n] = ap[i__1].real;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of CHPTRD */
 }
 /* chptrd_ */

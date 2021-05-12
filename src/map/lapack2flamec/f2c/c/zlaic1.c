@@ -136,22 +136,12 @@ static aocl_int64_t c__1 = 1;
 void zlaic1_(aocl_int_t *job, aocl_int_t *j, dcomplex *x, doublereal *sest, dcomplex *w,
              dcomplex *gamma, doublereal *sestpr, dcomplex *s, dcomplex *c__)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlaic1(job, j, x, sest, w, gamma, sestpr, s, c__);
-#else
-    aocl_int64_t job_64 = *job;
-    aocl_int64_t j_64 = *j;
-
-    aocl_lapack_zlaic1(&job_64, &j_64, x, sest, w, gamma, sestpr, s, c__);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"zlaic1 inputs: job %" FLA_IS ", j %" FLA_IS "",*job, *j);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doublereal *sest,
-                        dcomplex *w, dcomplex *gamma, doublereal *sestpr,
-                        dcomplex *s, dcomplex *c__)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaic1 inputs: job %" FLA_IS ", j %" FLA_IS "", *job, *j);
     /* System generated locals */
     doublereal d__1, d__2;
     dcomplex z__1, z__2, z__3, z__4, z__5, z__6;
@@ -238,8 +228,8 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
                 c__->real = z__1.real, c__->imag = z__1.imag;
                 *sestpr = s1 * tmp;
             }
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         else if(absgam <= eps * absest)
         {
@@ -249,8 +239,8 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
             s1 = absest / tmp;
             s2 = absalp / tmp;
             *sestpr = tmp * sqrt(s1 * s1 + s2 * s2);
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         else if(absalp <= eps * absest)
         {
@@ -268,8 +258,8 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
                 c__->real = 1., c__->imag = 0.;
                 *sestpr = s1;
             }
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         else if(absest <= eps * absalp || absest <= eps * absgam)
         {
@@ -307,8 +297,8 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
                 z__1.imag = z__2.imag / scl; // , expr subst
                 c__->real = z__1.real, c__->imag = z__1.imag;
             }
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         else
         {
@@ -373,8 +363,8 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
             z__1.imag = cosine.imag / tmp; // , expr subst
             c__->real = z__1.real, c__->imag = z__1.imag;
             *sestpr = sqrt(t + 1.) * absest;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
     }
     else if(*job == 2)
@@ -421,23 +411,23 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
             z__2.real = z__3.real + z__5.real;
             z__2.imag = z__3.imag + z__5.imag; // , expr subst
             z_sqrt(&z__1, &z__2);
-            tmp = z__1.real;
-            z__1.real = s->real / tmp;
-            z__1.imag = s->imag / tmp; // , expr subst
-            s->real = z__1.real, s->imag = z__1.imag;
-            z__1.real = c__->real / tmp;
-            z__1.imag = c__->imag / tmp; // , expr subst
-            c__->real = z__1.real, c__->imag = z__1.imag;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            tmp = z__1.r;
+            z__1.r = s->r / tmp;
+            z__1.i = s->i / tmp; // , expr subst
+            s->r = z__1.r, s->i = z__1.i;
+            z__1.r = c__->r / tmp;
+            z__1.i = c__->i / tmp; // , expr subst
+            c__->r = z__1.r, c__->i = z__1.i;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         else if(absgam <= eps * absest)
         {
             s->real = 0., s->imag = 0.;
             c__->real = 1., c__->imag = 0.;
             *sestpr = absgam;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         else if(absalp <= eps * absest)
         {
@@ -455,8 +445,8 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
                 c__->real = 0., c__->imag = 0.;
                 *sestpr = s2;
             }
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         else if(absest <= eps * absalp || absest <= eps * absgam)
         {
@@ -502,8 +492,8 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
                 z__1.imag = z__2.imag / scl; // , expr subst
                 c__->real = z__1.real, c__->imag = z__1.imag;
             }
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         else
         {
@@ -603,19 +593,19 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
             z__2.real = z__3.real + z__5.real;
             z__2.imag = z__3.imag + z__5.imag; // , expr subst
             z_sqrt(&z__1, &z__2);
-            tmp = z__1.real;
-            z__1.real = sine.real / tmp;
-            z__1.imag = sine.imag / tmp; // , expr subst
-            s->real = z__1.real, s->imag = z__1.imag;
-            z__1.real = cosine.real / tmp;
-            z__1.imag = cosine.imag / tmp; // , expr subst
-            c__->real = z__1.real, c__->imag = z__1.imag;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            tmp = z__1.r;
+            z__1.r = sine.r / tmp;
+            z__1.i = sine.i / tmp; // , expr subst
+            s->r = z__1.r, s->i = z__1.i;
+            z__1.r = cosine.r / tmp;
+            z__1.i = cosine.i / tmp; // , expr subst
+            c__->r = z__1.r, c__->i = z__1.i;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZLAIC1 */
 }
 /* zlaic1_ */

@@ -120,24 +120,12 @@ static aocl_int64_t c__1 = 1;
 void zhpcon_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, doublereal *anorm,
              doublereal *rcond, dcomplex *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zhpcon(uplo, n, ap, ipiv, anorm, rcond, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zhpcon(uplo, &n_64, ap, ipiv, anorm, rcond, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    snprintf(buffer, 256,"zhpcon inputs: uplo %c, n %" FLA_IS ", ipiv %" FLA_IS "",*uplo, *n, *ipiv);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zhpcon(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *ipiv,
-                        doublereal *anorm, doublereal *rcond, dcomplex *work,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhpcon inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     /* Local variables */
@@ -189,22 +177,22 @@ void aocl_lapack_zhpcon(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZHPCON", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZHPCON", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     *rcond = 0.;
     if(*n == 0)
     {
         *rcond = 1.;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(*anorm <= 0.)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if(upper)
@@ -216,8 +204,8 @@ void aocl_lapack_zhpcon(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
             i__1 = ip;
             if(ipiv[i__] > 0 && (ap[i__1].real == 0. && ap[i__1].imag == 0.))
             {
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             ip -= i__;
             /* L10: */
@@ -233,8 +221,8 @@ void aocl_lapack_zhpcon(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
             i__2 = ip;
             if(ipiv[i__] > 0 && (ap[i__2].real == 0. && ap[i__2].imag == 0.))
             {
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             ip = ip + *n - i__ + 1;
             /* L20: */
@@ -255,8 +243,8 @@ L30:
     {
         *rcond = 1. / ainvnm / *anorm;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZHPCON */
 }
 /* zhpcon_ */

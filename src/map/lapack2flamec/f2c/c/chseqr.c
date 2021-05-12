@@ -303,33 +303,12 @@ void chseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
              aocl_int_t *ldh, scomplex *w, scomplex *z__, aocl_int_t *ldz, scomplex *work,
              aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_chseqr(job, compz, n, ilo, ihi, h__, ldh, w, z__, ldz, work, lwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t ldh_64 = *ldh;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_chseqr(job, compz, &n_64, &ilo_64, &ihi_64, h__, &ldh_64, w, z__, &ldz_64, work,
-                       &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"chseqr inputs: job %c, compz %c, n %d, ilo %d, ihi %d, ldh %d, ldz %d\n",*job, *compz, *n, *ilo, *ihi, *ldh, *ldz);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_chseqr(char *job, char *compz, aocl_int64_t *n, aocl_int64_t *ilo,
-                        aocl_int64_t *ihi, scomplex *h__, aocl_int64_t *ldh, scomplex *w,
-                        scomplex *z__, aocl_int64_t *ldz, scomplex *work, aocl_int64_t *lwork,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("chseqr inputs: job %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
-                      ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldz %" FLA_IS "",
-                      *job, *compz, *n, *ilo, *ihi, *ldh, *ldz);
     /* System generated locals */
     aocl_int64_t h_dim1, h_offset, z_dim1, z_offset, i__1, i__2;
     real r__1, r__2, r__3;
@@ -434,16 +413,16 @@ void aocl_lapack_chseqr(char *job, char *compz, aocl_int64_t *n, aocl_int64_t *i
     {
         /* ==== Quick return in case of invalid argument. ==== */
         i__1 = -(*info);
-        aocl_blas_xerbla("CHSEQR", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("CHSEQR", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(*n == 0)
     {
         /* ==== Quick return in case N = 0;
         nothing to do. ==== */
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
@@ -453,15 +432,15 @@ void aocl_lapack_chseqr(char *job, char *compz, aocl_int64_t *n, aocl_int64_t *i
         /* ==== Ensure reported workspace size is backward-compatible with */
         /* . previous LAPACK versions. ==== */
         /* Computing MAX */
-        r__2 = work[1].real;
-        r__3 = (real)fla_max(1, *n); // , expr subst
-        r__1 = fla_max(r__2, r__3);
-        q__1.real = r__1;
-        q__1.imag = 0.f; // , expr subst
-        work[1].real = q__1.real;
-        work[1].imag = q__1.imag; // , expr subst
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        r__2 = work[1].r;
+        r__3 = (real) max(1,*n); // , expr subst
+        r__1 = max(r__2,r__3);
+        q__1.r = r__1;
+        q__1.i = 0.f; // , expr subst
+        work[1].r = q__1.r;
+        work[1].i = q__1.i; // , expr subst
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else
     {
@@ -489,10 +468,10 @@ void aocl_lapack_chseqr(char *job, char *compz, aocl_int64_t *n, aocl_int64_t *i
         {
             i__1 = *ilo;
             i__2 = *ilo + *ilo * h_dim1;
-            w[i__1].real = h__[i__2].real;
-            w[i__1].imag = h__[i__2].imag; // , expr subst
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            w[i__1].r = h__[i__2].r;
+            w[i__1].i = h__[i__2].i; // , expr subst
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         /* ==== CLAHQR/CLAQR0 crossover point ==== */
         nmin = aocl_lapack_ilaenv(&c__12, "CHSEQR", ch__1, n, ilo, ihi, lwork);
@@ -562,7 +541,7 @@ void aocl_lapack_chseqr(char *job, char *compz, aocl_int64_t *n, aocl_int64_t *i
         work[1].imag = q__1.imag; // , expr subst
     }
     /* ==== End of CHSEQR ==== */
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
 }
 /* chseqr_ */

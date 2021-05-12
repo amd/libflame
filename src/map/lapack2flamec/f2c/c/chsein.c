@@ -259,45 +259,10 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t 
              aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m, scomplex *work, real *rwork,
              aocl_int_t *ifaill, aocl_int_t *ifailr, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_chsein(side, eigsrc, initv, select, n, h__, ldh, w, vl, ldvl, vr, ldvr, mm, m, work,
-                       rwork, ifaill, ifailr, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldh_64 = *ldh;
-    aocl_int64_t ldvl_64 = *ldvl;
-    aocl_int64_t ldvr_64 = *ldvr;
-    aocl_int64_t mm_64 = *mm;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_chsein(side, eigsrc, initv, select, &n_64, h__, &ldh_64, w, vl, &ldvl_64, vr,
-                       &ldvr_64, &mm_64, &m_64, work, rwork, ifaill, ifailr, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_chsein(char *side, char *eigsrc, char *initv, logical *select, aocl_int64_t *n,
-                        scomplex *h__, aocl_int64_t *ldh, scomplex *w, scomplex *vl,
-                        aocl_int64_t *ldvl, scomplex *vr, aocl_int64_t *ldvr, aocl_int64_t *mm,
-                        aocl_int64_t *m, scomplex *work, real *rwork, aocl_int_t *ifaill,
-                        aocl_int_t *ifailr, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "chsein inputs: side %c, eigsrc %c, initv %c, n %lld, ldh %lld, ldvl %lld, ldvr %lld, "
-             "mm %lld",
-             *side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
-#else
-    snprintf(buffer, 256,
-             "chsein inputs: side %c, eigsrc %c, initv %c, n %d, ldh %d, ldvl %d, ldvr %d, mm %d",
-             *side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
-#endif
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"chsein inputs: side %c, eigsrc %c, initv %c, n %d, ldh %d, ldvl %d, ldvr %d, mm %d, m %d\n",*side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm, *m);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -416,15 +381,15 @@ void aocl_lapack_chsein(char *side, char *eigsrc, char *initv, logical *select, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHSEIN", &i__1, (ftnlen)6);
+        xerbla_("CHSEIN", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible. */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Set machine-dependent constants. */
     unfl = slamch_("Safe minimum");
@@ -497,7 +462,7 @@ void aocl_lapack_chsein(char *side, char *eigsrc, char *initv, logical *select, 
                 {
                     *info = -6;
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return;
+                    return 0;
                 }
                 else if(hnorm > 0.f)
                 {
@@ -590,7 +555,7 @@ void aocl_lapack_chsein(char *side, char *eigsrc, char *initv, logical *select, 
         /* L100: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CHSEIN */
 }
 /* chsein_ */

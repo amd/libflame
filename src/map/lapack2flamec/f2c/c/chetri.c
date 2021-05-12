@@ -119,30 +119,10 @@ the matrix is singular and its */
 void chetri_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
              scomplex *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_chetri(uplo, n, a, lda, ipiv, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_chetri(uplo, &n_64, a, &lda_64, ipiv, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_chetri(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
-                        aocl_int_t *ipiv, scomplex *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "chetri inputs: uplo %c, n %lld, lda %lld", *uplo, *n, *lda);
-#else
-    snprintf(buffer, 256, "chetri inputs: uplo %c, n %d, lda %d", *uplo, *n, *lda);
-#endif
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"chetri inputs: uplo %c, n %d, lda %d\n",*uplo, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -207,15 +187,15 @@ void aocl_lapack_chetri(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHETRI", &i__1, (ftnlen)6);
+        xerbla_("CHETRI", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if(upper)
@@ -227,7 +207,7 @@ void aocl_lapack_chetri(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
             if(ipiv[*info] > 0 && (a[i__1].real == 0.f && a[i__1].imag == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+                return 0;
             }
             /* L10: */
         }
@@ -242,7 +222,7 @@ void aocl_lapack_chetri(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
             if(ipiv[*info] > 0 && (a[i__2].real == 0.f && a[i__2].imag == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+                return 0;
             }
             /* L20: */
         }
@@ -599,7 +579,7 @@ void aocl_lapack_chetri(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
     L80:;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CHETRI */
 }
 /* chetri_ */

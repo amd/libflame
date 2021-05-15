@@ -150,25 +150,12 @@
 void zspmv_(char *uplo, aocl_int_t *n, dcomplex *alpha, dcomplex *ap, dcomplex *x,
             aocl_int_t *incx, dcomplex *beta, dcomplex *y, aocl_int_t *incy)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zspmv(uplo, n, alpha, ap, x, incx, beta, y, incy);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incy_64 = *incy;
-
-    aocl_lapack_zspmv(uplo, &n_64, alpha, ap, x, &incx_64, beta, y, &incy_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zspmv inputs: uplo %c, n %d, incx %d, incy %d",*uplo, *n, *incx, *incy);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zspmv(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *ap,
-                       dcomplex *x, aocl_int64_t *incx, dcomplex *beta, dcomplex *y,
-                       aocl_int64_t *incy)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zspmv inputs: uplo %c, n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",
-                      *uplo, *n, *incx, *incy);
-
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3, i__4, i__5;
     dcomplex z__1, z__2, z__3, z__4;
@@ -219,15 +206,15 @@ void aocl_lapack_zspmv(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *a
     }
     if(info != 0)
     {
-        aocl_blas_xerbla("ZSPMV ", &info, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZSPMV ", &info);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible. */
     if(*n == 0 || alpha->real == 0. && alpha->imag == 0. && (beta->real == 1. && beta->imag == 0.))
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Set up the start points in X and Y. */
     if(*incx > 0)
@@ -313,8 +300,8 @@ void aocl_lapack_zspmv(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *a
     }
     if(alpha->real == 0. && alpha->imag == 0.)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     kk = 1;
     if(lsame_(uplo, "U", 1, 1))
@@ -557,8 +544,8 @@ void aocl_lapack_zspmv(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *a
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZSPMV */
 }
 /* zspmv_ */

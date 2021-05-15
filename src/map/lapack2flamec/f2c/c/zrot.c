@@ -159,6 +159,12 @@ void aocl_lapack_zrot(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomple
 void fla_zrot_native(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomplex *cy,
                      aocl_int64_t *incy, doublereal *c__, dcomplex *s)
 {
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zrot inputs: n %d, incx %d, incy %d",*n, *incx, *incy);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     /* System generated locals */
     aocl_int64_t i__1;
     dcomplex z__1, z__2, z__3;
@@ -186,7 +192,8 @@ void fla_zrot_native(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomplex
 
     if(*n <= 0)
     {
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     lc = *c__;
     sr = s->real;
@@ -233,30 +240,8 @@ void fla_zrot_native(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomplex
             iy += *incy;
         }
     }
-    else
-    {
-        for(i__ = 1; i__ <= i__1; ++i__)
-        {
-            z__2.real = lc * cx[ix].real;
-            z__2.imag = lc * cx[ix].imag; // , expr subst
-            z__3.real = sr * cy[ix].real - si * cy[ix].imag;
-            z__3.imag = sr * cy[ix].imag + si * cy[ix].real; // , expr subst
-            z__1.real = z__2.real + z__3.real;
-            z__1.imag = z__2.imag + z__3.imag; // , expr subst
-
-            z__2.real = lc * cy[ix].real;
-            z__2.imag = lc * cy[ix].imag; // , expr subst
-            z__3.real = sr * cx[ix].real + si * cx[ix].imag;
-            z__3.imag = sr * cx[ix].imag - si * cx[ix].real; // , expr subst
-
-            cy[ix].real = z__2.real - z__3.real;
-            cy[ix].imag = z__2.imag - z__3.imag; // , expr subst
-            cx[ix].real = z__1.real;
-            cx[ix].imag = z__1.imag; // , expr subst
-            ix += *incx;
-        }
-    }
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* Code for both increments equal to 1 */
 L20:
     i__1 = *n;
@@ -279,6 +264,7 @@ L20:
         cx[i__].real = z__1.real;
         cx[i__].imag = z__1.imag; // , expr subst
     }
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
 }
 /* zrot_ */

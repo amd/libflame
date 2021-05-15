@@ -120,24 +120,12 @@ static aocl_int64_t c__1 = 1;
 void zptcon_(aocl_int_t *n, doublereal *d__, dcomplex *e, doublereal *anorm, doublereal *rcond,
              doublereal *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zptcon(n, d__, e, anorm, rcond, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zptcon(&n_64, d__, e, anorm, rcond, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zptcon inputs: n %d",*n);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zptcon(aocl_int64_t *n, doublereal *d__, dcomplex *e, doublereal *anorm,
-                        doublereal *rcond, doublereal *rwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zptcon inputs: n %" FLA_IS ", anorm %lf", *n, *anorm);
-
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal d__1;
@@ -184,22 +172,22 @@ void aocl_lapack_zptcon(aocl_int64_t *n, doublereal *d__, dcomplex *e, doublerea
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZPTCON", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZPTCON", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     *rcond = 0.;
     if(*n == 0)
     {
         *rcond = 1.;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(*anorm == 0.)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Check that D(1:N) is positive. */
     i__1 = *n;
@@ -207,8 +195,8 @@ void aocl_lapack_zptcon(aocl_int64_t *n, doublereal *d__, dcomplex *e, doublerea
     {
         if(d__[i__] <= 0.)
         {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         /* L10: */
     }
@@ -239,8 +227,8 @@ void aocl_lapack_zptcon(aocl_int64_t *n, doublereal *d__, dcomplex *e, doublerea
     {
         *rcond = 1. / ainvnm / *anorm;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZPTCON */
 }
 /* zptcon_ */

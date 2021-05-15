@@ -138,25 +138,12 @@
 void zlatrz_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, dcomplex *a, aocl_int_t *lda,
              dcomplex *tau, dcomplex *work)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlatrz(m, n, l, a, lda, tau, work);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t l_64 = *l;
-    aocl_int64_t lda_64 = *lda;
-
-    aocl_lapack_zlatrz(&m_64, &n_64, &l_64, a, &lda_64, tau, work);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zlatrz inputs: m %d, n %d, l %d, lda %d",*m, *n, *l, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zlatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, dcomplex *a,
-                        aocl_int64_t *lda, dcomplex *tau, dcomplex *work)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlatrz inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS "",
-                      *m, *n, *l, *lda);
-
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     dcomplex z__1;
@@ -193,8 +180,8 @@ void aocl_lapack_zlatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, dcomp
     /* Function Body */
     if(*m == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(*m == *n)
     {
@@ -206,8 +193,8 @@ void aocl_lapack_zlatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, dcomp
             tau[i__2].imag = 0.; // , expr subst
             /* L10: */
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     for(i__ = *m; i__ >= 1; --i__)
     {
@@ -235,8 +222,8 @@ void aocl_lapack_zlatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, dcomp
         a[i__1].imag = z__1.imag; // , expr subst
         /* L20: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZLATRZ */
 }
 /* zlatrz_ */

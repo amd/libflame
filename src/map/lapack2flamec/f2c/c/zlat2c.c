@@ -112,27 +112,12 @@ if INFO>0, the content of */
 void zlat2c_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, scomplex *sa,
              aocl_int_t *ldsa, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlat2c(uplo, n, a, lda, sa, ldsa, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldsa_64 = *ldsa;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zlat2c(uplo, &n_64, a, &lda_64, sa, &ldsa_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zlat2c inputs: uplo %c, n %d, lda %d, ldsa %d",*uplo, *n, *lda, *ldsa);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zlat2c(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
-                        scomplex *sa, aocl_int64_t *ldsa, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlat2c inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS "",
-                      *uplo, *n, *lda, *ldsa);
-
     /* System generated locals */
     aocl_int64_t sa_dim1, sa_offset, a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Builtin functions */
@@ -220,8 +205,8 @@ void aocl_lapack_zlat2c(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
         }
     }
 L50:
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZLAT2C */
 }
 /* zlat2c_ */

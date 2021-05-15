@@ -115,24 +115,12 @@ the matrix is singular and its */
 void zsptri_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, dcomplex *work,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zsptri(uplo, n, ap, ipiv, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zsptri(uplo, &n_64, ap, ipiv, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zsptri inputs: uplo %c, n %d, ipiv %d",*uplo, *n, *ipiv);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zsptri(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *ipiv,
-                        dcomplex *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zsptri inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
-
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
     dcomplex z__1, z__2, z__3;
@@ -187,15 +175,15 @@ void aocl_lapack_zsptri(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZSPTRI", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZSPTRI", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if(upper)
@@ -207,8 +195,8 @@ void aocl_lapack_zsptri(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
             i__1 = kp;
             if(ipiv[*info] > 0 && (ap[i__1].real == 0. && ap[i__1].imag == 0.))
             {
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             kp -= *info;
             /* L10: */
@@ -224,8 +212,8 @@ void aocl_lapack_zsptri(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
             i__2 = kp;
             if(ipiv[*info] > 0 && (ap[i__2].real == 0. && ap[i__2].imag == 0.))
             {
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             kp = kp + *n - *info + 1;
             /* L20: */
@@ -594,8 +582,8 @@ void aocl_lapack_zsptri(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
         goto L60;
     L80:;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZSPTRI */
 }
 /* zsptri_ */

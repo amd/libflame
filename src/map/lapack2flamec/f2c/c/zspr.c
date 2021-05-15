@@ -131,22 +131,12 @@
 void zspr_(char *uplo, aocl_int_t *n, dcomplex *alpha, dcomplex *x, aocl_int_t *incx,
            dcomplex *ap)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zspr(uplo, n, alpha, x, incx, ap);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-
-    aocl_lapack_zspr(uplo, &n_64, alpha, x, &incx_64, ap);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zspr inputs: uplo %c, n %d, incx %d",*uplo, *n, *incx);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zspr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
-                      aocl_int64_t *incx, dcomplex *ap)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zspr inputs: uplo %c, n %" FLA_IS ", incx %" FLA_IS "", *uplo, *n, *incx);
-
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3, i__4, i__5;
     dcomplex z__1, z__2;
@@ -193,15 +183,15 @@ void aocl_lapack_zspr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
     }
     if(info != 0)
     {
-        aocl_blas_xerbla("ZSPR ", &info, (ftnlen)5);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZSPR ", &info);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible. */
     if(*n == 0 || alpha->real == 0. && alpha->imag == 0.)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Set the start point in X if the increment is not unity. */
     if(*incx <= 0)
@@ -427,8 +417,8 @@ void aocl_lapack_zspr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZSPR */
 }
 /* zspr_ */

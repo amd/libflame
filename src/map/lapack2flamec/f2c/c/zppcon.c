@@ -121,25 +121,12 @@ static aocl_int64_t c__1 = 1;
 void zppcon_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *anorm, doublereal *rcond,
              dcomplex *work, doublereal *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zppcon(uplo, n, ap, anorm, rcond, work, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zppcon(uplo, &n_64, ap, anorm, rcond, work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zppcon inputs: uplo %c, n %d",*uplo, *n);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zppcon(char *uplo, aocl_int64_t *n, dcomplex *ap, doublereal *anorm,
-                        doublereal *rcond, dcomplex *work, doublereal *rwork,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zppcon inputs: uplo %c, n %" FLA_IS ", anorm %lf", *uplo, *n, *anorm);
-
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal d__1, d__2;
@@ -205,22 +192,22 @@ void aocl_lapack_zppcon(char *uplo, aocl_int64_t *n, dcomplex *ap, doublereal *a
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZPPCON", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZPPCON", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     *rcond = 0.;
     if(*n == 0)
     {
         *rcond = 1.;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(*anorm == 0.)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     smlnum = dlamch_("Safe minimum");
     /* Estimate the 1-norm of the inverse. */
@@ -270,8 +257,8 @@ L10:
         *rcond = 1. / ainvnm / *anorm;
     }
 L20:
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZPPCON */
 }
 /* zppcon_ */

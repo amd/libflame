@@ -199,25 +199,12 @@
 void zlasr_(char *side, char *pivot, char *direct, aocl_int_t *m, aocl_int_t *n, doublereal *c__,
             doublereal *s, dcomplex *a, aocl_int_t *lda)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlasr(side, pivot, direct, m, n, c__, s, a, lda);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-
-    aocl_lapack_zlasr(side, pivot, direct, &m_64, &n_64, c__, s, a, &lda_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zlasr inputs: side %c, pivot %c, direct %c, m %d, n %d, lda %d",*side, *pivot, *direct, *m, *n, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, aocl_int64_t *n,
-                       doublereal *c__, doublereal *s, dcomplex *a, aocl_int64_t *lda)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlasr inputs: side %c, pivot %c, direct %c, m %" FLA_IS ", n %" FLA_IS
-                      ", lda %" FLA_IS "",
-                      *side, *pivot, *direct, *m, *n, *lda);
-
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     dcomplex z__1, z__2, z__3;
@@ -281,15 +268,15 @@ void aocl_lapack_zlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, a
     }
     if(info != 0)
     {
-        aocl_blas_xerbla("ZLASR ", &info, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZLASR ", &info);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(lsame_(side, "L", 1, 1))
     {
@@ -803,8 +790,8 @@ void aocl_lapack_zlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, a
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZLASR */
 }
 /* zlasr_ */

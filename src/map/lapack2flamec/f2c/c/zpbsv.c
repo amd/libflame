@@ -165,31 +165,12 @@
 void zpbsv_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, dcomplex *ab,
             aocl_int_t *ldab, dcomplex *b, aocl_int_t *ldb, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zpbsv(uplo, n, kd, nrhs, ab, ldab, b, ldb, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kd_64 = *kd;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zpbsv(uplo, &n_64, &kd_64, &nrhs_64, ab, &ldab_64, b, &ldb_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zpbsv inputs: uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldb %d",*uplo, *n, *kd, *nrhs, *ldab, *ldb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zpbsv(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int64_t *nrhs,
-                       dcomplex *ab, aocl_int64_t *ldab, dcomplex *b, aocl_int64_t *ldb,
-                       aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpbsv inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS
-                      ", ldab %" FLA_IS ", ldb %" FLA_IS "",
-                      *uplo, *n, *kd, *nrhs, *ldab, *ldb);
-
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
@@ -247,9 +228,9 @@ void aocl_lapack_zpbsv(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int64
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZPBSV ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZPBSV ", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Compute the Cholesky factorization A = U**H *U or A = L*L**H. */
     aocl_lapack_zpbtrf(uplo, n, kd, &ab[ab_offset], ldab, info);
@@ -258,8 +239,8 @@ void aocl_lapack_zpbsv(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int64
         /* Solve the system A*X = B, overwriting B with X. */
         aocl_lapack_zpbtrs(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &b[b_offset], ldb, info);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZPBSV */
 }
 /* zpbsv_ */

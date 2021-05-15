@@ -136,28 +136,12 @@ void zpbcon_(char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab, aocl_int_t
              doublereal *anorm, doublereal *rcond, dcomplex *work, doublereal *rwork,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zpbcon(uplo, n, kd, ab, ldab, anorm, rcond, work, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kd_64 = *kd;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zpbcon(uplo, &n_64, &kd_64, ab, &ldab_64, anorm, rcond, work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zpbcon inputs: uplo %c, n %d, kd %d, ldab %d",*uplo, *n, *kd, *ldab);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zpbcon(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, dcomplex *ab,
-                        aocl_int64_t *ldab, doublereal *anorm, doublereal *rcond,
-                        dcomplex *work, doublereal *rwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpbcon inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",
-                      *uplo, *n, *kd, *ldab);
-
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1;
     doublereal d__1, d__2;
@@ -233,22 +217,22 @@ void aocl_lapack_zpbcon(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, dcomplex 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZPBCON", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZPBCON", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     *rcond = 0.;
     if(*n == 0)
     {
         *rcond = 1.;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(*anorm == 0.)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     smlnum = dlamch_("Safe minimum");
     /* Estimate the 1-norm of the inverse. */
@@ -298,8 +282,8 @@ L10:
         *rcond = 1. / ainvnm / *anorm;
     }
 L20:
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZPBCON */
 }
 /* zpbcon_ */

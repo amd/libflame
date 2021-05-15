@@ -122,26 +122,12 @@ static aocl_int64_t c__1 = 1;
 void zpocon_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *anorm,
              doublereal *rcond, dcomplex *work, doublereal *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zpocon(uplo, n, a, lda, anorm, rcond, work, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zpocon(uplo, &n_64, a, &lda_64, anorm, rcond, work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zpocon inputs: uplo %c, n %d, lda %d",*uplo, *n, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zpocon(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
-                        doublereal *anorm, doublereal *rcond, dcomplex *work,
-                        doublereal *rwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpocon inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
-
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
     doublereal d__1, d__2;
@@ -213,22 +199,22 @@ void aocl_lapack_zpocon(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZPOCON", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZPOCON", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     *rcond = 0.;
     if(*n == 0)
     {
         *rcond = 1.;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(*anorm == 0.)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     smlnum = dlamch_("Safe minimum");
     /* Estimate the 1-norm of inv(A). */
@@ -278,8 +264,8 @@ L10:
         *rcond = 1. / ainvnm / *anorm;
     }
 L20:
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZPOCON */
 }
 /* zpocon_ */

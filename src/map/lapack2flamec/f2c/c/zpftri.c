@@ -218,24 +218,12 @@ k=N/2. IF TRANSR = 'C' then RFP is */
 /** Generated wrapper function */
 void zpftri_(char *transr, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zpftri(transr, uplo, n, a, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zpftri(transr, uplo, &n_64, a, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zpftri inputs: transr %c, uplo %c, n %d",*transr, *uplo, *n);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zpftri(char *transr, char *uplo, aocl_int64_t *n, dcomplex *a,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpftri inputs: transr %c, uplo %c, n %" FLA_IS "", *transr, *uplo, *n);
-
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     /* Local variables */
@@ -282,22 +270,22 @@ void aocl_lapack_zpftri(char *transr, char *uplo, aocl_int64_t *n, dcomplex *a,
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZPFTRI", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZPFTRI", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Invert the triangular Cholesky factor U or L. */
     aocl_lapack_ztftri(transr, uplo, "N", n, a, info);
     if(*info > 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* If N is odd, set NISODD = .TRUE. */
     /* If N is even, set K = N/2 and NISODD = .FALSE. */
@@ -439,8 +427,8 @@ void aocl_lapack_zpftri(char *transr, char *uplo, aocl_int64_t *n, dcomplex *a,
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZPFTRI */
 }
 /* zpftri_ */

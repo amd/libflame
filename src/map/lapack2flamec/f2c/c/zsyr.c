@@ -134,24 +134,12 @@
 void zsyr_(char *uplo, aocl_int_t *n, dcomplex *alpha, dcomplex *x, aocl_int_t *incx,
            dcomplex *a, aocl_int_t *lda)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zsyr(uplo, n, alpha, x, incx, a, lda);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t lda_64 = *lda;
-
-    aocl_lapack_zsyr(uplo, &n_64, alpha, x, &incx_64, a, &lda_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zsyr inputs: uplo %c, n %d, incx %d, lda %d",*uplo, *n, *incx, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zsyr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
-                      aocl_int64_t *incx, dcomplex *a, aocl_int64_t *lda)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zsyr inputs: uplo %c, n %" FLA_IS ", incx %" FLA_IS ", lda %" FLA_IS "",
-                      *uplo, *n, *incx, *lda);
-
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     dcomplex z__1, z__2;
@@ -206,15 +194,15 @@ void aocl_lapack_zsyr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
     }
     if(info != 0)
     {
-        aocl_blas_xerbla("ZSYR ", &info, (ftnlen)5);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZSYR ", &info);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible. */
     if(*n == 0 || alpha->real == 0. && alpha->imag == 0.)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Set the start point in X if the increment is not unity. */
     if(*incx <= 0)
@@ -368,8 +356,8 @@ void aocl_lapack_zsyr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZSYR */
 }
 /* zsyr_ */

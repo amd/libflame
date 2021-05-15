@@ -91,23 +91,12 @@ if k < N, the factorization could not */
 /** Generated wrapper function */
 void zpttrf_(aocl_int_t *n, doublereal *d__, dcomplex *e, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zpttrf(n, d__, e, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zpttrf(&n_64, d__, e, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"zpttrf inputs: n %d",*n);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_zpttrf(aocl_int64_t *n, doublereal *d__, dcomplex *e, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpttrf inputs: n %" FLA_IS "", *n);
-
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     dcomplex z__1;
@@ -145,15 +134,15 @@ void aocl_lapack_zpttrf(aocl_int64_t *n, doublereal *d__, dcomplex *e, aocl_int6
     {
         *info = -1;
         i__1 = -(*info);
-        aocl_blas_xerbla("ZPTTRF", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZPTTRF", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Compute the L*D*L**H (or U**H *D*U) factorization of A. */
     i4 = (*n - 1) % 4;
@@ -259,8 +248,8 @@ void aocl_lapack_zpttrf(aocl_int64_t *n, doublereal *d__, dcomplex *e, aocl_int6
         *info = *n;
     }
 L30:
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of ZPTTRF */
 }
 /* zpttrf_ */

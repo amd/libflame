@@ -1,32 +1,25 @@
 /*
-    Copyright (c) 2021-2023 Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (c) 2021 Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "FLAME.h"
-#if FLA_ENABLE_AOCL_BLAS
-#include "blis.h"
-#endif
-
 /* Table of constant values */
 
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c_n1 = -1;
 static real c_b13 = -1.f;
 static real c_b14 = 1.f;
 
-/* Subroutine */ int lapack_spotrf(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
-	aocl_int64_t *info)
+/* Subroutine */ int lapack_spotrf(char *uplo, integer *n, real *a, integer *lda,
+	integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
 
     /* Local variables */
-    aocl_int64_t j, jb, nb;
+    integer j, jb, nb;
     logical upper;
-#ifndef FLA_ENABLE_AOCL_BLAS
-	logical lsame_(char *ca, char *cbi, aocl_int64_t a, aocl_int64_t b);
-#endif
-	int lapack_spotf2(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int64_t *info);
+
 
 /*  SPOTRF computes the Cholesky factorization of a real symmetric */
 /*  positive definite matrix A. */
@@ -61,7 +54,7 @@ static real c_b14 = 1.f;
 /*          factorization A = U**T*U or A = L*L**T. */
 
 /*  LDA     (input) INTEGER */
-/*          The leading dimension of the array A.  LDA >= fla_max(1,N). */
+/*          The leading dimension of the array A.  LDA >= max(1,N). */
 
 /*  INFO    (output) INTEGER */
 /*          = 0:  successful exit */
@@ -75,29 +68,20 @@ static real c_b14 = 1.f;
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;
     a -= a_offset;
-    #if AOCL_FLA_PROGRESS_H
-        AOCL_FLA_PROGRESS_VAR;
-	progress_step_count=0;
-      #ifndef FLA_ENABLE_WINDOWS_BUILD
-	if(!aocl_fla_progress_ptr)
-            aocl_fla_progress_ptr=aocl_fla_progress;
-      #endif 
 
-    #endif
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U", 1, 1);
-
-    if (! upper && ! lsame_(uplo, "L", 1, 1)) {
+    upper = lsame_(uplo, "U");
+    if (! upper && ! lsame_(uplo, "L")) {
 	*info = -1;
     } else if (*n < 0) {
 	*info = -2;
-    } else if (*lda < fla_max(1,*n)) {
+    } else if (*lda < max(1,*n)) {
 	*info = -4;
     }
     if (*info != 0) {
 	i__1 = -(*info);
-	aocl_blas_xerbla("LAPACK_SPOTRF", &i__1, (ftnlen)13);
+	xerbla_("LAPACK_SPOTRF", &i__1);
 	return 0;
     }
 
@@ -109,7 +93,7 @@ static real c_b14 = 1.f;
 
 /*     Determine the block size for this environment. */
 
-    nb = aocl_lapack_ilaenv(&c__1, "SPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
+    nb = ilaenv_(&c__1, "SPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
     if (nb <= 1 || nb >= *n) {
 
 /*        Use unblocked code. */
@@ -118,6 +102,7 @@ static real c_b14 = 1.f;
     } else {
 
 /*        Use blocked code. */
+
 	if (upper) {
 
 /*           Compute the Cholesky factorization A = U'*U. */
@@ -131,15 +116,9 @@ static real c_b14 = 1.f;
 
 /* Computing MIN */
 		i__3 = nb, i__4 = *n - j + 1;
-		jb = fla_min(i__3,i__4);
+		jb = min(i__3,i__4);
 		i__3 = j - 1;
-		#if AOCL_FLA_PROGRESS_H
-		    if(aocl_fla_progress_ptr){
-                	progress_step_count+=jb;
-                	AOCL_FLA_PROGRESS_FUNC_PTR("SPOTRF",6,&progress_step_count,&progress_thread_id,&progress_total_threads);
-            	    }
-        	#endif 
-		aocl_blas_ssyrk("Upper", "Transpose", &jb, &i__3, &c_b13, &a[j *
+		ssyrk_("Upper", "Transpose", &jb, &i__3, &c_b13, &a[j *
 			a_dim1 + 1], lda, &c_b14, &a[j + j * a_dim1], lda);
 		lapack_spotf2("Upper", &jb, &a[j + j * a_dim1], lda, info);
 		if (*info != 0) {
@@ -151,12 +130,12 @@ static real c_b14 = 1.f;
 
 		    i__3 = *n - j - jb + 1;
 		    i__4 = j - 1;
-		    aocl_blas_sgemm("Transpose", "No transpose", &jb, &i__3, &i__4, &
+		    sgemm_("Transpose", "No transpose", &jb, &i__3, &i__4, &
 			    c_b13, &a[j * a_dim1 + 1], lda, &a[(j + jb) *
 			    a_dim1 + 1], lda, &c_b14, &a[j + (j + jb) *
 			    a_dim1], lda);
 		    i__3 = *n - j - jb + 1;
-		    aocl_blas_strsm("Left", "Upper", "Transpose", "Non-unit", &jb, &
+		    strsm_("Left", "Upper", "Transpose", "Non-unit", &jb, &
 			    i__3, &c_b14, &a[j + j * a_dim1], lda, &a[j + (j
 			    + jb) * a_dim1], lda);
 		}
@@ -176,15 +155,9 @@ static real c_b14 = 1.f;
 
 /* Computing MIN */
 		i__3 = nb, i__4 = *n - j + 1;
-		jb = fla_min(i__3,i__4);
+		jb = min(i__3,i__4);
 		i__3 = j - 1;
-		#if AOCL_FLA_PROGRESS_H
-		    if(aocl_fla_progress_ptr){
-                	progress_step_count+=jb;
-                	AOCL_FLA_PROGRESS_FUNC_PTR("SPOTRF",6,&progress_step_count,&progress_thread_id,&progress_total_threads);
-                    }
-                #endif
-		aocl_blas_ssyrk("Lower", "No transpose", &jb, &i__3, &c_b13, &a[j +
+		ssyrk_("Lower", "No transpose", &jb, &i__3, &c_b13, &a[j +
 			a_dim1], lda, &c_b14, &a[j + j * a_dim1], lda);
 		lapack_spotf2("Lower", &jb, &a[j + j * a_dim1], lda, info);
 		if (*info != 0) {
@@ -196,11 +169,11 @@ static real c_b14 = 1.f;
 
 		    i__3 = *n - j - jb + 1;
 		    i__4 = j - 1;
-		    aocl_blas_sgemm("No transpose", "Transpose", &i__3, &jb, &i__4, &
+		    sgemm_("No transpose", "Transpose", &i__3, &jb, &i__4, &
 			    c_b13, &a[j + jb + a_dim1], lda, &a[j + a_dim1],
 			    lda, &c_b14, &a[j + jb + j * a_dim1], lda);
 		    i__3 = *n - j - jb + 1;
-		    aocl_blas_strsm("Right", "Lower", "Transpose", "Non-unit", &i__3, &
+		    strsm_("Right", "Lower", "Transpose", "Non-unit", &i__3, &
 			    jb, &c_b14, &a[j + j * a_dim1], lda, &a[j + jb +
 			    j * a_dim1], lda);
 		}

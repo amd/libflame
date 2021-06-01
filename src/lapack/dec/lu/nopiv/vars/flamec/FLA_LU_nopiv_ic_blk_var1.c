@@ -1,21 +1,20 @@
 /*
- *  Copyright (c) 2021-2025 Advanced Micro Devices, Inc. All rights reserved.
+ *  Copyright (c) 2021 Advanced Micro Devices, Inc. All rights reserved.
  * */
 
 #include "FLAME.h"
 
-FLA_Error FLA_LU_nopiv_ic_blk_var1( fla_dim_t m_A, fla_dim_t n_A,FLA_Obj A, scomplex* buff_A, fla_dim_t nfact, fla_dim_t rs_A, fla_dim_t cs_A )
+FLA_Error FLA_LU_nopiv_ic_blk_var1( integer m_A, integer n_A,FLA_Obj A, scomplex* buff_A, integer nfact, integer rs_A, integer cs_A )
 {
 
-  void* FLA_memset( void* str, fla_dim_t c, fla_dim_t len );
   scomplex* copy_A = (scomplex*)FLA_malloc(m_A*n_A*sizeof(scomplex));
   FLA_memset(copy_A,0,sizeof(copy_A));
 
-  for(fla_dim_t i=0;i<nfact;i++)
+  for(integer i=0;i<nfact;i++)
   {
-    for(fla_dim_t j=0;j<nfact;j++)
+    for(integer j=0;j<nfact;j++)
     {
-      *(copy_A+i+j*m_A) = *(buff_A+i+j*cs_A);
+      *(copy_A+i+j*cs_A) = *(buff_A+i+j*cs_A);
     }
   }
 
@@ -38,15 +37,14 @@ FLA_Error FLA_LU_nopiv_ic_blk_var1( fla_dim_t m_A, fla_dim_t n_A,FLA_Obj A, scom
   e_val = FLA_LU_nopiv( ATL );                                             // Singular check, returns e_val = (i) where i is index on diagonal where value is 0
   if( e_val != FLA_SUCCESS )
   {
-    for(fla_dim_t i=0;i<nfact;i++)
+    for(integer i=0;i<nfact;i++)
     {
-      for(fla_dim_t j=0;j<nfact;j++)
+      for(integer j=0;j<nfact;j++)
       {
-        *(buff_A+i+j*cs_A) = *(copy_A+i+j*m_A);
+        *(buff_A+i+j*cs_A) = *(copy_A+i+j*cs_A);
       }
     }
     FLA_LU_nopiv_ic_unblk_var1(m_A,n_A,buff_A,e_val,rs_A,cs_A);            //restore original matrix and use unblocked variant 1 to recover last valid state$
-    FLA_free(copy_A);
     return e_val;
   }
 

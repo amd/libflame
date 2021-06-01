@@ -108,7 +108,7 @@ FLA_Bool FLA_Memory_leak_counter_set( FLA_Bool new_status )
 
  *************************************************************************** */
 
-void* FLA_memset( void* str, fla_dim_t c, fla_dim_t len )                               // The memalign perf issue will not come here because we are taking void* (casting is expensive)
+void* FLA_memset( void* str, integer c, uinteger len )                               // The memalign perf issue will not come here because we are taking void* (casting is expensive)
 {
   unsigned char* ptr = str;
   while( len-- )

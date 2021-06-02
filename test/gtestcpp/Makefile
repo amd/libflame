@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright (C) 2021-2022, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2021, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 
 #
@@ -19,12 +19,13 @@
 BUILD_DIR       := ../../build
 CONFIG_DIR      := ../../config
 LIB_DIR         := ../../lib
-INCLUDE_DIR     := ../../src/aocl_dtl -I../../include/x86_64-unknown-linux-gnu -I../../config/x86_64-unknown-linux-gnu
+INCLUDE_DIR     := ../../src/aocl_dtl -I../../windows/include -I../../config/x86_64-unknown-linux-gnu
 SRC_PATH        := ../../src
 HOST            := $(shell sh $(BUILD_DIR)/ac-utils/config.guess)
 CONFIG_MK_FILE  := $(CONFIG_DIR)/$(HOST)/config.mk
 LIB_PATH        := $(LIB_DIR)/$(HOST)
 INC_PATH        := $(INCLUDE_DIR)
+
 
 # Include the definitions in the config makefile fragment.
 -include $(CONFIG_MK_FILE)
@@ -56,58 +57,8 @@ LIBBLAS        := $(LIBBLAS_PATH)/libblis-mt.a
 LIBLAPACK      :=
 
 all: libflame
-
-libflame: libflame_geqrf.x 
-#libflame_hbev.x \
-#libflame_hbev_2stage.x \
-#libflame_hbevd.x \
-#libflame_hbevd_2stage.x \
-#libflame_hbevx.x \
-#libflame_hbevx_2stage.x \
-#libflame_hbgst.x \
-#libflame_hbgv.x \
-#libflame_hbgvd.x \
-#libflame_hbgvx.x \
-#libflame_hbtrd.x \
-#libflame_heequb.x \
-#libflame_heev.x \
-#libflame_heev_2stage.x \
-#libflame_heevd.x \
-#libflame_heevd_2stage.x \
-#libflame_heevr.x \
-#libflame_heevr_2stage.x \
-#libflame_heevx.x \
-#libflame_heevx_2stage.x \
-#libflame_hegs2.x \
-#libflame_hegst.x \
-#libflame_hegv.x \
-#libflame_hegv_2stage.x \
-#libflame_hegvd.x \
-#libflame_hegvx.x \
-#libflame_hesv.x \
-#libflame_hesv_aa.x \
-#libflame_hesv_aa_2stage.x \
-#libflame_hesv_rk.x \
-#libflame_hesv_rook.x \
-#libflame_heswapr.x \
-#libflame_hetd2.x \
-#libflame_hetf2.x \
-#libflame_hetf2_rk.x \
-#libflame_hetf2_rook.x \
-#libflame_hetrd.x \
-#libflame_hetrd_2stage.x \
-#libflame_hetrd_hb2st.x \
-#libflame_hetrd_he2hb.x \
-#libflame_getrf.x \
-#libflame_getrs.x \
-#libflame_gecon.x \
-#libflame_getri.x \
-#libflame_potrf.x \
-#libflame_potrs.x \
-#libflame_pocon.x \
-#libflame_lansy.x \
-#libflame_lange.x \
-#libflame_geqp3.x
+libflame: libflame_hbev.x \
+libflame_hbevx.x
 
 # --- General build definitions ------------------------------------------------
 #

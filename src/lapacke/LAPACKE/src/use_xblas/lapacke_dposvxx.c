@@ -28,6 +28,7 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dposvxx
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"

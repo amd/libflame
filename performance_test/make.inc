@@ -13,28 +13,21 @@ CC = gcc
 #CFLAGS = -O0 -g
 CFLAGS = -O3
 
-#  GTEST Related build variablesi
-# Provide Google test install folder path for 'GTESTDIR'
-GTESTDIR=
-GTESTLIBDIR=$(GTESTDIR)/lib
-GTESTINC=$(GTESTDIR)/include
+#  GTEST Related build variables
+GTESTDIR=/home/amd/nagendra/softwares/GoogleTest/googletest-master/Gtest_Install
+GTESTLIBDIR=$(GTESTDIR)/lib64
+GTESTINC=$(GTESTDIR)/include  
 GTESTLIB=$(GTESTLIBDIR)/libgtest.a $(GTESTLIBDIR)/libgtest_main.a
 
 #  GBENCH Related build variables
-# Provide Google bench install folder path for 'GBENCHDIR'
-GBENCHDIR=
-GBENCHLIBDIR=$(GBENCHDIR)/lib
+GBENCHDIR=/home/amd/nagendra/softwares/Google_Bench/benchmark-main/Gbench_Install
+GBENCHLIBDIR=$(GBENCHDIR)/lib64
 GBENCHINC=$(GBENCHDIR)/include
 GBENCHLIB=$(GBENCHLIBDIR)/libbenchmark.a $(GBENCHLIBDIR)/libbenchmark_main.a
 
-# LAPACK/ libFlame install folder path
-# Provide Libflame install folder path for 'LAPACKINS'
-LAPACKINS    =
-LAPACKINC    =$(LAPACKINS)/include
-
 CXX = g++
-CXXFLAGS = -O3  -Wall -Wno-comment -fopenmp -I$(GTESTINC) -I$(GBENCHINC) -I../include/ -I$(LAPACKINC)
-#CXXFLAGS = -O0 -g  -Wall -Wno-comment -fopenmp -I$(GTESTINC) -I$(GBENCHINC) -I../include/ -I$(LAPACKINC)
+#CXXFLAGS = -O3  -Wall -Wno-comment -fopenmp -I$(GTESTINC) -I$(GBENCHINC) -I../include/
+CXXFLAGS = -O0 -g  -Wall -Wno-comment -fopenmp -I$(GTESTINC) -I$(GBENCHINC) -I../include/
 
 #  Modify the FC and FFLAGS definitions to the desired compiler
 #  and desired compiler options for your machine.  NOOPT refers to
@@ -101,11 +94,13 @@ TIMER = INT_ETIME
 #
 
 #BLASLIB      = $(TOPSRCDIR)/librefblas.a
-BLASLIB      =
+BLASLIB      = /home/amd/nagendra/work/LibFlame/LibFlame_perf_test/blis/Blis_GCC_Install/lib/libblis.a
 
 #CBLASLIB     = $(TOPSRCDIR)/libcblas.a
-LAPACKLIB    =$(LAPACKINS)/lib/libflame.a
+LAPACKLIB    =/home/amd/nagendra/work/LibFlame/LibFlame_perf_test/LF_3p1/libflame/libflame_gcc_install/lib/libflame.a
+
 
 #TMGLIB       = $(TOPSRCDIR)/libtmglib.a
+#TMGLIB       = /home/nagendra/Netlib_ref_libs/lapack-3.9.0/libtmglib.a
 
 

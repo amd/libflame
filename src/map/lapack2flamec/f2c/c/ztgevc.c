@@ -761,11 +761,11 @@ void aocl_lapack_ztgevc(char *side, char *howmny, logical *select, aocl_int64_t 
                         }
                     }
                     i__3 = j;
-                    z__2.real = -sum.real;
-                    z__2.imag = -sum.imag; // , expr subst
+                    z__2.r = -sum.r;
+                    z__2.i = -sum.i; // , expr subst
                     zladiv_f2c_(&z__1, &z__2, &d__);
-                    work[i__3].real = z__1.real;
-                    work[i__3].imag = z__1.imag; // , expr subst
+                    work[i__3].r = z__1.r;
+                    work[i__3].i = z__1.i; // , expr subst
                     /* Computing MAX */
                     i__3 = j;
                     d__3 = xmax;
@@ -1024,12 +1024,12 @@ void aocl_lapack_ztgevc(char *side, char *howmny, logical *select, aocl_int64_t 
                     }
                     i__1 = j;
                     i__2 = j;
-                    z__2.real = -work[i__2].real;
-                    z__2.imag = -work[i__2].imag; // , expr subst
+                    z__2.r = -work[i__2].r;
+                    z__2.i = -work[i__2].i; // , expr subst
                     zladiv_f2c_(&z__1, &z__2, &d__);
-                    work[i__1].real = z__1.real;
-                    work[i__1].imag = z__1.imag; // , expr subst
-                    if(j > 1)
+                    work[i__1].r = z__1.r;
+                    work[i__1].i = z__1.i; // , expr subst
+                    if (j > 1)
                     {
                         /* w = w + x(j)*(a S(*,j) - b P(*,j) ) with scaling */
                         i__1 = j;

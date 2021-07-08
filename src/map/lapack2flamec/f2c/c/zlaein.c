@@ -297,8 +297,8 @@ void aocl_lapack_zlaein(logical *rightv, logical *noinit, aocl_int64_t *n, dcomp
             {
                 /* Interchange rows and eliminate. */
                 zladiv_f2c_(&z__1, &b[i__ + i__ * b_dim1], &ei);
-                x.real = z__1.real;
-                x.imag = z__1.imag; // , expr subst
+                x.r = z__1.r;
+                x.i = z__1.i; // , expr subst
                 i__2 = i__ + i__ * b_dim1;
                 b[i__2].real = ei.real;
                 b[i__2].imag = ei.imag; // , expr subst
@@ -333,9 +333,9 @@ void aocl_lapack_zlaein(logical *rightv, logical *noinit, aocl_int64_t *n, dcomp
                     b[i__3].imag = 0.; // , expr subst
                 }
                 zladiv_f2c_(&z__1, &ei, &b[i__ + i__ * b_dim1]);
-                x.real = z__1.real;
-                x.imag = z__1.imag; // , expr subst
-                if(x.real != 0. || x.imag != 0.)
+                x.r = z__1.r;
+                x.i = z__1.i; // , expr subst
+                if (x.r != 0. || x.i != 0.)
                 {
                     i__2 = *n;
                     for(j = i__ + 1; j <= i__2; ++j)
@@ -378,8 +378,8 @@ void aocl_lapack_zlaein(logical *rightv, logical *noinit, aocl_int64_t *n, dcomp
             {
                 /* Interchange columns and eliminate. */
                 zladiv_f2c_(&z__1, &b[j + j * b_dim1], &ej);
-                x.real = z__1.real;
-                x.imag = z__1.imag; // , expr subst
+                x.r = z__1.r;
+                x.i = z__1.i; // , expr subst
                 i__1 = j + j * b_dim1;
                 b[i__1].real = ej.real;
                 b[i__1].imag = ej.imag; // , expr subst
@@ -414,9 +414,9 @@ void aocl_lapack_zlaein(logical *rightv, logical *noinit, aocl_int64_t *n, dcomp
                     b[i__2].imag = 0.; // , expr subst
                 }
                 zladiv_f2c_(&z__1, &ej, &b[j + j * b_dim1]);
-                x.real = z__1.real;
-                x.imag = z__1.imag; // , expr subst
-                if(x.real != 0. || x.imag != 0.)
+                x.r = z__1.r;
+                x.i = z__1.i; // , expr subst
+                if (x.r != 0. || x.i != 0.)
                 {
                     i__1 = j - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)

@@ -781,8 +781,8 @@ void aocl_lapack_clatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     }
                     i__3 = j;
                     cladiv_f2c_(&q__1, &x[j], &tjjs);
-                    x[i__3].real = q__1.real;
-                    x[i__3].imag = q__1.imag; // , expr subst
+                    x[i__3].r = q__1.r;
+                    x[i__3].i = q__1.i; // , expr subst
                     i__3 = j;
                     xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]) , f2c_abs(r__2));
                 }
@@ -806,8 +806,8 @@ void aocl_lapack_clatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     }
                     i__3 = j;
                     cladiv_f2c_(&q__1, &x[j], &tjjs);
-                    x[i__3].real = q__1.real;
-                    x[i__3].imag = q__1.imag; // , expr subst
+                    x[i__3].r = q__1.r;
+                    x[i__3].i = q__1.i; // , expr subst
                     i__3 = j;
                     xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]) , f2c_abs(r__2));
                 }
@@ -929,10 +929,10 @@ void aocl_lapack_clatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         /* Computing MIN */
                         r__1 = 1.f;
                         r__2 = rec * tjj; // , expr subst
-                        rec = fla_min(r__1, r__2);
+                        rec = min(r__1,r__2);
                         cladiv_f2c_(&q__1, &uscal, &tjjs);
-                        uscal.real = q__1.real;
-                        uscal.imag = q__1.imag; // , expr subst
+                        uscal.r = q__1.r;
+                        uscal.i = q__1.i; // , expr subst
                     }
                     if(rec < 1.f)
                     {
@@ -1051,8 +1051,8 @@ void aocl_lapack_clatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         }
                         i__3 = j;
                         cladiv_f2c_(&q__1, &x[j], &tjjs);
-                        x[i__3].real = q__1.real;
-                        x[i__3].imag = q__1.imag; // , expr subst
+                        x[i__3].r = q__1.r;
+                        x[i__3].i = q__1.i; // , expr subst
                     }
                     else if(tjj > 0.f)
                     {
@@ -1067,8 +1067,8 @@ void aocl_lapack_clatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         }
                         i__3 = j;
                         cladiv_f2c_(&q__1, &x[j], &tjjs);
-                        x[i__3].real = q__1.real;
-                        x[i__3].imag = q__1.imag; // , expr subst
+                        x[i__3].r = q__1.r;
+                        x[i__3].i = q__1.i; // , expr subst
                     }
                     else
                     {
@@ -1096,10 +1096,10 @@ void aocl_lapack_clatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     /* product has already been divided by 1/A(j,j). */
                     i__3 = j;
                     cladiv_f2c_(&q__2, &x[j], &tjjs);
-                    q__1.real = q__2.real - csumj.real;
-                    q__1.imag = q__2.imag - csumj.imag; // , expr subst
-                    x[i__3].real = q__1.real;
-                    x[i__3].imag = q__1.imag; // , expr subst
+                    q__1.r = q__2.r - csumj.r;
+                    q__1.i = q__2.i - csumj.i; // , expr subst
+                    x[i__3].r = q__1.r;
+                    x[i__3].i = q__1.i; // , expr subst
                 }
                 /* Computing MAX */
                 i__3 = j;
@@ -1147,10 +1147,10 @@ void aocl_lapack_clatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         /* Computing MIN */
                         r__1 = 1.f;
                         r__2 = rec * tjj; // , expr subst
-                        rec = fla_min(r__1, r__2);
+                        rec = min(r__1,r__2);
                         cladiv_f2c_(&q__1, &uscal, &tjjs);
-                        uscal.real = q__1.real;
-                        uscal.imag = q__1.imag; // , expr subst
+                        uscal.r = q__1.r;
+                        uscal.i = q__1.i; // , expr subst
                     }
                     if(rec < 1.f)
                     {
@@ -1269,8 +1269,8 @@ void aocl_lapack_clatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         }
                         i__3 = j;
                         cladiv_f2c_(&q__1, &x[j], &tjjs);
-                        x[i__3].real = q__1.real;
-                        x[i__3].imag = q__1.imag; // , expr subst
+                        x[i__3].r = q__1.r;
+                        x[i__3].i = q__1.i; // , expr subst
                     }
                     else if(tjj > 0.f)
                     {
@@ -1285,8 +1285,8 @@ void aocl_lapack_clatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         }
                         i__3 = j;
                         cladiv_f2c_(&q__1, &x[j], &tjjs);
-                        x[i__3].real = q__1.real;
-                        x[i__3].imag = q__1.imag; // , expr subst
+                        x[i__3].r = q__1.r;
+                        x[i__3].i = q__1.i; // , expr subst
                     }
                     else
                     {
@@ -1314,10 +1314,10 @@ void aocl_lapack_clatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     /* product has already been divided by 1/A(j,j). */
                     i__3 = j;
                     cladiv_f2c_(&q__2, &x[j], &tjjs);
-                    q__1.real = q__2.real - csumj.real;
-                    q__1.imag = q__2.imag - csumj.imag; // , expr subst
-                    x[i__3].real = q__1.real;
-                    x[i__3].imag = q__1.imag; // , expr subst
+                    q__1.r = q__2.r - csumj.r;
+                    q__1.i = q__2.i - csumj.i; // , expr subst
+                    x[i__3].r = q__1.r;
+                    x[i__3].i = q__1.i; // , expr subst
                 }
                 /* Computing MAX */
                 i__3 = j;

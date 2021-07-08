@@ -368,14 +368,14 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                         scaloc = 1. / db;
                     }
                 }
-                z__3.real = scaloc;
-                z__3.imag = 0.; // , expr subst
-                z__2.real = vec.real * z__3.real - vec.imag * z__3.imag;
-                z__2.imag = vec.real * z__3.imag + vec.imag * z__3.real; // , expr subst
+                z__3.r = scaloc;
+                z__3.i = 0.; // , expr subst
+                z__2.r = vec.r * z__3.r - vec.i * z__3.i;
+                z__2.i = vec.r * z__3.i + vec.i * z__3.r; // , expr subst
                 zladiv_f2c_(&z__1, &z__2, &a11);
-                x11.real = z__1.real;
-                x11.imag = z__1.imag; // , expr subst
-                if(scaloc != 1.)
+                x11.r = z__1.r;
+                x11.i = z__1.i; // , expr subst
+                if (scaloc != 1.)
                 {
                     i__2 = *n;
                     for(j = 1; j <= i__2; ++j)
@@ -451,14 +451,14 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                         scaloc = 1. / db;
                     }
                 }
-                z__3.real = scaloc;
-                z__3.imag = 0.; // , expr subst
-                z__2.real = vec.real * z__3.real - vec.imag * z__3.imag;
-                z__2.imag = vec.real * z__3.imag + vec.imag * z__3.real; // , expr subst
+                z__3.r = scaloc;
+                z__3.i = 0.; // , expr subst
+                z__2.r = vec.r * z__3.r - vec.i * z__3.i;
+                z__2.i = vec.r * z__3.i + vec.i * z__3.r; // , expr subst
                 zladiv_f2c_(&z__1, &z__2, &a11);
-                x11.real = z__1.real;
-                x11.imag = z__1.imag; // , expr subst
-                if(scaloc != 1.)
+                x11.r = z__1.r;
+                x11.i = z__1.i; // , expr subst
+                if (scaloc != 1.)
                 {
                     i__3 = *n;
                     for(j = 1; j <= i__3; ++j)
@@ -543,14 +543,14 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                         scaloc = 1. / db;
                     }
                 }
-                z__3.real = scaloc;
-                z__3.imag = 0.; // , expr subst
-                z__2.real = vec.real * z__3.real - vec.imag * z__3.imag;
-                z__2.imag = vec.real * z__3.imag + vec.imag * z__3.real; // , expr subst
+                z__3.r = scaloc;
+                z__3.i = 0.; // , expr subst
+                z__2.r = vec.r * z__3.r - vec.i * z__3.i;
+                z__2.i = vec.r * z__3.i + vec.i * z__3.r; // , expr subst
                 zladiv_f2c_(&z__1, &z__2, &a11);
-                x11.real = z__1.real;
-                x11.imag = z__1.imag; // , expr subst
-                if(scaloc != 1.)
+                x11.r = z__1.r;
+                x11.i = z__1.i; // , expr subst
+                if (scaloc != 1.)
                 {
                     i__2 = *n;
                     for(j = 1; j <= i__2; ++j)
@@ -635,14 +635,14 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                         scaloc = 1. / db;
                     }
                 }
-                z__3.real = scaloc;
-                z__3.imag = 0.; // , expr subst
-                z__2.real = vec.real * z__3.real - vec.imag * z__3.imag;
-                z__2.imag = vec.real * z__3.imag + vec.imag * z__3.real; // , expr subst
+                z__3.r = scaloc;
+                z__3.i = 0.; // , expr subst
+                z__2.r = vec.r * z__3.r - vec.i * z__3.i;
+                z__2.i = vec.r * z__3.i + vec.i * z__3.r; // , expr subst
                 zladiv_f2c_(&z__1, &z__2, &a11);
-                x11.real = z__1.real;
-                x11.imag = z__1.imag; // , expr subst
-                if(scaloc != 1.)
+                x11.r = z__1.r;
+                x11.i = z__1.i; // , expr subst
+                if (scaloc != 1.)
                 {
                     i__1 = *n;
                     for(j = 1; j <= i__1; ++j)

@@ -63,7 +63,7 @@
 /* ===================================================================== */
 /* Double Complex */
 #ifdef FLA_ENABLE_VOID_RETURN_COMPLEX_FUNCTION
-void zladiv_(dcomplex *ret_val, dcomplex *x, dcomplex *y)
+VOID zladiv_(doublecomplex * ret_val, doublecomplex *x, doublecomplex *y)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
@@ -101,17 +101,17 @@ void zladiv_(dcomplex *ret_val, dcomplex *x, dcomplex *y)
     /* End of ZLADIV */
 }
 #else
-dcomplex zladiv_(dcomplex *x, dcomplex *y)
+doublecomplex zladiv_(doublecomplex *x, doublecomplex *y)
 {
-    AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
     doublereal d__1, d__2, d__3, d__4;
-    dcomplex z__1;
+    doublecomplex z__1;
+    /* Builtin functions */
+    double d_imag(doublecomplex *);
     /* Local variables */
     doublereal zi, zr;
     extern /* Subroutine */
-        void
-        dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    int dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -126,26 +126,25 @@ dcomplex zladiv_(dcomplex *x, dcomplex *y)
     /* .. Intrinsic Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    d__1 = x->real;
-    d__2 = x->imag;
-    d__3 = y->real;
-    d__4 = y->imag;
+    d__1 = x->r;
+    d__2 = d_imag(x);
+    d__3 = y->r;
+    d__4 = d_imag(y);
     dladiv_(&d__1, &d__2, &d__3, &d__4, &zr, &zi);
-    z__1.real = zr;
-    z__1.imag = zi; // , expr subst
-    // ret_val->real = z__1.real, ret_val->imag = z__1.imag;
-    AOCL_DTL_TRACE_EXIT_INDENT
+    z__1.r = zr;
+    z__1.i = zi; // , expr subst
+    //ret_val->r = z__1.r, ret_val->i = z__1.i;
     return z__1;
     /* End of ZLADIV */
 }
 
 #endif
 
-void zladiv_f2c_(dcomplex *ret_val, dcomplex *x, dcomplex *y)
+void zladiv_f2c_(doublecomplex *ret_val, doublecomplex *x, doublecomplex *y)
 {
 
 #ifdef FLA_ENABLE_VOID_RETURN_COMPLEX_FUNCTION
-    zladiv_(ret_val, x, y);
+    zladiv_(ret_val, x, y);    
 #else
     *ret_val = zladiv_(x, y);
 #endif

@@ -58,6 +58,60 @@ extern void DTL_Trace(
 
 #ifndef FLA_ENABLE_MULTITHREADING
 
+#if FLA_AMD_OPT /* FLA_AMD_OPT */
+
+/* FLA_AMD_OPT enables the code which selects algorithm variants based on size */
+#define LAPACK_getrf_body_d(prefix)                                                    \
+  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                                        \
+  if( *m <= FLA_DGETRF_SMALL_THRESH0 && *n <= FLA_DGETRF_SMALL_THRESH0 )               \
+  {                                                                                    \
+    FLA_LU_piv_small_d_var0( m, n, buff_A, ldim_A, buff_p, info );                     \
+  }                                                                                    \
+  else if( *m < FLA_DGETRF_SMALL_THRESH1 && *n < FLA_DGETRF_SMALL_THRESH1 )            \
+  {                                                                                    \
+    FLA_LU_piv_small_d_var1( m, n, buff_A, ldim_A, buff_p, info );                     \
+  }                                                                                    \
+  else                                                                                 \
+  {                                                                                    \
+    dgetrf2_( m, n, buff_A, ldim_A, buff_p, info);                                     \
+  }                                                                                    \
+  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                                         \
+  return 0;
+
+#else /* FLA_AMD_OPT */
+
+/* Original FLA path */
+#define LAPACK_getrf_body_d(prefix)                                                    \
+  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                                        \
+  FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                               \
+  FLA_Obj      A, p;                                                                   \
+  integer      min_m_n    = min( *m, *n );                                             \
+  FLA_Error    e_val = FLA_SUCCESS;                                                    \
+  FLA_Error    init_result;                                                            \
+  FLA_Bool skip = FALSE;                                                               \
+                                                                                       \
+  FLA_Init_safe( &init_result );                                                       \
+                                                                                       \
+  FLA_Obj_create_without_buffer( datatype, *m, *n, &A );                               \
+  FLA_Obj_attach_buffer( buff_A, 1, *ldim_A, &A );                                     \
+                                                                                       \
+  FLA_Obj_create_without_buffer( FLA_INT, min_m_n, 1, &p );                            \
+  FLA_Obj_attach_buffer( buff_p, 1, min_m_n, &p );                                     \
+                                                                                       \
+  e_val = FLA_LU_piv( A, p );                                                          \
+  FLA_Shift_pivots_to( FLA_LAPACK_PIVOTS, p );                                         \
+                                                                                       \
+  FLA_Obj_free_without_buffer( &A );                                                   \
+  FLA_Obj_free_without_buffer( &p );                                                   \
+                                                                                       \
+  FLA_Finalize_safe( init_result );                                                    \
+                                                                                       \
+  if ( e_val != FLA_SUCCESS ) *info = e_val + 1;                                       \
+  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                                         \
+  return 0;
+
+#endif /* FLA_AMD_OPT */
+
 // Note that p should be set zero.
 #define LAPACK_getrf_body(prefix)                               \
   AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                 \
@@ -75,8 +129,6 @@ extern void DTL_Trace(
     {                                                                                                               \
        case FLA_FLOAT:                                                                                              \
        { lapack_sgetrf( m, n, buff_A, ldim_A, buff_p, info); break; }                                               \
-       case FLA_DOUBLE:                                                                                             \
-       { lapack_dgetrf( m, n, buff_A, ldim_A, buff_p, info); break; }                                               \
        case FLA_COMPLEX:                                                                                            \
        { lapack_cgetrf( m, n, buff_A, ldim_A, buff_p, info); break; }                                               \
        case FLA_DOUBLE_COMPLEX:                                                                                     \
@@ -110,8 +162,6 @@ extern void DTL_Trace(
     {                                                                                  \
        case FLA_FLOAT:                                                                 \
        { sgetrf2_( m, n, buff_A, ldim_A, buff_p, info); break; }                       \
-       case FLA_DOUBLE:                                                                \
-       { dgetrf2_( m, n, buff_A, ldim_A, buff_p, info); break; }                       \
        case FLA_COMPLEX:                                                               \
        { cgetrf2_( m, n, buff_A, ldim_A, buff_p, info); break; }                       \
        case FLA_DOUBLE_COMPLEX:                                                        \
@@ -208,9 +258,6 @@ LAPACK_getrf(d)
     if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_getrf_body_d(d)
-            /* fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;
@@ -303,9 +350,6 @@ LAPACK_getf2(d)
     if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_getrf_body_d(d)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

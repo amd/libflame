@@ -3,7 +3,7 @@
 *******************************************************************************/
 
 /*! @file libflame_hbev.cc
- *  libflame_hbev.cc Test application to validate CPP template interface.
+ *  @brief Test application to validate hbev() using CPP template interface.
  *  */
 
 #include <gtest/gtest.h>
@@ -51,26 +51,23 @@ double hbev_test(int ip)
           = 'N':  Compute eigenvalues only;
           = 'V':  Compute eigenvalues and eigenvectors.*/
   char jobz = eig_paramslist[ip].jobz;
-  
   if ((jobz != 'N') && (jobz != 'V')) {
-    printf("jobz should be N or V. Please correct the input data.");
+    PRINTF("jobz should be N or V. Please correct the input data.");
   }
   
   /* UPLO is CHARACTER*1
           = 'U':  Upper triangle of A is stored;
           = 'L':  Lower triangle of A is stored.*/
   char uplo = eig_paramslist[ip].uplo;
-  
   if ((uplo != 'U') && (uplo != 'L')) {
-    printf("jobz should be N or V. Please correct the input data.");
+    PRINTF("jobz should be N or V. Please correct the input data.");
   }
   
   /* N is INTEGER
           The order of the matrix A.  N >= 0.*/
   int n = eig_paramslist[ip].n;
-  
   if (n < 0) {
-    printf("n < 0 but should be: n >= 0. Please correct the input data.");
+    PRINTF("n < 0 but should be: n >= 0. Please correct the input data.");
   }
   
   /* KD is INTEGER
@@ -82,23 +79,20 @@ double hbev_test(int ip)
   } else if (uplo == 'L') {
     kd = eig_paramslist[ip].subda;
   }
-  
   if (kd < 0) {
-    printf("kd is 0 but should be: KD >= 0. Please correct the input data.");
+    PRINTF("kd is 0 but should be: KD >= 0. Please correct the input data.");
   }
   
   /* LDAB is INTEGER
           The leading dimension of the array AB.  LDAB >= KD + 1.*/
   int ldab = eig_paramslist[ip].ldab;
-  
   if (ldab < (kd+1)) {
-    printf("ldab < (kd+1) but it should be: LDAB >= KD + 1. Please correct" \
+    PRINTF("ldab < (kd+1) but it should be: LDAB >= KD + 1. Please correct" \
           " the input data.\n");
   }
   
   // AB is COMPLEX or COMPLEX*16 array, dimension (LDAB, N)
   T *abbuff = NULL, *abrefbuff = NULL;
-  
   allocate_init_buffer(abbuff, abrefbuff, ldab * n);
   
   /* W is REAL or DOUBLE PRECISION array, dimension (N)
@@ -110,14 +104,12 @@ double hbev_test(int ip)
           The leading dimension of the array Z.  LDZ >= 1, and if
           JOBZ = 'V', LDZ >= max(1,N).*/
   int ldz = eig_paramslist[ip].ldz;
-  
   if (ldz < 1) {
-    printf("ldz < 1 but it should be: ldz >= 1. Please correct the input" \
+    PRINTF("ldz < 1 but it should be: ldz >= 1. Please correct the input" \
           " data.\n");
   }
-  
   if ((jobz == 'V') && (ldz < max(1,n))) {
-    printf("When jobz is V, ldz < max(1,n) but it should be: ldz >= max(1,n)." \
+    PRINTF("When jobz is V, ldz < max(1,n) but it should be: ldz >= max(1,n)." \
           "Please correct the input data.\n");
   }
   
@@ -146,11 +138,12 @@ double hbev_test(int ip)
   } else if (typeid(T) == typeid(dcomplex)) {
     HBEV = (Fptr_NL_LAPACK_hbev)dlsym(lapackModule, "zhbev_");
   } else {
-	  printf("Invalid typename is passed to hbev_test function template.\n");
+	  PRINTF("Invalid typename is passed to %s() function template.\n",
+           __FUNCTION__);
   }
   
   if (HBEV == NULL) {
-    printf("Could not get the symbol. Exiting...\n");
+    PRINTF("Could not get the symbol. Exiting...\n");
 	  closelibs();
     exit(-1);
   }
@@ -160,7 +153,7 @@ double hbev_test(int ip)
       zrefbuff, &ldz, workrefbuff, rworkrefbuff, &info_ref);
 
   // Calculate the differences of buffers.
-  double diff = -1;
+  double diff = 0.0;
   if ((info_cpp == 0) && (info_ref == 0)) {
     diff = computeError<T>(ldab, n, abrefbuff, abbuff);
     diff += computeError<T>(ldz, n, zrefbuff, zbuff);
@@ -168,7 +161,7 @@ double hbev_test(int ip)
     diff += computeError<T>(1, n, workbuff, workrefbuff);
     diff += computeError<Ta>(1, max(1, 3*n-2), rworkbuff, rworkrefbuff);
   } else {
-    printf("Info returned by CPP or C API is not successful to compare" \
+    PRINTF("Info returned by CPP or C API is not successful(0) to compare" \
             " differences.\n");
   }
   
@@ -180,7 +173,7 @@ double hbev_test(int ip)
   delete[] rworkbuff; delete[] rworkrefbuff;
   
   // Return the difference.
-  return diff;
+  return abs(diff);
 }
 
 /* Use TEST macro and call C++ test function template with
@@ -188,8 +181,10 @@ double hbev_test(int ip)
 TEST(LAPACKCPP_hbev, CHBEV) {
   double diff = 0.0;
   for (short int index = 0; index < NUM_SUB_TESTS; index++) {
+    PRINTF("index: %d\n", index);
 	  diff = hbev_test<scomplex, float> (0);
     EXPECT_NEAR(0.0, diff, SYM_EIGEN_THRESHOLD);
+    PRINTF("diff: %lf\n", diff);
   }
 }
 
@@ -198,7 +193,9 @@ TEST(LAPACKCPP_hbev, CHBEV) {
 TEST(LAPACKCPP_hbev, ZHBEV) {
   double diff = 0.0;
   for (short int index = 0; index < NUM_SUB_TESTS; index++) {
+    PRINTF("index: %d\n", index);
     diff = hbev_test<dcomplex, double> (index);
     EXPECT_NEAR(0.0, diff, SYM_EIGEN_THRESHOLD);
+    PRINTF("diff: %lf\n", diff);
   }
 }

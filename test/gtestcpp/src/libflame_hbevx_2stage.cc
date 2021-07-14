@@ -22,36 +22,36 @@
 	  Ta can be float, double.
 	  
 	  hbevx_2stage_test() function template calls C and CPP based lbrary APIs with
-	  valid test values, calculate the differences in output if INFO is >= 0.
-    And passses the test case if difference is <= threshold.
-    Fails the test case if difference > threshold or INFO < 0.
+	  valid test values and returns the differences in output.
 	  
     Complex reference:
 	  http://www.netlib.org/lapack/explore-html/d9/d98/group__complex_o_t_h_e_reigen_gad8820f8a084e192bc6e3713b766a6cdd.html#gad8820f8a084e192bc6e3713b766a6cdd
 	  Complex double reference:
 	  http://www.netlib.org/lapack/explore-html/db/d61/group__complex16_o_t_h_e_reigen_ga42094c90148d11dd8eb7627231144c09.html#ga42094c90148d11dd8eb7627231144c09
+
     \endverbatim
 	
  * @param[in] IP
           IP is INTEGER
           Used to pass Index of Eigen Parameters array present in config file.
 
- * @return VOID
-           Nothing.
+ * @return DOUBLE
+          Returns differences value after comparing output of C and CPP based
+          library APIs.
  * */
 template<typename T, typename Ta>
-void hbevx_2stage_test(int ip)
+double hbevx_2stage_test(int ip)
 {
-  typedef integer (*fptr_NL_LAPACK_hbevx_2stage)(char* jobz, char* range,
+  typedef integer (*Fptr_NL_LAPACKE_hbevx_2stage)(char* jobz, char* range,
                   char* uplo, integer* n, integer* kd, T* ab, integer* ldab,
                   T* q, integer* ldq, Ta* vl, Ta* vu, integer* il, integer* iu,
                   Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work,
                   integer* lwork, Ta* rwork, integer* iwork, integer* ifail,
                   integer* info);
-  fptr_NL_LAPACK_hbevx_2stage hbevx_2stage_ref = NULL;
+  Fptr_NL_LAPACKE_hbevx_2stage HBEVX_2STAGE = NULL;
   
   // Initialise random number generators with timestamp
-  srand (SRAND_SEED_VALUE);
+  srand (time(NULL));
   
   /* JOBZ is CHARACTER*1
           = 'N':  Compute eigenvalues only;
@@ -120,11 +120,11 @@ void hbevx_2stage_test(int ip)
   
   /* LDQ is INTEGER
           The leading dimension of the array Q.  If JOBZ = 'V', then
-          LDQ >= fla_max(1,N).*/
+          LDQ >= max(1,N).*/
   integer ldq = eig_paramslist[ip].ldq;
   
-  if ((jobz == 'V') && (ldq < fla_max(1,n))) {
-    PRINTF("When jobz is V, ldz < fla_max(1,n) but it should be: ldz >= fla_max(1,n)" \
+  if ((jobz == 'V') && (ldq < max(1,n))) {
+    PRINTF("When jobz is V, ldz < max(1,n) but it should be: ldz >= max(1,n)" \
           ". Please correct the input data.\n");
   }
   
@@ -203,7 +203,7 @@ void hbevx_2stage_test(int ip)
   
   /*LDZ is INTEGER
           The leading dimension of the array Z.  LDZ >= 1, and if
-          JOBZ = 'V', LDZ >= fla_max(1,N).*/
+          JOBZ = 'V', LDZ >= max(1,N).*/
   integer ldz = eig_paramslist[ip].ldz;
   
   if (ldz < 1) {
@@ -211,12 +211,12 @@ void hbevx_2stage_test(int ip)
           " data.\n");
   }
   
-  if ((jobz == 'V') && (ldz < fla_max(1,n))) {
-    PRINTF("When jobz is V, ldz < fla_max(1,n) but it should be: ldz >= fla_max(1,n)" \
+  if ((jobz == 'V') && (ldz < max(1,n))) {
+    PRINTF("When jobz is V, ldz < max(1,n) but it should be: ldz >= max(1,n)" \
            ". Please correct the input data.\n");
   }
   
-  // Z is COMPLEX or COMPLEX*16 array, dimension (LDZ, fla_max(1,M))
+  // Z is COMPLEX or COMPLEX*16 array, dimension (LDZ, max(1,M))
   T *zbuff = NULL, *zrefbuff = NULL;
   allocate_init_buffer(zbuff, zrefbuff, ldz * (max(1, m)), 0);
   
@@ -262,98 +262,10 @@ void hbevx_2stage_test(int ip)
   // WORK is COMPLEX or COMPLEX*16  array, dimension (LWORK)
   T *workbuff = NULL, *workrefbuff = NULL;
   if (lwork_size > 0) {
-    allocate_init_buffer(workbuff, workrefbuff, lwork_size, 0);
+    allocate_init_buffer(workbuff, workrefbuff, lwork_size);
   } else {
     PRINTF("Incorrect LWORK size given/returned to allocate WORK buffer.\n");
   }
-  
-  // Print input values other than arrays.
-  #if (defined(PRINT_INPUT_VALUES) && (PRINT_INPUT_VALUES == 1))
-    PRINTF("\nPrinting all Input values other than array contents...\n");
-    PRINTF("jobz = %c\n", jobz);
-    PRINTF("range = %c\n", range);
-    PRINTF("uplo = %c\n", uplo);
-    PRINTF("n = %d\n", n);
-    PRINTF("kd = %d\n", kd);
-    PRINTF("ldab = %d\n", ldab);
-    PRINTF("Size of AB array (ldab*n) = %d\n", (ldab*n));
-    PRINTF("ldq = %d\n", ldq);
-    PRINTF("Size of Q array (ldq*n) = %d\n", ldq * n);
-    PRINTF("vl = %f\n", vl);
-    PRINTF("vu = %f\n", vu);
-    PRINTF("il = %d\n", il);
-    PRINTF("iu = %d\n", iu);
-    PRINTF("abstol = %f\n", abstol);
-    PRINTF("m = %d\n", m);
-    PRINTF("Size of W array (n) = %d\n", n);
-    PRINTF("ldz = %d\n", ldz);
-    PRINTF("Size of Z array (ldz*max(1,m)) = %d\n", (ldz * fla_max(1, m)));
-    PRINTF("Size of WORK array (LWORK)) = %d\n", lwork_size);
-    PRINTF("LWORK = %d\n", lwork_size);
-    PRINTF("Size of RWORK array (7*n) = %d\n", 7*n);
-    PRINTF("Size of IWORK array (5*n) = %d\n", 5*n);
-    PRINTF("Size of IFAIL array (n)) = %d\n", n);
-  #endif
-
-  #if (defined(PRINT_ARRAYS) && (PRINT_ARRAYS == 1))
-  // Array to store array name to print.
-  char arrayname[20] = "";
-  integer arraysize = sizeof(arrayname);
-  #endif
-  
-  #if (defined(PRINT_ARRAYS) && (PRINT_ARRAYS == 1) && \
-      defined(PRINT_INPUT_ARRAYS) && (PRINT_INPUT_ARRAYS == 1))
-    // Print all input arrays if PRINT_INPUT_ARRAYS macro is enabled
-    PRINTF("\nPrinting all Input arrays contents...\n");
-    
-    // Prints AB array contents
-    strncpy(arrayname, "AB input", arraysize);
-    print_array<T>(arrayname, abbuff, ldab * n);
-    strncpy(arrayname, "AB ref input", arraysize);
-    print_array<T>(arrayname, abrefbuff, ldab * n);
-    
-    // Prints Q array contents
-    strncpy(arrayname, "Q input", arraysize);
-    print_array<T>(arrayname, qbuff, ldq * n);
-    strncpy(arrayname, "Q ref input", arraysize);
-    print_array<T>(arrayname, qrefbuff, ldq * n);
-    
-    // Prints W array contents
-    strncpy(arrayname, "W input", arraysize);
-    print_array<Ta>(arrayname, wbuff, n);
-    strncpy(arrayname, "W ref input", arraysize);
-    print_array<Ta>(arrayname, wrefbuff, n);
-    
-    // Prints Z array contents
-    strncpy(arrayname, "Z input", arraysize);
-    print_array<T>(arrayname, zbuff, (ldz * fla_max(1, m)));
-    strncpy(arrayname, "Z ref input", arraysize);
-    print_array<T>(arrayname, zrefbuff, (ldz * fla_max(1, m)));
-    
-    // Prints WORK array contents
-    strncpy(arrayname, "WORK input", arraysize);
-    print_array<T>(arrayname, workbuff, lwork_size);
-    strncpy(arrayname, "WORK ref input", arraysize);
-    print_array<T>(arrayname, workrefbuff, lwork_size);
-    
-    // Prints RWORK array contents
-    strncpy(arrayname, "RWORK input", arraysize);
-    print_array<Ta>(arrayname, rworkbuff, 7 * n);
-    strncpy(arrayname, "RWORK ref input", arraysize);
-    print_array<Ta>(arrayname, rworkrefbuff, 7 * n);
-    
-    // Prints IWORK array contents
-    strncpy(arrayname, "IWORK input", arraysize);
-    print_array<integer>(arrayname, iworkbuff, 5 * n);
-    strncpy(arrayname, "IWORK ref input", arraysize);
-    print_array<integer>(arrayname, iworkrefbuff, 5 * n);
-    
-    // Prints IFAIL array contents
-    strncpy(arrayname, "IFAIL input", arraysize);
-    print_array<integer>(arrayname, ifail, n);
-    strncpy(arrayname, "IFAIL ref input", arraysize);
-    print_array<integer>(arrayname, ifailref, n);
-  #endif
   
   // Call CPP function
   info_cpp = -1;
@@ -366,105 +278,48 @@ void hbevx_2stage_test(int ip)
   /* Check the typename T passed to this function template and call respective
      function.*/
   if (typeid(T) == typeid(scomplex)) {
-    hbevx_2stage_ref = (fptr_NL_LAPACK_hbevx_2stage)dlsym(lapackModule,
+    HBEVX_2STAGE = (Fptr_NL_LAPACKE_hbevx_2stage)dlsym(lapackModule,
                               "chbevx_2stage_");
   } else if (typeid(T) == typeid(dcomplex)) {
-    hbevx_2stage_ref = (fptr_NL_LAPACK_hbevx_2stage)dlsym(lapackModule,
+    HBEVX_2STAGE = (Fptr_NL_LAPACKE_hbevx_2stage)dlsym(lapackModule,
                               "zhbevx_2stage_");
   } else {
 	  PRINTF("Invalid typename is passed to %s() function template.\n",
            __FUNCTION__);
   }
   
-  if (hbevx_2stage_ref == NULL) {
+  if (HBEVX_2STAGE == NULL) {
     PRINTF("Could not get the symbol. Exiting...\n");
 	  closelibs();
     exit(-1);
   }
   integer info_ref = -1;
   
-  hbevx_2stage_ref(&jobz, &range, &uplo, &n, &kd, abrefbuff, &ldab, qrefbuff,
+  HBEVX_2STAGE(&jobz, &range, &uplo, &n, &kd, abrefbuff, &ldab, qrefbuff,
         &ldq, &vl, &vu, &il, &iu, &abstol, &mref, wrefbuff, zrefbuff, &ldz,
         workrefbuff, &lwork_size, rworkrefbuff, iworkrefbuff, ifailref,
         &info_ref);
   PRINTF ("info_cpp: %d, info_ref: %d\n", info_cpp, info_ref);
+  PRINTF ("m: %d, mref: %d\n", m, mref);
   
   // Calculate the differences of buffers.
-  if ((info_cpp >= 0) && (info_ref >= 0)) {
-    #if (defined(PRINT_ARRAYS) && (PRINT_ARRAYS == 1) && \
-        defined(PRINT_OUTPUT_ARRAYS) && (PRINT_OUTPUT_ARRAYS == 1))
-      // Print all output arrays if PRINT_OUTPUT_ARRAYS macro is enabled
-      PRINTF("\nPrinting all Output arrays contents...\n");
-      // Prints AB array contents
-      strncpy(arrayname, "AB output", arraysize);
-      print_array<T>(arrayname, abbuff, ldab * n);
-      strncpy(arrayname, "AB ref output", arraysize);
-      print_array<T>(arrayname, abrefbuff, ldab * n);
-      
-      // Prints Q array contents
-      strncpy(arrayname, "Q output", arraysize);
-      print_array<T>(arrayname, qbuff, ldq * n);
-      strncpy(arrayname, "Q ref output", arraysize);
-      print_array<T>(arrayname, qrefbuff, ldq * n);
-      
-      // Prints M value after API call.
-      PRINTF("m = %d, mref = %d\n", m, mref);
-      
-      // Prints W array contents
-      strncpy(arrayname, "W output", arraysize);
-      print_array<Ta>(arrayname, wbuff, n);
-      strncpy(arrayname, "W ref output", arraysize);
-      print_array<Ta>(arrayname, wrefbuff, n);
-      
-      // Prints Z array contents
-      strncpy(arrayname, "Z output", arraysize);
-      print_array<T>(arrayname, zbuff, (ldz * fla_max(1, m)));
-      strncpy(arrayname, "Z ref output", arraysize);
-      print_array<T>(arrayname, zrefbuff, (ldz * fla_max(1, m)));
-      
-      // Prints WORK array contents
-      strncpy(arrayname, "WORK output", arraysize);
-      print_array<T>(arrayname, workbuff, lwork_size);
-      strncpy(arrayname, "WORK ref output", arraysize);
-      print_array<T>(arrayname, workrefbuff, lwork_size);
-      
-      // Prints RWORK array contents
-      strncpy(arrayname, "RWORK output", arraysize);
-      print_array<Ta>(arrayname, rworkbuff, 7 * n);
-      strncpy(arrayname, "RWORK ref output", arraysize);
-      print_array<Ta>(arrayname, rworkrefbuff, 7 * n);
-      
-      // Prints IWORK array contents
-      strncpy(arrayname, "IWORK output", arraysize);
-      print_array<integer>(arrayname, iworkbuff, 5 * n);
-      strncpy(arrayname, "IWORK ref output", arraysize);
-      print_array<integer>(arrayname, iworkrefbuff, 5 * n);
-      
-      // Prints IFAIL array contents
-      strncpy(arrayname, "IFAIL output", arraysize);
-      print_array<integer>(arrayname, ifail, n);
-      strncpy(arrayname, "IFAIL ref output", arraysize);
-      print_array<integer>(arrayname, ifailref, n);
-    #endif
-    
-    double diff = computeError<T>(ldab, n, abrefbuff, abbuff);
+  double diff = 0.0;
+  if ((info_cpp == 0) && (info_ref == 0)) {
+    diff = computeError<T>(ldab, n, abrefbuff, abbuff);
     if (jobz == 'V') {
       diff += computeError<T>(ldq, n, qrefbuff, qbuff);
       diff += computeError<integer>(1, n, ifailref, ifail);
-      diff += computeError<T>(ldz, fla_max(1, mtemp), zrefbuff, zbuff);
+      diff +=  computeError<T>(ldz, max(1, mtemp), zrefbuff, zbuff);
                   // Using mtemp, because m will be modified by lapacke func.
     }
     diff += computeError<integer>(1, 1, &mref, &m);
-    diff += computeError<Ta>(1, n, wrefbuff, wbuff);
+    diff +=  computeError<Ta>(1, n, wrefbuff, wbuff);
     diff += computeError<T>(1, lwork_size, workbuff, workrefbuff);
     diff += computeError<Ta>(7, n, rworkbuff, rworkrefbuff);
     diff += computeError<integer>(5, n, iworkbuff, iworkrefbuff);
-    PRINTF("diff: %lf\n", diff);
-    EXPECT_NEAR(0.0, abs(diff), SYM_EIGEN_THRESHOLD);
   } else {
     PRINTF("Info returned by CPP or C API is not successful to compare" \
             " differences.\n");
-    EXPECT_FALSE((info_cpp < 0) || (info_ref < 0));
   }
   
   // Free up the buffers
@@ -476,22 +331,31 @@ void hbevx_2stage_test(int ip)
   delete[] workbuff; delete[] workrefbuff;
   delete[] rworkbuff; delete[] rworkrefbuff;
   delete[] iworkbuff; delete[] iworkrefbuff;
+  
+  // Return the difference.
+  return abs(diff);
 }
 
 /* Use TEST macro and call C++ test function template with
    scomplex and float as typenames.*/
 TEST(LAPACKCPP_hbevx_2stage, CHBEVX_2STAGE) {
+  double diff = 0.0;
   for (short int index = 0; index < NUM_SUB_TESTS; index++) {
 	  PRINTF("index: %d\n", index);
-	  hbevx_2stage_test<scomplex, float> (index);
+	  diff = hbevx_2stage_test<scomplex, float> (index);
+    EXPECT_NEAR(0.0, diff, SYM_EIGEN_THRESHOLD);
+    PRINTF("diff: %lf\n", diff);
   }
 }
 
 /* Use TEST macro and call C++ test function template with
    dcomplex and double as typenames.*/
 TEST(LAPACKCPP_hbevx_2stage, ZHBEVX_2STAGE) {
+  double diff = 0.0;
   for (short int index = 0; index < NUM_SUB_TESTS; index++) {
     PRINTF("index: %d\n", index);
-    hbevx_2stage_test<dcomplex, double> (index);
+    diff = hbevx_2stage_test<dcomplex, double> (index);
+    EXPECT_NEAR(0.0, diff, SYM_EIGEN_THRESHOLD);
+    PRINTF("diff: %lf\n", diff);
   }
 }

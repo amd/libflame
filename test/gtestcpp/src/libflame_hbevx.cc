@@ -3,7 +3,7 @@
 *******************************************************************************/
 
 /*! @file libflame_hbevx.cc
- *  libflame_hbevx.cc Test application to validate CPP template interface
+ *  @brief Test application to validate hbevx() using CPP template interface.
  *  */
 
 #include <gtest/gtest.h>
@@ -55,9 +55,8 @@ double hbevx_test(int ip)
           = 'N':  Compute eigenvalues only;
           = 'V':  Compute eigenvalues and eigenvectors.*/
   char jobz = eig_paramslist[ip].jobz;
-  
   if ((jobz != 'N') && (jobz != 'V')) {
-    printf("jobz should be N or V. Please correct the input data.");
+    PRINTF("jobz should be N or V. Please correct the input data.");
   }
   
   /* RANGE is CHARACTER*1
@@ -66,26 +65,23 @@ double hbevx_test(int ip)
                  will be found;
           = 'I': the IL-th through IU-th eigenvalues will be found.*/
   char range = eig_paramslist[ip].range;
-  
   if ((range != 'A') && (range != 'V') && (range != 'I')) {
-    printf("range should be A or V or I. Please correct the input data.");
+    PRINTF("range should be A or V or I. Please correct the input data.");
   }
   
   /* UPLO is CHARACTER*1
           = 'U':  Upper triangle of A is stored;
           = 'L':  Lower triangle of A is stored.*/
   char uplo = eig_paramslist[ip].uplo;
-  
   if ((uplo != 'U') && (uplo != 'L')) {
-    printf("jobz should be N or V. Please correct the input data.");
+    PRINTF("jobz should be N or V. Please correct the input data.");
   }
   
   /* N is INTEGER
           The order of the matrix A.  N >= 0.*/
   integer n = eig_paramslist[ip].n;
-  
   if (n < 0) {
-    printf("n < 0 but should be: n >= 0. Please correct the input data.");
+    PRINTF("n < 0 but should be: n >= 0. Please correct the input data.");
   }
   
   /* KD is INTEGER
@@ -97,9 +93,8 @@ double hbevx_test(int ip)
   } else if (uplo == 'L') {
 	  kd = eig_paramslist[ip].subda;
   }
-
   if (kd < 0) {
-    printf("kd is 0 but should be: KD >= 0. Please correct the input data.");
+    PRINTF("kd is 0 but should be: KD >= 0. Please correct the input data.");
   }
   
   /* LDAB is INTEGER
@@ -107,7 +102,7 @@ double hbevx_test(int ip)
   integer ldab = eig_paramslist[ip].ldab;
   
   if (ldab < (kd+1)) {
-    printf("ldab < (kd+1) but it should be: LDAB >= KD + 1. Please correct" \
+    PRINTF("ldab < (kd+1) but it should be: LDAB >= KD + 1. Please correct" \
           " the input data.\n");
   }
   
@@ -121,8 +116,8 @@ double hbevx_test(int ip)
   integer ldq = eig_paramslist[ip].ldq;
   
   if ((jobz == 'V') && (ldq < max(1,n))) {
-    printf("When jobz is V, ldz < max(1,n) but it should be: ldz >= max(1,n)." \
-          "Please correct the input data.\n");
+    PRINTF("When jobz is V, ldz < max(1,n) but it should be: ldz >= max(1,n)" \
+          ". Please correct the input data.\n");
   }
   
   /* Q is COMPLEX or COMPLEX*16 array, dimension (LDQ, N)
@@ -145,7 +140,7 @@ double hbevx_test(int ip)
   Ta vu = (Ta)eig_paramslist[ip].vu;
   
   if ((range == 'V' )&& (vl > vu)) {
-    printf("vl > vu but it should be: vl < vu. Please correct the input data.");
+    PRINTF("vl > vu but it should be: vl < vu. Please correct the input data.");
   }
   
   /* IL is INTEGER
@@ -165,37 +160,18 @@ double hbevx_test(int ip)
   if (range == 'I' ) {
     if (n > 0) {
       if ((1 > il) || (il > iu) || (iu > n)) {
-        printf("if n > 0, then 1 <= il <= iu <= n is not satisfied. Please correct the input data.");
+        PRINTF("If n > 0, then 1 <= il <= iu <= n is not satisfied." \
+               " Please correct the input data.");
       }
     } else if (n = 0) {
       if ((il != 1) && (iu != 0)) {
-        printf ("If n = 0, then il = 1 and iu = 0. Please correct the input data.");
+        PRINTF("If n = 0, then il = 1 and iu = 0. Please correct the" \
+               " input data.");
       }
     }
   }
   
-  /* ABSTOL is REAL or DOUBLE PRECISION
-          The absolute error tolerance for the eigenvalues.
-          An approximate eigenvalue is accepted as converged
-          when it is determined to lie in an interval [a,b]
-          of width less than or equal to
-
-                  ABSTOL + EPS *   max( |a|,|b| ) ,
-
-          where EPS is the machine precision.  If ABSTOL is less than
-          or equal to zero, then  EPS*|T|  will be used in its place,
-          where |T| is the 1-norm of the tridiagonal matrix obtained
-          by reducing AB to tridiagonal form.
-
-          Eigenvalues will be computed most accurately when ABSTOL is
-          set to twice the underflow threshold 2*SLAMCH('S'), not zero.
-          If this routine returns with INFO>0, indicating that some
-          eigenvectors did not converge, try setting ABSTOL to
-          2*SLAMCH('S').
-
-          See "Computing Small Singular Values of Bidiagonal Matrices
-          with Guaranteed High Relative Accuracy," by Demmel and
-          Kahan, LAPACK Working Note #3.*/
+  // ABSTOL is REAL or DOUBLE PRECISION
   Ta abstol = eig_paramslist[ip].abstol;
   
   /* M is INTEGER
@@ -206,7 +182,7 @@ double hbevx_test(int ip)
   if (range == 'A') {
     m = mref = n;
   } else if (range == 'I') {
-    m = mref = iu-il+1;
+    m = mref = iu - il + 1;
   }
   integer mtemp = m; // For comparing Z buffer.
   
@@ -223,13 +199,13 @@ double hbevx_test(int ip)
   integer ldz = eig_paramslist[ip].ldz;
   
   if (ldz < 1) {
-    printf("ldz < 1 but it should be: ldz >= 1. Please correct the input" \
+    PRINTF("ldz < 1 but it should be: ldz >= 1. Please correct the input" \
           " data.\n");
   }
   
   if ((jobz == 'V') && (ldz < max(1,n))) {
-    printf("When jobz is V, ldz < max(1,n) but it should be: ldz >= max(1,n)." \
-          "Please correct the input data.\n");
+    PRINTF("When jobz is V, ldz < max(1,n) but it should be: ldz >= max(1,n)" \
+           ". Please correct the input data.\n");
   }
   
   // Z is COMPLEX or COMPLEX*16 array, dimension (LDZ, max(1,M))
@@ -267,11 +243,12 @@ double hbevx_test(int ip)
   } else if (typeid(T) == typeid(dcomplex)) {
     HBEVX = (Fptr_NL_LAPACKE_hbevx)dlsym(lapackModule, "zhbevx_");
   } else {
-	  printf("Invalid typename is passed to hbevx function template.\n");
+	  PRINTF("Invalid typename is passed to %s() function template.\n",
+           __FUNCTION__);
   }
   
   if (HBEVX == NULL) {
-    printf("Could not get the symbol. Exiting...\n");
+    PRINTF("Could not get the symbol. Exiting...\n");
 	  closelibs();
     exit(-1);
   }
@@ -296,7 +273,7 @@ double hbevx_test(int ip)
     diff += computeError<Ta>(7, n, rworkbuff, rworkrefbuff);
     diff += computeError<integer>(5, n, iworkbuff, iworkrefbuff);
   } else {
-    printf("Info returned by CPP or C API is not successful to compare" \
+    PRINTF("Info returned by CPP or C API is not successful to compare" \
             " differences.\n");
   }
   
@@ -311,7 +288,7 @@ double hbevx_test(int ip)
   delete[] iworkbuff; delete[] iworkrefbuff;
   
   // Return the difference.
-  return diff;
+  return abs(diff);
 }
 
 /* Use TEST macro and call C++ test function template with
@@ -319,8 +296,10 @@ double hbevx_test(int ip)
 TEST(LAPACKCPP_hbevx, CHBEVX) {
   double diff = 0.0;
   for (short int index = 0; index < NUM_SUB_TESTS; index++) {
+    PRINTF("index: %d\n", index);
 	  diff = hbevx_test<scomplex, float> (index);
     EXPECT_NEAR(0.0, diff, SYM_EIGEN_THRESHOLD);
+    PRINTF("diff: %lf\n", diff);
   }
 }
 
@@ -329,7 +308,9 @@ TEST(LAPACKCPP_hbevx, CHBEVX) {
 TEST(LAPACKCPP_hbevx, ZHBEVX) {
   double diff = 0.0;
   for (short int index = 0; index < NUM_SUB_TESTS; index++) {
+    PRINTF("index: %d\n", index);
     diff = hbevx_test<dcomplex, double> (index);
     EXPECT_NEAR(0.0, diff, SYM_EIGEN_THRESHOLD);
+    PRINTF("diff: %lf\n", diff);
   }
 }

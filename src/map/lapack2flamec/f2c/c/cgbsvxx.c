@@ -573,20 +573,12 @@ void cgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
               integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cgbsvxx inputs: fact %c, trans %c, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, "
-             "ldafb %lld, equed %c, ldb %lld, ldx %lld, n_err_bnds__ %lld, nparams %lld",
-             *fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx, *n_err_bnds__,
-             *nparams);
-#else
-    snprintf(buffer, 256,
-             "cgbsvxx inputs: fact %c, trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, "
-             "equed %c, ldb %d, ldx %d, n_err_bnds__ %d, nparams %d",
-             *fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx, *n_err_bnds__,
-             *nparams);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+   snprintf(buffer, 256,"cgbsvxx inputs: fact %c, trans %c, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldafb %lld, ipiv %lld, equed %c, ldb %lld, ldx %lld, n_err_bnds__ %lld, nparams %lld",*fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ipiv, *equed, *ldb, *ldx, *n_err_bnds__, *nparams);
+#else 
+   snprintf(buffer, 256,"cgbsvxx inputs: fact %c, trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, ipiv %d, equed %c, ldb %d, ldx %d, n_err_bnds__ %d, nparams %d",*fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ipiv, *equed, *ldb, *ldx, *n_err_bnds__, *nparams);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -820,9 +812,9 @@ void cgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGBSVXX", &i__1, (ftnlen)7);
+        xerbla_("CGBSVXX", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(equil)
     {
@@ -894,9 +886,9 @@ void cgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
             /* Pivot in column INFO is exactly 0 */
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
-            *rpvgrw = cla_gbrpvgrw_(n, kl, ku, info, &ab[ab_offset], ldab, &afb[afb_offset], ldafb);
+            *rpvgrw = cla_gbrpvgrw_(n, kl, ku, info, &ab[ab_offset], ldab, & afb[afb_offset], ldafb);
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
     }
     /* Compute the reciprocal pivot growth factor RPVGRW. */
@@ -920,7 +912,7 @@ void cgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
         clascl2_(n, nrhs, &r__[1], &x[x_offset], ldx);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGBSVXX */
 }
 /* cgbsvxx_ */

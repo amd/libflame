@@ -290,40 +290,13 @@ the routine */
 /** Generated wrapper function */
 void cgegv_(char *jobvl, char *jobvr, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, scomplex *alpha, scomplex *beta, scomplex *vl, aocl_int_t *ldvl, scomplex *vr, aocl_int_t *ldvr, scomplex *work, aocl_int_t *lwork, real *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgegv(jobvl, jobvr, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr, ldvr, work, lwork, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldvl_64 = *ldvl;
-    aocl_int64_t ldvr_64 = *ldvr;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgegv(jobvl, jobvr, &n_64, a, &lda_64, b, &ldb_64, alpha, beta, vl, &ldvl_64, vr, &ldvr_64, work, &lwork_64, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgegv(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *b,
-            aocl_int64_t *ldb, scomplex *alpha, scomplex *beta, scomplex *vl, aocl_int64_t *ldvl,
-            scomplex *vr, aocl_int64_t *ldvr, scomplex *work, aocl_int64_t *lwork, real *rwork,
-            aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cgegv inputs: jobvl %c, jobvr %c, n %lld, lda %lld, ldb %lld, ldvl %lld, ldvr %lld, "
-             "lwork %lld",
-             *jobvl, *jobvr, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);
-#else
-    snprintf(buffer, 256,
-             "cgegv inputs: jobvl %c, jobvr %c, n %d, lda %d, ldb %d, ldvl %d, ldvr %d, lwork %d",
-             *jobvl, *jobvr, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cgegv inputs: jobvl %c, jobvr %c, n %lld, lda %lld, ldb %lld, ldvl %lld, ldvr %lld, lwork %lld",*jobvl, *jobvr, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);
+#else 
+    snprintf(buffer, 256,"cgegv inputs: jobvl %c, jobvr %c, n %d, lda %d, ldb %d, ldvl %d, ldvr %d, lwork %d",*jobvl, *jobvr, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -494,20 +467,20 @@ void aocl_lapack_cgegv(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGEGV ", &i__1, (ftnlen)6);
+        xerbla_("CGEGV ", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Get machine constants */
     eps = slamch_("E") * slamch_("B");
@@ -533,7 +506,7 @@ void aocl_lapack_cgegv(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
         {
             *info = *n + 10;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
     }
     /* Scale B */
@@ -555,7 +528,7 @@ void aocl_lapack_cgegv(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
         {
             *info = *n + 10;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
     }
     /* Permute the matrix to make it more nearly triangular */
@@ -917,10 +890,10 @@ void aocl_lapack_cgegv(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
         /* L70: */
     }
 L80:
-    work[1].real = (real)lwkopt;
-    work[1].imag = 0.f; // , expr subst
+    work[1].r = (real) lwkopt;
+    work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGEGV */
 }
 /* cgegv_ */

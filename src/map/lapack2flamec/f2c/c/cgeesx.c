@@ -253,34 +253,16 @@ void cgeesx_(char *jobvs, char *sort, L_fp1 select, char *sense, aocl_int_t *n, 
              real *rconde, real *rcondv, scomplex *work, aocl_int_t *lwork, real *rwork,
              logical *bwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgeesx(jobvs, sort, select, sense, n, a, lda, sdim, w, vs, ldvs, rconde, rcondv,
-                       work, lwork, rwork, bwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t sdim_64 = *sdim;
-    aocl_int64_t ldvs_64 = *ldvs;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgeesx(jobvs, sort, select, sense, &n_64, a, &lda_64, &sdim_64, w, vs, &ldvs_64,
-                       rconde, rcondv, work, &lwork_64, rwork, bwork, &info_64);
-
-    *sdim = (aocl_int_t)sdim_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cgeesx inputs: jobvs %c, sort %c, sense %c, n %lld, lda %lld, ldvs %lld, lwork %lld",*jobvs, *sort, *sense, *n, *lda, *ldvs, *lwork);
+#else 
+    snprintf(buffer, 256,"cgeesx inputs: jobvs %c, sort %c, sense %c, n %d, lda %d, ldvs %d, lwork %d",*jobvs, *sort, *sense, *n, *lda, *ldvs, *lwork);
 #endif
-}
-
-void aocl_lapack_cgeesx(char *jobvs, char *sort, L_fp1 select, char *sense, aocl_int64_t *n,
-                        scomplex *a, aocl_int64_t *lda, aocl_int64_t *sdim, scomplex *w, scomplex *vs,
-                        aocl_int64_t *ldvs, real *rconde, real *rcondv, scomplex *work,
-                        aocl_int64_t *lwork, real *rwork, logical *bwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cgeesx inputs: jobvs %c, sort %c, sense %c, n %" FLA_IS ", lda %" FLA_IS
-                      ", ldvs %" FLA_IS "",
-                      *jobvs, *sort, *sense, *n, *lda, *ldvs);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, vs_dim1, vs_offset, i__1, i__2;
     real r__1;
@@ -339,13 +321,7 @@ void aocl_lapack_cgeesx(char *jobvs, char *sort, L_fp1 select, char *sense, aocl
     --work;
     --rwork;
     --bwork;
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    sprintf(buffer, "cgeesx inputs: jobvs %c, sort %c, sense %c, n %d, lda %d, sdim %d, ldvs %d\n", *jobvs, *sort, *sense, *n, *lda, *sdim, *ldvs);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     *info = 0;
     wantvs = lsame_(jobvs, "V", 1, 1);
     wantst = lsame_(sort, "S", 1, 1);
@@ -441,21 +417,21 @@ void aocl_lapack_cgeesx(char *jobvs, char *sort, L_fp1 select, char *sense, aocl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGEESX", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("CGEESX", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *sdim = 0;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Get machine constants */
     eps = slamch_("P");

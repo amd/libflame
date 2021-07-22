@@ -150,35 +150,13 @@ void cgbcon_(char *norm, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomplex
              aocl_int_t *ldab, aocl_int_t *ipiv, real *anorm, real *rcond, scomplex *work,
              real *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgbcon(norm, n, kl, ku, ab, ldab, ipiv, anorm, rcond, work, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgbcon(norm, &n_64, &kl_64, &ku_64, ab, &ldab_64, ipiv, anorm, rcond, work, rwork,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgbcon(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
-                        scomplex *ab, aocl_int64_t *ldab, aocl_int_t *ipiv, real *anorm, real *rcond,
-                        scomplex *work, real *rwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cgbcon inputs: norm %c, n %lld, kl %lld, ku %lld, ldab %lld", *norm, *n,
-             *kl, *ku, *ldab);
-#else
-    snprintf(buffer, 256, "cgbcon inputs: norm %c, n %d, kl %d, ku %d, ldab %d", *norm, *n, *kl,
-             *ku, *ldab);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+   snprintf(buffer, 256,"cgbcon inputs: norm %c, n %lld, kl %lld, ku %lld, ldab %lld, ipiv %lld",*norm, *n, *kl, *ku, *ldab, *ipiv);
+#else 
+   snprintf(buffer, 256,"cgbcon inputs: norm %c, n %d, kl %d, ku %d, ldab %d, ipiv %d",*norm, *n, *kl, *ku, *ldab, *ipiv);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -235,13 +213,7 @@ void aocl_lapack_cgbcon(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aocl_int6
     --ipiv;
     --work;
     --rwork;
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    sprintf(buffer, "cgbcon inputs: norm %c, n %d, kl %d, ku %d, ldab %d, ipiv %d\n", *norm, *n, *kl, *ku, *ldab, *ipiv);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     *info = 0;
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
     if(!onenrm && !lsame_(norm, "I", 1, 1))
@@ -271,9 +243,9 @@ void aocl_lapack_cgbcon(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aocl_int6
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGBCON", &i__1, (ftnlen)6);
+        xerbla_("CGBCON", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     *rcond = 0.f;
@@ -281,12 +253,12 @@ void aocl_lapack_cgbcon(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aocl_int6
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(*anorm == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     smlnum = slamch_("Safe minimum");
     /* Estimate the norm of inv(A). */

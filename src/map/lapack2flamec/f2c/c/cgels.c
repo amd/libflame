@@ -196,38 +196,13 @@ void cgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, scomple
             aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, scomplex *work, aocl_int_t *lwork,
             aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgels(trans, m, n, nrhs, a, lda, b, ldb, work, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgels(trans, &m_64, &n_64, &nrhs_64, a, &lda_64, b, &ldb_64, work, &lwork_64,
-                      &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
-                       scomplex *a, aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb, scomplex *work,
-                       aocl_int64_t *lwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cgels inputs: trans %c, m %lld, n %lld, nrhs %lld, lda %lld, ldb %lld, lwork %lld",
-             *trans, *m, *n, *nrhs, *lda, *ldb, *lwork);
-#else
-    snprintf(buffer, 256, "cgels inputs: trans %c, m %d, n %d, nrhs %d, lda %d, ldb %d, lwork %d",
-             *trans, *m, *n, *nrhs, *lda, *ldb, *lwork);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cgels inputs: trans %c, m %lld, n %lld, nrhs %lld, lda %lld, ldb %lld, lwork %lld",*trans, *m, *n, *nrhs, *lda, *ldb, *lwork);
+#else 
+    snprintf(buffer, 256,"cgels inputs: trans %c, m %d, n %d, nrhs %d, lda %d, ldb %d, lwork %d",*trans, *m, *n, *nrhs, *lda, *ldb, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -376,24 +351,24 @@ void aocl_lapack_cgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGELS ", &i__1, (ftnlen)6);
+        xerbla_("CGELS ", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     /* Computing MIN */
     i__1 = fla_min(*m, *n);
     if(fla_min(i__1, *nrhs) == 0)
     {
-        i__1 = fla_max(*m, *n);
-        aocl_lapack_claset("Full", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
+        i__1 = max(*m,*n);
+        claset_("Full", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
@@ -459,7 +434,7 @@ void aocl_lapack_cgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
             if(*info > 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+                return 0;
             }
             scllen = *n;
         }
@@ -472,7 +447,7 @@ void aocl_lapack_cgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
             if(*info > 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+                return 0;
             }
             /* B(N+1:M,1:NRHS) = ZERO */
             i__1 = *nrhs;
@@ -511,7 +486,7 @@ void aocl_lapack_cgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
             if(*info > 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+                return 0;
             }
             /* B(M+1:N,1:NRHS) = 0 */
             i__1 = *nrhs;
@@ -548,7 +523,7 @@ void aocl_lapack_cgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
             if(*info > 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+                return 0;
             }
             scllen = *m;
         }
@@ -575,11 +550,11 @@ void aocl_lapack_cgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                            info);
     }
 L50:
-    r__1 = (real)wsize;
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
+    r__1 = (real) wsize;
+    work[1].r = r__1;
+    work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGELS */
 }
 /* cgels_ */

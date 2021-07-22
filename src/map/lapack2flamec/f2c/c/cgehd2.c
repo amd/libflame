@@ -153,32 +153,13 @@ v(i+2:ihi) is stored on */
 void cgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, scomplex *a, aocl_int_t *lda,
              scomplex *tau, scomplex *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgehd2(n, ilo, ihi, a, lda, tau, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgehd2(&n_64, &ilo_64, &ihi_64, a, &lda_64, tau, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, scomplex *a,
-                        aocl_int64_t *lda, scomplex *tau, scomplex *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cgehd2 inputs: n %lld, ilo %lld, ihi %lld, lda %lld", *n, *ilo, *ihi,
-             *lda);
-#else
-    snprintf(buffer, 256, "cgehd2 inputs: n %d, ilo %d, ihi %d, lda %d", *n, *ilo, *ihi, *lda);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cgehd2 inputs: n %lld, ilo %lld, ihi %lld, lda %lld",*n, *ilo, *ihi, *lda);
+#else 
+    snprintf(buffer, 256,"cgehd2 inputs: n %d, ilo %d, ihi %d, lda %d",*n, *ilo, *ihi, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -234,9 +215,9 @@ void aocl_lapack_cgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, s
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGEHD2", &i__1, (ftnlen)6);
+        xerbla_("CGEHD2", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     i__1 = *ihi - 1;
     for(i__ = *ilo; i__ <= i__1; ++i__)
@@ -269,7 +250,7 @@ void aocl_lapack_cgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, s
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGEHD2 */
 }
 /* cgehd2_ */

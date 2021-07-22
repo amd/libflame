@@ -380,48 +380,13 @@ void cgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
              scomplex *x, aocl_int_t *ldx, real *rcond, real *ferr, real *berr, scomplex *work,
              real *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgbsvx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed, r__, c__, b,
-                       ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldafb_64 = *ldafb;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgbsvx(fact, trans, &n_64, &kl_64, &ku_64, &nrhs_64, ab, &ldab_64, afb, &ldafb_64,
-                       ipiv, equed, r__, c__, b, &ldb_64, x, &ldx_64, rcond, ferr, berr, work,
-                       rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgbsvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *kl,
-                        aocl_int64_t *ku, aocl_int64_t *nrhs, scomplex *ab, aocl_int64_t *ldab,
-                        scomplex *afb, aocl_int64_t *ldafb, aocl_int_t *ipiv, char *equed, real *r__,
-                        real *c__, scomplex *b, aocl_int64_t *ldb, scomplex *x, aocl_int64_t *ldx,
-                        real *rcond, real *ferr, real *berr, scomplex *work, real *rwork,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cgbsvx inputs: fact %c, trans %c, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, "
-             "ldafb %lld, equed %c, ldb %lld, ldx %lld",
-             *fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx);
-#else
-    snprintf(buffer, 256,
-             "cgbsvx inputs: fact %c, trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, "
-             "equed %c, ldb %d, ldx %d",
-             *fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+   snprintf(buffer, 256,"cgbsvx inputs: fact %c, trans %c, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldafb %lld, ipiv %lld, equed %c, ldb %lld, ldx %lld",*fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ipiv, *equed, *ldb, *ldx);
+#else 
+   snprintf(buffer, 256,"cgbsvx inputs: fact %c, trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, ipiv %d, equed %c, ldb %d, ldx %d",*fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ipiv, *equed, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -493,13 +458,7 @@ void aocl_lapack_cgbsvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     --berr;
     --work;
     --rwork;
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    sprintf(buffer, "cgbsvx inputs: fact %c, trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, ipiv %d, equed %c, ldb %d, ldx %d\n", *fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ipiv, *equed, *ldb, *ldx);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     *info = 0;
     nofact = lsame_(fact, "N", 1, 1);
     equil = lsame_(fact, "E", 1, 1);
@@ -633,9 +592,9 @@ void aocl_lapack_cgbsvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGBSVX", &i__1, (ftnlen)6);
+        xerbla_("CGBSVX", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(equil)
     {
@@ -758,7 +717,7 @@ void aocl_lapack_cgbsvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
             rwork[1] = rpvgrw;
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
     }
     /* Compute the norm of the matrix A and the */

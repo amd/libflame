@@ -202,30 +202,13 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 void cgebd2_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d__, real *e,
              scomplex *tauq, scomplex *taup, scomplex *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgebd2(m, n, a, lda, d__, e, tauq, taup, work, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgebd2(&m_64, &n_64, a, &lda_64, d__, e, tauq, taup, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgebd2(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *d__,
-                        real *e, scomplex *tauq, scomplex *taup, scomplex *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cgebd2 inputs: m %lld, n %lld, lda %lld", *m, *n, *lda);
-#else
-    snprintf(buffer, 256, "cgebd2 inputs: m %d, n %d, lda %d", *m, *n, *lda);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cgebd2 inputs: m %lld, n %lld, lda %lld",*m, *n, *lda);
+#else 
+    snprintf(buffer, 256,"cgebd2 inputs: m %d, n %d, lda %d",*m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -265,13 +248,7 @@ void aocl_lapack_cgebd2(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
     --tauq;
     --taup;
     --work;
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    sprintf(buffer, "cgebd2 inputs: m %d, n %d, lda %d\n", *m, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     *info = 0;
     if(*m < 0)
     {
@@ -288,9 +265,9 @@ void aocl_lapack_cgebd2(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
     if(*info < 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGEBD2", &i__1, (ftnlen)6);
+        xerbla_("CGEBD2", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*m >= *n)
     {

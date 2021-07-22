@@ -203,47 +203,13 @@ void cgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
              aocl_int_t *ldq, scomplex *pt, aocl_int_t *ldpt, scomplex *c__, aocl_int_t *ldc,
              scomplex *work, real *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgbbrd(vect, m, n, ncc, kl, ku, ab, ldab, d__, e, q, ldq, pt, ldpt, c__, ldc, work,
-                       rwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ncc_64 = *ncc;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t ldpt_64 = *ldpt;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgbbrd(vect, &m_64, &n_64, &ncc_64, &kl_64, &ku_64, ab, &ldab_64, d__, e, q,
-                       &ldq_64, pt, &ldpt_64, c__, &ldc_64, work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *ncc,
-                        aocl_int64_t *kl, aocl_int64_t *ku, scomplex *ab, aocl_int64_t *ldab,
-                        real *d__, real *e, scomplex *q, aocl_int64_t *ldq, scomplex *pt,
-                        aocl_int64_t *ldpt, scomplex *c__, aocl_int64_t *ldc, scomplex *work,
-                        real *rwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cgbbrd inputs: vect %c, m %lld, n %lld, ncc %lld, kl %lld, ku %lld, ldab %lld, ldq "
-             "%lld, ldpt %lld, ldc %lld",
-             *vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
-#else
-    snprintf(buffer, 256,
-             "cgbbrd inputs: vect %c, m %d, n %d, ncc %d, kl %d, ku %d, ldab %d, ldq %d, ldpt %d, "
-             "ldc %d",
-             *vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+   snprintf(buffer, 256,"cgbbrd inputs: vect %c, m %lld, n %lld, ncc %lld, kl %lld, ku %lld, ldab %lld, ldq %lld, ldpt %lld, ldc %lld",*vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
+#else 
+   snprintf(buffer, 256,"cgbbrd inputs: vect %c, m %d, n %d, ncc %d, kl %d, ku %d, ldab %d, ldq %d, ldpt %d, ldc %d",*vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -307,13 +273,7 @@ void aocl_lapack_cgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     c__ -= c_offset;
     --work;
     --rwork;
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    sprintf(buffer, "cgbbrd inputs: vect %c, m %d, n %d, ncc %d, kl %d, ku %d, ldab %d, ldq %d, ldpt %d, ldc %d\n", *vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     wantb = lsame_(vect, "B");
     wantq = lsame_(vect, "Q") || wantb;
     wantpt = lsame_(vect, "P") || wantb;
@@ -363,9 +323,9 @@ void aocl_lapack_cgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGBBRD", &i__1, (ftnlen)6);
+        xerbla_("CGBBRD", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Initialize Q and P**H to the unit matrix, if needed */
     if(wantq)
@@ -380,7 +340,7 @@ void aocl_lapack_cgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     minmn = fla_min(*m, *n);
     if(*kl + *ku > 1)

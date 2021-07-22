@@ -150,31 +150,16 @@ ILO=1 and IHI=0, if N=0. */
 void cggbak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, real *lscale,
              real *rscale, aocl_int_t *m, scomplex *v, aocl_int_t *ldv, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cggbak(job, side, n, ilo, ihi, lscale, rscale, m, v, ldv, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t ldv_64 = *ldv;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cggbak(job, side, &n_64, &ilo_64, &ihi_64, lscale, rscale, &m_64, v, &ldv_64,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cggbak inputs: job %c, side %c, n %lld, ilo %lld, ihi %lld, m %lld, ldv %lld",*job, *side, *n, *ilo, *ihi, *m, *ldv);
+#else 
+    snprintf(buffer, 256,"cggbak inputs: job %c, side %c, n %d, ilo %d, ihi %d, m %d, ldv %d",*job, *side, *n, *ilo, *ihi, *m, *ldv);
 #endif
-}
-
-void aocl_lapack_cggbak(char *job, char *side, aocl_int64_t *n, aocl_int64_t *ilo,
-                        aocl_int64_t *ihi, real *lscale, real *rscale, aocl_int64_t *m, scomplex *v,
-                        aocl_int64_t *ldv, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cggbak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS
-                      ", m %" FLA_IS ", ldv %" FLA_IS "",
-                      *job, *side, *n, *ilo, *ihi, *m, *ldv);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     /* System generated locals */
     aocl_int64_t v_dim1, v_offset, i__1;
     /* Local variables */
@@ -250,25 +235,25 @@ void aocl_lapack_cggbak(char *job, char *side, aocl_int64_t *n, aocl_int64_t *il
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGGBAK", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("CGGBAK", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*m == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(lsame_(job, "N", 1, 1))
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*ilo == *ihi)
     {
@@ -373,8 +358,8 @@ L30:
         }
     }
 L110:
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of CGGBAK */
 }
 /* cggbak_ */

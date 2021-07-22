@@ -123,30 +123,13 @@
 void cgtsv_(aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__, scomplex *du, scomplex *b,
             aocl_int_t *ldb, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgtsv(n, nrhs, dl, d__, du, b, ldb, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgtsv(&n_64, &nrhs_64, dl, d__, du, b, &ldb_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *dl, scomplex *d__, scomplex *du,
-                       scomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cgtsv inputs: n %lld, nrhs %lld, ldb %lld", *n, *nrhs, *ldb);
-#else
-    snprintf(buffer, 256, "cgtsv inputs: n %d, nrhs %d, ldb %d", *n, *nrhs, *ldb);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cgtsv inputs: n %lld, nrhs %lld, ldb %lld",*n, *nrhs, *ldb);
+#else 
+    snprintf(buffer, 256,"cgtsv inputs: n %d, nrhs %d, ldb %d",*n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -206,14 +189,14 @@ void aocl_lapack_cgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *dl, scompl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGTSV ", &i__1, (ftnlen)6);
+        xerbla_("CGTSV ", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     i__1 = *n - 1;
     for(k = 1; k <= i__1; ++k)
@@ -229,8 +212,8 @@ void aocl_lapack_cgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *dl, scompl
                 a unique */
                 /* solution can not be found. */
                 *info = k;
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
         }
         else /* if(complicated condition) */
@@ -341,7 +324,7 @@ void aocl_lapack_cgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *dl, scompl
     {
         *info = *n;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Back solve with the matrix U from the factorization. */
     i__1 = *nrhs;
@@ -389,7 +372,7 @@ void aocl_lapack_cgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *dl, scompl
         /* L50: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGTSV */
 }
 /* cgtsv_ */

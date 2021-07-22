@@ -120,30 +120,13 @@ the matrix is */
 void cgetri_(aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv, scomplex *work,
              aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgetri(n, a, lda, ipiv, work, lwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgetri(&n_64, a, &lda_64, ipiv, work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgetri(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int_t *ipiv,
-                        scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cgetri inputs: n %lld, lda %lld, lwork %lld", *n, *lda, *lwork);
-#else
-    snprintf(buffer, 256, "cgetri inputs: n %d, lda %d, lwork %d", *n, *lda, *lwork);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cgetri inputs: n %lld, lda %lld, ipiv %lld, lwork %lld",*n, *lda, *ipiv, *lwork);
+#else 
+    snprintf(buffer, 256,"cgetri inputs: n %d, lda %d, ipiv %d, lwork %d",*n, *lda, *ipiv, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -183,13 +166,7 @@ void aocl_lapack_cgetri(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_in
     a -= a_offset;
     --ipiv;
     --work;
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
-#if AOCL_DTL_LOG_ENABLE
-   char buffer[256];
-   snprintf(buffer, 256, "cgetri inputs: n %d, lda %d, ipiv %d\n", *n, *lda, *ipiv);
-   AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     *info = 0;
     nb = aocl_lapack_ilaenv(&c__1, "CGETRI", " ", n, &c_n1, &c_n1, &c_n1);
     lwkopt = *n * nb;
@@ -233,7 +210,7 @@ void aocl_lapack_cgetri(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_in
     if(*info > 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     nbmin = 2;
     ldwork = *n;

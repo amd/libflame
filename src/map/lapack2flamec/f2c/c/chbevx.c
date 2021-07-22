@@ -272,47 +272,13 @@ void chbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
              aocl_int_t *iu, real *abstol, aocl_int_t *m, real *w, scomplex *z__, aocl_int_t *ldz,
              scomplex *work, real *rwork, aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_chbevx(jobz, range, uplo, n, kd, ab, ldab, q, ldq, vl, vu, il, iu, abstol, m, w,
-                       z__, ldz, work, rwork, iwork, ifail, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kd_64 = *kd;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t il_64 = *il;
-    aocl_int64_t iu_64 = *iu;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_chbevx(jobz, range, uplo, &n_64, &kd_64, ab, &ldab_64, q, &ldq_64, vl, vu, &il_64,
-                       &iu_64, abstol, &m_64, w, z__, &ldz_64, work, rwork, iwork, ifail, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_chbevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, aocl_int64_t *kd,
-                        scomplex *ab, aocl_int64_t *ldab, scomplex *q, aocl_int64_t *ldq, real *vl,
-                        real *vu, aocl_int64_t *il, aocl_int64_t *iu, real *abstol, aocl_int64_t *m,
-                        real *w, scomplex *z__, aocl_int64_t *ldz, scomplex *work, real *rwork,
-                        aocl_int_t *iwork, aocl_int_t *ifail, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "chbevx inputs: jobz %c, range %c, uplo %c, n %lld, kd %lld, ldab %lld, ldq %lld, il "
-             "%lld, iu %lld, m %lld, ldz %lld",
-             *jobz, *range, *uplo, *n, *kd, *ldab, *ldq, *il, *iu, *m, *ldz);
-#else
-    snprintf(buffer, 256,
-             "chbevx inputs: jobz %c, range %c, uplo %c, n %d, kd %d, ldab %d, ldq %d, il %d, iu "
-             "%d, m %d, ldz %d",
-             *jobz, *range, *uplo, *n, *kd, *ldab, *ldq, *il, *iu, *m, *ldz);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"chbevx inputs: jobz %c, range %c, uplo %c, n %lld, kd %lld, ldab %lld, ldq %lld, il %lld, iu %lld, m %lld, ldz %lld",*jobz, *range, *uplo, *n, *kd, *ldab, *ldq, *il, *iu, *m, *ldz);
+#else 
+    snprintf(buffer, 256,"chbevx inputs: jobz %c, range %c, uplo %c, n %d, kd %d, ldab %d, ldq %d, il %d, iu %d, m %d, ldz %d",*jobz, *range, *uplo, *n, *kd, *ldab, *ldq, *il, *iu, *m, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -449,16 +415,16 @@ void aocl_lapack_chbevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, ao
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHBEVX", &i__1, (ftnlen)6);
+        xerbla_("CHBEVX", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*n == 1)
     {
@@ -494,7 +460,7 @@ void aocl_lapack_chbevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, ao
             }
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -685,7 +651,7 @@ L30:
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CHBEVX */
 }
 /* chbevx_ */

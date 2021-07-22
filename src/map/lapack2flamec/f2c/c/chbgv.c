@@ -187,41 +187,13 @@ void chbgv_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *k
             aocl_int_t *ldab, scomplex *bb, aocl_int_t *ldbb, real *w, scomplex *z__, aocl_int_t *ldz,
             scomplex *work, real *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_chbgv(jobz, uplo, n, ka, kb, ab, ldab, bb, ldbb, w, z__, ldz, work, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ka_64 = *ka;
-    aocl_int64_t kb_64 = *kb;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldbb_64 = *ldbb;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_chbgv(jobz, uplo, &n_64, &ka_64, &kb_64, ab, &ldab_64, bb, &ldbb_64, w, z__,
-                      &ldz_64, work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_chbgv(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *ka, aocl_int64_t *kb,
-                       scomplex *ab, aocl_int64_t *ldab, scomplex *bb, aocl_int64_t *ldbb, real *w,
-                       scomplex *z__, aocl_int64_t *ldz, scomplex *work, real *rwork,
-                       aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(
-        buffer, 256,
-        "chbgv inputs: jobz %c, uplo %c, n %lld, ka %lld, kb %lld, ldab %lld, ldbb %lld, ldz %lld",
-        *jobz, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldz);
-#else
-    snprintf(buffer, 256,
-             "chbgv inputs: jobz %c, uplo %c, n %d, ka %d, kb %d, ldab %d, ldbb %d, ldz %d", *jobz,
-             *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldz);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"chbgv inputs: jobz %c, uplo %c, n %lld, ka %lld, kb %lld, ldab %lld, ldbb %lld, ldz %lld",*jobz, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldz);
+#else 
+    snprintf(buffer, 256,"chbgv inputs: jobz %c, uplo %c, n %d, ka %d, kb %d, ldab %d, ldbb %d, ldz %d",*jobz, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -303,15 +275,15 @@ void aocl_lapack_chbgv(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *ka
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHBGV ", &i__1, (ftnlen)6);
+        xerbla_("CHBGV ", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Form a split Cholesky factorization of B. */
     aocl_lapack_cpbstf(uplo, n, kb, &bb[bb_offset], ldbb, info);
@@ -319,7 +291,7 @@ void aocl_lapack_chbgv(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *ka
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Transform problem to standard eigenvalue problem. */
     inde = 1;
@@ -347,7 +319,7 @@ void aocl_lapack_chbgv(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *ka
         aocl_lapack_csteqr(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indwrk], info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CHBGV */
 }
 /* chbgv_ */

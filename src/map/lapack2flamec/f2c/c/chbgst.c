@@ -172,41 +172,13 @@ void chbgst_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *
              aocl_int_t *ldab, scomplex *bb, aocl_int_t *ldbb, scomplex *x, aocl_int_t *ldx,
              scomplex *work, real *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_chbgst(vect, uplo, n, ka, kb, ab, ldab, bb, ldbb, x, ldx, work, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ka_64 = *ka;
-    aocl_int64_t kb_64 = *kb;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldbb_64 = *ldbb;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_chbgst(vect, uplo, &n_64, &ka_64, &kb_64, ab, &ldab_64, bb, &ldbb_64, x, &ldx_64,
-                       work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_chbgst(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *ka, aocl_int64_t *kb,
-                        scomplex *ab, aocl_int64_t *ldab, scomplex *bb, aocl_int64_t *ldbb,
-                        scomplex *x, aocl_int64_t *ldx, scomplex *work, real *rwork,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(
-        buffer, 256,
-        "chbgst inputs: vect %c, uplo %c, n %lld, ka %lld, kb %lld, ldab %lld, ldbb %lld, ldx %lld",
-        *vect, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldx);
-#else
-    snprintf(buffer, 256,
-             "chbgst inputs: vect %c, uplo %c, n %d, ka %d, kb %d, ldab %d, ldbb %d, ldx %d", *vect,
-             *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldx);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"chbgst inputs: vect %c, uplo %c, n %lld, ka %lld, kb %lld, ldab %lld, ldbb %lld, ldx %lld",*vect, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldx);
+#else 
+    snprintf(buffer, 256,"chbgst inputs: vect %c, uplo %c, n %d, ka %d, kb %d, ldab %d, ldbb %d, ldx %d",*vect, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -305,15 +277,15 @@ void aocl_lapack_chbgst(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *k
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHBGST", &i__1, (ftnlen)6);
+        xerbla_("CHBGST", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     inca = *ldab * ka1;
     /* Initialize X to the unit matrix, if needed */
@@ -1377,7 +1349,7 @@ L490:
             if(*ka == 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+                return 0;
             }
             goto L490;
         }
@@ -1388,7 +1360,7 @@ L490:
         if(i__ < 2)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
     }
     if(i__ < m - kbt)

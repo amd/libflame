@@ -268,48 +268,13 @@ LDQ >= 1 otherwise. */
 /** Generated wrapper function */
 void cggsvp_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, real *tola, real *tolb, aocl_int_t *k, aocl_int_t *l, scomplex *u, aocl_int_t *ldu, scomplex *v, aocl_int_t *ldv, scomplex *q, aocl_int_t *ldq, aocl_int_t *iwork, real *rwork, scomplex *tau, scomplex *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cggsvp(jobu, jobv, jobq, m, p, n, a, lda, b, ldb, tola, tolb, k, l, u, ldu, v, ldv, q, ldq, iwork, rwork, tau, work, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t p_64 = *p;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t l_64 = *l;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t ldv_64 = *ldv;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cggsvp(jobu, jobv, jobq, &m_64, &p_64, &n_64, a, &lda_64, b, &ldb_64, tola, tolb, &k_64, &l_64, u, &ldu_64, v, &ldv_64, q, &ldq_64, iwork, rwork, tau, work, &info_64);
-
-    *k = (aocl_int_t)k_64;
-    *l = (aocl_int_t)l_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *n,
-             scomplex *a, aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb, real *tola, real *tolb,
-             aocl_int64_t *k, aocl_int64_t *l, scomplex *u, aocl_int64_t *ldu, scomplex *v,
-             aocl_int64_t *ldv, scomplex *q, aocl_int64_t *ldq, aocl_int_t *iwork, real *rwork,
-             scomplex *tau, scomplex *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cggsvp inputs: jobu %c, jobv %c, jobq %c, m %lld, p %lld, n %lld, lda %lld, ldb "
-             "%lld, ldu %lld, ldv %lld, ldq %lld",
-             *jobu, *jobv, *jobq, *m, *p, *n, *lda, *ldb, *ldu, *ldv, *ldq);
-#else
-    snprintf(buffer, 256,
-             "cggsvp inputs: jobu %c, jobv %c, jobq %c, m %d, p %d, n %d, lda %d, ldb %d, ldu %d, "
-             "ldv %d, ldq %d",
-             *jobu, *jobv, *jobq, *m, *p, *n, *lda, *ldb, *ldu, *ldv, *ldq);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cggsvp inputs: jobu %c, jobv %c, jobq %c, m %lld, p %lld, n %lld, lda %lld, ldb %lld, ldu %lld, ldv %lld, ldq %lld",*jobu, *jobv, *jobq, *m, *p, *n, *lda, *ldb, *ldu, *ldv, *ldq);
+#else 
+    snprintf(buffer, 256,"cggsvp inputs: jobu %c, jobv %c, jobq %c, m %d, p %d, n %d, lda %d, ldb %d, ldu %d, ldv %d, ldq %d",*jobu, *jobv, *jobq, *m, *p, *n, *lda, *ldb, *ldu, *ldv, *ldq);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -422,9 +387,9 @@ void aocl_lapack_cggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGGSVP", &i__1, (ftnlen)6);
+        xerbla_("CGGSVP", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* QR with column pivoting of B: B*P = V*( S11 S12 ) */
     /* ( 0 0 ) */
@@ -656,7 +621,7 @@ void aocl_lapack_cggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGGSVP */
 }
 /* cggsvp_ */

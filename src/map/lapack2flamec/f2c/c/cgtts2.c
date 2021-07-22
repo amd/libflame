@@ -129,31 +129,13 @@ IPIV(i) = i indicates a row interchange was not */
 void cgtts2_(aocl_int_t *itrans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__,
              scomplex *du, scomplex *du2, aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgtts2(itrans, n, nrhs, dl, d__, du, du2, ipiv, b, ldb);
-#else
-    aocl_int64_t itrans_64 = *itrans;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-
-    aocl_lapack_cgtts2(&itrans_64, &n_64, &nrhs_64, dl, d__, du, du2, ipiv, b, &ldb_64);
-#endif
-}
-
-void aocl_lapack_cgtts2(aocl_int64_t *itrans, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *dl,
-                        scomplex *d__, scomplex *du, scomplex *du2, aocl_int_t *ipiv, scomplex *b,
-                        aocl_int64_t *ldb)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cgtts2 inputs: itrans %lld, n %lld, nrhs %lld, ldb %lld", *itrans, *n,
-             *nrhs, *ldb);
-#else
-    snprintf(buffer, 256, "cgtts2 inputs: itrans %d, n %d, nrhs %d, ldb %d", *itrans, *n, *nrhs,
-             *ldb);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cgtts2 inputs: itrans %lld, n %lld, nrhs %lld, ipiv %lld, ldb %lld",*itrans, *n, *nrhs, *ipiv, *ldb);
+#else 
+    snprintf(buffer, 256,"cgtts2 inputs: itrans %d, n %d, nrhs %d, ipiv %d, ldb %d",*itrans, *n, *nrhs, *ipiv, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -193,7 +175,7 @@ void aocl_lapack_cgtts2(aocl_int64_t *itrans, aocl_int64_t *n, aocl_int64_t *nrh
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*itrans == 0)
     {
@@ -729,6 +711,6 @@ void aocl_lapack_cgtts2(aocl_int64_t *itrans, aocl_int64_t *n, aocl_int64_t *nrh
     }
     /* End of CGTTS2 */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
 }
 /* cgtts2_ */

@@ -389,52 +389,13 @@ void cggevx_(char *balanc, char *jobvl, char *jobvr, char *sense, aocl_int_t *n,
              real *rcondv, scomplex *work, aocl_int_t *lwork, real *rwork, aocl_int_t *iwork,
              logical *bwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cggevx(balanc, jobvl, jobvr, sense, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr,
-                       ldvr, ilo, ihi, lscale, rscale, abnrm, bbnrm, rconde, rcondv, work, lwork,
-                       rwork, iwork, bwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldvl_64 = *ldvl;
-    aocl_int64_t ldvr_64 = *ldvr;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cggevx(balanc, jobvl, jobvr, sense, &n_64, a, &lda_64, b, &ldb_64, alpha, beta, vl,
-                       &ldvl_64, vr, &ldvr_64, &ilo_64, &ihi_64, lscale, rscale, abnrm, bbnrm,
-                       rconde, rcondv, work, &lwork_64, rwork, iwork, bwork, &info_64);
-
-    *ilo = (aocl_int_t)ilo_64;
-    *ihi = (aocl_int_t)ihi_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aocl_int64_t *n,
-                        scomplex *a, aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb,
-                        scomplex *alpha, scomplex *beta, scomplex *vl, aocl_int64_t *ldvl, scomplex *vr,
-                        aocl_int64_t *ldvr, aocl_int64_t *ilo, aocl_int64_t *ihi, real *lscale,
-                        real *rscale, real *abnrm, real *bbnrm, real *rconde, real *rcondv,
-                        scomplex *work, aocl_int64_t *lwork, real *rwork, aocl_int_t *iwork,
-                        logical *bwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cggevx inputs: balanc %c, jobvl %c, jobvr %c, sense %c, n %lld, lda %lld, ldb %lld, "
-             "ldvl %lld, ldvr %lld, lwork %lld",
-             *balanc, *jobvl, *jobvr, *sense, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);
-#else
-    snprintf(buffer, 256,
-             "cggevx inputs: balanc %c, jobvl %c, jobvr %c, sense %c, n %d, lda %d, ldb %d, ldvl "
-             "%d, ldvr %d, lwork %d",
-             *balanc, *jobvl, *jobvr, *sense, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cggevx inputs: balanc %c, jobvl %c, jobvr %c, sense %c, n %lld, lda %lld, ldb %lld, ldvl %lld, ldvr %lld, lwork %lld",*balanc, *jobvl, *jobvr, *sense, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);
+#else 
+    snprintf(buffer, 256,"cggevx inputs: balanc %c, jobvl %c, jobvr %c, sense %c, n %d, lda %d, ldb %d, ldvl %d, ldvr %d, lwork %d",*balanc, *jobvl, *jobvr, *sense, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -660,20 +621,20 @@ void aocl_lapack_cggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGGEVX", &i__1, (ftnlen)6);
+        xerbla_("CGGEVX", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Get machine constants */
     eps = slamch_("P");
@@ -984,11 +945,10 @@ L90:
     {
         aocl_lapack_clascl("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &ierr);
     }
-    r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
+    work[1].r = (real) maxwrk;
+    work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGGEVX */
 }
 /* cggevx_ */

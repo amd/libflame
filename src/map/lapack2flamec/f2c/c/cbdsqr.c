@@ -240,42 +240,13 @@ void cbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
              real *d__, real *e, scomplex *vt, aocl_int_t *ldvt, scomplex *u, aocl_int_t *ldu,
              scomplex *c__, aocl_int_t *ldc, real *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cbdsqr(uplo, n, ncvt, nru, ncc, d__, e, vt, ldvt, u, ldu, c__, ldc, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ncvt_64 = *ncvt;
-    aocl_int64_t nru_64 = *nru;
-    aocl_int64_t ncc_64 = *ncc;
-    aocl_int64_t ldvt_64 = *ldvt;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cbdsqr(uplo, &n_64, &ncvt_64, &nru_64, &ncc_64, d__, e, vt, &ldvt_64, u, &ldu_64,
-                       c__, &ldc_64, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cbdsqr(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_int64_t *nru,
-                        aocl_int64_t *ncc, real *d__, real *e, scomplex *vt, aocl_int64_t *ldvt,
-                        scomplex *u, aocl_int64_t *ldu, scomplex *c__, aocl_int64_t *ldc, real *rwork,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cbdsqr inputs: uplo %c, n %lld, ncvt %lld, nru %lld, ncc %lld, ldvt %lld, ldu %lld, "
-             "ldc %lld",
-             *uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
-#else
-    snprintf(buffer, 256,
-             "cbdsqr inputs: uplo %c, n %d, ncvt %d, nru %d, ncc %d, ldvt %d, ldu %d, ldc %d",
-             *uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+   snprintf(buffer, 256,"cbdsqr inputs: uplo %c, n %lld, ncvt %lld, nru %lld, ncc %lld, ldvt %lld, ldu %lld, ldc %lld",*uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
+#else 
+   snprintf(buffer, 256,"cbdsqr inputs: uplo %c, n %d, ncvt %d, nru %d, ncc %d, ldvt %d, ldu %d, ldc %d",*uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -354,13 +325,7 @@ void aocl_lapack_cbdsqr(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_in
     c_offset = 1 + c_dim1;
     c__ -= c_offset;
     --rwork;
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    sprintf(buffer, "cbdsqr inputs: uplo %c, n %d, ncvt %d, nru %d, ncc %d, ldvt %d, ldu %d, ldc %d\n", *uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     *info = 0;
     lower = lsame_(uplo, "L", 1, 1);
     if(!lsame_(uplo, "U", 1, 1) && !lower)
@@ -398,14 +363,14 @@ void aocl_lapack_cbdsqr(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_in
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CBDSQR", &i__1, (ftnlen)6);
+        xerbla_("CBDSQR", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*n == 1)
     {
@@ -421,7 +386,7 @@ void aocl_lapack_cbdsqr(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_in
         if(*info != 2)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
         *info = 0;
     }

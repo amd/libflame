@@ -228,41 +228,13 @@ void cgelsd_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_i
              scomplex *b, aocl_int_t *ldb, real *s, real *rcond, aocl_int_t *rank, scomplex *work,
              aocl_int_t *lwork, real *rwork, aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgelsd(m, n, nrhs, a, lda, b, ldb, s, rcond, rank, work, lwork, rwork, iwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t rank_64 = *rank;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgelsd(&m_64, &n_64, &nrhs_64, a, &lda_64, b, &ldb_64, s, rcond, &rank_64, work,
-                       &lwork_64, rwork, iwork, &info_64);
-
-    *rank = (aocl_int_t)rank_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgelsd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a,
-                        aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb, real *s, real *rcond,
-                        aocl_int64_t *rank, scomplex *work, aocl_int64_t *lwork, real *rwork,
-                        aocl_int_t *iwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cgelsd inputs: m %lld, n %lld, nrhs %lld, lda %lld, ldb %lld, lwork %lld", *m, *n,
-             *nrhs, *lda, *ldb, *lwork);
-#else
-    snprintf(buffer, 256, "cgelsd inputs: m %d, n %d, nrhs %d, lda %d, ldb %d, lwork %d", *m, *n,
-             *nrhs, *lda, *ldb, *lwork);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cgelsd inputs: m %lld, n %lld, nrhs %lld, lda %lld, ldb %lld, lwork %lld",*m, *n, *nrhs, *lda, *ldb, *lwork);
+#else 
+    snprintf(buffer, 256,"cgelsd inputs: m %d, n %d, nrhs %d, lda %d, ldb %d, lwork %d",*m, *n, *nrhs, *lda, *ldb, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -530,21 +502,21 @@ void aocl_lapack_cgelsd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, sc
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGELSD", &i__1, (ftnlen)6);
+        xerbla_("CGELSD", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible. */
     if(*m == 0 || *n == 0)
     {
         *rank = 0;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Get machine parameters. */
     eps = slamch_("P");
@@ -777,13 +749,12 @@ void aocl_lapack_cgelsd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, sc
         aocl_lapack_clascl("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L10:
-    r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
-    iwork[1] = (aocl_int_t)(liwork);
-    rwork[1] = (real)lrwork;
+    work[1].r = (real) maxwrk;
+    work[1].i = 0.f; // , expr subst
+    iwork[1] = liwork;
+    rwork[1] = (real) lrwork;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGELSD */
 }
 /* cgelsd_ */

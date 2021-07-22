@@ -145,32 +145,13 @@ v(1:m-k+i-1) is stored on exit in */
 void cgeqlf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *tau, scomplex *work,
              aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgeqlf(m, n, a, lda, tau, work, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgeqlf(&m_64, &n_64, a, &lda_64, tau, work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgeqlf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
-                        scomplex *tau, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cgeqlf inputs: m %lld, n %lld, lda %lld, lwork %lld", *m, *n, *lda,
-             *lwork);
-#else
-    snprintf(buffer, 256, "cgeqlf inputs: m %d, n %d, lda %d, lwork %d", *m, *n, *lda, *lwork);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cgeqlf inputs: m %lld, n %lld, lda %lld, lwork %lld",*m, *n, *lda, *lwork);
+#else 
+    snprintf(buffer, 256,"cgeqlf inputs: m %d, n %d, lda %d, lwork %d",*m, *n, *lda, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -243,20 +224,20 @@ void aocl_lapack_cgeqlf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGEQLF", &i__1, (ftnlen)6);
+        xerbla_("CGEQLF", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(k == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     nbmin = 2;
     nx = 1;
@@ -338,11 +319,10 @@ void aocl_lapack_cgeqlf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
     {
         aocl_lapack_cgeql2(&mu, &nu, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
     }
-    r__1 = aocl_lapack_sroundup_lwork(&iws);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
+    work[1].r = (real) iws;
+    work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGEQLF */
 }
 /* cgeqlf_ */

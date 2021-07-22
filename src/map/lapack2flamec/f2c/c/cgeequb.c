@@ -145,30 +145,13 @@
 void cgeequb_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *r__, real *c__,
               real *rowcnd, real *colcnd, real *amax, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgeequb(m, n, a, lda, r__, c__, rowcnd, colcnd, amax, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgeequb(&m_64, &n_64, a, &lda_64, r__, c__, rowcnd, colcnd, amax, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgeequb(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *r__,
-                         real *c__, real *rowcnd, real *colcnd, real *amax, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cgeequb inputs: m %lld, n %lld, lda %lld", *m, *n, *lda);
-#else
-    snprintf(buffer, 256, "cgeequb inputs: m %d, n %d, lda %d", *m, *n, *lda);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cgeequb inputs: m %lld, n %lld, lda %lld",*m, *n, *lda);
+#else 
+    snprintf(buffer, 256,"cgeequb inputs: m %d, n %d, lda %d",*m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -230,9 +213,9 @@ void aocl_lapack_cgeequb(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGEEQUB", &i__1, (ftnlen)7);
+        xerbla_("CGEEQUB", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible. */
     if(*m == 0 || *n == 0)
@@ -241,7 +224,7 @@ void aocl_lapack_cgeequb(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int
         *colcnd = 1.f;
         *amax = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Get machine constants. Assume SMLNUM is a power of the radix. */
     smlnum = slamch_("S");
@@ -307,7 +290,7 @@ void aocl_lapack_cgeequb(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int
             {
                 *info = i__;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+                return 0;
             }
             /* L50: */
         }
@@ -383,7 +366,7 @@ void aocl_lapack_cgeequb(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int
             {
                 *info = *m + j;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+                return 0;
             }
             /* L110: */
         }
@@ -405,7 +388,7 @@ void aocl_lapack_cgeequb(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int
         *colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGEEQUB */
 }
 /* cgeequb_ */

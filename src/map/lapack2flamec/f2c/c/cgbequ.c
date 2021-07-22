@@ -153,36 +153,13 @@ void cgbequ_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomp
              aocl_int_t *ldab, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgbequ(m, n, kl, ku, ab, ldab, r__, c__, rowcnd, colcnd, amax, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgbequ(&m_64, &n_64, &kl_64, &ku_64, ab, &ldab_64, r__, c__, rowcnd, colcnd, amax,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgbequ(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
-                        scomplex *ab, aocl_int64_t *ldab, real *r__, real *c__, real *rowcnd,
-                        real *colcnd, real *amax, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cgbequ inputs: m %lld, n %lld, kl %lld, ku %lld, ldab %lld", *m, *n, *kl,
-             *ku, *ldab);
-#else
-    snprintf(buffer, 256, "cgbequ inputs: m %d, n %d, kl %d, ku %d, ldab %d", *m, *n, *kl, *ku,
-             *ldab);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+   snprintf(buffer, 256,"cgbequ inputs: m %lld, n %lld, kl %lld, ku %lld, ldab %lld",*m, *n, *kl, *ku, *ldab);
+#else 
+   snprintf(buffer, 256,"cgbequ inputs: m %d, n %d, kl %d, ku %d, ldab %d",*m, *n, *kl, *ku, *ldab);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -227,13 +204,7 @@ void aocl_lapack_cgbequ(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
     ab -= ab_offset;
     --r__;
     --c__;
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    sprintf(buffer, "cgbequ inputs: m %d, n %d, kl %d, ku %d, ldab %d\n", *m, *n, *kl, *ku, *ldab);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     *info = 0;
     if(*m < 0)
     {
@@ -258,9 +229,9 @@ void aocl_lapack_cgbequ(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGBEQU", &i__1, (ftnlen)6);
+        xerbla_("CGBEQU", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
@@ -269,7 +240,7 @@ void aocl_lapack_cgbequ(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
         *colcnd = 1.f;
         *amax = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Get machine constants. */
     smlnum = slamch_("S");
@@ -329,7 +300,7 @@ void aocl_lapack_cgbequ(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
             {
                 *info = i__;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+                return 0;
             }
             /* L50: */
         }
@@ -405,7 +376,7 @@ void aocl_lapack_cgbequ(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
             {
                 *info = *m + j;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+                return 0;
             }
             /* L110: */
         }

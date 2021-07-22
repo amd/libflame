@@ -132,29 +132,13 @@ static aocl_int64_t c__1 = 1;
 void cgecon_(char *norm, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *anorm, real *rcond,
              scomplex *work, real *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgecon(norm, n, a, lda, anorm, rcond, work, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgecon(norm, &n_64, a, &lda_64, anorm, rcond, work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgecon(char *norm, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *anorm,
-                        real *rcond, scomplex *work, real *rwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cgecon inputs: norm %c, n %lld, lda %lld", *norm, *n, *lda);
-#else
-    snprintf(buffer, 256, "cgecon inputs: norm %c, n %d, lda %d", *norm, *n, *lda);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cgecon inputs: norm %c, n %lld, lda %lld",*norm, *n, *lda);
+#else 
+    snprintf(buffer, 256,"cgecon inputs: norm %c, n %d, lda %d",*norm, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -208,13 +192,7 @@ void aocl_lapack_cgecon(char *norm, aocl_int64_t *n, scomplex *a, aocl_int64_t *
     a -= a_offset;
     --work;
     --rwork;
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    sprintf(buffer, "cgecon inputs: norm %c, n %d, lda %d\n", *norm, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     *info = 0;
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
     if(!onenrm && !lsame_(norm, "I", 1, 1))
@@ -236,9 +214,9 @@ void aocl_lapack_cgecon(char *norm, aocl_int64_t *n, scomplex *a, aocl_int64_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGECON", &i__1, (ftnlen)6);
+        xerbla_("CGECON", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     *rcond = 0.f;
@@ -246,25 +224,12 @@ void aocl_lapack_cgecon(char *norm, aocl_int64_t *n, scomplex *a, aocl_int64_t *
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(*anorm == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
-    }
-    else if(sisnan_(anorm))
-    {
-        *rcond = *anorm;
-        *info = -5;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
-    }
-    else if(*anorm > hugeval)
-    {
-        *info = -5;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     smlnum = slamch_("Safe minimum");
     /* Estimate the norm of inv(A). */

@@ -125,34 +125,13 @@ for 1<=i<=N, row i of the */
 void cgetrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda,
              aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgetrs(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgetrs(trans, &n_64, &nrhs_64, a, &lda_64, ipiv, b, &ldb_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgetrs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a,
-                        aocl_int64_t *lda, aocl_int_t *ipiv, scomplex *b, aocl_int64_t *ldb,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cgetrs inputs: trans %c, n %lld, nrhs %lld, lda %lld, ldb %lld", *trans,
-             *n, *nrhs, *lda, *ldb);
-#else
-    snprintf(buffer, 256, "cgetrs inputs: trans %c, n %d, nrhs %d, lda %d, ldb %d", *trans, *n,
-             *nrhs, *lda, *ldb);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cgetrs inputs: trans %c, n %lld, nrhs %lld, lda %lld, ipiv %lld, ldb %lld",*trans, *n, *nrhs, *lda, *ipiv, *ldb);
+#else 
+    snprintf(buffer, 256,"cgetrs inputs: trans %c, n %d, nrhs %d, lda %d, ipiv %d, ldb %d",*trans, *n, *nrhs, *lda, *ipiv, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -190,13 +169,7 @@ void aocl_lapack_cgetrs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scompl
     b_dim1 = *ldb;
     b_offset = 1 + b_dim1;
     b -= b_offset;
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "cgetrs inputs: trans %c, n %d, nrhs %d, lda %d, ipiv %d, ldb %d\n", *trans, *n, *nrhs, *lda, *ipiv, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
     if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))

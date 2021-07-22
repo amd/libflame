@@ -279,47 +279,13 @@ void cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, aocl_int_t *n,
             scomplex *beta, scomplex *vsl, aocl_int_t *ldvsl, scomplex *vsr, aocl_int_t *ldvsr,
             scomplex *work, aocl_int_t *lwork, real *rwork, logical *bwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgges(jobvsl, jobvsr, sort, selctg, n, a, lda, b, ldb, sdim, alpha, beta, vsl,
-                      ldvsl, vsr, ldvsr, work, lwork, rwork, bwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t sdim_64 = *sdim;
-    aocl_int64_t ldvsl_64 = *ldvsl;
-    aocl_int64_t ldvsr_64 = *ldvsr;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgges(jobvsl, jobvsr, sort, selctg, &n_64, a, &lda_64, b, &ldb_64, &sdim_64, alpha,
-                      beta, vsl, &ldvsl_64, vsr, &ldvsr_64, work, &lwork_64, rwork, bwork,
-                      &info_64);
-
-    *sdim = (aocl_int_t)sdim_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgges(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, aocl_int64_t *n,
-                       scomplex *a, aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb,
-                       aocl_int64_t *sdim, scomplex *alpha, scomplex *beta, scomplex *vsl,
-                       aocl_int64_t *ldvsl, scomplex *vsr, aocl_int64_t *ldvsr, scomplex *work,
-                       aocl_int64_t *lwork, real *rwork, logical *bwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cgges inputs: jobvsl %c, jobvsr %c, sort %c, n %lld, lda %lld, ldb %lld, ldvsl %lld, "
-             "ldvsr %lld, lwork %lld",
-             *jobvsl, *jobvsr, *sort, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork);
-#else
-    snprintf(buffer, 256,
-             "cgges inputs: jobvsl %c, jobvsr %c, sort %c, n %d, lda %d, ldb %d, ldvsl %d, ldvsr "
-             "%d, lwork %d",
-             *jobvsl, *jobvsr, *sort, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cgges inputs: jobvsl %c, jobvsr %c, sort %c, n %lld, lda %lld, ldb %lld, ldvsl %lld, ldvsr %lld, lwork %lld",*jobvsl, *jobvsr, *sort, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork);
+#else 
+    snprintf(buffer, 256,"cgges inputs: jobvsl %c, jobvsr %c, sort %c, n %d, lda %d, ldb %d, ldvsl %d, ldvsr %d, lwork %d",*jobvsl, *jobvsr, *sort, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -504,21 +470,21 @@ void aocl_lapack_cgges(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, aoc
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGGES ", &i__1, (ftnlen)6);
+        xerbla_("CGGES ", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *sdim = 0;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Get machine constants */
     eps = slamch_("P");
@@ -705,11 +671,10 @@ void aocl_lapack_cgges(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, aoc
         }
     }
 L30:
-    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
+    work[1].r = (real) lwkopt;
+    work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGGES */
 }
 /* cgges_ */

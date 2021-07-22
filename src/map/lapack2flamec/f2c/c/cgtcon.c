@@ -144,29 +144,13 @@ IPIV(i) = i indicates a row interchange was not */
 void cgtcon_(char *norm, aocl_int_t *n, scomplex *dl, scomplex *d__, scomplex *du, scomplex *du2,
              aocl_int_t *ipiv, real *anorm, real *rcond, scomplex *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgtcon(norm, n, dl, d__, du, du2, ipiv, anorm, rcond, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgtcon(norm, &n_64, dl, d__, du, du2, ipiv, anorm, rcond, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgtcon(char *norm, aocl_int64_t *n, scomplex *dl, scomplex *d__, scomplex *du,
-                        scomplex *du2, aocl_int_t *ipiv, real *anorm, real *rcond, scomplex *work,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cgtcon inputs: norm %c, n %lld", *norm, *n);
-#else
-    snprintf(buffer, 256, "cgtcon inputs: norm %c, n %d", *norm, *n);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cgtcon inputs: norm %c, n %lld, ipiv %lld",*norm, *n, *ipiv);
+#else 
+    snprintf(buffer, 256,"cgtcon inputs: norm %c, n %d, ipiv %d",*norm, *n, *ipiv);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -226,9 +210,9 @@ void aocl_lapack_cgtcon(char *norm, aocl_int64_t *n, scomplex *dl, scomplex *d__
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGTCON", &i__1, (ftnlen)6);
+        xerbla_("CGTCON", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     *rcond = 0.f;
@@ -236,12 +220,12 @@ void aocl_lapack_cgtcon(char *norm, aocl_int64_t *n, scomplex *dl, scomplex *d__
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(*anorm == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Check that D(1:N) is non-zero. */
     i__1 = *n;
@@ -251,7 +235,7 @@ void aocl_lapack_cgtcon(char *norm, aocl_int64_t *n, scomplex *dl, scomplex *d__
         if(d__[i__2].real == 0.f && d__[i__2].imag == 0.f)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
         /* L10: */
     }
@@ -289,7 +273,7 @@ L20:
         *rcond = 1.f / ainvnm / *anorm;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGTCON */
 }
 /* cgtcon_ */

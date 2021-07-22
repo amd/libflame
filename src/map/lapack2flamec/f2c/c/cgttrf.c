@@ -125,28 +125,13 @@ IPIV(i) = i indicates a row interchange was not */
 void cgttrf_(aocl_int_t *n, scomplex *dl, scomplex *d__, scomplex *du, scomplex *du2, aocl_int_t *ipiv,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgttrf(n, dl, d__, du, du2, ipiv, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgttrf(&n_64, dl, d__, du, du2, ipiv, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgttrf(aocl_int64_t *n, scomplex *dl, scomplex *d__, scomplex *du, scomplex *du2,
-                        aocl_int_t *ipiv, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cgttrf inputs: n %lld", *n);
-#else
-    snprintf(buffer, 256, "cgttrf inputs: n %d", *n);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cgttrf inputs: n %lld",*n);
+#else 
+    snprintf(buffer, 256,"cgttrf inputs: n %d",*n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -194,15 +179,15 @@ void aocl_lapack_cgttrf(aocl_int64_t *n, scomplex *dl, scomplex *d__, scomplex *
     {
         *info = -1;
         i__1 = -(*info);
-        aocl_blas_xerbla("CGTTRF", &i__1, (ftnlen)6);
+        xerbla_("CGTTRF", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Initialize IPIV(i) = i and DU2(i) = 0 */
     i__1 = *n;
@@ -362,7 +347,7 @@ void aocl_lapack_cgttrf(aocl_int64_t *n, scomplex *dl, scomplex *d__, scomplex *
     }
 L50:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGTTRF */
 }
 /* cgttrf_ */

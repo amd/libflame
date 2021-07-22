@@ -183,33 +183,16 @@ void cggbal_(char *job, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b
              aocl_int_t *ilo, aocl_int_t *ihi, real *lscale, real *rscale, real *work,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cggbal(job, n, a, lda, b, ldb, ilo, ihi, lscale, rscale, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cggbal(job, &n_64, a, &lda_64, b, &ldb_64, &ilo_64, &ihi_64, lscale, rscale, work,
-                       &info_64);
-
-    *ilo = (aocl_int_t)ilo_64;
-    *ihi = (aocl_int_t)ihi_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cggbal inputs: job %c, n %lld, lda %lld, ldb %lld",*job, *n, *lda, *ldb);
+#else 
+    snprintf(buffer, 256,"cggbal inputs: job %c, n %d, lda %d, ldb %d",*job, *n, *lda, *ldb);
 #endif
-}
-
-void aocl_lapack_cggbal(char *job, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *b,
-                        aocl_int64_t *ldb, aocl_int64_t *ilo, aocl_int64_t *ihi, real *lscale,
-                        real *rscale, real *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cggbal inputs: job %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
-                      ", ilo %" FLA_IS ", ihi %" FLA_IS "",
-                      *job, *n, *lda, *ldb, *ilo, *ihi);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2, r__3;
@@ -292,17 +275,17 @@ void aocl_lapack_cggbal(char *job, aocl_int64_t *n, scomplex *a, aocl_int64_t *l
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGGBAL", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("CGGBAL", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *ilo = 1;
         *ihi = *n;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*n == 1)
     {
@@ -310,8 +293,8 @@ void aocl_lapack_cggbal(char *job, aocl_int64_t *n, scomplex *a, aocl_int64_t *l
         *ihi = *n;
         lscale[1] = 1.f;
         rscale[1] = 1.f;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(lsame_(job, "N", 1, 1))
     {
@@ -324,8 +307,8 @@ void aocl_lapack_cggbal(char *job, aocl_int64_t *n, scomplex *a, aocl_int64_t *l
             rscale[i__] = 1.f;
             /* L10: */
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     k = 1;
     l = *n;
@@ -464,13 +447,13 @@ L190:
             rscale[i__] = 1.f;
             /* L195: */
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*ilo == *ihi)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Balance the submatrix in rows ILO to IHI. */
     nr = *ihi - *ilo + 1;
@@ -724,8 +707,8 @@ L350:
         aocl_blas_csscal(ihi, &rscale[j], &b[j * b_dim1 + 1], &c__1);
         /* L380: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of CGGBAL */
 }
 /* cggbal_ */

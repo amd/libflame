@@ -119,26 +119,13 @@ for 1 <= j <= N, column j of the */
 void cgesc2_(aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *rhs, aocl_int_t *ipiv,
              aocl_int_t *jpiv, real *scale)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgesc2(n, a, lda, rhs, ipiv, jpiv, scale);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-
-    aocl_lapack_cgesc2(&n_64, a, &lda_64, rhs, ipiv, jpiv, scale);
-#endif
-}
-
-void aocl_lapack_cgesc2(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *rhs,
-                        aocl_int_t *ipiv, aocl_int_t *jpiv, real *scale)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cgesc2 inputs: n %lld, lda %lld", *n, *lda);
-#else
-    snprintf(buffer, 256, "cgesc2 inputs: n %d, lda %d", *n, *lda);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cgesc2 inputs: n %lld, lda %lld, ipiv %lld, jpiv %lld",*n, *lda, *ipiv, *jpiv);
+#else 
+    snprintf(buffer, 256,"cgesc2 inputs: n %d, lda %d, ipiv %d, jpiv %d",*n, *lda, *ipiv, *jpiv);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -182,13 +169,7 @@ void aocl_lapack_cgesc2(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomple
     --rhs;
     --ipiv;
     --jpiv;
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "cgesc2 inputs: n %d, lda %d, ipiv %d, jpiv %d\n", *n, *lda, *ipiv, *jpiv);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     eps = slamch_("P");
     smlnum = slamch_("S") / eps;
     /* Apply permutations IPIV to RHS */

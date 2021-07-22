@@ -345,50 +345,13 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
              aocl_int_t *ldvsr, real *rconde, real *rcondv, scomplex *work, aocl_int_t *lwork,
              real *rwork, aocl_int_t *iwork, aocl_int_t *liwork, logical *bwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cggesx(jobvsl, jobvsr, sort, selctg, sense, n, a, lda, b, ldb, sdim, alpha, beta,
-                       vsl, ldvsl, vsr, ldvsr, rconde, rcondv, work, lwork, rwork, iwork, liwork,
-                       bwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t sdim_64 = *sdim;
-    aocl_int64_t ldvsl_64 = *ldvsl;
-    aocl_int64_t ldvsr_64 = *ldvsr;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t liwork_64 = *liwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cggesx(jobvsl, jobvsr, sort, selctg, sense, &n_64, a, &lda_64, b, &ldb_64, &sdim_64,
-                       alpha, beta, vsl, &ldvsl_64, vsr, &ldvsr_64, rconde, rcondv, work, &lwork_64,
-                       rwork, iwork, &liwork_64, bwork, &info_64);
-
-    *sdim = (aocl_int_t)sdim_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cggesx(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense,
-                        aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *b,
-                        aocl_int64_t *ldb, aocl_int64_t *sdim, scomplex *alpha, scomplex *beta,
-                        scomplex *vsl, aocl_int64_t *ldvsl, scomplex *vsr, aocl_int64_t *ldvsr,
-                        real *rconde, real *rcondv, scomplex *work, aocl_int64_t *lwork, real *rwork,
-                        aocl_int_t *iwork, aocl_int64_t *liwork, logical *bwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cggesx inputs: jobvsl %c, jobvsr %c, sort %c, sense %c, n %lld, lda %lld, ldb %lld, "
-             "ldvsl %lld, ldvsr %lld, lwork %lld, liwork %lld",
-             *jobvsl, *jobvsr, *sort, *sense, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork, *liwork);
-#else
-    snprintf(buffer, 256,
-             "cggesx inputs: jobvsl %c, jobvsr %c, sort %c, sense %c, n %d, lda %d, ldb %d, ldvsl "
-             "%d, ldvsr %d, lwork %d, liwork %d",
-             *jobvsl, *jobvsr, *sort, *sense, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork, *liwork);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cggesx inputs: jobvsl %c, jobvsr %c, sort %c, sense %c, n %lld, lda %lld, ldb %lld, ldvsl %lld, ldvsr %lld, lwork %lld, liwork %lld",*jobvsl, *jobvsr, *sort, *sense, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork, *liwork);
+#else 
+    snprintf(buffer, 256,"cggesx inputs: jobvsl %c, jobvsr %c, sort %c, sense %c, n %d, lda %d, ldb %d, ldvsl %d, ldvsr %d, lwork %d, liwork %d",*jobvsl, *jobvsr, *sort, *sense, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork, *liwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -624,21 +587,21 @@ void aocl_lapack_cggesx(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, ch
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGGESX", &i__1, (ftnlen)6);
+        xerbla_("CGGESX", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *sdim = 0;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Get machine constants */
     eps = slamch_("P");
@@ -855,12 +818,11 @@ void aocl_lapack_cggesx(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, ch
         }
     }
 L40:
-    r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
-    iwork[1] = (aocl_int_t)(liwmin);
+    work[1].r = (real) maxwrk;
+    work[1].i = 0.f; // , expr subst
+    iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGGESX */
 }
 /* cggesx_ */

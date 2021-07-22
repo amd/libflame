@@ -356,43 +356,13 @@ void cgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex 
              scomplex *b, aocl_int_t *ldb, scomplex *x, aocl_int_t *ldx, real *rcond, real *ferr,
              real *berr, scomplex *work, real *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cgesvx(fact, trans, n, nrhs, a, lda, af, ldaf, ipiv, equed, r__, c__, b, ldb, x,
-                       ldx, rcond, ferr, berr, work, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldaf_64 = *ldaf;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cgesvx(fact, trans, &n_64, &nrhs_64, a, &lda_64, af, &ldaf_64, ipiv, equed, r__,
-                       c__, b, &ldb_64, x, &ldx_64, rcond, ferr, berr, work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a,
-                        aocl_int64_t *lda, scomplex *af, aocl_int64_t *ldaf, aocl_int_t *ipiv,
-                        char *equed, real *r__, real *c__, scomplex *b, aocl_int64_t *ldb,
-                        scomplex *x, aocl_int64_t *ldx, real *rcond, real *ferr, real *berr,
-                        scomplex *work, real *rwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cgesvx inputs: fact %c, trans %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ldb %lld, "
-             "ldx %lld",
-             *fact, *trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
-#else
-    snprintf(buffer, 256,
-             "cgesvx inputs: fact %c, trans %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d",
-             *fact, *trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cgesvx inputs: fact %c, trans %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ldb %lld, ldx %lld",*fact, *trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
+#else 
+    snprintf(buffer, 256,"cgesvx inputs: fact %c, trans %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d",*fact, *trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -459,13 +429,7 @@ void aocl_lapack_cgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     --berr;
     --work;
     --rwork;
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* Function Body */
-#if AOCL_DTL_LOG_ENABLE
- char buffer[256];
- snprintf(buffer, 256, "cgesvx inputs: fact %c, trans %c, n %d, nrhs %d, lda %d, ldaf %d, ipiv %d, equed %c, ldb %d, ldx %d\n", *fact, *trans, *n, *nrhs, *lda, *ldaf, *ipiv, *equed, *ldb, *ldx);
- AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     *info = 0;
     nofact = lsame_(fact, "N", 1, 1);
     equil = lsame_(fact, "E", 1, 1);

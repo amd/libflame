@@ -340,48 +340,13 @@ LDQ >= 1 otherwise. */
 /** Generated wrapper function */
 void cggsvd_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, aocl_int_t *k, aocl_int_t *l, scomplex *a, aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, real *alpha, real *beta, scomplex *u, aocl_int_t *ldu, scomplex *v, aocl_int_t *ldv, scomplex *q, aocl_int_t *ldq, scomplex *work, real *rwork, aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cggsvd(jobu, jobv, jobq, m, n, p, k, l, a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q, ldq, work, rwork, iwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t p_64 = *p;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t l_64 = *l;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t ldv_64 = *ldv;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cggsvd(jobu, jobv, jobq, &m_64, &n_64, &p_64, &k_64, &l_64, a, &lda_64, b, &ldb_64, alpha, beta, u, &ldu_64, v, &ldv_64, q, &ldq_64, work, rwork, iwork, &info_64);
-
-    *k = (aocl_int_t)k_64;
-    *l = (aocl_int_t)l_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cggsvd(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p,
-             aocl_int64_t *k, aocl_int64_t *l, scomplex *a, aocl_int64_t *lda, scomplex *b,
-             aocl_int64_t *ldb, real *alpha, real *beta, scomplex *u, aocl_int64_t *ldu, scomplex *v,
-             aocl_int64_t *ldv, scomplex *q, aocl_int64_t *ldq, scomplex *work, real *rwork,
-             aocl_int_t *iwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cggsvd inputs: jobu %c, jobv %c, jobq %c, m %lld, n %lld, p %lld, lda %lld, ldb "
-             "%lld, ldu %lld, ldv %lld, ldq %lld",
-             *jobu, *jobv, *jobq, *m, *n, *p, *lda, *ldb, *ldu, *ldv, *ldq);
-#else
-    snprintf(buffer, 256,
-             "cggsvd inputs: jobu %c, jobv %c, jobq %c, m %d, n %d, p %d, lda %d, ldb %d, ldu %d, "
-             "ldv %d, ldq %d",
-             *jobu, *jobv, *jobq, *m, *n, *p, *lda, *ldb, *ldu, *ldv, *ldq);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cggsvd inputs: jobu %c, jobv %c, jobq %c, m %lld, n %lld, p %lld, lda %lld, ldb %lld, ldu %lld, ldv %lld, ldq %lld",*jobu, *jobv, *jobq, *m, *n, *p, *lda, *ldb, *ldu, *ldv, *ldq);
+#else 
+    snprintf(buffer, 256,"cggsvd inputs: jobu %c, jobv %c, jobq %c, m %d, n %d, p %d, lda %d, ldb %d, ldu %d, ldv %d, ldq %d",*jobu, *jobv, *jobq, *m, *n, *p, *lda, *ldb, *ldu, *ldv, *ldq);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -493,9 +458,9 @@ void aocl_lapack_cggsvd(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGGSVD", &i__1, (ftnlen)6);
+        xerbla_("CGGSVD", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Compute the Frobenius norm of matrices A and B */
     anorm = aocl_lapack_clange("1", m, n, &a[a_offset], lda, &rwork[1]);
@@ -550,7 +515,7 @@ void aocl_lapack_cggsvd(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
         /* L20: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CGGSVD */
 }
 /* cggsvd_ */

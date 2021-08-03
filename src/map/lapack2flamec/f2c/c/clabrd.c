@@ -271,6 +271,16 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
                 real *d__, real *e, scomplex *tauq, scomplex *taup, scomplex *x, aocl_int64_t *ldx,
                 scomplex *y, aocl_int64_t *ldy)
 {
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clabrd inputs: m %lld, n %lld, nb %lld, lda %lld, ldx %lld, ldy %lld",*m, *n, *nb, *lda, *ldx, *ldy);
+#else 
+    snprintf(buffer, 256,"clabrd inputs: m %d, n %d, nb %d, lda %d, ldx %d, ldy %d",*m, *n, *nb, *lda, *ldx, *ldy);
+#endif
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3;
     scomplex q__1;
@@ -323,7 +333,8 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
     /* Function Body */
     if(*m <= 0 || *n <= 0)
     {
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
 
 #ifdef FLA_OPENMP_MULTITHREADING
@@ -716,7 +727,8 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
             }
         }
     }
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of CLABRD */
 }
 /* clabrd_ */

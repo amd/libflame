@@ -175,34 +175,13 @@ if VECT = 'N' or 'V', then Q need not be set. */
 void chbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab, aocl_int_t *ldab,
              real *d__, real *e, scomplex *q, aocl_int_t *ldq, scomplex *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_chbtrd(vect, uplo, n, kd, ab, ldab, d__, e, q, ldq, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kd_64 = *kd;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_chbtrd(vect, uplo, &n_64, &kd_64, ab, &ldab_64, d__, e, q, &ldq_64, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_chbtrd(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex *ab,
-                        aocl_int64_t *ldab, real *d__, real *e, scomplex *q, aocl_int64_t *ldq,
-                        scomplex *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "chbtrd inputs: vect %c, uplo %c, n %lld, kd %lld, ldab %lld, ldq %lld",
-             *vect, *uplo, *n, *kd, *ldab, *ldq);
-#else
-    snprintf(buffer, 256, "chbtrd inputs: vect %c, uplo %c, n %d, kd %d, ldab %d, ldq %d", *vect,
-             *uplo, *n, *kd, *ldab, *ldq);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"chbtrd inputs: vect %c, uplo %c, n %lld, kd %lld, ldab %lld, ldq %lld",*vect, *uplo, *n, *kd, *ldab, *ldq);
+#else 
+    snprintf(buffer, 256,"chbtrd inputs: vect %c, uplo %c, n %d, kd %d, ldab %d, ldq %d",*vect, *uplo, *n, *kd, *ldab, *ldq);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -292,15 +271,15 @@ void aocl_lapack_chbtrd(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *k
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHBTRD", &i__1, (ftnlen)6);
+        xerbla_("CHBTRD", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Initialize Q to the unit matrix, if needed */
     if(initq)
@@ -895,7 +874,7 @@ void aocl_lapack_chbtrd(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *k
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CHBTRD */
 }
 /* chbtrd_ */

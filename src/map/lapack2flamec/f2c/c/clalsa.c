@@ -271,48 +271,13 @@ void clalsa_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
              aocl_int_t *givcol, aocl_int_t *ldgcol, aocl_int_t *perm, real *givnum, real *c__,
              real *s, real *rwork, aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clalsa(icompq, smlsiz, n, nrhs, b, ldb, bx, ldbx, u, ldu, vt, k, difl, difr, z__,
-                       poles, givptr, givcol, ldgcol, perm, givnum, c__, s, rwork, iwork, info);
-#else
-    aocl_int64_t icompq_64 = *icompq;
-    aocl_int64_t smlsiz_64 = *smlsiz;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldbx_64 = *ldbx;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t ldgcol_64 = *ldgcol;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_clalsa(&icompq_64, &smlsiz_64, &n_64, &nrhs_64, b, &ldb_64, bx, &ldbx_64, u,
-                       &ldu_64, vt, k, difl, difr, z__, poles, givptr, givcol, &ldgcol_64, perm,
-                       givnum, c__, s, rwork, iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_clalsa(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t *n,
-                        aocl_int64_t *nrhs, scomplex *b, aocl_int64_t *ldb, scomplex *bx,
-                        aocl_int64_t *ldbx, real *u, aocl_int64_t *ldu, real *vt, aocl_int_t *k,
-                        real *difl, real *difr, real *z__, real *poles, aocl_int_t *givptr,
-                        aocl_int_t *givcol, aocl_int64_t *ldgcol, aocl_int_t *perm, real *givnum,
-                        real *c__, real *s, real *rwork, aocl_int_t *iwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "clalsa inputs: icompq %lld, smlsiz %lld, n %lld, nrhs %lld, ldb %lld, ldbx %lld, ldu "
-             "%lld, k %lld, ldgcol %lld",
-             *icompq, *smlsiz, *n, *nrhs, *ldb, *ldbx, *ldu, *k, *ldgcol);
-#else
-    snprintf(buffer, 256,
-             "clalsa inputs: icompq %d, smlsiz %d, n %d, nrhs %d, ldb %d, ldbx %d, ldu %d, k %d, "
-             "ldgcol %d",
-             *icompq, *smlsiz, *n, *nrhs, *ldb, *ldbx, *ldu, *k, *ldgcol);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clalsa inputs: icompq %lld, smlsiz %lld, n %lld, nrhs %lld, ldb %lld, ldbx %lld, ldu %lld, k %lld, ldgcol %lld",*icompq, *smlsiz, *n, *nrhs, *ldb, *ldbx, *ldu, *k, *ldgcol);
+#else 
+    snprintf(buffer, 256,"clalsa inputs: icompq %d, smlsiz %d, n %d, nrhs %d, ldb %d, ldbx %d, ldu %d, k %d, ldgcol %d",*icompq, *smlsiz, *n, *nrhs, *ldb, *ldbx, *ldu, *k, *ldgcol);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -425,9 +390,9 @@ void aocl_lapack_clalsa(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CLALSA", &i__1, (ftnlen)6);
+        xerbla_("CLALSA", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Book-keeping and setting up the computation tree. */
     inode = 1;
@@ -820,7 +785,7 @@ L170: /* First now go through the right singular vector matrices of all */
     }
 L330:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLALSA */
 }
 /* clalsa_ */

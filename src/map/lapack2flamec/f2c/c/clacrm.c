@@ -118,31 +118,13 @@ B is N by N and real;
 void clacrm_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *b, aocl_int_t *ldb,
              scomplex *c__, aocl_int_t *ldc, real *rwork)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clacrm(m, n, a, lda, b, ldb, c__, ldc, rwork);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldc_64 = *ldc;
-
-    aocl_lapack_clacrm(&m_64, &n_64, a, &lda_64, b, &ldb_64, c__, &ldc_64, rwork);
-#endif
-}
-
-void aocl_lapack_clacrm(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *b,
-                        aocl_int64_t *ldb, scomplex *c__, aocl_int64_t *ldc, real *rwork)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clacrm inputs: m %lld, n %lld, lda %lld, ldb %lld, ldc %lld", *m, *n,
-             *lda, *ldb, *ldc);
-#else
-    snprintf(buffer, 256, "clacrm inputs: m %d, n %d, lda %d, ldb %d, ldc %d", *m, *n, *lda, *ldb,
-             *ldc);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clacrm inputs: m %lld, n %lld, lda %lld, ldb %lld, ldc %lld",*m, *n, *lda, *ldb, *ldc);
+#else 
+    snprintf(buffer, 256,"clacrm inputs: m %d, n %d, lda %d, ldb %d, ldc %d",*m, *n, *lda, *ldb, *ldc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -188,7 +170,7 @@ void aocl_lapack_clacrm(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
     if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
@@ -249,7 +231,7 @@ void aocl_lapack_clacrm(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
         /* L80: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLACRM */
 }
 /* clacrm_ */

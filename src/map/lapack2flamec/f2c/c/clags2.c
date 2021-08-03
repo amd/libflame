@@ -568,7 +568,7 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLAGS2 */
 }
 /* clags2_ */

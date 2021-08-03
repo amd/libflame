@@ -100,19 +100,16 @@ static aocl_int64_t c__1 = 1;
 /** Generated wrapper function */
 real clanht_(char *norm, aocl_int_t *n, real *d__, scomplex *e)
 {
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_clanht(norm, n, d__, e);
-#else
-    aocl_int64_t n_64 = *n;
-
-    return aocl_lapack_clanht(norm, &n_64, d__, e);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+   snprintf(buffer, 256,"clanht inputs: norm %c, n %lld",*norm, *n);
+#else 
+   snprintf(buffer, 256,"clanht inputs: norm %c, n %d",*norm, *n);
 #endif
-}
-
-real aocl_lapack_clanht(char *norm, aocl_int64_t *n, real *d__, scomplex *e)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("clanht inputs: norm %c, n %" FLA_IS "", *norm, *n);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     /* System generated locals */
     aocl_int64_t i__1;
     real ret_val, r__1;
@@ -214,7 +211,7 @@ real aocl_lapack_clanht(char *norm, aocl_int64_t *n, real *d__, scomplex *e)
         anorm = scale * sqrt(sum);
     }
     ret_val = anorm;
-    AOCL_DTL_TRACE_LOG_EXIT
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return ret_val;
     /* End of CLANHT */
 }

@@ -372,50 +372,13 @@ void cheevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, scomplex *a, ao
              aocl_int_t *lwork, real *rwork, aocl_int_t *lrwork, aocl_int_t *iwork,
              aocl_int_t *liwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cheevr(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z__, ldz, isuppz,
-                       work, lwork, rwork, lrwork, iwork, liwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t il_64 = *il;
-    aocl_int64_t iu_64 = *iu;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t lrwork_64 = *lrwork;
-    aocl_int64_t liwork_64 = *liwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cheevr(jobz, range, uplo, &n_64, a, &lda_64, vl, vu, &il_64, &iu_64, abstol, &m_64,
-                       w, z__, &ldz_64, isuppz, work, &lwork_64, rwork, &lrwork_64, iwork,
-                       &liwork_64, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cheevr(char *jobz, char *range, char *uplo, aocl_int64_t *n, scomplex *a,
-                        aocl_int64_t *lda, real *vl, real *vu, aocl_int64_t *il, aocl_int64_t *iu,
-                        real *abstol, aocl_int64_t *m, real *w, scomplex *z__, aocl_int64_t *ldz,
-                        aocl_int_t *isuppz, scomplex *work, aocl_int64_t *lwork, real *rwork,
-                        aocl_int64_t *lrwork, aocl_int_t *iwork, aocl_int64_t *liwork,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cheevr inputs: jobz %c, range %c, uplo %c, n %lld, lda %lld, il %lld, iu %lld, ldz "
-             "%lld, lwork %lld, lrwork %lld, liwrok %lld",
-             *jobz, *range, *uplo, *n, *lda, *il, *iu, *ldz, *lwork, *lrwork, *liwork);
-#else
-    snprintf(buffer, 256,
-             "cheevr inputs: jobz %c, range %c, uplo %c, n %d, lda %d, il %d, iu %d, ldz %d, lwork "
-             "%d, lrwork %d, liwork %d",
-             *jobz, *range, *uplo, *n, *lda, *il, *iu, *ldz, *lwork, *lrwork, *liwork);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cheevr inputs: jobz %c, range %c, uplo %c, n %lld, lda %lld, il %lld, iu %lld, ldz %lld, lwork %lld, lrwork %lld, liwrok %lld",*jobz, *range, *uplo, *n, *lda, *il, *iu, *ldz, *lwork, *lrwork, *liwork);
+#else 
+    snprintf(buffer, 256,"cheevr inputs: jobz %c, range %c, uplo %c, n %d, lda %d, il %d, iu %d, ldz %d, lwork %d, lrwork %d, liwork %d",*jobz, *range, *uplo, *n, *lda, *il, *iu, *ldz, *lwork, *lrwork, *liwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -585,23 +548,23 @@ void aocl_lapack_cheevr(char *jobz, char *range, char *uplo, aocl_int64_t *n, sc
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHEEVR", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        xerbla_("CHEEVR", &i__1);
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
-        work[1].real = 1.f;
-        work[1].imag = 0.f; // , expr subst
+        work[1].r = 1.f;
+        work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*n == 1)
     {
@@ -633,7 +596,7 @@ void aocl_lapack_cheevr(char *jobz, char *range, char *uplo, aocl_int64_t *n, sc
             isuppz[2] = 1;
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -861,13 +824,12 @@ L30:
         }
     }
     /* Set WORK(1) to optimal workspace size. */
-    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
-    rwork[1] = (real)lrwmin;
-    iwork[1] = (aocl_int_t)(liwmin);
+    work[1].r = (real) lwkopt;
+    work[1].i = 0.f; // , expr subst
+    rwork[1] = (real) lrwmin;
+    iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CHEEVR */
 }
 /* cheevr_ */

@@ -132,28 +132,13 @@ static aocl_int64_t c__1 = 1;
 /** Generated wrapper function */
 void clacn2_(aocl_int_t *n, scomplex *v, scomplex *x, real *est, aocl_int_t *kase, aocl_int_t *isave)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clacn2(n, v, x, est, kase, isave);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kase_64 = *kase;
-
-    aocl_lapack_clacn2(&n_64, v, x, est, &kase_64, isave);
-
-    *kase = (aocl_int_t)kase_64;
-#endif
-}
-
-void aocl_lapack_clacn2(aocl_int64_t *n, scomplex *v, scomplex *x, real *est, aocl_int64_t *kase,
-                        aocl_int_t *isave)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clacn2 inputs: n %lld, kase %lld, isave %lld", *n, *kase, *isave);
-#else
-    snprintf(buffer, 256, "clacn2 inputs: n %d, kase %d, isave %d", *n, *kase, *isave);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clacn2 inputs: n %lld, kase %lld, isave %lld",*n, *kase, *isave);
+#else 
+    snprintf(buffer, 256,"clacn2 inputs: n %d, kase %d, isave %d",*n, *kase, *isave);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -211,7 +196,7 @@ void aocl_lapack_clacn2(aocl_int64_t *n, scomplex *v, scomplex *x, real *est, ao
         *kase = 1;
         isave[1] = 1;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     switch(isave[1])
     {
@@ -264,7 +249,7 @@ L20:
     *kase = 2;
     isave[1] = 2;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* ................ ENTRY (ISAVE( 1 ) = 2) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L40:
@@ -286,7 +271,7 @@ L50:
     *kase = 1;
     isave[1] = 3;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* ................ ENTRY (ISAVE( 1 ) = 3) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L70:
@@ -324,7 +309,7 @@ L70:
     *kase = 2;
     isave[1] = 4;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* ................ ENTRY (ISAVE( 1 ) = 4) */
     /* X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L90:
@@ -353,7 +338,7 @@ L100:
     *kase = 1;
     isave[1] = 5;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* ................ ENTRY (ISAVE( 1 ) = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L120:
@@ -366,7 +351,7 @@ L120:
 L130:
     *kase = 0;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLACN2 */
 }
 /* clacn2_ */

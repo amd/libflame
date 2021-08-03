@@ -147,32 +147,13 @@ i */
 void cheev_(char *jobz, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *w,
             scomplex *work, aocl_int_t *lwork, real *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cheev(jobz, uplo, n, a, lda, w, work, lwork, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cheev(jobz, uplo, &n_64, a, &lda_64, w, work, &lwork_64, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cheev(char *jobz, char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
-                       real *w, scomplex *work, aocl_int64_t *lwork, real *rwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cheev inputs: jobz %c, uplo %c, n %lld, lda %lld, lwork %lld", *jobz,
-             *uplo, *n, *lda, *lwork);
-#else
-    snprintf(buffer, 256, "cheev inputs: jobz %c, uplo %c, n %d, lda %d, lwork %d", *jobz, *uplo,
-             *n, *lda, *lwork);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cheev inputs: jobz %c, uplo %c, n %lld, lda %lld, lwork %lld",*jobz, *uplo, *n, *lda, *lwork);
+#else 
+    snprintf(buffer, 256,"cheev inputs: jobz %c, uplo %c, n %d, lda %d, lwork %d",*jobz, *uplo, *n, *lda, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -269,20 +250,20 @@ void aocl_lapack_cheev(char *jobz, char *uplo, aocl_int64_t *n, scomplex *a, aoc
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHEEV ", &i__1, (ftnlen)6);
+        xerbla_("CHEEV ", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*n == 1)
     {
@@ -297,7 +278,7 @@ void aocl_lapack_cheev(char *jobz, char *uplo, aocl_int64_t *n, scomplex *a, aoc
             a[i__1].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -357,12 +338,11 @@ void aocl_lapack_cheev(char *jobz, char *uplo, aocl_int64_t *n, scomplex *a, aoc
         r__1 = 1.f / sigma;
         aocl_blas_sscal(&imax, &r__1, &w[1], &c__1);
     }
-    /* Set WORK(1) to optimal scomplex workspace size. */
-    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
+    /* Set WORK(1) to optimal complex workspace size. */
+    work[1].r = (real) lwkopt;
+    work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CHEEV */
 }
 /* cheev_ */

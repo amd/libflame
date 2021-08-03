@@ -192,39 +192,13 @@ void clalsd_(char *uplo, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *nrhs, re
              scomplex *b, aocl_int_t *ldb, real *rcond, aocl_int_t *rank, scomplex *work, real *rwork,
              aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clalsd(uplo, smlsiz, n, nrhs, d__, e, b, ldb, rcond, rank, work, rwork, iwork,
-                       info);
-#else
-    aocl_int64_t smlsiz_64 = *smlsiz;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t rank_64 = *rank;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_clalsd(uplo, &smlsiz_64, &n_64, &nrhs_64, d__, e, b, &ldb_64, rcond, &rank_64, work,
-                       rwork, iwork, &info_64);
-
-    *rank = (aocl_int_t)rank_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_clalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_int64_t *nrhs,
-                        real *d__, real *e, scomplex *b, aocl_int64_t *ldb, real *rcond,
-                        aocl_int64_t *rank, scomplex *work, real *rwork, aocl_int_t *iwork,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clalsd inputs: uplo %c, smlsiz %lld, n %lld, nrhs %lld, ldb %lld", *uplo,
-             *smlsiz, *n, *nrhs, *ldb);
-#else
-    snprintf(buffer, 256, "clalsd inputs: uplo %c, smlsiz %d, n %d, nrhs %d, ldb %d", *uplo,
-             *smlsiz, *n, *nrhs, *ldb);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+   snprintf(buffer, 256,"clalsd inputs: uplo %c, smlsiz %lld, n %lld, nrhs %lld, ldb %lld",*uplo, *smlsiz, *n, *nrhs, *ldb);
+#else 
+   snprintf(buffer, 256,"clalsd inputs: uplo %c, smlsiz %d, n %d, nrhs %d, ldb %d",*uplo, *smlsiz, *n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -304,9 +278,9 @@ void aocl_lapack_clalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CLALSD", &i__1, (ftnlen)6);
+        xerbla_("CLALSD", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     eps = slamch_("Epsilon");
     /* Set up the tolerance. */
@@ -323,7 +297,7 @@ void aocl_lapack_clalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(*n == 1)
     {
@@ -338,7 +312,7 @@ void aocl_lapack_clalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
             d__[1] = f2c_dabs(d__[1]);
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Rotate the matrix if it is lower bidiagonal. */
     if(*(unsigned char *)uplo == 'L')
@@ -385,9 +359,9 @@ void aocl_lapack_clalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     orgnrm = aocl_lapack_slanst("M", n, &d__[1], &e[1]);
     if(orgnrm == 0.f)
     {
-        aocl_lapack_claset("A", n, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
+        claset_("A", n, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     aocl_lapack_slascl("G", &c__0, &c__0, &orgnrm, &c_b10, n, &c__1, &d__[1], n, info);
     aocl_lapack_slascl("G", &c__0, &c__0, &orgnrm, &c_b10, &nm1, &c__1, &e[1], &nm1, info);
@@ -408,7 +382,7 @@ void aocl_lapack_clalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
         if(*info != 0)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
         /* In the real version, B is passed to SLASDQ and multiplied */
         /* internally by Q**H. Here B is scomplex and that product is */
@@ -539,11 +513,11 @@ void aocl_lapack_clalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
             /* L160: */
         }
         /* Unscale. */
-        aocl_lapack_slascl("G", &c__0, &c__0, &c_b10, &orgnrm, n, &c__1, &d__[1], n, info);
-        aocl_lapack_slasrt("D", n, &d__[1], info);
-        aocl_lapack_clascl("G", &c__0, &c__0, &orgnrm, &c_b10, n, nrhs, &b[b_offset], ldb, info);
+        slascl_("G", &c__0, &c__0, &c_b10, &orgnrm, n, &c__1, &d__[1], n, info);
+        slasrt_("D", n, &d__[1], info);
+        clascl_("G", &c__0, &c__0, &orgnrm, &c_b10, n, nrhs, &b[b_offset], ldb, info);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Book-keeping and setting up some constants. */
     nlvl = (integer)(log((real)(*n) / (real)(*smlsiz + 1)) / log(2.f)) + 1;
@@ -633,7 +607,7 @@ void aocl_lapack_clalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                 if(*info != 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return;
+                    return 0;
                 }
                 /* In the real version, B is passed to SLASDQ and multiplied */
                 /* internally by Q**H. Here B is scomplex and that product is */
@@ -704,7 +678,7 @@ void aocl_lapack_clalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                 if(*info != 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return;
+                    return 0;
                 }
                 bxst = bx + st1;
                 aocl_lapack_clalsa(&icmpq2, smlsiz, &nsize, nrhs, &b[st + b_dim1], ldb, &work[bxst],
@@ -716,7 +690,7 @@ void aocl_lapack_clalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                 if(*info != 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return;
+                    return 0;
                 }
             }
             st = i__ + 1;
@@ -831,17 +805,17 @@ void aocl_lapack_clalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
             if(*info != 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+                return 0;
             }
         }
         /* L320: */
     }
     /* Unscale and sort the singular values. */
-    aocl_lapack_slascl("G", &c__0, &c__0, &c_b10, &orgnrm, n, &c__1, &d__[1], n, info);
-    aocl_lapack_slasrt("D", n, &d__[1], info);
-    aocl_lapack_clascl("G", &c__0, &c__0, &orgnrm, &c_b10, n, nrhs, &b[b_offset], ldb, info);
+    slascl_("G", &c__0, &c__0, &c_b10, &orgnrm, n, &c__1, &d__[1], n, info);
+    slasrt_("D", n, &d__[1], info);
+    clascl_("G", &c__0, &c__0, &orgnrm, &c_b10, n, nrhs, &b[b_offset], ldb, info);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLALSD */
 }
 /* clalsd_ */

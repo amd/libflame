@@ -175,37 +175,13 @@ void chesv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t
             aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, scomplex *work, aocl_int_t *lwork,
             aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_chesv(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_chesv(uplo, &n_64, &nrhs_64, a, &lda_64, ipiv, b, &ldb_64, work, &lwork_64,
-                      &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_chesv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a,
-                       aocl_int64_t *lda, aocl_int_t *ipiv, scomplex *b, aocl_int64_t *ldb,
-                       scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "chesv inputs: uplo %c, n %lld, nrhs %lld, lda %lld, ldb %lld, lwork %lld", *uplo, *n,
-             *nrhs, *lda, *ldb, *lwork);
-#else
-    snprintf(buffer, 256, "chesv inputs: uplo %c, n %d, nrhs %d, lda %d, ldb %d, lwork %d", *uplo,
-             *n, *nrhs, *lda, *ldb, *lwork);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"chesv inputs: uplo %c, n %lld, nrhs %lld, lda %lld, ldb %lld, lwork %lld",*uplo, *n, *nrhs, *lda, *ldb, *lwork);
+#else 
+    snprintf(buffer, 256,"chesv inputs: uplo %c, n %d, nrhs %d, lda %d, ldb %d, lwork %d",*uplo, *n, *nrhs, *lda, *ldb, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -289,14 +265,14 @@ void aocl_lapack_chesv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHESV ", &i__1, (ftnlen)6);
+        xerbla_("CHESV ", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Compute the factorization A = U*D*U**H or A = L*D*L**H. */
     aocl_lapack_chetrf(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
@@ -315,11 +291,10 @@ void aocl_lapack_chesv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex
                                 &work[1], info);
         }
     }
-    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
+    work[1].r = (real) lwkopt;
+    work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CHESV */
 }
 /* chesv_ */

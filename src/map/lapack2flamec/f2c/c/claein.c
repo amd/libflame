@@ -155,32 +155,13 @@ void claein_(logical *rightv, logical *noinit, aocl_int_t *n, scomplex *h__, aoc
              scomplex *w, scomplex *v, scomplex *b, aocl_int_t *ldb, real *rwork, real *eps3,
              real *smlnum, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_claein(rightv, noinit, n, h__, ldh, w, v, b, ldb, rwork, eps3, smlnum, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldh_64 = *ldh;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_claein(rightv, noinit, &n_64, h__, &ldh_64, w, v, b, &ldb_64, rwork, eps3, smlnum,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_claein(logical *rightv, logical *noinit, aocl_int64_t *n, scomplex *h__,
-                        aocl_int64_t *ldh, scomplex *w, scomplex *v, scomplex *b, aocl_int64_t *ldb,
-                        real *rwork, real *eps3, real *smlnum, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "claein inputs: n %lld, ldh %lld, ldb %lld", *n, *ldh, *ldb);
-#else
-    snprintf(buffer, 256, "claein inputs: n %d, ldh %d, ldb %d", *n, *ldh, *ldb);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"claein inputs: n %lld, ldh %lld, ldb %lld",*n, *ldh, *ldb);
+#else 
+    snprintf(buffer, 256,"claein inputs: n %d, ldh %d, ldb %d",*n, *ldh, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -494,6 +475,7 @@ L120: /* Normalize eigenvector. */
     i__1 = i__;
     r__3 = 1.f / ((r__1 = v[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&v[i__]), f2c_abs(r__2)));
     csscal_(n, &r__3, &v[1], &c__1);
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return 0;
     /* End of CLAEIN */
 }

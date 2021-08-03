@@ -186,37 +186,13 @@ static aocl_int64_t c__1 = 1;
 void clahef_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, scomplex *a,
                   aocl_int_t *lda, aocl_int_t *ipiv, scomplex *w, aocl_int_t *ldw, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clahef_rook(uplo, n, nb, kb, a, lda, ipiv, w, ldw, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nb_64 = *nb;
-    aocl_int64_t kb_64 = *kb;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldw_64 = *ldw;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_clahef_rook(uplo, &n_64, &nb_64, &kb_64, a, &lda_64, ipiv, w, &ldw_64, &info_64);
-
-    *kb = (aocl_int_t)kb_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_clahef_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl_int64_t *kb,
-                             scomplex *a, aocl_int64_t *lda, aocl_int_t *ipiv, scomplex *w,
-                             aocl_int64_t *ldw, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "clahef_rook inputs: uplo %c, n %lld, nb %lld, kb %lld, lda %lld, ldw %lld", *uplo, *n,
-             *nb, *kb, *lda, *ldw);
-#else
-    snprintf(buffer, 256, "clahef_rook inputs: uplo %c, n %d, nb %d, kb %d, lda %d, ldw %d", *uplo,
-             *n, *nb, *kb, *lda, *ldw);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clahef_rook inputs: uplo %c, n %lld, nb %lld, kb %lld, lda %lld, ldw %lld",*uplo, *n, *nb, *kb, *lda, *ldw);
+#else 
+    snprintf(buffer, 256,"clahef_rook inputs: uplo %c, n %d, nb %d, kb %d, lda %d, ldw %d",*uplo, *n, *nb, *kb, *lda, *ldw);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -1346,7 +1322,7 @@ void aocl_lapack_clahef_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
         *kb = k - 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLAHEF_ROOK */
 }
 /* clahef_rook__ */

@@ -103,30 +103,13 @@ if UPLO = 'L', only the lower trapezium is */
 void clacpy_(char *uplo, aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b,
              aocl_int_t *ldb)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clacpy(uplo, m, n, a, lda, b, ldb);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-
-    aocl_lapack_clacpy(uplo, &m_64, &n_64, a, &lda_64, b, &ldb_64);
-#endif
-}
-
-void aocl_lapack_clacpy(char *uplo, aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
-                        scomplex *b, aocl_int64_t *ldb)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clacpy inputs: uplo %c, m %lld, n %lld, lda %lld, ldb %lld", *uplo, *m,
-             *n, *lda, *ldb);
-#else
-    snprintf(buffer, 256, "clacpy inputs: uplo %c, m %d, n %d, lda %d, ldb %d", *uplo, *m, *n, *lda,
-             *ldb);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clacpy inputs: uplo %c, m %lld, n %lld, lda %lld, ldb %lld",*uplo, *m, *n, *lda, *ldb);
+#else 
+    snprintf(buffer, 256,"clacpy inputs: uplo %c, m %d, n %d, lda %d, ldb %d",*uplo, *m, *n, *lda, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -211,7 +194,7 @@ void aocl_lapack_clacpy(char *uplo, aocl_int64_t *m, aocl_int64_t *n, scomplex *
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLACPY */
 }
 /* clacpy_ */

@@ -136,26 +136,13 @@ static aocl_int64_t c__1 = 1;
 void claic1_(aocl_int_t *job, aocl_int_t *j, scomplex *x, real *sest, scomplex *w, scomplex *gamma,
              real *sestpr, scomplex *s, scomplex *c__)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_claic1(job, j, x, sest, w, gamma, sestpr, s, c__);
-#else
-    aocl_int64_t job_64 = *job;
-    aocl_int64_t j_64 = *j;
-
-    aocl_lapack_claic1(&job_64, &j_64, x, sest, w, gamma, sestpr, s, c__);
-#endif
-}
-
-void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *sest, scomplex *w,
-                        scomplex *gamma, real *sestpr, scomplex *s, scomplex *c__)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "claic1 inputs: job %lld, j %lld", *job, *j);
-#else
-    snprintf(buffer, 256, "claic1 inputs: job %d, j %d", *job, *j);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"claic1 inputs: job %lld, j %lld",*job, *j);
+#else 
+    snprintf(buffer, 256,"claic1 inputs: job %d, j %d",*job, *j);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -245,7 +232,7 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
                 *sestpr = s1 * tmp;
             }
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
         else if(absgam <= eps * absest)
         {
@@ -256,7 +243,7 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
             s2 = absalp / tmp;
             *sestpr = tmp * sqrt(s1 * s1 + s2 * s2);
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
         else if(absalp <= eps * absest)
         {
@@ -275,7 +262,7 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
                 *sestpr = s1;
             }
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
         else if(absest <= eps * absalp || absest <= eps * absgam)
         {
@@ -314,7 +301,7 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
                 c__->real = q__1.real, c__->imag = q__1.imag;
             }
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
         else
         {
@@ -380,7 +367,7 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
             c__->real = q__1.real, c__->imag = q__1.imag;
             *sestpr = sqrt(t + 1.f) * absest;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
     }
     else if(*job == 2)
@@ -427,15 +414,15 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
             q__2.real = q__3.real + q__5.real;
             q__2.imag = q__3.imag + q__5.imag; // , expr subst
             c_sqrt(&q__1, &q__2);
-            tmp = q__1.real;
-            q__1.real = s->real / tmp;
-            q__1.imag = s->imag / tmp; // , expr subst
-            s->real = q__1.real, s->imag = q__1.imag;
-            q__1.real = c__->real / tmp;
-            q__1.imag = c__->imag / tmp; // , expr subst
-            c__->real = q__1.real, c__->imag = q__1.imag;
+            tmp = q__1.r;
+            q__1.r = s->r / tmp;
+            q__1.i = s->i / tmp; // , expr subst
+            s->r = q__1.r, s->i = q__1.i;
+            q__1.r = c__->r / tmp;
+            q__1.i = c__->i / tmp; // , expr subst
+            c__->r = q__1.r, c__->i = q__1.i;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
         else if(absgam <= eps * absest)
         {
@@ -443,7 +430,7 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
             c__->real = 1.f, c__->imag = 0.f;
             *sestpr = absgam;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
         else if(absalp <= eps * absest)
         {
@@ -462,7 +449,7 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
                 *sestpr = s2;
             }
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
         else if(absest <= eps * absalp || absest <= eps * absgam)
         {
@@ -509,7 +496,7 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
                 c__->real = q__1.real, c__->imag = q__1.imag;
             }
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
         else
         {
@@ -609,19 +596,19 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
             q__2.real = q__3.real + q__5.real;
             q__2.imag = q__3.imag + q__5.imag; // , expr subst
             c_sqrt(&q__1, &q__2);
-            tmp = q__1.real;
-            q__1.real = sine.real / tmp;
-            q__1.imag = sine.imag / tmp; // , expr subst
-            s->real = q__1.real, s->imag = q__1.imag;
-            q__1.real = cosine.real / tmp;
-            q__1.imag = cosine.imag / tmp; // , expr subst
-            c__->real = q__1.real, c__->imag = q__1.imag;
+            tmp = q__1.r;
+            q__1.r = sine.r / tmp;
+            q__1.i = sine.i / tmp; // , expr subst
+            s->r = q__1.r, s->i = q__1.i;
+            q__1.r = cosine.r / tmp;
+            q__1.i = cosine.i / tmp; // , expr subst
+            c__->r = q__1.r, c__->i = q__1.i;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLAIC1 */
 }
 /* claic1_ */

@@ -121,7 +121,11 @@ void chpgst_(aocl_int_t *itype, char *uplo, aocl_int_t *n, scomplex *ap, scomple
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if AOCL_DTL_LOG_ENABLE 
     char buffer[256]; 
-    snprintf(buffer, 256,"chpgst inputs: itype %d, uplo %c, n %d\n",*itype, *uplo, *n);
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"chpgst inputs: itype %lld, uplo %c, n %lld",*itype, *uplo, *n);
+#else 
+    snprintf(buffer, 256,"chpgst inputs: itype %d, uplo %c, n %d",*itype, *uplo, *n);
+#endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */

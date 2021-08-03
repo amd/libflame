@@ -145,31 +145,13 @@ otherwise, */
 void clagtm_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *alpha, scomplex *dl, scomplex *d__,
              scomplex *du, scomplex *x, aocl_int_t *ldx, real *beta, scomplex *b, aocl_int_t *ldb)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clagtm(trans, n, nrhs, alpha, dl, d__, du, x, ldx, beta, b, ldb);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t ldb_64 = *ldb;
-
-    aocl_lapack_clagtm(trans, &n_64, &nrhs_64, alpha, dl, d__, du, x, &ldx_64, beta, b, &ldb_64);
-#endif
-}
-
-void aocl_lapack_clagtm(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *alpha, scomplex *dl,
-                        scomplex *d__, scomplex *du, scomplex *x, aocl_int64_t *ldx, real *beta,
-                        scomplex *b, aocl_int64_t *ldb)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clagtm inputs: trans %c, n %lld, nrhs %lld, ldx %lld, ldb %lld", *trans,
-             *n, *nrhs, *ldx, *ldb);
-#else
-    snprintf(buffer, 256, "clagtm inputs: trans %c, n %d, nrhs %d, ldx %d, ldb %d", *trans, *n,
-             *nrhs, *ldx, *ldb);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clagtm inputs: trans %c, n %lld, nrhs %lld, ldx %lld, ldb %lld",*trans, *n, *nrhs, *ldx, *ldb);
+#else 
+    snprintf(buffer, 256,"clagtm inputs: trans %c, n %d, nrhs %d, ldx %d, ldb %d",*trans, *n, *nrhs, *ldx, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -214,7 +196,7 @@ void aocl_lapack_clagtm(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Multiply B by BETA if BETA.NE.1. */
     if(*beta == 0.f)
@@ -751,7 +733,7 @@ void aocl_lapack_clagtm(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLAGTM */
 }
 /* clagtm_ */

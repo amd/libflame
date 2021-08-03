@@ -180,24 +180,16 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 void chetd2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d__, real *e,
              scomplex *tau, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_chetd2(uplo, n, a, lda, d__, e, tau, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_chetd2(uplo, &n_64, a, &lda_64, d__, e, tau, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"chetd2 inputs: uplo %c, n %lld, lda %lld",*uplo, *n, *lda);
+#else 
+    snprintf(buffer, 256,"chetd2 inputs: uplo %c, n %d, lda %d",*uplo, *n, *lda);
 #endif
-}
-
-void aocl_lapack_chetd2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *d__,
-                        real *e, scomplex *tau, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("chetd2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     real r__1;
@@ -253,15 +245,15 @@ void aocl_lapack_chetd2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHETD2", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("CHETD2", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n <= 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(upper)
     {
@@ -403,8 +395,8 @@ void aocl_lapack_chetd2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
         i__1 = *n + *n * a_dim1;
         d__[*n] = a[i__1].real;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of CHETD2 */
 }
 /* chetd2_ */

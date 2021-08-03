@@ -288,45 +288,13 @@ void chesvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *
              scomplex *x, aocl_int_t *ldx, real *rcond, real *ferr, real *berr, scomplex *work,
              aocl_int_t *lwork, real *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_chesvx(fact, uplo, n, nrhs, a, lda, af, ldaf, ipiv, b, ldb, x, ldx, rcond, ferr,
-                       berr, work, lwork, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldaf_64 = *ldaf;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_chesvx(fact, uplo, &n_64, &nrhs_64, a, &lda_64, af, &ldaf_64, ipiv, b, &ldb_64, x,
-                       &ldx_64, rcond, ferr, berr, work, &lwork_64, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_chesvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a,
-                        aocl_int64_t *lda, scomplex *af, aocl_int64_t *ldaf, aocl_int_t *ipiv,
-                        scomplex *b, aocl_int64_t *ldb, scomplex *x, aocl_int64_t *ldx, real *rcond,
-                        real *ferr, real *berr, scomplex *work, aocl_int64_t *lwork, real *rwork,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "chesvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ldb %lld, "
-             "ldx %lld, lwork %lld",
-             *fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *lwork);
-#else
-    snprintf(
-        buffer, 256,
-        "chesvx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d, lwork %d",
-        *fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *lwork);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"chesvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ipiv %lld, ldb %lld, ldx %lld, lwork %lld",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldx, *lwork);
+#else 
+    snprintf(buffer, 256,"chesvx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ipiv %d, ldb %d, ldx %d, lwork %d",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldx, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -447,14 +415,14 @@ void aocl_lapack_chesvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *n
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHESVX", &i__1, (ftnlen)6);
+        xerbla_("CHESVX", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(nofact)
     {
@@ -466,7 +434,7 @@ void aocl_lapack_chesvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *n
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -486,11 +454,10 @@ void aocl_lapack_chesvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *n
     {
         *info = *n + 1;
     }
-    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
+    work[1].r = (real) lwkopt;
+    work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CHESVX */
 }
 /* chesvx_ */

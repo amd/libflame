@@ -89,10 +89,11 @@ VOID cladiv_(complex * ret_val, complex *x, complex *y)
     r__3 = y->real;
     r__4 = y->imag;
     sladiv_(&r__1, &r__2, &r__3, &r__4, &zr, &zi);
-    q__1.real = zr;
-    q__1.imag = zi; // , expr subst
-    ret_val->real = q__1.real, ret_val->imag = q__1.imag;
-    return;
+    q__1.r = zr;
+    q__1.i = zi; // , expr subst
+    ret_val->r = q__1.r, ret_val->i = q__1.i;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return ;
     /* End of CLADIV */
 }
 
@@ -130,6 +131,7 @@ complex cladiv_(complex *x, complex *y)
     sladiv_(&r__1, &r__2, &r__3, &r__4, &zr, &zi);
     q__1.r = zr;
     q__1.i = zi; // , expr subst
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return q__1;
     /* End of CLADIV */
 }
@@ -138,13 +140,13 @@ complex cladiv_(complex *x, complex *y)
 
 void cladiv_f2c_(complex *ret_val, complex *x, complex *y)
 {
-
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5); 
 #ifdef FLA_ENABLE_VOID_RETURN_COMPLEX_FUNCTION
     cladiv_(ret_val, x, y);
 #else
     *ret_val = cladiv_(x, y);
 #endif
-
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
 }
 

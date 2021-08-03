@@ -72,25 +72,13 @@
 /** Generated wrapper function */
 void clacgv_(aocl_int_t *n, scomplex *x, aocl_int_t *incx)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clacgv(n, x, incx);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-
-    aocl_lapack_clacgv(&n_64, x, &incx_64);
-#endif
-}
-
-void aocl_lapack_clacgv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clacgv inputs: n %lld, incx %lld", *n, *incx);
-#else
-    snprintf(buffer, 256, "clacgv inputs: n %d, incx %d", *n, *incx);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clacgv inputs: n %lld, incx %lld",*n, *incx);
+#else 
+    snprintf(buffer, 256,"clacgv inputs: n %d, incx %d",*n, *incx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -147,7 +135,7 @@ void aocl_lapack_clacgv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx)
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLACGV */
 }
 /* clacgv_ */

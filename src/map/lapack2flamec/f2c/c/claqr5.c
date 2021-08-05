@@ -261,55 +261,13 @@ void claqr5_(logical *wantt, logical *wantz, aocl_int_t *kacc22, aocl_int_t *n, 
              aocl_int_t *ldv, scomplex *u, aocl_int_t *ldu, aocl_int_t *nv, scomplex *wv,
              aocl_int_t *ldwv, aocl_int_t *nh, scomplex *wh, aocl_int_t *ldwh)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_claqr5(wantt, wantz, kacc22, n, ktop, kbot, nshfts, s, h__, ldh, iloz, ihiz, z__,
-                       ldz, v, ldv, u, ldu, nv, wv, ldwv, nh, wh, ldwh);
-#else
-    aocl_int64_t kacc22_64 = *kacc22;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ktop_64 = *ktop;
-    aocl_int64_t kbot_64 = *kbot;
-    aocl_int64_t nshfts_64 = *nshfts;
-    aocl_int64_t ldh_64 = *ldh;
-    aocl_int64_t iloz_64 = *iloz;
-    aocl_int64_t ihiz_64 = *ihiz;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t ldv_64 = *ldv;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t nv_64 = *nv;
-    aocl_int64_t ldwv_64 = *ldwv;
-    aocl_int64_t nh_64 = *nh;
-    aocl_int64_t ldwh_64 = *ldwh;
-
-    aocl_lapack_claqr5(wantt, wantz, &kacc22_64, &n_64, &ktop_64, &kbot_64, &nshfts_64, s, h__,
-                       &ldh_64, &iloz_64, &ihiz_64, z__, &ldz_64, v, &ldv_64, u, &ldu_64, &nv_64,
-                       wv, &ldwv_64, &nh_64, wh, &ldwh_64);
-#endif
-}
-
-void aocl_lapack_claqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, aocl_int64_t *n,
-                        aocl_int64_t *ktop, aocl_int64_t *kbot, aocl_int64_t *nshfts, scomplex *s,
-                        scomplex *h__, aocl_int64_t *ldh, aocl_int64_t *iloz, aocl_int64_t *ihiz,
-                        scomplex *z__, aocl_int64_t *ldz, scomplex *v, aocl_int64_t *ldv, scomplex *u,
-                        aocl_int64_t *ldu, aocl_int64_t *nv, scomplex *wv, aocl_int64_t *ldwv,
-                        aocl_int64_t *nh, scomplex *wh, aocl_int64_t *ldwh)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(
-        buffer, 256,
-        "claqr5 inputs: kacc22 %lld, n %lld, ktop %lld, kbot %lld, nshfts %lld, ldh %lld, iloz "
-        "%lld, ihiz %lld, ldz %lld, ldv %lld, ldu %lld, nv %lld, ldwv %lld, nh %lld, ldwh %lld",
-        *kacc22, *n, *ktop, *kbot, *nshfts, *ldh, *iloz, *ihiz, *ldz, *ldv, *ldu, *nv, *ldwv, *nh,
-        *ldwh);
-#else
-    snprintf(buffer, 256,
-             "claqr5 inputs: kacc22 %d, n %d, ktop %d, kbot %d, nshfts %d, ldh %d, iloz %d, ihiz "
-             "%d, ldz %d, ldv %d, ldu %d, nv %d, ldwv %d, nh %d, ldwh %d",
-             *kacc22, *n, *ktop, *kbot, *nshfts, *ldh, *iloz, *ihiz, *ldz, *ldv, *ldu, *nv, *ldwv,
-             *nh, *ldwh);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"claqr5 inputs: kacc22 %lld, n %lld, ktop %lld, kbot %lld, nshfts %lld, ldh %lld, iloz %lld, ihiz %lld, ldz %lld, ldv %lld, ldu %lld, nv %lld, ldwv %lld, nh %lld, ldwh %lld",*kacc22, *n, *ktop, *kbot, *nshfts, *ldh, *iloz, *ihiz, *ldz, *ldv, *ldu, *nv, *ldwv, *nh, *ldwh);
+#else 
+    snprintf(buffer, 256,"claqr5 inputs: kacc22 %d, n %d, ktop %d, kbot %d, nshfts %d, ldh %d, iloz %d, ihiz %d, ldz %d, ldv %d, ldu %d, nv %d, ldwv %d, nh %d, ldwh %d",*kacc22, *n, *ktop, *kbot, *nshfts, *ldh, *iloz, *ihiz, *ldz, *ldv, *ldu, *nv, *ldwv, *nh, *ldwh);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -389,14 +347,14 @@ void aocl_lapack_claqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, ao
     if(*nshfts < 2)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* ==== If the active block is empty or 1-by-1, then there */
     /* . is nothing to do. ==== */
     if(*ktop >= *kbot)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* ==== NSHFTS is supposed to be even, but if it is odd, */
     /* . then simply reduce it by one. ==== */
@@ -1566,7 +1524,7 @@ void aocl_lapack_claqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, ao
     }
     /* ==== End of CLAQR5 ==== */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
 }
 /* claqr5_ */
 

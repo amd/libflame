@@ -148,32 +148,13 @@ static aocl_int64_t c__1 = 1;
 void clarz_(char *side, aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, scomplex *v, aocl_int_t *incv,
             scomplex *tau, scomplex *c__, aocl_int_t *ldc, scomplex *work)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clarz(side, m, n, l, v, incv, tau, c__, ldc, work);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t l_64 = *l;
-    aocl_int64_t incv_64 = *incv;
-    aocl_int64_t ldc_64 = *ldc;
-
-    aocl_lapack_clarz(side, &m_64, &n_64, &l_64, v, &incv_64, tau, c__, &ldc_64, work);
-#endif
-}
-
-void aocl_lapack_clarz(char *side, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, scomplex *v,
-                       aocl_int64_t *incv, scomplex *tau, scomplex *c__, aocl_int64_t *ldc,
-                       scomplex *work)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clarz inputs: side %c, m %lld, n %lld, l %lld, incv %lld, ldc %lld",
-             *side, *m, *n, *l, *incv, *ldc);
-#else
-    snprintf(buffer, 256, "clarz inputs: side %c, m %d, n %d, l %d, incv %d, ldc %d", *side, *m, *n,
-             *l, *incv, *ldc);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clarz inputs: side %c, m %lld, n %lld, l %lld, incv %lld, ldc %lld",*side, *m, *n, *l, *incv, *ldc);
+#else 
+    snprintf(buffer, 256,"clarz inputs: side %c, m %d, n %d, l %d, incv %d, ldc %d",*side, *m, *n, *l, *incv, *ldc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -252,7 +233,7 @@ void aocl_lapack_clarz(char *side, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLARZ */
 }
 /* clarz_ */

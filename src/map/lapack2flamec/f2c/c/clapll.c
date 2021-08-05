@@ -98,27 +98,13 @@
 /** Generated wrapper function */
 void clapll_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, scomplex *y, aocl_int_t *incy, real *ssmin)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clapll(n, x, incx, y, incy, ssmin);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incy_64 = *incy;
-
-    aocl_lapack_clapll(&n_64, x, &incx_64, y, &incy_64, ssmin);
-#endif
-}
-
-void aocl_lapack_clapll(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scomplex *y,
-                        aocl_int64_t *incy, real *ssmin)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clapll inputs: n %lld, incx %lld, incy %lld", *n, *incx, *incy);
-#else
-    snprintf(buffer, 256, "clapll inputs: n %d, incx %d, incy %d", *n, *incx, *incy);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clapll inputs: n %lld, incx %lld, incy %lld",*n, *incx, *incy);
+#else 
+    snprintf(buffer, 256,"clapll inputs: n %d, incx %d, incy %d",*n, *incx, *incy);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -164,7 +150,7 @@ void aocl_lapack_clapll(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
     {
         *ssmin = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Compute the QR factorization of the N-by-2 matrix ( X Y ) */
     aocl_lapack_clarfg(n, &x[1], &x[*incx + 1], incx, &tau);
@@ -194,7 +180,7 @@ void aocl_lapack_clapll(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
     r__3 = c_abs(&a22);
     slas2_(&r__1, &r__2, &r__3, ssmin, &ssmax);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLAPLL */
 }
 /* clapll_ */

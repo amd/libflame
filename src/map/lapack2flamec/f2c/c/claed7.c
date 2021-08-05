@@ -253,47 +253,13 @@ void claed7_(aocl_int_t *n, aocl_int_t *cutpnt, aocl_int_t *qsiz, aocl_int_t *tl
              aocl_int_t *perm, aocl_int_t *givptr, aocl_int_t *givcol, real *givnum, scomplex *work,
              real *rwork, aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_claed7(n, cutpnt, qsiz, tlvls, curlvl, curpbm, d__, q, ldq, rho, indxq, qstore,
-                       qptr, prmptr, perm, givptr, givcol, givnum, work, rwork, iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t cutpnt_64 = *cutpnt;
-    aocl_int64_t qsiz_64 = *qsiz;
-    aocl_int64_t tlvls_64 = *tlvls;
-    aocl_int64_t curlvl_64 = *curlvl;
-    aocl_int64_t curpbm_64 = *curpbm;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_claed7(&n_64, &cutpnt_64, &qsiz_64, &tlvls_64, &curlvl_64, &curpbm_64, d__, q,
-                       &ldq_64, rho, indxq, qstore, qptr, prmptr, perm, givptr, givcol, givnum,
-                       work, rwork, iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_claed7(aocl_int64_t *n, aocl_int64_t *cutpnt, aocl_int64_t *qsiz,
-                        aocl_int64_t *tlvls, aocl_int64_t *curlvl, aocl_int64_t *curpbm, real *d__,
-                        scomplex *q, aocl_int64_t *ldq, real *rho, aocl_int_t *indxq, real *qstore,
-                        aocl_int_t *qptr, aocl_int_t *prmptr, aocl_int_t *perm, aocl_int_t *givptr,
-                        aocl_int_t *givcol, real *givnum, scomplex *work, real *rwork,
-                        aocl_int_t *iwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "claed7 inputs: n %lld, cutpnt %lld, qsiz %lld, tlvls %lld, curlvl %lld, curpbm %lld, "
-             "ldq %lld, indxq %lld, qptr %lld, prmptr %lld",
-             *n, *cutpnt, *qsiz, *tlvls, *curlvl, *curpbm, *ldq, *indxq, *qptr, *prmptr);
-#else
-    snprintf(buffer, 256,
-             "claed7 inputs: n %d, cutpnt %d, qsiz %d, tlvls %d, curlvl %d, curpbm %d, ldq %d, "
-             "indxq %d, qptr %d, prmptr %d",
-             *n, *cutpnt, *qsiz, *tlvls, *curlvl, *curpbm, *ldq, *indxq, *qptr, *prmptr);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"claed7 inputs: n %lld, cutpnt %lld, qsiz %lld, tlvls %lld, curlvl %lld, curpbm %lld, ldq %lld, indxq %lld, qptr %lld, prmptr %lld",*n, *cutpnt, *qsiz, *tlvls, *curlvl, *curpbm, *ldq, *indxq, *qptr, *prmptr);
+#else 
+    snprintf(buffer, 256,"claed7 inputs: n %d, cutpnt %d, qsiz %d, tlvls %d, curlvl %d, curpbm %d, ldq %d, indxq %d, qptr %d, prmptr %d",*n, *cutpnt, *qsiz, *tlvls, *curlvl, *curpbm, *ldq, *indxq, *qptr, *prmptr);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -362,15 +328,15 @@ void aocl_lapack_claed7(aocl_int64_t *n, aocl_int64_t *cutpnt, aocl_int64_t *qsi
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CLAED7", &i__1, (ftnlen)6);
+        xerbla_("CLAED7", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* The following values are for bookkeeping purposes only. They are */
     /* integer pointers which indicate the portion of the workspace */
@@ -427,7 +393,7 @@ void aocl_lapack_claed7(aocl_int64_t *n, aocl_int64_t *cutpnt, aocl_int64_t *qsi
         if(*info != 0)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
         /* Prepare the INDXQ sorting premutation. */
         n1 = k;
@@ -445,7 +411,7 @@ void aocl_lapack_claed7(aocl_int64_t *n, aocl_int64_t *cutpnt, aocl_int64_t *qsi
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLAED7 */
 }
 /* claed7_ */

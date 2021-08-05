@@ -175,32 +175,13 @@ v(i+k+1:n) is stored on exit in */
 /** Generated wrapper function */
 void clahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, scomplex *a, aocl_int_t *lda, scomplex *tau, scomplex *t, aocl_int_t *ldt, scomplex *y, aocl_int_t *ldy)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clahrd(n, k, nb, a, lda, tau, t, ldt, y, ldy);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t nb_64 = *nb;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t ldy_64 = *ldy;
-
-    aocl_lapack_clahrd(&n_64, &k_64, &nb_64, a, &lda_64, tau, t, &ldt_64, y, &ldy_64);
-#endif
-}
-
-void aocl_lapack_clahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, scomplex *a, aocl_int64_t *lda,
-             scomplex *tau, scomplex *t, aocl_int64_t *ldt, scomplex *y, aocl_int64_t *ldy)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clahrd inputs: n %lld, k %lld, nb %lld, lda %lld, ldt %lld, ldy %lld",
-             *n, *k, *nb, *lda, *ldt, *ldy);
-#else
-    snprintf(buffer, 256, "clahrd inputs: n %d, k %d, nb %d, lda %d, ldt %d, ldy %d", *n, *k, *nb,
-             *lda, *ldt, *ldy);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clahrd inputs: n %lld, k %lld, nb %lld, lda %lld, ldt %lld, ldy %lld",*n, *k, *nb, *lda, *ldt, *ldy);
+#else 
+    snprintf(buffer, 256,"clahrd inputs: n %d, k %d, nb %d, lda %d, ldt %d, ldy %d",*n, *k, *nb, *lda, *ldt, *ldy);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -244,7 +225,7 @@ void aocl_lapack_clahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, scom
     if(*n <= 1)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     i__1 = *nb;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -344,10 +325,10 @@ void aocl_lapack_clahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, scom
         /* L10: */
     }
     i__1 = *k + *nb + *nb * a_dim1;
-    a[i__1].real = ei.real;
-    a[i__1].imag = ei.imag; // , expr subst
+    a[i__1].r = ei.r;
+    a[i__1].i = ei.i; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLAHRD */
 }
 /* clahrd_ */

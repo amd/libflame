@@ -140,27 +140,13 @@
 void claqge_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *r__, real *c__,
              real *rowcnd, real *colcnd, real *amax, char *equed)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_claqge(m, n, a, lda, r__, c__, rowcnd, colcnd, amax, equed);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-
-    aocl_lapack_claqge(&m_64, &n_64, a, &lda_64, r__, c__, rowcnd, colcnd, amax, equed);
-#endif
-}
-
-void aocl_lapack_claqge(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *r__,
-                        real *c__, real *rowcnd, real *colcnd, real *amax, char *equed)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "claqge inputs: m %lld, n %lld, lda %lld", *m, *n, *lda);
-#else
-    snprintf(buffer, 256, "claqge inputs: m %d, n %d, lda %d", *m, *n, *lda);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"claqge inputs: m %lld, n %lld, lda %lld",*m, *n, *lda);
+#else 
+    snprintf(buffer, 256,"claqge inputs: m %d, n %d, lda %d",*m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -200,7 +186,7 @@ void aocl_lapack_claqge(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
     {
         *(unsigned char *)equed = 'N';
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Initialize LARGE and SMALL. */
     small_val = slamch_("Safe minimum") / slamch_("Precision");
@@ -282,7 +268,7 @@ void aocl_lapack_claqge(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
         *(unsigned char *)equed = 'B';
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLAQGE */
 }
 /* claqge_ */

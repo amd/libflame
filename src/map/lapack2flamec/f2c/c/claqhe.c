@@ -132,26 +132,13 @@
 void claqhe_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *s, real *scond,
              real *amax, char *equed)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_claqhe(uplo, n, a, lda, s, scond, amax, equed);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-
-    aocl_lapack_claqhe(uplo, &n_64, a, &lda_64, s, scond, amax, equed);
-#endif
-}
-
-void aocl_lapack_claqhe(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *s,
-                        real *scond, real *amax, char *equed)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "claqhe inputs: uplo %c, n %lld, lda %lld", *uplo, *n, *lda);
-#else
-    snprintf(buffer, 256, "claqhe inputs: uplo %c, n %d, lda %d", *uplo, *n, *lda);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"claqhe inputs: uplo %c, n %lld, lda %lld",*uplo, *n, *lda);
+#else 
+    snprintf(buffer, 256,"claqhe inputs: uplo %c, n %d, lda %d",*uplo, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -194,7 +181,7 @@ void aocl_lapack_claqhe(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
     {
         *(unsigned char *)equed = 'N';
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Initialize LARGE and SMALL. */
     small_val = slamch_("Safe minimum") / slamch_("Precision");
@@ -264,7 +251,7 @@ void aocl_lapack_claqhe(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
         *(unsigned char *)equed = 'Y';
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLAQHE */
 }
 /* claqhe_ */

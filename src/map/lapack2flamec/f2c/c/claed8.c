@@ -230,47 +230,13 @@ void claed8_(aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz, scomplex *q, aocl_i
              real *w, aocl_int_t *indxp, aocl_int_t *indx, aocl_int_t *indxq, aocl_int_t *perm,
              aocl_int_t *givptr, aocl_int_t *givcol, real *givnum, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_claed8(k, n, qsiz, q, ldq, d__, rho, cutpnt, z__, dlambda, q2, ldq2, w, indxp, indx,
-                       indxq, perm, givptr, givcol, givnum, info);
-#else
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t qsiz_64 = *qsiz;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t cutpnt_64 = *cutpnt;
-    aocl_int64_t ldq2_64 = *ldq2;
-    aocl_int64_t givptr_64 = *givptr;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_claed8(&k_64, &n_64, &qsiz_64, q, &ldq_64, d__, rho, &cutpnt_64, z__, dlambda, q2,
-                       &ldq2_64, w, indxp, indx, indxq, perm, &givptr_64, givcol, givnum, &info_64);
-
-    *k = (aocl_int_t)k_64;
-    *givptr = (aocl_int_t)givptr_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_claed8(aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *qsiz, scomplex *q,
-                        aocl_int64_t *ldq, real *d__, real *rho, aocl_int64_t *cutpnt, real *z__,
-                        real *dlambda, scomplex *q2, aocl_int64_t *ldq2, real *w, aocl_int_t *indxp,
-                        aocl_int_t *indx, aocl_int_t *indxq, aocl_int_t *perm, aocl_int64_t *givptr,
-                        aocl_int_t *givcol, real *givnum, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "claed8 inputs: k %lld, n %lld, qsiz %lld, ldq %lld, cutpnt %lld, ldq2 %lld, indxp "
-             "%lld, indx %lld, indxq %lld",
-             *k, *n, *qsiz, *ldq, *cutpnt, *ldq2, *indxp, *indx, *indxq);
-#else
-    snprintf(buffer, 256,
-             "claed8 inputs: k %ld, n %ld, qsiz %ld, ldq %ld, cutpnt %ld, ldq2 %ld, indxp %" FLA_ISL ", indx %" FLA_ISL ", "
-             "indxq %" FLA_ISL "",
-             *k, *n, *qsiz, *ldq, *cutpnt, *ldq2, *indxp, *indx, *indxq);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"claed8 inputs: k %lld, n %lld, qsiz %lld, ldq %lld, cutpnt %lld, ldq2 %lld, indxp %lld, indx %lld, indxq %lld",*k, *n, *qsiz, *ldq, *cutpnt, *ldq2, *indxp, *indx, *indxq);
+#else 
+    snprintf(buffer, 256,"claed8 inputs: k %d, n %d, qsiz %d, ldq %d, cutpnt %d, ldq2 %d, indxp %d, indx %d, indxq %d",*k, *n, *qsiz, *ldq, *cutpnt, *ldq2, *indxp, *indx, *indxq);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -350,9 +316,9 @@ void aocl_lapack_claed8(aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *qsiz, sc
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CLAED8", &i__1, (ftnlen)6);
+        xerbla_("CLAED8", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Need to initialize GIVPTR to O here in case of quick exit */
     /* to prevent an unspecified code behavior (usually sigfault) */
@@ -363,7 +329,7 @@ void aocl_lapack_claed8(aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *qsiz, sc
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     n1 = *cutpnt;
     n2 = *n - n1;
@@ -424,9 +390,9 @@ void aocl_lapack_claed8(aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *qsiz, sc
             aocl_blas_ccopy(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
             /* L50: */
         }
-        aocl_lapack_clacpy("A", qsiz, n, &q2[q2_dim1 + 1], ldq2, &q[q_dim1 + 1], ldq);
+        clacpy_("A", qsiz, n, &q2[q2_dim1 + 1], ldq2, &q[q_dim1 + 1], ldq);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* If there are multiple eigenvalues then the problem deflates. Here */
     /* the number of equal eigenvalues are found. As each equal */
@@ -556,7 +522,7 @@ L100: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
                            &q[(*k + 1) * q_dim1 + 1], ldq);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLAED8 */
 }
 /* claed8_ */

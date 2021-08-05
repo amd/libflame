@@ -202,41 +202,13 @@ void clarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
              aocl_int_t *k, scomplex *v, aocl_int_t *ldv, scomplex *t, aocl_int_t *ldt, scomplex *c__,
              aocl_int_t *ldc, scomplex *work, aocl_int_t *ldwork)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clarfb(side, trans, direct, storev, m, n, k, v, ldv, t, ldt, c__, ldc, work,
-                       ldwork);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t ldv_64 = *ldv;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t ldwork_64 = *ldwork;
-
-    aocl_lapack_clarfb(side, trans, direct, storev, &m_64, &n_64, &k_64, v, &ldv_64, t, &ldt_64,
-                       c__, &ldc_64, work, &ldwork_64);
-#endif
-}
-
-void aocl_lapack_clarfb(char *side, char *trans, char *direct, char *storev, aocl_int64_t *m,
-                        aocl_int64_t *n, aocl_int64_t *k, scomplex *v, aocl_int64_t *ldv, scomplex *t,
-                        aocl_int64_t *ldt, scomplex *c__, aocl_int64_t *ldc, scomplex *work,
-                        aocl_int64_t *ldwork)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "clarfb inputs: side %c, trans %c, direct %c, storev %c, m %lld, n %lld, k %lld, ldv "
-             "%lld, ldt %lld, ldc %lld, ldwork %lld",
-             *side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc, *ldwork);
-#else
-    snprintf(buffer, 256,
-             "clarfb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, ldv %d, "
-             "ldt %d, ldc %d, ldwork %d",
-             *side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc, *ldwork);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clarfb inputs: side %c, trans %c, direct %c, storev %c, m %lld, n %lld, k %lld, ldv %lld, ldt %lld, ldc %lld, ldwork %lld",*side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc, *ldwork);
+#else 
+    snprintf(buffer, 256,"clarfb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, ldv %d, ldt %d, ldc %d, ldwork %d",*side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc, *ldwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -286,7 +258,7 @@ void aocl_lapack_clarfb(char *side, char *trans, char *direct, char *storev, aoc
     if(*m <= 0 || *n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(lsame_(trans, "N", 1, 1))
     {
@@ -815,7 +787,7 @@ void aocl_lapack_clarfb(char *side, char *trans, char *direct, char *storev, aoc
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLARFB */
 }
 /* clarfb_ */

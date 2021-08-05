@@ -140,36 +140,13 @@ real cla_hercond_c_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sco
                     aocl_int_t *ldaf, aocl_int_t *ipiv, real *c__, logical *capply,
                     aocl_int_t *info, scomplex *work, real *rwork)
 {
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_cla_hercond_c(uplo, n, a, lda, af, ldaf, ipiv, c__, capply, info, work,
-                                     rwork);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldaf_64 = *ldaf;
-    aocl_int64_t info_64 = *info;
-
-    real ret_val = aocl_lapack_cla_hercond_c(uplo, &n_64, a, &lda_64, af, &ldaf_64, ipiv, c__,
-                                             capply, &info_64, work, rwork);
-
-    *info = (aocl_int_t)info_64;
-    return ret_val;
-#endif
-}
-
-real aocl_lapack_cla_hercond_c(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
-                               scomplex *af, aocl_int64_t *ldaf, aocl_int_t *ipiv, real *c__,
-                               logical *capply, aocl_int64_t *info, scomplex *work, real *rwork)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cla_hercond_c inputs: uplo %c, n %lld, lda %lld, ldaf %lld", *uplo, *n,
-             *lda, *ldaf);
-#else
-    snprintf(buffer, 256, "cla_hercond_c inputs: uplo %c, n %d, lda %d, ldaf %d", *uplo, *n, *lda,
-             *ldaf);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cla_hercond_c inputs: uplo %c, n %lld, lda %lld, ldaf %lld, ipiv %lld",*uplo, *n, *lda, *ldaf, *ipiv);
+#else 
+    snprintf(buffer, 256,"cla_hercond_c inputs: uplo %c, n %d, lda %d, ldaf %d, ipiv %d",*uplo, *n, *lda, *ldaf, *ipiv);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -247,7 +224,7 @@ real aocl_lapack_cla_hercond_c(char *uplo, aocl_int64_t *n, scomplex *a, aocl_in
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CLA_HERCOND_C", &i__1, (ftnlen)13);
+        xerbla_("CLA_HERCOND_C", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return ret_val;
     }

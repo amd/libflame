@@ -120,25 +120,16 @@
 void clargv_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, scomplex *y, aocl_int_t *incy, real *c__,
              aocl_int_t *incc)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clargv(n, x, incx, y, incy, c__, incc);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incy_64 = *incy;
-    aocl_int64_t incc_64 = *incc;
-
-    aocl_lapack_clargv(&n_64, x, &incx_64, y, &incy_64, c__, &incc_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clargv inputs: n %lld, incx %lld, incy %lld, incc %lld",*n, *incx, *incy, *incc);
+#else 
+    snprintf(buffer, 256,"clargv inputs: n %d, incx %d, incy %d, incc %d",*n, *incx, *incy, *incc);
 #endif
-}
-
-void aocl_lapack_clargv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scomplex *y,
-                        aocl_int64_t *incy, real *c__, aocl_int64_t *incc)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("clargv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS
-                      ", incc %" FLA_IS "",
-                      *n, *incx, *incy, *incc);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     real r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8, r__9, r__10;
@@ -442,8 +433,8 @@ void aocl_lapack_clargv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
         ix += *incx;
         /* L60: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of CLARGV */
 }
 /* clargv_ */

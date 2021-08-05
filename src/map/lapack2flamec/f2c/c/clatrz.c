@@ -138,28 +138,13 @@
 void clatrz_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, scomplex *a, aocl_int_t *lda, scomplex *tau,
              scomplex *work)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clatrz(m, n, l, a, lda, tau, work);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t l_64 = *l;
-    aocl_int64_t lda_64 = *lda;
-
-    aocl_lapack_clatrz(&m_64, &n_64, &l_64, a, &lda_64, tau, work);
-#endif
-}
-
-void aocl_lapack_clatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, scomplex *a,
-                        aocl_int64_t *lda, scomplex *tau, scomplex *work)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clatrz inputs: m %lld, n %lld, l %lld, lda %lld", *m, *n, *l, *lda);
-#else
-    snprintf(buffer, 256, "clatrz inputs: m %d, n %d, l %d, lda %d", *m, *n, *l, *lda);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clatrz inputs: m %lld, n %lld, l %lld, lda %lld",*m, *n, *l, *lda);
+#else 
+    snprintf(buffer, 256,"clatrz inputs: m %d, n %d, l %d, lda %d",*m, *n, *l, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -200,7 +185,7 @@ void aocl_lapack_clatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, scomp
     if(*m == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(*m == *n)
     {
@@ -213,7 +198,7 @@ void aocl_lapack_clatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, scomp
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     for(i__ = *m; i__ >= 1; --i__)
     {
@@ -242,7 +227,7 @@ void aocl_lapack_clatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, scomp
         /* L20: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLATRZ */
 }
 /* clatrz_ */

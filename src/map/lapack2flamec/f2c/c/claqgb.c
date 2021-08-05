@@ -158,33 +158,13 @@ void claqgb_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomp
              aocl_int_t *ldab, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax,
              char *equed)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_claqgb(m, n, kl, ku, ab, ldab, r__, c__, rowcnd, colcnd, amax, equed);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t ldab_64 = *ldab;
-
-    aocl_lapack_claqgb(&m_64, &n_64, &kl_64, &ku_64, ab, &ldab_64, r__, c__, rowcnd, colcnd, amax,
-                       equed);
-#endif
-}
-
-void aocl_lapack_claqgb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
-                        scomplex *ab, aocl_int64_t *ldab, real *r__, real *c__, real *rowcnd,
-                        real *colcnd, real *amax, char *equed)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "claqgb inputs: m %lld, n %lld, kl %lld, ku %lld, ldab %lld", *m, *n, *kl,
-             *ku, *ldab);
-#else
-    snprintf(buffer, 256, "claqgb inputs: m %d, n %d, kl %d, ku %d, ldab %d", *m, *n, *kl, *ku,
-             *ldab);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"claqgb inputs: m %lld, n %lld, kl %lld, ku %lld, ldab %lld",*m, *n, *kl, *ku, *ldab);
+#else 
+    snprintf(buffer, 256,"claqgb inputs: m %d, n %d, kl %d, ku %d, ldab %d",*m, *n, *kl, *ku, *ldab);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -226,7 +206,7 @@ void aocl_lapack_claqgb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
     {
         *(unsigned char *)equed = 'N';
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Initialize LARGE and SMALL. */
     small_val = slamch_("Safe minimum") / slamch_("Precision");
@@ -326,7 +306,7 @@ void aocl_lapack_claqgb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
         *(unsigned char *)equed = 'B';
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLAQGB */
 }
 /* claqgb_ */

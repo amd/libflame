@@ -111,8 +111,7 @@ x / |x|, x != 0 */
 /* Subroutine */
 void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("clartg inputs : f (%f,%f), g (%f,%f)", f->real, f->imag, g->real, g->imag);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
     real r__1, r__2, r__3, r__4;
     scomplex q__1, q__2, q__3;
@@ -172,11 +171,11 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
         r__1 = c_abs(g);
         if (g->r == 0.f && g->i == 0.f || sisnan_(&r__1))
         {
-            r__2 = (r__1 = r_imag(&g__t), f2c_abs(r__1));
-            r__->real = r__2, r__->imag = 0.f;
-            r_cnjg(&q__2, &g__t);
-            c_div(&q__1, &q__2, r__);
-            s->real = q__1.real, s->imag = q__1.imag;
+            *cs = 1.f;
+            sn->r = 0.f, sn->i = 0.f;
+            r__->r = f->r, r__->i = f->i;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         else if(r_imag(&g__t) == 0.f)
         {
@@ -212,6 +211,7 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
             q__1.r = r__1;
             q__1.i = r__2; // , expr subst
             sn->r = q__1.r, sn->i = q__1.i;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return 0;
         }
         r__1 = fs.r;
@@ -509,7 +509,8 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
             r__->real = q__1.real, r__->imag = q__1.imag;
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
+    /* End of CLARTG */
 }
 /* clartg_ */

@@ -162,40 +162,13 @@ real cla_gbrcond_c_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, 
                     aocl_int_t *ldab, scomplex *afb, aocl_int_t *ldafb, aocl_int_t *ipiv, real *c__,
                     logical *capply, aocl_int_t *info, scomplex *work, real *rwork)
 {
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_cla_gbrcond_c(trans, n, kl, ku, ab, ldab, afb, ldafb, ipiv, c__, capply,
-                                     info, work, rwork);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldafb_64 = *ldafb;
-    aocl_int64_t info_64 = *info;
-
-    real ret_val = aocl_lapack_cla_gbrcond_c(trans, &n_64, &kl_64, &ku_64, ab, &ldab_64, afb,
-                                             &ldafb_64, ipiv, c__, capply, &info_64, work, rwork);
-
-    *info = (aocl_int_t)info_64;
-    return ret_val;
-#endif
-}
-
-real aocl_lapack_cla_gbrcond_c(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
-                               scomplex *ab, aocl_int64_t *ldab, scomplex *afb, aocl_int64_t *ldafb,
-                               aocl_int_t *ipiv, real *c__, logical *capply, aocl_int64_t *info,
-                               scomplex *work, real *rwork)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cla_gbrcond_c inputs: trans %c, n %lld, kl %lld, ku %lld, ldab %lld, ldafb %lld",
-             *trans, *n, *kl, *ku, *ldab, *ldafb);
-#else
-    snprintf(buffer, 256, "cla_gbrcond_c inputs: trans %c, n %d, kl %d, ku %d, ldab %d, ldafb %d",
-             *trans, *n, *kl, *ku, *ldab, *ldafb);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cla_gbrcond_c inputs: trans %c, n %lld, kl %lld, ku %lld, ldab %lld, ldafb %lld, ipiv %lld",*trans, *n, *kl, *ku, *ldab, *ldafb, *ipiv);
+#else 
+    snprintf(buffer, 256,"cla_gbrcond_c inputs: trans %c, n %d, kl %d, ku %d, ldab %d, ldafb %d, ipiv %d",*trans, *n, *kl, *ku, *ldab, *ldafb, *ipiv);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -280,7 +253,7 @@ real aocl_lapack_cla_gbrcond_c(char *trans, aocl_int64_t *n, aocl_int64_t *kl, a
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CLA_GBRCOND_C", &i__1, (ftnlen)13);
+        xerbla_("CLA_GBRCOND_C", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return ret_val;
     }

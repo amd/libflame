@@ -174,35 +174,13 @@ void cla_geamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, real *alpha, sc
                 aocl_int_t *lda, scomplex *x, aocl_int_t *incx, real *beta, real *y,
                 aocl_int_t *incy)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cla_geamv(trans, m, n, alpha, a, lda, x, incx, beta, y, incy);
-#else
-    aocl_int64_t trans_64 = *trans;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incy_64 = *incy;
-
-    aocl_lapack_cla_geamv(&trans_64, &m_64, &n_64, alpha, a, &lda_64, x, &incx_64, beta, y,
-                          &incy_64);
-#endif
-}
-
-void aocl_lapack_cla_geamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n, real *alpha,
-                           scomplex *a, aocl_int64_t *lda, scomplex *x, aocl_int64_t *incx,
-                           real *beta, real *y, aocl_int64_t *incy)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cla_geamv inputs: trans %lld, m %lld, n %lld, lda %lld, incx %lld, incy %lld", *trans,
-             *m, *n, *lda, *incx, *incy);
-#else
-    snprintf(buffer, 256, "cla_geamv inputs: trans %d, m %d, n %d, lda %d, incx %d, incy %d",
-             *trans, *m, *n, *lda, *incx, *incy);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cla_geamv inputs: trans %lld, m %lld, n %lld, lda %lld, incx %lld, incy %lld",*trans, *m, *n, *lda, *incx, *incy);
+#else 
+    snprintf(buffer, 256,"cla_geamv inputs: trans %d, m %d, n %d, lda %d, incx %d, incy %d",*trans, *m, *n, *lda, *incx, *incy);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -279,15 +257,15 @@ void aocl_lapack_cla_geamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
     }
     if(info != 0)
     {
-        aocl_blas_xerbla("CLA_GEAMV ", &info, (ftnlen)10);
+        xerbla_("CLA_GEAMV ", &info);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible. */
     if(*m == 0 || *n == 0 || *alpha == 0.f && *beta == 1.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Set LENX and LENY, the lengths of the vectors x and y, and set */
     /* up the start points in X and Y. */
@@ -497,7 +475,7 @@ void aocl_lapack_cla_geamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLA_GEAMV */
 }
 /* cla_geamv__ */

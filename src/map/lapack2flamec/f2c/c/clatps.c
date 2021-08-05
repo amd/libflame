@@ -238,30 +238,13 @@ b(i), i=1,..,n}
 void clatps_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, scomplex *ap,
              scomplex *x, real *scale, real *cnorm, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clatps(uplo, trans, diag, normin, n, ap, x, scale, cnorm, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_clatps(uplo, trans, diag, normin, &n_64, ap, x, scale, cnorm, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_clatps(char *uplo, char *trans, char *diag, char *normin, aocl_int64_t *n,
-                        scomplex *ap, scomplex *x, real *scale, real *cnorm, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clatps inputs: uplo %c, trans %c, diag %c, normin %c, n %lld", *uplo,
-             *trans, *diag, *normin, *n);
-#else
-    snprintf(buffer, 256, "clatps inputs: uplo %c, trans %c, diag %c, normin %c, n %d", *uplo,
-             *trans, *diag, *normin, *n);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clatps inputs: uplo %c, trans %c, diag %c, normin %c, n %lld",*uplo, *trans, *diag, *normin, *n);
+#else 
+    snprintf(buffer, 256,"clatps inputs: uplo %c, trans %c, diag %c, normin %c, n %d",*uplo, *trans, *diag, *normin, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -355,15 +338,15 @@ void aocl_lapack_clatps(char *uplo, char *trans, char *diag, char *normin, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CLATPS", &i__1, (ftnlen)6);
+        xerbla_("CLATPS", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Determine machine dependent parameters to control overflow. */
     smlnum = slamch_("Safe minimum");
@@ -1254,7 +1237,7 @@ void aocl_lapack_clatps(char *uplo, char *trans, char *diag, char *normin, aocl_
         aocl_blas_sscal(n, &r__1, &cnorm[1], &c__1);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLATPS */
 }
 /* clatps_ */

@@ -106,30 +106,13 @@
 void clartv_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, scomplex *y, aocl_int_t *incy, real *c__,
              scomplex *s, aocl_int_t *incc)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clartv(n, x, incx, y, incy, c__, s, incc);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incy_64 = *incy;
-    aocl_int64_t incc_64 = *incc;
-
-    aocl_lapack_clartv(&n_64, x, &incx_64, y, &incy_64, c__, s, &incc_64);
-#endif
-}
-
-void aocl_lapack_clartv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scomplex *y,
-                        aocl_int64_t *incy, real *c__, scomplex *s, aocl_int64_t *incc)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clartv inputs: n %lld, incx %lld, incy %lld, incc %lld", *n, *incx,
-             *incy, *incc);
-#else
-    snprintf(buffer, 256, "clartv inputs: n %d, incx %d, incy %d, incc %d", *n, *incx, *incy,
-             *incc);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clartv inputs: n %lld, incx %lld, incy %lld, incc %lld",*n, *incx, *incy, *incc);
+#else 
+    snprintf(buffer, 256,"clartv inputs: n %d, incx %d, incy %d, incc %d",*n, *incx, *incy, *incc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -201,7 +184,7 @@ void aocl_lapack_clartv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLARTV */
 }
 /* clartv_ */

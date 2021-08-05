@@ -251,44 +251,13 @@ void claqr0_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
              scomplex *h__, aocl_int_t *ldh, scomplex *w, aocl_int_t *iloz, aocl_int_t *ihiz,
              scomplex *z__, aocl_int_t *ldz, scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_claqr0(wantt, wantz, n, ilo, ihi, h__, ldh, w, iloz, ihiz, z__, ldz, work, lwork,
-                       info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t ldh_64 = *ldh;
-    aocl_int64_t iloz_64 = *iloz;
-    aocl_int64_t ihiz_64 = *ihiz;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_claqr0(wantt, wantz, &n_64, &ilo_64, &ihi_64, h__, &ldh_64, w, &iloz_64, &ihiz_64,
-                       z__, &ldz_64, work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_claqr0(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_int64_t *ilo,
-                        aocl_int64_t *ihi, scomplex *h__, aocl_int64_t *ldh, scomplex *w,
-                        aocl_int64_t *iloz, aocl_int64_t *ihiz, scomplex *z__, aocl_int64_t *ldz,
-                        scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "claqr0 inputs: n %lld, ilo %lld, ihi %lld, ldh %lld, iloz %lld, ihiz %lld, ldz %lld, "
-             "lwork %lld",
-             *n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz, *lwork);
-#else
-    snprintf(buffer, 256,
-             "claqr0 inputs: n %d, ilo %d, ihi %d, ldh %d, iloz %d, ihiz %d, ldz %d, lwork %d", *n,
-             *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz, *lwork);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"claqr0 inputs: n %lld, ilo %lld, ihi %lld, ldh %lld, iloz %lld, ihiz %lld, ldz %lld, lwork %lld",*n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz, *lwork);
+#else 
+    snprintf(buffer, 256,"claqr0 inputs: n %d, ilo %d, ihi %d, ldh %d, iloz %d, ihiz %d, ldz %d, lwork %d",*n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -367,10 +336,10 @@ void aocl_lapack_claqr0(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     /* ==== Quick return for N = 0: nothing to do. ==== */
     if(*n == 0)
     {
-        work[1].real = 1.f;
-        work[1].imag = 0.f; // , expr subst
+        work[1].r = 1.f;
+        work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*n <= 15)
     {
@@ -445,13 +414,13 @@ void aocl_lapack_claqr0(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
         /* ==== Quick return in case of workspace query. ==== */
         if(*lwork == -1)
         {
-            r__1 = (real)lwkopt;
-            q__1.real = r__1;
-            q__1.imag = 0.f; // , expr subst
-            work[1].real = q__1.real;
-            work[1].imag = q__1.imag; // , expr subst
+            r__1 = (real) lwkopt;
+            q__1.r = r__1;
+            q__1.i = 0.f; // , expr subst
+            work[1].r = q__1.r;
+            work[1].i = q__1.i; // , expr subst
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
         /* ==== CLAHQR/CLAQR0 crossover point ==== */
         nmin = aocl_lapack_ilaenv(&c__12, "CLAQR0", jbcmpz, n, ilo, ihi, lwork);
@@ -850,6 +819,6 @@ void aocl_lapack_claqr0(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     work[1].imag = q__1.imag; // , expr subst
     /* ==== End of CLAQR0 ==== */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
 }
 /* claqr0_ */

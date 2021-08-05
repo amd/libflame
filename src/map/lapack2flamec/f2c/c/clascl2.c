@@ -89,26 +89,13 @@
 /** Generated wrapper function */
 void clascl2_(aocl_int_t *m, aocl_int_t *n, real *d__, scomplex *x, aocl_int_t *ldx)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clascl2(m, n, d__, x, ldx);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldx_64 = *ldx;
-
-    aocl_lapack_clascl2(&m_64, &n_64, d__, x, &ldx_64);
-#endif
-}
-
-void aocl_lapack_clascl2(aocl_int64_t *m, aocl_int64_t *n, real *d__, scomplex *x, aocl_int64_t *ldx)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clascl2 inputs: m %lld, n %lld, ldx %lld", *m, *n, *ldx);
-#else
-    snprintf(buffer, 256, "clascl2 inputs: m %d, n %d, ldx %d", *m, *n, *ldx);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clascl2 inputs: m %lld, n %lld, ldx %lld",*m, *n, *ldx);
+#else 
+    snprintf(buffer, 256,"clascl2 inputs: m %d, n %d, ldx %d",*m, *n, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -151,6 +138,6 @@ void aocl_lapack_clascl2(aocl_int64_t *m, aocl_int64_t *n, real *d__, scomplex *
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
 }
 /* clascl2_ */

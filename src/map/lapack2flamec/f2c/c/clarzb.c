@@ -187,42 +187,13 @@ void clarzb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
              aocl_int_t *k, aocl_int_t *l, scomplex *v, aocl_int_t *ldv, scomplex *t, aocl_int_t *ldt,
              scomplex *c__, aocl_int_t *ldc, scomplex *work, aocl_int_t *ldwork)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clarzb(side, trans, direct, storev, m, n, k, l, v, ldv, t, ldt, c__, ldc, work,
-                       ldwork);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t l_64 = *l;
-    aocl_int64_t ldv_64 = *ldv;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t ldwork_64 = *ldwork;
-
-    aocl_lapack_clarzb(side, trans, direct, storev, &m_64, &n_64, &k_64, &l_64, v, &ldv_64, t,
-                       &ldt_64, c__, &ldc_64, work, &ldwork_64);
-#endif
-}
-
-void aocl_lapack_clarzb(char *side, char *trans, char *direct, char *storev, aocl_int64_t *m,
-                        aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *l, scomplex *v,
-                        aocl_int64_t *ldv, scomplex *t, aocl_int64_t *ldt, scomplex *c__,
-                        aocl_int64_t *ldc, scomplex *work, aocl_int64_t *ldwork)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "clarzb inputs: side %c, trans %c, direct %c, storev %c, m %lld, n %lld, k %lld, l "
-             "%lld, ldv %lld, ldt %lld, ldc %lld",
-             *side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *ldc);
-#else
-    snprintf(buffer, 256,
-             "clarzb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, l %d, ldv "
-             "%d, ldt %d, ldc %d",
-             *side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *ldc);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clarzb inputs: side %c, trans %c, direct %c, storev %c, m %lld, n %lld, k %lld, l %lld, ldv %lld, ldt %lld, ldc %lld",*side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *ldc);
+#else 
+    snprintf(buffer, 256,"clarzb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, l %d, ldv %d, ldt %d, ldc %d",*side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *ldc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -270,7 +241,7 @@ void aocl_lapack_clarzb(char *side, char *trans, char *direct, char *storev, aoc
     if(*m <= 0 || *n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Check for currently supported options */
     info = 0;
@@ -285,9 +256,9 @@ void aocl_lapack_clarzb(char *side, char *trans, char *direct, char *storev, aoc
     if(info != 0)
     {
         i__1 = -info;
-        aocl_blas_xerbla("CLARZB", &i__1, (ftnlen)6);
+        xerbla_("CLARZB", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(lsame_(trans, "N", 1, 1))
     {
@@ -424,7 +395,7 @@ void aocl_lapack_clarzb(char *side, char *trans, char *direct, char *storev, aoc
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLARZB */
 }
 /* clarzb_ */

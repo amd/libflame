@@ -210,30 +210,13 @@ v(i+1:n) is stored on exit in A(i+1:n,i), */
 void clatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, scomplex *a, aocl_int_t *lda, real *e,
              scomplex *tau, scomplex *w, aocl_int_t *ldw)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clatrd(uplo, n, nb, a, lda, e, tau, w, ldw);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nb_64 = *nb;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldw_64 = *ldw;
-
-    aocl_lapack_clatrd(uplo, &n_64, &nb_64, a, &lda_64, e, tau, w, &ldw_64);
-#endif
-}
-
-void aocl_lapack_clatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
-                        aocl_int64_t *lda, real *e, scomplex *tau, scomplex *w, aocl_int64_t *ldw)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clatrd inputs: uplo %c, n %lld, nb %lld, lda %lld, ldw %lld", *uplo, *n,
-             *nb, *lda, *ldw);
-#else
-    snprintf(buffer, 256, "clatrd inputs: uplo %c, n %d, nb %d, lda %d, ldw %d", *uplo, *n, *nb,
-             *lda, *ldw);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clatrd inputs: uplo %c, n %lld, nb %lld, lda %lld, ldw %lld",*uplo, *n, *nb, *lda, *ldw);
+#else 
+    snprintf(buffer, 256,"clatrd inputs: uplo %c, n %d, nb %d, lda %d, ldw %d",*uplo, *n, *nb, *lda, *ldw);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -279,7 +262,7 @@ void aocl_lapack_clatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, scomplex 
     if(*n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(lsame_(uplo, "U", 1, 1))
     {
@@ -492,7 +475,7 @@ void aocl_lapack_clatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, scomplex 
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLATRD */
 }
 /* clatrd_ */

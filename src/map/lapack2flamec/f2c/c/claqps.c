@@ -179,38 +179,13 @@ void claqps_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, aocl_int_t *nb, a
              scomplex *a, aocl_int_t *lda, aocl_int_t *jpvt, scomplex *tau, real *vn1, real *vn2,
              scomplex *auxv, scomplex *f, aocl_int_t *ldf)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_claqps(m, n, offset, nb, kb, a, lda, jpvt, tau, vn1, vn2, auxv, f, ldf);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t offset_64 = *offset;
-    aocl_int64_t nb_64 = *nb;
-    aocl_int64_t kb_64 = *kb;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldf_64 = *ldf;
-
-    aocl_lapack_claqps(&m_64, &n_64, &offset_64, &nb_64, &kb_64, a, &lda_64, jpvt, tau, vn1, vn2,
-                       auxv, f, &ldf_64);
-
-    *kb = (aocl_int_t)kb_64;
-#endif
-}
-
-void aocl_lapack_claqps(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, aocl_int64_t *nb,
-                        aocl_int64_t *kb, scomplex *a, aocl_int64_t *lda, aocl_int_t *jpvt,
-                        scomplex *tau, real *vn1, real *vn2, scomplex *auxv, scomplex *f,
-                        aocl_int64_t *ldf)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "claqps inputs: m %lld, n %lld, offset %lld, nb %lld, lda %lld, ldf %lld",
-             *m, *n, *offset, *nb, *lda, *ldf);
-#else
-    snprintf(buffer, 256, "claqps inputs: m %d, n %d, offset %d, nb %d, lda %d, ldf %d", *m, *n,
-             *offset, *nb, *lda, *ldf);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"claqps inputs: m %lld, n %lld, offset %lld, nb %lld, lda %lld, jpvt %lld, ldf %lld",*m, *n, *offset, *nb, *lda, *jpvt, *ldf);
+#else 
+    snprintf(buffer, 256,"claqps inputs: m %d, n %d, offset %d, nb %d, lda %d, jpvt %d, ldf %d",*m, *n, *offset, *nb, *lda, *jpvt, *ldf);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -452,7 +427,7 @@ L60:
         goto L60;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLAQPS */
 }
 /* claqps_ */

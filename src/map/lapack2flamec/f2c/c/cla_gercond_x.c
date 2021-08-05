@@ -137,35 +137,13 @@ real cla_gercond_x_(char *trans, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sc
                     aocl_int_t *ldaf, aocl_int_t *ipiv, scomplex *x, aocl_int_t *info, scomplex *work,
                     real *rwork)
 {
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_cla_gercond_x(trans, n, a, lda, af, ldaf, ipiv, x, info, work, rwork);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldaf_64 = *ldaf;
-    aocl_int64_t info_64 = *info;
-
-    real ret_val = aocl_lapack_cla_gercond_x(trans, &n_64, a, &lda_64, af, &ldaf_64, ipiv, x,
-                                             &info_64, work, rwork);
-
-    *info = (aocl_int_t)info_64;
-    return ret_val;
-#endif
-}
-
-real aocl_lapack_cla_gercond_x(char *trans, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
-                               scomplex *af, aocl_int64_t *ldaf, aocl_int_t *ipiv, scomplex *x,
-                               aocl_int64_t *info, scomplex *work, real *rwork)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cla_gercond_x inputs: trans %c, n %lld, lda %lld, ldaf %lld", *trans, *n,
-             *lda, *ldaf);
-#else
-    snprintf(buffer, 256, "cla_gercond_x inputs: trans %c, n %d, lda %d, ldaf %d", *trans, *n, *lda,
-             *ldaf);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cla_gercond_x inputs: trans %c, n %lld, lda %lld, ldaf %lld, ipiv %lld",*trans, *n, *lda, *ldaf, *ipiv);
+#else 
+    snprintf(buffer, 256,"cla_gercond_x inputs: trans %c, n %d, lda %d, ldaf %d, ipiv %d",*trans, *n, *lda, *ldaf, *ipiv);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -243,7 +221,7 @@ real aocl_lapack_cla_gercond_x(char *trans, aocl_int64_t *n, scomplex *a, aocl_i
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CLA_GERCOND_X", &i__1, (ftnlen)13);
+        xerbla_("CLA_GERCOND_X", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return ret_val;
     }

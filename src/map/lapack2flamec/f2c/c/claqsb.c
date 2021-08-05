@@ -140,28 +140,13 @@
 void claqsb_(char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab, aocl_int_t *ldab, real *s,
              real *scond, real *amax, char *equed)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_claqsb(uplo, n, kd, ab, ldab, s, scond, amax, equed);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kd_64 = *kd;
-    aocl_int64_t ldab_64 = *ldab;
-
-    aocl_lapack_claqsb(uplo, &n_64, &kd_64, ab, &ldab_64, s, scond, amax, equed);
-#endif
-}
-
-void aocl_lapack_claqsb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex *ab,
-                        aocl_int64_t *ldab, real *s, real *scond, real *amax, char *equed)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "claqsb inputs: uplo %c, n %lld, kd %lld, ldab %lld", *uplo, *n, *kd,
-             *ldab);
-#else
-    snprintf(buffer, 256, "claqsb inputs: uplo %c, n %d, kd %d, ldab %d", *uplo, *n, *kd, *ldab);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"claqsb inputs: uplo %c, n %lld, kd %lld, ldab %lld",*uplo, *n, *kd, *ldab);
+#else 
+    snprintf(buffer, 256,"claqsb inputs: uplo %c, n %d, kd %d, ldab %d",*uplo, *n, *kd, *ldab);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -204,7 +189,7 @@ void aocl_lapack_claqsb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
     {
         *(unsigned char *)equed = 'N';
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Initialize LARGE and SMALL. */
     small_val = slamch_("Safe minimum") / slamch_("Precision");
@@ -270,7 +255,7 @@ void aocl_lapack_claqsb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
         *(unsigned char *)equed = 'Y';
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLAQSB */
 }
 /* claqsb_ */

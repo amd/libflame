@@ -128,25 +128,13 @@
 /** Generated wrapper function */
 void classq_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, real *scale, real *sumsq)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_classq(n, x, incx, scale, sumsq);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-
-    aocl_lapack_classq(&n_64, x, &incx_64, scale, sumsq);
-#endif
-}
-
-void aocl_lapack_classq(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, real *scale, real *sumsq)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "classq inputs: n %lld, incx %lld", *n, *incx);
-#else
-    snprintf(buffer, 256, "classq inputs: n %d, incx %d", *n, *incx);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"classq inputs: n %lld, incx %lld",*n, *incx);
+#else 
+    snprintf(buffer, 256,"classq inputs: n %d, incx %d",*n, *incx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -321,54 +309,8 @@ void aocl_lapack_classq(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, real *
             /* L10: */
         }
     }
-    /* Combine abig and amed or amed and asml if more than one */
-    /* accumulator was used. */
-    if(abig > 0.f)
-    {
-        if(amed > 0.f || amed != amed)
-        {
-            abig += amed * sbig * sbig;
-        }
-        *scale = 1.f / sbig;
-        *sumsq = abig;
-    }
-    else if(asml > 0.f)
-    {
-        /* Combine amed and asml if asml > 0. */
-        if(amed > 0.f || amed != amed)
-        {
-            amed = sqrt(amed);
-            asml = sqrt(asml) / ssml;
-            if(asml > amed)
-            {
-                ymin = amed;
-                ymax = asml;
-            }
-            else
-            {
-                ymin = asml;
-                ymax = amed;
-            }
-            *scale = 1.f;
-            /* Computing 2nd power */
-            r__1 = ymax;
-            /* Computing 2nd power */
-            r__2 = ymin / ymax;
-            *sumsq = r__1 * r__1 * (1.f + r__2 * r__2);
-        }
-        else
-        {
-            *scale = 1.f / ssml;
-            *sumsq = asml;
-        }
-    }
-    else
-    {
-        /* Otherwise all values are mid-range or zero */
-        *scale = 1.f;
-        *sumsq = amed;
-    }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
+    /* End of CLASSQ */
 }
 /* classq_ */

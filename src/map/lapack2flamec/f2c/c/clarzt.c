@@ -190,30 +190,13 @@ the corresponding */
 void clarzt_(char *direct, char *storev, aocl_int_t *n, aocl_int_t *k, scomplex *v, aocl_int_t *ldv,
              scomplex *tau, scomplex *t, aocl_int_t *ldt)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clarzt(direct, storev, n, k, v, ldv, tau, t, ldt);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t ldv_64 = *ldv;
-    aocl_int64_t ldt_64 = *ldt;
-
-    aocl_lapack_clarzt(direct, storev, &n_64, &k_64, v, &ldv_64, tau, t, &ldt_64);
-#endif
-}
-
-void aocl_lapack_clarzt(char *direct, char *storev, aocl_int64_t *n, aocl_int64_t *k, scomplex *v,
-                        aocl_int64_t *ldv, scomplex *tau, scomplex *t, aocl_int64_t *ldt)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clarzt inputs: direct %c, storev %c, n %lld, k %lld, ldv %lld, ldt %lld",
-             *direct, *storev, *n, *k, *ldv, *ldt);
-#else
-    snprintf(buffer, 256, "clarzt inputs: direct %c, storev %c, n %d, k %d, ldv %d, ldt %d",
-             *direct, *storev, *n, *k, *ldv, *ldt);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clarzt inputs: direct %c, storev %c, n %lld, k %lld, ldv %lld, ldt %lld",*direct, *storev, *n, *k, *ldv, *ldt);
+#else 
+    snprintf(buffer, 256,"clarzt inputs: direct %c, storev %c, n %d, k %d, ldv %d, ldt %d",*direct, *storev, *n, *k, *ldv, *ldt);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -263,9 +246,9 @@ void aocl_lapack_clarzt(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
     if(info != 0)
     {
         i__1 = -info;
-        aocl_blas_xerbla("CLARZT", &i__1, (ftnlen)6);
+        xerbla_("CLARZT", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     for(i__ = *k; i__ >= 1; --i__)
     {
@@ -310,7 +293,7 @@ void aocl_lapack_clarzt(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
         /* L20: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLARZT */
 }
 /* clarzt_ */

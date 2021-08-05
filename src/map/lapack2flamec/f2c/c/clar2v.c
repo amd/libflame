@@ -112,27 +112,13 @@ the elements of y are assumed to be real. */
 void clar2v_(aocl_int_t *n, scomplex *x, scomplex *y, scomplex *z__, aocl_int_t *incx, real *c__,
              scomplex *s, aocl_int_t *incc)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clar2v(n, x, y, z__, incx, c__, s, incc);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incc_64 = *incc;
-
-    aocl_lapack_clar2v(&n_64, x, y, z__, &incx_64, c__, s, &incc_64);
-#endif
-}
-
-void aocl_lapack_clar2v(aocl_int64_t *n, scomplex *x, scomplex *y, scomplex *z__, aocl_int64_t *incx,
-                        real *c__, scomplex *s, aocl_int64_t *incc)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clar2v inputs: n %lld, incx %lld, incc %lld", *n, *incx, *incc);
-#else
-    snprintf(buffer, 256, "clar2v inputs: n %d, incx %d, incc %d", *n, *incx, *incc);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clar2v inputs: n %lld, incx %lld, incc %lld",*n, *incx, *incc);
+#else 
+    snprintf(buffer, 256,"clar2v inputs: n %d, incx %d, incc %d",*n, *incx, *incc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -242,7 +228,7 @@ void aocl_lapack_clar2v(aocl_int64_t *n, scomplex *x, scomplex *y, scomplex *z__
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLAR2V */
 }
 /* clar2v_ */

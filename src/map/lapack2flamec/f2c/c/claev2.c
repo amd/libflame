@@ -166,11 +166,11 @@ void claev2_(scomplex *a, scomplex *b, scomplex *c__, real *rt1, real *rt2, real
     r__2 = c_abs(b);
     r__3 = c__->r;
     slaev2_(&r__1, &r__2, &r__3, rt1, rt2, cs1, &t);
-    q__1.real = t * w.real;
-    q__1.imag = t * w.imag; // , expr subst
-    sn1->real = q__1.real, sn1->imag = q__1.imag;
+    q__1.r = t * w.r;
+    q__1.i = t * w.i; // , expr subst
+    sn1->r = q__1.r, sn1->i = q__1.i;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLAEV2 */
 }
 /* claev2_ */

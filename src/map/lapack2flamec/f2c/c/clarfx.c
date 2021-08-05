@@ -121,27 +121,13 @@ static aocl_int64_t c__1 = 1;
 void clarfx_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, scomplex *tau, scomplex *c__,
              aocl_int_t *ldc, scomplex *work)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clarfx(side, m, n, v, tau, c__, ldc, work);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldc_64 = *ldc;
-
-    aocl_lapack_clarfx(side, &m_64, &n_64, v, tau, c__, &ldc_64, work);
-#endif
-}
-
-void aocl_lapack_clarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *v, scomplex *tau,
-                        scomplex *c__, aocl_int64_t *ldc, scomplex *work)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clarfx inputs: side %c, m %lld, n %lld, ldc %lld", *side, *m, *n, *ldc);
-#else
-    snprintf(buffer, 256, "clarfx inputs: side %c, m %d, n %d, ldc %d", *side, *m, *n, *ldc);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clarfx inputs: side %c, m %lld, n %lld, ldc %lld",*side, *m, *n, *ldc);
+#else 
+    snprintf(buffer, 256,"clarfx inputs: side %c, m %d, n %d, ldc %d",*side, *m, *n, *ldc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -186,7 +172,7 @@ void aocl_lapack_clarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *
     if(tau->real == 0.f && tau->imag == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(lsame_(side, "L", 1, 1))
     {
@@ -2634,7 +2620,7 @@ void aocl_lapack_clarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *
     }
 L410:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLARFX */
 }
 /* clarfx_ */

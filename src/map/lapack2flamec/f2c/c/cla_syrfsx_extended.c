@@ -408,18 +408,12 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
                           real *dz_ub__, logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cla_syrfsx_extended inputs: prec_type__ %lld, uplo %c, n %lld, nrhs %lld, lda %lld, "
-             "ldaf %lld, ldb %lld, ldy %lld, n_norms__ %lld, ithresh %lld",
-             *prec_type__, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldy, *n_norms__, *ithresh);
-#else
-    snprintf(buffer, 256,
-             "cla_syrfsx_extended inputs: prec_type__ %d, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, "
-             "ldb %d, ldy %d, n_norms__ %d, ithresh %d",
-             *prec_type__, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldy, *n_norms__, *ithresh);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cla_syrfsx_extended inputs: prec_type__ %lld, uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ipiv %lld, ldb %lld, ldy %lld, n_norms__ %lld, ithresh %lld",*prec_type__, *uplo, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldy, *n_norms__, *ithresh);
+#else 
+    snprintf(buffer, 256,"cla_syrfsx_extended inputs: prec_type__ %d, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ipiv %d, ldb %d, ldy %d, n_norms__ %d, ithresh %d",*prec_type__, *uplo, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldy, *n_norms__, *ithresh);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -567,9 +561,9 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLA_SYRFSX_EXTENDED", &i__1, (ftnlen)19);
+        xerbla_("CLA_SYRFSX_EXTENDED", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     eps = slamch_("Epsilon");
     hugeval = slamch_("Overflow");
@@ -842,7 +836,7 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         /* End of loop for each RHS. */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
 }
 /* cla_syrfsx_extended__ */
 #endif

@@ -423,21 +423,12 @@ void cla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
                           integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(
-        buffer, 256,
-        "cla_gbrfsx_extended inputs: prec_type__ %lld, trans_type__ %lld, n %lld, kl %lld, ku "
-        "%lld, nrhs %lld, ldab %lld, ldafb %lld, ldb %lld, ldy %lld, n_norms__ %lld, ithresh %lld",
-        *prec_type__, *trans_type__, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldy, *n_norms__,
-        *ithresh);
-#else
-    snprintf(buffer, 256,
-             "cla_gbrfsx_extended inputs: prec_type__ %d, trans_type__ %d, n %d, kl %d, ku %d, "
-             "nrhs %d, ldab %d, ldafb %d, ldb %d, ldy %d, n_norms__ %d, ithresh %d",
-             *prec_type__, *trans_type__, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldy,
-             *n_norms__, *ithresh);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cla_gbrfsx_extended inputs: prec_type__ %lld, trans_type__ %lld, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldafb %lld, ipiv %lld, ldb %lld, ldy %lld, n_norms__ %lld, ithresh %lld",*prec_type__, *trans_type__, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ipiv, *ldb, *ldy, *n_norms__, *ithresh);
+#else 
+    snprintf(buffer, 256,"cla_gbrfsx_extended inputs: prec_type__ %d, trans_type__ %d, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, ipiv %d, ldb %d, ldy %d, n_norms__ %d, ithresh %d",*prec_type__, *trans_type__, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ipiv, *ldb, *ldy, *n_norms__, *ithresh);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -550,7 +541,7 @@ void cla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
     if(*info != 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     chla_transtype_(ch__1, trans_type__);
     *(unsigned char *)trans = *(unsigned char *)&ch__1[0];
@@ -833,7 +824,7 @@ void cla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
         /* End of loop for each RHS. */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
 }
 /* cla_gbrfsx_extended__ */
 #endif

@@ -148,30 +148,13 @@ if JPVT(i) = 0, */
 void claqp2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, scomplex *a, aocl_int_t *lda,
              aocl_int_t *jpvt, scomplex *tau, real *vn1, real *vn2, scomplex *work)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_claqp2(m, n, offset, a, lda, jpvt, tau, vn1, vn2, work);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t offset_64 = *offset;
-    aocl_int64_t lda_64 = *lda;
-
-    aocl_lapack_claqp2(&m_64, &n_64, &offset_64, a, &lda_64, jpvt, tau, vn1, vn2, work);
-#endif
-}
-
-void aocl_lapack_claqp2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, scomplex *a,
-                        aocl_int64_t *lda, aocl_int_t *jpvt, scomplex *tau, real *vn1, real *vn2,
-                        scomplex *work)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "claqp2 inputs: m %lld, n %lld, offset %lld, lda %lld", *m, *n, *offset,
-             *lda);
-#else
-    snprintf(buffer, 256, "claqp2 inputs: m %d, n %d, offset %d, lda %d", *m, *n, *offset, *lda);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"claqp2 inputs: m %lld, n %lld, offset %lld, lda %lld, jpvt %lld",*m, *n, *offset, *lda, *jpvt);
+#else 
+    snprintf(buffer, 256,"claqp2 inputs: m %d, n %d, offset %d, lda %d, jpvt %d",*m, *n, *offset, *lda, *jpvt);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -311,7 +294,7 @@ void aocl_lapack_claqp2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, 
         /* L20: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLAQP2 */
 }
 /* claqp2_ */

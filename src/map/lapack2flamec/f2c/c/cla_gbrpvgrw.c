@@ -114,34 +114,13 @@
 real cla_gbrpvgrw_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *ncols, scomplex *ab,
                    aocl_int_t *ldab, scomplex *afb, aocl_int_t *ldafb)
 {
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_cla_gbrpvgrw(n, kl, ku, ncols, ab, ldab, afb, ldafb);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t ncols_64 = *ncols;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldafb_64 = *ldafb;
-
-    return aocl_lapack_cla_gbrpvgrw(&n_64, &kl_64, &ku_64, &ncols_64, ab, &ldab_64, afb, &ldafb_64);
-#endif
-}
-
-real aocl_lapack_cla_gbrpvgrw(aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
-                              aocl_int64_t *ncols, scomplex *ab, aocl_int64_t *ldab, scomplex *afb,
-                              aocl_int64_t *ldafb)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cla_gbrpvgrw inputs: n %lld, kl %lld, ku %lld, ncols %lld, ldab %lld, ldafb %lld", *n,
-             *kl, *ku, *ncols, *ldab, *ldafb);
-#else
-    snprintf(buffer, 256, "cla_gbrpvgrw inputs: n %d, kl %d, ku %d, ncols %d, ldab %d, ldafb %d",
-             *n, *kl, *ku, *ncols, *ldab, *ldafb);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cla_gbrpvgrw inputs: n %lld, kl %lld, ku %lld, ncols %lld, ldab %lld, ldafb %lld",*n, *kl, *ku, *ncols, *ldab, *ldafb);
+#else 
+    snprintf(buffer, 256,"cla_gbrpvgrw inputs: n %d, kl %d, ku %d, ncols %d, ldab %d, ldafb %d",*n, *kl, *ku, *ncols, *ldab, *ldafb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

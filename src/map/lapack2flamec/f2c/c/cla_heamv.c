@@ -176,32 +176,13 @@
 void cla_heamv_(aocl_int_t *uplo, aocl_int_t *n, real *alpha, scomplex *a, aocl_int_t *lda,
                 scomplex *x, aocl_int_t *incx, real *beta, real *y, aocl_int_t *incy)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cla_heamv(uplo, n, alpha, a, lda, x, incx, beta, y, incy);
-#else
-    aocl_int64_t uplo_64 = *uplo;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incy_64 = *incy;
-
-    aocl_lapack_cla_heamv(&uplo_64, &n_64, alpha, a, &lda_64, x, &incx_64, beta, y, &incy_64);
-#endif
-}
-
-void aocl_lapack_cla_heamv(aocl_int64_t *uplo, aocl_int64_t *n, real *alpha, scomplex *a,
-                           aocl_int64_t *lda, scomplex *x, aocl_int64_t *incx, real *beta, real *y,
-                           aocl_int64_t *incy)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cla_heamv inputs: uplo %lld, n %lld, lda %lld, incx %lld, incy %lld",
-             *uplo, *n, *lda, *incx, *incy);
-#else
-    snprintf(buffer, 256, "cla_heamv inputs: uplo %d, n %d, lda %d, incx %d, incy %d", *uplo, *n,
-             *lda, *incx, *incy);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cla_heamv inputs: uplo %lld, n %lld, lda %lld, incx %lld, incy %lld",*uplo, *n, *lda, *incx, *incy);
+#else 
+    snprintf(buffer, 256,"cla_heamv inputs: uplo %d, n %d, lda %d, incx %d, incy %d",*uplo, *n, *lda, *incx, *incy);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -272,15 +253,15 @@ void aocl_lapack_cla_heamv(aocl_int64_t *uplo, aocl_int64_t *n, real *alpha, sco
     }
     if(info != 0)
     {
-        aocl_blas_xerbla("CHEMV ", &info, (ftnlen)6);
+        xerbla_("CHEMV ", &info);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible. */
     if(*n == 0 || *alpha == 0.f && *beta == 1.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Set up the start points in X and Y. */
     if(*incx > 0)
@@ -525,7 +506,7 @@ void aocl_lapack_cla_heamv(aocl_int64_t *uplo, aocl_int64_t *n, real *alpha, sco
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLA_HEAMV */
 }
 /* cla_heamv__ */

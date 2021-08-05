@@ -100,27 +100,13 @@
 void cla_lin_berr_(aocl_int_t *n, aocl_int_t *nz, aocl_int_t *nrhs, scomplex *res, real *ayb,
                    real *berr)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cla_lin_berr(n, nz, nrhs, res, ayb, berr);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nz_64 = *nz;
-    aocl_int64_t nrhs_64 = *nrhs;
-
-    aocl_lapack_cla_lin_berr(&n_64, &nz_64, &nrhs_64, res, ayb, berr);
-#endif
-}
-
-void aocl_lapack_cla_lin_berr(aocl_int64_t *n, aocl_int64_t *nz, aocl_int64_t *nrhs, scomplex *res,
-                              real *ayb, real *berr)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cla_lin_berr inputs: n %lld, nz %lld, nrhs %lld", *n, *nz, *nrhs);
-#else
-    snprintf(buffer, 256, "cla_lin_berr inputs: n %d, nz %d, nrhs %d", *n, *nz, *nrhs);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cla_lin_berr inputs: n %lld, nz %lld, nrhs %lld",*n, *nz, *nrhs);
+#else 
+    snprintf(buffer, 256,"cla_lin_berr inputs: n %d, nz %d, nrhs %d",*n, *nz, *nrhs);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -196,6 +182,6 @@ void aocl_lapack_cla_lin_berr(aocl_int64_t *n, aocl_int64_t *nz, aocl_int64_t *n
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
 }
 /* cla_lin_berr__ */

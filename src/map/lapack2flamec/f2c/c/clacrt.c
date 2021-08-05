@@ -104,27 +104,13 @@
 void clacrt_(aocl_int_t *n, scomplex *cx, aocl_int_t *incx, scomplex *cy, aocl_int_t *incy,
              scomplex *c__, scomplex *s)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clacrt(n, cx, incx, cy, incy, c__, s);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incy_64 = *incy;
-
-    aocl_lapack_clacrt(&n_64, cx, &incx_64, cy, &incy_64, c__, s);
-#endif
-}
-
-void aocl_lapack_clacrt(aocl_int64_t *n, scomplex *cx, aocl_int64_t *incx, scomplex *cy,
-                        aocl_int64_t *incy, scomplex *c__, scomplex *s)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clacrt inputs: n %lld, incx %lld, incy %lld", *n, *incx, *incy);
-#else
-    snprintf(buffer, 256, "clacrt inputs: n %d, incx %d, incy %d", *n, *incx, *incy);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clacrt inputs: n %lld, incx %lld, incy %lld",*n, *incx, *incy);
+#else 
+    snprintf(buffer, 256,"clacrt inputs: n %d, incx %d, incy %d",*n, *incx, *incy);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -153,7 +139,7 @@ void aocl_lapack_clacrt(aocl_int64_t *n, scomplex *cx, aocl_int64_t *incx, scomp
     if(*n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*incx == 1 && *incy == 1)
     {
@@ -202,7 +188,7 @@ void aocl_lapack_clacrt(aocl_int64_t *n, scomplex *cx, aocl_int64_t *incx, scomp
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* Code for both increments equal to 1 */
 L20:
     i__1 = *n;
@@ -235,6 +221,6 @@ L20:
         /* L30: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
 }
 /* clacrt_ */

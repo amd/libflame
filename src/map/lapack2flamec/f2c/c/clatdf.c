@@ -172,27 +172,13 @@ for 1 <= j <= N, column j of the */
 void clatdf_(aocl_int_t *ijob, aocl_int_t *n, scomplex *z__, aocl_int_t *ldz, scomplex *rhs,
              real *rdsum, real *rdscal, aocl_int_t *ipiv, aocl_int_t *jpiv)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clatdf(ijob, n, z__, ldz, rhs, rdsum, rdscal, ipiv, jpiv);
-#else
-    aocl_int64_t ijob_64 = *ijob;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldz_64 = *ldz;
-
-    aocl_lapack_clatdf(&ijob_64, &n_64, z__, &ldz_64, rhs, rdsum, rdscal, ipiv, jpiv);
-#endif
-}
-
-void aocl_lapack_clatdf(aocl_int64_t *ijob, aocl_int64_t *n, scomplex *z__, aocl_int64_t *ldz,
-                        scomplex *rhs, real *rdsum, real *rdscal, aocl_int_t *ipiv, aocl_int_t *jpiv)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clatdf inputs: ijob %lld, n %lld, ldz %lld", *ijob, *n, *ldz);
-#else
-    snprintf(buffer, 256, "clatdf inputs: ijob %d, n %d, ldz %d", *ijob, *n, *ldz);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"clatdf inputs: ijob %lld, n %lld, ldz %lld, ipiv %lld, jpiv %lld",*ijob, *n, *ldz, *ipiv, *jpiv);
+#else 
+    snprintf(buffer, 256,"clatdf inputs: ijob %d, n %d, ldz %d, ipiv %d, jpiv %d",*ijob, *n, *ldz, *ipiv, *jpiv);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -392,9 +378,9 @@ void aocl_lapack_clatdf(aocl_int64_t *ijob, aocl_int64_t *n, scomplex *z__, aocl
         i__1 = *n - 1;
         aocl_lapack_claswp(&c__1, &rhs[1], ldz, &c__1, &i__1, &jpiv[1], &c_n1);
         /* Compute the sum of squares */
-        aocl_lapack_classq(n, &rhs[1], &c__1, rdscal, rdsum);
+        classq_(n, &rhs[1], &c__1, rdscal, rdsum);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* ENTRY IJOB = 2 */
     /* Compute approximate nullvector XM of Z */
@@ -421,9 +407,9 @@ void aocl_lapack_clatdf(aocl_int64_t *ijob, aocl_int64_t *n, scomplex *z__, aocl
         aocl_blas_ccopy(n, xp, &c__1, &rhs[1], &c__1);
     }
     /* Compute the sum of squares */
-    aocl_lapack_classq(n, &rhs[1], &c__1, rdscal, rdsum);
+    classq_(n, &rhs[1], &c__1, rdscal, rdsum);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CLATDF */
 }
 /* clatdf_ */

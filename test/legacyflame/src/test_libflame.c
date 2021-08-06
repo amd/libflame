@@ -1359,7 +1359,7 @@ void libfla_test_op_driver( char*         func_str,
 							(sc_str[sci][0] == 'r' || sc_str[sci][0] == 'g'))
 						{
 						  pass_str = libfla_test_storage_format_string;
-						  perf = residual = 0.0f;
+						  perf = time = residual = 0.0f;
 						}
 						else
 						{
@@ -1422,6 +1422,7 @@ void libfla_test_print_result_info(char  *func_param_str,
                                    char  *sc_str,
                                    integer    p_cur,
                                    double perf,
+                                   double time,
                                    double residual,
                                    char  *pass_str,
                                    int    nfact )
@@ -1431,11 +1432,10 @@ void libfla_test_print_result_info(char  *func_param_str,
 
 	n_spaces = MAX_FUNC_STRING_LENGTH - strlen( func_param_str );
 	fill_string_with_n_spaces( blank_str, n_spaces );
-
-    libfla_test_output_info( "   %s%s  %c|%-6s  %5u  %6.3lf  %9.2le   %s for nfact=%d\n",
+  libfla_test_output_info( "   %s%s  %c|%-6s  %5u  %6.3lf  %6.10lf  %9.2le   %s for nfact=%d\n",
                                  func_param_str, blank_str,
                                  datatype_char, sc_str,
-                                 p_cur, perf, residual, pass_str, nfact );
+                                 p_cur, perf, time, residual, pass_str, nfact );
 }
 
 

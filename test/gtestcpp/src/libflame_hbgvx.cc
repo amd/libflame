@@ -41,17 +41,17 @@
 template<typename T, typename Ta>
 void hbgvx_test(int ip)
 {
-  typedef integer (*fptr_NL_LAPACK_hbgvx)(char* jobz, char* range, char* uplo,
+  typedef integer (*Fptr_NL_LAPACK_hbgvx)(char* jobz, char* range, char* uplo,
                       integer* n, integer* ka, integer* kb, T* ab,
                       integer* ldab, T* bb, integer* ldbb, T* q, integer* ldq,
                       Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol,
                       integer* m, Ta* w, T* z, integer* ldz, T* work,
                       Ta* rwork, integer* iwork, integer* ifail,
                       integer* info);
-  fptr_NL_LAPACK_hbgvx hbgvx_ref;
+  Fptr_NL_LAPACK_hbgvx HBGVX;
   
   // Initialise random number generators with timestamp
-  srand (SRAND_SEED_VALUE);
+  srand (time(NULL));
   
   /* JOBZ is CHARACTER*1
           = 'N':  Compute eigenvalues only;
@@ -138,15 +138,15 @@ void hbgvx_test(int ip)
   
   /* LDQ is INTEGER
 	  The leading dimension of the array Q.  If JOBZ = 'N',
-	  LDQ >= 1. If JOBZ = 'V', LDQ >= fla_max(1,N).*/
+	  LDQ >= 1. If JOBZ = 'V', LDQ >= max(1,N).*/
   integer ldq = eig_paramslist[ip].ldq_hbgvx;
   if ((jobz == 'N') && (ldq < 1)) {
     PRINTF("If jobz= N and ldq is < 1, but should be LDQ >= 1. Please " \
            "correct the input data.\n");
   }
-  if ((jobz == 'V') && (ldq < fla_max(1, n))) {
-    PRINTF("If jobz= N and ldq is < fla_max(1, n), but should be " \
-           " LDQ >= fla_max(1, n). Please correct the input data.\n");
+  if ((jobz == 'V') && (ldq < max(1, n))) {
+    PRINTF("If jobz= N and ldq is < max(1, n), but should be " \
+           " LDQ >= max(1, n). Please correct the input data.\n");
   }
   
   T *qbuff = NULL, *qrefbuff = NULL;
@@ -359,21 +359,21 @@ void hbgvx_test(int ip)
   /* Check the typename T passed to this function template and call respective
      function.*/
   if (typeid(T) == typeid(scomplex)) {
-    hbgvx_ref = (fptr_NL_LAPACK_hbgvx)dlsym(lapackModule, "chbgvx_");
+    HBGVX = (Fptr_NL_LAPACK_hbgvx)dlsym(lapackModule, "chbgvx_");
   } else if (typeid(T) == typeid(dcomplex)) {
-    hbgvx_ref = (fptr_NL_LAPACK_hbgvx)dlsym(lapackModule, "zhbgvx_");
+    HBGVX = (Fptr_NL_LAPACK_hbgvx)dlsym(lapackModule, "zhbgvx_");
   } else {
 	  PRINTF("Invalid typename is passed to %s() function template.\n",
            __FUNCTION__);
   }
-  if (NULL == hbgvx_ref) {
+  if (NULL == HBGVX) {
     PRINTF("Could not get the symbol. Exiting...\n");
     closelibs();
     exit (-1);
   }
 
   integer info_ref = -1;
-  hbgvx_ref(&jobz, &range, &uplo, &n, &ka, &kb, abrefbuff, &ldab, bbrefbuff, &ldbb,
+  HBGVX(&jobz, &range, &uplo, &n, &ka, &kb, abrefbuff, &ldab, bbrefbuff, &ldbb,
     qrefbuff, &ldq, &vl, &vu, &il, &iu, &abstol, &mref, wrefbuff, zrefbuff,
     &ldz, workrefbuff, rworkrefbuff, iworkrefbuff, ifailref, &info_ref);
   PRINTF ("info_cpp: %u, info_ref: %u\n", info_cpp, info_ref);

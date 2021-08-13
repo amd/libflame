@@ -42,13 +42,13 @@
 template<typename T, typename Ta>
 void heev_2stage_test(int ip)
 {
-  typedef int (*fptr_NL_LAPACK_heev_2stage)(char* jobz, char* uplo,
+  typedef int (*Fptr_NL_LAPACK_heev_2stage)(char* jobz, char* uplo,
                   integer* n, T* a, integer* lda, Ta* w, T* work,
                   integer* lwork, Ta* rwork, integer* info);
-  fptr_NL_LAPACK_heev_2stage heev_2stage_ref;
+  Fptr_NL_LAPACK_heev_2stage HEEV_2STAGE;
   
   // Initialise random number generators with timestamp
-  srand (SRAND_SEED_VALUE);
+  srand (time(NULL));
   
   /* JOBZ is CHARACTER*1
           = 'N':  Compute eigenvalues only;
@@ -75,10 +75,10 @@ void heev_2stage_test(int ip)
   }
   
   /* LDA is INTEGER
-          The leading dimension of the array A.  LDA >= fla_max(1,N).*/
+          The leading dimension of the array A.  LDA >= max(1,N).*/
   integer lda = eig_paramslist[ip].lda;
-  if (lda < fla_max(1, n)) {
-    PRINTF("lda < fla_max(1, n) but it should be: lda >= fla_max(1, n). Please " \
+  if (lda < max(1, n)) {
+    PRINTF("lda < max(1, n) but it should be: lda >= max(1, n). Please " \
            "correct the input data.");
   }
   
@@ -90,9 +90,9 @@ void heev_2stage_test(int ip)
   Ta *wbuff, *wrefbuff;
   allocate_init_buffer(wbuff, wrefbuff, n, 0);
 
-  // RWORK is REAL or DOUBLE PRECISION array, dimension fla_max(1,3*N-2)
+  // RWORK is REAL or DOUBLE PRECISION array, dimension max(1,3*N-2)
   Ta *rworkbuff = NULL, *rworkrefbuff = NULL;
-  allocate_init_buffer(rworkbuff, rworkrefbuff, fla_max(1, 3*n-2), 0);
+  allocate_init_buffer(rworkbuff, rworkrefbuff, max(1, 3*n-2), 0);
   
   //  LWORK is INTEGER. The length of the array WORK.
   integer lwork = eig_paramslist[ip].lwork_heev_2stage;
@@ -121,7 +121,7 @@ void heev_2stage_test(int ip)
   
   // WORK is COMPLEX or COMPLEX*16 array, dimension (MAX(1,LWORK))
   T *workbuff = NULL, *workrefbuff = NULL;
-  allocate_init_buffer(workbuff, workrefbuff, fla_max(1, lwork_size), 0);
+  allocate_init_buffer(workbuff, workrefbuff, max(1, lwork_size), 0);
   
   #if (defined(PRINT_INPUT_VALUES) && (PRINT_INPUT_VALUES == 1))
     // Print input values other than arrays.
@@ -133,8 +133,8 @@ void heev_2stage_test(int ip)
     PRINTF("Size of A array (lda*n) = %d\n", (lda*n));
     PRINTF("Size of W array (n) = %d\n", n);
     PRINTF("lwork = %d\n", lwork_size);
-    PRINTF("Size of WORK array (max(1, lwork)) = %d\n", fla_max(1, lwork_size));
-    PRINTF("Size of RWORK array (max(1, 3*n-2)) = %d\n", fla_max(1, 3*n-2));
+    PRINTF("Size of WORK array (max(1, lwork)) = %d\n", max(1, lwork_size));
+    PRINTF("Size of RWORK array (max(1, 3*n-2)) = %d\n", max(1, 3*n-2));
   #endif
   
   #if (defined(PRINT_ARRAYS) && (PRINT_ARRAYS == 1))
@@ -162,15 +162,15 @@ void heev_2stage_test(int ip)
     
     // Prints WORK array contents
     strncpy(arrayname, "WORK input", arraysize);
-    print_array<T>(arrayname, workbuff, fla_max(1, lwork_size));
+    print_array<T>(arrayname, workbuff, max(1, lwork_size));
     strncpy(arrayname, "WORK ref input", arraysize);
-    print_array<T>(arrayname, workrefbuff, fla_max(1, lwork_size));
+    print_array<T>(arrayname, workrefbuff, max(1, lwork_size));
     
     // Prints RWORK array contents
     strncpy(arrayname, "RWORK input", arraysize);
-    print_array<Ta>(arrayname, rworkbuff, fla_max(1, 3*n-2));
+    print_array<Ta>(arrayname, rworkbuff, max(1, 3*n-2));
     strncpy(arrayname, "RWORK ref input", arraysize);
-    print_array<Ta>(arrayname, rworkrefbuff, fla_max(1, 3*n-2));
+    print_array<Ta>(arrayname, rworkrefbuff, max(1, 3*n-2));
   #endif
   
   info_cpp = -1;
@@ -181,17 +181,17 @@ void heev_2stage_test(int ip)
   /* Check the typename T passed to this function template and call respective
      function.*/
   if (typeid(T) == typeid(scomplex)) {
-    heev_2stage_ref = (fptr_NL_LAPACK_heev_2stage)dlsym(lapackModule,
+    HEEV_2STAGE = (Fptr_NL_LAPACK_heev_2stage)dlsym(lapackModule,
                         "cheev_2stage_");
   } else if (typeid(T) == typeid(dcomplex)) {
-    heev_2stage_ref = (fptr_NL_LAPACK_heev_2stage)dlsym(lapackModule,
+    HEEV_2STAGE = (Fptr_NL_LAPACK_heev_2stage)dlsym(lapackModule,
                         "zheev_2stage_");
   } else {
 	  PRINTF("Invalid typename is passed to %s() function template.\n",
            __FUNCTION__);
   }
   
-  if (heev_2stage_ref == NULL) {
+  if (HEEV_2STAGE == NULL) {
     PRINTF("Could not get the symbol. Exiting...\n");
     closelibs();
     exit (-1);
@@ -199,7 +199,7 @@ void heev_2stage_test(int ip)
 
   // Call C function
   integer info_ref = -1;
-  heev_2stage_ref(&jobz, &uplo, &n, arefbuff, &lda, wrefbuff, workrefbuff,
+  HEEV_2STAGE(&jobz, &uplo, &n, arefbuff, &lda, wrefbuff, workrefbuff,
               &lwork_size, rworkrefbuff, &info_ref);
   PRINTF ("info_cpp: %d, info_ref: %d\n", info_cpp, info_ref);
   
@@ -224,23 +224,23 @@ void heev_2stage_test(int ip)
       
       // Prints WORK array contents
       strncpy(arrayname, "WORK output", arraysize);
-      print_array<T>(arrayname, workbuff, fla_max(1, lwork_size));
+      print_array<T>(arrayname, workbuff, max(1, lwork_size));
       strncpy(arrayname, "WORK ref output", arraysize);
-      print_array<T>(arrayname, workrefbuff, fla_max(1, lwork_size));
+      print_array<T>(arrayname, workrefbuff, max(1, lwork_size));
       
       // Prints RWORK array contents
       strncpy(arrayname, "RWORK output", arraysize);
-      print_array<Ta>(arrayname, rworkbuff, fla_max(1, 3*n-2));
+      print_array<Ta>(arrayname, rworkbuff, max(1, 3*n-2));
       strncpy(arrayname, "RWORK ref output", arraysize);
-      print_array<Ta>(arrayname, rworkrefbuff, fla_max(1, 3*n-2));
+      print_array<Ta>(arrayname, rworkrefbuff, max(1, 3*n-2));
     #endif
     
     double diff = computeError<T>(lda, n, arefbuff, abuff);
 	  diff += computeError<Ta>(1, n, wrefbuff, wbuff);
     if (lwork_size != 0) {
-      diff += computeError<T>(1, fla_max(1, lwork_size), workbuff, workrefbuff);
+      diff += computeError<T>(1, max(1, lwork_size), workbuff, workrefbuff);
     }
-    diff += computeError<Ta>(1, fla_max(1, 3*n-2), rworkbuff, rworkrefbuff);
+    diff += computeError<Ta>(1, max(1, 3*n-2), rworkbuff, rworkrefbuff);
     PRINTF("diff: %lf\n", diff);
     EXPECT_NEAR(0.0, abs(diff), SYM_EIGEN_THRESHOLD);
   } else {

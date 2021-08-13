@@ -81,25 +81,13 @@
 /** Generated wrapper function */
 void csrscl_(aocl_int_t *n, real *sa, scomplex *sx, aocl_int_t *incx)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_csrscl(n, sa, sx, incx);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-
-    aocl_lapack_csrscl(&n_64, sa, sx, &incx_64);
-#endif
-}
-
-void aocl_lapack_csrscl(aocl_int64_t *n, real *sa, scomplex *sx, aocl_int64_t *incx)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "csrscl inputs: n %d, incx %d\n", *n, *incx);
-#else
-    snprintf(buffer, 256, "csrscl inputs: n %d, incx %d\n", *n, *incx);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"csrscl inputs: n %d, incx %d\n", *n, *incx);
+#else 
+    snprintf(buffer, 256,"csrscl inputs: n %d, incx %d\n", *n, *incx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -108,14 +96,6 @@ void aocl_lapack_csrscl(aocl_int64_t *n, real *sa, scomplex *sx, aocl_int64_t *i
     real cnum, cden1, cnum1;
     extern real slamch_(char *);
     real bignum, smlnum;
-    
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    sprintf(buffer, "csrscl inputs: n %d, incx %d\n", *n, *incx);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
-
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -142,7 +122,7 @@ void aocl_lapack_csrscl(aocl_int64_t *n, real *sa, scomplex *sx, aocl_int64_t *i
     if(*n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Get machine parameters */
     smlnum = slamch_("S");

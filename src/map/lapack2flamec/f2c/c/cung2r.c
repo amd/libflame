@@ -115,31 +115,13 @@ static aocl_int64_t c__1 = 1;
 void cung2r_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, scomplex *a, aocl_int_t *lda, scomplex *tau,
              scomplex *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cung2r(m, n, k, a, lda, tau, work, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cung2r(&m_64, &n_64, &k_64, a, &lda_64, tau, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cung2r(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a,
-                        aocl_int64_t *lda, scomplex *tau, scomplex *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cung2r inputs: m %lld, n %lld, k %lld, lda %lld", *m, *n, *k, *lda);
-#else
-    snprintf(buffer, 256, "cung2r inputs: m %d, n %d, k %d, lda %d", *m, *n, *k, *lda);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cung2r inputs: m %lld, n %lld, k %lld, lda %lld",*m, *n, *k, *lda);
+#else 
+    snprintf(buffer, 256,"cung2r inputs: m %d, n %d, k %d, lda %d",*m, *n, *k, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -194,15 +176,15 @@ void aocl_lapack_cung2r(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomp
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CUNG2R", &i__1, (ftnlen)6);
+        xerbla_("CUNG2R", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Initialise columns k+1:n to columns of the unit matrix */
     i__1 = *n;
@@ -260,7 +242,7 @@ void aocl_lapack_cung2r(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomp
         /* L40: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CUNG2R */
 }
 /* cung2r_ */

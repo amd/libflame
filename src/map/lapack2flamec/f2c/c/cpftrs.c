@@ -224,32 +224,13 @@ static scomplex c_b1 = {1.f, 0.f};
 void cpftrs_(char *transr, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, scomplex *b,
              aocl_int_t *ldb, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cpftrs(transr, uplo, n, nrhs, a, b, ldb, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cpftrs(transr, uplo, &n_64, &nrhs_64, a, b, &ldb_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cpftrs(char *transr, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a,
-                        scomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cpftrs inputs: transr %c, uplo %c, n %lld, nrhs %lld, ldb %lld", *transr,
-             *uplo, *n, *nrhs, *ldb);
-#else
-    snprintf(buffer, 256, "cpftrs inputs: transr %c, uplo %c, n %d, nrhs %d, ldb %d", *transr,
-             *uplo, *n, *nrhs, *ldb);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cpftrs inputs: transr %c, uplo %c, n %lld, nrhs %lld, ldb %lld",*transr, *uplo, *n, *nrhs, *ldb);
+#else 
+    snprintf(buffer, 256,"cpftrs inputs: transr %c, uplo %c, n %d, nrhs %d, ldb %d",*transr, *uplo, *n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -311,15 +292,15 @@ void aocl_lapack_cpftrs(char *transr, char *uplo, aocl_int64_t *n, aocl_int64_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CPFTRS", &i__1, (ftnlen)6);
+        xerbla_("CPFTRS", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* start execution: there are two triangular solves */
     if(lower)
@@ -333,7 +314,7 @@ void aocl_lapack_cpftrs(char *transr, char *uplo, aocl_int64_t *n, aocl_int64_t 
         aocl_lapack_ctfsm(transr, "L", uplo, "N", "N", n, nrhs, &c_b1, a, &b[b_offset], ldb);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CPFTRS */
 }
 /* cpftrs_ */

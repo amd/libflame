@@ -210,28 +210,13 @@
 /** Generated wrapper function */
 void ctfttp_(char *transr, char *uplo, aocl_int_t *n, scomplex *arf, scomplex *ap, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ctfttp(transr, uplo, n, arf, ap, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ctfttp(transr, uplo, &n_64, arf, ap, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf, scomplex *ap,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "ctfttp inputs: transr %c, uplo %c, n %lld", *transr, *uplo, *n);
-#else
-    snprintf(buffer, 256, "ctfttp inputs: transr %c, uplo %c, n %d", *transr, *uplo, *n);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"ctfttp inputs: transr %c, uplo %c, n %lld",*transr, *uplo, *n);
+#else 
+    snprintf(buffer, 256,"ctfttp inputs: transr %c, uplo %c, n %d",*transr, *uplo, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -287,15 +272,15 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CTFTTP", &i__1, (ftnlen)6);
+        xerbla_("CTFTTP", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*n == 1)
     {
@@ -311,7 +296,7 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
             ap[0].imag = q__1.imag; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Set N1 and N2 depending on LOWER */
     if(lower)
@@ -670,7 +655,7 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CTFTTP */
 }
 /* ctfttp_ */

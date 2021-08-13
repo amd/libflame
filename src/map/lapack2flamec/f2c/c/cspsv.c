@@ -163,31 +163,13 @@
 void cspsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, aocl_int_t *ipiv, scomplex *b,
             aocl_int_t *ldb, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cspsv(uplo, n, nrhs, ap, ipiv, b, ldb, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cspsv(uplo, &n_64, &nrhs_64, ap, ipiv, b, &ldb_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cspsv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *ap,
-                       aocl_int_t *ipiv, scomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cspsv inputs: uplo %c, n %lld, nrhs %lld, ldb %lld", *uplo, *n, *nrhs,
-             *ldb);
-#else
-    snprintf(buffer, 256, "cspsv inputs: uplo %c, n %d, nrhs %d, ldb %d", *uplo, *n, *nrhs, *ldb);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cspsv inputs: uplo %c, n %lld, nrhs %lld, ldb %lld",*uplo, *n, *nrhs, *ldb);
+#else 
+    snprintf(buffer, 256,"cspsv inputs: uplo %c, n %d, nrhs %d, ldb %d",*uplo, *n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -239,9 +221,9 @@ void aocl_lapack_cspsv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CSPSV ", &i__1, (ftnlen)6);
+        xerbla_("CSPSV ", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
     aocl_lapack_csptrf(uplo, n, &ap[1], &ipiv[1], info);
@@ -251,7 +233,7 @@ void aocl_lapack_cspsv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex
         aocl_lapack_csptrs(uplo, n, nrhs, &ap[1], &ipiv[1], &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CSPSV */
 }
 /* cspsv_ */

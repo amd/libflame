@@ -130,26 +130,13 @@
 /** Generated wrapper function */
 void cspr_(char *uplo, aocl_int_t *n, scomplex *alpha, scomplex *x, aocl_int_t *incx, scomplex *ap)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cspr(uplo, n, alpha, x, incx, ap);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-
-    aocl_lapack_cspr(uplo, &n_64, alpha, x, &incx_64, ap);
-#endif
-}
-
-void aocl_lapack_cspr(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int64_t *incx,
-                      scomplex *ap)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cspr inputs: uplo %c, n %lld, incx %lld", *uplo, *n, *incx);
-#else
-    snprintf(buffer, 256, "cspr inputs: uplo %c, n %d, incx %d", *uplo, *n, *incx);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cspr inputs: uplo %c, n %lld, incx %lld",*uplo, *n, *incx);
+#else 
+    snprintf(buffer, 256,"cspr inputs: uplo %c, n %d, incx %d",*uplo, *n, *incx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -199,15 +186,15 @@ void aocl_lapack_cspr(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *x,
     }
     if(info != 0)
     {
-        aocl_blas_xerbla("CSPR ", &info, (ftnlen)5);
+        xerbla_("CSPR ", &info);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible. */
     if(*n == 0 || alpha->real == 0.f && alpha->imag == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Set the start point in X if the increment is not unity. */
     if(*incx <= 0)
@@ -434,7 +421,7 @@ void aocl_lapack_cspr(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *x,
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CSPR */
 }
 /* cspr_ */

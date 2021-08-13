@@ -280,37 +280,13 @@ void cspsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *
              aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, scomplex *x, aocl_int_t *ldx,
              real *rcond, real *ferr, real *berr, scomplex *work, real *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cspsvx(fact, uplo, n, nrhs, ap, afp, ipiv, b, ldb, x, ldx, rcond, ferr, berr, work,
-                       rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cspsvx(fact, uplo, &n_64, &nrhs_64, ap, afp, ipiv, b, &ldb_64, x, &ldx_64, rcond,
-                       ferr, berr, work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cspsvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *ap,
-                        scomplex *afp, aocl_int_t *ipiv, scomplex *b, aocl_int64_t *ldb, scomplex *x,
-                        aocl_int64_t *ldx, real *rcond, real *ferr, real *berr, scomplex *work,
-                        real *rwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cspsvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, ldb %lld, ldx %lld",
-             *fact, *uplo, *n, *nrhs, *ldb, *ldx);
-#else
-    snprintf(buffer, 256, "cspsvx inputs: fact %c, uplo %c, n %d, nrhs %d, ldb %d, ldx %d", *fact,
-             *uplo, *n, *nrhs, *ldb, *ldx);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cspsvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, ipiv %lld, ldb %lld, ldx %lld",*fact, *uplo, *n, *nrhs, *ipiv, *ldb, *ldx);
+#else 
+    snprintf(buffer, 256,"cspsvx inputs: fact %c, uplo %c, n %d, nrhs %d, ipiv %d, ldb %d, ldx %d",*fact, *uplo, *n, *nrhs, *ipiv, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -386,9 +362,9 @@ void aocl_lapack_cspsvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *n
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CSPSVX", &i__1, (ftnlen)6);
+        xerbla_("CSPSVX", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(nofact)
     {
@@ -401,7 +377,7 @@ void aocl_lapack_cspsvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *n
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -421,7 +397,7 @@ void aocl_lapack_cspsvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *n
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CSPSVX */
 }
 /* cspsvx_ */

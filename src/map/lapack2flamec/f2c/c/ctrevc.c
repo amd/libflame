@@ -229,42 +229,13 @@ void ctrevc_(char *side, char *howmny, logical *select, aocl_int_t *n, scomplex 
              scomplex *vl, aocl_int_t *ldvl, scomplex *vr, aocl_int_t *ldvr, aocl_int_t *mm,
              aocl_int_t *m, scomplex *work, real *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ctrevc(side, howmny, select, n, t, ldt, vl, ldvl, vr, ldvr, mm, m, work, rwork,
-                       info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t ldvl_64 = *ldvl;
-    aocl_int64_t ldvr_64 = *ldvr;
-    aocl_int64_t mm_64 = *mm;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ctrevc(side, howmny, select, &n_64, t, &ldt_64, vl, &ldvl_64, vr, &ldvr_64, &mm_64,
-                       &m_64, work, rwork, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ctrevc(char *side, char *howmny, logical *select, aocl_int64_t *n, scomplex *t,
-                        aocl_int64_t *ldt, scomplex *vl, aocl_int64_t *ldvl, scomplex *vr,
-                        aocl_int64_t *ldvr, aocl_int64_t *mm, aocl_int64_t *m, scomplex *work,
-                        real *rwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "ctrevc inputs: side %c, howmny %c, n %lld, ldt %lld, ldvl %lld, ldvr %lld, mm %lld",
-             *side, *howmny, *n, *ldt, *ldvl, *ldvr, *mm);
-#else
-    snprintf(buffer, 256,
-             "ctrevc inputs: side %c, howmny %c, n %d, ldt %d, ldvl %d, ldvr %d, mm %d", *side,
-             *howmny, *n, *ldt, *ldvl, *ldvr, *mm);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"ctrevc inputs: side %c, howmny %c, n %lld, ldt %lld, ldvl %lld, ldvr %lld, mm %lld",*side, *howmny, *n, *ldt, *ldvl, *ldvr, *mm);
+#else 
+    snprintf(buffer, 256,"ctrevc inputs: side %c, howmny %c, n %d, ldt %d, ldvl %d, ldvr %d, mm %d",*side, *howmny, *n, *ldt, *ldvl, *ldvr, *mm);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -384,15 +355,15 @@ void aocl_lapack_ctrevc(char *side, char *howmny, logical *select, aocl_int64_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CTREVC", &i__1, (ftnlen)6);
+        xerbla_("CTREVC", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible. */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Set the constants to control overflow. */
     unfl = slamch_("Safe minimum");
@@ -639,7 +610,7 @@ void aocl_lapack_ctrevc(char *side, char *howmny, logical *select, aocl_int64_t 
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CTREVC */
 }
 /* ctrevc_ */

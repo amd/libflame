@@ -205,41 +205,13 @@ void ctgexc_(logical *wantq, logical *wantz, aocl_int_t *n, scomplex *a, aocl_in
              aocl_int_t *ldb, scomplex *q, aocl_int_t *ldq, scomplex *z__, aocl_int_t *ldz,
              aocl_int_t *ifst, aocl_int_t *ilst, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ctgexc(wantq, wantz, n, a, lda, b, ldb, q, ldq, z__, ldz, ifst, ilst, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t ifst_64 = *ifst;
-    aocl_int64_t ilst_64 = *ilst;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ctgexc(wantq, wantz, &n_64, a, &lda_64, b, &ldb_64, q, &ldq_64, z__, &ldz_64,
-                       &ifst_64, &ilst_64, &info_64);
-
-    *ilst = (aocl_int_t)ilst_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ctgexc(logical *wantq, logical *wantz, aocl_int64_t *n, scomplex *a,
-                        aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb, scomplex *q,
-                        aocl_int64_t *ldq, scomplex *z__, aocl_int64_t *ldz, aocl_int64_t *ifst,
-                        aocl_int64_t *ilst, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "ctgexc inputs: n %lld, lda %lld, ldb %lld, ldq %lld, ldz %lld, ifst %lld, ilst %lld",
-             *n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
-#else
-    snprintf(buffer, 256, "ctgexc inputs: n %d, lda %d, ldb %d, ldq %d, ldz %d, ifst %d, ilst %d",
-             *n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"ctgexc inputs: n %lld, lda %lld, ldb %lld, ldq %lld, ldz %lld, ifst %lld, ilst %lld",*n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
+#else 
+    snprintf(buffer, 256,"ctgexc inputs: n %d, lda %d, ldb %d, ldq %d, ldz %d, ifst %d, ilst %d",*n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -310,20 +282,20 @@ void aocl_lapack_ctgexc(logical *wantq, logical *wantz, aocl_int64_t *n, scomple
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CTGEXC", &i__1, (ftnlen)6);
+        xerbla_("CTGEXC", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n <= 1)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*ifst == *ilst)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*ifst < *ilst)
     {
@@ -335,7 +307,7 @@ void aocl_lapack_ctgexc(logical *wantq, logical *wantz, aocl_int64_t *n, scomple
         {
             *ilst = here;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
         ++here;
         if(here < *ilst)
@@ -354,7 +326,7 @@ void aocl_lapack_ctgexc(logical *wantq, logical *wantz, aocl_int64_t *n, scomple
         {
             *ilst = here;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
         --here;
         if(here >= *ilst)
@@ -365,7 +337,7 @@ void aocl_lapack_ctgexc(logical *wantq, logical *wantz, aocl_int64_t *n, scomple
     }
     *ilst = here;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CTGEXC */
 }
 /* ctgexc_ */

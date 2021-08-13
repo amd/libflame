@@ -131,31 +131,13 @@
 void cpbequ_(char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab, aocl_int_t *ldab, real *s,
              real *scond, real *amax, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cpbequ(uplo, n, kd, ab, ldab, s, scond, amax, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kd_64 = *kd;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cpbequ(uplo, &n_64, &kd_64, ab, &ldab_64, s, scond, amax, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cpbequ(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex *ab,
-                        aocl_int64_t *ldab, real *s, real *scond, real *amax, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cpbequ inputs: uplo %c, n %lld, kd %lld, ldab %lld", *uplo, *n, *kd,
-             *ldab);
-#else
-    snprintf(buffer, 256, "cpbequ inputs: uplo %c, n %d, kd %d, ldab %d", *uplo, *n, *kd, *ldab);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cpbequ inputs: uplo %c, n %lld, kd %lld, ldab %lld",*uplo, *n, *kd, *ldab);
+#else 
+    snprintf(buffer, 256,"cpbequ inputs: uplo %c, n %d, kd %d, ldab %d",*uplo, *n, *kd, *ldab);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -217,9 +199,9 @@ void aocl_lapack_cpbequ(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CPBEQU", &i__1, (ftnlen)6);
+        xerbla_("CPBEQU", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
@@ -227,7 +209,7 @@ void aocl_lapack_cpbequ(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
         *scond = 1.f;
         *amax = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(upper)
     {
@@ -268,7 +250,7 @@ void aocl_lapack_cpbequ(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
             {
                 *info = i__;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+                return 0;
             }
             /* L20: */
         }
@@ -287,7 +269,7 @@ void aocl_lapack_cpbequ(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
         *scond = sqrt(smin) / sqrt(*amax);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CPBEQU */
 }
 /* cpbequ_ */

@@ -166,28 +166,13 @@ static aocl_int64_t c__1 = 1;
 /** Generated wrapper function */
 void csptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_csptrf(uplo, n, ap, ipiv, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_csptrf(uplo, &n_64, ap, ipiv, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_csptrf(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *ipiv,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "csptrf inputs: uplo %c, n %lld", *uplo, *n);
-#else
-    snprintf(buffer, 256, "csptrf inputs: uplo %c, n %d", *uplo, *n);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"csptrf inputs: uplo %c, n %lld",*uplo, *n);
+#else 
+    snprintf(buffer, 256,"csptrf inputs: uplo %c, n %d",*uplo, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -256,9 +241,9 @@ void aocl_lapack_csptrf(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CSPTRF", &i__1, (ftnlen)6);
+        xerbla_("CSPTRF", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.f) + 1.f) / 8.f;
@@ -810,7 +795,7 @@ void aocl_lapack_csptrf(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
     }
 L110:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CSPTRF */
 }
 /* csptrf_ */

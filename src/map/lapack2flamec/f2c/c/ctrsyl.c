@@ -160,41 +160,13 @@ void ctrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
              aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, scomplex *c__, aocl_int_t *ldc,
              real *scale, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ctrsyl(trana, tranb, isgn, m, n, a, lda, b, ldb, c__, ldc, scale, info);
-#else
-    aocl_int64_t isgn_64 = *isgn;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ctrsyl(trana, tranb, &isgn_64, &m_64, &n_64, a, &lda_64, b, &ldb_64, c__, &ldc_64,
-                       scale, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ctrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64_t *m,
-                        aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *b,
-                        aocl_int64_t *ldb, scomplex *c__, aocl_int64_t *ldc, real *scale,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "ctrsyl inputs: trana %c, tranb %c, isgn %lld, m %lld, n %lld, lda %lld, ldb %lld, "
-             "ldc %lld",
-             *trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
-#else
-    snprintf(buffer, 256,
-             "ctrsyl inputs: trana %c, tranb %c, isgn %d, m %d, n %d, lda %d, ldb %d, ldc %d",
-             *trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"ctrsyl inputs: trana %c, tranb %c, isgn %lld, m %lld, n %lld, lda %lld, ldb %lld, ldc %lld",*trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
+#else 
+    snprintf(buffer, 256,"ctrsyl inputs: trana %c, tranb %c, isgn %d, m %d, n %d, lda %d, ldb %d, ldc %d",*trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -294,16 +266,16 @@ void aocl_lapack_ctrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CTRSYL", &i__1, (ftnlen)6);
+        xerbla_("CTRSYL", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     *scale = 1.f;
     if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Set constants to control overflow */
     eps = slamch_("P");
@@ -672,7 +644,7 @@ void aocl_lapack_ctrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CTRSYL */
 }
 /* ctrsyl_ */

@@ -123,34 +123,13 @@ static aocl_int64_t c__1 = 1;
 void csytrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda,
              aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_csytrs(uplo, n, nrhs, a, lda, ipiv, b, ldb, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_csytrs(uplo, &n_64, &nrhs_64, a, &lda_64, ipiv, b, &ldb_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_csytrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a,
-                        aocl_int64_t *lda, aocl_int_t *ipiv, scomplex *b, aocl_int64_t *ldb,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "csytrs inputs: uplo %c, n %lld, nrhs %lld, lda %lld, ldb %lld", *uplo,
-             *n, *nrhs, *lda, *ldb);
-#else
-    snprintf(buffer, 256, "csytrs inputs: uplo %c, n %d, nrhs %d, lda %d, ldb %d", *uplo, *n, *nrhs,
-             *lda, *ldb);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"csytrs inputs: uplo %c, n %lld, nrhs %lld, lda %lld, ipiv %lld, ldb %lld",*uplo, *n, *nrhs, *lda, *ipiv, *ldb);
+#else 
+    snprintf(buffer, 256,"csytrs inputs: uplo %c, n %d, nrhs %d, lda %d, ipiv %d, ldb %d",*uplo, *n, *nrhs, *lda, *ipiv, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -221,15 +200,15 @@ void aocl_lapack_csytrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomple
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CSYTRS", &i__1, (ftnlen)6);
+        xerbla_("CSYTRS", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(upper)
     {
@@ -551,7 +530,7 @@ void aocl_lapack_csytrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomple
     L100:;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CSYTRS */
 }
 /* csytrs_ */

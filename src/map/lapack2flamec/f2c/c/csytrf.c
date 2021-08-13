@@ -186,32 +186,13 @@ the routine */
 void csytrf_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
              scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_csytrf(uplo, n, a, lda, ipiv, work, lwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_csytrf(uplo, &n_64, a, &lda_64, ipiv, work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_csytrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
-                        aocl_int_t *ipiv, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "csytrf inputs: uplo %c, n %lld, lda %lld, lwork %lld", *uplo, *n, *lda,
-             *lwork);
-#else
-    snprintf(buffer, 256, "csytrf inputs: uplo %c, n %d, lda %d, lwork %d", *uplo, *n, *lda,
-             *lwork);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"csytrf inputs: uplo %c, n %lld, lda %lld, lwork %lld",*uplo, *n, *lda, *lwork);
+#else 
+    snprintf(buffer, 256,"csytrf inputs: uplo %c, n %d, lda %d, lwork %d",*uplo, *n, *lda, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -284,14 +265,14 @@ void aocl_lapack_csytrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CSYTRF", &i__1, (ftnlen)6);
+        xerbla_("CSYTRF", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     nbmin = 2;
     ldwork = *n;
@@ -405,11 +386,10 @@ void aocl_lapack_csytrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
         goto L20;
     }
 L40:
-    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
+    work[1].r = (real) lwkopt;
+    work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CSYTRF */
 }
 /* csytrf_ */

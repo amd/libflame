@@ -120,28 +120,13 @@ static aocl_int64_t c__1 = 1;
 void cptcon_(aocl_int_t *n, real *d__, scomplex *e, real *anorm, real *rcond, real *rwork,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cptcon(n, d__, e, anorm, rcond, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cptcon(&n_64, d__, e, anorm, rcond, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cptcon(aocl_int64_t *n, real *d__, scomplex *e, real *anorm, real *rcond,
-                        real *rwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cptcon inputs: n %lld", *n);
-#else
-    snprintf(buffer, 256, "cptcon inputs: n %d", *n);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cptcon inputs: n %lld",*n);
+#else 
+    snprintf(buffer, 256,"cptcon inputs: n %d",*n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -191,9 +176,9 @@ void aocl_lapack_cptcon(aocl_int64_t *n, real *d__, scomplex *e, real *anorm, re
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CPTCON", &i__1, (ftnlen)6);
+        xerbla_("CPTCON", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     *rcond = 0.f;
@@ -201,12 +186,12 @@ void aocl_lapack_cptcon(aocl_int64_t *n, real *d__, scomplex *e, real *anorm, re
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(*anorm == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Check that D(1:N) is positive. */
     i__1 = *n;
@@ -215,7 +200,7 @@ void aocl_lapack_cptcon(aocl_int64_t *n, real *d__, scomplex *e, real *anorm, re
         if(d__[i__] <= 0.f)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return;
+            return 0;
         }
         /* L10: */
     }
@@ -247,7 +232,7 @@ void aocl_lapack_cptcon(aocl_int64_t *n, real *d__, scomplex *e, real *anorm, re
         *rcond = 1.f / ainvnm / *anorm;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CPTCON */
 }
 /* cptcon_ */

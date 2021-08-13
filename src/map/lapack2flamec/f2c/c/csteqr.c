@@ -140,29 +140,13 @@ on exit, D */
 void csteqr_(char *compz, aocl_int_t *n, real *d__, real *e, scomplex *z__, aocl_int_t *ldz,
              real *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_csteqr(compz, n, d__, e, z__, ldz, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_csteqr(compz, &n_64, d__, e, z__, &ldz_64, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_csteqr(char *compz, aocl_int64_t *n, real *d__, real *e, scomplex *z__,
-                        aocl_int64_t *ldz, real *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "csteqr inputs: compz %c, n %lld, ldz %lld", *compz, *n, *ldz);
-#else
-    snprintf(buffer, 256, "csteqr inputs: compz %c, n %d, ldz %d", *compz, *n, *ldz);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"csteqr inputs: compz %c, n %lld, ldz %lld",*compz, *n, *ldz);
+#else 
+    snprintf(buffer, 256,"csteqr inputs: compz %c, n %d, ldz %d",*compz, *n, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -262,15 +246,15 @@ void aocl_lapack_csteqr(char *compz, aocl_int64_t *n, real *d__, real *e, scompl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CSTEQR", &i__1, (ftnlen)6);
+        xerbla_("CSTEQR", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*n == 1)
     {
@@ -281,7 +265,7 @@ void aocl_lapack_csteqr(char *compz, aocl_int64_t *n, real *d__, real *e, scompl
             z__[i__1].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Determine the unit roundoff and over/underflow thresholds. */
     eps = slamch_("E");
@@ -633,7 +617,7 @@ L140:
             /* L150: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     goto L10;
     /* Order eigenvalues and eigenvectors. */
@@ -672,7 +656,7 @@ L160:
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CSTEQR */
 }
 /* csteqr_ */

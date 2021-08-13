@@ -115,28 +115,13 @@ the matrix is singular and its */
 void csptri_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, scomplex *work,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_csptri(uplo, n, ap, ipiv, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_csptri(uplo, &n_64, ap, ipiv, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_csptri(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *ipiv, scomplex *work,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "csptri inputs: uplo %c, n %lld", *uplo, *n);
-#else
-    snprintf(buffer, 256, "csptri inputs: uplo %c, n %d", *uplo, *n);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"csptri inputs: uplo %c, n %lld, ipiv %lld",*uplo, *n, *ipiv);
+#else 
+    snprintf(buffer, 256,"csptri inputs: uplo %c, n %d, ipiv %d",*uplo, *n, *ipiv);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -194,15 +179,15 @@ void aocl_lapack_csptri(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CSPTRI", &i__1, (ftnlen)6);
+        xerbla_("CSPTRI", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if(upper)
@@ -215,7 +200,7 @@ void aocl_lapack_csptri(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
             if(ipiv[*info] > 0 && (ap[i__1].real == 0.f && ap[i__1].imag == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+                return 0;
             }
             kp -= *info;
             /* L10: */
@@ -232,7 +217,7 @@ void aocl_lapack_csptri(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
             if(ipiv[*info] > 0 && (ap[i__2].real == 0.f && ap[i__2].imag == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+                return 0;
             }
             kp = kp + *n - *info + 1;
             /* L20: */
@@ -602,7 +587,7 @@ void aocl_lapack_csptri(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
     L80:;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CSPTRI */
 }
 /* csptri_ */

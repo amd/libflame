@@ -120,28 +120,13 @@ static aocl_int64_t c__1 = 1;
 void cspcon_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, real *anorm, real *rcond,
              scomplex *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cspcon(uplo, n, ap, ipiv, anorm, rcond, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cspcon(uplo, &n_64, ap, ipiv, anorm, rcond, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cspcon(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *ipiv, real *anorm,
-                        real *rcond, scomplex *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cspcon inputs: uplo %c, n %lld", *uplo, *n);
-#else
-    snprintf(buffer, 256, "cspcon inputs: uplo %c, n %d", *uplo, *n);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cspcon inputs: uplo %c, n %lld, ipiv %lld",*uplo, *n, *ipiv);
+#else 
+    snprintf(buffer, 256,"cspcon inputs: uplo %c, n %d, ipiv %d",*uplo, *n, *ipiv);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -196,9 +181,9 @@ void aocl_lapack_cspcon(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CSPCON", &i__1, (ftnlen)6);
+        xerbla_("CSPCON", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     *rcond = 0.f;
@@ -206,12 +191,12 @@ void aocl_lapack_cspcon(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(*anorm <= 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if(upper)
@@ -224,7 +209,7 @@ void aocl_lapack_cspcon(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
             if(ipiv[i__] > 0 && (ap[i__1].real == 0.f && ap[i__1].imag == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+                return 0;
             }
             ip -= i__;
             /* L10: */
@@ -241,7 +226,7 @@ void aocl_lapack_cspcon(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
             if(ipiv[i__] > 0 && (ap[i__2].real == 0.f && ap[i__2].imag == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+                return 0;
             }
             ip = ip + *n - i__ + 1;
             /* L20: */
@@ -263,7 +248,7 @@ L30:
         *rcond = 1.f / ainvnm / *anorm;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CSPCON */
 }
 /* cspcon_ */

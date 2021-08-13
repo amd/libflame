@@ -122,27 +122,13 @@ static real c_b16 = -1.f;
 /** Generated wrapper function */
 void cpptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cpptrf(uplo, n, ap, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cpptrf(uplo, &n_64, ap, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cpptrf(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cpptrf inputs: uplo %c, n %lld", *uplo, *n);
-#else
-    snprintf(buffer, 256, "cpptrf inputs: uplo %c, n %d", *uplo, *n);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cpptrf inputs: uplo %c, n %lld",*uplo, *n);
+#else 
+    snprintf(buffer, 256,"cpptrf inputs: uplo %c, n %d",*uplo, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -194,15 +180,15 @@ void aocl_lapack_cpptrf(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int64_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CPPTRF", &i__1, (ftnlen)6);
+        xerbla_("CPPTRF", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(upper)
     {
@@ -282,7 +268,7 @@ L30:
     *info = j;
 L40:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CPPTRF */
 }
 /* cpptrf_ */

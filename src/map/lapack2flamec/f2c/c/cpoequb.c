@@ -112,29 +112,13 @@
 void cpoequb_(aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *s, real *scond, real *amax,
               aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cpoequb(n, a, lda, s, scond, amax, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cpoequb(&n_64, a, &lda_64, s, scond, amax, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cpoequb(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *s, real *scond,
-                         real *amax, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cpoequb inputs: n %lld, lda %lld", *n, *lda);
-#else
-    snprintf(buffer, 256, "cpoequb inputs: n %d, lda %d", *n, *lda);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cpoequb inputs: n %lld, lda %lld",*n, *lda);
+#else 
+    snprintf(buffer, 256,"cpoequb inputs: n %d, lda %d",*n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -187,9 +171,9 @@ void aocl_lapack_cpoequb(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CPOEQUB", &i__1, (ftnlen)7);
+        xerbla_("CPOEQUB", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible. */
     if(*n == 0)
@@ -197,7 +181,7 @@ void aocl_lapack_cpoequb(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *
         *scond = 1.f;
         *amax = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     base = slamch_("B");
     tmp = -.5f / log(base);
@@ -232,7 +216,7 @@ void aocl_lapack_cpoequb(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *
             {
                 *info = i__;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return;
+                return 0;
             }
             /* L20: */
         }
@@ -252,7 +236,7 @@ void aocl_lapack_cpoequb(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *
         *scond = sqrt(smin) / sqrt(*amax);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CPOEQUB */
 }
 /* cpoequb_ */

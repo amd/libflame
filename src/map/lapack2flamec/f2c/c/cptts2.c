@@ -112,30 +112,13 @@
 void cptts2_(aocl_int_t *iuplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e, scomplex *b,
              aocl_int_t *ldb)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cptts2(iuplo, n, nrhs, d__, e, b, ldb);
-#else
-    aocl_int64_t iuplo_64 = *iuplo;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-
-    aocl_lapack_cptts2(&iuplo_64, &n_64, &nrhs_64, d__, e, b, &ldb_64);
-#endif
-}
-
-void aocl_lapack_cptts2(aocl_int64_t *iuplo, aocl_int64_t *n, aocl_int64_t *nrhs, real *d__,
-                        scomplex *e, scomplex *b, aocl_int64_t *ldb)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cptts2 inputs: iuplo %lld, n %lld, nrhs %lld, ldb %lld", *iuplo, *n,
-             *nrhs, *ldb);
-#else
-    snprintf(buffer, 256, "cptts2 inputs: iuplo %d, n %d, nrhs %d, ldb %d", *iuplo, *n, *nrhs,
-             *ldb);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cptts2 inputs: iuplo %lld, n %lld, nrhs %lld, ldb %lld",*iuplo, *n, *nrhs, *ldb);
+#else 
+    snprintf(buffer, 256,"cptts2 inputs: iuplo %d, n %d, nrhs %d, ldb %d",*iuplo, *n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -179,7 +162,7 @@ void aocl_lapack_cptts2(aocl_int64_t *iuplo, aocl_int64_t *n, aocl_int64_t *nrhs
             aocl_blas_csscal(nrhs, &r__1, &b[b_offset], ldb);
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*iuplo == 1)
     {
@@ -394,7 +377,7 @@ void aocl_lapack_cptts2(aocl_int64_t *iuplo, aocl_int64_t *n, aocl_int64_t *nrhs
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CPTTS2 */
 }
 /* cptts2_ */

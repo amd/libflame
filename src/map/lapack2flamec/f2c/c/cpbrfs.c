@@ -193,43 +193,13 @@ void cpbrfs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, scompl
              scomplex *x, aocl_int_t *ldx, real *ferr, real *berr, scomplex *work, real *rwork,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cpbrfs(uplo, n, kd, nrhs, ab, ldab, afb, ldafb, b, ldb, x, ldx, ferr, berr, work,
-                       rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kd_64 = *kd;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldafb_64 = *ldafb;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cpbrfs(uplo, &n_64, &kd_64, &nrhs_64, ab, &ldab_64, afb, &ldafb_64, b, &ldb_64, x,
-                       &ldx_64, ferr, berr, work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int64_t *nrhs,
-                        scomplex *ab, aocl_int64_t *ldab, scomplex *afb, aocl_int64_t *ldafb,
-                        scomplex *b, aocl_int64_t *ldb, scomplex *x, aocl_int64_t *ldx, real *ferr,
-                        real *berr, scomplex *work, real *rwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cpbrfs inputs: uplo %c, n %lld, kd %lld, nrhs %lld, ldab %lld, ldafb %lld, ldb %lld, "
-             "ldx %lld",
-             *uplo, *n, *kd, *nrhs, *ldab, *ldafb, *ldb, *ldx);
-#else
-    snprintf(buffer, 256,
-             "cpbrfs inputs: uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldafb %d, ldb %d, ldx %d",
-             *uplo, *n, *kd, *nrhs, *ldab, *ldafb, *ldb, *ldx);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cpbrfs inputs: uplo %c, n %lld, kd %lld, nrhs %lld, ldab %lld, ldafb %lld, ldb %lld, ldx %lld",*uplo, *n, *kd, *nrhs, *ldab, *ldafb, *ldb, *ldx);
+#else 
+    snprintf(buffer, 256,"cpbrfs inputs: uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldafb %d, ldb %d, ldx %d",*uplo, *n, *kd, *nrhs, *ldab, *ldafb, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -336,9 +306,9 @@ void aocl_lapack_cpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int6
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CPBRFS", &i__1, (ftnlen)6);
+        xerbla_("CPBRFS", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -351,7 +321,7 @@ void aocl_lapack_cpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int6
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* NZ = maximum number of nonzero elements in each row of A, plus 1 */
     /* Computing MIN */
@@ -573,7 +543,7 @@ void aocl_lapack_cpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int6
         /* L140: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CPBRFS */
 }
 /* cpbrfs_ */

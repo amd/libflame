@@ -134,32 +134,13 @@ static aocl_int64_t c__1 = 1;
 void ctptrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap,
              scomplex *b, aocl_int_t *ldb, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ctptrs(uplo, trans, diag, n, nrhs, ap, b, ldb, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ctptrs(uplo, trans, diag, &n_64, &nrhs_64, ap, b, &ldb_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ctptrs(char *uplo, char *trans, char *diag, aocl_int64_t *n, aocl_int64_t *nrhs,
-                        scomplex *ap, scomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "ctptrs inputs: uplo %c, trans %c, diag %c, n %lld, nrhs %lld, ldb %lld",
-             *uplo, *trans, *diag, *n, *nrhs, *ldb);
-#else
-    snprintf(buffer, 256, "ctptrs inputs: uplo %c, trans %c, diag %c, n %d, nrhs %d, ldb %d", *uplo,
-             *trans, *diag, *n, *nrhs, *ldb);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"ctptrs inputs: uplo %c, trans %c, diag %c, n %lld, nrhs %lld, ldb %lld",*uplo, *trans, *diag, *n, *nrhs, *ldb);
+#else 
+    snprintf(buffer, 256,"ctptrs inputs: uplo %c, trans %c, diag %c, n %d, nrhs %d, ldb %d",*uplo, *trans, *diag, *n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -227,15 +208,15 @@ void aocl_lapack_ctptrs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CTPTRS", &i__1, (ftnlen)6);
+        xerbla_("CTPTRS", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Check for singularity. */
     if(nounit)
@@ -250,7 +231,7 @@ void aocl_lapack_ctptrs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
                 if(ap[i__2].real == 0.f && ap[i__2].imag == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return;
+                    return 0;
                 }
                 jc += *info;
                 /* L10: */
@@ -266,7 +247,7 @@ void aocl_lapack_ctptrs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
                 if(ap[i__2].real == 0.f && ap[i__2].imag == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return;
+                    return 0;
                 }
                 jc = jc + *n - *info + 1;
                 /* L20: */
@@ -282,7 +263,7 @@ void aocl_lapack_ctptrs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
         /* L30: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CTPTRS */
 }
 /* ctptrs_ */

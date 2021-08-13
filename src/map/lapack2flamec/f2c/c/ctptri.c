@@ -121,27 +121,13 @@ static aocl_int64_t c__1 = 1;
 /** Generated wrapper function */
 void ctptri_(char *uplo, char *diag, aocl_int_t *n, scomplex *ap, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ctptri(uplo, diag, n, ap, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ctptri(uplo, diag, &n_64, ap, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ctptri(char *uplo, char *diag, aocl_int64_t *n, scomplex *ap, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "ctptri inputs: uplo %c, diag %c, n %lld", *uplo, *diag, *n);
-#else
-    snprintf(buffer, 256, "ctptri inputs: uplo %c, diag %c, n %d", *uplo, *diag, *n);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"ctptri inputs: uplo %c, diag %c, n %lld",*uplo, *diag, *n);
+#else 
+    snprintf(buffer, 256,"ctptri inputs: uplo %c, diag %c, n %d",*uplo, *diag, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -198,9 +184,9 @@ void aocl_lapack_ctptri(char *uplo, char *diag, aocl_int64_t *n, scomplex *ap, a
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CTPTRI", &i__1, (ftnlen)6);
+        xerbla_("CTPTRI", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Check for singularity if non-unit. */
     if(nounit)
@@ -216,7 +202,7 @@ void aocl_lapack_ctptri(char *uplo, char *diag, aocl_int64_t *n, scomplex *ap, a
                 if(ap[i__2].real == 0.f && ap[i__2].imag == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return;
+                    return 0;
                 }
                 /* L10: */
             }
@@ -231,7 +217,7 @@ void aocl_lapack_ctptri(char *uplo, char *diag, aocl_int64_t *n, scomplex *ap, a
                 if(ap[i__2].real == 0.f && ap[i__2].imag == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return;
+                    return 0;
                 }
                 jj = jj + *n - *info + 1;
                 /* L20: */
@@ -314,7 +300,7 @@ void aocl_lapack_ctptri(char *uplo, char *diag, aocl_int64_t *n, scomplex *ap, a
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CTPTRI */
 }
 /* ctptri_ */

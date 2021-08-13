@@ -42,12 +42,12 @@
 template<typename T, typename Ta>
 void hbevx_test(int ip)
 {
-  typedef integer (*Fptr_NL_LAPACKE_hbevx)(char* jobz, char* range, char* uplo,
+  typedef integer (*Fptr_NL_LAPACK_hbevx)(char* jobz, char* range, char* uplo,
                 integer* n, integer* kd, T* ab, integer* ldab, T* q,
                 integer* ldq, Ta* vl, Ta* vu, integer* il, integer* iu,
                 Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work,
                 Ta* rwork, integer* iwork, integer* ifail, integer* info);
-  Fptr_NL_LAPACKE_hbevx HBEVX = NULL;
+  Fptr_NL_LAPACK_hbevx HBEVX = NULL;
   
   // Initialise random number generators with timestamp
   srand (time(NULL));
@@ -75,7 +75,7 @@ void hbevx_test(int ip)
           = 'L':  Lower triangle of A is stored.*/
   char uplo = eig_paramslist[ip].uplo;
   if ((uplo != 'U') && (uplo != 'L')) {
-    PRINTF("jobz should be N or V. Please correct the input data.");
+    PRINTF("uplo should be U or L. Please correct the input data.\n");
   }
   
   /* N is INTEGER
@@ -117,7 +117,7 @@ void hbevx_test(int ip)
   integer ldq = eig_paramslist[ip].ldq;
   
   if ((jobz == 'V') && (ldq < max(1,n))) {
-    PRINTF("When jobz is V, ldz < max(1,n) but it should be: ldz >= max(1,n)" \
+    PRINTF("When jobz is V, ldq < max(1,n) but it should be: ldq >= max(1,n)" \
           ". Please correct the input data.\n");
   }
   
@@ -254,7 +254,7 @@ void hbevx_test(int ip)
     PRINTF("Size of WORK array (n)) = %d\n", n);
     PRINTF("Size of RWORK array (7*n) = %d\n", 7*n);
     PRINTF("Size of IWORK array (5*n) = %d\n", 5*n);
-    PRINTF("Size of IFAIL array (n)) = %d\n", n);
+    PRINTF("Size of IFAIL array (n) = %d\n", n);
   #endif
 
   #if (defined(PRINT_ARRAYS) && (PRINT_ARRAYS == 1))
@@ -327,9 +327,9 @@ void hbevx_test(int ip)
   /* Check the typename T passed to this function template and call respective
      function.*/
   if (typeid(T) == typeid(scomplex)) {
-    HBEVX = (Fptr_NL_LAPACKE_hbevx)dlsym(lapackModule, "chbevx_");
+    HBEVX = (Fptr_NL_LAPACK_hbevx)dlsym(lapackModule, "chbevx_");
   } else if (typeid(T) == typeid(dcomplex)) {
-    HBEVX = (Fptr_NL_LAPACKE_hbevx)dlsym(lapackModule, "zhbevx_");
+    HBEVX = (Fptr_NL_LAPACK_hbevx)dlsym(lapackModule, "zhbevx_");
   } else {
 	  PRINTF("Invalid typename is passed to %s() function template.\n",
            __FUNCTION__);

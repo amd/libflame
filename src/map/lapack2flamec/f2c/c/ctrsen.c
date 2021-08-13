@@ -273,38 +273,13 @@ void ctrsen_(char *job, char *compq, logical *select, aocl_int_t *n, scomplex *t
              scomplex *q, aocl_int_t *ldq, scomplex *w, aocl_int_t *m, real *s, real *sep,
              scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ctrsen(job, compq, select, n, t, ldt, q, ldq, w, m, s, sep, work, lwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ctrsen(job, compq, select, &n_64, t, &ldt_64, q, &ldq_64, w, &m_64, s, sep, work,
-                       &lwork_64, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ctrsen(char *job, char *compq, logical *select, aocl_int64_t *n, scomplex *t,
-                        aocl_int64_t *ldt, scomplex *q, aocl_int64_t *ldq, scomplex *w,
-                        aocl_int64_t *m, real *s, real *sep, scomplex *work, aocl_int64_t *lwork,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "ctrsen inputs: job %c, compq %c, n %lld, ldt %lld, ldq %lld, lwork %lld",
-             *job, *compq, *n, *ldt, *ldq, *lwork);
-#else
-    snprintf(buffer, 256, "ctrsen inputs: job %c, compq %c, n %d, ldt %d, ldq %d, lwork %d", *job,
-             *compq, *n, *ldt, *ldq, *lwork);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"ctrsen inputs: job %c, compq %c, n %lld, ldt %lld, ldq %lld, lwork %lld",*job, *compq, *n, *ldt, *ldq, *lwork);
+#else 
+    snprintf(buffer, 256,"ctrsen inputs: job %c, compq %c, n %d, ldt %d, ldq %d, lwork %d",*job, *compq, *n, *ldt, *ldq, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -429,14 +404,14 @@ void aocl_lapack_ctrsen(char *job, char *compq, logical *select, aocl_int64_t *n
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CTRSEN", &i__1, (ftnlen)6);
+        xerbla_("CTRSEN", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*m == *n || *m == 0)
@@ -523,11 +498,10 @@ L40: /* Copy reordered eigenvalues to W. */
         w[i__2].imag = t[i__3].imag; // , expr subst
         /* L50: */
     }
-    r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
+    work[1].r = (real) lwmin;
+    work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CTRSEN */
 }
 /* ctrsen_ */

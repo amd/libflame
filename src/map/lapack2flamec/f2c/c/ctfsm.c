@@ -301,33 +301,13 @@ K=N/2. If */
 void ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_int_t *m,
             aocl_int_t *n, scomplex *alpha, scomplex *a, scomplex *b, aocl_int_t *ldb)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ctfsm(transr, side, uplo, trans, diag, m, n, alpha, a, b, ldb);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldb_64 = *ldb;
-
-    aocl_lapack_ctfsm(transr, side, uplo, trans, diag, &m_64, &n_64, alpha, a, b, &ldb_64);
-#endif
-}
-
-void aocl_lapack_ctfsm(char *transr, char *side, char *uplo, char *trans, char *diag,
-                       aocl_int64_t *m, aocl_int64_t *n, scomplex *alpha, scomplex *a, scomplex *b,
-                       aocl_int64_t *ldb)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(
-        buffer, 256,
-        "ctfsm inputs: transr %c, side %c, uplo %c, trans %c, diag %c, m %lld, n %lld, ldb %lld",
-        *transr, *side, *uplo, *trans, *diag, *m, *n, *ldb);
-#else
-    snprintf(buffer, 256,
-             "ctfsm inputs: transr %c, side %c, uplo %c, trans %c, diag %c, m %d, n %d, ldb %d",
-             *transr, *side, *uplo, *trans, *diag, *m, *n, *ldb);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"ctfsm inputs: transr %c, side %c, uplo %c, trans %c, diag %c, m %lld, n %lld, ldb %lld",*transr, *side, *uplo, *trans, *diag, *m, *n, *ldb);
+#else 
+    snprintf(buffer, 256,"ctfsm inputs: transr %c, side %c, uplo %c, trans %c, diag %c, m %d, n %d, ldb %d",*transr, *side, *uplo, *trans, *diag, *m, *n, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -408,15 +388,15 @@ void aocl_lapack_ctfsm(char *transr, char *side, char *uplo, char *trans, char *
     if(info != 0)
     {
         i__1 = -info;
-        aocl_blas_xerbla("CTFSM ", &i__1, (ftnlen)6);
+        xerbla_("CTFSM ", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return when ( (N.EQ.0).OR.(M.EQ.0) ) */
     if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return when ALPHA.EQ.(0E+0,0E+0) */
     if(alpha->real == 0.f && alpha->imag == 0.f)
@@ -435,7 +415,7 @@ void aocl_lapack_ctfsm(char *transr, char *side, char *uplo, char *trans, char *
             /* L20: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(lside)
     {
@@ -1058,7 +1038,7 @@ void aocl_lapack_ctfsm(char *transr, char *side, char *uplo, char *trans, char *
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CTFSM */
 }
 /* ctfsm_ */

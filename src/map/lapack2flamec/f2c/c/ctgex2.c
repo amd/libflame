@@ -197,33 +197,16 @@ void ctgex2_(logical *wantq, logical *wantz, aocl_int_t *n, scomplex *a, aocl_in
              aocl_int_t *ldb, scomplex *q, aocl_int_t *ldq, scomplex *z__, aocl_int_t *ldz,
              aocl_int_t *j1, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ctgex2(wantq, wantz, n, a, lda, b, ldb, q, ldq, z__, ldz, j1, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t j1_64 = *j1;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ctgex2(wantq, wantz, &n_64, a, &lda_64, b, &ldb_64, q, &ldq_64, z__, &ldz_64,
-                       &j1_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"ctgex2 inputs: n %lld, lda %lld, ldb %lld, ldq %lld, ldz %lld, j1 %lld",*n, *lda, *ldb, *ldq, *ldz, *j1);
+#else 
+    snprintf(buffer, 256,"ctgex2 inputs: n %d, lda %d, ldb %d, ldq %d, ldz %d, j1 %d",*n, *lda, *ldb, *ldq, *ldz, *j1);
 #endif
-}
-
-void aocl_lapack_ctgex2(logical *wantq, logical *wantz, aocl_int64_t *n, scomplex *a,
-                        aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb, scomplex *q,
-                        aocl_int64_t *ldq, scomplex *z__, aocl_int64_t *ldz, aocl_int64_t *j1,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ctgex2 inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS
-                      ", ldz %" FLA_IS ", j1 %" FLA_IS "",
-                      *n, *lda, *ldb, *ldq, *ldz, *j1);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
         i__3;
@@ -288,8 +271,8 @@ void aocl_lapack_ctgex2(logical *wantq, logical *wantz, aocl_int64_t *n, scomple
     /* Quick return if possible */
     if(*n <= 1)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     m = 2;
     weak = FALSE_;
@@ -474,13 +457,13 @@ void aocl_lapack_ctgex2(logical *wantq, logical *wantz, aocl_int64_t *n, scomple
                          &q__1);
     }
     /* Exit with INFO = 0 if swap was successfully performed. */
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* Exit with INFO = 1 if swap was rejected. */
 L20:
     *info = 1;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of CTGEX2 */
 }
 /* ctgex2_ */

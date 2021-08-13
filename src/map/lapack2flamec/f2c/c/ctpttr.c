@@ -103,29 +103,13 @@
 /** Generated wrapper function */
 void ctpttr_(char *uplo, aocl_int_t *n, scomplex *ap, scomplex *a, aocl_int_t *lda, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ctpttr(uplo, n, ap, a, lda, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ctpttr(uplo, &n_64, ap, a, &lda_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ctpttr(char *uplo, aocl_int64_t *n, scomplex *ap, scomplex *a, aocl_int64_t *lda,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "ctpttr inputs: uplo %c, n %lld, lda %lld", *uplo, *n, *lda);
-#else
-    snprintf(buffer, 256, "ctpttr inputs: uplo %c, n %d, lda %d", *uplo, *n, *lda);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"ctpttr inputs: uplo %c, n %lld, lda %lld",*uplo, *n, *lda);
+#else 
+    snprintf(buffer, 256,"ctpttr inputs: uplo %c, n %d, lda %d",*uplo, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -177,9 +161,9 @@ void aocl_lapack_ctpttr(char *uplo, aocl_int64_t *n, scomplex *ap, scomplex *a, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CTPTTR", &i__1, (ftnlen)6);
+        xerbla_("CTPTTR", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(lower)
     {
@@ -216,7 +200,7 @@ void aocl_lapack_ctpttr(char *uplo, aocl_int64_t *n, scomplex *ap, scomplex *a, 
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CTPTTR */
 }
 /* ctpttr_ */

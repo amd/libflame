@@ -323,47 +323,13 @@ void ctgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, scomplex *
              aocl_int_t *ldvr, real *s, real *dif, aocl_int_t *mm, aocl_int_t *m, scomplex *work,
              aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ctgsna(job, howmny, select, n, a, lda, b, ldb, vl, ldvl, vr, ldvr, s, dif, mm, m,
-                       work, lwork, iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldvl_64 = *ldvl;
-    aocl_int64_t ldvr_64 = *ldvr;
-    aocl_int64_t mm_64 = *mm;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ctgsna(job, howmny, select, &n_64, a, &lda_64, b, &ldb_64, vl, &ldvl_64, vr,
-                       &ldvr_64, s, dif, &mm_64, &m_64, work, &lwork_64, iwork, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ctgsna(char *job, char *howmny, logical *select, aocl_int64_t *n, scomplex *a,
-                        aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb, scomplex *vl,
-                        aocl_int64_t *ldvl, scomplex *vr, aocl_int64_t *ldvr, real *s, real *dif,
-                        aocl_int64_t *mm, aocl_int64_t *m, scomplex *work, aocl_int64_t *lwork,
-                        aocl_int_t *iwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "ctgsna inputs: job %c, howmny %c, n %lld, lda %lld, ldb %lld, ldvl %lld, ldvr %lld, "
-             "mm %lld, m %lld, lwork %lld",
-             *job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *m, *lwork);
-#else
-    snprintf(buffer, 256,
-             "ctgsna inputs: job %c, howmny %c, n %d, lda %d, ldb %d, ldvl %d, ldvr %d, mm %d, m "
-             "%d, lwork %d",
-             *job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *m, *lwork);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"ctgsna inputs: job %c, howmny %c, n %lld, lda %lld, ldb %lld, ldvl %lld, ldvr %lld, mm %lld, m %lld, lwork %lld",*job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *m, *lwork);
+#else 
+    snprintf(buffer, 256,"ctgsna inputs: job %c, howmny %c, n %d, lda %d, ldb %d, ldvl %d, ldvr %d, mm %d, m %d, lwork %d",*job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *m, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -513,20 +479,20 @@ void aocl_lapack_ctgsna(char *job, char *howmny, logical *select, aocl_int64_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CTGSNA", &i__1, (ftnlen)6);
+        xerbla_("CTGSNA", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Get machine constants */
     ks = 0;
@@ -613,11 +579,10 @@ void aocl_lapack_ctgsna(char *job, char *howmny, logical *select, aocl_int64_t *
         }
     L20:;
     }
-    r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
+    work[1].r = (real) lwmin;
+    work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CTGSNA */
 }
 /* ctgsna_ */

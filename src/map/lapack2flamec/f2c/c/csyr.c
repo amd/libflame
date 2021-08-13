@@ -134,28 +134,13 @@
 void csyr_(char *uplo, aocl_int_t *n, scomplex *alpha, scomplex *x, aocl_int_t *incx, scomplex *a,
            aocl_int_t *lda)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_csyr(uplo, n, alpha, x, incx, a, lda);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t lda_64 = *lda;
-
-    aocl_lapack_csyr(uplo, &n_64, alpha, x, &incx_64, a, &lda_64);
-#endif
-}
-
-void aocl_lapack_csyr(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int64_t *incx,
-                      scomplex *a, aocl_int64_t *lda)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "csyr inputs: uplo %c, n %lld, incx %lld, lda %lld", *uplo, *n, *incx,
-             *lda);
-#else
-    snprintf(buffer, 256, "csyr inputs: uplo %c, n %d, incx %d, lda %d", *uplo, *n, *incx, *lda);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"csyr inputs: uplo %c, n %lld, incx %lld, lda %lld",*uplo, *n, *incx, *lda);
+#else 
+    snprintf(buffer, 256,"csyr inputs: uplo %c, n %d, incx %d, lda %d",*uplo, *n, *incx, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -213,15 +198,15 @@ void aocl_lapack_csyr(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *x,
     }
     if(info != 0)
     {
-        aocl_blas_xerbla("CSYR ", &info, (ftnlen)5);
+        xerbla_("CSYR ", &info);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible. */
     if(*n == 0 || alpha->real == 0.f && alpha->imag == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Set the start point in X if the increment is not unity. */
     if(*incx <= 0)
@@ -376,7 +361,7 @@ void aocl_lapack_csyr(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *x,
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CSYR */
 }
 /* csyr_ */

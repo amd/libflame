@@ -218,31 +218,13 @@
 void ctrttf_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *arf,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ctrttf(transr, uplo, n, a, lda, arf, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ctrttf(transr, uplo, &n_64, a, &lda_64, arf, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ctrttf(char *transr, char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
-                        scomplex *arf, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "ctrttf inputs: transr %c, uplo %c, n %lld, lda %lld", *transr, *uplo, *n,
-             *lda);
-#else
-    snprintf(buffer, 256, "ctrttf inputs: transr %c, uplo %c, n %d, lda %d", *transr, *uplo, *n,
-             *lda);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"ctrttf inputs: transr %c, uplo %c, n %lld, lda %lld",*transr, *uplo, *n, *lda);
+#else 
+    snprintf(buffer, 256,"ctrttf inputs: transr %c, uplo %c, n %d, lda %d",*transr, *uplo, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -305,9 +287,9 @@ void aocl_lapack_ctrttf(char *transr, char *uplo, aocl_int64_t *n, scomplex *a, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CTRTTF", &i__1, (ftnlen)6);
+        xerbla_("CTRTTF", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n <= 1)
@@ -327,7 +309,7 @@ void aocl_lapack_ctrttf(char *transr, char *uplo, aocl_int64_t *n, scomplex *a, 
             }
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Size of array ARF(1:2,0:nt-1) */
     nt = *n * (*n + 1) / 2;
@@ -701,7 +683,7 @@ void aocl_lapack_ctrttf(char *transr, char *uplo, aocl_int64_t *n, scomplex *a, 
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CTRTTF */
 }
 /* ctrttf_ */

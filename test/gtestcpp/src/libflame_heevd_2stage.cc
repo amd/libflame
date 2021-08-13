@@ -41,14 +41,14 @@
 template<typename T, typename Ta>
 void heevd_2stage_test(int ip)
 {
-  typedef int (*fptr_NL_LAPACK_heevd_2stage)(char* jobz, char* uplo, integer* n,
+  typedef int (*Fptr_NL_LAPACK_heevd_2stage)(char* jobz, char* uplo, integer* n,
                   T* a, integer* lda, Ta* w, T* work, integer* lwork,
                   Ta* rwork, integer* lrwork, integer* iwork, integer* liwork,
                   integer* info);
-  fptr_NL_LAPACK_heevd_2stage heevd_2stage_ref;
+  Fptr_NL_LAPACK_heevd_2stage HEEVD_2STAGE;
   
   // Initialise random number generators with timestamp
-  srand (SRAND_SEED_VALUE);
+  srand (time(NULL));
   
   /* JOBZ is CHARACTER*1
           = 'N':  Compute eigenvalues only;
@@ -74,10 +74,10 @@ void heevd_2stage_test(int ip)
   }
 
   /* LDA is INTEGER
-          The leading dimension of the array A.  LDA >= fla_max(1,N).*/
+          The leading dimension of the array A.  LDA >= max(1,N).*/
   integer lda = eig_paramslist[ip].lda;
-  if (lda < fla_max(1, n)) {
-    PRINTF("lda < fla_max(1, n) but it should be: lda >= fla_max(1, n). Please " \
+  if (lda < max(1, n)) {
+    PRINTF("lda < max(1, n) but it should be: lda >= max(1, n). Please " \
            "correct the input data.");
   }
   
@@ -170,7 +170,7 @@ void heevd_2stage_test(int ip)
 
   // WORK is COMPLEX or COMPLEX*16  array, dimension (MAX(1,LWORK))
   T *workbuff = NULL, *workrefbuff = NULL;
-  allocate_init_buffer(workbuff, workrefbuff, fla_max(1, lwork_size), 0);
+  allocate_init_buffer(workbuff, workrefbuff, max(1, lwork_size), 0);
   
   // Check if lrwork = -1 for intializing random buffer size.
   if (lrwork != -1) {
@@ -214,7 +214,7 @@ void heevd_2stage_test(int ip)
   
   // IWORK is INTEGER array, dimension (MAX(1,LIWORK))
   integer *iworkbuff = NULL, *iworkrefbuff = NULL;
-  allocate_init_buffer(iworkbuff, iworkrefbuff, fla_max(1, liwork_size), 0);
+  allocate_init_buffer(iworkbuff, iworkrefbuff, max(1, liwork_size), 0);
   
   #if (defined(PRINT_INPUT_VALUES) && (PRINT_INPUT_VALUES == 1))
     // Print input values other than arrays.
@@ -226,11 +226,11 @@ void heevd_2stage_test(int ip)
     PRINTF("Size of A array (lda*n) = %d\n", (lda*n));
     PRINTF("Size of W array (n) = %d\n", n);
     PRINTF("lwork = %d\n", lwork_size);
-    PRINTF("Size of WORK array (max(1, lwork)) = %d\n", fla_max(1, lwork_size));
+    PRINTF("Size of WORK array (max(1, lwork)) = %d\n", max(1, lwork_size));
     PRINTF("lrwork = %d\n", lrwork_size);
     PRINTF("Size of RWORK array (lrwork) = %d\n", lrwork_size);
     PRINTF("liwork = %d\n", liwork_size);
-    PRINTF("Size of IWORK array (max(1, liwork)) = %d\n", fla_max(1, liwork_size));
+    PRINTF("Size of IWORK array (max(1, liwork)) = %d\n", max(1, liwork_size));
   #endif
   
   #if (defined(PRINT_ARRAYS) && (PRINT_ARRAYS == 1))
@@ -258,9 +258,9 @@ void heevd_2stage_test(int ip)
     
     // Prints WORK array contents
     strncpy(arrayname, "WORK input", arraysize);
-    print_array<T>(arrayname, workbuff, fla_max(1, lwork_size));
+    print_array<T>(arrayname, workbuff, max(1, lwork_size));
     strncpy(arrayname, "WORK ref input", arraysize);
-    print_array<T>(arrayname, workrefbuff, fla_max(1, lwork_size));
+    print_array<T>(arrayname, workrefbuff, max(1, lwork_size));
     
     // Prints RWORK array contents
     strncpy(arrayname, "RWORK input", arraysize);
@@ -270,9 +270,9 @@ void heevd_2stage_test(int ip)
     
     // Prints IWORK array contents
     strncpy(arrayname, "IWORK input", arraysize);
-    print_array<integer>(arrayname, iworkbuff, fla_max(1, liwork_size));
+    print_array<integer>(arrayname, iworkbuff, max(1, liwork_size));
     strncpy(arrayname, "IWORK ref input", arraysize);
-    print_array<integer>(arrayname, iworkrefbuff, fla_max(1, liwork_size));
+    print_array<integer>(arrayname, iworkrefbuff, max(1, liwork_size));
   #endif
   
   info_cpp = -1;
@@ -287,24 +287,24 @@ void heevd_2stage_test(int ip)
   /* Check the typename T passed to this function template and call respective
      function.*/
   if (typeid(T) == typeid(scomplex)) {
-    heevd_2stage_ref = (fptr_NL_LAPACK_heevd_2stage)dlsym(lapackModule, \
+    HEEVD_2STAGE = (Fptr_NL_LAPACK_heevd_2stage)dlsym(lapackModule, \
                         "cheevd_2stage_");
   } else if (typeid(T) == typeid(dcomplex)) {
-    heevd_2stage_ref = (fptr_NL_LAPACK_heevd_2stage)dlsym(lapackModule, \
+    HEEVD_2STAGE = (Fptr_NL_LAPACK_heevd_2stage)dlsym(lapackModule, \
                         "zheevd_2stage_");
   } else {
 	  PRINTF("Invalid typename is passed to %s() function template.\n",
            __FUNCTION__);
   }
   
-  if (heevd_2stage_ref == NULL) {
+  if (HEEVD_2STAGE == NULL) {
     PRINTF("Could not get the symbol. Exiting...\n");
     closelibs();
     exit (-1);
   }
 
   integer info_ref = -1;
-  heevd_2stage_ref(&jobz, &uplo, &n, arefbuff, &lda, wrefbuff, workrefbuff,
+  HEEVD_2STAGE(&jobz, &uplo, &n, arefbuff, &lda, wrefbuff, workrefbuff,
         &lwork_size, rworkrefbuff, &lrwork_size, iworkrefbuff, &liwork_size,
         &info_ref);
   PRINTF ("info_cpp: %d, info_ref: %d\n", info_cpp, info_ref);
@@ -330,9 +330,9 @@ void heevd_2stage_test(int ip)
       
       // Prints WORK array contents
       strncpy(arrayname, "WORK output", arraysize);
-      print_array<T>(arrayname, workbuff, fla_max(1, lwork_size));
+      print_array<T>(arrayname, workbuff, max(1, lwork_size));
       strncpy(arrayname, "WORK ref output", arraysize);
-      print_array<T>(arrayname, workrefbuff, fla_max(1, lwork_size));
+      print_array<T>(arrayname, workrefbuff, max(1, lwork_size));
       
       // Prints RWORK array contents
       strncpy(arrayname, "RWORK output", arraysize);
@@ -342,16 +342,16 @@ void heevd_2stage_test(int ip)
       
       // Prints IWORK array contents
       strncpy(arrayname, "IWORK output", arraysize);
-      print_array<integer>(arrayname, iworkbuff, fla_max(1, liwork_size));
+      print_array<integer>(arrayname, iworkbuff, max(1, liwork_size));
       strncpy(arrayname, "IWORK ref output", arraysize);
-      print_array<integer>(arrayname, iworkrefbuff, fla_max(1, liwork_size));
+      print_array<integer>(arrayname, iworkrefbuff, max(1, liwork_size));
     #endif
     
     double diff = computeError<T>(lda, n, arefbuff, abuff);
 	  diff += computeError<Ta>(1, n, wrefbuff, wbuff);
-    diff += computeError<T>(1, fla_max(1, lwork_size), workbuff, workrefbuff);
+    diff += computeError<T>(1, max(1, lwork_size), workbuff, workrefbuff);
     diff += computeError<Ta>(1, lrwork_size, rworkbuff, rworkrefbuff);
-    diff += computeError<integer>(1, fla_max(1, liwork_size), iworkbuff,
+    diff += computeError<integer>(1, max(1, liwork_size), iworkbuff,
                                   iworkrefbuff);
     PRINTF("diff: %lf\n", diff);
     EXPECT_NEAR(0.0, abs(diff), SYM_EIGEN_THRESHOLD);

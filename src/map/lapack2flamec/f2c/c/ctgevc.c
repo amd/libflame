@@ -229,44 +229,13 @@ void ctgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, scomplex 
              aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m, scomplex *work, real *rwork,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ctgevc(side, howmny, select, n, s, lds, p, ldp, vl, ldvl, vr, ldvr, mm, m, work,
-                       rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lds_64 = *lds;
-    aocl_int64_t ldp_64 = *ldp;
-    aocl_int64_t ldvl_64 = *ldvl;
-    aocl_int64_t ldvr_64 = *ldvr;
-    aocl_int64_t mm_64 = *mm;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ctgevc(side, howmny, select, &n_64, s, &lds_64, p, &ldp_64, vl, &ldvl_64, vr,
-                       &ldvr_64, &mm_64, &m_64, work, rwork, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ctgevc(char *side, char *howmny, logical *select, aocl_int64_t *n, scomplex *s,
-                        aocl_int64_t *lds, scomplex *p, aocl_int64_t *ldp, scomplex *vl,
-                        aocl_int64_t *ldvl, scomplex *vr, aocl_int64_t *ldvr, aocl_int64_t *mm,
-                        aocl_int64_t *m, scomplex *work, real *rwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "ctgevc inputs: side %c, howmny %c, n %lld, lds %lld, ldp %lld, ldvl %lld, ldvr %lld, "
-             "mm %lld",
-             *side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm);
-#else
-    snprintf(buffer, 256,
-             "ctgevc inputs: side %c, howmny %c, n %d, lds %d, ldp %d, ldvl %d, ldvr %d, mm %d",
-             *side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"ctgevc inputs: side %c, howmny %c, n %lld, lds %lld, ldp %lld, ldvl %lld, ldvr %lld, mm %lld",*side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm);
+#else 
+    snprintf(buffer, 256,"ctgevc inputs: side %c, howmny %c, n %d, lds %d, ldp %d, ldvl %d, ldvr %d, mm %d",*side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -425,9 +394,9 @@ void aocl_lapack_ctgevc(char *side, char *howmny, logical *select, aocl_int64_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CTGEVC", &i__1, (ftnlen)6);
+        xerbla_("CTGEVC", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Count the number of eigenvectors */
     if(!ilall)
@@ -477,16 +446,16 @@ void aocl_lapack_ctgevc(char *side, char *howmny, logical *select, aocl_int64_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CTGEVC", &i__1, (ftnlen)6);
+        xerbla_("CTGEVC", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     *m = im;
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Machine Constants */
     safmin = slamch_("Safe minimum");
@@ -1149,7 +1118,7 @@ void aocl_lapack_ctgevc(char *side, char *howmny, logical *select, aocl_int64_t 
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CTGEVC */
 }
 /* ctgevc_ */

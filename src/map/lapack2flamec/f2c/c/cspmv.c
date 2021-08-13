@@ -150,28 +150,13 @@
 void cspmv_(char *uplo, aocl_int_t *n, scomplex *alpha, scomplex *ap, scomplex *x, aocl_int_t *incx,
             scomplex *beta, scomplex *y, aocl_int_t *incy)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cspmv(uplo, n, alpha, ap, x, incx, beta, y, incy);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incy_64 = *incy;
-
-    aocl_lapack_cspmv(uplo, &n_64, alpha, ap, x, &incx_64, beta, y, &incy_64);
-#endif
-}
-
-void aocl_lapack_cspmv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *ap, scomplex *x,
-                       aocl_int64_t *incx, scomplex *beta, scomplex *y, aocl_int64_t *incy)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cspmv inputs: uplo %c, n %lld, incx %lld, incy %lld", *uplo, *n, *incx,
-             *incy);
-#else
-    snprintf(buffer, 256, "cspmv inputs: uplo %c, n %d, incx %d, incy %d", *uplo, *n, *incx, *incy);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cspmv inputs: uplo %c, n %lld, incx %lld, incy %lld",*uplo, *n, *incx, *incy);
+#else 
+    snprintf(buffer, 256,"cspmv inputs: uplo %c, n %d, incx %d, incy %d",*uplo, *n, *incx, *incy);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -225,15 +210,15 @@ void aocl_lapack_cspmv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *a
     }
     if(info != 0)
     {
-        aocl_blas_xerbla("CSPMV ", &info, (ftnlen)6);
+        xerbla_("CSPMV ", &info);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible. */
     if(*n == 0 || alpha->real == 0.f && alpha->imag == 0.f && (beta->real == 1.f && beta->imag == 0.f))
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Set up the start points in X and Y. */
     if(*incx > 0)
@@ -320,7 +305,7 @@ void aocl_lapack_cspmv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *a
     if(alpha->real == 0.f && alpha->imag == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     kk = 1;
     if(lsame_(uplo, "U", 1, 1))
@@ -564,7 +549,7 @@ void aocl_lapack_cspmv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *a
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CSPMV */
 }
 /* cspmv_ */

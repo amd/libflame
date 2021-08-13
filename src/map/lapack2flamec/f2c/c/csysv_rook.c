@@ -206,31 +206,16 @@ void csysv_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_
                  aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, scomplex *work, aocl_int_t *lwork,
                  aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_csysv_rook(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_csysv_rook(uplo, &n_64, &nrhs_64, a, &lda_64, ipiv, b, &ldb_64, work, &lwork_64,
-                           &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"csysv_rook inputs: uplo %c, n %lld, nrhs %lld, lda %lld, ldb %lld, lwork %lld",*uplo, *n, *nrhs, *lda, *ldb, *lwork);
+#else 
+    snprintf(buffer, 256,"csysv_rook inputs: uplo %c, n %d, nrhs %d, lda %d, ldb %d, lwork %d",*uplo, *n, *nrhs, *lda, *ldb, *lwork);
 #endif
-}
-
-void aocl_lapack_csysv_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a,
-                            aocl_int64_t *lda, aocl_int_t *ipiv, scomplex *b, aocl_int64_t *ldb,
-                            scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("csysv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
-                      ", ldb %" FLA_IS "",
-                      *uplo, *n, *nrhs, *lda, *ldb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     real r__1;
@@ -310,14 +295,14 @@ void aocl_lapack_csysv_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, sco
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CSYSV_ROOK", &i__1, (ftnlen)10);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("CSYSV_ROOK ", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
     aocl_lapack_csytrf_rook(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
@@ -328,11 +313,10 @@ void aocl_lapack_csysv_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, sco
         aocl_lapack_csytrs_rook(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
                                 info);
     }
-    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    work[1].r = (real) lwkopt;
+    work[1].i = 0.f; // , expr subst
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of CSYSV_ROOK */
 }
 /* csysv_rook__ */

@@ -121,28 +121,13 @@ static aocl_int64_t c__1 = 1;
 void cppcon_(char *uplo, aocl_int_t *n, scomplex *ap, real *anorm, real *rcond, scomplex *work,
              real *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cppcon(uplo, n, ap, anorm, rcond, work, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cppcon(uplo, &n_64, ap, anorm, rcond, work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cppcon(char *uplo, aocl_int64_t *n, scomplex *ap, real *anorm, real *rcond,
-                        scomplex *work, real *rwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cppcon inputs: uplo %c, n %lld", *uplo, *n);
-#else
-    snprintf(buffer, 256, "cppcon inputs: uplo %c, n %d", *uplo, *n);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+#if FLA_ENABLE_ILP64 
+    snprintf(buffer, 256,"cppcon inputs: uplo %c, n %lld",*uplo, *n);
+#else 
+    snprintf(buffer, 256,"cppcon inputs: uplo %c, n %d",*uplo, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -212,9 +197,9 @@ void aocl_lapack_cppcon(char *uplo, aocl_int64_t *n, scomplex *ap, real *anorm, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CPPCON", &i__1, (ftnlen)6);
+        xerbla_("CPPCON", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     *rcond = 0.f;
@@ -222,12 +207,12 @@ void aocl_lapack_cppcon(char *uplo, aocl_int64_t *n, scomplex *ap, real *anorm, 
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     else if(*anorm == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     smlnum = slamch_("Safe minimum");
     /* Estimate the 1-norm of the inverse. */
@@ -278,7 +263,7 @@ L10:
     }
 L20:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CPPCON */
 }
 /* cppcon_ */

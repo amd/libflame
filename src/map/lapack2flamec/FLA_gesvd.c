@@ -9,27 +9,28 @@
 */
 
 /*
-    Copyright (c) 2021-2025 Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (c) 2021 Advanced Micro Devices, Inc. All rights reserved.
+    Aug 4, 2021
 */
 
 #include "FLAME.h"
 
 #ifdef FLA_ENABLE_LAPACK2FLAME
 
-#include "FLA_lapack2flame_prototypes.h"
-#include "FLA_lapack2flame_return_defs.h"
 #include "FLA_lapack2flame_util_defs.h"
+#include "FLA_lapack2flame_return_defs.h"
+#include "FLA_lapack2flame_prototypes.h"
 
 /*
   GESVD computes the singular value decomposition (SVD) of a M-by-N
   matrix A, optionally computing the left and/or right singular vectors.
   The SVD is written
   A = U * S * transpose(V)
-  where S is an M-by-N matrix which is zero except for its fla_min(m,n)
+  where S is an M-by-N matrix which is zero except for its min(m,n)
   diagonal elements, U is an M-by-M orthogonal matrix, and V is an N-by-N
   orthogonal matrix.  The diagonal elements of S are the singular values
   of A; they are real and non-negative, and are returned in descending order.
-  The first fla_min(m,n) columns of U and V are the left and right singular
+  The first min(m,n) columns of U and V are the left and right singular
   vectors of A.
 
   Note that the routine returns V**T, not V.
@@ -59,6 +60,13 @@
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_w,  integer* lwork, \
                                PREFIX2LAPACK_REALDEF(prefix)* buff_r,   \
                                integer* info )
+
+
+#define LAPACK_gesvd_body_d(prefix)                                                                                \
+  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                                                                    \
+  lapack_dgesvd( jobu, jobv, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U,buff_Vh , ldim_Vh, buff_w, lwork,info ); \
+  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                                                                     \
+  return *info;                                                                                                        
 
 #define LAPACK_gesvd_body(prefix)                                       \
   AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                         \
@@ -128,255 +136,82 @@
   AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                          \
   return e_val;
 
-/** Generated wrapper function */
-void dgesvd_(char *jobu, char *jobv, aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_s, doublereal *buff_U, aocl_int_t *ldim_U, doublereal *buff_Vh, aocl_int_t *ldim_Vh, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgesvd(jobu, jobv, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, ldim_Vh, buff_w, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t ldim_U_64 = *ldim_U;
-    aocl_int64_t ldim_Vh_64 = *ldim_Vh;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dgesvd(jobu, jobv, &m_64, &n_64, buff_A, &ldim_A_64, buff_s, buff_U, &ldim_U_64, buff_Vh, &ldim_Vh_64, buff_w, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-
-extern int lapack_sgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda,
-                         real *s, real *u, aocl_int64_t *ldu, real *vt, aocl_int64_t *ldvt, real *work,
-                         aocl_int64_t *lwork, aocl_int64_t *info);
-extern int lapack_dgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, doublereal *a,
-                         aocl_int64_t *lda, doublereal *s, doublereal *u, aocl_int64_t *ldu, doublereal *vt,
-                         aocl_int64_t *ldvt, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
-extern int sgesvd_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda,
-                        float *s, float *u, aocl_int64_t *ldu, float *vt, aocl_int64_t *ldvt, float *work,
-                        aocl_int64_t *lwork, aocl_int64_t *info);
-extern int dgesvd_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda,
-                        double *s, double *u, aocl_int64_t *ldu, double *vt, aocl_int64_t *ldvt, double *work,
-                        aocl_int64_t *lwork, aocl_int64_t *info);
-extern int cgesvd_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
-                        float *s, scomplex *u, aocl_int64_t *ldu, scomplex *vt, aocl_int64_t *ldvt,
-                        scomplex *work, aocl_int64_t *lwork, float *rwork, aocl_int64_t *info);
-extern int zgesvd_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
-                        double *s, dcomplex *u, aocl_int64_t *ldu, dcomplex *vt, aocl_int64_t *ldvt,
-                        dcomplex *work, aocl_int64_t *lwork, double *rwork, aocl_int64_t *info);
-
-#define LAPACK_gesvd_real(prefix)                                                               \
-    void aocl_lapack_##prefix##gesvd(                                                                   \
-        char *jobu, char *jobv, aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-        aocl_int64_t * ldim_A, PREFIX2LAPACK_REALDEF(prefix) * buff_s,                               \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_U, aocl_int64_t * ldim_U,                               \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_Vh, aocl_int64_t * ldim_Vh,                             \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork, aocl_int64_t * info)
-
-#define LAPACK_gesvd_complex(prefix)                                                     \
-    void F77_##prefix##gesvd(char *jobu, char *jobv, aocl_int64_t *m, aocl_int64_t *n,             \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A,   \
-                             PREFIX2LAPACK_REALDEF(prefix) * buff_s,                     \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_U, aocl_int64_t * ldim_U,   \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_Vh, aocl_int64_t * ldim_Vh, \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork,    \
-                             PREFIX2LAPACK_REALDEF(prefix) * buff_r, aocl_int64_t * info)
-
-#define LAPACK_gesvd_body(prefix)                                                              \
-    FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                                     \
-    FLA_Datatype dtype_re = PREFIX2FLAME_REALTYPE(prefix);                                     \
-    fla_dim_t min_m_n = fla_min(*m, *n);                                                           \
-    FLA_Svd_type jobu_fla;                                                                     \
-    FLA_Svd_type jobv_fla;                                                                     \
-    FLA_Bool create_U;                                                                         \
-    FLA_Bool create_V;                                                                         \
-    fla_dim_t m_U, n_U;                                                                            \
-    fla_dim_t m_V, n_V;                                                                            \
-    FLA_Obj A, s, U, V;                                                                        \
-    FLA_Error e_val, init_result;                                                              \
-                                                                                               \
-    FLA_Init_safe(&init_result);                                                               \
-                                                                                               \
-    /* Parameters */                                                                           \
-    FLA_Param_map_netlib_to_flame_svd_type(jobu, &jobu_fla);                                   \
-    FLA_Param_map_netlib_to_flame_svd_type(jobv, &jobv_fla);                                   \
-                                                                                               \
-    m_U = *m;                                                                                  \
-    n_U = (jobu_fla == FLA_SVD_VECTORS_ALL ? *m : min_m_n);                                    \
-    n_V = *n;                                                                                  \
-    m_V = (jobv_fla == FLA_SVD_VECTORS_ALL ? *n : min_m_n);                                    \
-                                                                                               \
-    create_U = (jobu_fla == FLA_SVD_VECTORS_ALL || jobu_fla == FLA_SVD_VECTORS_MIN_COPY);      \
-    create_V = (jobv_fla == FLA_SVD_VECTORS_ALL || jobv_fla == FLA_SVD_VECTORS_MIN_COPY);      \
-                                                                                               \
-    /* Given A */                                                                              \
-    FLA_Obj_create_without_buffer(datatype, *m, *n, &A);                                       \
-    FLA_Obj_attach_buffer(buff_A, 1, *ldim_A, &A);                                             \
-                                                                                               \
-    /* Singular values are stored in s */                                                      \
-    FLA_Obj_create_without_buffer(dtype_re, min_m_n, 1, &s);                                   \
-    FLA_Obj_attach_buffer(buff_s, 1, min_m_n, &s);                                             \
-                                                                                               \
-    /* U */                                                                                    \
-    if(create_U)                                                                               \
-    {                                                                                          \
-        FLA_Obj_create_without_buffer(datatype, m_U, n_U, &U);                                 \
-        FLA_Obj_attach_buffer(buff_U, 1, *ldim_U, &U);                                         \
-    }                                                                                          \
-    else                                                                                       \
-    {                                                                                          \
-        FLA_Obj_nullify(&U);                                                                   \
-    }                                                                                          \
-    /* V^H */                                                                                  \
-    if(create_V)                                                                               \
-    {                                                                                          \
-        FLA_Obj_create_without_buffer(datatype, m_V, n_V, &V);                                 \
-        FLA_Obj_attach_buffer(buff_Vh, 1, *ldim_Vh, &V);                                       \
-    }                                                                                          \
-    else                                                                                       \
-    {                                                                                          \
-        FLA_Obj_nullify(&V);                                                                   \
-    }                                                                                          \
-    /* Compute SVD */                                                                          \
-    e_val = FLA_Svd_ext(jobu_fla, FLA_NO_TRANSPOSE, jobv_fla, FLA_CONJ_TRANSPOSE, A, s, U, V); \
-                                                                                               \
-    /* Clean up */                                                                             \
-    if(create_U)                                                                               \
-        FLA_Obj_free_without_buffer(&U);                                                       \
-    if(create_V)                                                                               \
-        FLA_Obj_free_without_buffer(&V);                                                       \
-                                                                                               \
-    FLA_Obj_free_without_buffer(&A);                                                           \
-    FLA_Obj_free_without_buffer(&s);                                                           \
-                                                                                               \
-    FLA_Finalize_safe(init_result);                                                            \
-    *info = 0;
 
 LAPACK_gesvd_real(s)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgesvd inputs: jobu %c, jobvt %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
-                      ", ldu %" FLA_IS ", ldvt %" FLA_IS "",
-                      *jobu, *jobv, *m, *n, *ldim_A, *ldim_U, *ldim_Vh);
-#if FLA_ENABLE_AMD_OPT
     {
-        lapack_sgesvd(jobu, jobv, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, ldim_Vh,
-                      buff_w, lwork, info);
+        LAPACK_RETURN_CHECK( sgesvd_check( jobu, jobv,
+                                           m, n,
+                                           buff_A, ldim_A,
+                                           buff_s,
+                                           buff_U, ldim_U,
+                                           buff_Vh, ldim_Vh,
+                                           buff_w, lwork,
+                                           info ) )
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
-#else
-    int fla_error = LAPACK_SUCCESS;
-    {
-        LAPACK_RETURN_CHECK_VAR1(sgesvd_check(jobu, jobv, m, n, buff_A, ldim_A, buff_s, buff_U,
-                                              ldim_U, buff_Vh, ldim_Vh, buff_w, lwork, info),
-                                 fla_error)
-    }
-    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gesvd_body(s)
-            /** fla_error set to e_val on LAPACK_SUCCESS */
-            fla_error
-            = e_val;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
-#endif
 }
 
 LAPACK_gesvd_real(d)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgesvd inputs: jobu %c, jobvt %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
-                      ", ldu %" FLA_IS ", ldvt %" FLA_IS "",
-                      *jobu, *jobv, *m, *n, *ldim_A, *ldim_U, *ldim_Vh);
-#if FLA_ENABLE_AMD_OPT
+#ifdef FLA_AMD_OPT
     {
-        aocl_int64_t i__1;
-        /* Initialize global context data */
-        aocl_fla_init();
-
-        lapack_dgesvd(jobu, jobv, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, ldim_Vh,
-                      buff_w, lwork, info);
-
-        if(*info < 0)
-        {
-            /* If the info is set to a negative value, it means that the
-             * input parameters are invalid, so return. */
-            i__1 = -(*info);
-            aocl_blas_xerbla("DGESVD", &i__1, (ftnlen)6);
-        }
+       LAPACK_gesvd_body_d(d)
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 #else
-    int fla_error = LAPACK_SUCCESS;
     {
-        LAPACK_RETURN_CHECK_VAR1(dgesvd_check(jobu, jobv, m, n, buff_A, ldim_A, buff_s, buff_U,
-                                              ldim_U, buff_Vh, ldim_Vh, buff_w, lwork, info),
-                                 fla_error)
+       LAPACK_RETURN_CHECK( dgesvd_check (  jobu, jobv,
+                                            m, n,
+                                            buff_A, ldim_A,
+                                            buff_s,
+                                            buff_U, ldim_U,
+                                            buff_Vh, ldim_Vh,
+                                            buff_w, lwork,
+                                            info ) )
+
     }
-    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gesvd_body(d)
-            /** fla_error set to e_val on LAPACK_SUCCESS */
-            fla_error
-            = e_val;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 #endif
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
 LAPACK_gesvd_complex(c)
 {
-    int fla_error = LAPACK_SUCCESS;
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cgesvd inputs: jobu %c, jobvt %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
-                      ", ldu %" FLA_IS ", ldvt %" FLA_IS "",
-                      *jobu, *jobv, *m, *n, *ldim_A, *ldim_U, *ldim_Vh);
     {
-        LAPACK_RETURN_CHECK_VAR1(cgesvd_check(jobu, jobv, m, n, buff_A, ldim_A, buff_s, buff_U,
-                                              ldim_U, buff_Vh, ldim_Vh, buff_w, lwork, buff_r,
-                                              info),
-                                 fla_error)
+        LAPACK_RETURN_CHECK( cgesvd_check( jobu, jobv,
+                                           m, n,
+                                           buff_A, ldim_A,
+                                           buff_s,
+                                           buff_U, ldim_U,
+                                           buff_Vh, ldim_Vh,
+                                           buff_w, lwork,
+                                           buff_r,
+                                           info ) )
     }
-    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gesvd_body(c)
-            /** fla_error set to e_val on LAPACK_SUCCESS */
-            fla_error
-            = e_val;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
 LAPACK_gesvd_complex(z)
 {
-    int fla_error = LAPACK_SUCCESS;
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgesvd inputs: jobu %c, jobvt %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
-                      ", ldu %" FLA_IS ", ldvt %" FLA_IS "",
-                      *jobu, *jobv, *m, *n, *ldim_A, *ldim_U, *ldim_Vh);
     {
-        LAPACK_RETURN_CHECK_VAR1(zgesvd_check(jobu, jobv, m, n, buff_A, ldim_A, buff_s, buff_U,
-                                              ldim_U, buff_Vh, ldim_Vh, buff_w, lwork, buff_r,
-                                              info),
-                                 fla_error)
+        LAPACK_RETURN_CHECK( zgesvd_check( jobu, jobv,
+                                           m, n,
+                                           buff_A, ldim_A,
+                                           buff_s,
+                                           buff_U, ldim_U,
+                                           buff_Vh, ldim_Vh,
+                                           buff_w, lwork,
+                                           buff_r,
+                                           info ) )
     }
-    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gesvd_body(z)
-            /** fla_error set to e_val on LAPACK_SUCCESS */
-            fla_error
-            = e_val;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
 #endif
 

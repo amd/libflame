@@ -307,7 +307,7 @@ void aocl_lapack_zlaqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, ao
     aocl_int64_t h_dim1, h_offset, u_dim1, u_offset, v_dim1, v_offset, wh_dim1, wh_offset, wv_dim1,
         wv_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6, d__7, d__8, d__9, d__10;
-    dcomplex z__1, z__2, z__3, z__4, z__5, z__6;
+    doublecomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7, z__8, z__9, z__a;
     /* Builtin functions */
     void d_cnjg(dcomplex *, dcomplex *);
     double d_imag(dcomplex *);
@@ -327,8 +327,13 @@ void aocl_lapack_zlaqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, ao
     logical accum;
     aocl_int64_t ndcol, incol, krcol, nbmps;
     extern doublereal dlamch_(char *);
-    doublereal safmin;
-    dcomplex refsum;
+    doublereal safmin, safmax;
+    extern /* Subroutine */
+    int zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    doublecomplex refsum, refsum1;
+    extern /* Subroutine */
+    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+    integer mstart;
     doublereal smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -725,6 +730,349 @@ void aocl_lapack_zlaqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, ao
                     h__[i__5].imag = z__1.imag; // , expr subst
                     /* L40: */
                 }
+            }
+            /* ==== Multiply H by reflections from the right. */
+            /* . Delay filling in the last row until the */
+            /* . vigilant deflation check is complete. ==== */
+            if (accum)
+            {
+                jtop = max(*ktop,incol);
+            }
+            else if (*wantt)
+            {
+                jtop = 1;
+            }
+            else
+            {
+                jtop = *ktop;
+            }
+            i__5 = mbot;
+            for (m = mtop;
+                    m <= i__5;
+                    ++m)
+            {
+                i__4 = m * v_dim1 + 1;
+                if (v[i__4].r != 0. || v[i__4].i != 0.)
+                {
+                    k = krcol + (m - 1) * 3;
+                    /* Computing MIN */
+                    i__6 = *kbot;
+                    i__7 = k + 3; // , expr subst
+                    i__4 = min(i__6,i__7);
+                    for (j = jtop;
+                            j <= i__4;
+                            ++j)
+                    {
+                        i__6 = m * v_dim1 + 1;
+                        i__7 = j + (k + 1) * h_dim1;
+                        i__8 = m * v_dim1 + 2;
+                        i__9 = j + (k + 2) * h_dim1;
+                        z__4.r = v[i__8].r * h__[i__9].r - v[i__8].i * h__[ i__9].i;
+                        z__4.i = v[i__8].r * h__[i__9].i + v[ i__8].i * h__[i__9].r; // , expr subst
+                        z__3.r = h__[i__7].r + z__4.r;
+                        z__3.i = h__[i__7].i + z__4.i; // , expr subst
+                        i__10 = m * v_dim1 + 3;
+                        i__11 = j + (k + 3) * h_dim1;
+                        z__5.r = v[i__10].r * h__[i__11].r - v[i__10].i * h__[ i__11].i;
+                        z__5.i = v[i__10].r * h__[i__11].i + v[i__10].i * h__[i__11].r; // , expr subst
+                        z__2.r = z__3.r + z__5.r;
+                        z__2.i = z__3.i + z__5.i; // , expr subst
+                        z__1.r = v[i__6].r * z__2.r - v[i__6].i * z__2.i;
+                        z__1.i = v[i__6].r * z__2.i + v[i__6].i * z__2.r; // , expr subst
+                        refsum.r = z__1.r;
+                        refsum.i = z__1.i; // , expr subst
+                        i__6 = j + (k + 1) * h_dim1;
+                        i__7 = j + (k + 1) * h_dim1;
+                        z__1.r = h__[i__7].r - refsum.r;
+                        z__1.i = h__[i__7].i - refsum.i; // , expr subst
+                        h__[i__6].r = z__1.r;
+                        h__[i__6].i = z__1.i; // , expr subst
+                        i__6 = j + (k + 2) * h_dim1;
+                        i__7 = j + (k + 2) * h_dim1;
+                        d_cnjg(&z__3, &v[m * v_dim1 + 2]);
+                        z__2.r = refsum.r * z__3.r - refsum.i * z__3.i;
+                        z__2.i = refsum.r * z__3.i + refsum.i * z__3.r; // , expr subst
+                        z__1.r = h__[i__7].r - z__2.r;
+                        z__1.i = h__[i__7].i - z__2.i; // , expr subst
+                        h__[i__6].r = z__1.r;
+                        h__[i__6].i = z__1.i; // , expr subst
+                        i__6 = j + (k + 3) * h_dim1;
+                        i__7 = j + (k + 3) * h_dim1;
+                        d_cnjg(&z__3, &v[m * v_dim1 + 3]);
+                        z__2.r = refsum.r * z__3.r - refsum.i * z__3.i;
+                        z__2.i = refsum.r * z__3.i + refsum.i * z__3.r; // , expr subst
+                        z__1.r = h__[i__7].r - z__2.r;
+                        z__1.i = h__[i__7].i - z__2.i; // , expr subst
+                        h__[i__6].r = z__1.r;
+                        h__[i__6].i = z__1.i; // , expr subst
+                        /* L50: */
+                    }
+                    if (accum)
+                    {
+                        double v1r, v1i, v2r, v2i, v3r, v3i;
+                        double u1r, u1i, u2r, u2i, u3r, u3i;
+                        /* ==== Accumulate U. (If necessary, update Z later */
+                        /* . with with an efficient matrix-matrix */
+                        /* . multiply.) ==== */
+                        kms = k - incol;
+                        i__4 = 1;
+                        i__6 = *ktop - incol;
+                        i__7 = kdu;
+
+                        v1r = v[m * v_dim1 + 1].r;
+                        v1i = v[m * v_dim1 + 1].i;
+                        v2r = v[m * v_dim1 + 2].r;
+                        v2i = v[m * v_dim1 + 2].i;
+                        v3r = v[m * v_dim1 + 3].r;
+                        v3i = v[m * v_dim1 + 3].i;
+
+                        for (j = max(i__4,i__6); j <= i__7; ++j)
+                        {
+                            i__6 = j + (kms + 1) * u_dim1;
+                            i__9 = j + (kms + 2) * u_dim1;
+                            i__11 = j + (kms + 3) * u_dim1;
+
+                            u1r = u[i__6].r;
+                            u1i = u[i__6].i;
+                            u2r = u[i__9].r;
+                            u2i = u[i__9].i;
+                            u3r = u[i__11].r;
+                            u3i = u[i__11].i;
+
+                            z__4.r = v2r * u2r - v2i * u2i;
+                            z__4.i = v2r * u2i + v2i * u2r;
+                            z__3.r = u1r + z__4.r;
+                            z__3.i = u1i + z__4.i;
+
+                            z__5.r = v3r * u3r - v3i * u3i;
+                            z__5.i = v3r * u3i + v3i * u3r;
+                            z__2.r = z__3.r + z__5.r;
+                            z__2.i = z__3.i + z__5.i;
+
+                            refsum.r = v1r * z__2.r - v1i * z__2.i;
+                            refsum.i = v1r * z__2.i + v1i * z__2.r;
+
+                            u[i__6].r = u1r - refsum.r;
+                            u[i__6].i = u1i - refsum.i;
+
+                            z__1.r = refsum.r * v2r + refsum.i * v2i;
+                            z__1.i = - refsum.r * v2i + refsum.i * v2r;
+                            u[i__9].r = u2r - z__1.r;
+                            u[i__9].i = u2i - z__1.i;
+
+                            z__2.r = refsum.r * v3r + refsum.i * v3i;
+                            z__2.i = - refsum.r * v3i + refsum.i * v3r;
+                            u[i__11].r = u3r - z__2.r;
+                            u[i__11].i = u3i - z__2.i;
+                        }
+                    }
+                    else if (*wantz)
+                    {
+                        /* ==== U is not accumulated, so update Z */
+                        /* . now by multiplying by reflections */
+                        /* . from the right. ==== */
+                        i__7 = *ihiz;
+                        for (j = *iloz;
+                                j <= i__7;
+                                ++j)
+                        {
+                            i__4 = m * v_dim1 + 1;
+                            i__6 = j + (k + 1) * z_dim1;
+                            i__8 = m * v_dim1 + 2;
+                            i__9 = j + (k + 2) * z_dim1;
+                            z__4.r = v[i__8].r * z__[i__9].r - v[i__8].i * z__[i__9].i;
+                            z__4.i = v[i__8].r * z__[ i__9].i + v[i__8].i * z__[i__9].r; // , expr subst
+                            z__3.r = z__[i__6].r + z__4.r;
+                            z__3.i = z__[i__6] .i + z__4.i; // , expr subst
+                            i__10 = m * v_dim1 + 3;
+                            i__11 = j + (k + 3) * z_dim1;
+                            z__5.r = v[i__10].r * z__[i__11].r - v[i__10].i * z__[i__11].i;
+                            z__5.i = v[i__10].r * z__[ i__11].i + v[i__10].i * z__[i__11].r; // , expr subst
+                            z__2.r = z__3.r + z__5.r;
+                            z__2.i = z__3.i + z__5.i; // , expr subst
+                            z__1.r = v[i__4].r * z__2.r - v[i__4].i * z__2.i;
+                            z__1.i = v[i__4].r * z__2.i + v[i__4].i * z__2.r; // , expr subst
+                            refsum.r = z__1.r;
+                            refsum.i = z__1.i; // , expr subst
+                            i__4 = j + (k + 1) * z_dim1;
+                            i__6 = j + (k + 1) * z_dim1;
+                            z__1.r = z__[i__6].r - refsum.r;
+                            z__1.i = z__[ i__6].i - refsum.i; // , expr subst
+                            z__[i__4].r = z__1.r;
+                            z__[i__4].i = z__1.i; // , expr subst
+                            i__4 = j + (k + 2) * z_dim1;
+                            i__6 = j + (k + 2) * z_dim1;
+                            d_cnjg(&z__3, &v[m * v_dim1 + 2]);
+                            z__2.r = refsum.r * z__3.r - refsum.i * z__3.i;
+                            z__2.i = refsum.r * z__3.i + refsum.i * z__3.r; // , expr subst
+                            z__1.r = z__[i__6].r - z__2.r;
+                            z__1.i = z__[i__6] .i - z__2.i; // , expr subst
+                            z__[i__4].r = z__1.r;
+                            z__[i__4].i = z__1.i; // , expr subst
+                            i__4 = j + (k + 3) * z_dim1;
+                            i__6 = j + (k + 3) * z_dim1;
+                            d_cnjg(&z__3, &v[m * v_dim1 + 3]);
+                            z__2.r = refsum.r * z__3.r - refsum.i * z__3.i;
+                            z__2.i = refsum.r * z__3.i + refsum.i * z__3.r; // , expr subst
+                            z__1.r = z__[i__6].r - z__2.r;
+                            z__1.i = z__[i__6] .i - z__2.i; // , expr subst
+                            z__[i__4].r = z__1.r;
+                            z__[i__4].i = z__1.i; // , expr subst
+                            /* L70: */
+                        }
+                    }
+                }
+                /* L80: */
+            }
+
+            /* ==== Special case: 2-by-2 reflection (if needed) ==== */
+            k = krcol + (m22 - 1) * 3;
+            if (bmp22)
+            {
+                i__5 = m22 * v_dim1 + 1;
+                if (v[i__5].r != 0. || v[i__5].i != 0.)
+                {
+                    /* Computing MIN */
+                    i__7 = *kbot;
+                    i__4 = k + 3; // , expr subst
+                    i__5 = min(i__7,i__4);
+                    for (j = jtop;
+                            j <= i__5;
+                            ++j)
+                    {
+                        i__7 = m22 * v_dim1 + 1;
+                        i__4 = j + (k + 1) * h_dim1;
+                        i__6 = m22 * v_dim1 + 2;
+                        i__8 = j + (k + 2) * h_dim1;
+                        z__3.r = v[i__6].r * h__[i__8].r - v[i__6].i * h__[ i__8].i;
+                        z__3.i = v[i__6].r * h__[i__8].i + v[ i__6].i * h__[i__8].r; // , expr subst
+                        z__2.r = h__[i__4].r + z__3.r;
+                        z__2.i = h__[i__4].i + z__3.i; // , expr subst
+                        z__1.r = v[i__7].r * z__2.r - v[i__7].i * z__2.i;
+                        z__1.i = v[i__7].r * z__2.i + v[i__7].i * z__2.r; // , expr subst
+                        refsum.r = z__1.r;
+                        refsum.i = z__1.i; // , expr subst
+                        i__7 = j + (k + 1) * h_dim1;
+                        i__4 = j + (k + 1) * h_dim1;
+                        z__1.r = h__[i__4].r - refsum.r;
+                        z__1.i = h__[i__4].i - refsum.i; // , expr subst
+                        h__[i__7].r = z__1.r;
+                        h__[i__7].i = z__1.i; // , expr subst
+                        i__7 = j + (k + 2) * h_dim1;
+                        i__4 = j + (k + 2) * h_dim1;
+                        d_cnjg(&z__3, &v[m22 * v_dim1 + 2]);
+                        z__2.r = refsum.r * z__3.r - refsum.i * z__3.i;
+                        z__2.i = refsum.r * z__3.i + refsum.i * z__3.r; // , expr subst
+                        z__1.r = h__[i__4].r - z__2.r;
+                        z__1.i = h__[i__4].i - z__2.i; // , expr subst
+                        h__[i__7].r = z__1.r;
+                        h__[i__7].i = z__1.i; // , expr subst
+                        /* L90: */
+                    }
+                    if (accum)
+                    {
+                        kms = k - incol;
+                        /* Computing MAX */
+                        i__5 = 1;
+                        i__7 = *ktop - incol; // , expr subst
+                        i__4 = kdu;
+                        for (j = max(i__5,i__7);
+                                j <= i__4;
+                                ++j)
+                        {
+                            i__5 = m22 * v_dim1 + 1;
+                            i__7 = j + (kms + 1) * u_dim1;
+                            i__6 = m22 * v_dim1 + 2;
+                            i__8 = j + (kms + 2) * u_dim1;
+                            z__3.r = v[i__6].r * u[i__8].r - v[i__6].i * u[ i__8].i;
+                            z__3.i = v[i__6].r * u[i__8].i + v[i__6].i * u[i__8].r; // , expr subst
+                            z__2.r = u[i__7].r + z__3.r;
+                            z__2.i = u[i__7].i + z__3.i; // , expr subst
+                            z__1.r = v[i__5].r * z__2.r - v[i__5].i * z__2.i;
+                            z__1.i = v[i__5].r * z__2.i + v[i__5].i * z__2.r; // , expr subst
+                            refsum.r = z__1.r;
+                            refsum.i = z__1.i; // , expr subst
+                            i__5 = j + (kms + 1) * u_dim1;
+                            i__7 = j + (kms + 1) * u_dim1;
+                            z__1.r = u[i__7].r - refsum.r;
+                            z__1.i = u[i__7].i - refsum.i; // , expr subst
+                            u[i__5].r = z__1.r;
+                            u[i__5].i = z__1.i; // , expr subst
+                            i__5 = j + (kms + 2) * u_dim1;
+                            i__7 = j + (kms + 2) * u_dim1;
+                            d_cnjg(&z__3, &v[m22 * v_dim1 + 2]);
+                            z__2.r = refsum.r * z__3.r - refsum.i * z__3.i;
+                            z__2.i = refsum.r * z__3.i + refsum.i * z__3.r; // , expr subst
+                            z__1.r = u[i__7].r - z__2.r;
+                            z__1.i = u[i__7].i - z__2.i; // , expr subst
+                            u[i__5].r = z__1.r;
+                            u[i__5].i = z__1.i; // , expr subst
+                            /* L100: */
+                        }
+                    }
+                    else if (*wantz)
+                    {
+                        i__4 = *ihiz;
+                        for (j = *iloz;
+                                j <= i__4;
+                                ++j)
+                        {
+                            i__5 = m22 * v_dim1 + 1;
+                            i__7 = j + (k + 1) * z_dim1;
+                            i__6 = m22 * v_dim1 + 2;
+                            i__8 = j + (k + 2) * z_dim1;
+                            z__3.r = v[i__6].r * z__[i__8].r - v[i__6].i * z__[i__8].i;
+                            z__3.i = v[i__6].r * z__[ i__8].i + v[i__6].i * z__[i__8].r; // , expr subst
+                            z__2.r = z__[i__7].r + z__3.r;
+                            z__2.i = z__[i__7] .i + z__3.i; // , expr subst
+                            z__1.r = v[i__5].r * z__2.r - v[i__5].i * z__2.i;
+                            z__1.i = v[i__5].r * z__2.i + v[i__5].i * z__2.r; // , expr subst
+                            refsum.r = z__1.r;
+                            refsum.i = z__1.i; // , expr subst
+                            i__5 = j + (k + 1) * z_dim1;
+                            i__7 = j + (k + 1) * z_dim1;
+                            z__1.r = z__[i__7].r - refsum.r;
+                            z__1.i = z__[ i__7].i - refsum.i; // , expr subst
+                            z__[i__5].r = z__1.r;
+                            z__[i__5].i = z__1.i; // , expr subst
+                            i__5 = j + (k + 2) * z_dim1;
+                            i__7 = j + (k + 2) * z_dim1;
+                            d_cnjg(&z__3, &v[m22 * v_dim1 + 2]);
+                            z__2.r = refsum.r * z__3.r - refsum.i * z__3.i;
+                            z__2.i = refsum.r * z__3.i + refsum.i * z__3.r; // , expr subst
+                            z__1.r = z__[i__7].r - z__2.r;
+                            z__1.i = z__[i__7] .i - z__2.i; // , expr subst
+                            z__[i__5].r = z__1.r;
+                            z__[i__5].i = z__1.i; // , expr subst
+                            /* L110: */
+                        }
+                    }
+                }
+            }
+            /* ==== Vigilant deflation check ==== */
+            mstart = mtop;
+            if (krcol + (mstart - 1) * 3 < *ktop)
+            {
+                ++mstart;
+            }
+            mend = mbot;
+            if (bmp22)
+            {
+                ++mend;
+            }
+            if (krcol == *kbot - 2)
+            {
+                ++mend;
+            }
+            i__4 = mend;
+            for (m = mstart;
+                    m <= i__4;
+                    ++m)
+            {
+                /* Computing MIN */
+                i__5 = *kbot - 1;
+                i__7 = krcol + (m - 1) * 3; // , expr subst
+                k = min(i__5,i__7);
                 /* ==== The following convergence test requires that */
                 /* . the tradition small-compared-to-nearby-diagonals */
                 /* . criterion and the Ahues & Tisseur (LAWN 122, 1997) */

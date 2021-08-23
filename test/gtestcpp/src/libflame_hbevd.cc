@@ -41,12 +41,12 @@
 template<typename T, typename Ta>
 void hbevd_test(int ip)
 {
-  typedef integer (*Fptr_NL_LAPACKE_hbevd)(char* jobz, char* uplo, integer* n,
+  typedef integer (*fptr_NL_LAPACK_hbevd)(char* jobz, char* uplo, integer* n,
                       integer* kd, T* ab, integer* ldab, Ta* w, T* z,
                       integer* ldz, T* work, integer* lwork, Ta* rwork,
                       integer* lrwork, integer* iwork, integer* liwork,
                       integer* info);
-  Fptr_NL_LAPACKE_hbevd HBEVD = NULL;
+  fptr_NL_LAPACK_hbevd hbevd_ref = NULL;
   
   // Initialise random number generators with timestamp
   srand (time(NULL));
@@ -325,21 +325,21 @@ void hbevd_test(int ip)
   
   // Call C function
   if (typeid(T) == typeid(scomplex)) {
-    HBEVD = (Fptr_NL_LAPACKE_hbevd)dlsym(lapackModule, "chbevd_");
+    hbevd_ref = (fptr_NL_LAPACK_hbevd)dlsym(lapackModule, "chbevd_");
   } else if (typeid(T) == typeid(dcomplex)) {
-    HBEVD = (Fptr_NL_LAPACKE_hbevd)dlsym(lapackModule, "zhbevd_");
+    hbevd_ref = (fptr_NL_LAPACK_hbevd)dlsym(lapackModule, "zhbevd_");
   } else {
 	  PRINTF("Invalid typename is passed to %s() function template.\n",
            __FUNCTION__);
   }
   
-  if (HBEVD == NULL) {
+  if (hbevd_ref == NULL) {
     PRINTF("Could not get the symbol. Exiting...\n");
 	  closelibs();
     exit(-1);
   }
   
-  HBEVD(&jobz, &uplo, &n, &kd, abrefbuff, &ldab, wrefbuff, zrefbuff, &ldz,
+  hbevd_ref(&jobz, &uplo, &n, &kd, abrefbuff, &ldab, wrefbuff, zrefbuff, &ldz,
         workrefbuff, &lwork_size, rworkrefbuff, &lrwork_size, iworkrefbuff,
         &liwork_size, &info_ref);
   PRINTF ("info_cpp: %d, info_ref: %d\n", info_cpp, info_ref);

@@ -42,12 +42,12 @@
 template<typename T, typename Ta>
 void hbevx_test(int ip)
 {
-  typedef integer (*Fptr_NL_LAPACK_hbevx)(char* jobz, char* range, char* uplo,
+  typedef integer (*fptr_NL_LAPACK_hbevx)(char* jobz, char* range, char* uplo,
                 integer* n, integer* kd, T* ab, integer* ldab, T* q,
                 integer* ldq, Ta* vl, Ta* vu, integer* il, integer* iu,
                 Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work,
                 Ta* rwork, integer* iwork, integer* ifail, integer* info);
-  Fptr_NL_LAPACK_hbevx HBEVX = NULL;
+  fptr_NL_LAPACK_hbevx hbevx_ref = NULL;
   
   // Initialise random number generators with timestamp
   srand (time(NULL));
@@ -327,21 +327,21 @@ void hbevx_test(int ip)
   /* Check the typename T passed to this function template and call respective
      function.*/
   if (typeid(T) == typeid(scomplex)) {
-    HBEVX = (Fptr_NL_LAPACK_hbevx)dlsym(lapackModule, "chbevx_");
+    hbevx_ref = (fptr_NL_LAPACK_hbevx)dlsym(lapackModule, "chbevx_");
   } else if (typeid(T) == typeid(dcomplex)) {
-    HBEVX = (Fptr_NL_LAPACK_hbevx)dlsym(lapackModule, "zhbevx_");
+    hbevx_ref = (fptr_NL_LAPACK_hbevx)dlsym(lapackModule, "zhbevx_");
   } else {
 	  PRINTF("Invalid typename is passed to %s() function template.\n",
            __FUNCTION__);
   }
   
-  if (HBEVX == NULL) {
+  if (hbevx_ref == NULL) {
     PRINTF("Could not get the symbol. Exiting...\n");
 	  closelibs();
     exit(-1);
   }
 
-  HBEVX(&jobz, &range, &uplo, &n, &kd, abrefbuff, &ldab, qrefbuff,
+  hbevx_ref(&jobz, &range, &uplo, &n, &kd, abrefbuff, &ldab, qrefbuff,
         &ldq, &vl, &vu, &il, &iu, &abstol, &mref, wrefbuff, zrefbuff, &ldz,
         workrefbuff, rworkrefbuff, iworkrefbuff, ifailref, &info_ref);
   PRINTF ("info_cpp: %d, info_ref: %d\n", info_cpp, info_ref);

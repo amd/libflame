@@ -394,9 +394,13 @@ typedef struct Namelist Namelist;
 #endif
 #endif
 
+#ifdef FLA_ENABLE_EXTRA_SYMBOLS
 #define lsame_ lsame_lf
 #define xerbla_ xerbla_lf
-/*#if (defined(_WIN32) || defined(_WIN64))
+#endif
+
+#ifndef FLA_ENABLE_EXTRA_SYMBOLS
+#if (defined(_WIN32) || defined(_WIN64))
 #ifdef UPPER
 #define  isamax_   ISAMAX     
 #define  idamax_   IDAMAX     
@@ -4683,4 +4687,4 @@ typedef struct Namelist Namelist;
 #define zgetrfnpi_               zgetrfnpi
 #endif
 #endif 
-*/
+#endif

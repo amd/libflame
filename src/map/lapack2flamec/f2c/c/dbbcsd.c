@@ -348,43 +348,12 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
              doublereal *b22d, doublereal *b22e, doublereal *work, aocl_int_t *lwork,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dbbcsd(jobu1, jobu2, jobv1t, jobv2t, trans, m, p, q, theta, phi, u1, ldu1, u2, ldu2,
-                       v1t, ldv1t, v2t, ldv2t, b11d, b11e, b12d, b12e, b21d, b21e, b22d, b22e, work,
-                       lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t p_64 = *p;
-    aocl_int64_t q_64 = *q;
-    aocl_int64_t ldu1_64 = *ldu1;
-    aocl_int64_t ldu2_64 = *ldu2;
-    aocl_int64_t ldv1t_64 = *ldv1t;
-    aocl_int64_t ldv2t_64 = *ldv2t;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dbbcsd(jobu1, jobu2, jobv1t, jobv2t, trans, &m_64, &p_64, &q_64, theta, phi, u1,
-                       &ldu1_64, u2, &ldu2_64, v1t, &ldv1t_64, v2t, &ldv2t_64, b11d, b11e, b12d,
-                       b12e, b21d, b21e, b22d, b22e, work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS ", ldv2t %" FLA_IS ", lwork %" FLA_IS "",*jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t, *lwork);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans,
-                        aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, doublereal *theta,
-                        doublereal *phi, doublereal *u1, aocl_int64_t *ldu1, doublereal *u2,
-                        aocl_int64_t *ldu2, doublereal *v1t, aocl_int64_t *ldv1t, doublereal *v2t,
-                        aocl_int64_t *ldv2t, doublereal *b11d, doublereal *b11e, doublereal *b12d,
-                        doublereal *b12e, doublereal *b21d, doublereal *b21e, doublereal *b22d,
-                        doublereal *b22e, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-        "dbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %" FLA_IS
-        ", p %" FLA_IS ", q %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS
-        ", ldv2t %" FLA_IS ", lwork %" FLA_IS "",
-        *jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t, *lwork);
     /* System generated locals */
     aocl_int64_t u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset,
         i__1, i__2;
@@ -508,9 +477,9 @@ void aocl_lapack_dbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
     if(*info == 0 && *q == 0)
     {
         lworkmin = 1;
-        work[1] = (doublereal)lworkmin;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        work[1] = (doublereal) lworkmin;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Compute workspace */
     if(*info == 0)
@@ -534,14 +503,14 @@ void aocl_lapack_dbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DBBCSD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DBBCSD", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Get machine constants */
     eps = dlamch_("Epsilon");
@@ -641,8 +610,8 @@ void aocl_lapack_dbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
                     ++(*info);
                 }
             }
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         iter = iter + imax - imin;
         /* Compute shifts */
@@ -1374,8 +1343,8 @@ void aocl_lapack_dbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DBBCSD */
 }
 /* dbbcsd_ */

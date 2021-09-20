@@ -167,28 +167,12 @@ and second, applying a diagonal similarity transformation */
 void dgebal_(char *job, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *ilo,
              aocl_int_t *ihi, doublereal *scale, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgebal(job, n, a, lda, ilo, ihi, scale, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dgebal(job, &n_64, a, &lda_64, &ilo_64, &ihi_64, scale, &info_64);
-
-    *ilo = (aocl_int_t)ilo_64;
-    *ihi = (aocl_int_t)ihi_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dgebal inputs: job %c, n %" FLA_IS ", lda %" FLA_IS "",*job, *n, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dgebal(char *job, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
-                        aocl_int64_t *ilo, aocl_int64_t *ihi, doublereal *scale, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgebal inputs: job %c, n %" FLA_IS ", lda %" FLA_IS "", *job, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -244,9 +228,9 @@ void aocl_lapack_dgebal(char *job, aocl_int64_t *n, doublereal *a, aocl_int64_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DGEBAL", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DGEBAL", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick returns. */
     if(*n == 0)
@@ -411,8 +395,44 @@ L160: /* Computing MAX */
                 continue;
             }
             /* Exit if NaN to avoid infinite loop */
-            d__1 = c__ + ca + r__ + ra;
-            if(disnan_(&d__1))
+            *info = -3;
+            i__2 = -(*info);
+            xerbla_("DGEBAL", &i__2);
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
+        }
+        f *= 2.;
+        c__ *= 2.;
+        ca *= 2.;
+        r__ /= 2.;
+        g /= 2.;
+        ra /= 2.;
+        goto L160;
+L170:
+        g = c__ / 2.;
+L180: /* Computing MIN */
+        d__1 = min(f,c__);
+        d__1 = min(d__1,g); // , expr subst
+        if (g < r__ || max(r__,ra) >= sfmax2 || min(d__1,ca) <= sfmin2)
+        {
+            goto L190;
+        }
+        f /= 2.;
+        c__ /= 2.;
+        g /= 2.;
+        ca /= 2.;
+        r__ *= 2.;
+        ra *= 2.;
+        goto L180;
+        /* Now balance. */
+L190:
+        if (c__ + r__ >= s * .95)
+        {
+            goto L200;
+        }
+        if (f < 1. && scale[i__] < 1.)
+        {
+            if (f * scale[i__] <= sfmin1)
             {
                 *info = -3;
                 i__2 = -(*info);
@@ -484,8 +504,8 @@ L160: /* Computing MAX */
     }
     *ilo = k;
     *ihi = l;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DGEBAL */
 }
 /* dgebal_ */

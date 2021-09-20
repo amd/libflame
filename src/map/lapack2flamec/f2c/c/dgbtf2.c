@@ -332,29 +332,12 @@ elements marked */
 void dgbtf2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doublereal *ab,
              aocl_int_t *ldab, aocl_int_t *ipiv, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgbtf2(m, n, kl, ku, ab, ldab, ipiv, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dgbtf2(&m_64, &n_64, &kl_64, &ku_64, ab, &ldab_64, ipiv, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dgbtf2 inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS "",*m, *n, *kl, *ku, *ldab);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dgbtf2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
-                        doublereal *ab, aocl_int64_t *ldab, aocl_int_t *ipiv, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgbtf2 inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
-                      ", ldab %" FLA_IS "",
-                      *m, *n, *kl, *ku, *ldab);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal d__1;
@@ -429,15 +412,15 @@ void aocl_lapack_dgbtf2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DGBTF2", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DGBTF2", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
 #if AOCL_FLA_PROGRESS_H
     progress_step_count = 0;
@@ -542,8 +525,8 @@ void aocl_lapack_dgbtf2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
         }
         /* L40: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DGBTF2 */
 }
 /* dgbtf2_ */

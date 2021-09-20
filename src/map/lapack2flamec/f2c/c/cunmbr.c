@@ -207,32 +207,12 @@ void cunmbr_(char *vect, char *side, char *trans, aocl_int_t *m, aocl_int_t *n, 
              scomplex *a, aocl_int_t *lda, scomplex *tau, scomplex *c__, aocl_int_t *ldc,
              scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cunmbr(vect, side, trans, m, n, k, a, lda, tau, c__, ldc, work, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cunmbr(vect, side, trans, &m_64, &n_64, &k_64, a, &lda_64, tau, c__, &ldc_64, work,
-                       &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"cunmbr inputs: vect %c, side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "",*vect, *side, *trans, *m, *n, *k, *lda, *ldc, *lwork);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_cunmbr(char *vect, char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n,
-                        aocl_int64_t *k, scomplex *a, aocl_int64_t *lda, scomplex *tau, scomplex *c__,
-                        aocl_int64_t *ldc, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cunmbr inputs: vect %c, side %c, trans %c, m %" FLA_IS ", n %" FLA_IS
-                      ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",
-                      *vect, *side, *trans, *m, *n, *k, *lda, *ldc);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
     real r__1;
@@ -383,20 +363,20 @@ void aocl_lapack_cunmbr(char *vect, char *side, char *trans, aocl_int64_t *m, ao
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CUNMBR", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("CUNMBR", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(applyq)
     {
@@ -468,11 +448,10 @@ void aocl_lapack_cunmbr(char *vect, char *side, char *trans, aocl_int64_t *m, ao
                                &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
         }
     }
-    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    work[1].r = (real) lwkopt;
+    work[1].i = 0.f; // , expr subst
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of CUNMBR */
 }
 /* cunmbr_ */

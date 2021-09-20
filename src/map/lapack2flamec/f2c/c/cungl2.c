@@ -112,30 +112,10 @@
 void cungl2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, scomplex *a, aocl_int_t *lda, scomplex *tau,
              scomplex *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cungl2(m, n, k, a, lda, tau, work, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cungl2(&m_64, &n_64, &k_64, a, &lda_64, tau, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cungl2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a,
-                        aocl_int64_t *lda, scomplex *tau, scomplex *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
-             "cungl2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-             *k, *lda);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"cungl2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",*m, *n, *k, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -191,15 +171,15 @@ void aocl_lapack_cungl2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomp
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CUNGL2", &i__1, (ftnlen)6);
+        xerbla_("CUNGL2", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*m <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(*k < *m)
     {
@@ -268,7 +248,7 @@ void aocl_lapack_cungl2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomp
         /* L40: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CUNGL2 */
 }
 /* cungl2_ */

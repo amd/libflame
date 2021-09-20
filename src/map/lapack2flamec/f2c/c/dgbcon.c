@@ -149,30 +149,12 @@ void dgbcon_(char *norm, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doublere
              aocl_int_t *ldab, aocl_int_t *ipiv, doublereal *anorm, doublereal *rcond,
              doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgbcon(norm, n, kl, ku, ab, ldab, ipiv, anorm, rcond, work, iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dgbcon(norm, &n_64, &kl_64, &ku_64, ab, &ldab_64, ipiv, anorm, rcond, work, iwork,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dgbcon inputs: norm %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", ipiv %" FLA_IS "",*norm, *n, *kl, *ku, *ldab, *ipiv);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dgbcon(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
-                        doublereal *ab, aocl_int64_t *ldab, aocl_int_t *ipiv, doublereal *anorm,
-                        doublereal *rcond, doublereal *work, aocl_int_t *iwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgbcon inputs: norm %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
-                      ", ldab %" FLA_IS "",
-                      *norm, *n, *kl, *ku, *ldab);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3;
     doublereal d__1;
@@ -250,22 +232,22 @@ void aocl_lapack_dgbcon(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aocl_int6
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DGBCON", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DGBCON", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     *rcond = 0.;
     if(*n == 0)
     {
         *rcond = 1.;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(*anorm == 0.)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     smlnum = dlamch_("Safe minimum");
     /* Estimate the norm of inv(A). */
@@ -363,8 +345,8 @@ L10:
         *rcond = 1. / ainvnm / *anorm;
     }
 L40:
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DGBCON */
 }
 /* dgbcon_ */

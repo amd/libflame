@@ -114,27 +114,10 @@
 void cupgtr_(char *uplo, aocl_int_t *n, scomplex *ap, scomplex *tau, scomplex *q, aocl_int_t *ldq,
              scomplex *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_cupgtr(uplo, n, ap, tau, q, ldq, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_cupgtr(uplo, &n_64, ap, tau, q, &ldq_64, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_cupgtr(char *uplo, aocl_int64_t *n, scomplex *ap, scomplex *tau, scomplex *q,
-                        aocl_int64_t *ldq, scomplex *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "cupgtr inputs: uplo %c, n %" FLA_IS ", ldq %" FLA_IS "", *uplo, *n,
-             *ldq);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"cupgtr inputs: uplo %c, n %" FLA_IS ", ldq %" FLA_IS "",*uplo, *n, *ldq);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -190,15 +173,15 @@ void aocl_lapack_cupgtr(char *uplo, aocl_int64_t *n, scomplex *ap, scomplex *tau
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CUPGTR", &i__1, (ftnlen)6);
+        xerbla_("CUPGTR", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        return 0;
     }
     if(upper)
     {
@@ -291,7 +274,7 @@ void aocl_lapack_cupgtr(char *uplo, aocl_int64_t *n, scomplex *ap, scomplex *tau
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
+    return 0;
     /* End of CUPGTR */
 }
 /* cupgtr_ */

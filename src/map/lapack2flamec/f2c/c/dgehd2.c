@@ -153,28 +153,12 @@ v(i+2:ihi) is stored on */
 void dgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, doublereal *a, aocl_int_t *lda,
              doublereal *tau, doublereal *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgehd2(n, ilo, ihi, a, lda, tau, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dgehd2(&n_64, &ilo_64, &ihi_64, a, &lda_64, tau, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dgehd2 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS "",*n, *ilo, *ihi, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, doublereal *a,
-                        aocl_int64_t *lda, doublereal *tau, doublereal *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgehd2 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS
-                      "",
-                      *n, *ilo, *ihi, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -226,9 +210,9 @@ void aocl_lapack_dgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DGEHD2", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DGEHD2", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     i__1 = *ihi - 1;
     for(i__ = *ilo; i__ <= i__1; ++i__)
@@ -253,8 +237,8 @@ void aocl_lapack_dgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
         a[i__ + 1 + i__ * a_dim1] = aii;
         /* L10: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DGEHD2 */
 }
 /* dgehd2_ */

@@ -101,15 +101,8 @@ typedef double doublereal;
 typedef struct { real r, i; } complex;
 typedef struct { doublereal r, i; } doublecomplex;
 
-#ifdef FLA_ENABLE_ILP64
-  #ifdef _WIN32
-    #define FLA_ISL "lld"
-  #else
-    #define FLA_ISL "ld"
-  #endif
-#else
-  #define FLA_ISL "d"
-#endif
+/* typedef long int logical; */
+typedef integer logical; 
 
 #if LF_AOCL_DTL_LOG_ENABLE
 	/*Increases visibility of FLA_clock()*/

@@ -3,12 +3,9 @@
                     Run netlib lapack tests
 ===============================================================================
 
-1. Run netlib lapack tests using script
+1. Use the script "run-netlib-test.sh" to run netlib lapack tests
 
-   For GCC: Use the script "run-netlib-test.sh" 
-   For AOCC: Use the script "run-netlib-test-aocc.sh" 
-
-2. Usage for GCC:
+2. Usage :
    
    $ sh run-netlib-test.sh BLAS_LIB_PATH=<blas library path> LAPACK_TEST_DIR=<lapack library path> 
                            [BLAS_LIB=<blas library] [LAPACK_LIB=<lapack library>] [ILP64=<0/1>] 
@@ -23,11 +20,4 @@
         ILP64 : LP64 or ILP64 mode. Default=0(Use LP64)
         BLAS_LIB_PATH : path of blas library chosen in BLAS_LIB
         LAPACK_LIB_PATH : path to lapack library chosen in LAPACK_LIB
-        LAPACK_TEST_DIR : netlib lapack test directory name. Default=lapack-3.12.0
-
-  Usage for AOCC is on similar lines. Just replace script name from "run-netlib-test.sh" to "run-netlib-test-aocc.sh" 
-
-Note: Netlib tests override certain symbols in the libFLAME library (ilaenv_, ilaenv2stage_, iparmq_, slarfy_, clarfy_, dlarfy_, zlarfy_).
-   Since the latest aocl-lapack code uses aocl_lapack_* functions internally across function calls, wrapper functions that override these symbols
-   are also required. The latest 3.12 test suites include C files for these wrappers. Makefiles and CMakeLists are updated
-   to properly compile and link these symbols.
+        LAPACK_TEST_DIR : netlib lapack test directory name. Default=lapack-3.10.0

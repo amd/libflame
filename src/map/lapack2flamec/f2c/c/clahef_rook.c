@@ -1090,7 +1090,7 @@ void clahef_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, sco
                         i__1 = *n - k;
                         aocl_blas_csscal(&i__1, &r1, &a[k + 1 + k * a_dim1], &c__1);
                     }
-                    else if(f2c_abs(t) != 0.f)
+                    else if (f2c_abs(t) != 0.f)
                     {
                         i__1 = *n;
                         for(ii = k + 1; ii <= i__1; ++ii)

@@ -18,14 +18,11 @@ main()
         'f90_cycle__()'             'continue' \
         'f90_exit__()'              'break' \
         'include \"f2c.h\"'         'include \"FLA_f2c.h\"' \
-        'dotc_'                     'dotc_f2c_' \
-        'dotu_'                     'dotu_f2c_' \
-        'abs('                      'f2c_abs' \
+        'dotc_('                    'dotc_f2c_(' \
+        'dotu_('                    'dotu_f2c_(' \
+        ' abs('                     ' f2c_abs(' \
         '__('                       '_(' \
-	    'cladiv_('                   'cladiv_f2c_(' \
-        'zladiv_('                   'zladiv_f2c_(' \
-        ' max('                      ' fla_max('\
-        ' min('                      ' fla_min('\
+	'ladiv_('                   'ladiv_f2c_(' \
         )
 
     # '\\#include \"blaswrap.h\"' ' ' \

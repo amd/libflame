@@ -17,9 +17,11 @@ extern "C" {
 #endif
 #include "FLAME.h"
 #include "stdio.h"
+#include "FLAME.h"
+
 /* Table of constant values */
 
-//static TLS_CLASS_SPEC fla_dim_t c__1 = 1;
+//static TLS_CLASS_SPEC integer c__1 = 1;
 static doublereal c_b32 = 0.;
 
 double fla_pow_di(doublereal *ap, fla_dim_t *bp)
@@ -67,17 +69,17 @@ doublereal fla_dlamch(char *cmach, ftnlen cmach_len)
 
     /* Local variables */
     static TLS_CLASS_SPEC doublereal base;
-    static TLS_CLASS_SPEC fla_dim_t beta;
+    static TLS_CLASS_SPEC integer beta;
     static TLS_CLASS_SPEC doublereal emin, prec, emax;
-    static TLS_CLASS_SPEC fla_dim_t imin, imax;
+    static TLS_CLASS_SPEC integer imin, imax;
     static TLS_CLASS_SPEC logical lrnd;
     static TLS_CLASS_SPEC doublereal rmin, rmax, t, rmach;
     extern logical fla_lsame(char *, char *, ftnlen, ftnlen);
-    static doublereal small, sfmin;
+    static TLS_CLASS_SPEC doublereal small, sfmin;
     extern /* Subroutine */ integer fla_dlamc2(integer *, integer *, logical *, 
 	    doublereal *, integer *, doublereal *, integer *, doublereal *);
-    static integer it;
-    static doublereal rnd, eps;
+    static TLS_CLASS_SPEC integer it;
+    static TLS_CLASS_SPEC doublereal rnd, eps;
 
 
 /*  -- LAPACK auxiliary routine (version 3.2) -- */
@@ -210,12 +212,12 @@ doublereal fla_dlamch(char *cmach, ftnlen cmach_len)
     /* Local variables */
     static TLS_CLASS_SPEC logical lrnd;
     static TLS_CLASS_SPEC doublereal a, b, c__, f;
-    static TLS_CLASS_SPEC fla_dim_t lbeta;
+    static TLS_CLASS_SPEC integer lbeta;
     static TLS_CLASS_SPEC doublereal savec;
     extern doublereal fla_dlamc3(doublereal *, doublereal *);
     static TLS_CLASS_SPEC logical lieee1;
     static TLS_CLASS_SPEC doublereal t1, t2;
-    static TLS_CLASS_SPEC fla_dim_t lt;
+    static TLS_CLASS_SPEC integer lt;
     static TLS_CLASS_SPEC doublereal one, qtr;
 
 
@@ -432,24 +434,24 @@ explicitly.\002,/)";
     //fla_dim_t s_wsfe(cilist *), do_fio(fla_dim_t *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
-    static logical ieee;
-    static doublereal half;
-    static logical lrnd;
-    static doublereal leps, zero, a, b, c__;
-    static integer i__, lbeta;
-    static doublereal rbase;
-    static integer lemin, lemax, gnmin;
-    static doublereal small;
-    static integer gpmin;
-    static doublereal third, lrmin, lrmax, sixth;
+    static TLS_CLASS_SPEC logical ieee;
+    static TLS_CLASS_SPEC doublereal half;
+    static TLS_CLASS_SPEC logical lrnd;
+    static TLS_CLASS_SPEC doublereal leps, zero, a, b, c__;
+    static TLS_CLASS_SPEC integer i__, lbeta;
+    static TLS_CLASS_SPEC doublereal rbase;
+    static TLS_CLASS_SPEC integer lemin, lemax, gnmin;
+    static TLS_CLASS_SPEC doublereal small;
+    static TLS_CLASS_SPEC integer gpmin;
+    static TLS_CLASS_SPEC doublereal third, lrmin, lrmax, sixth;
     extern /* Subroutine */ integer fla_dlamc1(integer *, integer *, logical *, 
 	    logical *);
     extern doublereal fla_dlamc3(doublereal *, doublereal *);
-    static logical lieee1;
+    static TLS_CLASS_SPEC logical lieee1;
     extern /* Subroutine */ integer fla_dlamc4(integer *, doublereal *, integer *), 
 	    fla_dlamc5(integer *, integer *, integer *, logical *, integer *, 
 	    doublereal *);
-    static TLS_CLASS_SPEC fla_dim_t lt, ngnmin, ngpmin;
+    static TLS_CLASS_SPEC integer lt, ngnmin, ngpmin;
     static TLS_CLASS_SPEC doublereal one, two;
 
     /* Fortran I/O blocks */
@@ -772,7 +774,7 @@ doublereal fla_dlamc3(doublereal *a, doublereal *b)
 
     /* Local variables */
     static TLS_CLASS_SPEC doublereal zero, a;
-    static TLS_CLASS_SPEC fla_dim_t i__;
+    static TLS_CLASS_SPEC integer i__;
     static TLS_CLASS_SPEC doublereal rbase, b1, b2, c1, c2, d1, d2;
     extern doublereal fla_dlamc3(doublereal *, doublereal *);
     static TLS_CLASS_SPEC doublereal one;
@@ -870,14 +872,14 @@ L10:
     doublereal d__1;
 
     /* Local variables */
-    static TLS_CLASS_SPEC fla_dim_t lexp;
+    static TLS_CLASS_SPEC integer lexp;
     static TLS_CLASS_SPEC doublereal oldy;
-    static TLS_CLASS_SPEC fla_dim_t uexp, i__;
+    static TLS_CLASS_SPEC integer uexp, i__;
     static TLS_CLASS_SPEC doublereal y, z__;
-    static TLS_CLASS_SPEC fla_dim_t nbits;
+    static TLS_CLASS_SPEC integer nbits;
     extern doublereal fla_dlamc3(doublereal *, doublereal *);
     static TLS_CLASS_SPEC doublereal recbas;
-    static TLS_CLASS_SPEC fla_dim_t exbits, expsum, try__;
+    static TLS_CLASS_SPEC integer exbits, expsum, try__;
 
 
 /*  -- LAPACK auxiliary routine (version 3.2) -- */

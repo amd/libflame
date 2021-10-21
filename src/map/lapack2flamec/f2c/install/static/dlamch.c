@@ -1,5 +1,5 @@
 #include "FLAME.h"
-
+#include "FLA_f2c.h"
 #include <float.h>
 
 /* Table of constant values */
@@ -17,8 +17,8 @@ doublereal dlamch_(char *cmach)
     doublereal ret_val;
 
     /* Local variables */
-    static TLS_CLASS_SPEC doublereal eps, sfmin, base, prec, t, rnd, emin, rmin, emax, rmax;
-    doublereal rmach, small_val;
+    static TLS_CLASS_SPEC doublereal  eps, sfmin, base, prec, t, rnd, emin, rmin, emax, rmax;
+    doublereal rmach, small;
 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
 

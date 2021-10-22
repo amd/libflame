@@ -17,8 +17,6 @@ extern "C" {
 #endif
 #include "FLAME.h"
 #include "stdio.h"
-#include "FLAME.h"
-
 /* Table of constant values */
 
 //static TLS_CLASS_SPEC integer c__1 = 1;
@@ -75,7 +73,7 @@ doublereal fla_dlamch(char *cmach, ftnlen cmach_len)
     static TLS_CLASS_SPEC logical lrnd;
     static TLS_CLASS_SPEC doublereal rmin, rmax, t, rmach;
     extern logical fla_lsame(char *, char *, ftnlen, ftnlen);
-    static TLS_CLASS_SPEC doublereal small, sfmin;
+    static TLS_CLASS_SPEC doublereal small_val, sfmin;
     extern /* Subroutine */ integer fla_dlamc2(integer *, integer *, logical *, 
 	    doublereal *, integer *, doublereal *, integer *, doublereal *);
     static TLS_CLASS_SPEC integer it;
@@ -441,7 +439,7 @@ explicitly.\002,/)";
     static TLS_CLASS_SPEC integer i__, lbeta;
     static TLS_CLASS_SPEC doublereal rbase;
     static TLS_CLASS_SPEC integer lemin, lemax, gnmin;
-    static TLS_CLASS_SPEC doublereal small;
+    static TLS_CLASS_SPEC doublereal small_val;
     static TLS_CLASS_SPEC integer gpmin;
     static TLS_CLASS_SPEC doublereal third, lrmin, lrmax, sixth;
     extern /* Subroutine */ integer fla_dlamc1(integer *, integer *, logical *, 

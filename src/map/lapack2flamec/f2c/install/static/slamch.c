@@ -1,12 +1,11 @@
 #include "FLAME.h"
-
 #include <float.h>
 
 /* Table of constant values */
 
-static TLS_CLASS_SPEC const real half = 0.5f;
-static TLS_CLASS_SPEC const real one = 1.f;
-static TLS_CLASS_SPEC const real zero = 0.f;
+static TLS_CLASS_SPEC const real half  = 0.5f;
+static TLS_CLASS_SPEC const real one   = 1.f;
+static TLS_CLASS_SPEC const real zero  = 0.f;
 
 real slamch_(char *cmach)
 {
@@ -17,8 +16,8 @@ real slamch_(char *cmach)
     real ret_val;
 
     /* Local variables */
-    static TLS_CLASS_SPEC real eps, sfmin, base, prec, t, rnd, emin, rmin, emax, rmax;
-    real rmach, small_val;
+    static TLS_CLASS_SPEC real  eps, sfmin, base, prec, t, rnd, emin, rmin, emax, rmax;
+    real rmach, small;
 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
 

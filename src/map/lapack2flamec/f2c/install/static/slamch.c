@@ -17,7 +17,7 @@ real slamch_(char *cmach)
 
     /* Local variables */
     static TLS_CLASS_SPEC real  eps, sfmin, base, prec, t, rnd, emin, rmin, emax, rmax;
-    real rmach, small;
+    real rmach, small_val;
 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
 
@@ -82,7 +82,7 @@ real slamch_(char *cmach)
         prec = eps * base;
         sfmin = FLT_MIN;
         small_val = one / FLT_MAX;
-        if(small_val >= sfmin)
+        if ( small_val >= sfmin)
             sfmin = small_val * (one + eps);
 
 		// For t, we need the number of base-2 digits, not base-10 digits.

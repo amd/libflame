@@ -74,7 +74,7 @@ real fla_slamch(char *cmach, ftnlen cmach_len)
     static TLS_CLASS_SPEC logical lrnd;
     static TLS_CLASS_SPEC real rmin, rmax, t, rmach;
     extern logical fla_lsame(char *, char *, ftnlen, ftnlen);
-    static TLS_CLASS_SPEC real small, sfmin;
+    static TLS_CLASS_SPEC real small_val, sfmin;
     extern /* Subroutine */ integer fla_slamc2(integer *, integer *, logical *, real 
 	    *, integer *, real *, integer *, real *);
     static TLS_CLASS_SPEC integer it;
@@ -437,7 +437,7 @@ explicitly.\002,/)";
     static TLS_CLASS_SPEC integer i__, lbeta;
     static TLS_CLASS_SPEC real rbase;
     static TLS_CLASS_SPEC integer lemin, lemax, gnmin;
-    static TLS_CLASS_SPEC real small;
+    static TLS_CLASS_SPEC real small_val;
     static TLS_CLASS_SPEC integer gpmin;
     static TLS_CLASS_SPEC real third, lrmin, lrmax, sixth;
     static TLS_CLASS_SPEC logical lieee1;

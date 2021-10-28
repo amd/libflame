@@ -98,25 +98,12 @@
 void dlamrg_(aocl_int_t *n1, aocl_int_t *n2, doublereal *a, aocl_int_t *dtrd1, aocl_int_t *dtrd2,
              aocl_int_t *index)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlamrg(n1, n2, a, dtrd1, dtrd2, index);
-#else
-    aocl_int64_t n1_64 = *n1;
-    aocl_int64_t n2_64 = *n2;
-    aocl_int64_t dtrd1_64 = *dtrd1;
-    aocl_int64_t dtrd2_64 = *dtrd2;
-
-    aocl_lapack_dlamrg(&n1_64, &n2_64, a, &dtrd1_64, &dtrd2_64, index);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlamrg inputs: n1 %" FLA_IS ", n2 %" FLA_IS ", dtrd1 %" FLA_IS ", dtrd2 %" FLA_IS "",*n1, *n2, *dtrd1, *dtrd2);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlamrg(aocl_int64_t *n1, aocl_int64_t *n2, doublereal *a, aocl_int64_t *dtrd1,
-                        aocl_int64_t *dtrd2, aocl_int_t *index)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlamrg inputs: n1 %" FLA_IS ", n2 %" FLA_IS ", dtrd1 %" FLA_IS
-                      ", dtrd2 %" FLA_IS "",
-                      *n1, *n2, *dtrd1, *dtrd2);
     /* System generated locals */
     aocl_int64_t i__1;
     /* Local variables */
@@ -200,8 +187,8 @@ L10:
             /* L30: */
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAMRG */
 }
 /* dlamrg_ */

@@ -326,15 +326,19 @@ LAPACK_ormtr(d, orm)
                       *side, *uplo, *trans, *m, *n, *ldim_A, *ldim_C);
 #if FLA_ENABLE_AMD_OPT
     {
+       #if !FLA_AMD_OPT
         if ( *uplo == 'U' || *uplo == 'u' )
-        {
-            LAPACK_ormtr_body(d)
-                /** fla_error set to 0 on LAPACK_SUCCESS */
-                fla_error
-                = 0;
-        }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+       #endif
+       {
+          dormtr_fla( side, uplo, trans,
+                      m, n,
+                      buff_A, ldim_A,
+                      buff_t,
+                      buff_C, ldim_C,
+                      buff_w, lwork,
+                      info );
+          return 0;
+       }
     }
 #endif
 }

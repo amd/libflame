@@ -353,15 +353,19 @@ LAPACK_hetrd(d, sy)
                       *ldim_A);
 #if FLA_ENABLE_AMD_OPT
     {
-        if ( *uplo == 'U' || *uplo == 'u' )
-        {
-            LAPACK_hetrd_body(d)
-                /** fla_error set to 0 on LAPACK_SUCCESS */
-                fla_error
-                = 0;
-        }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+         
+    #if !FLA_AMD_OPT
+      if ( *uplo == 'U' || *uplo == 'u' )
+    #endif
+      {
+         dsytrd_fla( uplo, m,
+                     buff_A, ldim_A,
+                     buff_d, buff_e,
+                     buff_t,
+                     buff_w, lwork,
+                     info );
+         return 0;
+      }
     }
 #endif
 }

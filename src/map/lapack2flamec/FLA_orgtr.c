@@ -251,12 +251,16 @@ LAPACK_orgtr(d, org)
     AOCL_DTL_SNPRINTF("dorgtr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *m, *ldim_A);
 #if FLA_ENABLE_AMD_OPT
     {
+	#if !FLA_AMD_OPT
         if ( *uplo == 'U' || *uplo == 'u' )
-        {
-            LAPACK_orgtr_body(d)
-                /** fla_error set to 0 on LAPACK_SUCCESS */
-                fla_error
-                = 0;
+        #endif
+	{
+            dorgtr_fla( uplo, m,
+                        buff_A, ldim_A,
+                        buff_t,
+                        buff_w, lwork,
+                        info );
+            return 0;
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;

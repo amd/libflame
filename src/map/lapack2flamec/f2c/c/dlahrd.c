@@ -176,27 +176,12 @@ v(i+k+1:n) is stored on exit in */
 /** Generated wrapper function */
 void dlahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, doublereal *a, aocl_int_t *lda, doublereal *tau, doublereal *t, aocl_int_t *ldt, doublereal *y, aocl_int_t *ldy)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlahrd(n, k, nb, a, lda, tau, t, ldt, y, ldy);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t nb_64 = *nb;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t ldy_64 = *ldy;
-
-    aocl_lapack_dlahrd(&n_64, &k_64, &nb_64, a, &lda_64, tau, t, &ldt_64, y, &ldy_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlahrd inputs: n %" FLA_IS ", k %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", ldy %" FLA_IS "",*n, *k, *nb, *lda, *ldt, *ldy);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, doublereal *a, aocl_int64_t *lda,
-             doublereal *tau, doublereal *t, aocl_int64_t *ldt, doublereal *y, aocl_int64_t *ldy)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlahrd inputs: n %" FLA_IS ", k %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
-                      ", ldt %" FLA_IS ", ldy %" FLA_IS "",
-                      *n, *k, *nb, *lda, *ldt, *ldy);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, y_dim1, y_offset, i__1, i__2, i__3;
     doublereal d__1;
@@ -237,8 +222,8 @@ void aocl_lapack_dlahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, doub
     ei = 0.;
     if(*n <= 1)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     i__1 = *nb;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -316,8 +301,8 @@ void aocl_lapack_dlahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, doub
         /* L10: */
     }
     a[*k + *nb + *nb * a_dim1] = ei;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAHRD */
 }
 /* dlahrd_ */

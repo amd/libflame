@@ -184,33 +184,12 @@ void dlalsd_(char *uplo, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *nrhs, do
              doublereal *e, doublereal *b, aocl_int_t *ldb, doublereal *rcond, aocl_int_t *rank,
              doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlalsd(uplo, smlsiz, n, nrhs, d__, e, b, ldb, rcond, rank, work, iwork, info);
-#else
-    aocl_int64_t smlsiz_64 = *smlsiz;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t rank_64 = *rank;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlalsd(uplo, &smlsiz_64, &n_64, &nrhs_64, d__, e, b, &ldb_64, rcond, &rank_64, work,
-                       iwork, &info_64);
-
-    *rank = (aocl_int_t)rank_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlalsd inputs: uplo %c, smlsiz %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", rank %" FLA_IS "",*uplo, *smlsiz, *n, *nrhs, *ldb, *rank);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_int64_t *nrhs,
-                        doublereal *d__, doublereal *e, doublereal *b, aocl_int64_t *ldb,
-                        doublereal *rcond, aocl_int64_t *rank, doublereal *work, aocl_int_t *iwork,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlalsd inputs: uplo %c, smlsiz %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS
-                      ", ldb %" FLA_IS ", rank %" FLA_IS "",
-                      *uplo, *smlsiz, *n, *nrhs, *ldb, *rank);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2;
     doublereal d__1;
@@ -282,9 +261,9 @@ void aocl_lapack_dlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DLALSD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DLALSD", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     eps = dlamch_("Epsilon");
     /* Set up the tolerance. */
@@ -300,8 +279,8 @@ void aocl_lapack_dlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     /* Quick return if possible. */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(*n == 1)
     {
@@ -315,8 +294,8 @@ void aocl_lapack_dlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
             dlascl_("G", &c__0, &c__0, &d__[1], &c_b11, &c__1, nrhs, &b[ b_offset], ldb, info);
             d__[1] = f2c_dabs(d__[1]);
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Rotate the matrix if it is lower bidiagonal. */
     if(*(unsigned char *)uplo == 'L')
@@ -363,9 +342,9 @@ void aocl_lapack_dlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     orgnrm = aocl_lapack_dlanst("M", n, &d__[1], &e[1]);
     if(orgnrm == 0.)
     {
-        aocl_lapack_dlaset("A", n, nrhs, &c_b6, &c_b6, &b[b_offset], ldb);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        dlaset_("A", n, nrhs, &c_b6, &c_b6, &b[b_offset], ldb);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     aocl_lapack_dlascl("G", &c__0, &c__0, &orgnrm, &c_b11, n, &c__1, &d__[1], n, info);
     aocl_lapack_dlascl("G", &c__0, &c__0, &orgnrm, &c_b11, &nm1, &c__1, &e[1], &nm1, info);
@@ -379,8 +358,8 @@ void aocl_lapack_dlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                            &b[b_offset], ldb, &work[nwork], info);
         if(*info != 0)
         {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         tol = rcnd * (d__1 = d__[idamax_(n, &d__[1], &c__1)], f2c_dabs(d__1));
         i__1 = *n;
@@ -402,11 +381,11 @@ void aocl_lapack_dlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                         &work[nwork], n);
         aocl_lapack_dlacpy("A", n, nrhs, &work[nwork], n, &b[b_offset], ldb);
         /* Unscale. */
-        aocl_lapack_dlascl("G", &c__0, &c__0, &c_b11, &orgnrm, n, &c__1, &d__[1], n, info);
-        aocl_lapack_dlasrt("D", n, &d__[1], info);
-        aocl_lapack_dlascl("G", &c__0, &c__0, &orgnrm, &c_b11, n, nrhs, &b[b_offset], ldb, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        dlascl_("G", &c__0, &c__0, &c_b11, &orgnrm, n, &c__1, &d__[1], n, info);
+        dlasrt_("D", n, &d__[1], info);
+        dlascl_("G", &c__0, &c__0, &orgnrm, &c_b11, n, nrhs, &b[b_offset], ldb, info);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Book-keeping and setting up some constants. */
     nlvl = (integer)(log((doublereal)(*n) / (doublereal)(*smlsiz + 1)) / log(2.)) + 1;
@@ -491,8 +470,8 @@ void aocl_lapack_dlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                                    &work[nwork], info);
                 if(*info != 0)
                 {
-                    AOCL_DTL_TRACE_LOG_EXIT
-                    return;
+                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    return 0;
                 }
                 aocl_lapack_dlacpy("A", &nsize, nrhs, &b[st + b_dim1], ldb, &work[bx + st1], n);
             }
@@ -507,8 +486,8 @@ void aocl_lapack_dlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                                    &work[s + st1], &work[nwork], &iwork[iwk], info);
                 if(*info != 0)
                 {
-                    AOCL_DTL_TRACE_LOG_EXIT
-                    return;
+                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    return 0;
                 }
                 bxst = bx + st1;
                 aocl_lapack_dlalsa(&icmpq2, smlsiz, &nsize, nrhs, &b[st + b_dim1], ldb, &work[bxst],
@@ -519,8 +498,8 @@ void aocl_lapack_dlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                                    &work[s + st1], &work[nwork], &iwork[iwk], info);
                 if(*info != 0)
                 {
-                    AOCL_DTL_TRACE_LOG_EXIT
-                    return;
+                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    return 0;
                 }
             }
             st = i__ + 1;
@@ -575,18 +554,18 @@ void aocl_lapack_dlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                                &work[s + st1], &work[nwork], &iwork[iwk], info);
             if(*info != 0)
             {
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
         }
         /* L80: */
     }
     /* Unscale and sort the singular values. */
-    aocl_lapack_dlascl("G", &c__0, &c__0, &c_b11, &orgnrm, n, &c__1, &d__[1], n, info);
-    aocl_lapack_dlasrt("D", n, &d__[1], info);
-    aocl_lapack_dlascl("G", &c__0, &c__0, &orgnrm, &c_b11, n, nrhs, &b[b_offset], ldb, info);
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    dlascl_("G", &c__0, &c__0, &c_b11, &orgnrm, n, &c__1, &d__[1], n, info);
+    dlasrt_("D", n, &d__[1], info);
+    dlascl_("G", &c__0, &c__0, &orgnrm, &c_b11, n, nrhs, &b[b_offset], ldb, info);
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLALSD */
 }
 /* dlalsd_ */

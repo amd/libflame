@@ -136,22 +136,12 @@ static doublereal c_b5 = 1.;
 void dlaic1_(aocl_int_t *job, aocl_int_t *j, doublereal *x, doublereal *sest, doublereal *w,
              doublereal *gamma, doublereal *sestpr, doublereal *s, doublereal *c__)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlaic1(job, j, x, sest, w, gamma, sestpr, s, c__);
-#else
-    aocl_int64_t job_64 = *job;
-    aocl_int64_t j_64 = *j;
-
-    aocl_lapack_dlaic1(&job_64, &j_64, x, sest, w, gamma, sestpr, s, c__);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlaic1 inputs: job %" FLA_IS ", j %" FLA_IS "",*job, *j);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlaic1(aocl_int64_t *job, aocl_int64_t *j, doublereal *x, doublereal *sest,
-                        doublereal *w, doublereal *gamma, doublereal *sestpr, doublereal *s,
-                        doublereal *c__)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaic1 inputs: job %" FLA_IS ", j %" FLA_IS "", *job, *j);
     /* System generated locals */
     doublereal d__1, d__2, d__3, d__4;
     /* Builtin functions */
@@ -210,8 +200,8 @@ void aocl_lapack_dlaic1(aocl_int64_t *job, aocl_int64_t *j, doublereal *x, doubl
                 *c__ /= tmp;
                 *sestpr = s1 * tmp;
             }
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         else if(absgam <= eps * absest)
         {
@@ -221,8 +211,8 @@ void aocl_lapack_dlaic1(aocl_int64_t *job, aocl_int64_t *j, doublereal *x, doubl
             s1 = absest / tmp;
             s2 = absalp / tmp;
             *sestpr = tmp * sqrt(s1 * s1 + s2 * s2);
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         else if(absalp <= eps * absest)
         {
@@ -240,8 +230,8 @@ void aocl_lapack_dlaic1(aocl_int64_t *job, aocl_int64_t *j, doublereal *x, doubl
                 *c__ = 1.;
                 *sestpr = s1;
             }
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         else if(absest <= eps * absalp || absest <= eps * absgam)
         {
@@ -263,8 +253,8 @@ void aocl_lapack_dlaic1(aocl_int64_t *job, aocl_int64_t *j, doublereal *x, doubl
                 *s = alpha / s1 / *c__;
                 *c__ = d_sign(&c_b5, gamma) / *c__;
             }
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         else
         {
@@ -287,8 +277,8 @@ void aocl_lapack_dlaic1(aocl_int64_t *job, aocl_int64_t *j, doublereal *x, doubl
             *s = sine / tmp;
             *c__ = cosine / tmp;
             *sestpr = sqrt(t + 1.) * absest;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
     }
     else if(*job == 2)
@@ -317,16 +307,16 @@ void aocl_lapack_dlaic1(aocl_int64_t *job, aocl_int64_t *j, doublereal *x, doubl
             tmp = sqrt(*s * *s + *c__ * *c__);
             *s /= tmp;
             *c__ /= tmp;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         else if(absgam <= eps * absest)
         {
             *s = 0.;
             *c__ = 1.;
             *sestpr = absgam;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         else if(absalp <= eps * absest)
         {
@@ -344,8 +334,8 @@ void aocl_lapack_dlaic1(aocl_int64_t *job, aocl_int64_t *j, doublereal *x, doubl
                 *c__ = 0.;
                 *sestpr = s2;
             }
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         else if(absest <= eps * absalp || absest <= eps * absgam)
         {
@@ -367,8 +357,8 @@ void aocl_lapack_dlaic1(aocl_int64_t *job, aocl_int64_t *j, doublereal *x, doubl
                 *c__ = alpha / s1 / *s;
                 *s = -d_sign(&c_b5, gamma) / *s;
             }
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         else
         {
@@ -411,12 +401,12 @@ void aocl_lapack_dlaic1(aocl_int64_t *job, aocl_int64_t *j, doublereal *x, doubl
             tmp = sqrt(sine * sine + cosine * cosine);
             *s = sine / tmp;
             *c__ = cosine / tmp;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAIC1 */
 }
 /* dlaic1_ */

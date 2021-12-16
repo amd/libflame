@@ -100,23 +100,12 @@
 void dla_lin_berr_(aocl_int_t *n, aocl_int_t *nz, aocl_int_t *nrhs, doublereal *res,
                    doublereal *ayb, doublereal *berr)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dla_lin_berr(n, nz, nrhs, res, ayb, berr);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nz_64 = *nz;
-    aocl_int64_t nrhs_64 = *nrhs;
-
-    aocl_lapack_dla_lin_berr(&n_64, &nz_64, &nrhs_64, res, ayb, berr);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dla_lin_berr inputs: n %" FLA_IS ", nz %" FLA_IS ", nrhs %" FLA_IS "",*n, *nz, *nrhs);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dla_lin_berr(aocl_int64_t *n, aocl_int64_t *nz, aocl_int64_t *nrhs,
-                              doublereal *res, doublereal *ayb, doublereal *berr)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dla_lin_berr inputs: n %" FLA_IS ", nz %" FLA_IS ", nrhs %" FLA_IS "", *n,
-                      *nz, *nrhs);
     /* System generated locals */
     aocl_int64_t ayb_dim1, ayb_offset, res_dim1, res_offset, i__1, i__2;
     doublereal d__1;
@@ -172,7 +161,7 @@ void aocl_lapack_dla_lin_berr(aocl_int64_t *n, aocl_int64_t *nz, aocl_int64_t *n
             /* the true residual also must be exactly 0.0. */
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
 }
 /* dla_lin_berr__ */

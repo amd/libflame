@@ -184,33 +184,12 @@ void dla_gbamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl,
                 doublereal *alpha, doublereal *ab, aocl_int_t *ldab, doublereal *x,
                 aocl_int_t *incx, doublereal *beta, doublereal *y, aocl_int_t *incy)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dla_gbamv(trans, m, n, kl, ku, alpha, ab, ldab, x, incx, beta, y, incy);
-#else
-    aocl_int64_t trans_64 = *trans;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incy_64 = *incy;
-
-    aocl_lapack_dla_gbamv(&trans_64, &m_64, &n_64, &kl_64, &ku_64, alpha, ab, &ldab_64, x, &incx_64,
-                          beta, y, &incy_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dla_gbamv inputs: trans %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*trans, *m, *n, *kl, *ku, *ldab, *incx, *incy);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl,
-                           aocl_int64_t *ku, doublereal *alpha, doublereal *ab, aocl_int64_t *ldab,
-                           doublereal *x, aocl_int64_t *incx, doublereal *beta, doublereal *y,
-                           aocl_int64_t *incy)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dla_gbamv inputs: trans %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS
-                      ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", incx %" FLA_IS
-                      ", incy %" FLA_IS "",
-                      *trans, *m, *n, *kl, *ku, *ldab, *incx, *incy);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal d__1;
@@ -288,15 +267,15 @@ void aocl_lapack_dla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
     }
     if(info != 0)
     {
-        aocl_blas_xerbla("DLA_GBAMV ", &info, (ftnlen)10);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DLA_GBAMV ", &info);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible. */
     if(*m == 0 || *n == 0 || *alpha == 0. && *beta == 1.)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Set LENX and LENY, the lengths of the vectors x and y, and set */
     /* up the start points in X and Y. */
@@ -507,8 +486,8 @@ void aocl_lapack_dla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLA_GBAMV */
 }
 /* dla_gbamv__ */

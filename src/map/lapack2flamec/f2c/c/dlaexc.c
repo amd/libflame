@@ -149,32 +149,12 @@ void dlaexc_(logical *wantq, aocl_int_t *n, doublereal *t, aocl_int_t *ldt, doub
              aocl_int_t *ldq, aocl_int_t *j1, aocl_int_t *n1, aocl_int_t *n2, doublereal *work,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlaexc(wantq, n, t, ldt, q, ldq, j1, n1, n2, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t j1_64 = *j1;
-    aocl_int64_t n1_64 = *n1;
-    aocl_int64_t n2_64 = *n2;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlaexc(wantq, &n_64, t, &ldt_64, q, &ldq_64, &j1_64, &n1_64, &n2_64, work,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlaexc inputs: n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", j1 %" FLA_IS ", n1 %" FLA_IS ", n2 %" FLA_IS "",*n, *ldt, *ldq, *j1, *n1, *n2);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlaexc(logical *wantq, aocl_int64_t *n, doublereal *t, aocl_int64_t *ldt,
-                        doublereal *q, aocl_int64_t *ldq, aocl_int64_t *j1, aocl_int64_t *n1,
-                        aocl_int64_t *n2, doublereal *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaexc inputs: n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", j1 %" FLA_IS
-                      ", n1 %" FLA_IS ", n2 %" FLA_IS "",
-                      *n, *ldt, *ldq, *j1, *n1, *n2);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, t_dim1, t_offset, i__1;
     doublereal d__1, d__2, d__3;
@@ -227,13 +207,13 @@ void aocl_lapack_dlaexc(logical *wantq, aocl_int64_t *n, doublereal *t, aocl_int
     /* Quick return if possible */
     if(*n == 0 || *n1 == 0 || *n2 == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*j1 + *n1 > *n)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     j2 = *j1 + 1;
     j3 = *j1 + 2;
@@ -447,13 +427,13 @@ void aocl_lapack_dlaexc(logical *wantq, aocl_int64_t *n, doublereal *t, aocl_int
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* Exit with INFO = 1 if swap was rejected. */
 L50:
     *info = 1;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAEXC */
 }
 /* dlaexc_ */

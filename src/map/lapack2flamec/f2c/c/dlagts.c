@@ -160,26 +160,12 @@
 void dlagts_(aocl_int_t *job, aocl_int_t *n, doublereal *a, doublereal *b, doublereal *c__,
              doublereal *d__, aocl_int_t *in, doublereal *y, doublereal *tol, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlagts(job, n, a, b, c__, d__, in, y, tol, info);
-#else
-    aocl_int64_t job_64 = *job;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlagts(&job_64, &n_64, a, b, c__, d__, in, y, tol, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlagts inputs: job %" FLA_IS ", n %" FLA_IS ", in %" FLA_IS "",*job, *n, *in);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlagts(aocl_int64_t *job, aocl_int64_t *n, doublereal *a, doublereal *b,
-                        doublereal *c__, doublereal *d__, aocl_int_t *in, doublereal *y,
-                        doublereal *tol, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlagts inputs: job %" FLA_IS ", n %" FLA_IS ", in %" FLA_IS "", *job, *n,
-                      *in);
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal d__1, d__2, d__3, d__4, d__5;
@@ -230,14 +216,14 @@ void aocl_lapack_dlagts(aocl_int64_t *job, aocl_int64_t *n, doublereal *a, doubl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DLAGTS", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DLAGTS", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     eps = dlamch_("Epsilon");
     sfmin = dlamch_("Safe minimum");
@@ -314,8 +300,8 @@ void aocl_lapack_dlagts(aocl_int64_t *job, aocl_int64_t *n, doublereal *a, doubl
                         if (absak == 0. || f2c_dabs(temp) * sfmin > absak)
                         {
                             *info = k;
-                            AOCL_DTL_TRACE_LOG_EXIT
-                            return;
+                            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                            return 0;
                         }
                         else
                         {
@@ -326,8 +312,8 @@ void aocl_lapack_dlagts(aocl_int64_t *job, aocl_int64_t *n, doublereal *a, doubl
                     else if (f2c_dabs(temp) > absak * bignum)
                     {
                         *info = k;
-                        AOCL_DTL_TRACE_LOG_EXIT
-                        return;
+                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        return 0;
                     }
                 }
                 y[k] = temp / ak;
@@ -411,8 +397,8 @@ L40:
                         if (absak == 0. || f2c_dabs(temp) * sfmin > absak)
                         {
                             *info = k;
-                            AOCL_DTL_TRACE_LOG_EXIT
-                            return;
+                            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                            return 0;
                         }
                         else
                         {
@@ -423,8 +409,8 @@ L40:
                     else if (f2c_dabs(temp) > absak * bignum)
                     {
                         *info = k;
-                        AOCL_DTL_TRACE_LOG_EXIT
-                        return;
+                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        return 0;
                     }
                 }
                 y[k] = temp / ak;
@@ -495,7 +481,7 @@ L70:
         }
     }
     /* End of DLAGTS */
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
 }
 /* dlagts_ */

@@ -171,37 +171,12 @@ doublereal dla_gbrcond_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *
                         aocl_int_t *cmode, doublereal *c__, aocl_int_t *info, doublereal *work,
                         aocl_int_t *iwork)
 {
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_dla_gbrcond(trans, n, kl, ku, ab, ldab, afb, ldafb, ipiv, cmode, c__, info,
-                                   work, iwork);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldafb_64 = *ldafb;
-    aocl_int64_t cmode_64 = *cmode;
-    aocl_int64_t info_64 = *info;
-
-    doublereal ret_val
-        = aocl_lapack_dla_gbrcond(trans, &n_64, &kl_64, &ku_64, ab, &ldab_64, afb, &ldafb_64, ipiv,
-                                  &cmode_64, c__, &info_64, work, iwork);
-
-    *info = (aocl_int_t)info_64;
-    return ret_val;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dla_gbrcond inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ipiv %" FLA_IS ", cmode %" FLA_IS ", work %" FLA_IS ", iwork %" FLA_IS "",*trans, *n, *kl, *ku, *ldab, *ldafb, *ipiv, *cmode, *work, *iwork);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-doublereal aocl_lapack_dla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
-                                   doublereal *ab, aocl_int64_t *ldab, doublereal *afb,
-                                   aocl_int64_t *ldafb, aocl_int_t *ipiv, aocl_int64_t *cmode,
-                                   doublereal *c__, aocl_int64_t *info, doublereal *work,
-                                   aocl_int_t *iwork)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dla_gbrcond inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
-                      ", ldab %" FLA_IS ", ldafb %" FLA_IS ", cmode %" FLA_IS ", iwork %" FLA_IS "",
-                      *trans, *n, *kl, *ku, *ldab, *ldafb, *cmode, *iwork);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1;
@@ -275,14 +250,14 @@ doublereal aocl_lapack_dla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *k
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DLA_GBRCOND", &i__1, (ftnlen)11);
-        AOCL_DTL_TRACE_LOG_EXIT
+        xerbla_("DLA_GBRCOND", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return ret_val;
     }
     if(*n == 0)
     {
         ret_val = 1.;
-        AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return ret_val;
     }
     /* Compute the equilibration matrix R such that */
@@ -465,7 +440,7 @@ L10:
     {
         ret_val = 1. / ainvnm;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return ret_val;
 }
 /* dla_gbrcond__ */

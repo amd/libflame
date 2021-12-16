@@ -150,7 +150,7 @@ void dlags2_(logical *upper, doublereal *a1, doublereal *a2, doublereal *a3, dou
              doublereal *b2, doublereal *b3, doublereal *csu, doublereal *snu, doublereal *csv,
              doublereal *snv, doublereal *csq, doublereal *snq)
 {
-    AOCL_DTL_TRACE_ENTRY_INDENT
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
     doublereal d__1;
     /* Local variables */
@@ -334,8 +334,8 @@ void dlags2_(logical *upper, doublereal *a1, doublereal *a2, doublereal *a3, dou
             *snv = csl;
         }
     }
-    AOCL_DTL_TRACE_EXIT_INDENT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAGS2 */
 }
 /* dlags2_ */

@@ -181,31 +181,12 @@ void dlaein_(logical *rightv, logical *noinit, aocl_int_t *n, doublereal *h__, a
              aocl_int_t *ldb, doublereal *work, doublereal *eps3, doublereal *smlnum,
              doublereal *bignum, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlaein(rightv, noinit, n, h__, ldh, wr, wi, vr, vi, b, ldb, work, eps3, smlnum,
-                       bignum, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldh_64 = *ldh;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlaein(rightv, noinit, &n_64, h__, &ldh_64, wr, wi, vr, vi, b, &ldb_64, work, eps3,
-                       smlnum, bignum, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlaein inputs: n %" FLA_IS ", ldh %" FLA_IS ", ldb %" FLA_IS "",*n, *ldh, *ldb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlaein(logical *rightv, logical *noinit, aocl_int64_t *n, doublereal *h__,
-                        aocl_int64_t *ldh, doublereal *wr, doublereal *wi, doublereal *vr,
-                        doublereal *vi, doublereal *b, aocl_int64_t *ldb, doublereal *work,
-                        doublereal *eps3, doublereal *smlnum, doublereal *bignum,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaein inputs: n %" FLA_IS ", ldh %" FLA_IS ", ldb %" FLA_IS "", *n, *ldh,
-                      *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, h_dim1, h_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3, d__4;
@@ -733,8 +714,8 @@ L120: /* Normalize eigenvector. */
         d__1 = 1. / vnorm;
         aocl_blas_dscal(n, &d__1, &vi[1], &c__1);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAEIN */
 }
 /* dlaein_ */

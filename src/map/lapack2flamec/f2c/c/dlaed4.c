@@ -142,24 +142,12 @@
 void dlaed4_(aocl_int_t *n, aocl_int_t *i__, doublereal *d__, doublereal *z__, doublereal *delta,
              doublereal *rho, doublereal *dlam, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlaed4(n, i__, d__, z__, delta, rho, dlam, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t i___64 = *i__;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlaed4(&n_64, &i___64, d__, z__, delta, rho, dlam, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlaed4 inputs: n %" FLA_IS ", i__ %" FLA_IS "",*n, *i__);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlaed4(aocl_int64_t *n, aocl_int64_t *i__, doublereal *d__, doublereal *z__,
-                        doublereal *delta, doublereal *rho, doublereal *dlam, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaed4 inputs: n %" FLA_IS ", i__ %" FLA_IS "", *n, *i__);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     doublereal d__1;
@@ -221,14 +209,14 @@ void aocl_lapack_dlaed4(aocl_int64_t *n, aocl_int64_t *i__, doublereal *d__, dou
         /* Presumably, I=1 upon entry */
         *dlam = d__[1] + *rho * z__[1] * z__[1];
         delta[1] = 1.;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*n == 2)
     {
-        aocl_lapack_dlaed5(i__, &d__[1], &z__[1], &delta[1], rho, dlam);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        dlaed5_(i__, &d__[1], &z__[1], &delta[1], rho, dlam);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Compute machine epsilon */
     if(r_once)
@@ -1022,8 +1010,8 @@ void aocl_lapack_dlaed4(aocl_int64_t *n, aocl_int64_t *i__, doublereal *d__, dou
         }
     }
 L250:
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAED4 */
 }
 /* dlaed4_ */

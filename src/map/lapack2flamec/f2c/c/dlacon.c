@@ -117,23 +117,12 @@ static doublereal c_b11 = 1.;
 void dlacon_(aocl_int_t *n, doublereal *v, doublereal *x, aocl_int_t *isgn, doublereal *est,
              aocl_int_t *kase)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlacon(n, v, x, isgn, est, kase);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kase_64 = *kase;
-
-    aocl_lapack_dlacon(&n_64, v, x, isgn, est, &kase_64);
-
-    *kase = (aocl_int_t)kase_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlacon inputs: n %" FLA_IS ", kase %" FLA_IS "",*n, *kase);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlacon(aocl_int64_t *n, doublereal *v, doublereal *x, aocl_int_t *isgn,
-                        doublereal *est, aocl_int64_t *kase)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlacon inputs: n %" FLA_IS ", kase %" FLA_IS "", *n, *kase);
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal d__1;
@@ -185,8 +174,8 @@ void aocl_lapack_dlacon(aocl_int64_t *n, doublereal *v, doublereal *x, aocl_int_
         }
         *kase = 1;
         jump = 1;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     switch(jump)
     {
@@ -223,8 +212,8 @@ L20:
     }
     *kase = 2;
     jump = 2;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* ................ ENTRY (JUMP = 2) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L40:
@@ -241,8 +230,8 @@ L50:
     x[j] = 1.;
     *kase = 1;
     jump = 3;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* ................ ENTRY (JUMP = 3) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L70:
@@ -275,8 +264,8 @@ L90: /* TEST FOR CYCLING. */
     }
     *kase = 2;
     jump = 4;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* ................ ENTRY (JUMP = 4) */
     /* X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L110:
@@ -299,8 +288,8 @@ L120:
     }
     *kase = 1;
     jump = 5;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* ................ ENTRY (JUMP = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L140:
@@ -312,8 +301,8 @@ L140:
     }
 L150:
     *kase = 0;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLACON */
 }
 /* dlacon_ */

@@ -106,25 +106,12 @@ if UPLO = 'L', only the lower */
 void dlacpy_(char *uplo, aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda,
              doublereal *b, aocl_int_t *ldb)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlacpy(uplo, m, n, a, lda, b, ldb);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-
-    aocl_lapack_dlacpy(uplo, &m_64, &n_64, a, &lda_64, b, &ldb_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlacpy inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *m, *n, *lda, *ldb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlacpy(char *uplo, aocl_int64_t *m, aocl_int64_t *n, doublereal *a,
-                        aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlacpy inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
-                      ", ldb %" FLA_IS "",
-                      *uplo, *m, *n, *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
@@ -238,9 +225,8 @@ void aocl_lapack_dlacpy(char *uplo, aocl_int64_t *m, aocl_int64_t *n, doublereal
             /* L60: */
         }
     }
-#endif
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLACPY */
 }
 /* dlacpy_ */

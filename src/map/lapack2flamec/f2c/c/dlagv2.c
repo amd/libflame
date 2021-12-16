@@ -159,22 +159,12 @@ void dlagv2_(doublereal *a, aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, dou
              doublereal *alphai, doublereal *beta, doublereal *csl, doublereal *snl,
              doublereal *csr, doublereal *snr)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlagv2(a, lda, b, ldb, alphar, alphai, beta, csl, snl, csr, snr);
-#else
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-
-    aocl_lapack_dlagv2(a, &lda_64, b, &ldb_64, alphar, alphai, beta, csl, snl, csr, snr);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlagv2 inputs: lda %" FLA_IS ", ldb %" FLA_IS "",*lda, *ldb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlagv2(doublereal *a, aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb,
-                        doublereal *alphar, doublereal *alphai, doublereal *beta, doublereal *csl,
-                        doublereal *snl, doublereal *csr, doublereal *snr)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlagv2 inputs: lda %" FLA_IS ", ldb %" FLA_IS "", *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
@@ -380,8 +370,8 @@ void aocl_lapack_dlagv2(doublereal *a, aocl_int64_t *lda, doublereal *b, aocl_in
         beta[1] = 1.;
         beta[2] = 1.;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAGV2 */
 }
 /* dlagv2_ */

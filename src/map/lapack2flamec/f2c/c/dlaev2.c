@@ -119,7 +119,7 @@ higher precision or correctly rounded or */
 void dlaev2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *rt1, doublereal *rt2,
              doublereal *cs1, doublereal *sn1)
 {
-    AOCL_DTL_TRACE_ENTRY_INDENT
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
     doublereal d__1;
     /* Builtin functions */
@@ -238,8 +238,8 @@ void dlaev2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *rt1, dou
         *cs1 = -(*sn1);
         *sn1 = tn;
     }
-    AOCL_DTL_TRACE_EXIT_INDENT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAEV2 */
 }
 /* dlaev2_ */

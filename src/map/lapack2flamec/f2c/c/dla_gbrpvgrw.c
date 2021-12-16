@@ -114,28 +114,12 @@
 doublereal dla_gbrpvgrw_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *ncols,
                          doublereal *ab, aocl_int_t *ldab, doublereal *afb, aocl_int_t *ldafb)
 {
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_dla_gbrpvgrw(n, kl, ku, ncols, ab, ldab, afb, ldafb);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t ncols_64 = *ncols;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldafb_64 = *ldafb;
-
-    return aocl_lapack_dla_gbrpvgrw(&n_64, &kl_64, &ku_64, &ncols_64, ab, &ldab_64, afb, &ldafb_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dla_gbrpvgrw inputs: n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ncols %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS "",*n, *kl, *ku, *ncols, *ldab, *ldafb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-doublereal aocl_lapack_dla_gbrpvgrw(aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
-                                    aocl_int64_t *ncols, doublereal *ab, aocl_int64_t *ldab,
-                                    doublereal *afb, aocl_int64_t *ldafb)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dla_gbrpvgrw inputs: n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
-                      ", ncols %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS "",
-                      *n, *kl, *ku, *ncols, *ldab, *ldafb);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1, d__2;
@@ -199,7 +183,7 @@ doublereal aocl_lapack_dla_gbrpvgrw(aocl_int64_t *n, aocl_int64_t *kl, aocl_int6
         }
     }
     ret_val = rpvgrw;
-    AOCL_DTL_TRACE_LOG_EXIT
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return ret_val;
 }
 /* dla_gbrpvgrw__ */

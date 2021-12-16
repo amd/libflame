@@ -280,36 +280,12 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t 
              doublereal *vr, aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m, doublereal *work,
              aocl_int_t *ifaill, aocl_int_t *ifailr, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dhsein(side, eigsrc, initv, select, n, h__, ldh, wr, wi, vl, ldvl, vr, ldvr, mm, m,
-                       work, ifaill, ifailr, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldh_64 = *ldh;
-    aocl_int64_t ldvl_64 = *ldvl;
-    aocl_int64_t ldvr_64 = *ldvr;
-    aocl_int64_t mm_64 = *mm;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dhsein(side, eigsrc, initv, select, &n_64, h__, &ldh_64, wr, wi, vl, &ldvl_64, vr,
-                       &ldvr_64, &mm_64, &m_64, work, ifaill, ifailr, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dhsein inputs: side %c, eigsrc %c, initv %c, n %" FLA_IS ", ldh %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",*side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dhsein(char *side, char *eigsrc, char *initv, logical *select, aocl_int64_t *n,
-                        doublereal *h__, aocl_int64_t *ldh, doublereal *wr, doublereal *wi,
-                        doublereal *vl, aocl_int64_t *ldvl, doublereal *vr, aocl_int64_t *ldvr,
-                        aocl_int64_t *mm, aocl_int64_t *m, doublereal *work, aocl_int_t *ifaill,
-                        aocl_int_t *ifailr, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dhsein inputs: side %c, eigsrc %c, initv %c, n %" FLA_IS ", ldh %" FLA_IS
-                      ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",
-                      *side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
     /* System generated locals */
     aocl_int64_t h_dim1, h_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -444,15 +420,15 @@ void aocl_lapack_dhsein(char *side, char *eigsrc, char *initv, logical *select, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DHSEIN", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DHSEIN", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible. */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Set machine-dependent constants. */
     unfl = dlamch_("Safe minimum");
@@ -524,8 +500,8 @@ void aocl_lapack_dhsein(char *side, char *eigsrc, char *initv, logical *select, 
                 if(disnan_(&hnorm))
                 {
                     *info = -6;
-                    AOCL_DTL_TRACE_LOG_EXIT
-                    return;
+                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    return 0;
                 }
                 else if(hnorm > 0.)
                 {
@@ -656,8 +632,8 @@ void aocl_lapack_dhsein(char *side, char *eigsrc, char *initv, logical *select, 
         }
         /* L120: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DHSEIN */
 }
 /* dhsein_ */

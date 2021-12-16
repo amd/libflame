@@ -166,28 +166,12 @@ void dlaed1_(aocl_int_t *n, doublereal *d__, doublereal *q, aocl_int_t *ldq, aoc
              doublereal *rho, aocl_int_t *cutpnt, doublereal *work, aocl_int_t *iwork,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlaed1(n, d__, q, ldq, indxq, rho, cutpnt, work, iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t cutpnt_64 = *cutpnt;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlaed1(&n_64, d__, q, &ldq_64, indxq, rho, &cutpnt_64, work, iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlaed1 inputs: n %" FLA_IS ", ldq %" FLA_IS ", indxq %" FLA_IS ", cutpnt %" FLA_IS "",*n, *ldq, *indxq, *cutpnt);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlaed1(aocl_int64_t *n, doublereal *d__, doublereal *q, aocl_int64_t *ldq,
-                        aocl_int_t *indxq, doublereal *rho, aocl_int64_t *cutpnt, doublereal *work,
-                        aocl_int_t *iwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaed1 inputs: n %" FLA_IS ", ldq %" FLA_IS ", indxq %" FLA_IS
-                      ", cutpnt %" FLA_IS "",
-                      *n, *ldq, *indxq, *cutpnt);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, i__1, i__2;
     /* Local variables */
@@ -243,15 +227,15 @@ void aocl_lapack_dlaed1(aocl_int64_t *n, doublereal *d__, doublereal *q, aocl_in
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DLAED1", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DLAED1", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* The following values are integer pointers which indicate */
     /* the portion of the workspace */
@@ -304,8 +288,8 @@ void aocl_lapack_dlaed1(aocl_int64_t *n, doublereal *d__, doublereal *q, aocl_in
         }
     }
 L20:
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAED1 */
 }
 /* dlaed1_ */

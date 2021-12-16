@@ -178,31 +178,12 @@ void dlaed0_(aocl_int_t *icompq, aocl_int_t *qsiz, aocl_int_t *n, doublereal *d_
              doublereal *q, aocl_int_t *ldq, doublereal *qstore, aocl_int_t *ldqs, doublereal *work,
              aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlaed0(icompq, qsiz, n, d__, e, q, ldq, qstore, ldqs, work, iwork, info);
-#else
-    aocl_int64_t icompq_64 = *icompq;
-    aocl_int64_t qsiz_64 = *qsiz;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t ldqs_64 = *ldqs;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlaed0(&icompq_64, &qsiz_64, &n_64, d__, e, q, &ldq_64, qstore, &ldqs_64, work,
-                       iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlaed0 inputs: icompq %" FLA_IS ", qsiz %" FLA_IS ", n %" FLA_IS ", ldq %" FLA_IS ", ldqs %" FLA_IS "",*icompq, *qsiz, *n, *ldq, *ldqs);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlaed0(aocl_int64_t *icompq, aocl_int64_t *qsiz, aocl_int64_t *n, doublereal *d__,
-                        doublereal *e, doublereal *q, aocl_int64_t *ldq, doublereal *qstore,
-                        aocl_int64_t *ldqs, doublereal *work, aocl_int_t *iwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaed0 inputs: icompq %" FLA_IS ", qsiz %" FLA_IS ", n %" FLA_IS
-                      ", ldq %" FLA_IS ", ldqs %" FLA_IS "",
-                      *icompq, *qsiz, *n, *ldq, *ldqs);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, qstore_dim1, qstore_offset, i__1, i__2;
     doublereal d__1;
@@ -284,15 +265,15 @@ void aocl_lapack_dlaed0(aocl_int64_t *icompq, aocl_int64_t *qsiz, aocl_int64_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DLAED0", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DLAED0", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     smlsiz = aocl_lapack_ilaenv(&c__9, "DLAED0", " ", &c__0, &c__0, &c__0, &c__0);
     /* Determine the size and placement of the submatrices, and save in */
@@ -520,8 +501,8 @@ L80:
 L130:
     *info = submat * (*n + 1) + submat + matsiz - 1;
 L140:
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAED0 */
 }
 /* dlaed0_ */

@@ -319,39 +319,12 @@ void dlaebz_(aocl_int_t *ijob, aocl_int_t *nitmax, aocl_int_t *n, aocl_int_t *mm
              doublereal *ab, doublereal *c__, aocl_int_t *mout, aocl_int_t *nab, doublereal *work,
              aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlaebz(ijob, nitmax, n, mmax, minp, nbmin, abstol, reltol, pivmin, d__, e, e2, nval,
-                       ab, c__, mout, nab, work, iwork, info);
-#else
-    aocl_int64_t ijob_64 = *ijob;
-    aocl_int64_t nitmax_64 = *nitmax;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t mmax_64 = *mmax;
-    aocl_int64_t minp_64 = *minp;
-    aocl_int64_t nbmin_64 = *nbmin;
-    aocl_int64_t mout_64 = *mout;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlaebz(&ijob_64, &nitmax_64, &n_64, &mmax_64, &minp_64, &nbmin_64, abstol, reltol,
-                       pivmin, d__, e, e2, nval, ab, c__, &mout_64, nab, work, iwork, &info_64);
-
-    *mout = (aocl_int_t)mout_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlaebz inputs: ijob %" FLA_IS ", nitmax %" FLA_IS ", n %" FLA_IS ", mmax %" FLA_IS ", minp %" FLA_IS ", nbmin %" FLA_IS ", nval %" FLA_IS ", nab %" FLA_IS "",*ijob, *nitmax, *n, *mmax, *minp, *nbmin, *nval, *nab);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlaebz(aocl_int64_t *ijob, aocl_int64_t *nitmax, aocl_int64_t *n,
-                        aocl_int64_t *mmax, aocl_int64_t *minp, aocl_int64_t *nbmin,
-                        doublereal *abstol, doublereal *reltol, doublereal *pivmin, doublereal *d__,
-                        doublereal *e, doublereal *e2, aocl_int_t *nval, doublereal *ab,
-                        doublereal *c__, aocl_int64_t *mout, aocl_int_t *nab, doublereal *work,
-                        aocl_int_t *iwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaebz inputs: ijob %" FLA_IS ", nitmax %" FLA_IS ", n %" FLA_IS
-                      ", mmax %" FLA_IS ", minp %" FLA_IS ", nbmin %" FLA_IS ", nval %" FLA_IS
-                      ", nab %" FLA_IS "",
-                      *ijob, *nitmax, *n, *mmax, *minp, *nbmin, *nval, *nab);
     /* System generated locals */
     aocl_int64_t nab_dim1, nab_offset, ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1, d__2, d__3, d__4;
@@ -395,8 +368,8 @@ void aocl_lapack_dlaebz(aocl_int64_t *ijob, aocl_int64_t *nitmax, aocl_int64_t *
     if(*ijob < 1 || *ijob > 3)
     {
         *info = -1;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Initialize NAB */
     if(*ijob == 1)
@@ -437,8 +410,8 @@ void aocl_lapack_dlaebz(aocl_int64_t *ijob, aocl_int64_t *nitmax, aocl_int64_t *
             *mout = *mout + nab[ji + (nab_dim1 << 1)] - nab[ji + nab_dim1];
             /* L30: */
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Initialize for loop */
     /* KF and KL have the following meaning: */
@@ -547,8 +520,8 @@ void aocl_lapack_dlaebz(aocl_int64_t *ijob, aocl_int64_t *nitmax, aocl_int64_t *
                 }
                 if(*info != 0)
                 {
-                    AOCL_DTL_TRACE_LOG_EXIT
-                    return;
+                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    return 0;
                 }
                 kl = klnew;
             }
@@ -645,8 +618,8 @@ void aocl_lapack_dlaebz(aocl_int64_t *ijob, aocl_int64_t *nitmax, aocl_int64_t *
                     else
                     {
                         *info = *mmax + 1;
-                        AOCL_DTL_TRACE_LOG_EXIT
-                        return;
+                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        return 0;
                     }
                 }
                 else
@@ -730,8 +703,8 @@ L140: /* Computing MAX */
     i__1 = kl + 1 - kf;
     *info = fla_max(i__1, 0);
     *mout = kl;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAEBZ */
 }
 /* dlaebz_ */

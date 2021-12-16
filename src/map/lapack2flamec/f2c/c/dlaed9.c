@@ -156,33 +156,12 @@ void dlaed9_(aocl_int_t *k, aocl_int_t *kstart, aocl_int_t *kstop, aocl_int_t *n
              doublereal *q, aocl_int_t *ldq, doublereal *rho, doublereal *dlambda, doublereal *w,
              doublereal *s, aocl_int_t *lds, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlaed9(k, kstart, kstop, n, d__, q, ldq, rho, dlambda, w, s, lds, info);
-#else
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t kstart_64 = *kstart;
-    aocl_int64_t kstop_64 = *kstop;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t lds_64 = *lds;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlaed9(&k_64, &kstart_64, &kstop_64, &n_64, d__, q, &ldq_64, rho, dlambda, w, s,
-                       &lds_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlaed9 inputs: k %" FLA_IS ", kstart %" FLA_IS ", kstop %" FLA_IS ", n %" FLA_IS ", ldq %" FLA_IS ", lds %" FLA_IS "",*k, *kstart, *kstop, *n, *ldq, *lds);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kstop, aocl_int64_t *n,
-                        doublereal *d__, doublereal *q, aocl_int64_t *ldq, doublereal *rho,
-                        doublereal *dlambda, doublereal *w, doublereal *s, aocl_int64_t *lds,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaed9 inputs: k %" FLA_IS ", kstart %" FLA_IS ", kstop %" FLA_IS
-                      ", n %" FLA_IS ", ldq %" FLA_IS ", lds %" FLA_IS "",
-                      *k, *kstart, *kstop, *n, *ldq, *lds);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, s_dim1, s_offset, i__1, i__2;
     doublereal d__1;
@@ -248,15 +227,40 @@ void aocl_lapack_dlaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kst
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DLAED9", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DLAED9", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*k == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
+    }
+    /* Modify values DLAMDA(i) to make sure all DLAMDA(i)-DLAMDA(j) can */
+    /* be computed with high relative accuracy (barring over/underflow). */
+    /* This is a problem on machines without a guard digit in */
+    /* add/subtract (Cray XMP, Cray YMP, Cray C 90 and Cray 2). */
+    /* The following code replaces DLAMDA(I) by 2*DLAMDA(I)-DLAMDA(I), */
+    /* which on any of these machines zeros out the bottommost */
+    /* bit of DLAMDA(I) if it is 1;
+    this makes the subsequent */
+    /* subtractions DLAMDA(I)-DLAMDA(J) unproblematic when cancellation */
+    /* occurs. On binary machines with a guard digit (almost all */
+    /* machines) it does not change DLAMDA(I) at all. On hexadecimal */
+    /* and decimal machines with a guard digit, it slightly */
+    /* changes the bottommost bits of DLAMDA(I). It does not account */
+    /* for hexadecimal or decimal machines without guard digits */
+    /* (we know of none). We use a subroutine call to compute */
+    /* 2*DLAMBDA(I) to prevent optimizing compilers from eliminating */
+    /* this code. */
+    i__1 = *n;
+    for (i__ = 1;
+            i__ <= i__1;
+            ++i__)
+    {
+        dlamda[i__] = dlamc3_(&dlamda[i__], &dlamda[i__]) - dlamda[i__];
+        /* L10: */
     }
     i__1 = *kstop;
     for(j = *kstart; j <= i__1; ++j)
@@ -334,7 +338,8 @@ void aocl_lapack_dlaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kst
     }
     AOCL_DTL_TRACE_LOG_EXIT
 L120:
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAED9 */
 }
 /* dlaed9_ */

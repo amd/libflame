@@ -171,33 +171,12 @@ void dlaeda_(aocl_int_t *n, aocl_int_t *tlvls, aocl_int_t *curlvl, aocl_int_t *c
              doublereal *givnum, doublereal *q, aocl_int_t *qptr, doublereal *z__,
              doublereal *ztemp, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlaeda(n, tlvls, curlvl, curpbm, prmptr, perm, givptr, givcol, givnum, q, qptr, z__,
-                       ztemp, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t tlvls_64 = *tlvls;
-    aocl_int64_t curlvl_64 = *curlvl;
-    aocl_int64_t curpbm_64 = *curpbm;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlaeda(&n_64, &tlvls_64, &curlvl_64, &curpbm_64, prmptr, perm, givptr, givcol,
-                       givnum, q, qptr, z__, ztemp, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlaeda inputs: n %" FLA_IS ", tlvls %" FLA_IS ", curlvl %" FLA_IS ", curpbm %" FLA_IS ", prmptr %" FLA_IS ", perm %" FLA_IS ", givptr %" FLA_IS ", givcol %" FLA_IS ", qptr %" FLA_IS "",*n, *tlvls, *curlvl, *curpbm, *prmptr, *perm, *givptr, *givcol, *qptr);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlaeda(aocl_int64_t *n, aocl_int64_t *tlvls, aocl_int64_t *curlvl,
-                        aocl_int64_t *curpbm, aocl_int_t *prmptr, aocl_int_t *perm,
-                        aocl_int_t *givptr, aocl_int_t *givcol, doublereal *givnum, doublereal *q,
-                        aocl_int_t *qptr, doublereal *z__, doublereal *ztemp, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaeda inputs: n %" FLA_IS ", tlvls %" FLA_IS ", curlvl %" FLA_IS
-                      ", curpbm %" FLA_IS ", prmptr %" FLA_IS ", perm %" FLA_IS ", givptr %" FLA_IS
-                      ", givcol %" FLA_IS ", qptr %" FLA_IS "",
-                      *n, *tlvls, *curlvl, *curpbm, *prmptr, *perm, *givptr, *givcol, *qptr);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
     /* Builtin functions */
@@ -244,15 +223,15 @@ void aocl_lapack_dlaeda(aocl_int64_t *n, aocl_int64_t *tlvls, aocl_int64_t *curl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DLAEDA", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DLAEDA", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Determine location of first number in second half. */
     mid = *n / 2 + 1;
@@ -349,8 +328,8 @@ void aocl_lapack_dlaeda(aocl_int64_t *n, aocl_int64_t *tlvls, aocl_int64_t *curl
         ptr += pow_ii(&c__2, &i__2);
         /* L70: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAEDA */
 }
 /* dlaeda_ */

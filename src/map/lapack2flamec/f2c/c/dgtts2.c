@@ -129,26 +129,12 @@ IPIV(i) = i indicates a row interchange was not */
 void dgtts2_(aocl_int_t *itrans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doublereal *d__,
              doublereal *du, doublereal *du2, aocl_int_t *ipiv, doublereal *b, aocl_int_t *ldb)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgtts2(itrans, n, nrhs, dl, d__, du, du2, ipiv, b, ldb);
-#else
-    aocl_int64_t itrans_64 = *itrans;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-
-    aocl_lapack_dgtts2(&itrans_64, &n_64, &nrhs_64, dl, d__, du, du2, ipiv, b, &ldb_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dgtts2 inputs: itrans %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ipiv %" FLA_IS ", ldb %" FLA_IS "",*itrans, *n, *nrhs, *ipiv, *ldb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dgtts2(aocl_int64_t *itrans, aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *dl,
-                        doublereal *d__, doublereal *du, doublereal *du2, aocl_int_t *ipiv,
-                        doublereal *b, aocl_int64_t *ldb)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgtts2 inputs: itrans %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS
-                      ", ldb %" FLA_IS "",
-                      *itrans, *n, *nrhs, *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2;
     /* Local variables */
@@ -179,8 +165,8 @@ void aocl_lapack_dgtts2(aocl_int64_t *itrans, aocl_int64_t *n, aocl_int64_t *nrh
     /* Function Body */
     if(*n == 0 || *nrhs == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*itrans == 0)
     {
@@ -333,7 +319,7 @@ void aocl_lapack_dgtts2(aocl_int64_t *itrans, aocl_int64_t *n, aocl_int64_t *nrh
         }
     }
     /* End of DGTTS2 */
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
 }
 /* dgtts2_ */

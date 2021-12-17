@@ -262,40 +262,12 @@ LDQ >= 1 otherwise. */
 /** Generated wrapper function */
 void dggsvp_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, doublereal *tola, doublereal *tolb, aocl_int_t *k, aocl_int_t *l, doublereal *u, aocl_int_t *ldu, doublereal *v, aocl_int_t *ldv, doublereal *q, aocl_int_t *ldq, aocl_int_t *iwork, doublereal *tau, doublereal *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dggsvp(jobu, jobv, jobq, m, p, n, a, lda, b, ldb, tola, tolb, k, l, u, ldu, v, ldv, q, ldq, iwork, tau, work, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t p_64 = *p;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t l_64 = *l;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t ldv_64 = *ldv;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dggsvp(jobu, jobv, jobq, &m_64, &p_64, &n_64, a, &lda_64, b, &ldb_64, tola, tolb, &k_64, &l_64, u, &ldu_64, v, &ldv_64, q, &ldq_64, iwork, tau, work, &info_64);
-
-    *k = (aocl_int_t)k_64;
-    *l = (aocl_int_t)l_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dggsvp inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS "",*jobu, *jobv, *jobq, *m, *p, *n, *lda, *ldb, *ldu, *ldv, *ldq);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *n,
-             doublereal *a, aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb, doublereal *tola,
-             doublereal *tolb, aocl_int64_t *k, aocl_int64_t *l, doublereal *u, aocl_int64_t *ldu,
-             doublereal *v, aocl_int64_t *ldv, doublereal *q, aocl_int64_t *ldq,
-             aocl_int_t *iwork, doublereal *tau, doublereal *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dggsvp inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS
-                      ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldu %" FLA_IS
-                      ", ldv %" FLA_IS ", ldq %" FLA_IS "",
-                      *jobu, *jobv, *jobq, *m, *p, *n, *lda, *ldb, *ldu, *ldv, *ldq);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
         v_offset, i__1, i__2, i__3;
@@ -398,9 +370,9 @@ void aocl_lapack_dggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DGGSVP", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DGGSVP", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* QR with column pivoting of B: B*P = V*( S11 S12 ) */
     /* ( 0 0 ) */
@@ -619,8 +591,8 @@ void aocl_lapack_dggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
             /* L140: */
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DGGSVP */
 }
 /* dggsvp_ */

@@ -125,25 +125,12 @@ v(1:n-k+i-1) is stored on exit in */
 void dgerq2_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *tau,
              doublereal *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgerq2(m, n, a, lda, tau, work, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dgerq2(&m_64, &n_64, a, &lda_64, tau, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dgerq2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dgerq2(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
-                        doublereal *tau, doublereal *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgerq2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -191,9 +178,9 @@ void aocl_lapack_dgerq2(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DGERQ2", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DGERQ2", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     k = fla_min(*m, *n);
     for(i__ = k; i__ >= 1; --i__)
@@ -213,8 +200,8 @@ void aocl_lapack_dgerq2(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
         a[*m - k + i__ + (*n - k + i__) * a_dim1] = aii;
         /* L10: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DGERQ2 */
 }
 /* dgerq2_ */

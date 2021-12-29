@@ -223,32 +223,12 @@ void dggqrf_(aocl_int_t *n, aocl_int_t *m, aocl_int_t *p, doublereal *a, aocl_in
              doublereal *taua, doublereal *b, aocl_int_t *ldb, doublereal *taub, doublereal *work,
              aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dggqrf(n, m, p, a, lda, taua, b, ldb, taub, work, lwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t p_64 = *p;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dggqrf(&n_64, &m_64, &p_64, a, &lda_64, taua, b, &ldb_64, taub, work, &lwork_64,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dggqrf inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*n, *m, *p, *lda, *ldb, *lwork);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dggqrf(aocl_int64_t *n, aocl_int64_t *m, aocl_int64_t *p, doublereal *a,
-                        aocl_int64_t *lda, doublereal *taua, doublereal *b, aocl_int64_t *ldb,
-                        doublereal *taub, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dggqrf inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS
-                      ", ldb %" FLA_IS ", lwork %" FLA_IS "",
-                      *n, *m, *p, *lda, *ldb, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
@@ -330,14 +310,14 @@ void aocl_lapack_dggqrf(aocl_int64_t *n, aocl_int64_t *m, aocl_int64_t *p, doubl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DGGQRF", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DGGQRF", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* QR factorization of N-by-M matrix A: A = Q*R */
     aocl_lapack_dgeqrf(n, m, &a[a_offset], lda, &taua[1], &work[1], lwork, info);
@@ -354,10 +334,10 @@ void aocl_lapack_dggqrf(aocl_int64_t *n, aocl_int64_t *m, aocl_int64_t *p, doubl
     aocl_lapack_dgerqf(n, p, &b[b_offset], ldb, &taub[1], &work[1], lwork, info);
     /* Computing MAX */
     i__1 = lopt;
-    i__2 = (integer)work[1]; // , expr subst
-    work[1] = (doublereal)fla_max(i__1, i__2);
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    i__2 = (integer) work[1]; // , expr subst
+    work[1] = (doublereal) max(i__1,i__2);
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DGGQRF */
 }
 /* dggqrf_ */

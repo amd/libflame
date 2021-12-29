@@ -192,33 +192,12 @@ void dggglm_(aocl_int_t *n, aocl_int_t *m, aocl_int_t *p, doublereal *a, aocl_in
              doublereal *b, aocl_int_t *ldb, doublereal *d__, doublereal *x, doublereal *y,
              doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dggglm(n, m, p, a, lda, b, ldb, d__, x, y, work, lwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t p_64 = *p;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dggglm(&n_64, &m_64, &p_64, a, &lda_64, b, &ldb_64, d__, x, y, work, &lwork_64,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dggglm inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*n, *m, *p, *lda, *ldb, *lwork);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dggglm(aocl_int64_t *n, aocl_int64_t *m, aocl_int64_t *p, doublereal *a,
-                        aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb, doublereal *d__,
-                        doublereal *x, doublereal *y, doublereal *work, aocl_int64_t *lwork,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dggglm inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS
-                      ", ldb %" FLA_IS ", lwork %" FLA_IS "",
-                      *n, *m, *p, *lda, *ldb, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -311,30 +290,20 @@ void aocl_lapack_dggglm(aocl_int64_t *n, aocl_int64_t *m, aocl_int64_t *p, doubl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DGGGLM", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DGGGLM", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        i__1 = *m;
-        for(i__ = 1; i__ <= i__1; ++i__)
-        {
-            x[i__] = 0.;
-        }
-        i__1 = *p;
-        for(i__ = 1; i__ <= i__1; ++i__)
-        {
-            y[i__] = 0.;
-        }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Compute the GQR factorization of matrices A and B: */
     /* Q**T*A = ( R11 ) M, Q**T*B*Z**T = ( T11 T12 ) M */
@@ -367,8 +336,8 @@ void aocl_lapack_dggglm(aocl_int64_t *n, aocl_int64_t *m, aocl_int64_t *p, doubl
         if(*info > 0)
         {
             *info = 1;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         i__1 = *n - *m;
         aocl_blas_dcopy(&i__1, &d__[*m + 1], &c__1, &y[*m + *p - *n + 1], &c__1);
@@ -392,8 +361,8 @@ void aocl_lapack_dggglm(aocl_int64_t *n, aocl_int64_t *m, aocl_int64_t *p, doubl
         if(*info > 0)
         {
             *info = 2;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         /* Copy D to X */
         aocl_blas_dcopy(m, &d__[1], &c__1, &x[1], &c__1);
@@ -408,10 +377,10 @@ void aocl_lapack_dggglm(aocl_int64_t *n, aocl_int64_t *m, aocl_int64_t *p, doubl
                        &work[*m + 1], &y[1], &i__3, &work[*m + np + 1], &i__4, info);
     /* Computing MAX */
     i__1 = lopt;
-    i__2 = (integer)work[*m + np + 1]; // , expr subst
-    work[1] = (doublereal)(*m + np + fla_max(i__1, i__2));
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    i__2 = (integer) work[*m + np + 1]; // , expr subst
+    work[1] = (doublereal) (*m + np + max(i__1,i__2));
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DGGGLM */
 }
 /* dggglm_ */

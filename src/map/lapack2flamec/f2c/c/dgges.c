@@ -297,39 +297,12 @@ void dgges_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, aocl_int_t *n
             doublereal *vsr, aocl_int_t *ldvsr, doublereal *work, aocl_int_t *lwork, logical *bwork,
             aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgges(jobvsl, jobvsr, sort, selctg, n, a, lda, b, ldb, sdim, alphar, alphai, beta,
-                      vsl, ldvsl, vsr, ldvsr, work, lwork, bwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t sdim_64 = *sdim;
-    aocl_int64_t ldvsl_64 = *ldvsl;
-    aocl_int64_t ldvsr_64 = *ldvsr;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dgges(jobvsl, jobvsr, sort, selctg, &n_64, a, &lda_64, b, &ldb_64, &sdim_64, alphar,
-                      alphai, beta, vsl, &ldvsl_64, vsr, &ldvsr_64, work, &lwork_64, bwork,
-                      &info_64);
-
-    *sdim = (aocl_int_t)sdim_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dgges inputs: jobvsl %c, jobvsr %c, sort %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", sdim %" FLA_IS ", ldvsl %" FLA_IS ", ldvsr %" FLA_IS ", lwork  %" FLA_IS "",*jobvsl, *jobvsr, *sort, *n, *lda, *ldb, *sdim, *ldvsl, *ldvsr, *lwork);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dgges(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, aocl_int64_t *n,
-                       doublereal *a, aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb,
-                       aocl_int64_t *sdim, doublereal *alphar, doublereal *alphai, doublereal *beta,
-                       doublereal *vsl, aocl_int64_t *ldvsl, doublereal *vsr, aocl_int64_t *ldvsr,
-                       doublereal *work, aocl_int64_t *lwork, logical *bwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgges inputs: jobvsl %c, jobvsr %c, sort %c, n %" FLA_IS ", lda %" FLA_IS
-                      ", ldb %" FLA_IS ", sdim %" FLA_IS ", ldvsl %" FLA_IS ", ldvsr %" FLA_IS
-                      ", lwork  %" FLA_IS "",
-                      *jobvsl, *jobvsr, *sort, *n, *lda, *ldb, *sdim, *ldvsl, *ldvsr, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, vsr_dim1, vsr_offset,
         i__1, i__2;
@@ -519,21 +492,21 @@ void aocl_lapack_dgges(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, ao
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DGGES ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DGGES ", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *sdim = 0;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Get machine constants */
     eps = dlamch_("P");
@@ -799,9 +772,9 @@ void aocl_lapack_dgges(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, ao
         }
     }
 L50:
-    work[1] = (doublereal)maxwrk;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    work[1] = (doublereal) maxwrk;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DGGES */
 }
 /* dgges_ */

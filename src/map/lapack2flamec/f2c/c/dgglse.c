@@ -187,33 +187,12 @@ void dgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, doublereal *a, aocl_in
              doublereal *b, aocl_int_t *ldb, doublereal *c__, doublereal *d__, doublereal *x,
              doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgglse(m, n, p, a, lda, b, ldb, c__, d__, x, work, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t p_64 = *p;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dgglse(&m_64, &n_64, &p_64, a, &lda_64, b, &ldb_64, c__, d__, x, work, &lwork_64,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dgglse inputs: m %" FLA_IS ", n %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *p, *lda, *ldb, *lwork);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, doublereal *a,
-                        aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb, doublereal *c__,
-                        doublereal *d__, doublereal *x, doublereal *work, aocl_int64_t *lwork,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgglse inputs: m %" FLA_IS ", n %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS
-                      ", ldb %" FLA_IS ", lwork %" FLA_IS "",
-                      *m, *n, *p, *lda, *ldb, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
@@ -307,20 +286,20 @@ void aocl_lapack_dgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, doubl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DGGLSE", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DGGLSE", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Compute the GRQ factorization of matrices B and A: */
     /* B*Q**T = ( 0 T12 ) P Z**T*A*Q**T = ( R11 R12 ) N-P */
@@ -350,8 +329,8 @@ void aocl_lapack_dgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, doubl
         if(*info > 0)
         {
             *info = 1;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         /* Put the solution in X */
         aocl_blas_dcopy(p, &d__[1], &c__1, &x[*n - *p + 1], &c__1);
@@ -370,8 +349,8 @@ void aocl_lapack_dgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, doubl
         if(*info > 0)
         {
             *info = 2;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         /* Put the solutions in X */
         i__1 = *n - *p;
@@ -404,10 +383,10 @@ void aocl_lapack_dgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, doubl
                        &work[*p + mn + 1], &i__1, info);
     /* Computing MAX */
     i__1 = lopt;
-    i__2 = (integer)work[*p + mn + 1]; // , expr subst
-    work[1] = (doublereal)(*p + mn + fla_max(i__1, i__2));
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    i__2 = (integer) work[*p + mn + 1]; // , expr subst
+    work[1] = (doublereal) (*p + mn + max(i__1,i__2));
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DGGLSE */
 }
 /* dgglse_ */

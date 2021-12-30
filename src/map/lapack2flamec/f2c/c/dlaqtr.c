@@ -172,25 +172,12 @@ void dlaqtr_(logical *ltran, logical *lreal, aocl_int_t *n, doublereal *t, aocl_
              doublereal *b, doublereal *w, doublereal *scale, doublereal *x, doublereal *work,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlaqtr(ltran, lreal, n, t, ldt, b, w, scale, x, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlaqtr(ltran, lreal, &n_64, t, &ldt_64, b, w, scale, x, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlaqtr inputs: n %" FLA_IS ", ldt %" FLA_IS "",*n, *ldt);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doublereal *t,
-                        aocl_int64_t *ldt, doublereal *b, doublereal *w, doublereal *scale,
-                        doublereal *x, doublereal *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaqtr inputs: n %" FLA_IS ", ldt %" FLA_IS "", *n, *ldt);
     /* System generated locals */
     aocl_int64_t t_dim1, t_offset, i__1, i__2;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
@@ -250,8 +237,8 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Set constants to control overflow */
     eps = dlamch_("P");
@@ -869,8 +856,8 @@ void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doubler
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAQTR */
 }
 /* dlaqtr_ */

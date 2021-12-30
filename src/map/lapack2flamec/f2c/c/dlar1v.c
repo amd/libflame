@@ -231,35 +231,12 @@ void dlar1v_(aocl_int_t *n, aocl_int_t *b1, aocl_int_t *bn, doublereal *lambda, 
              doublereal *mingma, aocl_int_t *r__, aocl_int_t *isuppz, doublereal *nrminv,
              doublereal *resid, doublereal *rqcorr, doublereal *work)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlar1v(n, b1, bn, lambda, d__, l, ld, lld, pivmin, gaptol, z__, wantnc, negcnt, ztz,
-                       mingma, r__, isuppz, nrminv, resid, rqcorr, work);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t b1_64 = *b1;
-    aocl_int64_t bn_64 = *bn;
-    aocl_int64_t negcnt_64 = *negcnt;
-    aocl_int64_t r___64 = *r__;
-
-    aocl_lapack_dlar1v(&n_64, &b1_64, &bn_64, lambda, d__, l, ld, lld, pivmin, gaptol, z__, wantnc,
-                       &negcnt_64, ztz, mingma, &r___64, isuppz, nrminv, resid, rqcorr, work);
-
-    *negcnt = (aocl_int_t)negcnt_64;
-    *r__ = (aocl_int_t)r___64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlar1v inputs: n %" FLA_IS ", b1 %" FLA_IS ", bn %" FLA_IS ", r__ %" FLA_IS "",*n, *b1, *bn, *r__);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlar1v(aocl_int64_t *n, aocl_int64_t *b1, aocl_int64_t *bn, doublereal *lambda,
-                        doublereal *d__, doublereal *l, doublereal *ld, doublereal *lld,
-                        doublereal *pivmin, doublereal *gaptol, doublereal *z__, logical *wantnc,
-                        aocl_int64_t *negcnt, doublereal *ztz, doublereal *mingma,
-                        aocl_int64_t *r__, aocl_int_t *isuppz, doublereal *nrminv,
-                        doublereal *resid, doublereal *rqcorr, doublereal *work)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlar1v inputs: n %" FLA_IS ", b1 %" FLA_IS ", bn %" FLA_IS ", r__ %" FLA_IS
-                      "",
-                      *n, *b1, *bn, *r__);
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal d__1, d__2, d__3;
@@ -584,8 +561,8 @@ L60:
     *nrminv = sqrt(tmp);
     *resid = f2c_dabs(*mingma) * *nrminv;
     *rqcorr = *mingma * tmp;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAR1V */
 }
 /* dlar1v_ */

@@ -101,23 +101,12 @@
 void dlapll_(aocl_int_t *n, doublereal *x, aocl_int_t *incx, doublereal *y, aocl_int_t *incy,
              doublereal *ssmin)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlapll(n, x, incx, y, incy, ssmin);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incy_64 = *incy;
-
-    aocl_lapack_dlapll(&n_64, x, &incx_64, y, &incy_64, ssmin);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlapll inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*n, *incx, *incy);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlapll(aocl_int64_t *n, doublereal *x, aocl_int64_t *incx, doublereal *y,
-                        aocl_int64_t *incy, doublereal *ssmin)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlapll inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *n, *incx,
-                      *incy);
     /* System generated locals */
     aocl_int64_t i__1;
     /* Local variables */
@@ -149,8 +138,8 @@ void aocl_lapack_dlapll(aocl_int64_t *n, doublereal *x, aocl_int64_t *incx, doub
     if(*n <= 1)
     {
         *ssmin = 0.;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Compute the QR factorization of the N-by-2 matrix ( X Y ) */
     aocl_lapack_dlarfg(n, &x[1], &x[*incx + 1], incx, &tau);
@@ -164,8 +153,8 @@ void aocl_lapack_dlapll(aocl_int64_t *n, doublereal *x, aocl_int64_t *incx, doub
     a22 = y[*incy + 1];
     /* Compute the SVD of 2-by-2 Upper triangular matrix. */
     dlas2_(&a11, &a12, &a22, ssmin, &ssmax);
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAPLL */
 }
 /* dlapll_ */

@@ -103,24 +103,12 @@
 void dlapmt_(logical *forwrd, aocl_int_t *m, aocl_int_t *n, doublereal *x, aocl_int_t *ldx,
              aocl_int_t *k)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlapmt(forwrd, m, n, x, ldx, k);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldx_64 = *ldx;
-
-    aocl_lapack_dlapmt(forwrd, &m_64, &n_64, x, &ldx_64, k);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlapmt inputs: m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS ", k %" FLA_IS "",*m, *n, *ldx, *k);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlapmt(logical *forwrd, aocl_int64_t *m, aocl_int64_t *n, doublereal *x,
-                        aocl_int64_t *ldx, aocl_int_t *k)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlapmt inputs: forward %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS
-                      ", ldx %" FLA_IS ", k %" FLA_IS "",
-                      *forwrd, *m, *n, *ldx, *k);
     /* System generated locals */
     aocl_int64_t x_dim1, x_offset, i__1, i__2;
     /* Local variables */
@@ -146,8 +134,8 @@ void aocl_lapack_dlapmt(logical *forwrd, aocl_int64_t *m, aocl_int64_t *n, doubl
     /* Function Body */
     if(*n <= 1)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -221,8 +209,8 @@ void aocl_lapack_dlapmt(logical *forwrd, aocl_int64_t *m, aocl_int64_t *n, doubl
             ;
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAPMT */
 }
 /* dlapmt_ */

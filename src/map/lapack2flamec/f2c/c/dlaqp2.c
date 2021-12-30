@@ -152,26 +152,12 @@ if JPVT(i) = 0, */
 void dlaqp2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, doublereal *a, aocl_int_t *lda,
              aocl_int_t *jpvt, doublereal *tau, doublereal *vn1, doublereal *vn2, doublereal *work)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlaqp2(m, n, offset, a, lda, jpvt, tau, vn1, vn2, work);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t offset_64 = *offset;
-    aocl_int64_t lda_64 = *lda;
-
-    aocl_lapack_dlaqp2(&m_64, &n_64, &offset_64, a, &lda_64, jpvt, tau, vn1, vn2, work);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlaqp2 inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", lda %" FLA_IS ", jpvt %" FLA_IS "",*m, *n, *offset, *lda, *jpvt);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlaqp2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, doublereal *a,
-                        aocl_int64_t *lda, aocl_int_t *jpvt, doublereal *tau, doublereal *vn1,
-                        doublereal *vn2, doublereal *work)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaqp2 inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS
-                      ", lda %" FLA_IS "",
-                      *m, *n, *offset, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1, d__2;
@@ -322,8 +308,8 @@ void aocl_lapack_dlaqp2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, 
         }
         /* L20: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAQP2 */
 }
 /* dlaqp2_ */

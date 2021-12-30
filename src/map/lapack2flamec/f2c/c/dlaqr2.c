@@ -287,52 +287,12 @@ void dlaqr2_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
              aocl_int_t *ldt, aocl_int_t *nv, doublereal *wv, aocl_int_t *ldwv, doublereal *work,
              aocl_int_t *lwork)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlaqr2(wantt, wantz, n, ktop, kbot, nw, h__, ldh, iloz, ihiz, z__, ldz, ns, nd, sr,
-                       si, v, ldv, nh, t, ldt, nv, wv, ldwv, work, lwork);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ktop_64 = *ktop;
-    aocl_int64_t kbot_64 = *kbot;
-    aocl_int64_t nw_64 = *nw;
-    aocl_int64_t ldh_64 = *ldh;
-    aocl_int64_t iloz_64 = *iloz;
-    aocl_int64_t ihiz_64 = *ihiz;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t ns_64 = *ns;
-    aocl_int64_t nd_64 = *nd;
-    aocl_int64_t ldv_64 = *ldv;
-    aocl_int64_t nh_64 = *nh;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t nv_64 = *nv;
-    aocl_int64_t ldwv_64 = *ldwv;
-    aocl_int64_t lwork_64 = *lwork;
-
-    aocl_lapack_dlaqr2(wantt, wantz, &n_64, &ktop_64, &kbot_64, &nw_64, h__, &ldh_64, &iloz_64,
-                       &ihiz_64, z__, &ldz_64, &ns_64, &nd_64, sr, si, v, &ldv_64, &nh_64, t,
-                       &ldt_64, &nv_64, wv, &ldwv_64, work, &lwork_64);
-
-    *ns = (aocl_int_t)ns_64;
-    *nd = (aocl_int_t)nd_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlaqr2 inputs: n %" FLA_IS ", ktop %" FLA_IS ", kbot %" FLA_IS ", nw %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS ", ns %" FLA_IS ", nd %" FLA_IS ", ldv %" FLA_IS ", nh %" FLA_IS ", ldt %" FLA_IS ", nv %" FLA_IS ", ldwv %" FLA_IS ", lwork %" FLA_IS "",*n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ns, *nd, *ldv, *nh, *ldt, *nv, *ldwv, *lwork);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_int64_t *ktop,
-                        aocl_int64_t *kbot, aocl_int64_t *nw, doublereal *h__, aocl_int64_t *ldh,
-                        aocl_int64_t *iloz, aocl_int64_t *ihiz, doublereal *z__, aocl_int64_t *ldz,
-                        aocl_int64_t *ns, aocl_int64_t *nd, doublereal *sr, doublereal *si,
-                        doublereal *v, aocl_int64_t *ldv, aocl_int64_t *nh, doublereal *t,
-                        aocl_int64_t *ldt, aocl_int64_t *nv, doublereal *wv, aocl_int64_t *ldwv,
-                        doublereal *work, aocl_int64_t *lwork)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaqr2 inputs: n %" FLA_IS ", ktop %" FLA_IS ", kbot %" FLA_IS
-                      ", nw %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS
-                      ", ldz %" FLA_IS ", ns %" FLA_IS ", nd %" FLA_IS ", ldv %" FLA_IS
-                      ", nh %" FLA_IS ", ldt %" FLA_IS ", nv %" FLA_IS ", ldwv %" FLA_IS
-                      ", lwork %" FLA_IS "",
-                      *n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ns, *nd, *ldv, *nh, *ldt,
-                      *nv, *ldwv, *lwork);
     /* System generated locals */
     aocl_int64_t h_dim1, h_offset, t_dim1, t_offset, v_dim1, v_offset, wv_dim1, wv_offset, z_dim1,
         z_offset, i__1, i__2, i__3, i__4;
@@ -425,9 +385,9 @@ void aocl_lapack_dlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     /* ==== Quick return in case of workspace query. ==== */
     if(*lwork == -1)
     {
-        work[1] = (doublereal)lwkopt;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        work[1] = (doublereal) lwkopt;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* ==== Nothing to do ... */
     /* ... for an empty active block ... ==== */
@@ -436,14 +396,14 @@ void aocl_lapack_dlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     work[1] = 1.;
     if(*ktop > *kbot)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* ... nor for an empty deflation window. ==== */
     if(*nw < 1)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* ==== Machine constants ==== */
     safmin = dlamch_("SAFE MINIMUM");
@@ -483,8 +443,8 @@ void aocl_lapack_dlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
             }
         }
         work[1] = 1.;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* ==== Convert to spike-triangular form. (In case of a */
     /* . rare QR failure, this routine continues to do */
@@ -816,7 +776,7 @@ L60:
     /* ==== Return optimal workspace. ==== */
     work[1] = (doublereal)lwkopt;
     /* ==== End of DLAQR2 ==== */
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
 }
 /* dlaqr2_ */

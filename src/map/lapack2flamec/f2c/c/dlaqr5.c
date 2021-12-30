@@ -269,47 +269,12 @@ void dlaqr5_(logical *wantt, logical *wantz, aocl_int_t *kacc22, aocl_int_t *n, 
              doublereal *v, aocl_int_t *ldv, doublereal *u, aocl_int_t *ldu, aocl_int_t *nv,
              doublereal *wv, aocl_int_t *ldwv, aocl_int_t *nh, doublereal *wh, aocl_int_t *ldwh)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlaqr5(wantt, wantz, kacc22, n, ktop, kbot, nshfts, sr, si, h__, ldh, iloz, ihiz,
-                       z__, ldz, v, ldv, u, ldu, nv, wv, ldwv, nh, wh, ldwh);
-#else
-    aocl_int64_t kacc22_64 = *kacc22;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ktop_64 = *ktop;
-    aocl_int64_t kbot_64 = *kbot;
-    aocl_int64_t nshfts_64 = *nshfts;
-    aocl_int64_t ldh_64 = *ldh;
-    aocl_int64_t iloz_64 = *iloz;
-    aocl_int64_t ihiz_64 = *ihiz;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t ldv_64 = *ldv;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t nv_64 = *nv;
-    aocl_int64_t ldwv_64 = *ldwv;
-    aocl_int64_t nh_64 = *nh;
-    aocl_int64_t ldwh_64 = *ldwh;
-
-    aocl_lapack_dlaqr5(wantt, wantz, &kacc22_64, &n_64, &ktop_64, &kbot_64, &nshfts_64, sr, si, h__,
-                       &ldh_64, &iloz_64, &ihiz_64, z__, &ldz_64, v, &ldv_64, u, &ldu_64, &nv_64,
-                       wv, &ldwv_64, &nh_64, wh, &ldwh_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlaqr5 inputs: kacc22 %" FLA_IS ", n %" FLA_IS ", ktop %" FLA_IS ", kbot %" FLA_IS ", nshfts %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS ", ldv %" FLA_IS ", ldu %" FLA_IS ", nv %" FLA_IS ", ldwv %" FLA_IS ", nh %" FLA_IS ", ldwh %" FLA_IS "",*kacc22, *n, *ktop, *kbot, *nshfts, *ldh, *iloz, *ihiz, *ldz, *ldv, *ldu, *nv, *ldwv, *nh, *ldwh);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlaqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, aocl_int64_t *n,
-                        aocl_int64_t *ktop, aocl_int64_t *kbot, aocl_int64_t *nshfts,
-                        doublereal *sr, doublereal *si, doublereal *h__, aocl_int64_t *ldh,
-                        aocl_int64_t *iloz, aocl_int64_t *ihiz, doublereal *z__, aocl_int64_t *ldz,
-                        doublereal *v, aocl_int64_t *ldv, doublereal *u, aocl_int64_t *ldu,
-                        aocl_int64_t *nv, doublereal *wv, aocl_int64_t *ldwv, aocl_int64_t *nh,
-                        doublereal *wh, aocl_int64_t *ldwh)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaqr5 inputs: kacc22 %" FLA_IS ", n %" FLA_IS ", ktop %" FLA_IS
-                      ", kbot %" FLA_IS ", nshfts %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS
-                      ", ihiz %" FLA_IS ", ldz %" FLA_IS ", ldv %" FLA_IS ", ldu %" FLA_IS
-                      ", nv %" FLA_IS ", ldwv %" FLA_IS ", nh %" FLA_IS ", ldwh %" FLA_IS "",
-                      *kacc22, *n, *ktop, *kbot, *nshfts, *ldh, *iloz, *ihiz, *ldz, *ldv, *ldu, *nv,
-                      *ldwv, *nh, *ldwh);
     /* System generated locals */
     aocl_int64_t h_dim1, h_offset, u_dim1, u_offset, v_dim1, v_offset, wh_dim1, wh_offset, wv_dim1,
         wv_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
@@ -377,15 +342,15 @@ void aocl_lapack_dlaqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, ao
     /* Function Body */
     if(*nshfts < 2)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* ==== If the active block is empty or 1-by-1, then there */
     /* . is nothing to do. ==== */
     if(*ktop >= *kbot)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* ==== Shuffle shifts into pairs of real shifts and pairs */
     /* . of scomplex conjugate shifts assuming scomplex */
@@ -1027,7 +992,7 @@ void aocl_lapack_dlaqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, ao
         /* L180: */
     }
     /* ==== End of DLAQR5 ==== */
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
 }
 /* dlaqr5_ */

@@ -124,20 +124,12 @@
 void dlaqsp_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *s, doublereal *scond,
              doublereal *amax, char *equed)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlaqsp(uplo, n, ap, s, scond, amax, equed);
-#else
-    aocl_int64_t n_64 = *n;
-
-    aocl_lapack_dlaqsp(uplo, &n_64, ap, s, scond, amax, equed);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlaqsp inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlaqsp(char *uplo, aocl_int64_t *n, doublereal *ap, doublereal *s,
-                        doublereal *scond, doublereal *amax, char *equed)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaqsp inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     /* Local variables */
@@ -170,8 +162,8 @@ void aocl_lapack_dlaqsp(char *uplo, aocl_int64_t *n, doublereal *ap, doublereal 
     if(*n <= 0)
     {
         *(unsigned char *)equed = 'N';
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Initialize LARGE and SMALL. */
     small_val = dlamch_("Safe minimum") / dlamch_("Precision");
@@ -222,8 +214,8 @@ void aocl_lapack_dlaqsp(char *uplo, aocl_int64_t *n, doublereal *ap, doublereal 
         }
         *(unsigned char *)equed = 'Y';
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLAQSP */
 }
 /* dlaqsp_ */

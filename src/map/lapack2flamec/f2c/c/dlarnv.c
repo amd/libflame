@@ -95,21 +95,12 @@ the array */
 /** Generated wrapper function */
 void dlarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, doublereal *x)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlarnv(idist, iseed, n, x);
-#else
-    aocl_int64_t idist_64 = *idist;
-    aocl_int64_t n_64 = *n;
-
-    aocl_lapack_dlarnv(&idist_64, iseed, &n_64, x);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlarnv inputs: idist %" FLA_IS ", iseed %" FLA_IS ", n %" FLA_IS "",*idist, *iseed, *n);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlarnv(aocl_int64_t *idist, aocl_int_t *iseed, aocl_int64_t *n, doublereal *x)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlarnv inputs: idist %" FLA_IS ", iseed %" FLA_IS ", n %" FLA_IS "", *idist,
-                      *iseed, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
     /* Builtin functions */
@@ -193,8 +184,8 @@ void aocl_lapack_dlarnv(aocl_int64_t *idist, aocl_int_t *iseed, aocl_int64_t *n,
         }
         /* L40: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLARNV */
 }
 /* dlarnv_ */

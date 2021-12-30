@@ -103,25 +103,12 @@
 void dlargv_(aocl_int_t *n, doublereal *x, aocl_int_t *incx, doublereal *y, aocl_int_t *incy,
              doublereal *c__, aocl_int_t *incc)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlargv(n, x, incx, y, incy, c__, incc);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incy_64 = *incy;
-    aocl_int64_t incc_64 = *incc;
-
-    aocl_lapack_dlargv(&n_64, x, &incx_64, y, &incy_64, c__, &incc_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlargv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incy, *incc);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlargv(aocl_int64_t *n, doublereal *x, aocl_int64_t *incx, doublereal *y,
-                        aocl_int64_t *incy, doublereal *c__, aocl_int64_t *incc)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlargv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS
-                      ", incc %" FLA_IS "",
-                      *n, *incx, *incy, *incc);
     /* System generated locals */
     aocl_int64_t i__1;
     /* Builtin functions */
@@ -192,8 +179,8 @@ void aocl_lapack_dlargv(aocl_int64_t *n, doublereal *x, aocl_int64_t *incx, doub
         ix += *incx;
         /* L10: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLARGV */
 }
 /* dlargv_ */

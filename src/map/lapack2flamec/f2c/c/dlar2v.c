@@ -109,23 +109,12 @@
 void dlar2v_(aocl_int_t *n, doublereal *x, doublereal *y, doublereal *z__, aocl_int_t *incx,
              doublereal *c__, doublereal *s, aocl_int_t *incc)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlar2v(n, x, y, z__, incx, c__, s, incc);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incc_64 = *incc;
-
-    aocl_lapack_dlar2v(&n_64, x, y, z__, &incx_64, c__, s, &incc_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlar2v inputs: n %" FLA_IS ", incx %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incc);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlar2v(aocl_int64_t *n, doublereal *x, doublereal *y, doublereal *z__,
-                        aocl_int64_t *incx, doublereal *c__, doublereal *s, aocl_int64_t *incc)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlar2v inputs: n %" FLA_IS ", incx %" FLA_IS ", incc %" FLA_IS "", *n, *incx,
-                      *incc);
     /* System generated locals */
     aocl_int64_t i__1;
     /* Local variables */
@@ -178,7 +167,7 @@ void aocl_lapack_dlar2v(aocl_int64_t *n, doublereal *x, doublereal *y, doublerea
         /* L10: */
     }
     /* End of DLAR2V */
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
 }
 /* dlar2v_ */

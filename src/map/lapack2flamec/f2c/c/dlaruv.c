@@ -93,19 +93,12 @@ the array */
 /** Generated wrapper function */
 void dlaruv_(aocl_int_t *iseed, aocl_int_t *n, doublereal *x)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlaruv(iseed, n, x);
-#else
-    aocl_int64_t n_64 = *n;
-
-    aocl_lapack_dlaruv(iseed, &n_64, x);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlaruv inputs: iseed %" FLA_IS ", n %" FLA_IS "",*iseed, *n);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlaruv(aocl_int_t *iseed, aocl_int64_t *n, doublereal *x)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaruv inputs: iseed %" FLA_IS ", n %" FLA_IS "", *iseed, *n);
     /* Initialized data */
     static const integer mm[512] /* was [128][4] */
     =
@@ -194,12 +187,12 @@ void aocl_lapack_dlaruv(aocl_int_t *iseed, aocl_int64_t *n, doublereal *x)
         /* L10: */
     }
     /* Return final value of seed */
-    iseed[1] = (aocl_int_t)(it1);
-    iseed[2] = (aocl_int_t)(it2);
-    iseed[3] = (aocl_int_t)(it3);
-    iseed[4] = (aocl_int_t)(it4);
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    iseed[1] = it1;
+    iseed[2] = it2;
+    iseed[3] = it3;
+    iseed[4] = it4;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLARUV */
 }
 /* dlaruv_ */

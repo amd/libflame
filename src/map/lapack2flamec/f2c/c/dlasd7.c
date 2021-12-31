@@ -287,44 +287,12 @@ void dlasd7_(aocl_int_t *icompq, aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqr
              doublereal *givnum, aocl_int_t *ldgnum, doublereal *c__, doublereal *s,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlasd7(icompq, nl, nr, sqre, k, d__, z__, zw, vf, vfw, vl, vlw, alpha, beta, dsigma,
-                       idx, idxp, idxq, perm, givptr, givcol, ldgcol, givnum, ldgnum, c__, s, info);
-#else
-    aocl_int64_t icompq_64 = *icompq;
-    aocl_int64_t nl_64 = *nl;
-    aocl_int64_t nr_64 = *nr;
-    aocl_int64_t sqre_64 = *sqre;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t givptr_64 = *givptr;
-    aocl_int64_t ldgcol_64 = *ldgcol;
-    aocl_int64_t ldgnum_64 = *ldgnum;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlasd7(&icompq_64, &nl_64, &nr_64, &sqre_64, &k_64, d__, z__, zw, vf, vfw, vl, vlw,
-                       alpha, beta, dsigma, idx, idxp, idxq, perm, &givptr_64, givcol, &ldgcol_64,
-                       givnum, &ldgnum_64, c__, s, &info_64);
-
-    *k = (aocl_int_t)k_64;
-    *givptr = (aocl_int_t)givptr_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlasd7 inputs: icompq %" FLA_IS ", nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", idxq %" FLA_IS ", ldgcol %" FLA_IS ", ldgnum %" FLA_IS "",*icompq, *nl, *nr, *sqre, *idxq, *ldgcol, *ldgnum);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlasd7(aocl_int64_t *icompq, aocl_int64_t *nl, aocl_int64_t *nr,
-                        aocl_int64_t *sqre, aocl_int64_t *k, doublereal *d__, doublereal *z__,
-                        doublereal *zw, doublereal *vf, doublereal *vfw, doublereal *vl,
-                        doublereal *vlw, doublereal *alpha, doublereal *beta, doublereal *dsigma,
-                        aocl_int_t *idx, aocl_int_t *idxp, aocl_int_t *idxq, aocl_int_t *perm,
-                        aocl_int64_t *givptr, aocl_int_t *givcol, aocl_int64_t *ldgcol,
-                        doublereal *givnum, aocl_int64_t *ldgnum, doublereal *c__, doublereal *s,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasd7 inputs: icompq %" FLA_IS ", nl %" FLA_IS ", nr %" FLA_IS
-                      ", sqre %" FLA_IS ", idxq %" FLA_IS ", ldgcol %" FLA_IS ", ldgnum %" FLA_IS
-                      "",
-                      *icompq, *nl, *nr, *sqre, *idxq, *ldgcol, *ldgnum);
     /* System generated locals */
     aocl_int64_t givcol_dim1, givcol_offset, givnum_dim1, givnum_offset, i__1;
     doublereal d__1, d__2;
@@ -410,9 +378,9 @@ void aocl_lapack_dlasd7(aocl_int64_t *icompq, aocl_int64_t *nl, aocl_int64_t *nr
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DLASD7", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DLASD7", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     nlp1 = *nl + 1;
     nlp2 = *nl + 2;
@@ -658,9 +626,9 @@ L100: /* Sort the singular values into DSIGMA. The singular values which */
     i__1 = n - 1;
     aocl_blas_dcopy(&i__1, &vfw[2], &c__1, &vf[2], &c__1);
     i__1 = n - 1;
-    aocl_blas_dcopy(&i__1, &vlw[2], &c__1, &vl[2], &c__1);
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    dcopy_(&i__1, &vlw[2], &c__1, &vl[2], &c__1);
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLASD7 */
 }
 /* dlasd7_ */

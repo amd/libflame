@@ -213,32 +213,12 @@ void dlasd1_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, doublereal *d__, 
              doublereal *beta, doublereal *u, aocl_int_t *ldu, doublereal *vt, aocl_int_t *ldvt,
              aocl_int_t *idxq, aocl_int_t *iwork, doublereal *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlasd1(nl, nr, sqre, d__, alpha, beta, u, ldu, vt, ldvt, idxq, iwork, work, info);
-#else
-    aocl_int64_t nl_64 = *nl;
-    aocl_int64_t nr_64 = *nr;
-    aocl_int64_t sqre_64 = *sqre;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t ldvt_64 = *ldvt;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlasd1(&nl_64, &nr_64, &sqre_64, d__, alpha, beta, u, &ldu_64, vt, &ldvt_64, idxq,
-                       iwork, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlasd1 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", ldu %" FLA_IS ", ldvt %" FLA_IS "",*nl, *nr, *sqre, *ldu, *ldvt);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlasd1(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, doublereal *d__,
-                        doublereal *alpha, doublereal *beta, doublereal *u, aocl_int64_t *ldu,
-                        doublereal *vt, aocl_int64_t *ldvt, aocl_int_t *idxq, aocl_int_t *iwork,
-                        doublereal *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasd1 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS
-                      ", ldu %" FLA_IS ", ldvt %" FLA_IS "",
-                      *nl, *nr, *sqre, *ldu, *ldvt);
     /* System generated locals */
     aocl_int64_t u_dim1, u_offset, vt_dim1, vt_offset, i__1;
     doublereal d__1, d__2;
@@ -294,9 +274,9 @@ void aocl_lapack_dlasd1(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DLASD1", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DLASD1", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     n = *nl + *nr + 1;
     m = n + *sqre;
@@ -343,17 +323,17 @@ void aocl_lapack_dlasd1(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
                        &iwork[coltyp], &work[iz], info);
     if(*info != 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Unscale. */
     aocl_lapack_dlascl("G", &c__0, &c__0, &c_b7, &orgnrm, &n, &c__1, &d__[1], &n, info);
     /* Prepare the IDXQ sorting permutation. */
     n1 = k;
     n2 = n - k;
-    aocl_lapack_dlamrg(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    dlamrg_(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLASD1 */
 }
 /* dlasd1_ */

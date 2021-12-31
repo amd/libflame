@@ -88,23 +88,12 @@
 /** Generated wrapper function */
 void dlascl2_(aocl_int_t *m, aocl_int_t *n, doublereal *d__, doublereal *x, aocl_int_t *ldx)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlascl2(m, n, d__, x, ldx);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldx_64 = *ldx;
-
-    aocl_lapack_dlascl2(&m_64, &n_64, d__, x, &ldx_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlascl2 inputs: m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS "",*m, *n, *ldx);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlascl2(aocl_int64_t *m, aocl_int64_t *n, doublereal *d__, doublereal *x,
-                         aocl_int64_t *ldx)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlascl2 inputs: m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS "", *m, *n,
-                      *ldx);
     /* System generated locals */
     aocl_int64_t x_dim1, x_offset, i__1, i__2;
     /* Local variables */
@@ -136,7 +125,7 @@ void aocl_lapack_dlascl2(aocl_int64_t *m, aocl_int64_t *n, doublereal *d__, doub
             x[i__ + j * x_dim1] *= d__[i__];
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
 }
 /* dlascl2_ */

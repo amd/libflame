@@ -225,39 +225,12 @@ void dlasd3_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, do
              aocl_int_t *ldvt2, aocl_int_t *idxc, aocl_int_t *ctot, doublereal *z__,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlasd3(nl, nr, sqre, k, d__, q, ldq, dsigma, u, ldu, u2, ldu2, vt, ldvt, vt2, ldvt2,
-                       idxc, ctot, z__, info);
-#else
-    aocl_int64_t nl_64 = *nl;
-    aocl_int64_t nr_64 = *nr;
-    aocl_int64_t sqre_64 = *sqre;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t ldu2_64 = *ldu2;
-    aocl_int64_t ldvt_64 = *ldvt;
-    aocl_int64_t ldvt2_64 = *ldvt2;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlasd3(&nl_64, &nr_64, &sqre_64, &k_64, d__, q, &ldq_64, dsigma, u, &ldu_64, u2,
-                       &ldu2_64, vt, &ldvt_64, vt2, &ldvt2_64, idxc, ctot, z__, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlasd3 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", k %" FLA_IS ", ldq %" FLA_IS ", ldu %" FLA_IS ", ldu2 %" FLA_IS ", ldvt %" FLA_IS ", ldvt2 %" FLA_IS ", idxc %" FLA_IS ", ctot %" FLA_IS "",*nl, *nr, *sqre, *k, *ldq, *ldu, *ldu2, *ldvt, *ldvt2, *idxc, *ctot);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, aocl_int64_t *k,
-                        doublereal *d__, doublereal *q, aocl_int64_t *ldq, doublereal *dsigma,
-                        doublereal *u, aocl_int64_t *ldu, doublereal *u2, aocl_int64_t *ldu2,
-                        doublereal *vt, aocl_int64_t *ldvt, doublereal *vt2, aocl_int64_t *ldvt2,
-                        aocl_int_t *idxc, aocl_int_t *ctot, doublereal *z__, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasd3 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", k %" FLA_IS
-                      ", ldq %" FLA_IS ", ldu %" FLA_IS ", ldu2 %" FLA_IS ", ldvt %" FLA_IS
-                      ", ldvt2 %" FLA_IS ", idxc %" FLA_IS ", ctot %" FLA_IS "",
-                      *nl, *nr, *sqre, *k, *ldq, *ldu, *ldu2, *ldvt, *ldvt2, *idxc, *ctot);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, u_dim1, u_offset, u2_dim1, u2_offset, vt_dim1, vt_offset,
         vt2_dim1, vt2_offset, i__1, i__2;
@@ -358,9 +331,9 @@ void aocl_lapack_dlasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DLASD3", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DLASD3", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*k == 1)
@@ -380,8 +353,33 @@ void aocl_lapack_dlasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
                 /* L10: */
             }
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
+    }
+    /* Modify values DSIGMA(i) to make sure all DSIGMA(i)-DSIGMA(j) can */
+    /* be computed with high relative accuracy (barring over/underflow). */
+    /* This is a problem on machines without a guard digit in */
+    /* add/subtract (Cray XMP, Cray YMP, Cray C 90 and Cray 2). */
+    /* The following code replaces DSIGMA(I) by 2*DSIGMA(I)-DSIGMA(I), */
+    /* which on any of these machines zeros out the bottommost */
+    /* bit of DSIGMA(I) if it is 1;
+    this makes the subsequent */
+    /* subtractions DSIGMA(I)-DSIGMA(J) unproblematic when cancellation */
+    /* occurs. On binary machines with a guard digit (almost all */
+    /* machines) it does not change DSIGMA(I) at all. On hexadecimal */
+    /* and decimal machines with a guard digit, it slightly */
+    /* changes the bottommost bits of DSIGMA(I). It does not account */
+    /* for hexadecimal or decimal machines without guard digits */
+    /* (we know of none). We use a subroutine call to compute */
+    /* 2*DSIGMA(I) to prevent optimizing compilers from eliminating */
+    /* this code. */
+    i__1 = *k;
+    for (i__ = 1;
+            i__ <= i__1;
+            ++i__)
+    {
+        dsigma[i__] = dlamc3_(&dsigma[i__], &dsigma[i__]) - dsigma[i__];
+        /* L20: */
     }
     /* Keep a copy of Z. */
     aocl_blas_dcopy(k, &z__[1], &c__1, &q[q_offset], &c__1);
@@ -398,8 +396,8 @@ void aocl_lapack_dlasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
         /* If the zero finder fails, report the convergence failure. */
         if(*info != 0)
         {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         /* L30: */
     }
@@ -506,10 +504,9 @@ L100:
     /* Update the right singular vector matrix. */
     if(*k == 2)
     {
-        aocl_blas_dgemm("N", "N", k, &m, k, &c_b12, &q[q_offset], ldq, &vt2[vt2_offset], ldvt2,
-                        &c_b25, &vt[vt_offset], ldvt);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        dgemm_("N", "N", k, &m, k, &c_b13, &q[q_offset], ldq, &vt2[vt2_offset] , ldvt2, &c_b26, &vt[vt_offset], ldvt);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     ktemp = ctot[1] + 1;
     aocl_blas_dgemm("N", "N", k, &nlp1, &ktemp, &c_b12, &q[q_dim1 + 1], ldq, &vt2[vt2_dim1 + 1],
@@ -539,10 +536,9 @@ L100:
         }
     }
     ctemp = ctot[2] + 1 + ctot[3];
-    aocl_blas_dgemm("N", "N", k, &nrp1, &ctemp, &c_b12, &q[ktemp * q_dim1 + 1], ldq,
-                    &vt2[ktemp + nlp2 * vt2_dim1], ldvt2, &c_b25, &vt[nlp2 * vt_dim1 + 1], ldvt);
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    dgemm_("N", "N", k, &nrp1, &ctemp, &c_b13, &q[ktemp * q_dim1 + 1], ldq, & vt2[ktemp + nlp2 * vt2_dim1], ldvt2, &c_b26, &vt[nlp2 * vt_dim1 + 1], ldvt);
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLASD3 */
 }
 /* dlasd3_ */

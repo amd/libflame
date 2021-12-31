@@ -115,20 +115,12 @@
 void dlasd5_(aocl_int_t *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho,
              doublereal *dsigma, doublereal *work)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlasd5(i__, d__, z__, delta, rho, dsigma, work);
-#else
-    aocl_int64_t i___64 = *i__;
-
-    aocl_lapack_dlasd5(&i___64, d__, z__, delta, rho, dsigma, work);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlasd5 inputs: i__ %" FLA_IS "",*i__);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlasd5(aocl_int64_t *i__, doublereal *d__, doublereal *z__, doublereal *delta,
-                        doublereal *rho, doublereal *dsigma, doublereal *work)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasd5 inputs: i__ %" FLA_IS "", *i__);
     /* System generated locals */
     doublereal d__1;
     /* Builtin functions */
@@ -237,8 +229,8 @@ void aocl_lapack_dlasd5(aocl_int64_t *i__, doublereal *d__, doublereal *z__, dou
         /* DELTA( 1 ) = DELTA( 1 ) / TEMP */
         /* DELTA( 2 ) = DELTA( 2 ) / TEMP */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLASD5 */
 }
 /* dlasd5_ */

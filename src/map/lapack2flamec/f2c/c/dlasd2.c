@@ -279,41 +279,12 @@ void dlasd2_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, do
              doublereal *vt2, aocl_int_t *ldvt2, aocl_int_t *idxp, aocl_int_t *idx,
              aocl_int_t *idxc, aocl_int_t *idxq, aocl_int_t *coltyp, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlasd2(nl, nr, sqre, k, d__, z__, alpha, beta, u, ldu, vt, ldvt, dsigma, u2, ldu2,
-                       vt2, ldvt2, idxp, idx, idxc, idxq, coltyp, info);
-#else
-    aocl_int64_t nl_64 = *nl;
-    aocl_int64_t nr_64 = *nr;
-    aocl_int64_t sqre_64 = *sqre;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t ldvt_64 = *ldvt;
-    aocl_int64_t ldu2_64 = *ldu2;
-    aocl_int64_t ldvt2_64 = *ldvt2;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlasd2(&nl_64, &nr_64, &sqre_64, &k_64, d__, z__, alpha, beta, u, &ldu_64, vt,
-                       &ldvt_64, dsigma, u2, &ldu2_64, vt2, &ldvt2_64, idxp, idx, idxc, idxq,
-                       coltyp, &info_64);
-
-    *k = (aocl_int_t)k_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlasd2 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", ldu %" FLA_IS ", ldvt %" FLA_IS ", ldu2 %" FLA_IS ", ldvt2 %" FLA_IS ", idxq %" FLA_IS "",*nl, *nr, *sqre, *ldu, *ldvt, *ldu2, *ldvt2, *idxq);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, aocl_int64_t *k,
-                        doublereal *d__, doublereal *z__, doublereal *alpha, doublereal *beta,
-                        doublereal *u, aocl_int64_t *ldu, doublereal *vt, aocl_int64_t *ldvt,
-                        doublereal *dsigma, doublereal *u2, aocl_int64_t *ldu2, doublereal *vt2,
-                        aocl_int64_t *ldvt2, aocl_int_t *idxp, aocl_int_t *idx, aocl_int_t *idxc,
-                        aocl_int_t *idxq, aocl_int_t *coltyp, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasd2 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS
-                      ", ldu %" FLA_IS ", ldvt %" FLA_IS ", ldu2 %" FLA_IS ", ldvt2 %" FLA_IS
-                      ", idxq %" FLA_IS "",
-                      *nl, *nr, *sqre, *ldu, *ldvt, *ldu2, *ldvt2, *idxq);
     /* System generated locals */
     aocl_int64_t u_dim1, u_offset, u2_dim1, u2_offset, vt_dim1, vt_offset, vt2_dim1, vt2_offset,
         i__1;
@@ -413,9 +384,9 @@ void aocl_lapack_dlasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DLASD2", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DLASD2", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     nlp1 = *nl + 1;
     nlp2 = *nl + 2;
@@ -732,8 +703,8 @@ L120: /* Count up the total number of the various types of columns, then */
         coltyp[j] = (aocl_int_t)(ctot[j - 1]);
         /* L190: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLASD2 */
 }
 /* dlasd2_ */

@@ -157,32 +157,12 @@ void dlasd0_(aocl_int_t *n, aocl_int_t *sqre, doublereal *d__, doublereal *e, do
              aocl_int_t *ldu, doublereal *vt, aocl_int_t *ldvt, aocl_int_t *smlsiz,
              aocl_int_t *iwork, doublereal *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlasd0(n, sqre, d__, e, u, ldu, vt, ldvt, smlsiz, iwork, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t sqre_64 = *sqre;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t ldvt_64 = *ldvt;
-    aocl_int64_t smlsiz_64 = *smlsiz;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlasd0(&n_64, &sqre_64, d__, e, u, &ldu_64, vt, &ldvt_64, &smlsiz_64, iwork, work,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlasd0 inputs: n %" FLA_IS ", sqre %" FLA_IS ", ldu %" FLA_IS ", ldvt %" FLA_IS ", smlsiz %" FLA_IS "",*n, *sqre, *ldu, *ldvt, *smlsiz);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlasd0(aocl_int64_t *n, aocl_int64_t *sqre, doublereal *d__, doublereal *e,
-                        doublereal *u, aocl_int64_t *ldu, doublereal *vt, aocl_int64_t *ldvt,
-                        aocl_int64_t *smlsiz, aocl_int_t *iwork, doublereal *work,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasd0 inputs: n %" FLA_IS ", sqre %" FLA_IS ", ldu %" FLA_IS
-                      ", ldvt %" FLA_IS ", smlsiz %" FLA_IS "",
-                      *n, *sqre, *ldu, *ldvt, *smlsiz);
     /* System generated locals */
     aocl_int64_t u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
     /* Builtin functions */
@@ -246,17 +226,16 @@ void aocl_lapack_dlasd0(aocl_int64_t *n, aocl_int64_t *sqre, doublereal *d__, do
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DLASD0", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DLASD0", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* If the input matrix is too small, call DLASDQ to find the SVD. */
     if(*n <= *smlsiz)
     {
-        aocl_lapack_dlasdq("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt,
-                           &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        dlasdq_("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt, &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Set up the computation tree. */
     inode = 1;
@@ -291,8 +270,8 @@ void aocl_lapack_dlasd0(aocl_int64_t *n, aocl_int64_t *sqre, doublereal *d__, do
                            &u[nlf + nlf * u_dim1], ldu, &work[1], info);
         if(*info != 0)
         {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         itemp = idxq + nlf - 2;
         i__2 = nl;
@@ -315,8 +294,8 @@ void aocl_lapack_dlasd0(aocl_int64_t *n, aocl_int64_t *sqre, doublereal *d__, do
                            &u[nrf + nrf * u_dim1], ldu, &work[1], info);
         if(*info != 0)
         {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         itemp = idxq + ic;
         i__2 = nr;
@@ -367,15 +346,15 @@ void aocl_lapack_dlasd0(aocl_int64_t *n, aocl_int64_t *sqre, doublereal *d__, do
                                &work[1], info);
             if(*info != 0)
             {
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             /* L40: */
         }
         /* L50: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLASD0 */
 }
 /* dlasd0_ */

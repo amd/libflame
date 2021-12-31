@@ -267,13 +267,13 @@ void dlasr_(char *side, char *pivot, char *direct, aocl_int_t *m, aocl_int_t *n,
     if(info != 0)
     {
         xerbla_("DLASR ", &info);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
     if(lsame_(side, "L", 1, 1))

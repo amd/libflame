@@ -124,20 +124,12 @@
 /** Generated wrapper function */
 void dlassq_(aocl_int_t *n, doublereal *x, aocl_int_t *incx, doublereal *scl, doublereal *sumsq)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlassq(n, x, incx, scl, sumsq);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-
-    aocl_lapack_dlassq(&n_64, x, &incx_64, scl, sumsq);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlassq inputs: n %" FLA_IS ", incx %" FLA_IS "",*n, *incx);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlassq(aocl_int64_t *n, doublereal *x, aocl_int64_t *incx, doublereal *scl, doublereal *sumsq)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlassq inputs: n %" FLA_IS ", incx %" FLA_IS "", *n, *incx);
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal r__1, r__2;
@@ -257,54 +249,8 @@ void aocl_lapack_dlassq(aocl_int64_t *n, doublereal *x, aocl_int64_t *incx, doub
             amed += (r__1 * r__1) * *sumsq;
         }
     }
-    /* Combine abig and amed or amed and asml if more than one */
-    /* accumulator was used. */
-    if(abig > 0.)
-    {
-        if(amed > 0. || amed != amed)
-        {
-            abig += amed * sbig * sbig;
-        }
-        *scl = 1. / sbig;
-        *sumsq = abig;
-    }
-    else if(asml > 0.)
-    {
-        /* Combine amed and asml if asml > 0. */
-        if(amed > 0. || amed != amed)
-        {
-            amed = sqrt(amed);
-            asml = sqrt(asml) / ssml;
-            if(asml > amed)
-            {
-                ymin = amed;
-                ymax = asml;
-            }
-            else
-            {
-                ymin = asml;
-                ymax = amed;
-            }
-            *scl = 1.;
-            /* Computing 2nd power */
-            r__1 = ymax;
-            /* Computing 2nd power */
-            r__2 = ymin / ymax;
-            *sumsq = r__1 * r__1 * (r__2 * r__2 + 1.);
-        }
-        else
-        {
-            *scl = 1. / ssml;
-            *sumsq = asml;
-        }
-    }
-    else
-    {
-        /* Otherwise all values are mid-range or zero */
-        *scl = 1.;
-        *sumsq = amed;
-    }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
+    /* End of DLASSQ */
 }
 /* dlassq_ */

@@ -135,9 +135,7 @@ on exit, D */
 /* ===================================================================== */
 /* Subroutine */
 
-/** Generated wrapper function */
-void dsteqr_(char *compz, aocl_int_t *n, doublereal *d__, doublereal *e, doublereal *z__,
-             aocl_int_t *ldz, doublereal *work, aocl_int_t *info)
+int dsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal *z__, integer *ldz, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if AOCL_DTL_LOG_ENABLE 
@@ -145,8 +143,8 @@ void dsteqr_(char *compz, aocl_int_t *n, doublereal *d__, doublereal *e, doubler
     snprintf(buffer, 256,"dsteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-    /* System generated locals */
-    aocl_int64_t z_dim1, z_offset, i__1, i__2;
+ /* System generated locals */
+    integer z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2;
     /* Builtin functions */
     double sqrt(doublereal), d_sign(doublereal *, doublereal *);
@@ -193,16 +191,6 @@ void dsteqr_(char *compz, aocl_int_t *n, doublereal *d__, doublereal *e, doubler
     /* .. */
     /* .. Intrinsic Functions .. */
     /* .. */
-
-    /* .. Executable Statements .. */
-    /* Test the input parameters. */
-    /* Parameter adjustments */
-    --d__;
-    --e;
-    z_dim1 = *ldz;
-    z_offset = 1 + z_dim1;
-    z__ -= z_offset;
-    --work;
 
     /* Function Body */
     *info = 0;
@@ -257,7 +245,64 @@ void dsteqr_(char *compz, aocl_int_t *n, doublereal *d__, doublereal *e, doubler
         return 0;
     }
 
-    if(lsame_(compz, "I", 1, 1) && *n > 37)
+if(lsame_(compz, "I") && *n > 37 )
+{
+    integer lwork, liwork,iwkopt, *iwork;
+    double wkopt,*worker;
+    lwork=-1;
+    liwork=-1;
+    integer N=*n,i;
+    integer LDZ=*ldz;
+    for( i = 0; 
+            i < N;
+            i++)
+    {
+        z__[i * LDZ + i] = d__[i];
+    }
+     
+    for( i = 0;
+            i < N-1;
+            i++)
+    {
+        /* Sub-diagonal */
+        z__[i * LDZ + i + LDZ] = e[i];
+        /* Super-diagonal */
+        z__[i * LDZ + i + 1] = e[i];
+    }
+
+    dsteqr_helper_("V", "L", &N, z__, &LDZ, d__,  &wkopt,&lwork, &iwkopt, &liwork, &info);
+    lwork=(int)wkopt;
+    worker = (double*)malloc( lwork*sizeof(double) );
+    liwork = iwkopt;
+    iwork =  (int*)malloc( liwork*sizeof(int) );
+    dsteqr_helper_("V", "L", &N, z__, &LDZ, d__,  worker,&lwork, iwork, &liwork, &info);
+AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
+  }
+else
+  {
+   
+    /* .. Executable Statements .. */
+    /* Test the input parameters. */
+    /* Parameter adjustments */
+    --d__;
+    --e;
+    z_dim1 = *ldz;
+    z_offset = 1 + z_dim1;
+    z__ -= z_offset;
+    --work;
+    /* Determine the unit roundoff and over/underflow thresholds. */
+    eps = dlamch_("E");
+    /* Computing 2nd power */
+    d__1 = eps;
+    eps2 = d__1 * d__1;
+    safmin = dlamch_("S");
+    safmax = 1. / safmin;
+    ssfmax = sqrt(safmax) / 3.;
+    ssfmin = sqrt(safmin) / eps2;
+    /* Compute the eigenvalues and eigenvectors of the tridiagonal */
+    /* matrix. */
+    if (icompz == 2)
     {
         aocl_int64_t lwork, liwork;
         aocl_int_t iwkopt, *iwork;
@@ -673,6 +718,7 @@ L90:
 L190:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return 0;
+}
     /* End of DSTEQR */
 }
 /* dsteqr_ */

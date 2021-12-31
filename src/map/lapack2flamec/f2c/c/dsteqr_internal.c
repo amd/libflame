@@ -1,31 +1,22 @@
-/* ../netlib/dsteqr.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dsteqr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b9 = 0.;
 static doublereal c_b10 = 1.;
-static aocl_int64_t c__0 = 0;
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c__2 = 2;
+static integer c__0 = 0;
+static integer c__1 = 1;
+static integer c__2 = 2;
 /* > \brief \b DSTEQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DSTEQR + dependencies */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsteqr_internal.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsteqr_internal. f"> */
 /* > [TGZ]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsteqr_internal.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsteqr_internal. f"> */
 /* > [ZIP]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsteqr_internal.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsteqr_internal. f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -101,12 +92,12 @@ static aocl_int64_t c__2 = 2;
 /* > \verbatim */
 /* > LDZ is INTEGER */
 /* > The leading dimension of the array Z. LDZ >= 1, and if */
-/* > eigenvectors are desired, then LDZ >= fla_max(1,N). */
+/* > eigenvectors are desired, then LDZ >= max(1,N). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WORK */
 /* > \verbatim */
-/* > WORK is DOUBLE PRECISION array, dimension (fla_max(1,2*N-2)) */
+/* > WORK is DOUBLE PRECISION array, dimension (max(1,2*N-2)) */
 /* > If COMPZ = 'N', then WORK is not referenced. */
 /* > \endverbatim */
 /* > */
@@ -135,44 +126,54 @@ on exit, D */
 /* ===================================================================== */
 /* Subroutine */
 
-void dsteqr_internal_(char *compz, aocl_int64_t *n, doublereal *d__, doublereal *e, doublereal *z__,
-                      aocl_int64_t *ldz, doublereal *work, aocl_int64_t *info)
+int dsteqr_internal_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal *z__, integer *ldz, doublereal *work, integer *info)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n, *ldz);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dsteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
 
     /* System generated locals */
-    aocl_int64_t z_dim1, z_offset, i__1, i__2;
+    integer z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2;
     /* Builtin functions */
     double sqrt(doublereal), d_sign(doublereal *, doublereal *);
     /* Local variables */
     doublereal b, c__, f, g;
-    aocl_int64_t i__, j, k, l, m;
+    integer i__, j, k, l, m;
     doublereal p, r__, s;
-    aocl_int64_t l1, ii, mm, lm1, mm1, nm1;
+    integer l1, ii, mm, lm1, mm1, nm1;
     doublereal rt1, rt2, eps;
-    aocl_int64_t lsv;
+    integer lsv;
     doublereal tst, eps2;
-    aocl_int64_t lend, jtot;
+    integer lend, jtot;
     extern /* Subroutine */
-        void
-        dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    int dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal anorm;
-    extern void dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-              doublereal *);
-    aocl_int64_t lendm1, lendp1;
+    extern /* Subroutine */
+    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    integer lendm1, lendp1;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
-    aocl_int64_t iscale;
+    integer iscale;
+    extern /* Subroutine */
+    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-        void
-        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal safmax;
-    aocl_int64_t lendsv;
+    extern /* Subroutine */
+    int xerbla_(char *, integer *);
+    extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
+    extern /* Subroutine */
+    int dlasrt_(char *, integer *, doublereal *, integer *);
+    integer lendsv;
     doublereal ssfmin;
-    aocl_int64_t nmaxit, icompz;
+    integer nmaxit, icompz;
     doublereal ssfmax;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -204,15 +205,15 @@ void dsteqr_internal_(char *compz, aocl_int64_t *n, doublereal *d__, doublereal 
     --work;
     /* Function Body */
     *info = 0;
-    if(lsame_(compz, "N", 1, 1))
+    if (lsame_(compz, "N"))
     {
         icompz = 0;
     }
-    else if(lsame_(compz, "V", 1, 1))
+    else if (lsame_(compz, "V"))
     {
         icompz = 1;
     }
-    else if(lsame_(compz, "I", 1, 1))
+    else if (lsame_(compz, "I"))
     {
         icompz = 2;
     }
@@ -220,39 +221,39 @@ void dsteqr_internal_(char *compz, aocl_int64_t *n, doublereal *d__, doublereal 
     {
         icompz = -1;
     }
-    if(icompz < 0)
+    if (icompz < 0)
     {
         *info = -1;
     }
-    else if(*n < 0)
+    else if (*n < 0)
     {
         *info = -2;
     }
-    else if(*ldz < 1 || icompz > 0 && *ldz < fla_max(1, *n))
+    else if (*ldz < 1 || icompz > 0 && *ldz < max(1,*n))
     {
         *info = -6;
     }
-    if(*info != 0)
+    if (*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DSTEQR", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DSTEQR", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
-    if(*n == 0)
+    if (*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
-    if(*n == 1)
+    if (*n == 1)
     {
-        if(icompz == 2)
+        if (icompz == 2)
         {
             z__[z_dim1 + 1] = 1.;
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Determine the unit roundoff and over/underflow thresholds. */
     eps = dlamch_("E");
@@ -265,9 +266,9 @@ void dsteqr_internal_(char *compz, aocl_int64_t *n, doublereal *d__, doublereal 
     ssfmin = sqrt(safmin) / eps2;
     /* Compute the eigenvalues and eigenvectors of the tridiagonal */
     /* matrix. */
-    if(icompz == 2)
+    if (icompz == 2)
     {
-        aocl_lapack_dlaset("Full", n, n, &c_b9, &c_b10, &z__[z_offset], ldz);
+        dlaset_("Full", n, n, &c_b9, &c_b10, &z__[z_offset], ldz);
     }
     nmaxit = *n * 30;
     jtot = 0;
@@ -277,26 +278,27 @@ void dsteqr_internal_(char *compz, aocl_int64_t *n, doublereal *d__, doublereal 
     l1 = 1;
     nm1 = *n - 1;
 L10:
-    if(l1 > *n)
+    if (l1 > *n)
     {
         goto L160;
     }
-    if(l1 > 1)
+    if (l1 > 1)
     {
         e[l1 - 1] = 0.;
     }
-    if(l1 <= nm1)
+    if (l1 <= nm1)
     {
         i__1 = nm1;
-        for(m = l1; m <= i__1; ++m)
+        for (m = l1;
+                m <= i__1;
+                ++m)
         {
             tst = (d__1 = e[m], f2c_dabs(d__1));
-            if(tst == 0.)
+            if (tst == 0.)
             {
                 goto L30;
             }
-            if(tst <= sqrt((d__1 = d__[m], f2c_dabs(d__1)))
-                          * sqrt((d__2 = d__[m + 1], f2c_dabs(d__2))) * eps)
+            if (tst <= sqrt((d__1 = d__[m], f2c_dabs(d__1))) * sqrt((d__2 = d__[m + 1], f2c_dabs(d__2))) * eps)
             {
                 e[m] = 0.;
                 goto L30;
@@ -311,57 +313,57 @@ L30:
     lend = m;
     lendsv = lend;
     l1 = m + 1;
-    if(lend == l)
+    if (lend == l)
     {
         goto L10;
     }
     /* Scale submatrix in rows and columns L to LEND */
     i__1 = lend - l + 1;
-    anorm = aocl_lapack_dlanst("M", &i__1, &d__[l], &e[l]);
+    anorm = dlanst_("M", &i__1, &d__[l], &e[l]);
     iscale = 0;
-    if(anorm == 0.)
+    if (anorm == 0.)
     {
         goto L10;
     }
-    if(anorm > ssfmax)
+    if (anorm > ssfmax)
     {
         iscale = 1;
         i__1 = lend - l + 1;
-        aocl_lapack_dlascl("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &d__[l], n, info);
+        dlascl_("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &d__[l], n, info);
         i__1 = lend - l;
-        aocl_lapack_dlascl("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &e[l], n, info);
+        dlascl_("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &e[l], n, info);
     }
-    else if(anorm < ssfmin)
+    else if (anorm < ssfmin)
     {
         iscale = 2;
         i__1 = lend - l + 1;
-        aocl_lapack_dlascl("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &d__[l], n, info);
+        dlascl_("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &d__[l], n, info);
         i__1 = lend - l;
-        aocl_lapack_dlascl("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info);
+        dlascl_("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info);
     }
     /* Choose between QL and QR iteration */
-    if((d__1 = d__[lend], f2c_dabs(d__1)) < (d__2 = d__[l], f2c_dabs(d__2)))
+    if ((d__1 = d__[lend], f2c_dabs(d__1)) < (d__2 = d__[l], f2c_dabs(d__2)))
     {
         lend = lsv;
         l = lendsv;
     }
-    if(lend > l)
+    if (lend > l)
     {
         /* QL Iteration */
         /* Look for small subdiagonal element. */
-    L40:
-        if(l != lend)
+L40:
+        if (l != lend)
         {
             lendm1 = lend - 1;
             i__1 = lendm1;
-            for(m = l; m <= i__1; ++m)
+            for (m = l;
+                    m <= i__1;
+                    ++m)
             {
                 /* Computing 2nd power */
                 d__2 = (d__1 = e[m], f2c_dabs(d__1));
                 tst = d__2 * d__2;
-                if(tst
-                   <= eps2 * (d__1 = d__[m], f2c_dabs(d__1)) * (d__2 = d__[m + 1], f2c_dabs(d__2))
-                          + safmin)
+                if (tst <= eps2 * (d__1 = d__[m], f2c_dabs(d__1)) * (d__2 = d__[m + 1], f2c_dabs(d__2)) + safmin)
                 {
                     goto L60;
                 }
@@ -369,27 +371,26 @@ L30:
             }
         }
         m = lend;
-    L60:
-        if(m < lend)
+L60:
+        if (m < lend)
         {
             e[m] = 0.;
         }
         p = d__[l];
-        if(m == l)
+        if (m == l)
         {
             goto L80;
         }
         /* If remaining matrix is 2-by-2, use DLAE2 or SLAEV2 */
         /* to compute its eigensystem. */
-        if(m == l + 1)
+        if (m == l + 1)
         {
-            if(icompz > 0)
+            if (icompz > 0)
             {
                 dlaev2_(&d__[l], &e[l], &d__[l + 1], &rt1, &rt2, &c__, &s);
                 work[l] = c__;
                 work[*n - 1 + l] = s;
-                aocl_lapack_dlasr("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l],
-                                  &z__[l * z_dim1 + 1], ldz);
+                dlasr_("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l], & z__[l * z_dim1 + 1], ldz);
             }
             else
             {
@@ -399,13 +400,13 @@ L30:
             d__[l + 1] = rt2;
             e[l] = 0.;
             l += 2;
-            if(l <= lend)
+            if (l <= lend)
             {
                 goto L40;
             }
             goto L140;
         }
-        if(jtot == nmaxit)
+        if (jtot == nmaxit)
         {
             goto L140;
         }
@@ -420,12 +421,14 @@ L30:
         /* Inner loop */
         mm1 = m - 1;
         i__1 = l;
-        for(i__ = mm1; i__ >= i__1; --i__)
+        for (i__ = mm1;
+                i__ >= i__1;
+                --i__)
         {
             f = s * e[i__];
             b = c__ * e[i__];
             dlartg_(&g, &f, &c__, &s, &r__);
-            if(i__ != m - 1)
+            if (i__ != m - 1)
             {
                 e[i__ + 1] = r__;
             }
@@ -435,7 +438,7 @@ L30:
             d__[i__ + 1] = g + p;
             g = c__ * r__ - b;
             /* If eigenvectors are desired, then save rotations. */
-            if(icompz > 0)
+            if (icompz > 0)
             {
                 work[i__] = c__;
                 work[*n - 1 + i__] = -s;
@@ -443,20 +446,19 @@ L30:
             /* L70: */
         }
         /* If eigenvectors are desired, then apply saved rotations. */
-        if(icompz > 0)
+        if (icompz > 0)
         {
             mm = m - l + 1;
-            aocl_lapack_dlasr("R", "V", "B", n, &mm, &work[l], &work[*n - 1 + l],
-                              &z__[l * z_dim1 + 1], ldz);
+            dlasr_("R", "V", "B", n, &mm, &work[l], &work[*n - 1 + l], &z__[l * z_dim1 + 1], ldz);
         }
         d__[l] -= p;
         e[l] = g;
         goto L40;
         /* Eigenvalue found. */
-    L80:
+L80:
         d__[l] = p;
         ++l;
-        if(l <= lend)
+        if (l <= lend)
         {
             goto L40;
         }
@@ -466,19 +468,19 @@ L30:
     {
         /* QR Iteration */
         /* Look for small superdiagonal element. */
-    L90:
-        if(l != lend)
+L90:
+        if (l != lend)
         {
             lendp1 = lend + 1;
             i__1 = lendp1;
-            for(m = l; m >= i__1; --m)
+            for (m = l;
+                    m >= i__1;
+                    --m)
             {
                 /* Computing 2nd power */
                 d__2 = (d__1 = e[m - 1], f2c_dabs(d__1));
                 tst = d__2 * d__2;
-                if(tst
-                   <= eps2 * (d__1 = d__[m], f2c_dabs(d__1)) * (d__2 = d__[m - 1], f2c_dabs(d__2))
-                          + safmin)
+                if (tst <= eps2 * (d__1 = d__[m], f2c_dabs(d__1)) * (d__2 = d__[m - 1], f2c_dabs(d__2)) + safmin)
                 {
                     goto L110;
                 }
@@ -486,27 +488,26 @@ L30:
             }
         }
         m = lend;
-    L110:
-        if(m > lend)
+L110:
+        if (m > lend)
         {
             e[m - 1] = 0.;
         }
         p = d__[l];
-        if(m == l)
+        if (m == l)
         {
             goto L130;
         }
         /* If remaining matrix is 2-by-2, use DLAE2 or SLAEV2 */
         /* to compute its eigensystem. */
-        if(m == l - 1)
+        if (m == l - 1)
         {
-            if(icompz > 0)
+            if (icompz > 0)
             {
-                dlaev2_(&d__[l - 1], &e[l - 1], &d__[l], &rt1, &rt2, &c__, &s);
+                dlaev2_(&d__[l - 1], &e[l - 1], &d__[l], &rt1, &rt2, &c__, &s) ;
                 work[m] = c__;
                 work[*n - 1 + m] = s;
-                aocl_lapack_dlasr("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m],
-                                  &z__[(l - 1) * z_dim1 + 1], ldz);
+                dlasr_("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m], & z__[(l - 1) * z_dim1 + 1], ldz);
             }
             else
             {
@@ -516,13 +517,13 @@ L30:
             d__[l] = rt2;
             e[l - 1] = 0.;
             l += -2;
-            if(l >= lend)
+            if (l >= lend)
             {
                 goto L90;
             }
             goto L140;
         }
-        if(jtot == nmaxit)
+        if (jtot == nmaxit)
         {
             goto L140;
         }
@@ -537,12 +538,14 @@ L30:
         /* Inner loop */
         lm1 = l - 1;
         i__1 = lm1;
-        for(i__ = m; i__ <= i__1; ++i__)
+        for (i__ = m;
+                i__ <= i__1;
+                ++i__)
         {
             f = s * e[i__];
             b = c__ * e[i__];
             dlartg_(&g, &f, &c__, &s, &r__);
-            if(i__ != m)
+            if (i__ != m)
             {
                 e[i__ - 1] = r__;
             }
@@ -552,7 +555,7 @@ L30:
             d__[i__] = g + p;
             g = c__ * r__ - b;
             /* If eigenvectors are desired, then save rotations. */
-            if(icompz > 0)
+            if (icompz > 0)
             {
                 work[i__] = c__;
                 work[*n - 1 + i__] = s;
@@ -560,20 +563,19 @@ L30:
             /* L120: */
         }
         /* If eigenvectors are desired, then apply saved rotations. */
-        if(icompz > 0)
+        if (icompz > 0)
         {
             mm = l - m + 1;
-            aocl_lapack_dlasr("R", "V", "F", n, &mm, &work[m], &work[*n - 1 + m],
-                              &z__[m * z_dim1 + 1], ldz);
+            dlasr_("R", "V", "F", n, &mm, &work[m], &work[*n - 1 + m], &z__[m * z_dim1 + 1], ldz);
         }
         d__[l] -= p;
         e[lm1] = g;
         goto L90;
         /* Eigenvalue found. */
-    L130:
+L130:
         d__[l] = p;
         --l;
-        if(l >= lend)
+        if (l >= lend)
         {
             goto L90;
         }
@@ -581,30 +583,32 @@ L30:
     }
     /* Undo scaling if necessary */
 L140:
-    if(iscale == 1)
+    if (iscale == 1)
     {
         i__1 = lendsv - lsv + 1;
-        aocl_lapack_dlascl("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &d__[lsv], n, info);
+        dlascl_("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &d__[lsv], n, info);
         i__1 = lendsv - lsv;
-        aocl_lapack_dlascl("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &e[lsv], n, info);
+        dlascl_("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &e[lsv], n, info);
     }
-    else if(iscale == 2)
+    else if (iscale == 2)
     {
         i__1 = lendsv - lsv + 1;
-        aocl_lapack_dlascl("G", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &d__[lsv], n, info);
+        dlascl_("G", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &d__[lsv], n, info);
         i__1 = lendsv - lsv;
-        aocl_lapack_dlascl("G", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &e[lsv], n, info);
+        dlascl_("G", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &e[lsv], n, info);
     }
     /* Check for no convergence to an eigenvalue after a total */
     /* of N*MAXIT iterations. */
-    if(jtot < nmaxit)
+    if (jtot < nmaxit)
     {
         goto L10;
     }
     i__1 = *n - 1;
-    for(i__ = 1; i__ <= i__1; ++i__)
+    for (i__ = 1;
+            i__ <= i__1;
+            ++i__)
     {
-        if(e[i__] != 0.)
+        if (e[i__] != 0.)
         {
             ++(*info);
         }
@@ -613,42 +617,46 @@ L140:
     goto L190;
     /* Order eigenvalues and eigenvectors. */
 L160:
-    if(icompz == 0)
+    if (icompz == 0)
     {
         /* Use Quick Sort */
-        aocl_lapack_dlasrt("I", n, &d__[1], info);
+        dlasrt_("I", n, &d__[1], info);
     }
     else
     {
         /* Use Selection Sort to minimize swaps of eigenvectors */
         i__1 = *n;
-        for(ii = 2; ii <= i__1; ++ii)
+        for (ii = 2;
+                ii <= i__1;
+                ++ii)
         {
             i__ = ii - 1;
             k = i__;
             p = d__[i__];
             i__2 = *n;
-            for(j = ii; j <= i__2; ++j)
+            for (j = ii;
+                    j <= i__2;
+                    ++j)
             {
-                if(d__[j] < p)
+                if (d__[j] < p)
                 {
                     k = j;
                     p = d__[j];
                 }
                 /* L170: */
             }
-            if(k != i__)
+            if (k != i__)
             {
                 d__[k] = d__[i__];
                 d__[i__] = p;
-                aocl_blas_dswap(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[k * z_dim1 + 1], &c__1);
+                dswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[k * z_dim1 + 1], &c__1);
             }
             /* L180: */
         }
     }
 L190:
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
 
     /* End of DSTEQR */
 }

@@ -138,24 +138,12 @@
 void dlatrz_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, doublereal *a, aocl_int_t *lda,
              doublereal *tau, doublereal *work)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlatrz(m, n, l, a, lda, tau, work);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t l_64 = *l;
-    aocl_int64_t lda_64 = *lda;
-
-    aocl_lapack_dlatrz(&m_64, &n_64, &l_64, a, &lda_64, tau, work);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlatrz inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS "",*m, *n, *l, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, doublereal *a,
-                        aocl_int64_t *lda, doublereal *tau, doublereal *work)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlatrz inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS "",
-                      *m, *n, *l, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -187,8 +175,8 @@ void aocl_lapack_dlatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, doubl
     /* Function Body */
     if(*m == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(*m == *n)
     {
@@ -198,8 +186,8 @@ void aocl_lapack_dlatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, doubl
             tau[i__] = 0.;
             /* L10: */
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     for(i__ = *m; i__ >= 1; --i__)
     {
@@ -215,8 +203,8 @@ void aocl_lapack_dlatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, doubl
                           &tau[i__], &a[i__ * a_dim1 + 1], lda, &work[1]);
         /* L20: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLATRZ */
 }
 /* dlatrz_ */

@@ -210,26 +210,12 @@ v(i+1:n) is stored on exit in A(i+1:n,i), */
 void dlatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, doublereal *a, aocl_int_t *lda,
              doublereal *e, doublereal *tau, doublereal *w, aocl_int_t *ldw)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlatrd(uplo, n, nb, a, lda, e, tau, w, ldw);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nb_64 = *nb;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldw_64 = *ldw;
-
-    aocl_lapack_dlatrd(uplo, &n_64, &nb_64, a, &lda_64, e, tau, w, &ldw_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlatrd inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldw %" FLA_IS "",*uplo, *n, *nb, *lda, *ldw);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, doublereal *a,
-                        aocl_int64_t *lda, doublereal *e, doublereal *tau, doublereal *w,
-                        aocl_int64_t *ldw)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlatrd inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
-                      ", ldw %" FLA_IS "",
-                      *uplo, *n, *nb, *lda, *ldw);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -269,8 +255,8 @@ void aocl_lapack_dlatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, doublerea
     /* Function Body */
     if(*n <= 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(lsame_(uplo, "U", 1, 1))
     {
@@ -404,8 +390,8 @@ void aocl_lapack_dlatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, doublerea
             /* L20: */
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLATRD */
 }
 /* dlatrd_ */

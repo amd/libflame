@@ -154,28 +154,12 @@ static aocl_int64_t c__1 = 1;
 void dopmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, doublereal *ap,
              doublereal *tau, doublereal *c__, aocl_int_t *ldc, doublereal *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dopmtr(side, uplo, trans, m, n, ap, tau, c__, ldc, work, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dopmtr(side, uplo, trans, &m_64, &n_64, ap, tau, c__, &ldc_64, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dopmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *uplo, *trans, *m, *n, *ldc);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dopmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n,
-                        doublereal *ap, doublereal *tau, doublereal *c__, aocl_int64_t *ldc,
-                        doublereal *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dopmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS
-                      ", ldc %" FLA_IS "",
-                      *side, *uplo, *trans, *m, *n, *ldc);
     /* System generated locals */
     aocl_int64_t c_dim1, c_offset, i__1, i__2;
     /* Local variables */
@@ -254,15 +238,15 @@ void aocl_lapack_dopmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DOPMTR", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DOPMTR", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(upper)
     {
@@ -382,8 +366,8 @@ void aocl_lapack_dopmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
             /* L20: */
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DOPMTR */
 }
 /* dopmtr_ */

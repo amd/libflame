@@ -244,27 +244,12 @@ b(i), i=1,..,n}
 void dlatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, doublereal *a,
              aocl_int_t *lda, doublereal *x, doublereal *scale, doublereal *cnorm, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlatrs(uplo, trans, diag, normin, n, a, lda, x, scale, cnorm, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlatrs(uplo, trans, diag, normin, &n_64, a, &lda_64, x, scale, cnorm, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlatrs inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *trans, *diag, *normin, *n, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_int64_t *n,
-                        doublereal *a, aocl_int64_t *lda, doublereal *x, doublereal *scale,
-                        doublereal *cnorm, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlatrs inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS
-                      ", lda %" FLA_IS "",
-                      *uplo, *trans, *diag, *normin, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1, d__2, d__3;
@@ -345,16 +330,16 @@ void aocl_lapack_dlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DLATRS", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DLATRS", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     *scale = 1.;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Determine machine dependent parameters to control overflow. */
     smlnum = dlamch_("Safe minimum") / dlamch_("Precision");
@@ -959,8 +944,8 @@ void aocl_lapack_dlatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
         d__1 = 1. / tscal;
         aocl_blas_dscal(n, &d__1, &cnorm[1], &c__1);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLATRS */
 }
 /* dlatrs_ */

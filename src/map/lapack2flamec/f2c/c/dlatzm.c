@@ -152,25 +152,12 @@ static doublereal c_b5 = 1.;
 /** Generated wrapper function */
 void dlatzm_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, aocl_int_t *incv, doublereal *tau, doublereal *c1, doublereal *c2, aocl_int_t *ldc, doublereal *work)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlatzm(side, m, n, v, incv, tau, c1, c2, ldc, work);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incv_64 = *incv;
-    aocl_int64_t ldc_64 = *ldc;
-
-    aocl_lapack_dlatzm(side, &m_64, &n_64, v, &incv_64, tau, c1, c2, &ldc_64, work);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dlatzm inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *incv, *ldc);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dlatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal *v, aocl_int64_t *incv,
-             doublereal *tau, doublereal *c1, doublereal *c2, aocl_int64_t *ldc, doublereal *work)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlatzm inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS
-                      ", ldc %" FLA_IS "",
-                      *side, *m, *n, *incv, *ldc);
     /* System generated locals */
     aocl_int64_t c1_dim1, c1_offset, c2_dim1, c2_offset, i__1;
     doublereal d__1;
@@ -206,8 +193,8 @@ void aocl_lapack_dlatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal
     /* Function Body */
     if(fla_min(*m, *n) == 0 || *tau == 0.)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(lsame_(side, "L", 1, 1))
     {
@@ -238,8 +225,8 @@ void aocl_lapack_dlatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal
         d__1 = -(*tau);
         aocl_blas_dger(m, &i__1, &d__1, &work[1], &c__1, &v[1], incv, &c2[c2_offset], ldc);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DLATZM */
 }
 /* dlatzm_ */

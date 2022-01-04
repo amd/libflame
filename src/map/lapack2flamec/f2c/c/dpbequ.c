@@ -130,27 +130,12 @@
 void dpbequ_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int_t *ldab,
              doublereal *s, doublereal *scond, doublereal *amax, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dpbequ(uplo, n, kd, ab, ldab, s, scond, amax, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kd_64 = *kd;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dpbequ(uplo, &n_64, &kd_64, ab, &ldab_64, s, scond, amax, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dpbequ inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",*uplo, *n, *kd, *ldab);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dpbequ(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, doublereal *ab,
-                        aocl_int64_t *ldab, doublereal *s, doublereal *scond, doublereal *amax,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dpbequ inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",
-                      *uplo, *n, *kd, *ldab);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1;
     doublereal d__1, d__2;
@@ -209,17 +194,17 @@ void aocl_lapack_dpbequ(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, doublerea
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DPBEQU", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DPBEQU", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *scond = 1.;
         *amax = 0.;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(upper)
     {
@@ -257,8 +242,8 @@ void aocl_lapack_dpbequ(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, doublerea
             if(s[i__] <= 0.)
             {
                 *info = i__;
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             /* L20: */
         }
@@ -276,8 +261,8 @@ void aocl_lapack_dpbequ(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, doublerea
         /* Compute SCOND = fla_min(S(I)) / fla_max(S(I)) */
         *scond = sqrt(smin) / sqrt(*amax);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DPBEQU */
 }
 /* dpbequ_ */

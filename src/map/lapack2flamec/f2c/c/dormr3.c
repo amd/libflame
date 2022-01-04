@@ -177,32 +177,12 @@ void dormr3_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
              doublereal *a, aocl_int_t *lda, doublereal *tau, doublereal *c__, aocl_int_t *ldc,
              doublereal *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dormr3(side, trans, m, n, k, l, a, lda, tau, c__, ldc, work, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t l_64 = *l;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dormr3(side, trans, &m_64, &n_64, &k_64, &l_64, a, &lda_64, tau, c__, &ldc_64, work,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dormr3 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *k, *l, *lda, *ldc);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dormr3(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
-                        aocl_int64_t *l, doublereal *a, aocl_int64_t *lda, doublereal *tau,
-                        doublereal *c__, aocl_int64_t *ldc, doublereal *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dormr3 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
-                      ", l %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",
-                      *side, *trans, *m, *n, *k, *l, *lda, *ldc);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
     /* Local variables */
@@ -286,15 +266,15 @@ void aocl_lapack_dormr3(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DORMR3", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DORMR3", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || *k == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(left && !notran || !left && notran)
     {
@@ -341,8 +321,8 @@ void aocl_lapack_dormr3(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
                           &c__[ic + jc * c_dim1], ldc, &work[1]);
         /* L10: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DORMR3 */
 }
 /* dormr3_ */

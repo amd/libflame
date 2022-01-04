@@ -111,24 +111,12 @@
 void dpoequ_(aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *s, doublereal *scond,
              doublereal *amax, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dpoequ(n, a, lda, s, scond, amax, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dpoequ(&n_64, a, &lda_64, s, scond, amax, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dpoequ inputs: n %" FLA_IS ", lda %" FLA_IS "",*n, *lda);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dpoequ(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *s,
-                        doublereal *scond, doublereal *amax, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dpoequ inputs: n %" FLA_IS ", lda %" FLA_IS "", *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
     doublereal d__1, d__2;
@@ -174,17 +162,17 @@ void aocl_lapack_dpoequ(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doubl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DPOEQU", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DPOEQU", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *scond = 1.;
         *amax = 0.;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Find the minimum and maximum diagonal elements. */
     s[1] = a[a_dim1 + 1];
@@ -213,8 +201,8 @@ void aocl_lapack_dpoequ(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doubl
             if(s[i__] <= 0.)
             {
                 *info = i__;
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             /* L20: */
         }
@@ -232,8 +220,8 @@ void aocl_lapack_dpoequ(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doubl
         /* Compute SCOND = fla_min(S(I)) / fla_max(S(I)) */
         *scond = sqrt(smin) / sqrt(*amax);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DPOEQU */
 }
 /* dpoequ_ */

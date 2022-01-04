@@ -320,33 +320,12 @@ void dppsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal
              doublereal *x, aocl_int_t *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr,
              doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dppsvx(fact, uplo, n, nrhs, ap, afp, equed, s, b, ldb, x, ldx, rcond, ferr, berr,
-                       work, iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dppsvx(fact, uplo, &n_64, &nrhs_64, ap, afp, equed, s, b, &ldb_64, x, &ldx_64,
-                       rcond, ferr, berr, work, iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dppsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *nrhs, *equed, *ldb, *ldx);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dppsvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *ap,
-                        doublereal *afp, char *equed, doublereal *s, doublereal *b,
-                        aocl_int64_t *ldb, doublereal *x, aocl_int64_t *ldx, doublereal *rcond,
-                        doublereal *ferr, doublereal *berr, doublereal *work, aocl_int_t *iwork,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dppsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
-                      ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS "",
-                      *fact, *uplo, *n, *nrhs, *equed, *ldb, *ldx);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -480,9 +459,9 @@ void aocl_lapack_dppsvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *n
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DPPSVX", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DPPSVX", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(equil)
     {
@@ -520,8 +499,8 @@ void aocl_lapack_dppsvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *n
         if(*info > 0)
         {
             *rcond = 0.;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -562,8 +541,8 @@ void aocl_lapack_dppsvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *n
     {
         *info = *n + 1;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DPPSVX */
 }
 /* dppsvx_ */

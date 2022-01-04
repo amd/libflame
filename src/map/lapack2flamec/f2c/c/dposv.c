@@ -130,28 +130,12 @@
 void dposv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_int_t *lda,
             doublereal *b, aocl_int_t *ldb, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dposv(uplo, n, nrhs, a, lda, b, ldb, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dposv(uplo, &n_64, &nrhs_64, a, &lda_64, b, &ldb_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dposv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dposv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *a,
-                       aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dposv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
-                      ", ldb %" FLA_IS "",
-                      *uplo, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
@@ -205,9 +189,9 @@ void aocl_lapack_dposv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, doublere
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DPOSV ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DPOSV ", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Compute the Cholesky factorization A = U**T*U or A = L*L**T. */
     aocl_lapack_dpotrf(uplo, n, &a[a_offset], lda, info);
@@ -216,8 +200,8 @@ void aocl_lapack_dposv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, doublere
         /* Solve the system A*X = B, overwriting B with X. */
         aocl_lapack_dpotrs(uplo, n, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DPOSV */
 }
 /* dposv_ */

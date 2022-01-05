@@ -152,29 +152,12 @@ i */
 void dsbev_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int_t *ldab,
             doublereal *w, doublereal *z__, aocl_int_t *ldz, doublereal *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dsbev(jobz, uplo, n, kd, ab, ldab, w, z__, ldz, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kd_64 = *kd;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dsbev(jobz, uplo, &n_64, &kd_64, ab, &ldab_64, w, z__, &ldz_64, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dsbev inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", ldz %" FLA_IS "",*jobz, *uplo, *n, *kd, *ldab, *ldz);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dsbev(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *kd, doublereal *ab,
-                       aocl_int64_t *ldab, doublereal *w, doublereal *z__, aocl_int64_t *ldz,
-                       doublereal *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsbev inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS
-                      ", ldz %" FLA_IS "",
-                      *jobz, *uplo, *n, *kd, *ldab, *ldz);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, z_dim1, z_offset, i__1;
     doublereal d__1;
@@ -257,15 +240,15 @@ void aocl_lapack_dsbev(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *kd
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DSBEV ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DSBEV ", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*n == 1)
     {
@@ -281,8 +264,8 @@ void aocl_lapack_dsbev(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *kd
         {
             z__[z_dim1 + 1] = 1.;
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -343,8 +326,8 @@ void aocl_lapack_dsbev(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *kd
         d__1 = 1. / sigma;
         aocl_blas_dscal(&imax, &d__1, &w[1], &c__1);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DSBEV */
 }
 /* dsbev_ */

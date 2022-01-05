@@ -113,26 +113,12 @@
 void dptsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, doublereal *b,
             aocl_int_t *ldb, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dptsv(n, nrhs, d__, e, b, ldb, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dptsv(&n_64, &nrhs_64, d__, e, b, &ldb_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dptsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dptsv(aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *d__, doublereal *e,
-                       doublereal *b, aocl_int64_t *ldb, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dptsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n, *nrhs,
-                      *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
@@ -174,9 +160,9 @@ void aocl_lapack_dptsv(aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *d__, dou
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DPTSV ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DPTSV ", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Compute the L*D*L**T (or U**T*D*U) factorization of A. */
     aocl_lapack_dpttrf(n, &d__[1], &e[1], info);
@@ -185,8 +171,8 @@ void aocl_lapack_dptsv(aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *d__, dou
         /* Solve the system A*X = B, overwriting B with X. */
         aocl_lapack_dpttrs(n, nrhs, &d__[1], &e[1], &b[b_offset], ldb, info);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DPTSV */
 }
 /* dptsv_ */

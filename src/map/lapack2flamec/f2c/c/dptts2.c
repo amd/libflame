@@ -101,23 +101,12 @@
 void dptts2_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, doublereal *b,
              aocl_int_t *ldb)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dptts2(n, nrhs, d__, e, b, ldb);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-
-    aocl_lapack_dptts2(&n_64, &nrhs_64, d__, e, b, &ldb_64);
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dptts2 inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dptts2(aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *d__, doublereal *e,
-                        doublereal *b, aocl_int64_t *ldb)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dptts2 inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n, *nrhs,
-                      *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2;
     doublereal d__1;
@@ -152,8 +141,8 @@ void aocl_lapack_dptts2(aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *d__, do
             d__1 = 1. / d__[1];
             aocl_blas_dscal(nrhs, &d__1, &b[b_offset], ldb);
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Solve A * X = B using the factorization A = L*D*L**T, */
     /* overwriting each right hand side vector with its solution. */
@@ -176,8 +165,8 @@ void aocl_lapack_dptts2(aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *d__, do
         }
         /* L30: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DPTTS2 */
 }
 /* dptts2_ */

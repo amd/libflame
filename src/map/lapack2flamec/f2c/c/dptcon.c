@@ -119,23 +119,12 @@ static aocl_int64_t c__1 = 1;
 void dptcon_(aocl_int_t *n, doublereal *d__, doublereal *e, doublereal *anorm, doublereal *rcond,
              doublereal *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dptcon(n, d__, e, anorm, rcond, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dptcon(&n_64, d__, e, anorm, rcond, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dptcon inputs: n %" FLA_IS "",*n);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dptcon(aocl_int64_t *n, doublereal *d__, doublereal *e, doublereal *anorm,
-                        doublereal *rcond, doublereal *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dptcon inputs: n %" FLA_IS "", *n);
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal d__1;
@@ -180,22 +169,22 @@ void aocl_lapack_dptcon(aocl_int64_t *n, doublereal *d__, doublereal *e, doubler
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DPTCON", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DPTCON", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     *rcond = 0.;
     if(*n == 0)
     {
         *rcond = 1.;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(*anorm == 0.)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Check that D(1:N) is positive. */
     i__1 = *n;
@@ -203,8 +192,8 @@ void aocl_lapack_dptcon(aocl_int64_t *n, doublereal *d__, doublereal *e, doubler
     {
         if(d__[i__] <= 0.)
         {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
         /* L10: */
     }
@@ -235,8 +224,8 @@ void aocl_lapack_dptcon(aocl_int64_t *n, doublereal *d__, doublereal *e, doubler
     {
         *rcond = 1. / ainvnm / *anorm;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DPTCON */
 }
 /* dptcon_ */

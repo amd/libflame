@@ -869,51 +869,27 @@ void libfla_test_read_parameter_file( char* input_filename, test_params_t* param
 
 	// Read the blocksize to use for blocked algorithms on flat matrices.
 	libfla_test_read_next_line( buffer, input_stream );
-    #ifdef _WIN32
-	sscanf( buffer, "%lld ", &(params->b_alg_flat) );
-    #else
-    sscanf( buffer, "%ld ", &(params->b_alg_flat) );
-    #endif
+	sscanf( buffer, "%llu ", &(params->b_alg_flat) );
 
 	// Read the algorithmic blocksize to use for algorithms-by-blocks.
 	libfla_test_read_next_line( buffer, input_stream );
-    #ifdef _WIN32
-	sscanf( buffer, "%lld ", &(params->b_alg_hier) );
-    #else
-    sscanf( buffer, "%ld ", &(params->b_alg_hier) );
-    #endif
+	sscanf( buffer, "%llu ", &(params->b_alg_hier) );
 
 	// Read the storage (FLASH) blocksize to use for algorithms-by-blocks.
 	libfla_test_read_next_line( buffer, input_stream );
-    #ifdef _WIN32
-	sscanf( buffer, "%lld ", &(params->b_flash) );
-    #else
-    sscanf( buffer, "%ld ", &(params->b_flash) ); 
-    #endif
-        
+	sscanf( buffer, "%llu ", &(params->b_flash) );
+
 	// Read the initial problem size to test.
 	libfla_test_read_next_line( buffer, input_stream );
-    #ifdef _WIN32
-	sscanf( buffer, "%lld ", &(params->p_first) );
-    #else
-    sscanf( buffer, "%ld ", &(params->p_first) );
-    #endif
-    
+	sscanf( buffer, "%llu ", &(params->p_first) );
+
 	// Read the maximum problem size to test.
 	libfla_test_read_next_line( buffer, input_stream );
-    #ifdef _WIN32
-	sscanf( buffer, "%lld ", &(params->p_max) );
-    #else
-    sscanf( buffer, "%ld ", &(params->p_max) );
-    #endif
-    
+	sscanf( buffer, "%llu ", &(params->p_max) );
+
 	// Read the problem size increment to test.
 	libfla_test_read_next_line( buffer, input_stream );
-    #ifdef _WIN32
-	sscanf( buffer, "%lld ", &(params->p_inc) );
-    #else
-    sscanf( buffer, "%ld ", &(params->p_inc) );
-    #endif
+	sscanf( buffer, "%llu ", &(params->p_inc) );
 
 	// Read the partial number of matrix size for incomplete factorization.
         libfla_test_read_next_line( buffer, input_stream );

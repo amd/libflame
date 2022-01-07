@@ -78,9 +78,9 @@ typedef int FLA_Svd_type;
 typedef int FLA_Machval;
 typedef int FLA_Diag_off;
 
-#ifndef _DEFINED_FLA_DIM_T
-#define _DEFINED_FLA_DIM_T
-typedef int64_t fla_dim_t;
+#ifndef _DEFINED_DIM_T
+#define _DEFINED_DIM_T
+typedef uinteger dim_t;
 #endif
 
 // --- Intrinsic/assembly definitions ----------------------------------------

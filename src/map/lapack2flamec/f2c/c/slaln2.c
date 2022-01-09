@@ -251,10 +251,22 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
                       ",ldx %" FLA_IS "",
                       *na, *nw, *lda, *ldb, *ldx);
     /* Initialized data */
-    static const logical cswap[4] = {FALSE_, FALSE_, TRUE_, TRUE_};
-    static const logical rswap[4] = {FALSE_, TRUE_, FALSE_, TRUE_};
+    static const logical cswap[4] =
+    {
+        FALSE_,FALSE_,TRUE_,TRUE_
+    }
+    ;
+    static const logical rswap[4] =
+    {
+        FALSE_,TRUE_,FALSE_,TRUE_
+    }
+    ;
     static const integer ipivot[16] /* was [4][4] */
-        = {1, 2, 3, 4, 2, 1, 4, 3, 3, 4, 1, 2, 4, 3, 2, 1};
+    =
+    {
+        1,2,3,4,2,1,4,3,3,4,1,2, 4,3,2,1
+    }
+    ;
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, x_dim1, x_offset;
     real r__1, r__2, r__3, r__4, r__5, r__6;

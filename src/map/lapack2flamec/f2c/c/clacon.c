@@ -130,14 +130,15 @@ void clacon_(aocl_int_t *n, scomplex *v, scomplex *x, real *est, aocl_int_t *kas
     /* Builtin functions */
     double c_abs(complex *), r_imag(complex *);
     /* Local variables */
-    aocl_int64_t i__;
+    integer i__, j, iter;
     real temp;
-    static aocl_int64_t jump = 0;
-    static aocl_int64_t j = 0;
-    static aocl_int64_t iter = 0;
+    integer jump;
     real absxi;
-    aocl_int64_t jlast;
-    extern real slamch_(char *);
+    integer jlast;
+    extern /* Subroutine */
+    int ccopy_(integer *, complex *, integer *, complex *, integer *);
+    extern integer icmax1_(integer *, complex *, integer *);
+    extern real scsum1_(integer *, complex *, integer *), slamch_(char *);
     real safmin, altsgn, estold;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

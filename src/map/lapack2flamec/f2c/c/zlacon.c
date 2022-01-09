@@ -4,9 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-/* > \brief \b ZLACON estimates the 1-norm of a square matrix, using reverse communication for
- * evaluating matr ix-vector products. */
+static const integer c__1 = 1;
+/* > \brief \b ZLACON estimates the 1-norm of a square matrix, using reverse communication for evaluating matr ix-vector products. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -137,14 +136,15 @@ void aocl_lapack_zlacon(aocl_int64_t *n, dcomplex *v, dcomplex *x, doublereal *e
     /* Builtin functions */
     double z_abs(doublecomplex *), d_imag(doublecomplex *);
     /* Local variables */
-    aocl_int64_t i__;
+    integer i__, j, iter;
     doublereal temp;
-    static aocl_int64_t jump = 0;
-    static aocl_int64_t j = 0;
-    static aocl_int64_t iter = 0;
+    integer jump;
     doublereal absxi;
-    aocl_int64_t jlast;
-    extern doublereal dlamch_(char *);
+    integer jlast;
+    extern /* Subroutine */
+    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    extern integer izmax1_(integer *, doublecomplex *, integer *);
+    extern doublereal dzsum1_(integer *, doublecomplex *, integer *), dlamch_( char *);
     doublereal safmin, altsgn, estold;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

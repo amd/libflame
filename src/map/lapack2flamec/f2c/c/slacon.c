@@ -4,10 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-static real c_b11 = 1.f;
-/* > \brief \b SLACON estimates the 1-norm of a square matrix, using reverse communication for
- * evaluating matr ix-vector products. */
+static const integer c__1 = 1;
+static const real c_b11 = 1.f;
+/* > \brief \b SLACON estimates the 1-norm of a square matrix, using reverse communication for evaluating matr ix-vector products. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -139,12 +138,13 @@ void aocl_lapack_slacon(aocl_int64_t *n, real *v, real *x, aocl_int_t *isgn, rea
     /* Builtin functions */
     double r_sign(real *, real *);
     /* Local variables */
-    aocl_int64_t i__;
+    integer i__, j, iter;
     real temp;
-    static aocl_int64_t jump = 0;
-    static aocl_int64_t j = 0;
-    static aocl_int64_t iter = 0;
-    aocl_int64_t jlast;
+    integer jump, jlast;
+    extern real sasum_(integer *, real *, integer *);
+    extern /* Subroutine */
+    int scopy_(integer *, real *, integer *, real *, integer *);
+    extern integer isamax_(integer *, real *, integer *);
     real altsgn, estold;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

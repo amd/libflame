@@ -225,10 +225,22 @@ void dlaln2_(logical *ltrans, aocl_int_t *na, aocl_int_t *nw, doublereal *smin, 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* Initialized data */
-    logical zswap[4] = {FALSE_, FALSE_, TRUE_, TRUE_};
-    logical rswap[4] = {FALSE_, TRUE_, FALSE_, TRUE_};
+    logical zswap[4] =
+    {
+        FALSE_,FALSE_,TRUE_,TRUE_
+    }
+    ;
+    logical rswap[4] =
+    {
+        FALSE_,TRUE_,FALSE_,TRUE_
+    }
+    ;
     integer ipivot[16] /* was [4][4] */
-        = {1, 2, 3, 4, 2, 1, 4, 3, 3, 4, 1, 2, 4, 3, 2, 1};
+    =
+    {
+        1,2,3,4,2,1,4,3,3,4,1,2, 4,3,2,1
+    }
+    ;
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, x_dim1, x_offset;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;

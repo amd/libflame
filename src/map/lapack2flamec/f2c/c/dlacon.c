@@ -130,12 +130,14 @@ void dlacon_(aocl_int_t *n, doublereal *v, doublereal *x, aocl_int_t *isgn, doub
     double d_sign(doublereal *, doublereal *);
     integer i_dnnt(doublereal *);
     /* Local variables */
-    aocl_int64_t i__;
+    integer i__, j, iter;
     doublereal temp;
-    static aocl_int64_t jump = 0;
-    static aocl_int64_t j = 0;
-    static aocl_int64_t iter = 0;
-    aocl_int64_t jlast;
+    integer jump;
+    extern doublereal dasum_(integer *, doublereal *, integer *);
+    integer jlast;
+    extern /* Subroutine */
+    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    extern integer idamax_(integer *, doublereal *, integer *);
     doublereal altsgn, estold;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

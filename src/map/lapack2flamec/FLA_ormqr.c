@@ -248,16 +248,7 @@ LAPACK_orm2r(s, orm)
 
 LAPACK_orm2r(d, orm)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dorm2r inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
-                      ", lda %" FLA_IS ", ldc %" FLA_IS "",
-                      *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
-    extern void dorm2r_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
-                           doublereal *a, aocl_int64_t *lda, doublereal *tau, doublereal *c__,
-                           aocl_int64_t *ldc, doublereal *work, aocl_int64_t *info);
-
-#if !FLA_ENABLE_AMD_OPT
-    int fla_error = LAPACK_SUCCESS;
+#if !FLA_AMD_OPT
     {
         LAPACK_RETURN_CHECK_VAR1(dorm2r_check(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B,
                                               ldim_B, buff_w, info),
@@ -270,13 +261,17 @@ LAPACK_orm2r(d, orm)
             fla_error
             = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 #else
     {
-        dorm2r_fla(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        dorm2r_fla( side, trans,
+                    m, n, k,
+                    buff_A, ldim_A,
+                    buff_t,
+                    buff_B, ldim_B,
+                    buff_w,
+                    info );
+        return 0;
+
     }
 #endif
 }

@@ -26,6 +26,9 @@
   as returned by SGEQRF.
 */
 
+extern int dorgqr_fla(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *lwork, integer *info);
+extern int sorgqr_fla(integer *m, integer *n, integer *k, real * a, integer *lda, real *tau, real *work, integer *lwork, integer *info);
+
 #define LAPACK_orgqr(prefix, name)                                      \
   int F77_ ## prefix ## name ## qr( integer* m,                             \
                                     integer* n,                             \
@@ -78,11 +81,7 @@
 
 LAPACK_orgqr(s, org)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sorgqr inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
-                      *m, *n, *k, *ldim_A);
-#if !FLA_ENABLE_AMD_OPT
-    int fla_error = LAPACK_SUCCESS;
+#if !FLA_AMD_OPT
     {
         LAPACK_RETURN_CHECK_VAR1(sorgqr_check(m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info),
                                  fla_error)
@@ -94,23 +93,20 @@ LAPACK_orgqr(s, org)
             fla_error
             = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 #else
     {
-        sorgqr_fla(m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        sorgqr_fla(m, n, k,
+                   buff_A, ldim_A,
+                   buff_t,
+                   buff_w, lwork,
+                   info);
+        return 0;
     }
 #endif
 }
 LAPACK_orgqr(d, org)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dorgqr inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
-                      *m, *n, *k, *ldim_A);
-#if !FLA_ENABLE_AMD_OPT
-    int fla_error = LAPACK_SUCCESS;
+#if !FLA_AMD_OPT
     {
         LAPACK_RETURN_CHECK_VAR1(dorgqr_check(m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info),
                                  fla_error)
@@ -122,13 +118,14 @@ LAPACK_orgqr(d, org)
             fla_error
             = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 #else
     {
-        lapack_dorgqr(m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        dorgqr_fla(m, n, k,
+                   buff_A, ldim_A,
+                   buff_t,
+                   buff_w, lwork,
+                   info);
+        return 0;
     }
 #endif
 }

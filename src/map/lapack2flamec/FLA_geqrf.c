@@ -25,6 +25,9 @@
   GEQRF computes a QR factorization of a M-by-N matrix A: A = Q * R.
 */
 
+extern int dgeqrf_fla(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info);
+extern int sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info);
+
 extern void DTL_Trace(
 		    uint8 ui8LogLevel,
 		    uint8 ui8LogType,
@@ -79,74 +82,41 @@ extern void DTL_Trace(
 
 LAPACK_geqrf(s)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgeqrf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS
-                      "",
-                      *m, *n, *ldim_A, *lwork);
-#if !FLA_ENABLE_AMD_OPT
-    int fla_error = LAPACK_SUCCESS;
+#if !FLA_AMD_OPT
     {
         LAPACK_RETURN_CHECK_VAR1(sgeqrf_check(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info),
                                  fla_error)
     }
-    if( ( *m < FLA_GEQRF__STHRESH ) || (*n < FLA_GEQRF__STHRESH ) && !FLA_ENABLE_ALT_PATHS)
-    {
-        FLA_EXT_sgeqrf( *m, *n, buff_A, *ldim_A, buff_t,
-                       buff_w, lwork, info );
-        return 0;
-    }
-    else
     {
         LAPACK_geqrf_body(s)
             /** fla_error set to 0 on LAPACK_SUCCESS */
             fla_error
             = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 #else
     {
-        sgeqrf_fla(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+      sgeqrf_fla(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+      return 0;
     }
 #endif
 }
 LAPACK_geqrf(d)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgeqrf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS
-                      "",
-                      *m, *n, *ldim_A, *lwork);
-#if !FLA_ENABLE_AMD_OPT
-    int fla_error = LAPACK_SUCCESS;
+#if !FLA_AMD_OPT
     {
         LAPACK_RETURN_CHECK_VAR1(dgeqrf_check(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info),
                                  fla_error)
     }
-    if( ( *m < FLA_GEQRF__STHRESH ) || (*n < FLA_GEQRF__STHRESH ) && !FLA_ENABLE_ALT_PATHS)
-    {
-        FLA_EXT_dgeqrf( *m, *n, buff_A, *ldim_A, buff_t,
-                       buff_w, lwork, info );
-        return 0;
-    }
-    else
     {
         LAPACK_geqrf_body(d)
             /** fla_error set to 0 on LAPACK_SUCCESS */
             fla_error
             = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 #else
     {
-        /* Initialize global context data */
-        aocl_fla_init();
-
-        dgeqrf_fla(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+      dgeqrf_fla(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+      return 0;
     }
 #endif
 }

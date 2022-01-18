@@ -32,6 +32,9 @@
   if SIDE = 'R'.
 */
 
+extern int dormqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal * c__, integer *ldc, doublereal *work, integer *lwork, integer *info);
+extern int sormqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real * c__, integer *ldc, real *work, integer *lwork, integer *info);
+
 #define LAPACK_ormqr(prefix, name)                                      \
   int F77_ ## prefix ## name ## qr( char* side,                              \
                                     char* trans,                        \
@@ -98,12 +101,7 @@
 
 LAPACK_ormqr(s, orm)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sormqr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
-                      ", lda %" FLA_IS ", ldc %" FLA_IS "",
-                      *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
-#if !FLA_ENABLE_AMD_OPT
-    int fla_error = LAPACK_SUCCESS;
+#if !FLA_AMD_OPT
     {
         LAPACK_RETURN_CHECK_VAR1(sormqr_check(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B,
                                               ldim_B, buff_w, lwork, info),
@@ -116,24 +114,20 @@ LAPACK_ormqr(s, orm)
             fla_error
             = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 #else
     {
-        lapack_sormqr(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, lwork, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        sormqr_fla(side, trans, m, n, k,
+                   buff_A, ldim_A,
+                   buff_t,
+                   buff_B, ldim_B,
+                   buff_w, lwork, info);
+        return 0;
     }
 #endif
 }
 LAPACK_ormqr(d, orm)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dormqr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
-                      ", lda %" FLA_IS ", ldc %" FLA_IS "",
-                      *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
-#if !FLA_ENABLE_AMD_OPT
-    int fla_error = LAPACK_SUCCESS;
+#if !FLA_AMD_OPT
     {
         LAPACK_RETURN_CHECK_VAR1(dormqr_check(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B,
                                               ldim_B, buff_w, lwork, info),
@@ -146,13 +140,14 @@ LAPACK_ormqr(d, orm)
             fla_error
             = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 #else
     {
-        lapack_dormqr(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, lwork, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        dormqr_fla(side, trans, m, n, k,
+                   buff_A, ldim_A,
+                   buff_t,
+                   buff_B, ldim_B,
+                   buff_w, lwork, info);
+        return 0;
     }
 #endif
 }

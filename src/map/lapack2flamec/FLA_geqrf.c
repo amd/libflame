@@ -27,6 +27,10 @@
 
 extern int dgeqrf_fla(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info);
 extern int sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info);
+extern int sgeqrfp_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info);
+extern int dgeqrfp_fla(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info);
+extern int sgeqr2p_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *info);
+extern int dgeqr2p_fla(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *info);
 
 extern void DTL_Trace(
 		    uint8 ui8LogLevel,
@@ -268,11 +272,7 @@ LAPACK_geqr2(z)
                                integer* info )
 LAPACK_geqrfp(s)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgeqrfp inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
-#if !FLA_ENABLE_AMD_OPT
-    int fla_error = LAPACK_SUCCESS;
+#if !FLA_AMD_OPT
     {
         LAPACK_RETURN_CHECK_VAR1(sgeqrfp_check(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info),
                                  fla_error)
@@ -284,23 +284,20 @@ LAPACK_geqrfp(s)
             fla_error
             = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 #else
     {
-        sgeqrfp_fla(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+      sgeqrfp_fla( m, n,
+                   buff_A, ldim_A,
+                   buff_t,
+                   buff_w, lwork,
+                   info );
+      return 0;
     }
 #endif
 }
 LAPACK_geqrfp(d)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgeqrfp inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
-#if !FLA_ENABLE_AMD_OPT
-    int fla_error = LAPACK_SUCCESS;
+#if !FLA_AMD_OPT
     {
         LAPACK_RETURN_CHECK_VAR1(dgeqrfp_check(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info),
                                  fla_error)
@@ -312,13 +309,14 @@ LAPACK_geqrfp(d)
             fla_error
             = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 #else
     {
-        dgeqrfp_fla(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+      dgeqrfp_fla( m, n,
+                   buff_A, ldim_A,
+                   buff_t,
+                   buff_w, lwork,
+                   info );
+      return 0;
     }
 #endif
 }
@@ -376,11 +374,7 @@ LAPACK_geqrfp(z)
 
 LAPACK_geqr2p(s)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgeqr2p inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
-#if !FLA_ENABLE_AMD_OPT
-    int fla_error = LAPACK_SUCCESS;
+#if !FLA_AMD_OPT
     {
         LAPACK_RETURN_CHECK_VAR1(sgeqr2p_check(m, n, buff_A, ldim_A, buff_t, buff_w, info),
                                  fla_error)
@@ -392,23 +386,20 @@ LAPACK_geqr2p(s)
             fla_error
             = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 #else
     {
-        sgeqr2p_fla(m, n, buff_A, ldim_A, buff_t, buff_w, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        sgeqr2p_fla( m, n,
+                     buff_A, ldim_A,
+                     buff_t,
+                     buff_w,
+                     info );
+        return 0;
     }
 #endif
 }
 LAPACK_geqr2p(d)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgeqr2p inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
-#if !FLA_ENABLE_AMD_OPT
-    int fla_error = LAPACK_SUCCESS;
+#if !FLA_AMD_OPT
     {
         LAPACK_RETURN_CHECK_VAR1(dgeqr2p_check(m, n, buff_A, ldim_A, buff_t, buff_w, info),
                                  fla_error)
@@ -420,13 +411,14 @@ LAPACK_geqr2p(d)
             fla_error
             = 0;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 #else
     {
-        dgeqr2p_fla(m, n, buff_A, ldim_A, buff_t, buff_w, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        dgeqr2p_fla( m, n,
+                     buff_A, ldim_A,
+                     buff_t,
+                     buff_w,
+                     info );
+        return 0;
     }
 #endif
 }

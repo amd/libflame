@@ -46,6 +46,9 @@
   Here dimenions m and n are defined w.r.t C.
 */
 
+extern int sormbr_fla(char *vect, char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *lwork, integer *info);
+extern int dormbr_fla(char *vect, char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work, integer *lwork, integer *info);
+
 #define LAPACK_ormbr(prefix, name)                                      \
   int F77_ ## prefix ## name ## br( char* vect,                         \
                                     char* side,                         \
@@ -228,29 +231,26 @@ LAPACK_ormbr(s, orm)
                       ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",
                       *vect, *side, *trans, *m, *n, *k, *ldim_A, *ldim_C);
     {
-#if !FLA_ENABLE_AMD_OPT
-        int fla_error = LAPACK_SUCCESS;
-        {
-            LAPACK_RETURN_CHECK_VAR1(sormbr_check(vect, side, trans, m, n, k, buff_A, ldim_A,
-                                                  buff_t, buff_C, ldim_C, buff_w, lwork, info),
-                                     fla_error)
-        }
-        if(fla_error == LAPACK_SUCCESS)
-        {
-            LAPACK_ormbr_body(s)
-                /** fla_error set to 0 on LAPACK_SUCCESS */
-                fla_error
-                = 0;
-        }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        LAPACK_RETURN_CHECK( sormbr_check( vect, side, trans,
+                                           m, n, k,
+                                           buff_A, ldim_A,
+                                           buff_t,
+                                           buff_C, ldim_C,
+                                           buff_w, lwork,
+                                           info ) )
+    }
+    {
+#if !FLA_AMD_OPT
+        LAPACK_ormbr_body(s)
 #else
-        {
-            sormbr_fla(vect, side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_C, ldim_C, buff_w,
-                       lwork, info);
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
-        }
+        sormbr_fla( vect, side, trans,
+                    m, n, k,
+                    buff_A, ldim_A,
+                    buff_t,
+                    buff_C, ldim_C,
+                    buff_w, lwork,
+                    info);
+        return 0;
 #endif
     }
 }
@@ -261,28 +261,27 @@ LAPACK_ormbr(d, orm)
                       ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",
                       *vect, *side, *trans, *m, *n, *k, *ldim_A, *ldim_C);
     {
-#if !FLA_ENABLE_AMD_OPT
-        int fla_error = LAPACK_SUCCESS;
-        {
-            LAPACK_RETURN_CHECK_VAR1(dormbr_check(vect, side, trans, m, n, k, buff_A, ldim_A,
-                                                  buff_t, buff_C, ldim_C, buff_w, lwork, info),
-                                     fla_error)
-        }
-        if(fla_error == LAPACK_SUCCESS)
-        {
-            LAPACK_ormbr_body(d)
-                /** fla_error set to 0 on LAPACK_SUCCESS */
-                fla_error
-                = 0;
-        }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        LAPACK_RETURN_CHECK( dormbr_check( vect, side, trans,
+                                           m, n, k,
+                                           buff_A, ldim_A,
+                                           buff_t,
+                                           buff_C, ldim_C,
+                                           buff_w, lwork,
+                                           info ) )
+    }
+    {
+#if !FLA_AMD_OPT
+        LAPACK_ormbr_body(d)
 #else
         *info = 0;
-        dormbr_fla(vect, side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_C, ldim_C, buff_w,
-                   lwork, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        dormbr_fla( vect, side, trans,
+                    m, n, k,
+                    buff_A, ldim_A,
+                    buff_t,
+                    buff_C, ldim_C,
+                    buff_w, lwork,
+                    info);
+        return 0;
 #endif
     }
 }

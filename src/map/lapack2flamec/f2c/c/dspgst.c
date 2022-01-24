@@ -119,25 +119,12 @@ static doublereal c_b11 = 1.;
 void dspgst_(aocl_int_t *itype, char *uplo, aocl_int_t *n, doublereal *ap, doublereal *bp,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dspgst(itype, uplo, n, ap, bp, info);
-#else
-    aocl_int64_t itype_64 = *itype;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dspgst(&itype_64, uplo, &n_64, ap, bp, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dspgst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS "",*itype, *uplo, *n);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dspgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, doublereal *ap,
-                        doublereal *bp, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dspgst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS "", *itype, *uplo,
-                      *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     doublereal d__1;
@@ -190,9 +177,9 @@ void aocl_lapack_dspgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, double
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DSPGST", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DSPGST", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(*itype == 1)
     {
@@ -315,8 +302,8 @@ void aocl_lapack_dspgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, double
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DSPGST */
 }
 /* dspgst_ */

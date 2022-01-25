@@ -65,17 +65,6 @@
 
 #define LAPACK_gesdd_real_body(prefix)                                  \
   AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                 	\
-  char jobu[1], jobv[1];                                                \
-                                                                        \
-  if ( *jobz == 'O' ) {                                                 \
-    if ( *m >= *n ) {                                                   \
-      jobu[0] = 'O'; jobv[0] = 'A';                                     \
-    } else {                                                            \
-      jobu[0] = 'A'; jobv[0] = 'O';                                     \
-    }                                                                   \
-  } else {                                                              \
-    jobu[0] = *jobz; jobv[0] = *jobz;                                   \
-  }                                                                     \
                                                                         \
   F77_ ## prefix ## gesvd( jobu, jobv,                                  \
                            m, n,                                        \
@@ -116,21 +105,28 @@
 
 LAPACK_gesdd_real(s)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgesdd inputs: jobz %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
-                      ", ldu %" FLA_IS ", ldvt %" FLA_IS ", lwork %" FLA_IS "",
-                      *jobz, *m, *n, *ldim_A, *ldim_U, *ldim_Vh, *lwork);
-    extern int sgesdd_fla_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, float *a,
-                                aocl_int64_t *lda, float *s, float *u, aocl_int64_t *ldu, float *vt,
-                                aocl_int64_t *ldvt, float *work, aocl_int64_t *lwork, aocl_int64_t *info);
-    extern int lapack_sgesdd(char *jobz, aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *s,
-                             real *u, aocl_int64_t *ldu, real *vt, aocl_int64_t *ldvt, real *work,
-                             aocl_int64_t *lwork, aocl_int_t *iwork, aocl_int64_t *info);
+    
+    char jobu[1], jobv[1];                                                
+                                                                        
+    if ( *jobz == 'O' ) {                                                 
+      if ( *m >= *n ) {                                                   
+        jobu[0] = 'O'; jobv[0] = 'A';                                     
+      } else {                                                            
+        jobu[0] = 'A'; jobv[0] = 'O';                                     
+      }                                                                   
+    } else {                                                              
+      jobu[0] = *jobz; jobv[0] = *jobz;                                   
+    }
 
-#if FLA_ENABLE_AMD_OPT
-    {
-        lapack_sgesdd(jobz, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, ldim_Vh,
-                      buff_w, lwork, buff_i, info);
+    {                                                                    
+        LAPACK_RETURN_CHECK( sgesvd_check( jobu, jobv,
+                                           m, n,
+                                           buff_A,  ldim_A,
+                                           buff_s,
+                                           buff_U,  ldim_U,
+                                           buff_Vh, ldim_Vh,
+                                           buff_w,  lwork,
+                                           info ) )
     }
 #else
     {
@@ -174,79 +170,30 @@ LAPACK_gesdd_real(s)
 
 LAPACK_gesdd_real(d)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgesdd inputs: jobz %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
-                      ", ldu %" FLA_IS ", ldvt %" FLA_IS ", lwork %" FLA_IS "",
-                      *jobz, *m, *n, *ldim_A, *ldim_U, *ldim_Vh, *lwork);
-    extern int lapack_dgesdd(char *jobz, aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
-                             doublereal *s, doublereal *u, aocl_int64_t *ldu, doublereal *vt,
-                             aocl_int64_t *ldvt, doublereal *work, aocl_int64_t *lwork, aocl_int_t *iwork,
-                             aocl_int64_t *info);
+    
+    char jobu[1], jobv[1];                                                
+                                                                        
+    if ( *jobz == 'O' ) {                                                 
+      if ( *m >= *n ) {                                                   
+        jobu[0] = 'O'; jobv[0] = 'A';                                     
+      } else {                                                            
+        jobu[0] = 'A'; jobv[0] = 'O';                                     
+      }                                                                   
+    } else {                                                              
+      jobu[0] = *jobz; jobv[0] = *jobz;                                   
+    }
 
-#if FLA_ENABLE_AMD_OPT
-    if(*m < FLA_DGESDD_SMALL_SIZE_THRESH && *n < FLA_DGESDD_SMALL_SIZE_THRESH)
+    {                                                                    
+        LAPACK_RETURN_CHECK( dgesvd_check( jobu, jobv,
+                                           m, n,
+                                           buff_A,  ldim_A,
+                                           buff_s,
+                                           buff_U,  ldim_U,
+                                           buff_Vh, ldim_Vh,
+                                           buff_w,  lwork,
+                                           info ) )
+    }
     {
-        /* Path for small sizes making use of optimized DGESVD */
-        aocl_int64_t i__1;
-        char jobu[1], jobv[1];
-        doublereal anrm;
-
-        *info = 0;
-        if(lsame_(jobz, "O", 1, 1))
-        {
-            if(*m >= *n)
-            {
-                jobu[0] = 'O';
-                jobv[0] = 'A';
-            }
-            else
-            {
-                jobu[0] = 'A';
-                jobv[0] = 'O';
-            }
-        }
-        else
-        {
-            jobu[0] = *jobz;
-            jobv[0] = *jobz;
-        }
-
-        /* Check input dimensions */
-        if(*m < 0)
-        {
-            *info = -2;
-        }
-        else if(*n < 0)
-        {
-            *info = -3;
-        }
-        else if(*ldim_A < fla_max(1, *m))
-        {
-            *info = -5;
-        }
-
-        /* Check for NAN values in input */
-        if(*lwork != -1 && *info == 0)
-        {
-            /* DLANGE call with "M" to get max absolute value */
-            anrm = aocl_lapack_dlange("M", m, n, buff_A, ldim_A, NULL);
-            if(anrm != anrm)
-            {
-                *info = -4;
-            }
-        }
-
-        if(*info < 0)
-        {
-            /* If the info is set to a negative value, it means that the
-             * input parameters are invalid, so return. */
-            i__1 = -(*info);
-            aocl_blas_xerbla("DGESDD", &i__1, (ftnlen)6);
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
-        }
-
-        /* Calling DGESVD */
         LAPACK_gesdd_real_body(d)
 
         /* Map info values of DGESVD to DGESDD */

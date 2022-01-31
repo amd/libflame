@@ -119,7 +119,7 @@ LAPACK_gesdd_real(s)
     }
 
     {                                                                    
-        LAPACK_RETURN_CHECK( sgesvd_check( jobu, jobv,
+        LAPACK_RETURN_CHECK( sgesdd_fla_check( jobu, jobv,
                                            m, n,
                                            buff_A,  ldim_A,
                                            buff_s,
@@ -184,7 +184,7 @@ LAPACK_gesdd_real(d)
     }
 
     {                                                                    
-        LAPACK_RETURN_CHECK( dgesvd_check( jobu, jobv,
+        LAPACK_RETURN_CHECK( dgesdd_fla_check( jobu, jobv,
                                            m, n,
                                            buff_A,  ldim_A,
                                            buff_s,

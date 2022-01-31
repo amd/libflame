@@ -1,32 +1,35 @@
-
-/*
- *  Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
- */
-
- #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-static aocl_int64_t c__6 = 6;
-static aocl_int64_t c__0 = 0;
-static aocl_int64_t c_n1 = -1;
+#include "FLA_f2c.h"
+static integer c__6 = 6;
+static integer c__0 = 0;
+static integer c_n1 = -1;
 
-int dgesdd_fla_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda,
-                     double *s, double *u, aocl_int64_t *ldu, double *vt, aocl_int64_t *ldvt, double *work,
-                     aocl_int64_t *lwork, aocl_int64_t *info)
+int dgesdd_fla_check(char *jobu, char *jobvt, integer *m, integer *n, double * a, integer *lda, double *s, double *u, integer *ldu, double *vt, integer *ldvt, double *work, integer *lwork, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__2, i__3;
+    integer a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__2, i__3;
     char ch__1[2];
     /* Local variables */
     double dum[1];
-    aocl_int64_t ierr, lwork_dgebrd__, lwork_dgelqf__, lwork_dgeqrf__;
-    aocl_int64_t minmn, wrkbl, mnthr;
+    integer ierr, lwork_dgebrd__, lwork_dgelqf__, lwork_dgeqrf__;
+    integer minmn, wrkbl, mnthr;
     logical wntua, wntva, wntun, wntuo, wntvn, wntvo, wntus, wntvs;
-    aocl_int64_t bdspac;
-    aocl_int64_t minwrk, maxwrk;
+    integer bdspac;
+    extern int 
+      dgebrd_(integer *, integer *, double *, integer *, double *, double *, double *, double *, double *, integer *, integer *),
+      dgelqf_(integer *, integer *, double *, integer *, double *, double *, integer *, integer *), 
+      dgeqrf_(integer *, integer *, double *, integer *, double *, double *, integer *, integer *), 
+      dorgbr_(char *, integer *, integer *, integer *, double *, integer *, double *, double *, integer *, integer *),
+      dorglq_(integer *, integer *, integer *, double *, integer *, double *, double *, integer *, integer *), 
+      dorgqr_(integer *, integer *, integer *, double *, integer *, double *, double *, integer *, integer *);
+    integer minwrk, maxwrk;
     logical lquery, wntuas, wntvas;
-    aocl_int64_t lwork_dorgbr_p__, lwork_dorgbr_q__, lwork_dorglq_m__, lwork_dorglq_n__,
-        lwork_dorgqr_m__, lwork_dorgqr_n__;
-
+    integer lwork_dorgbr_p__, lwork_dorgbr_q__, lwork_dorglq_m__, lwork_dorglq_n__, lwork_dorgqr_m__, lwork_dorgqr_n__;
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+    sprintf(buffer, "dgesdd inputs: jobz %c, m %d, n %d, lda %d, ldu %d, ldvt %d\n", *jobz, *m, *n, *lda, *ldu, *ldvt);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
+#endif
     /* Parameter adjustments */
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;
@@ -41,41 +44,39 @@ int dgesdd_fla_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, 
     --work;
     /* Function Body */
     *info = 0;
-    minmn = fla_min(*m, *n);
-    wntua = lsame_(jobu, "A", 1, 1);
-    wntus = lsame_(jobu, "S", 1, 1);
+    minmn = min(*m,*n);
+    wntua = lsame_(jobu, "A");
+    wntus = lsame_(jobu, "S");
     wntuas = wntua || wntus;
-    wntuo = lsame_(jobu, "O", 1, 1);
-    wntun = lsame_(jobu, "N", 1, 1);
-    wntva = lsame_(jobvt, "A", 1, 1);
-    wntvs = lsame_(jobvt, "S", 1, 1);
+    wntuo = lsame_(jobu, "O");
+    wntun = lsame_(jobu, "N");
+    wntva = lsame_(jobvt, "A");
+    wntvs = lsame_(jobvt, "S");
     wntvas = wntva || wntvs;
-    wntvo = lsame_(jobvt, "O", 1, 1);
-    wntvn = lsame_(jobvt, "N", 1, 1);
+    wntvo = lsame_(jobvt, "O");
+    wntvn = lsame_(jobvt, "N");
     lquery = *lwork == -1;
-    if((!(wntua || wntus || wntuo || wntun))
-       || (!(wntva || wntvs || wntvo || wntvn) || wntvo && wntuo))
+    if ((! (wntua || wntus || wntuo || wntun)) || (! (wntva || wntvs || wntvo || wntvn) || wntvo && wntuo))
     {
         *info = -1;
     }
-    else if(*m < 0)
+    else if (*m < 0)
     {
         *info = -2;
     }
-    else if(*n < 0)
+    else if (*n < 0)
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < max(1,*m))
     {
         *info = -5;
     }
-    else if(*ldu < 1 || wntuas && *ldu < *m || wntuo && *m < *n && *ldu < *m)
+    else if (*ldu < 1 || wntuas && *ldu < *m || wntuo && *m < *n && *ldu < * m)
     {
         *info = -8;
     }
-    else if(*ldvt < 1 || wntva && *ldvt < *n || wntvs && *ldvt < minmn
-            || wntvo && *m >= *n && *ldvt < *n)
+    else if (*ldvt < 1 || wntua && *ldvt < *n || wntus && *ldvt < minmn || wntuo && *m >= *n && *ldvt < *n)
     {
         *info = -10;
     }
@@ -85,80 +86,80 @@ int dgesdd_fla_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, 
     /* as well as the preferred amount for good performance. */
     /* NB refers to the optimal block size for the immediately */
     /* following subroutine, as returned by ILAENV.) */
-    if(*info == 0)
+    if (*info == 0)
     {
         minwrk = 1;
         maxwrk = 1;
-        if(*m >= *n && minmn > 0)
+        if (*m >= *n && minmn > 0)
         {
             /* Compute space needed for DBDSQR */
-            mnthr = aocl_lapack_ilaenv(&c__6, "DGESVD", ch__1, m, n, &c__0, &c__0);
+            mnthr = ilaenv_(&c__6, "DGESVD", ch__1, m, n, &c__0, &c__0);
             bdspac = *n * 5;
             /* Compute space needed for DGEQRF */
-            aocl_lapack_dgeqrf(m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
-            lwork_dgeqrf__ = (integer)dum[0];
+            dgeqrf_(m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
+            lwork_dgeqrf__ = (integer) dum[0];
             /* Compute space needed for DORGQR */
-            aocl_lapack_dorgqr(m, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
-            lwork_dorgqr_n__ = (integer)dum[0];
-            aocl_lapack_dorgqr(m, m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
-            lwork_dorgqr_m__ = (integer)dum[0];
+            dorgqr_(m, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
+            lwork_dorgqr_n__ = (integer) dum[0];
+            dorgqr_(m, m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
+            lwork_dorgqr_m__ = (integer) dum[0];
             /* Compute space needed for DGEBRD */
-            aocl_lapack_dgebrd(n, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, &ierr);
-            lwork_dgebrd__ = (integer)dum[0];
+            dgebrd_(n, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, &ierr);
+            lwork_dgebrd__ = (integer) dum[0];
             /* Compute space needed for DORGBR P */
-            aocl_lapack_dorgbr("P", n, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
-            lwork_dorgbr_p__ = (integer)dum[0];
+            dorgbr_("P", n, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
+            lwork_dorgbr_p__ = (integer) dum[0];
             /* Compute space needed for DORGBR Q */
-            aocl_lapack_dorgbr("Q", n, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
-            lwork_dorgbr_q__ = (integer)dum[0];
-            if(*m >= mnthr)
+            dorgbr_("Q", n, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
+            lwork_dorgbr_q__ = (integer) dum[0];
+            if (*m >= mnthr)
             {
-                if(wntun)
+                if (wntun)
                 {
                     /* Path 1 (M much larger than N, JOBU='N') */
                     maxwrk = *n + lwork_dgeqrf__;
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = *n * 3 + lwork_dgebrd__; // , expr subst
-                    maxwrk = fla_max(i__2, i__3);
-                    if(wntvo || wntvas)
+                    maxwrk = max(i__2,i__3);
+                    if (wntvo || wntvas)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
                         i__3 = *n * 3 + lwork_dorgbr_p__; // , expr subst
-                        maxwrk = fla_max(i__2, i__3);
+                        maxwrk = max(i__2,i__3);
                     }
-                    maxwrk = fla_max(maxwrk, bdspac);
+                    maxwrk = max(maxwrk,bdspac);
                     /* Computing MAX */
                     i__2 = *n << 2;
-                    minwrk = fla_max(i__2, bdspac);
+                    minwrk = max(i__2,bdspac);
                 }
-                else if(wntuo && wntvn)
+                else if (wntuo && wntvn)
                 {
                     /* Path 2 (M much larger than N, JOBU='O', JOBVT='N') */
                     wrkbl = *n + lwork_dgeqrf__;
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_dorgqr_n__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
-                    wrkbl = fla_max(wrkbl, bdspac);
+                    wrkbl = max(i__2,i__3);
+                    wrkbl = max(wrkbl,bdspac);
                     /* Computing MAX */
                     i__2 = *n * *n + wrkbl;
                     i__3 = *n * *n + *m * *n + *n; // , expr subst
-                    maxwrk = fla_max(i__2, i__3);
+                    maxwrk = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = *n * 3 + *m;
-                    minwrk = fla_max(i__2, bdspac);
+                    minwrk = max(i__2,bdspac);
                 }
-                else if(wntuo && wntvas)
+                else if (wntuo && wntvas)
                 {
                     /* Path 3 (M much larger than N, JOBU='O', JOBVT='S' or */
                     /* 'A') */
@@ -166,77 +167,77 @@ int dgesdd_fla_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, 
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_dorgqr_n__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
-                    wrkbl = fla_max(wrkbl, bdspac);
+                    wrkbl = max(i__2,i__3);
+                    wrkbl = max(wrkbl,bdspac);
                     /* Computing MAX */
                     i__2 = *n * *n + wrkbl;
                     i__3 = *n * *n + *m * *n + *n; // , expr subst
-                    maxwrk = fla_max(i__2, i__3);
+                    maxwrk = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = *n * 3 + *m;
-                    minwrk = fla_max(i__2, bdspac);
+                    minwrk = max(i__2,bdspac);
                 }
-                else if(wntus && wntvn)
+                else if (wntus && wntvn)
                 {
                     /* Path 4 (M much larger than N, JOBU='S', JOBVT='N') */
                     wrkbl = *n + lwork_dgeqrf__;
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_dorgqr_n__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
-                    wrkbl = fla_max(wrkbl, bdspac);
+                    wrkbl = max(i__2,i__3);
+                    wrkbl = max(wrkbl,bdspac);
                     maxwrk = *n * *n + wrkbl;
                     /* Computing MAX */
                     i__2 = *n * 3 + *m;
-                    minwrk = fla_max(i__2, bdspac);
+                    minwrk = max(i__2,bdspac);
                 }
-                else if(wntus && wntvo)
+                else if (wntus && wntvo)
                 {
                     /* Path 5 (M much larger than N, JOBU='S', JOBVT='O') */
                     wrkbl = *n + lwork_dgeqrf__;
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_dorgqr_n__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
-                    wrkbl = fla_max(wrkbl, bdspac);
+                    wrkbl = max(i__2,i__3);
+                    wrkbl = max(wrkbl,bdspac);
                     maxwrk = (*n << 1) * *n + wrkbl;
                     /* Computing MAX */
                     i__2 = *n * 3 + *m;
-                    minwrk = fla_max(i__2, bdspac);
+                    minwrk = max(i__2,bdspac);
                 }
-                else if(wntus && wntvas)
+                else if (wntus && wntvas)
                 {
                     /* Path 6 (M much larger than N, JOBU='S', JOBVT='S' or */
                     /* 'A') */
@@ -244,74 +245,74 @@ int dgesdd_fla_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, 
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_dorgqr_n__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
-                    wrkbl = fla_max(wrkbl, bdspac);
+                    wrkbl = max(i__2,i__3);
+                    wrkbl = max(wrkbl,bdspac);
                     maxwrk = *n * *n + wrkbl;
                     /* Computing MAX */
                     i__2 = *n * 3 + *m;
-                    minwrk = fla_max(i__2, bdspac);
+                    minwrk = max(i__2,bdspac);
                 }
-                else if(wntua && wntvn)
+                else if (wntua && wntvn)
                 {
                     /* Path 7 (M much larger than N, JOBU='A', JOBVT='N') */
                     wrkbl = *n + lwork_dgeqrf__;
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_dorgqr_m__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
-                    wrkbl = fla_max(wrkbl, bdspac);
+                    wrkbl = max(i__2,i__3);
+                    wrkbl = max(wrkbl,bdspac);
                     maxwrk = *n * *n + wrkbl;
                     /* Computing MAX */
                     i__2 = *n * 3 + *m;
-                    minwrk = fla_max(i__2, bdspac);
+                    minwrk = max(i__2,bdspac);
                 }
-                else if(wntua && wntvo)
+                else if (wntua && wntvo)
                 {
                     /* Path 8 (M much larger than N, JOBU='A', JOBVT='O') */
                     wrkbl = *n + lwork_dgeqrf__;
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_dorgqr_m__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
-                    wrkbl = fla_max(wrkbl, bdspac);
+                    wrkbl = max(i__2,i__3);
+                    wrkbl = max(wrkbl,bdspac);
                     maxwrk = (*n << 1) * *n + wrkbl;
                     /* Computing MAX */
                     i__2 = *n * 3 + *m;
-                    minwrk = fla_max(i__2, bdspac);
+                    minwrk = max(i__2,bdspac);
                 }
-                else if(wntua && wntvas)
+                else if (wntua && wntvas)
                 {
                     /* Path 9 (M much larger than N, JOBU='A', JOBVT='S' or */
                     /* 'A') */
@@ -319,133 +320,133 @@ int dgesdd_fla_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, 
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_dorgqr_m__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
-                    wrkbl = fla_max(wrkbl, bdspac);
+                    wrkbl = max(i__2,i__3);
+                    wrkbl = max(wrkbl,bdspac);
                     maxwrk = *n * *n + wrkbl;
                     /* Computing MAX */
                     i__2 = *n * 3 + *m;
-                    minwrk = fla_max(i__2, bdspac);
+                    minwrk = max(i__2,bdspac);
                 }
             }
             else
             {
                 /* Path 10 (M at least N, but not much larger) */
-                aocl_lapack_dgebrd(m, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, &ierr);
-                lwork_dgebrd__ = (integer)dum[0];
+                dgebrd_(m, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, & c_n1, &ierr);
+                lwork_dgebrd__ = (integer) dum[0];
                 maxwrk = *n * 3 + lwork_dgebrd__;
-                if(wntus || wntuo)
+                if (wntus || wntuo)
                 {
-                    aocl_lapack_dorgbr("Q", m, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
-                    lwork_dorgbr_q__ = (integer)dum[0];
+                    dorgbr_("Q", m, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
+                    lwork_dorgbr_q__ = (integer) dum[0];
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    maxwrk = fla_max(i__2, i__3);
+                    maxwrk = max(i__2,i__3);
                 }
-                if(wntua)
+                if (wntua)
                 {
-                    aocl_lapack_dorgbr("Q", m, m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
-                    lwork_dorgbr_q__ = (integer)dum[0];
+                    dorgbr_("Q", m, m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
+                    lwork_dorgbr_q__ = (integer) dum[0];
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    maxwrk = fla_max(i__2, i__3);
+                    maxwrk = max(i__2,i__3);
                 }
-                if(!wntvn)
+                if (! wntvn)
                 {
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = *n * 3 + lwork_dorgbr_p__; // , expr subst
-                    maxwrk = fla_max(i__2, i__3);
+                    maxwrk = max(i__2,i__3);
                 }
-                maxwrk = fla_max(maxwrk, bdspac);
+                maxwrk = max(maxwrk,bdspac);
                 /* Computing MAX */
                 i__2 = *n * 3 + *m;
-                minwrk = fla_max(i__2, bdspac);
+                minwrk = max(i__2,bdspac);
             }
         }
-        else if(minmn > 0)
+        else if (minmn > 0)
         {
             /* Compute space needed for DBDSQR */
-            mnthr = aocl_lapack_ilaenv(&c__6, "DGESVD", ch__1, m, n, &c__0, &c__0);
+            mnthr = ilaenv_(&c__6, "DGESVD", ch__1, m, n, &c__0, &c__0);
             bdspac = *m * 5;
             /* Compute space needed for DGELQF */
-            aocl_lapack_dgelqf(m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
-            lwork_dgelqf__ = (integer)dum[0];
+            dgelqf_(m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
+            lwork_dgelqf__ = (integer) dum[0];
             /* Compute space needed for DORGLQ */
-            aocl_lapack_dorglq(n, n, m, dum, n, dum, dum, &c_n1, &ierr);
-            lwork_dorglq_n__ = (integer)dum[0];
-            aocl_lapack_dorglq(m, n, m, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
-            lwork_dorglq_m__ = (integer)dum[0];
+            dorglq_(n, n, m, dum, n, dum, dum, &c_n1, &ierr);
+            lwork_dorglq_n__ = (integer) dum[0];
+            dorglq_(m, n, m, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
+            lwork_dorglq_m__ = (integer) dum[0];
             /* Compute space needed for DGEBRD */
-            aocl_lapack_dgebrd(m, m, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, &ierr);
-            lwork_dgebrd__ = (integer)dum[0];
+            dgebrd_(m, m, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, &ierr);
+            lwork_dgebrd__ = (integer) dum[0];
             /* Compute space needed for DORGBR P */
-            aocl_lapack_dorgbr("P", m, m, m, &a[a_offset], n, dum, dum, &c_n1, &ierr);
-            lwork_dorgbr_p__ = (integer)dum[0];
+            dorgbr_("P", m, m, m, &a[a_offset], n, dum, dum, &c_n1, &ierr);
+            lwork_dorgbr_p__ = (integer) dum[0];
             /* Compute space needed for DORGBR Q */
-            aocl_lapack_dorgbr("Q", m, m, m, &a[a_offset], n, dum, dum, &c_n1, &ierr);
-            lwork_dorgbr_q__ = (integer)dum[0];
-            if(*n >= mnthr)
+            dorgbr_("Q", m, m, m, &a[a_offset], n, dum, dum, &c_n1, &ierr);
+            lwork_dorgbr_q__ = (integer) dum[0];
+            if (*n >= mnthr)
             {
-                if(wntvn)
+                if (wntvn)
                 {
                     /* Path 1t(N much larger than M, JOBVT='N') */
                     maxwrk = *m + lwork_dgelqf__;
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = *m * 3 + lwork_dgebrd__; // , expr subst
-                    maxwrk = fla_max(i__2, i__3);
-                    if(wntuo || wntuas)
+                    maxwrk = max(i__2,i__3);
+                    if (wntuo || wntuas)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
                         i__3 = *m * 3 + lwork_dorgbr_q__; // , expr subst
-                        maxwrk = fla_max(i__2, i__3);
+                        maxwrk = max(i__2,i__3);
                     }
-                    maxwrk = fla_max(maxwrk, bdspac);
+                    maxwrk = max(maxwrk,bdspac);
                     /* Computing MAX */
                     i__2 = *m << 2;
-                    minwrk = fla_max(i__2, bdspac);
+                    minwrk = max(i__2,bdspac);
                 }
-                else if(wntvo && wntun)
+                else if (wntvo && wntun)
                 {
                     /* Path 2t(N much larger than M, JOBU='N', JOBVT='O') */
                     wrkbl = *m + lwork_dgelqf__;
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_dorglq_m__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
-                    wrkbl = fla_max(wrkbl, bdspac);
+                    wrkbl = max(i__2,i__3);
+                    wrkbl = max(wrkbl,bdspac);
                     /* Computing MAX */
                     i__2 = *m * *m + wrkbl;
                     i__3 = *m * *m + *m * *n + *m; // , expr subst
-                    maxwrk = fla_max(i__2, i__3);
+                    maxwrk = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = *m * 3 + *n;
-                    minwrk = fla_max(i__2, bdspac);
+                    minwrk = max(i__2,bdspac);
                 }
-                else if(wntvo && wntuas)
+                else if (wntvo && wntuas)
                 {
                     /* Path 3t(N much larger than M, JOBU='S' or 'A', */
                     /* JOBVT='O') */
@@ -453,77 +454,77 @@ int dgesdd_fla_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, 
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_dorglq_m__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
-                    wrkbl = fla_max(wrkbl, bdspac);
+                    wrkbl = max(i__2,i__3);
+                    wrkbl = max(wrkbl,bdspac);
                     /* Computing MAX */
                     i__2 = *m * *m + wrkbl;
                     i__3 = *m * *m + *m * *n + *m; // , expr subst
-                    maxwrk = fla_max(i__2, i__3);
+                    maxwrk = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = *m * 3 + *n;
-                    minwrk = fla_max(i__2, bdspac);
+                    minwrk = max(i__2,bdspac);
                 }
-                else if(wntvs && wntun)
+                else if (wntvs && wntun)
                 {
                     /* Path 4t(N much larger than M, JOBU='N', JOBVT='S') */
                     wrkbl = *m + lwork_dgelqf__;
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_dorglq_m__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
-                    wrkbl = fla_max(wrkbl, bdspac);
+                    wrkbl = max(i__2,i__3);
+                    wrkbl = max(wrkbl,bdspac);
                     maxwrk = *m * *m + wrkbl;
                     /* Computing MAX */
                     i__2 = *m * 3 + *n;
-                    minwrk = fla_max(i__2, bdspac);
+                    minwrk = max(i__2,bdspac);
                 }
-                else if(wntvs && wntuo)
+                else if (wntvs && wntuo)
                 {
                     /* Path 5t(N much larger than M, JOBU='O', JOBVT='S') */
                     wrkbl = *m + lwork_dgelqf__;
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_dorglq_m__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
-                    wrkbl = fla_max(wrkbl, bdspac);
+                    wrkbl = max(i__2,i__3);
+                    wrkbl = max(wrkbl,bdspac);
                     maxwrk = (*m << 1) * *m + wrkbl;
                     /* Computing MAX */
                     i__2 = *m * 3 + *n;
-                    minwrk = fla_max(i__2, bdspac);
+                    minwrk = max(i__2,bdspac);
                 }
-                else if(wntvs && wntuas)
+                else if (wntvs && wntuas)
                 {
                     /* Path 6t(N much larger than M, JOBU='S' or 'A', */
                     /* JOBVT='S') */
@@ -531,74 +532,74 @@ int dgesdd_fla_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, 
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_dorglq_m__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
-                    wrkbl = fla_max(wrkbl, bdspac);
+                    wrkbl = max(i__2,i__3);
+                    wrkbl = max(wrkbl,bdspac);
                     maxwrk = *m * *m + wrkbl;
                     /* Computing MAX */
                     i__2 = *m * 3 + *n;
-                    minwrk = fla_max(i__2, bdspac);
+                    minwrk = max(i__2,bdspac);
                 }
-                else if(wntva && wntun)
+                else if (wntva && wntun)
                 {
                     /* Path 7t(N much larger than M, JOBU='N', JOBVT='A') */
                     wrkbl = *m + lwork_dgelqf__;
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_dorglq_n__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
-                    wrkbl = fla_max(wrkbl, bdspac);
+                    wrkbl = max(i__2,i__3);
+                    wrkbl = max(wrkbl,bdspac);
                     maxwrk = *m * *m + wrkbl;
                     /* Computing MAX */
                     i__2 = *m * 3 + *n;
-                    minwrk = fla_max(i__2, bdspac);
+                    minwrk = max(i__2,bdspac);
                 }
-                else if(wntva && wntuo)
+                else if (wntva && wntuo)
                 {
                     /* Path 8t(N much larger than M, JOBU='O', JOBVT='A') */
                     wrkbl = *m + lwork_dgelqf__;
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_dorglq_n__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
-                    wrkbl = fla_max(wrkbl, bdspac);
+                    wrkbl = max(i__2,i__3);
+                    wrkbl = max(wrkbl,bdspac);
                     maxwrk = (*m << 1) * *m + wrkbl;
                     /* Computing MAX */
                     i__2 = *m * 3 + *n;
-                    minwrk = fla_max(i__2, bdspac);
+                    minwrk = max(i__2,bdspac);
                 }
-                else if(wntva && wntuas)
+                else if (wntva && wntuas)
                 {
                     /* Path 9t(N much larger than M, JOBU='S' or 'A', */
                     /* JOBVT='A') */
@@ -606,83 +607,83 @@ int dgesdd_fla_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, 
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_dorglq_n__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = max(i__2,i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2, i__3);
-                    wrkbl = fla_max(wrkbl, bdspac);
+                    wrkbl = max(i__2,i__3);
+                    wrkbl = max(wrkbl,bdspac);
                     maxwrk = *m * *m + wrkbl;
                     /* Computing MAX */
                     i__2 = *m * 3 + *n;
-                    minwrk = fla_max(i__2, bdspac);
+                    minwrk = max(i__2,bdspac);
                 }
             }
             else
             {
                 /* Path 10t(N greater than M, but not much larger) */
-                aocl_lapack_dgebrd(m, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, &ierr);
-                lwork_dgebrd__ = (integer)dum[0];
+                dgebrd_(m, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, & c_n1, &ierr);
+                lwork_dgebrd__ = (integer) dum[0];
                 maxwrk = *m * 3 + lwork_dgebrd__;
-                if(wntvs || wntvo)
+                if (wntvs || wntvo)
                 {
                     /* Compute space needed for DORGBR P */
-                    aocl_lapack_dorgbr("P", m, n, m, &a[a_offset], n, dum, dum, &c_n1, &ierr);
-                    lwork_dorgbr_p__ = (integer)dum[0];
+                    dorgbr_("P", m, n, m, &a[a_offset], n, dum, dum, &c_n1, & ierr);
+                    lwork_dorgbr_p__ = (integer) dum[0];
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    maxwrk = fla_max(i__2, i__3);
+                    maxwrk = max(i__2,i__3);
                 }
-                if(wntva)
+                if (wntva)
                 {
-                    aocl_lapack_dorgbr("P", n, n, m, &a[a_offset], n, dum, dum, &c_n1, &ierr);
-                    lwork_dorgbr_p__ = (integer)dum[0];
+                    dorgbr_("P", n, n, m, &a[a_offset], n, dum, dum, &c_n1, & ierr);
+                    lwork_dorgbr_p__ = (integer) dum[0];
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    maxwrk = fla_max(i__2, i__3);
+                    maxwrk = max(i__2,i__3);
                 }
-                if(!wntun)
+                if (! wntun)
                 {
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = *m * 3 + lwork_dorgbr_q__; // , expr subst
-                    maxwrk = fla_max(i__2, i__3);
+                    maxwrk = max(i__2,i__3);
                 }
-                maxwrk = fla_max(maxwrk, bdspac);
+                maxwrk = max(maxwrk,bdspac);
                 /* Computing MAX */
                 i__2 = *m * 3 + *n;
-                minwrk = fla_max(i__2, bdspac);
+                minwrk = max(i__2,bdspac);
             }
         }
-        maxwrk = fla_max(maxwrk, minwrk);
-        work[1] = (double)maxwrk;
-        if(*lwork < minwrk && !lquery)
+        maxwrk = max(maxwrk,minwrk);
+        work[1] = (double) maxwrk;
+        if (*lwork < minwrk && ! lquery)
         {
-            *info = -12;
+            *info = -13;
         }
     }
-    if(*info != 0)
+    if (*info != 0)
     {
         i__2 = -(*info);
-        aocl_blas_xerbla("DGESDD", &i__2, (ftnlen)6);
+        xerbla_("DGESVD", &i__2);
         return LAPACK_FAILURE;
     }
-    else if(lquery)
+    else if (lquery)
     {
         return LAPACK_QUERY_RETURN;
     }
     /* Quick return if possible */
-    if(*m == 0 || *n == 0)
+    if (*m == 0 || *n == 0)
     {
         return LAPACK_QUICK_RETURN;
     }

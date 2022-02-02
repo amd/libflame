@@ -145,26 +145,12 @@ void dsycon_rook_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aoc
                   doublereal *anorm, doublereal *rcond, doublereal *work, aocl_int_t *iwork,
                   aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dsycon_rook(uplo, n, a, lda, ipiv, anorm, rcond, work, iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dsycon_rook(uplo, &n_64, a, &lda_64, ipiv, anorm, rcond, work, iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dsycon_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ipiv %" FLA_IS "",*uplo, *n, *lda, *ipiv);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dsycon_rook(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
-                             aocl_int_t *ipiv, doublereal *anorm, doublereal *rcond,
-                             doublereal *work, aocl_int_t *iwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsycon_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
-                      *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
@@ -226,22 +212,22 @@ void aocl_lapack_dsycon_rook(char *uplo, aocl_int64_t *n, doublereal *a, aocl_in
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DSYCON_ROOK", &i__1, (ftnlen)11);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DSYCON_ROOK", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     *rcond = 0.;
     if(*n == 0)
     {
         *rcond = 1.;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(*anorm <= 0.)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if(upper)
@@ -251,8 +237,8 @@ void aocl_lapack_dsycon_rook(char *uplo, aocl_int64_t *n, doublereal *a, aocl_in
         {
             if(ipiv[i__] > 0 && a[i__ + i__ * a_dim1] == 0.)
             {
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             /* L10: */
         }
@@ -265,8 +251,8 @@ void aocl_lapack_dsycon_rook(char *uplo, aocl_int64_t *n, doublereal *a, aocl_in
         {
             if(ipiv[i__] > 0 && a[i__ + i__ * a_dim1] == 0.)
             {
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                return 0;
             }
             /* L20: */
         }
@@ -286,8 +272,8 @@ L30:
     {
         *rcond = 1. / ainvnm / *anorm;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DSYCON_ROOK */
 }
 /* dsycon_rook__ */

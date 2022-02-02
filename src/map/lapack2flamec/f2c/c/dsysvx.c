@@ -289,37 +289,12 @@ void dsysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal
              doublereal *berr, doublereal *work, aocl_int_t *lwork, aocl_int_t *iwork,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dsysvx(fact, uplo, n, nrhs, a, lda, af, ldaf, ipiv, b, ldb, x, ldx, rcond, ferr,
-                       berr, work, lwork, iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldaf_64 = *ldaf;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dsysvx(fact, uplo, &n_64, &nrhs_64, a, &lda_64, af, &ldaf_64, ipiv, b, &ldb_64, x,
-                       &ldx_64, rcond, ferr, berr, work, &lwork_64, iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dsysvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ipiv %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS ", lwork %" FLA_IS "",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldx, *lwork);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dsysvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *a,
-                        aocl_int64_t *lda, doublereal *af, aocl_int64_t *ldaf, aocl_int_t *ipiv,
-                        doublereal *b, aocl_int64_t *ldb, doublereal *x, aocl_int64_t *ldx,
-                        doublereal *rcond, doublereal *ferr, doublereal *berr, doublereal *work,
-                        aocl_int64_t *lwork, aocl_int_t *iwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsysvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
-                      ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS
-                      ", lwork %" FLA_IS "",
-                      *fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2;
@@ -435,14 +410,14 @@ void aocl_lapack_dsysvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *n
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DSYSVX", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DSYSVX", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     if(nofact)
     {
@@ -453,8 +428,8 @@ void aocl_lapack_dsysvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *n
         if(*info > 0)
         {
             *rcond = 0.;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return 0;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -475,9 +450,9 @@ void aocl_lapack_dsysvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *n
     {
         *info = *n + 1;
     }
-    work[1] = (doublereal)lwkopt;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    work[1] = (doublereal) lwkopt;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DSYSVX */
 }
 /* dsysvx_ */

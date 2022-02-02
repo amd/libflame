@@ -175,31 +175,12 @@ void dsysv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_int
             aocl_int_t *ipiv, doublereal *b, aocl_int_t *ldb, doublereal *work, aocl_int_t *lwork,
             aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dsysv(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dsysv(uplo, &n_64, &nrhs_64, a, &lda_64, ipiv, b, &ldb_64, work, &lwork_64,
-                      &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dsysv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb, *lwork);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dsysv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *a,
-                       aocl_int64_t *lda, aocl_int_t *ipiv, doublereal *b, aocl_int64_t *ldb,
-                       doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsysv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
-                      ", ldb %" FLA_IS ", lwork %" FLA_IS "",
-                      *uplo, *n, *nrhs, *lda, *ldb, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
@@ -277,14 +258,14 @@ void aocl_lapack_dsysv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, doublere
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DSYSV ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DSYSV ", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
     aocl_lapack_dsytrf(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
@@ -303,9 +284,9 @@ void aocl_lapack_dsysv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, doublere
                                 &work[1], info);
         }
     }
-    work[1] = (doublereal)lwkopt;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    work[1] = (doublereal) lwkopt;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DSYSV */
 }
 /* dsysv_ */

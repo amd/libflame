@@ -399,45 +399,12 @@ void dtgsja_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
              doublereal *beta, doublereal *u, aocl_int_t *ldu, doublereal *v, aocl_int_t *ldv,
              doublereal *q, aocl_int_t *ldq, doublereal *work, aocl_int_t *ncycle, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dtgsja(jobu, jobv, jobq, m, p, n, k, l, a, lda, b, ldb, tola, tolb, alpha, beta, u,
-                       ldu, v, ldv, q, ldq, work, ncycle, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t p_64 = *p;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t l_64 = *l;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t ldv_64 = *ldv;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t ncycle_64 = *ncycle;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dtgsja(jobu, jobv, jobq, &m_64, &p_64, &n_64, &k_64, &l_64, a, &lda_64, b, &ldb_64,
-                       tola, tolb, alpha, beta, u, &ldu_64, v, &ldv_64, q, &ldq_64, work,
-                       &ncycle_64, &info_64);
-
-    *ncycle = (aocl_int_t)ncycle_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dtgsja inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS "",*jobu, *jobv, *jobq, *m, *p, *n, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dtgsja(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aocl_int64_t *p,
-                        aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *l, doublereal *a,
-                        aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb, doublereal *tola,
-                        doublereal *tolb, doublereal *alpha, doublereal *beta, doublereal *u,
-                        aocl_int64_t *ldu, doublereal *v, aocl_int64_t *ldv, doublereal *q,
-                        aocl_int64_t *ldq, doublereal *work, aocl_int64_t *ncycle,
-                        aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dtgsja inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS
-                      ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
-                      ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS "",
-                      *jobu, *jobv, *jobq, *m, *p, *n, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
         v_offset, i__1, i__2, i__3, i__4;
@@ -547,9 +514,9 @@ void aocl_lapack_dtgsja(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DTGSJA", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DTGSJA", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Initialize U, V and Q, if necessary */
     if(initu)
@@ -773,8 +740,8 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
     }
 L100:
     *ncycle = kcycle;
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DTGSJA */
 }
 /* dtgsja_ */

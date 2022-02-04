@@ -308,36 +308,12 @@ void dtgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, doublerea
              doublereal *vr, aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m, doublereal *work,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dtgevc(side, howmny, select, n, s, lds, p, ldp, vl, ldvl, vr, ldvr, mm, m, work,
-                       info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lds_64 = *lds;
-    aocl_int64_t ldp_64 = *ldp;
-    aocl_int64_t ldvl_64 = *ldvl;
-    aocl_int64_t ldvr_64 = *ldvr;
-    aocl_int64_t mm_64 = *mm;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dtgevc(side, howmny, select, &n_64, s, &lds_64, p, &ldp_64, vl, &ldvl_64, vr,
-                       &ldvr_64, &mm_64, &m_64, work, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dtgevc inputs: side %c, howmny %c, n %" FLA_IS ", lds %" FLA_IS ", ldp %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",*side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dtgevc(char *side, char *howmny, logical *select, aocl_int64_t *n, doublereal *s,
-                        aocl_int64_t *lds, doublereal *p, aocl_int64_t *ldp, doublereal *vl,
-                        aocl_int64_t *ldvl, doublereal *vr, aocl_int64_t *ldvr, aocl_int64_t *mm,
-                        aocl_int64_t *m, doublereal *work, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dtgevc inputs: side %c, howmny %c, n %" FLA_IS ", lds %" FLA_IS
-                      ", ldp %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",
-                      *side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm);
     /* System generated locals */
     aocl_int64_t p_dim1, p_offset, s_dim1, s_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1,
         i__2, i__3, i__4, i__5;
@@ -482,9 +458,9 @@ void aocl_lapack_dtgevc(char *side, char *howmny, logical *select, aocl_int64_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DTGEVC", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DTGEVC", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Count the number of eigenvectors to be computed */
     if(!ilall)
@@ -573,16 +549,16 @@ void aocl_lapack_dtgevc(char *side, char *howmny, logical *select, aocl_int64_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DTGEVC", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DTGEVC", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     *m = im;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Machine Constants */
     safmin = dlamch_("Safe minimum");
@@ -783,8 +759,8 @@ void aocl_lapack_dtgevc(char *side, char *howmny, logical *select, aocl_int64_t 
                 if(bcoefi == 0.)
                 {
                     *info = je;
-                    AOCL_DTL_TRACE_LOG_EXIT
-                    return;
+                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    return 0;
                 }
                 /* Scale to avoid over/underflow */
                 acoefa = f2c_dabs(acoef);
@@ -1204,8 +1180,8 @@ void aocl_lapack_dtgevc(char *side, char *howmny, logical *select, aocl_int64_t 
                 if(bcoefi == 0.)
                 {
                     *info = je - 1;
-                    AOCL_DTL_TRACE_LOG_EXIT
-                    return;
+                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    return 0;
                 }
                 /* Scale to avoid over/underflow */
                 acoefa = f2c_dabs(acoef);
@@ -1528,8 +1504,8 @@ void aocl_lapack_dtgevc(char *side, char *howmny, logical *select, aocl_int64_t 
         L500:;
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DTGEVC */
 }
 /* dtgevc_ */

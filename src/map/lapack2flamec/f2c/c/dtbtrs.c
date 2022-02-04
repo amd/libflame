@@ -149,31 +149,12 @@ static aocl_int64_t c__1 = 1;
 void dtbtrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs,
              doublereal *ab, aocl_int_t *ldab, doublereal *b, aocl_int_t *ldb, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dtbtrs(uplo, trans, diag, n, kd, nrhs, ab, ldab, b, ldb, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kd_64 = *kd;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dtbtrs(uplo, trans, diag, &n_64, &kd_64, &nrhs_64, ab, &ldab_64, b, &ldb_64,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+#if AOCL_DTL_LOG_ENABLE 
+    char buffer[256]; 
+    snprintf(buffer, 256,"dtbtrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb);
+    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-}
-
-void aocl_lapack_dtbtrs(char *uplo, char *trans, char *diag, aocl_int64_t *n, aocl_int64_t *kd,
-                        aocl_int64_t *nrhs, doublereal *ab, aocl_int64_t *ldab, doublereal *b,
-                        aocl_int64_t *ldb, aocl_int64_t *info)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dtbtrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", kd %" FLA_IS
-                      ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",
-                      *uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
@@ -248,15 +229,15 @@ void aocl_lapack_dtbtrs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DTBTRS", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DTBTRS", &i__1);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Check for singularity. */
     if(nounit)
@@ -268,8 +249,8 @@ void aocl_lapack_dtbtrs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
             {
                 if(ab[*kd + 1 + *info * ab_dim1] == 0.)
                 {
-                    AOCL_DTL_TRACE_LOG_EXIT
-                    return;
+                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    return 0;
                 }
                 /* L10: */
             }
@@ -281,8 +262,8 @@ void aocl_lapack_dtbtrs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
             {
                 if(ab[*info * ab_dim1 + 1] == 0.)
                 {
-                    AOCL_DTL_TRACE_LOG_EXIT
-                    return;
+                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    return 0;
                 }
                 /* L20: */
             }
@@ -296,8 +277,8 @@ void aocl_lapack_dtbtrs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
         aocl_blas_dtbsv(uplo, trans, diag, n, kd, &ab[ab_offset], ldab, &b[j * b_dim1 + 1], &c__1);
         /* L30: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    return 0;
     /* End of DTBTRS */
 }
 /* dtbtrs_ */

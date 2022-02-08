@@ -314,11 +314,16 @@ void aocl_lapack_slaqr0(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     real swap;
     aocl_int64_t ktop;
     real zdum[1] /* was [1][1] */
-        ;
-    aocl_int64_t kacc22, itmax, nsmax, nwmax, kwtop;
-    aocl_int64_t nibble;
+    ;
+    integer kacc22, itmax, nsmax, nwmax, kwtop;
+    extern /* Subroutine */
+    int slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *), slaqr3_(logical *, logical *, integer *, integer *, integer *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *), slaqr4_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *), slaqr5_(logical *, logical *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *);
+    integer nibble;
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     char jbcmpz[2];
-    aocl_int64_t nwupbd;
+    extern /* Subroutine */
+    int slahqr_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    integer nwupbd;
     logical sorted;
     aocl_int64_t lwkopt;
     /* -- LAPACK auxiliary routine -- */
@@ -624,8 +629,7 @@ void aocl_lapack_slaqr0(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
                         bb = ss;
                         cc = ss * -.4375f;
                         dd = aa;
-                        slanv2_(&aa, &bb, &cc, &dd, &wr[i__ - 1], &wi[i__ - 1], &wr[i__], &wi[i__],
-                                &cs, &sn);
+                        slanv2_(&aa, &bb, &cc, &dd, &wr[i__ - 1], &wi[i__ - 1], &wr[i__], &wi[i__], &cs, &sn);
                         /* L30: */
                     }
                     if(ks == ktop)
@@ -693,7 +697,7 @@ void aocl_lapack_slaqr0(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
                             i__3 = k - 1;
                             for(i__ = ks; i__ <= i__3; ++i__)
                             {
-                                if ((r__1 = wr[i__], f2c_abs(r__1)) + (r__2 = wi[ i__], f2c_abs(r__2)) < (r__3 = wr[i__ + 1] , f2c_abs(r__3)) + (r__4 = wi[i__ + 1], f2c_abs(r__4)))
+                                if ((r__1 = wr[i__], f2c_abs(r__1)) + (r__2 = wi[ i__], f2c_abs(r__2)) < (r__3 = wr[i__ + 1], f2c_abs(r__3)) + (r__4 = wi[i__ + 1], f2c_abs(r__4)))
                                 {
                                     sorted = FALSE_;
                                     swap = wr[i__];

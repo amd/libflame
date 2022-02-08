@@ -219,8 +219,8 @@ k=N/2. IF TRANSR = 'C' then RFP is */
 void zpftrf_(char *transr, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zpftrf inputs: transr %c, uplo %c, n %d",*transr, *uplo, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -383,10 +383,10 @@ void zpftrf_(char *transr, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *i
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return 0;
                 }
-                aocl_blas_ztrsm("R", "U", "N", "N", &n2, &n1, &c_b1, &a[n2 * n2], &n2, a, &n2);
-                aocl_blas_zherk("L", "N", &n2, &n1, &c_b15, a, &n2, &c_b16, &a[n1 * n2], &n2);
-                aocl_lapack_zpotrf("L", &n2, &a[n1 * n2], &n2, info);
-                if(*info > 0)
+                ztrsm_("R", "U", "N", "N", &n2, &n1, &c_b1, &a[n2 * n2], &n2, a, &n2);
+                zherk_("L", "N", &n2, &n1, &c_b15, a, &n2, &c_b16, &a[n1 * n2], &n2);
+                zpotrf_("L", &n2, &a[n1 * n2], &n2, info);
+                if (*info > 0)
                 {
                     *info += n1;
                 }

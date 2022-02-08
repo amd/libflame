@@ -116,11 +116,11 @@ void csptri_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, scomplex
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"csptri inputs: uplo %c, n %lld, ipiv %lld",*uplo, *n, *ipiv);
-#else 
+#else
     snprintf(buffer, 256,"csptri inputs: uplo %c, n %d, ipiv %d",*uplo, *n, *ipiv);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -131,13 +131,21 @@ void csptri_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, scomplex
     /* Builtin functions */
     void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    scomplex d__;
-    aocl_int64_t j, k;
-    scomplex t, ak;
-    aocl_int64_t kc, kp, kx, kpc, npp;
-    scomplex akp1, temp, akkp1;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t kstep;
+    complex d__;
+    integer j, k;
+    complex t, ak;
+    integer kc, kp, kx, kpc, npp;
+    complex akp1, temp, akkp1;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int ccopy_(integer *, complex *, integer *, complex *, integer *);
+    extern /* Complex */
+    VOID cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+    extern /* Subroutine */
+    int cswap_(integer *, complex *, integer *, complex *, integer *);
+    integer kstep;
+    extern /* Subroutine */
+    int cspmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *, integer *);
     logical upper;
     aocl_int64_t kcnext;
     /* -- LAPACK computational routine (version 3.4.0) -- */

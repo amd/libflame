@@ -243,8 +243,12 @@ void aocl_lapack_slasd1(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     aocl_int64_t u_dim1, u_offset, vt_dim1, vt_offset, i__1;
     real r__1, r__2;
     /* Local variables */
-    aocl_int64_t i__, k, m, n, n1, n2, iq, iz, iu2, ldq, idx, ldu2, ivt2, idxc, idxp, ldvt2;
-    aocl_int64_t isigma;
+    integer i__, k, m, n, n1, n2, iq, iz, iu2, ldq, idx, ldu2, ivt2, idxc, idxp, ldvt2;
+    extern /* Subroutine */
+    int slasd2_(integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, integer *, integer *), slasd3_(integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *);
+    integer isigma;
+    extern /* Subroutine */
+    int xerbla_(char *, integer *), slascl_( char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
     real orgnrm;
     aocl_int64_t coltyp;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */

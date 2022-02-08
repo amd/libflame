@@ -165,12 +165,12 @@ void cgbsv_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *nrhs, sco
             aocl_int_t *ldab, aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
-   snprintf(buffer, 256,"cgbsv inputs: n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldb %lld",*n, *kl, *ku, *nrhs, *ldab, *ldb);
-#else 
-   snprintf(buffer, 256,"cgbsv inputs: n %d, kl %d, ku %d, nrhs %d, ldab %d, ldb %d",*n, *kl, *ku, *nrhs, *ldab, *ldb);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
+    snprintf(buffer, 256,"cgbsv inputs: n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldb %lld",*n, *kl, *ku, *nrhs, *ldab, *ldb);
+#else
+    snprintf(buffer, 256,"cgbsv inputs: n %d, kl %d, ku %d, nrhs %d, ldab %d, ldb %d",*n, *kl, *ku, *nrhs, *ldab, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

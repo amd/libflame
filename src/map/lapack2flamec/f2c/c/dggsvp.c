@@ -263,8 +263,8 @@ LDQ >= 1 otherwise. */
 void dggsvp_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, doublereal *tola, doublereal *tolb, aocl_int_t *k, aocl_int_t *l, doublereal *u, aocl_int_t *ldu, doublereal *v, aocl_int_t *ldv, doublereal *q, aocl_int_t *ldq, aocl_int_t *iwork, doublereal *tau, doublereal *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dggsvp inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS "",*jobu, *jobv, *jobq, *m, *p, *n, *lda, *ldb, *ldu, *ldv, *ldq);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -501,7 +501,7 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
         {
             i__1 = *m - 1;
             i__2 = *n - *l;
-            aocl_lapack_dlacpy("Lower", &i__1, &i__2, &a[a_dim1 + 2], lda, &u[u_dim1 + 2], ldu);
+            dlacpy_("Lower", &i__1, &i__2, &a[a_dim1 + 2], lda, &u[u_dim1 + 2], ldu);
         }
         /* Computing MIN */
         i__2 = *m;

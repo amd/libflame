@@ -207,8 +207,8 @@ void ssysv_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_
                  aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"ssysv_rook inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -303,8 +303,7 @@ void ssysv_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_
     {
         /* Solve the system A*X = B, overwriting B with X. */
         /* Solve with TRS_ROOK ( Use Level 2 BLAS) */
-        aocl_lapack_ssytrs_rook(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
-                                info);
+        ssytrs_rook_(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb, info);
     }
     work[1] = (real) lwkopt;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

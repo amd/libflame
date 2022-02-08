@@ -289,11 +289,11 @@ void chesvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *
              aocl_int_t *lwork, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"chesvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ipiv %lld, ldb %lld, ldx %lld, lwork %lld",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldx, *lwork);
-#else 
+#else
     snprintf(buffer, 256,"chesvx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ipiv %d, ldb %d, ldx %d, lwork %d",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldx, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -446,9 +446,7 @@ void chesvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *
     aocl_lapack_chetrs(uplo, n, nrhs, &af[af_offset], ldaf, &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    aocl_lapack_cherfs(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1],
-                       &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
-                       &rwork[1], info);
+    cherfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
     if(*rcond < slamch_("Epsilon"))
     {

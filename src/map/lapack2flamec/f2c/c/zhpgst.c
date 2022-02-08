@@ -151,6 +151,8 @@ void aocl_lapack_zhpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcompl
     doublereal bjj, bkk;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
+    extern /* Subroutine */
+    int zhpmv_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_( char *, integer *), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -270,10 +272,9 @@ void aocl_lapack_zhpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcompl
                     i__2 = *n - k;
                     aocl_blas_zaxpy(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
-                    z__1.real = -1.;
-                    z__1.imag = -0.; // , expr subst
-                    aocl_blas_zhpr2(uplo, &i__2, &z__1, &ap[kk + 1], &c__1, &bp[kk + 1], &c__1,
-                                    &ap[k1k1]);
+                    z__1.r = -1.;
+                    z__1.i = -0.; // , expr subst
+                    zhpr2_(uplo, &i__2, &z__1, &ap[kk + 1], &c__1, &bp[kk + 1], &c__1, &ap[k1k1]);
                     i__2 = *n - k;
                     aocl_blas_zaxpy(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
@@ -352,8 +353,7 @@ void aocl_lapack_zhpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcompl
                 aocl_blas_zhpmv(uplo, &i__2, &c_b1, &ap[j1j1], &bp[jj + 1], &c__1, &c_b1,
                                 &ap[jj + 1], &c__1);
                 i__2 = *n - j + 1;
-                aocl_blas_ztpmv(uplo, "Conjugate transpose", "Non-unit", &i__2, &bp[jj], &ap[jj],
-                                &c__1);
+                ztpmv_(uplo, "Conjugate transpose", "Non-unit", &i__2, &bp[jj], &ap[jj], &c__1);
                 jj = j1j1;
                 /* L40: */
             }

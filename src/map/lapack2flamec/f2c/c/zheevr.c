@@ -761,8 +761,7 @@ void aocl_lapack_zheevr(char *jobz, char *range, char *uplo, aocl_int64_t *n, dc
             {
                 indwkn = indwk;
                 llwrkn = *lwork - indwkn + 1;
-                aocl_lapack_zunmtr("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau],
-                                   &z__[z_offset], ldz, &work[indwkn], &llwrkn, &iinfo);
+                zunmtr_("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau], &z__[z_offset], ldz, &work[indwkn], &llwrkn, &iinfo);
             }
         }
         if(*info == 0)

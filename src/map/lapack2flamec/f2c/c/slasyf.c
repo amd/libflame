@@ -185,8 +185,8 @@ void slasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, real *a,
              aocl_int_t *ipiv, real *w, aocl_int_t *ldw, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"slasyf inputs: uplo %c, n %d, nb %d, lda %d, ldw %d",*uplo, *n, *nb, *lda, *ldw);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -760,8 +760,7 @@ void slasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, real *a,
             {
                 i__4 = j + jb - jj;
                 i__5 = k - 1;
-                aocl_blas_sgemv("No transpose", &i__4, &i__5, &c_b8, &a[jj + a_dim1], lda,
-                                &w[jj + w_dim1], ldw, &c_b9, &a[jj + jj * a_dim1], &c__1);
+                sgemv_("No transpose", &i__4, &i__5, &c_b8, &a[jj + a_dim1], lda, &w[jj + w_dim1], ldw, &c_b9, &a[jj + jj * a_dim1], &c__1);
                 /* L100: */
             }
             /* Update the rectangular subdiagonal block */

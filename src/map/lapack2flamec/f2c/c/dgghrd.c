@@ -219,8 +219,8 @@ void dgghrd_(char *compq, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_
              aocl_int_t *ldq, doublereal *z__, aocl_int_t *ldz, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dgghrd inputs: compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS "",*compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

@@ -173,11 +173,11 @@ void clatdf_(aocl_int_t *ijob, aocl_int_t *n, scomplex *z__, aocl_int_t *ldz, sc
              real *rdsum, real *rdscal, aocl_int_t *ipiv, aocl_int_t *jpiv)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clatdf inputs: ijob %lld, n %lld, ldz %lld, ipiv %lld, jpiv %lld",*ijob, *n, *ldz, *ipiv, *jpiv);
-#else 
+#else
     snprintf(buffer, 256,"clatdf inputs: ijob %d, n %d, ldz %d, ipiv %d, jpiv %d",*ijob, *n, *ldz, *ipiv, *jpiv);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

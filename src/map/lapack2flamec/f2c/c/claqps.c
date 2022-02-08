@@ -180,11 +180,11 @@ void claqps_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, aocl_int_t *nb, a
              scomplex *auxv, scomplex *f, aocl_int_t *ldf)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"claqps inputs: m %lld, n %lld, offset %lld, nb %lld, lda %lld, jpvt %lld, ldf %lld",*m, *n, *offset, *nb, *lda, *jpvt, *ldf);
-#else 
+#else
     snprintf(buffer, 256,"claqps inputs: m %d, n %d, offset %d, nb %d, lda %d, jpvt %d, ldf %d",*m, *n, *offset, *nb, *lda, *jpvt, *ldf);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -338,10 +338,9 @@ L10:
             i__1 = *m - rk + 1;
             i__2 = k - 1;
             i__3 = k;
-            q__1.real = -tau[i__3].real;
-            q__1.imag = -tau[i__3].imag; // , expr subst
-            aocl_blas_cgemv("Conjugate transpose", &i__1, &i__2, &q__1, &a[rk + a_dim1], lda,
-                            &a[rk + k * a_dim1], &c__1, &c_b1, &auxv[1], &c__1);
+            q__1.r = -tau[i__3].r;
+            q__1.i = -tau[i__3].i; // , expr subst
+            cgemv_("Conjugate transpose", &i__1, &i__2, &q__1, &a[rk + a_dim1], lda, &a[rk + k * a_dim1], &c__1, &c_b1, &auxv[1], &c__1);
             i__1 = k - 1;
             aocl_blas_cgemv("No transpose", n, &i__1, &c_b2, &f[f_dim1 + 1], ldf, &auxv[1], &c__1,
                             &c_b2, &f[k * f_dim1 + 1], &c__1);

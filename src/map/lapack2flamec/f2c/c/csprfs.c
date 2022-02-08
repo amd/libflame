@@ -184,11 +184,11 @@ void csprfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, scomplex
              real *berr, scomplex *work, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"csprfs inputs: uplo %c, n %lld, nrhs %lld, ipiv %lld, ldb %lld, ldx %lld",*uplo, *n, *nrhs, *ipiv, *ldb, *ldx);
-#else 
+#else
     snprintf(buffer, 256,"csprfs inputs: uplo %c, n %d, nrhs %d, ipiv %d, ldb %d, ldx %d",*uplo, *n, *nrhs, *ipiv, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -210,7 +210,11 @@ void csprfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, scomplex
     real safe1, safe2;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    aocl_int64_t count;
+    extern /* Subroutine */
+    int ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    integer count;
+    extern /* Subroutine */
+    int cspmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *, integer *);
     logical upper;
     extern real slamch_(char *);
     real safmin;

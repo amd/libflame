@@ -465,9 +465,7 @@ void aocl_lapack_slasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
         if(ctot[3] > 0)
         {
             ktemp = ctot[1] + 2 + ctot[2];
-            ctot_sca = ctot[3];
-            aocl_blas_sgemm("N", "N", nl, k, &ctot_sca, &c_b12, &u2[ktemp * u2_dim1 + 1], ldu2,
-                            &q[ktemp + q_dim1], ldq, &c_b12, &u[u_dim1 + 1], ldu);
+            sgemm_("N", "N", nl, k, &ctot[3], &c_b13, &u2[ktemp * u2_dim1 + 1], ldu2, &q[ktemp + q_dim1], ldq, &c_b13, &u[u_dim1 + 1], ldu);
         }
     }
     else if(ctot[3] > 0)
@@ -505,10 +503,8 @@ L100:
     /* Update the right singular vector matrix. */
     if(*k == 2)
     {
-        aocl_blas_sgemm("N", "N", k, &m, k, &c_b12, &q[q_offset], ldq, &vt2[vt2_offset], ldvt2,
-                        &c_b25, &vt[vt_offset], ldvt);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        sgemm_("N", "N", k, &m, k, &c_b13, &q[q_offset], ldq, &vt2[vt2_offset], ldvt2, &c_b26, &vt[vt_offset], ldvt);
+        return 0;
     }
     ktemp = ctot[1] + 1;
     aocl_blas_sgemm("N", "N", k, &nlp1, &ktemp, &c_b12, &q[q_dim1 + 1], ldq, &vt2[vt2_dim1 + 1],

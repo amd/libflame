@@ -284,8 +284,8 @@ void dlasda_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
              aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlasda inputs: icompq %" FLA_IS ", smlsiz %" FLA_IS ", n %" FLA_IS ", sqre %" FLA_IS ", ldu %" FLA_IS ", ldgcol %" FLA_IS "",*icompq, *smlsiz, *n, *sqre, *ldu, *ldgcol);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -403,8 +403,7 @@ void dlasda_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
         }
         else
         {
-            aocl_lapack_dlasdq("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldu,
-                               &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
+            dlasdq_("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldu, &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;

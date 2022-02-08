@@ -143,16 +143,19 @@ void zgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl, dcomple
              aocl_int_t *ldb, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zgttrs inputs: trans %c, n %d, nrhs %d, ldb %d",*trans, *n, *nrhs, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2, i__3;
     /* Local variables */
-    aocl_int64_t j, jb, nb;
-    aocl_int64_t itrans;
+    integer j, jb, nb;
+    extern /* Subroutine */
+    int zgtts2_(integer *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(char *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer itrans;
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

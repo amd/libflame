@@ -185,8 +185,8 @@ void dlasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, doublere
              aocl_int_t *lda, aocl_int_t *ipiv, doublereal *w, aocl_int_t *ldw, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlasyf inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldw %" FLA_IS "",*uplo, *n, *nb, *lda, *ldw);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -200,8 +200,12 @@ void dlasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, doublere
     doublereal t, r1, d11, d21, d22;
     aocl_int64_t jb, jj, kk, jp, kp, kw, kkw, imax, jmax;
     doublereal alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t kstep;
+    extern /* Subroutine */
+    int dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    integer kstep;
     doublereal absakk;
     doublereal colmax, rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
@@ -760,8 +764,7 @@ void dlasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, doublere
             {
                 i__4 = j + jb - jj;
                 i__5 = k - 1;
-                aocl_blas_dgemv("No transpose", &i__4, &i__5, &c_b8, &a[jj + a_dim1], lda,
-                                &w[jj + w_dim1], ldw, &c_b9, &a[jj + jj * a_dim1], &c__1);
+                dgemv_("No transpose", &i__4, &i__5, &c_b8, &a[jj + a_dim1], lda, &w[jj + w_dim1], ldw, &c_b9, &a[jj + jj * a_dim1], &c__1);
                 /* L100: */
             }
             /* Update the rectangular subdiagonal block */

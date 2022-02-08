@@ -274,8 +274,8 @@ void dlalsa_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
              aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlalsa inputs: icompq %" FLA_IS ", smlsiz %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldbx %" FLA_IS ", ldu %" FLA_IS ", k %" FLA_IS ", givptr %" FLA_IS ", givcol %" FLA_IS ", ldgcol %" FLA_IS "",*icompq, *smlsiz, *n, *nrhs, *ldb, *ldbx, *ldu, *k, *givptr, *givcol, *ldgcol);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

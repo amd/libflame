@@ -126,8 +126,8 @@ void zgttrf_(aocl_int_t *n, dcomplex *dl, dcomplex *d__, dcomplex *du,
              dcomplex *du2, aocl_int_t *ipiv, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zgttrf inputs: n %d",*n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

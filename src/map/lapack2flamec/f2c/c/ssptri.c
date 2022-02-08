@@ -270,7 +270,7 @@ void ssptri_(char *uplo, aocl_int_t *n, real *ap, aocl_int_t *ipiv, real *work, 
                 i__1 = k - 1;
                 ap[kc + k - 1] -= aocl_blas_sdot(&i__1, &work[1], &c__1, &ap[kc], &c__1);
                 i__1 = k - 1;
-                ap[kcnext + k - 1] -= aocl_blas_sdot(&i__1, &ap[kc], &c__1, &ap[kcnext], &c__1);
+                ap[kcnext + k - 1] -= sdot_(&i__1, &ap[kc], &c__1, &ap[kcnext], &c__1);
                 i__1 = k - 1;
                 aocl_blas_scopy(&i__1, &ap[kcnext], &c__1, &work[1], &c__1);
                 i__1 = k - 1;

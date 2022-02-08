@@ -105,11 +105,11 @@ void clacp2_(char *uplo, aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda,
              aocl_int_t *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clacp2 inputs: uplo %c, m %lld, n %lld, lda %lld, ldb %lld",*uplo, *m, *n, *lda, *ldb);
-#else 
+#else
     snprintf(buffer, 256,"clacp2 inputs: uplo %c, m %d, n %d, lda %d, ldb %d",*uplo, *m, *n, *lda, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

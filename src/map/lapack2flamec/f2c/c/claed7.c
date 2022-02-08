@@ -254,11 +254,11 @@ void claed7_(aocl_int_t *n, aocl_int_t *cutpnt, aocl_int_t *qsiz, aocl_int_t *tl
              real *rwork, aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"claed7 inputs: n %lld, cutpnt %lld, qsiz %lld, tlvls %lld, curlvl %lld, curpbm %lld, ldq %lld, indxq %lld, qptr %lld, prmptr %lld",*n, *cutpnt, *qsiz, *tlvls, *curlvl, *curpbm, *ldq, *indxq, *qptr, *prmptr);
-#else 
+#else
     snprintf(buffer, 256,"claed7 inputs: n %d, cutpnt %d, qsiz %d, tlvls %d, curlvl %d, curpbm %d, ldq %d, indxq %d, qptr %d, prmptr %d",*n, *cutpnt, *qsiz, *tlvls, *curlvl, *curpbm, *ldq, *indxq, *qptr, *prmptr);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -268,9 +268,13 @@ void claed7_(aocl_int_t *n, aocl_int_t *cutpnt, aocl_int_t *qsiz, aocl_int_t *tl
     /* Builtin functions */
     integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     /* Local variables */
-    aocl_int64_t i__, k, n1, n2, iq, iw, iz, ptr, indx, curr, indxc, indxp;
-    aocl_int64_t idlmda;
-    aocl_int64_t coltyp;
+    integer i__, k, n1, n2, iq, iw, iz, ptr, indx, curr, indxc, indxp;
+    extern /* Subroutine */
+    int claed8_(integer *, integer *, integer *, complex *, integer *, real *, real *, integer *, real *, real *, complex *, integer *, real *, integer *, integer *, integer *, integer *, integer *, integer *, real *, integer *), slaed9_( integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, real *, real *, integer *, integer *), slaeda_(integer *, integer *, integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *);
+    integer idlmda;
+    extern /* Subroutine */
+    int clacrm_(integer *, integer *, complex *, integer *, real *, integer *, complex *, integer *, real *), xerbla_(char *, integer *), slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
+    integer coltyp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -383,10 +387,8 @@ void claed7_(aocl_int_t *n, aocl_int_t *cutpnt, aocl_int_t *qsiz, aocl_int_t *tl
     /* Solve Secular Equation. */
     if(k != 0)
     {
-        aocl_lapack_slaed9(&k, &c__1, &k, n, &d__[1], &rwork[iq], &k, rho, &rwork[idlmda],
-                           &rwork[iw], &qstore[qptr[curr]], &k, info);
-        aocl_lapack_clacrm(qsiz, &k, &work[1], qsiz, &qstore[qptr[curr]], &k, &q[q_offset], ldq,
-                           &rwork[iq]);
+        slaed9_(&k, &c__1, &k, n, &d__[1], &rwork[iq], &k, rho, &rwork[idlmda], &rwork[iw], &qstore[qptr[curr]], &k, info);
+        clacrm_(qsiz, &k, &work[1], qsiz, &qstore[qptr[curr]], &k, &q[ q_offset], ldq, &rwork[iq]);
         /* Computing 2nd power */
         i__1 = k;
         qptr[curr + 1] = (aocl_int_t)(qptr[curr] + i__1 * i__1);

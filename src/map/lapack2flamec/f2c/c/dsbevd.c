@@ -204,8 +204,8 @@ void dsbevd_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *
              aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dsbevd inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*jobz, *uplo, *n, *kd, *ldab, *ldz, *lwork, *liwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -218,6 +218,8 @@ void dsbevd_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *
     doublereal eps;
     aocl_int64_t inde;
     doublereal anrm, rmin, rmax;
+    extern /* Subroutine */
+    int dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo, lwmin;
@@ -348,7 +350,7 @@ void dsbevd_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *
         {
             z__[z_dim1 + 1] = 1.;
         }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
     /* Get machine constants. */

@@ -160,8 +160,8 @@ void fla_zrot_native(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomplex
                      aocl_int64_t *incy, doublereal *c__, dcomplex *s)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zrot inputs: n %d, incx %d, incy %d",*n, *incx, *incy);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

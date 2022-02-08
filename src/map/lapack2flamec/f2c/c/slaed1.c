@@ -189,9 +189,13 @@ void aocl_lapack_slaed1(aocl_int64_t *n, real *d__, real *q, aocl_int64_t *ldq, 
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, i__1, i__2;
     /* Local variables */
-    aocl_int64_t i__, k, n1, n2, is, iw, iz, iq2, cpp1, indx, indxc, indxp;
-    aocl_int64_t idlmda;
-    aocl_int64_t coltyp;
+    integer i__, k, n1, n2, is, iw, iz, iq2, cpp1, indx, indxc, indxp;
+    extern /* Subroutine */
+    int scopy_(integer *, real *, integer *, real *, integer *), slaed2_(integer *, integer *, integer *, real *, real *, integer *, integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, integer *), slaed3_( integer *, integer *, integer *, real *, real *, integer *, real *, real *, real *, integer *, integer *, real *, real *, integer *) ;
+    integer idlmda;
+    extern /* Subroutine */
+    int xerbla_(char *, integer *), slamrg_( integer *, integer *, real *, integer *, integer *, integer *);
+    integer coltyp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

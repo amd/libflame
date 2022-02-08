@@ -152,11 +152,11 @@ void cgelqf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
              aocl_int_t *lwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgelqf inputs: m %lld, n %lld, lda %lld, lwork %lld",*m, *n, *lda, *lwork);
-#else 
+#else
     snprintf(buffer, 256,"cgelqf inputs: m %d, n %d, lda %d, lwork %d",*m, *n, *lda, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -165,8 +165,11 @@ void cgelqf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     real r__1;
     /* Local variables */
-    aocl_int64_t i__, k, ib, nb, nx, iws, nbmin, iinfo;
-    aocl_int64_t ldwork, lwkopt;
+    integer i__, k, ib, nb, nx, iws, nbmin, iinfo;
+    extern /* Subroutine */
+    int cgelq2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), clarft_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), xerbla_(char *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -305,7 +308,7 @@ void cgelqf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
     {
         i__2 = *m - i__ + 1;
         i__1 = *n - i__ + 1;
-        aocl_lapack_cgelq2(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
+        cgelq2_(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
     }
     work[1].r = (real) iws;
     work[1].i = 0.f; // , expr subst

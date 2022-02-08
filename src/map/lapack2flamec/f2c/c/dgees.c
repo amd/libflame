@@ -229,8 +229,8 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, aocl_int_t *n, doublereal *a
             doublereal *work, aocl_int_t *lwork, logical *bwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dgees inputs: jobvs %c, sort %c, n %" FLA_IS ", lda %" FLA_IS ", ldvs %" FLA_IS ", lwork %" FLA_IS "",*jobvs, *sort, *n, *lda, *ldvs, *lwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -338,10 +338,9 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, aocl_int_t *n, doublereal *a
         {
             maxwrk = (*n << 1) + *n * aocl_lapack_ilaenv(&c__1, "DGEHRD", " ", n, &c__1, n, &c__0);
             minwrk = *n * 3;
-            aocl_lapack_dhseqr("S", jobvs, n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1],
-                               &vs[vs_offset], ldvs, &work[1], &c_n1, &ieval);
-            hswork = (integer)work[1];
-            if(!wantvs)
+            dhseqr_("S", jobvs, n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1], &vs[vs_offset], ldvs, &work[1], &c_n1, &ieval);
+            hswork = (integer) work[1];
+            if (! wantvs)
             {
                 /* Computing MAX */
                 i__1 = maxwrk;

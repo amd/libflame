@@ -391,8 +391,7 @@ void ssygvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *a, 
             {
                 *(unsigned char *)trans = 'T';
             }
-            aocl_blas_strsm("Left", uplo, trans, "Non-unit", n, n, &c_b11, &b[b_offset], ldb,
-                            &a[a_offset], lda);
+            strsm_("Left", uplo, trans, "Non-unit", n, n, &c_b11, &b[b_offset], ldb, &a[a_offset], lda);
         }
         else if(*itype == 3)
         {
@@ -407,8 +406,7 @@ void ssygvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *a, 
             {
                 *(unsigned char *)trans = 'N';
             }
-            aocl_blas_strmm("Left", uplo, trans, "Non-unit", n, n, &c_b11, &b[b_offset], ldb,
-                            &a[a_offset], lda);
+            strmm_("Left", uplo, trans, "Non-unit", n, n, &c_b11, &b[b_offset], ldb, &a[a_offset], lda);
         }
     }
     work[1] = (real) lopt;

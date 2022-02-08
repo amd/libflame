@@ -246,8 +246,8 @@ void dlaed8_(aocl_int_t *icompq, aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz,
              aocl_int_t *indxp, aocl_int_t *indx, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlaed8 inputs: icompq %" FLA_IS ", n %" FLA_IS ", qsiz %" FLA_IS ", ldq %" FLA_IS ", indxq %" FLA_IS ", cutpnt %" FLA_IS ", ldq2 %" FLA_IS "",*icompq, *n, *qsiz, *ldq, *indxq, *cutpnt, *ldq2);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -551,7 +551,7 @@ L110: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
             jp = indxp[j];
             dlambda[j] = d__[jp];
             perm[j] = indxq[indx[jp]];
-            aocl_blas_dcopy(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
+            dcopy_(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
             /* L130: */
         }
     }

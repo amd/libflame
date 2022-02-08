@@ -228,11 +228,20 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     real tol;
     aocl_int64_t difl, difr;
     real rcnd;
-    aocl_int64_t perm, nsub, nlvl, sqre, bxst;
-    aocl_int64_t poles, sizei, nsize;
-    aocl_int64_t nwork, icmpq1, icmpq2;
+    integer perm, nsub, nlvl, sqre, bxst;
+    extern /* Subroutine */
+    int srot_(integer *, real *, integer *, real *, integer *, real *, real *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    integer poles, sizei, nsize;
+    extern /* Subroutine */
+    int scopy_(integer *, real *, integer *, real *, integer *);
+    integer nwork, icmpq1, icmpq2;
     extern real slamch_(char *);
-    aocl_int64_t givcol;
+    extern /* Subroutine */
+    int slasda_(integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), xerbla_(char *, integer *), slalsa_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    integer givcol;
+    extern integer isamax_(integer *, real *, integer *);
+    extern /* Subroutine */
+    int slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slartg_(real *, real *, real *, real *, real * ), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     real orgnrm;
     aocl_int64_t givnum;
     aocl_int64_t givptr, smlszp;

@@ -232,8 +232,8 @@ void dlar1v_(aocl_int_t *n, aocl_int_t *b1, aocl_int_t *bn, doublereal *lambda, 
              doublereal *resid, doublereal *rqcorr, doublereal *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlar1v inputs: n %" FLA_IS ", b1 %" FLA_IS ", bn %" FLA_IS ", r__ %" FLA_IS "",*n, *b1, *bn, *r__);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

@@ -291,11 +291,11 @@ the routine */
 void cgegv_(char *jobvl, char *jobvr, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, scomplex *alpha, scomplex *beta, scomplex *vl, aocl_int_t *ldvl, scomplex *vr, aocl_int_t *ldvr, scomplex *work, aocl_int_t *lwork, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgegv inputs: jobvl %c, jobvr %c, n %lld, lda %lld, ldb %lld, ldvl %lld, ldvr %lld, lwork %lld",*jobvl, *jobvr, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);
-#else 
+#else
     snprintf(buffer, 256,"cgegv inputs: jobvl %c, jobvr %c, n %d, lda %d, ldb %d, ldvl %d, ldvr %d, lwork %d",*jobvl, *jobvr, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

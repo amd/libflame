@@ -570,8 +570,8 @@ void dgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
               integer *nparams, doublereal *params, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dgbsvxx inputs: fact %c, trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ipiv %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",*fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ipiv, *equed, *ldb, *ldx, *n_err_bnds__, *nparams);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -615,15 +615,7 @@ void dgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
     doublereal smlnum;
     logical rowequ;
     extern /* Subroutine */
-        void
-        dlascl2_(integer *, integer *, doublereal *, doublereal *, integer *),
-        dgbequb_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *,
-                 doublereal *, doublereal *, doublereal *, doublereal *, integer *),
-        dgbrfsx_(char *, char *, integer *, integer *, integer *, integer *, doublereal *,
-                 integer *, doublereal *, integer *, integer *, doublereal *, doublereal *,
-                 doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                 integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *,
-                 integer *, integer *);
+    int dlascl2_(integer *, integer *, doublereal *, doublereal *, integer *), dgbequb_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dgbrfsx_( char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

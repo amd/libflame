@@ -196,11 +196,11 @@ void csytf2_rook_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_
                   aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"csytf2_rook inputs: uplo %c, n %lld, lda %lld",*uplo, *n, *lda);
-#else 
+#else
     snprintf(buffer, 256,"csytf2_rook inputs: uplo %c, n %d, lda %d",*uplo, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -693,7 +693,7 @@ void csytf2_rook_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    itemp = imax + aocl_blas_icamax(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
+                    itemp = imax + icamax_(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     i__1 = itemp + imax * a_dim1;
                     stemp = (r__1 = a[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ itemp + imax * a_dim1]), f2c_abs(r__2));
                     if (stemp > rowmax)

@@ -115,8 +115,8 @@ doublereal dla_gbrpvgrw_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int
                          doublereal *ab, aocl_int_t *ldab, doublereal *afb, aocl_int_t *ldafb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dla_gbrpvgrw inputs: n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ncols %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS "",*n, *kl, *ku, *ncols, *ldab, *ldafb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

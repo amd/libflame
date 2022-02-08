@@ -241,12 +241,12 @@ void cbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
              scomplex *c__, aocl_int_t *ldc, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
-   snprintf(buffer, 256,"cbdsqr inputs: uplo %c, n %lld, ncvt %lld, nru %lld, ncc %lld, ldvt %lld, ldu %lld, ldc %lld",*uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
-#else 
-   snprintf(buffer, 256,"cbdsqr inputs: uplo %c, n %d, ncvt %d, nru %d, ncc %d, ldvt %d, ldu %d, ldc %d",*uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
+    snprintf(buffer, 256,"cbdsqr inputs: uplo %c, n %lld, ncvt %lld, nru %lld, ncc %lld, ldvt %lld, ldu %lld, ldc %lld",*uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
+#else
+    snprintf(buffer, 256,"cbdsqr inputs: uplo %c, n %d, ncvt %d, nru %d, ncc %d, ldvt %d, ldu %d, ldc %d",*uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -282,8 +282,8 @@ void cbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
     real shift, sigmn, oldsn;
     real sigmx;
     logical lower;
-    extern void
-     slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
+    extern /* Subroutine */
+    int csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *), slasq1_(integer *, real *, real *, real *, integer *), slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
     extern real slamch_(char *);
     real sminoa;
     extern /* Subroutine */
@@ -467,7 +467,7 @@ void cbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
         i__1 = *n;
         for(i__ = 2; i__ <= i__1; ++i__)
         {
-            mu = (r__2 = d__[i__], f2c_abs(r__2)) * (mu / (mu + (r__1 = e[i__ - 1] , f2c_abs(r__1))));
+            mu = (r__2 = d__[i__], f2c_abs(r__2)) * (mu / (mu + (r__1 = e[i__ - 1], f2c_abs(r__1))));
             sminoa = min(sminoa,mu);
             if (sminoa == 0.f)
             {
@@ -647,7 +647,7 @@ L90:
                     e[lll] = 0.f;
                     goto L60;
                 }
-                mu = (r__2 = d__[lll], f2c_abs(r__2)) * (mu / (mu + (r__1 = e[lll] , f2c_abs(r__1))));
+                mu = (r__2 = d__[lll], f2c_abs(r__2)) * (mu / (mu + (r__1 = e[lll], f2c_abs(r__1))));
                 sminl = min(sminl,mu);
                 /* L110: */
             }

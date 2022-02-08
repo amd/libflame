@@ -280,8 +280,14 @@ void aocl_lapack_zhpgvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_
     aocl_int64_t lwmin;
     char trans[1];
     logical upper, wantz;
-    aocl_int64_t liwmin;
-    aocl_int64_t lrwmin;
+    extern /* Subroutine */
+    int ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_( char *, integer *);
+    integer liwmin;
+    extern /* Subroutine */
+    int zhpevd_(char *, char *, integer *, doublecomplex *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *, integer *);
+    integer lrwmin;
+    extern /* Subroutine */
+    int zhpgst_(integer *, char *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical lquery;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

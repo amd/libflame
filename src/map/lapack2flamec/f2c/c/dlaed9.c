@@ -157,8 +157,8 @@ void dlaed9_(aocl_int_t *k, aocl_int_t *kstart, aocl_int_t *kstop, aocl_int_t *n
              doublereal *s, aocl_int_t *lds, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlaed9 inputs: k %" FLA_IS ", kstart %" FLA_IS ", kstop %" FLA_IS ", n %" FLA_IS ", ldq %" FLA_IS ", lds %" FLA_IS "",*k, *kstart, *kstop, *n, *ldq, *lds);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

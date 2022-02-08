@@ -172,8 +172,8 @@ doublereal dla_gbrcond_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *
                         aocl_int_t *iwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dla_gbrcond inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ipiv %" FLA_IS ", cmode %" FLA_IS ", work %" FLA_IS ", iwork %" FLA_IS "",*trans, *n, *kl, *ku, *ldab, *ldafb, *ipiv, *cmode, *work, *iwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

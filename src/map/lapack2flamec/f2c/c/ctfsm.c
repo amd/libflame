@@ -302,11 +302,11 @@ void ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
             aocl_int_t *n, scomplex *alpha, scomplex *a, scomplex *b, aocl_int_t *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctfsm inputs: transr %c, side %c, uplo %c, trans %c, diag %c, m %lld, n %lld, ldb %lld",*transr, *side, *uplo, *trans, *diag, *m, *n, *ldb);
-#else 
+#else
     snprintf(buffer, 256,"ctfsm inputs: transr %c, side %c, uplo %c, trans %c, diag %c, m %d, n %d, ldb %d",*transr, *side, *uplo, *trans, *diag, *m, *n, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -579,27 +579,21 @@ void ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
                     {
                         /* SIDE ='L', N is odd, TRANSR = 'C', UPLO = 'U', and */
                         /* TRANS = 'N' */
-                        aocl_blas_ctrsm("L", "U", "C", diag, &m1, n, alpha, &a[m2 * m2], &m2,
-                                        &b[b_offset], ldb);
-                        q__1.real = -1.f;
-                        q__1.imag = -0.f; // , expr subst
-                        aocl_blas_cgemm("N", "N", &m2, n, &m1, &q__1, a, &m2, &b[b_offset], ldb,
-                                        alpha, &b[m1], ldb);
-                        aocl_blas_ctrsm("L", "L", "N", diag, &m2, n, &c_b1, &a[m1 * m2], &m2,
-                                        &b[m1], ldb);
+                        ctrsm_("L", "U", "C", diag, &m1, n, alpha, &a[m2 * m2], &m2, &b[b_offset], ldb);
+                        q__1.r = -1.f;
+                        q__1.i = -0.f; // , expr subst
+                        cgemm_("N", "N", &m2, n, &m1, &q__1, a, &m2, &b[ b_offset], ldb, alpha, &b[m1], ldb);
+                        ctrsm_("L", "L", "N", diag, &m2, n, &c_b1, &a[m1 * m2], &m2, &b[m1], ldb);
                     }
                     else
                     {
                         /* SIDE ='L', N is odd, TRANSR = 'C', UPLO = 'U', and */
                         /* TRANS = 'C' */
-                        aocl_blas_ctrsm("L", "L", "C", diag, &m2, n, alpha, &a[m1 * m2], &m2,
-                                        &b[m1], ldb);
-                        q__1.real = -1.f;
-                        q__1.imag = -0.f; // , expr subst
-                        aocl_blas_cgemm("C", "N", &m1, n, &m2, &q__1, a, &m2, &b[m1], ldb, alpha,
-                                        &b[b_offset], ldb);
-                        aocl_blas_ctrsm("L", "U", "N", diag, &m1, n, &c_b1, &a[m2 * m2], &m2,
-                                        &b[b_offset], ldb);
+                        ctrsm_("L", "L", "C", diag, &m2, n, alpha, &a[m1 * m2], &m2, &b[m1], ldb);
+                        q__1.r = -1.f;
+                        q__1.i = -0.f; // , expr subst
+                        cgemm_("C", "N", &m1, n, &m2, &q__1, a, &m2, &b[m1], ldb, alpha, &b[b_offset], ldb);
+                        ctrsm_("L", "U", "N", diag, &m1, n, &c_b1, &a[m2 * m2], &m2, &b[b_offset], ldb);
                     }
                 }
             }
@@ -691,25 +685,21 @@ void ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
                     {
                         /* SIDE ='L', N is even, TRANSR = 'C', UPLO = 'L', */
                         /* and TRANS = 'N' */
-                        aocl_blas_ctrsm("L", "U", "C", diag, &k, n, alpha, &a[k], &k, &b[b_offset],
-                                        ldb);
-                        q__1.real = -1.f;
-                        q__1.imag = -0.f; // , expr subst
-                        aocl_blas_cgemm("C", "N", &k, n, &k, &q__1, &a[k * (k + 1)], &k,
-                                        &b[b_offset], ldb, alpha, &b[k], ldb);
-                        aocl_blas_ctrsm("L", "L", "N", diag, &k, n, &c_b1, a, &k, &b[k], ldb);
+                        ctrsm_("L", "U", "C", diag, &k, n, alpha, &a[k], &k, & b[b_offset], ldb);
+                        q__1.r = -1.f;
+                        q__1.i = -0.f; // , expr subst
+                        cgemm_("C", "N", &k, n, &k, &q__1, &a[k * (k + 1)], & k, &b[b_offset], ldb, alpha, &b[k], ldb);
+                        ctrsm_("L", "L", "N", diag, &k, n, &c_b1, a, &k, &b[k], ldb);
                     }
                     else
                     {
                         /* SIDE ='L', N is even, TRANSR = 'C', UPLO = 'L', */
                         /* and TRANS = 'C' */
-                        aocl_blas_ctrsm("L", "L", "C", diag, &k, n, alpha, a, &k, &b[k], ldb);
-                        q__1.real = -1.f;
-                        q__1.imag = -0.f; // , expr subst
-                        aocl_blas_cgemm("N", "N", &k, n, &k, &q__1, &a[k * (k + 1)], &k, &b[k], ldb,
-                                        alpha, &b[b_offset], ldb);
-                        aocl_blas_ctrsm("L", "U", "N", diag, &k, n, &c_b1, &a[k], &k, &b[b_offset],
-                                        ldb);
+                        ctrsm_("L", "L", "C", diag, &k, n, alpha, a, &k, &b[k], ldb);
+                        q__1.r = -1.f;
+                        q__1.i = -0.f; // , expr subst
+                        cgemm_("N", "N", &k, n, &k, &q__1, &a[k * (k + 1)], & k, &b[k], ldb, alpha, &b[b_offset], ldb);
+                        ctrsm_("L", "U", "N", diag, &k, n, &c_b1, &a[k], &k, & b[b_offset], ldb);
                     }
                 }
                 else
@@ -719,14 +709,11 @@ void ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
                     {
                         /* SIDE ='L', N is even, TRANSR = 'C', UPLO = 'U', */
                         /* and TRANS = 'N' */
-                        aocl_blas_ctrsm("L", "U", "C", diag, &k, n, alpha, &a[k * (k + 1)], &k,
-                                        &b[b_offset], ldb);
-                        q__1.real = -1.f;
-                        q__1.imag = -0.f; // , expr subst
-                        aocl_blas_cgemm("N", "N", &k, n, &k, &q__1, a, &k, &b[b_offset], ldb, alpha,
-                                        &b[k], ldb);
-                        aocl_blas_ctrsm("L", "L", "N", diag, &k, n, &c_b1, &a[k * k], &k, &b[k],
-                                        ldb);
+                        ctrsm_("L", "U", "C", diag, &k, n, alpha, &a[k * (k + 1)], &k, &b[b_offset], ldb);
+                        q__1.r = -1.f;
+                        q__1.i = -0.f; // , expr subst
+                        cgemm_("N", "N", &k, n, &k, &q__1, a, &k, &b[b_offset], ldb, alpha, &b[k], ldb);
+                        ctrsm_("L", "L", "N", diag, &k, n, &c_b1, &a[k * k], & k, &b[k], ldb);
                     }
                     else
                     {
@@ -871,27 +858,21 @@ void ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'C', UPLO = 'U', and */
                         /* TRANS = 'N' */
-                        aocl_blas_ctrsm("R", "U", "N", diag, m, &n1, alpha, &a[n2 * n2], &n2, b,
-                                        ldb);
-                        q__1.real = -1.f;
-                        q__1.imag = -0.f; // , expr subst
-                        aocl_blas_cgemm("N", "C", m, &n2, &n1, &q__1, b, ldb, a, &n2, alpha,
-                                        &b[n1 * b_dim1], ldb);
-                        aocl_blas_ctrsm("R", "L", "C", diag, m, &n2, &c_b1, &a[n1 * n2], &n2,
-                                        &b[n1 * b_dim1], ldb);
+                        ctrsm_("R", "U", "N", diag, m, &n1, alpha, &a[n2 * n2], &n2, b, ldb);
+                        q__1.r = -1.f;
+                        q__1.i = -0.f; // , expr subst
+                        cgemm_("N", "C", m, &n2, &n1, &q__1, b, ldb, a, &n2, alpha, &b[n1 * b_dim1], ldb);
+                        ctrsm_("R", "L", "C", diag, m, &n2, &c_b1, &a[n1 * n2], &n2, &b[n1 * b_dim1], ldb);
                     }
                     else
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'C', UPLO = 'U', and */
                         /* TRANS = 'C' */
-                        aocl_blas_ctrsm("R", "L", "N", diag, m, &n2, alpha, &a[n1 * n2], &n2,
-                                        &b[n1 * b_dim1], ldb);
-                        q__1.real = -1.f;
-                        q__1.imag = -0.f; // , expr subst
-                        aocl_blas_cgemm("N", "N", m, &n1, &n2, &q__1, &b[n1 * b_dim1], ldb, a, &n2,
-                                        alpha, b, ldb);
-                        aocl_blas_ctrsm("R", "U", "C", diag, m, &n1, &c_b1, &a[n2 * n2], &n2, b,
-                                        ldb);
+                        ctrsm_("R", "L", "N", diag, m, &n2, alpha, &a[n1 * n2], &n2, &b[n1 * b_dim1], ldb);
+                        q__1.r = -1.f;
+                        q__1.i = -0.f; // , expr subst
+                        cgemm_("N", "N", m, &n1, &n2, &q__1, &b[n1 * b_dim1], ldb, a, &n2, alpha, b, ldb);
+                        ctrsm_("R", "U", "C", diag, m, &n1, &c_b1, &a[n2 * n2], &n2, b, ldb);
                     }
                 }
             }

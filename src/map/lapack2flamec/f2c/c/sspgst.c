@@ -230,8 +230,7 @@ void sspgst_(aocl_int_t *itype, char *uplo, aocl_int_t *n, real *ap, real *bp, a
                     i__2 = *n - k;
                     aocl_blas_saxpy(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
-                    aocl_blas_sspr2(uplo, &i__2, &c_b9, &ap[kk + 1], &c__1, &bp[kk + 1], &c__1,
-                                    &ap[k1k1]);
+                    sspr2_(uplo, &i__2, &c_b9, &ap[kk + 1], &c__1, &bp[kk + 1], &c__1, &ap[k1k1]);
                     i__2 = *n - k;
                     aocl_blas_saxpy(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;

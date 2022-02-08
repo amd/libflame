@@ -288,8 +288,8 @@ void ssysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, a
              aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"ssysvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -304,7 +304,9 @@ void ssysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, a
     logical nofact;
     aocl_int64_t lwkopt;
     logical lquery;
-    /* -- LAPACK driver routine -- */
+    extern /* Subroutine */
+    int ssyrfs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), ssytrf_(char *, integer *, real *, integer *, integer *, real *, integer *, integer *), ssytrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -439,9 +441,7 @@ void ssysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, a
     aocl_lapack_ssytrs(uplo, n, nrhs, &af[af_offset], ldaf, &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    aocl_lapack_ssyrfs(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1],
-                       &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
-                       &iwork[1], info);
+    ssyrfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
     if(*rcond < slamch_("Epsilon"))
     {

@@ -145,8 +145,8 @@ void dlascl_(char *type__, aocl_int_t *kl, aocl_int_t *ku, doublereal *cfrom, do
              aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlascl inputs: type__ %c, kl %" FLA_IS ", ku %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*type__, *kl, *ku, *m, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

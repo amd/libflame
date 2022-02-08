@@ -379,10 +379,10 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
-                aocl_blas_strsm("R", "U", "N", "N", &n2, &n1, &c_b12, &a[n2 * n2], &n2, a, &n2);
-                aocl_blas_ssyrk("L", "N", &n2, &n1, &c_b15, a, &n2, &c_b12, &a[n1 * n2], &n2);
-                aocl_lapack_spotrf("L", &n2, &a[n1 * n2], &n2, info);
-                if(*info > 0)
+                strsm_("R", "U", "N", "N", &n2, &n1, &c_b12, &a[n2 * n2], &n2, a, &n2);
+                ssyrk_("L", "N", &n2, &n1, &c_b15, a, &n2, &c_b12, &a[n1 * n2], &n2);
+                spotrf_("L", &n2, &a[n1 * n2], &n2, info);
+                if (*info > 0)
                 {
                     *info += n1;
                 }

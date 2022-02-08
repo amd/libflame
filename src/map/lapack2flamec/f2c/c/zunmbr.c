@@ -422,8 +422,7 @@ void aocl_lapack_zunmbr(char *vect, char *side, char *trans, aocl_int64_t *m, ao
                 i2 = 2;
             }
             i__1 = nq - 1;
-            aocl_lapack_zunmqr(side, trans, &mi, &ni, &i__1, &a[a_dim1 + 2], lda, &tau[1],
-                               &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
+            zunmqr_(side, trans, &mi, &ni, &i__1, &a[a_dim1 + 2], lda, &tau[1], &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
         }
     }
     else

@@ -276,11 +276,11 @@ void claqr3_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
              scomplex *wv, aocl_int_t *ldwv, scomplex *work, aocl_int_t *lwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"claqr3 inputs: n %lld, ktop %lld, kbot %lld, nw %lld, ldh %lld, iloz %lld, ihiz %lld, ldz %lld, ldv %lld, nh %lld, ldt %lld, nv %lld, ldwv %lld, lwork %lld",*n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ldv, *nh, *ldt, *nv, *ldwv, *lwork);
-#else 
+#else
     snprintf(buffer, 256,"claqr3 inputs: n %d, ktop %d, kbot %d, nw %d, ldh %d, iloz %d, ihiz %d, ldz %d, ldv %d, nh %d, ldt %d, nv %d, ldwv %d, lwork %d",*n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ldv, *nh, *ldt, *nv, *ldwv, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -302,10 +302,14 @@ void claqr3_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
     scomplex tau;
     aocl_int64_t knt;
     real ulp;
-    aocl_int64_t lwk1, lwk2, lwk3;
-    scomplex beta;
-    aocl_int64_t kcol, info, nmin, ifst, ilst, ltop, krow;
-    aocl_int64_t infqr, kwtop;
+    integer lwk1, lwk2, lwk3;
+    complex beta;
+    integer kcol, info, nmin, ifst, ilst, ltop, krow;
+    extern /* Subroutine */
+    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *);
+    integer infqr, kwtop;
+    extern /* Subroutine */
+    int claqr4_(logical *, logical *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, integer *), slabad_(real *, real *), cgehrd_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern real slamch_(char *);
     real safmin;
     real smlnum;
@@ -587,8 +591,7 @@ void claqr3_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
             aocl_lapack_clarf("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv,
                               &work[jw + 1]);
             i__1 = *lwork - jw;
-            aocl_lapack_cgehrd(&jw, &c__1, ns, &t[t_offset], ldt, &work[1], &work[jw + 1], &i__1,
-                               &info);
+            cgehrd_(&jw, &c__1, ns, &t[t_offset], ldt, &work[1], &work[jw + 1], &i__1, &info);
         }
         /* ==== Copy updated reduced window into place ==== */
         if(kwtop > 1)
@@ -600,7 +603,7 @@ void claqr3_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
             h__[i__1].real = q__1.real;
             h__[i__1].imag = q__1.imag; // , expr subst
         }
-        aocl_lapack_clacpy("U", &jw, &jw, &t[t_offset], ldt, &h__[kwtop + kwtop * h_dim1], ldh);
+        clacpy_("U", &jw, &jw, &t[t_offset], ldt, &h__[kwtop + kwtop * h_dim1], ldh);
         i__1 = jw - 1;
         i__2 = *ldt + 1;
         i__3 = *ldh + 1;
@@ -664,11 +667,9 @@ void claqr3_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
                 /* Computing MIN */
                 i__3 = *nv;
                 i__4 = *ihiz - krow + 1; // , expr subst
-                kln = fla_min(i__3, i__4);
-                aocl_blas_cgemm("N", "N", &kln, &jw, &jw, &c_b2, &z__[krow + kwtop * z_dim1], ldz,
-                                &v[v_offset], ldv, &c_b1, &wv[wv_offset], ldwv);
-                aocl_lapack_clacpy("A", &kln, &jw, &wv[wv_offset], ldwv,
-                                   &z__[krow + kwtop * z_dim1], ldz);
+                kln = min(i__3,i__4);
+                cgemm_("N", "N", &kln, &jw, &jw, &c_b2, &z__[krow + kwtop * z_dim1], ldz, &v[v_offset], ldv, &c_b1, &wv[wv_offset], ldwv);
+                clacpy_("A", &kln, &jw, &wv[wv_offset], ldwv, &z__[krow + kwtop * z_dim1], ldz);
                 /* L80: */
             }
         }

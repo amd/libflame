@@ -325,7 +325,9 @@ void aocl_lapack_zlaqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, ao
     aocl_int64_t jcol, jlen, jbot, mbot, jtop, jrow, mtop;
     dcomplex alpha;
     logical accum;
-    aocl_int64_t ndcol, incol, krcol, nbmps;
+    integer ndcol, incol, krcol, nbmps;
+    extern /* Subroutine */
+    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *), zlaqr1_(integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, doublecomplex *);
     extern doublereal dlamch_(char *);
     doublereal safmin, safmax;
     extern /* Subroutine */
@@ -557,7 +559,7 @@ void aocl_lapack_zlaqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, ao
                         i__6 = k + k * h_dim1;
                         i__7 = k + 1 + (k + 1) * h_dim1;
                         i__8 = k + 2 + (k + 2) * h_dim1;
-                        if ((d__1 = z__1.r, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1) , f2c_dabs(d__2)) + ((d__3 = z__4.r, f2c_dabs(d__3)) + ( d__4 = d_imag(&z__4), f2c_dabs(d__4))) > ulp * (( d__5 = h__[i__6].r, f2c_dabs(d__5)) + (d__6 = d_imag(&h__[k + k * h_dim1]), f2c_dabs(d__6)) + (( d__7 = h__[i__7].r, f2c_dabs(d__7)) + (d__8 = d_imag(&h__[k + 1 + (k + 1) * h_dim1]), f2c_dabs( d__8))) + ((d__9 = h__[i__8].r, f2c_dabs(d__9)) + ( d__10 = d_imag(&h__[k + 2 + (k + 2) * h_dim1]) , f2c_dabs(d__10)))))
+                        if ((d__1 = z__1.r, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2)) + ((d__3 = z__4.r, f2c_dabs(d__3)) + ( d__4 = d_imag(&z__4), f2c_dabs(d__4))) > ulp * (( d__5 = h__[i__6].r, f2c_dabs(d__5)) + (d__6 = d_imag(&h__[k + k * h_dim1]), f2c_dabs(d__6)) + (( d__7 = h__[i__7].r, f2c_dabs(d__7)) + (d__8 = d_imag(&h__[k + 1 + (k + 1) * h_dim1]), f2c_dabs( d__8))) + ((d__9 = h__[i__8].r, f2c_dabs(d__9)) + ( d__10 = d_imag(&h__[k + 2 + (k + 2) * h_dim1]), f2c_dabs(d__10)))))
                         {
                             /* ==== Starting a new bulge here would */
                             /* . create non-negligible fill. Use */
@@ -2000,16 +2002,96 @@ void aocl_lapack_zlaqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, ao
                 i__6 = *nv;
                 for(jrow = *iloz; i__6 < 0 ? jrow >= i__3 : jrow <= i__3; jrow += i__6)
                 {
-                    /* Computing fla_min */
-                    i__7 = *nv;
-                    i__4 = *ihiz - jrow + 1; // , expr subst
-                    jlen = fla_min(i__7, i__4);
-                    aocl_blas_zgemm("N", "N", &jlen, &nu, &nu, &c_b2,
-                                    &z__[jrow + (incol + k1) * z_dim1], ldz, &u[k1 + k1 * u_dim1],
-                                    ldu, &c_b1, &wv[wv_offset], ldwv);
-                    aocl_lapack_zlacpy("ALL", &jlen, &nu, &wv[wv_offset], ldwv,
-                                       &z__[jrow + (incol + k1) * z_dim1], ldz);
-                    /* L170: */
+                    /* Computing MIN */
+                    i__5 = *nh;
+                    i__7 = jbot - jcol + 1; // , expr subst
+                    jlen = min(i__5,i__7);
+                    /* ==== Copy bottom of H to top+KZS of scratch ==== */
+                    /* (The first KZS rows get multiplied by zero.) ==== */
+                    zlacpy_("ALL", &knz, &jlen, &h__[incol + 1 + j2 + jcol * h_dim1], ldh, &wh[kzs + 1 + wh_dim1], ldwh);
+                    /* ==== Multiply by U21**H ==== */
+                    zlaset_("ALL", &kzs, &jlen, &c_b1, &c_b1, &wh[wh_offset], ldwh);
+                    ztrmm_("L", "U", "C", "N", &knz, &jlen, &c_b2, &u[j2 + 1 + (kzs + 1) * u_dim1], ldu, &wh[kzs + 1 + wh_dim1], ldwh);
+                    /* ==== Multiply top of H by U11**H ==== */
+                    zgemm_("C", "N", &i2, &jlen, &j2, &c_b2, &u[u_offset], ldu, &h__[incol + 1 + jcol * h_dim1], ldh, &c_b2, &wh[wh_offset], ldwh);
+                    /* ==== Copy top of H to bottom of WH ==== */
+                    zlacpy_("ALL", &j2, &jlen, &h__[incol + 1 + jcol * h_dim1], ldh, &wh[i2 + 1 + wh_dim1], ldwh);
+                    /* ==== Multiply by U21**H ==== */
+                    ztrmm_("L", "L", "C", "N", &j2, &jlen, &c_b2, &u[(i2 + 1) * u_dim1 + 1], ldu, &wh[i2 + 1 + wh_dim1], ldwh);
+                    /* ==== Multiply by U22 ==== */
+                    i__5 = i4 - i2;
+                    i__7 = j4 - j2;
+                    zgemm_("C", "N", &i__5, &jlen, &i__7, &c_b2, &u[j2 + 1 + ( i2 + 1) * u_dim1], ldu, &h__[incol + 1 + j2 + jcol * h_dim1], ldh, &c_b2, &wh[i2 + 1 + wh_dim1], ldwh);
+                    /* ==== Copy it back ==== */
+                    zlacpy_("ALL", &kdu, &jlen, &wh[wh_offset], ldwh, &h__[ incol + 1 + jcol * h_dim1], ldh);
+                    /* L180: */
+                }
+                /* ==== Vertical multiply ==== */
+                i__3 = max(incol,*ktop) - 1;
+                i__4 = *nv;
+                for (jrow = jtop;
+                        i__4 < 0 ? jrow >= i__3 : jrow <= i__3;
+                        jrow += i__4)
+                {
+                    /* Computing MIN */
+                    i__5 = *nv;
+                    i__7 = max(incol,*ktop) - jrow; // , expr subst
+                    jlen = min(i__5,i__7);
+                    /* ==== Copy right of H to scratch (the first KZS */
+                    /* . columns get multiplied by zero) ==== */
+                    zlacpy_("ALL", &jlen, &knz, &h__[jrow + (incol + 1 + j2) * h_dim1], ldh, &wv[(kzs + 1) * wv_dim1 + 1], ldwv);
+                    /* ==== Multiply by U21 ==== */
+                    zlaset_("ALL", &jlen, &kzs, &c_b1, &c_b1, &wv[wv_offset], ldwv);
+                    ztrmm_("R", "U", "N", "N", &jlen, &knz, &c_b2, &u[j2 + 1 + (kzs + 1) * u_dim1], ldu, &wv[(kzs + 1) * wv_dim1 + 1], ldwv);
+                    /* ==== Multiply by U11 ==== */
+                    zgemm_("N", "N", &jlen, &i2, &j2, &c_b2, &h__[jrow + ( incol + 1) * h_dim1], ldh, &u[u_offset], ldu, & c_b2, &wv[wv_offset], ldwv);
+                    /* ==== Copy left of H to right of scratch ==== */
+                    zlacpy_("ALL", &jlen, &j2, &h__[jrow + (incol + 1) * h_dim1], ldh, &wv[(i2 + 1) * wv_dim1 + 1], ldwv);
+                    /* ==== Multiply by U21 ==== */
+                    i__5 = i4 - i2;
+                    ztrmm_("R", "L", "N", "N", &jlen, &i__5, &c_b2, &u[(i2 + 1) * u_dim1 + 1], ldu, &wv[(i2 + 1) * wv_dim1 + 1], ldwv);
+                    /* ==== Multiply by U22 ==== */
+                    i__5 = i4 - i2;
+                    i__7 = j4 - j2;
+                    zgemm_("N", "N", &jlen, &i__5, &i__7, &c_b2, &h__[jrow + ( incol + 1 + j2) * h_dim1], ldh, &u[j2 + 1 + (i2 + 1) * u_dim1], ldu, &c_b2, &wv[(i2 + 1) * wv_dim1 + 1], ldwv);
+                    /* ==== Copy it back ==== */
+                    zlacpy_("ALL", &jlen, &kdu, &wv[wv_offset], ldwv, &h__[ jrow + (incol + 1) * h_dim1], ldh);
+                    /* L190: */
+                }
+                /* ==== Multiply Z (also vertical) ==== */
+                if (*wantz)
+                {
+                    i__4 = *ihiz;
+                    i__3 = *nv;
+                    for (jrow = *iloz;
+                            i__3 < 0 ? jrow >= i__4 : jrow <= i__4;
+                            jrow += i__3)
+                    {
+                        /* Computing MIN */
+                        i__5 = *nv;
+                        i__7 = *ihiz - jrow + 1; // , expr subst
+                        jlen = min(i__5,i__7);
+                        /* ==== Copy right of Z to left of scratch (first */
+                        /* . KZS columns get multiplied by zero) ==== */
+                        zlacpy_("ALL", &jlen, &knz, &z__[jrow + (incol + 1 + j2) * z_dim1], ldz, &wv[(kzs + 1) * wv_dim1 + 1], ldwv);
+                        /* ==== Multiply by U12 ==== */
+                        zlaset_("ALL", &jlen, &kzs, &c_b1, &c_b1, &wv[ wv_offset], ldwv);
+                        ztrmm_("R", "U", "N", "N", &jlen, &knz, &c_b2, &u[j2 + 1 + (kzs + 1) * u_dim1], ldu, &wv[(kzs + 1) * wv_dim1 + 1], ldwv);
+                        /* ==== Multiply by U11 ==== */
+                        zgemm_("N", "N", &jlen, &i2, &j2, &c_b2, &z__[jrow + ( incol + 1) * z_dim1], ldz, &u[u_offset], ldu, &c_b2, &wv[wv_offset], ldwv);
+                        /* ==== Copy left of Z to right of scratch ==== */
+                        zlacpy_("ALL", &jlen, &j2, &z__[jrow + (incol + 1) * z_dim1], ldz, &wv[(i2 + 1) * wv_dim1 + 1], ldwv);
+                        /* ==== Multiply by U21 ==== */
+                        i__5 = i4 - i2;
+                        ztrmm_("R", "L", "N", "N", &jlen, &i__5, &c_b2, &u[( i2 + 1) * u_dim1 + 1], ldu, &wv[(i2 + 1) * wv_dim1 + 1], ldwv);
+                        /* ==== Multiply by U22 ==== */
+                        i__5 = i4 - i2;
+                        i__7 = j4 - j2;
+                        zgemm_("N", "N", &jlen, &i__5, &i__7, &c_b2, &z__[ jrow + (incol + 1 + j2) * z_dim1], ldz, &u[j2 + 1 + (i2 + 1) * u_dim1], ldu, &c_b2, &wv[(i2 + 1) * wv_dim1 + 1], ldwv);
+                        /* ==== Copy the result back to Z ==== */
+                        zlacpy_("ALL", &jlen, &kdu, &wv[wv_offset], ldwv, & z__[jrow + (incol + 1) * z_dim1], ldz);
+                        /* L200: */
+                    }
                 }
             }
         }

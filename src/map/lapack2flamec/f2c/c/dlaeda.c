@@ -172,8 +172,8 @@ void dlaeda_(aocl_int_t *n, aocl_int_t *tlvls, aocl_int_t *curlvl, aocl_int_t *c
              doublereal *ztemp, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlaeda inputs: n %" FLA_IS ", tlvls %" FLA_IS ", curlvl %" FLA_IS ", curpbm %" FLA_IS ", prmptr %" FLA_IS ", perm %" FLA_IS ", givptr %" FLA_IS ", givcol %" FLA_IS ", qptr %" FLA_IS "",*n, *tlvls, *curlvl, *curpbm, *prmptr, *perm, *givptr, *givcol, *qptr);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

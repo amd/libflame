@@ -133,8 +133,8 @@ void dgecon_(char *norm, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublere
              doublereal *rcond, doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dgecon inputs: norm %c, n %" FLA_IS ", lda %" FLA_IS "",*norm, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

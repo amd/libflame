@@ -401,11 +401,11 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
              aocl_int_t *ncycle, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctgsja inputs: jobu %c, jobv %c, jobq %c, m %lld, p %lld, n %lld, k %lld, l %lld, lda %lld, ldb %lld, ldu %lld, ldv %lld, ldq %lld",*jobu, *jobv, *jobq, *m, *p, *n, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq);
-#else 
+#else
     snprintf(buffer, 256,"ctgsja inputs: jobu %c, jobv %c, jobq %c, m %d, p %d, n %d, k %d, l %d, lda %d, ldb %d, ldu %d, ldv %d, ldq %d",*jobu, *jobv, *jobq, *m, *p, *n, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

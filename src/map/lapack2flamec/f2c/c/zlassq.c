@@ -129,8 +129,8 @@
 void zlassq_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx, doublereal *scale, doublereal *sumsq)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zlassq inputs: n %d, incx %d",*n, *incx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

@@ -281,8 +281,8 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t 
              aocl_int_t *ifaill, aocl_int_t *ifailr, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dhsein inputs: side %c, eigsrc %c, initv %c, n %" FLA_IS ", ldh %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",*side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -301,6 +301,9 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t 
     logical leftv, bothv;
     doublereal hnorm;
     extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    int dlaein_(logical *, logical *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
+    extern doublereal dlanhs_(char *, integer *, doublereal *, integer *, doublereal *);
     extern logical disnan_(doublereal *);
     doublereal bignum;
     logical noinit;

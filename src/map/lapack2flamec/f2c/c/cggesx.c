@@ -346,11 +346,11 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
              real *rwork, aocl_int_t *iwork, aocl_int_t *liwork, logical *bwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cggesx inputs: jobvsl %c, jobvsr %c, sort %c, sense %c, n %lld, lda %lld, ldb %lld, ldvsl %lld, ldvsr %lld, lwork %lld, liwork %lld",*jobvsl, *jobvsr, *sort, *sense, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork, *liwork);
-#else 
+#else
     snprintf(buffer, 256,"cggesx inputs: jobvsl %c, jobvsr %c, sort %c, sense %c, n %d, lda %d, ldb %d, ldvsl %d, ldvsr %d, lwork %d, liwork %d",*jobvsl, *jobvsr, *sort, *sense, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork, *liwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

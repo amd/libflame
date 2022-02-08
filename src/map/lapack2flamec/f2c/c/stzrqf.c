@@ -162,7 +162,9 @@ void aocl_lapack_stzrqf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real r__1;
     /* Local variables */
-    aocl_int64_t i__, k, m1;
+    integer i__, k, m1;
+    extern /* Subroutine */
+    int sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), xerbla_(char *, integer *), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -256,8 +258,7 @@ void aocl_lapack_stzrqf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
                 i__1 = k - 1;
                 i__2 = *n - *m;
                 r__1 = -tau[k];
-                aocl_blas_sger(&i__1, &i__2, &r__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda,
-                               &a[m1 * a_dim1 + 1], lda);
+                sger_(&i__1, &i__2, &r__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda, &a[m1 * a_dim1 + 1], lda);
             }
             /* L20: */
         }

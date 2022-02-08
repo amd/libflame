@@ -190,8 +190,8 @@ void zgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int
              dcomplex *work, doublereal *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zgerfs inputs: trans %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d, ipiv %d",*trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *ipiv);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

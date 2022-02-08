@@ -350,11 +350,11 @@ void cpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
              scomplex *work, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cpbsvx inputs: fact %c, uplo %c, n %lld, kd %lld, nrhs %lld, ldab %lld, ldafb %lld, equed %c, ldb %lld, ldx %lld",*fact, *uplo, *n, *kd, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx);
-#else 
+#else
     snprintf(buffer, 256,"cpbsvx inputs: fact %c, uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldafb %d, equed %c, ldb %d, ldx %d",*fact, *uplo, *n, *kd, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -370,6 +370,9 @@ void cpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real scond, anorm;
     logical equil, rcequ, upper;
+    extern real clanhb_(char *, char *, integer *, integer *, complex *, integer *, real *);
+    extern /* Subroutine */
+    int claqhb_(char *, integer *, integer *, complex *, integer *, real *, real *, real *, char *), cpbcon_(char *, integer *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *);
     extern real slamch_(char *);
     logical nofact;
     real bignum;
@@ -596,9 +599,7 @@ void cpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
     aocl_lapack_cpbtrs(uplo, n, kd, nrhs, &afb[afb_offset], ldafb, &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    aocl_lapack_cpbrfs(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb,
-                       &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
-                       &rwork[1], info);
+    cpbrfs_(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(rcequ)

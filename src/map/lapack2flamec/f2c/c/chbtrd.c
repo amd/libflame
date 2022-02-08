@@ -176,11 +176,11 @@ void chbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab
              real *d__, real *e, scomplex *q, aocl_int_t *ldq, scomplex *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"chbtrd inputs: vect %c, uplo %c, n %lld, kd %lld, ldab %lld, ldq %lld",*vect, *uplo, *n, *kd, *ldab, *ldq);
-#else 
+#else
     snprintf(buffer, 256,"chbtrd inputs: vect %c, uplo %c, n %d, kd %d, ldab %d, ldq %d",*vect, *uplo, *n, *kd, *ldab, *ldq);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -356,9 +356,7 @@ void chbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab
                         {
                             /* generate plane rotation to annihilate a(i,i+k-1) */
                             /* within the band */
-                            clartg_(&ab[*kd - k + 3 + (i__ + k - 2) * ab_dim1],
-                                    &ab[*kd - k + 2 + (i__ + k - 1) * ab_dim1], &d__[i__ + k - 1],
-                                    &work[i__ + k - 1], &temp);
+                            clartg_(&ab[*kd - k + 3 + (i__ + k - 2) * ab_dim1], &ab[*kd - k + 2 + (i__ + k - 1) * ab_dim1], &d__[i__ + k - 1], &work[i__ + k - 1], &temp);
                             i__3 = *kd - k + 3 + (i__ + k - 2) * ab_dim1;
                             ab[i__3].real = temp.real;
                             ab[i__3].imag = temp.imag; // , expr subst
@@ -634,9 +632,7 @@ void chbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab
                             i__2 = kd1;
                             for(jinc = j1; i__2 < 0 ? jinc >= i__3 : jinc <= i__3; jinc += i__2)
                             {
-                                aocl_lapack_crot(&kdm1, &ab[*kd + (jinc - *kd) * ab_dim1], &incx,
-                                                 &ab[kd1 + (jinc - *kd) * ab_dim1], &incx,
-                                                 &d__[jinc], &work[jinc]);
+                                crot_(&kdm1, &ab[*kd + (jinc - *kd) * ab_dim1], &incx, &ab[kd1 + (jinc - *kd) * ab_dim1], &incx, &d__[jinc], &work[ jinc]);
                                 /* L140: */
                             }
                         }

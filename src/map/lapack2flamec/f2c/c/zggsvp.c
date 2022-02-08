@@ -552,7 +552,7 @@ void aocl_lapack_zggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
         {
             i__1 = *m - 1;
             i__2 = *n - *l;
-            aocl_lapack_zlacpy("Lower", &i__1, &i__2, &a[a_dim1 + 2], lda, &u[u_dim1 + 2], ldu);
+            zlacpy_("Lower", &i__1, &i__2, &a[a_dim1 + 2], lda, &u[u_dim1 + 2], ldu);
         }
         /* Computing MIN */
         i__2 = *m;

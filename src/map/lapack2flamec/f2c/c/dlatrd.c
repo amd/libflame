@@ -354,9 +354,7 @@ void dlatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, doublereal *a, aocl_int_
                 a[i__ + 1 + i__ * a_dim1] = 1.;
                 /* Compute W(i+1:n,i) */
                 i__2 = *n - i__;
-                aocl_blas_dsymv("Lower", &i__2, &c_b6, &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
-                                &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16,
-                                &w[i__ + 1 + i__ * w_dim1], &c__1);
+                dsymv_("Lower", &i__2, &c_b6, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &w[ i__ + 1 + i__ * w_dim1], &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
                 aocl_blas_dgemv("Transpose", &i__2, &i__3, &c_b6, &w[i__ + 1 + w_dim1], ldw,

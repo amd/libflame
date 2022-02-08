@@ -351,8 +351,8 @@ void spbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
              real *work, aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"spbsvx inputs: fact %c, uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldafb %d, ldb %d, ldx %d",*fact, *uplo, *n, *kd, *nrhs, *ldab, *ldafb, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -369,7 +369,12 @@ void spbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
     extern real slamch_(char *);
     logical nofact;
     real bignum;
-    aocl_int64_t infequ;
+    extern real slansb_(char *, char *, integer *, integer *, real *, integer *, real *);
+    extern /* Subroutine */
+    int spbcon_(char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), slaqsb_(char *, integer *, integer *, real *, integer *, real *, real *, real *, char *);
+    integer infequ;
+    extern /* Subroutine */
+    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), spbequ_(char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *), spbrfs_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), spbtrf_( char *, integer *, integer *, real *, integer *, integer *);
     real smlnum;
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -586,9 +591,7 @@ void spbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
     aocl_lapack_spbtrs(uplo, n, kd, nrhs, &afb[afb_offset], ldafb, &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    aocl_lapack_spbrfs(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb,
-                       &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
-                       &iwork[1], info);
+    spbrfs_(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(rcequ)

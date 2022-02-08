@@ -133,11 +133,11 @@ void cgecon_(char *norm, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *anor
              scomplex *work, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgecon inputs: norm %c, n %lld, lda %lld",*norm, *n, *lda);
-#else 
+#else
     snprintf(buffer, 256,"cgecon inputs: norm %c, n %d, lda %d",*norm, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

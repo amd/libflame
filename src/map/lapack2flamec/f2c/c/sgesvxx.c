@@ -564,7 +564,7 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, integ
     integer j;
     real amax;
     extern real sla_gerpvgrw_(integer *, integer *, real *, integer *, real *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *);
     real rcmin, rcmax;
     logical equil;
     real colcnd;

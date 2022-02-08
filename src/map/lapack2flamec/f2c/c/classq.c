@@ -129,11 +129,11 @@
 void classq_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, real *scale, real *sumsq)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"classq inputs: n %lld, incx %lld",*n, *incx);
-#else 
+#else
     snprintf(buffer, 256,"classq inputs: n %d, incx %d",*n, *incx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

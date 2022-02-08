@@ -154,11 +154,11 @@ void cgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, scomplex *a, aocl_
              scomplex *tau, scomplex *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgehd2 inputs: n %lld, ilo %lld, ihi %lld, lda %lld",*n, *ilo, *ihi, *lda);
-#else 
+#else
     snprintf(buffer, 256,"cgehd2 inputs: n %d, ilo %d, ihi %d, lda %d",*n, *ilo, *ihi, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -167,8 +167,10 @@ void cgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, scomplex *a, aocl_
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     scomplex q__1;
     /* Local variables */
-    aocl_int64_t i__;
-    scomplex alpha;
+    integer i__;
+    complex alpha;
+    extern /* Subroutine */
+    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(char *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

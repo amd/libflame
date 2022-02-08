@@ -137,7 +137,9 @@ void zhptri_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, dcomplex
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t kstep;
     logical upper;
-    aocl_int64_t kcnext;
+    extern /* Subroutine */
+    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zhpmv_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zswap_( integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(char *, integer *);
+    integer kcnext;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

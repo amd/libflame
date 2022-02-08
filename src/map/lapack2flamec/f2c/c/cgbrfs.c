@@ -209,12 +209,12 @@ void cgbrfs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
              scomplex *work, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
-   snprintf(buffer, 256,"cgbrfs inputs: trans %c, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldafb %lld, ipiv %lld, ldb %lld, ldx %lld",*trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ipiv, *ldb, *ldx);
-#else 
-   snprintf(buffer, 256,"cgbrfs inputs: trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, ipiv %d, ldb %d, ldx %d",*trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ipiv, *ldb, *ldx);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
+    snprintf(buffer, 256,"cgbrfs inputs: trans %c, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldafb %lld, ipiv %lld, ldb %lld, ldx %lld",*trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ipiv, *ldb, *ldx);
+#else
+    snprintf(buffer, 256,"cgbrfs inputs: trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, ipiv %d, ldb %d, ldx %d",*trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ipiv, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -234,7 +234,9 @@ void cgbrfs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
     real eps;
     aocl_int64_t kase;
     real safe1, safe2;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    int cgbmv_(char *, integer *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    extern logical lsame_(char *, char *);
     integer isave[3];
     aocl_int64_t count;
     extern real slamch_(char *);
@@ -473,9 +475,8 @@ void cgbrfs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
         if(berr[j] > eps && berr[j] * 2.f <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            aocl_lapack_cgbtrs(trans, n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1], &work[1],
-                               n, info);
-            aocl_blas_caxpy(n, &c_b1, &work[1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            cgbtrs_(trans, n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1], &work[1], n, info);
+            caxpy_(n, &c_b1, &work[1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;

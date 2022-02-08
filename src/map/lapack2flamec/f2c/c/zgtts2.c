@@ -131,8 +131,8 @@ void zgtts2_(aocl_int_t *itrans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl,
              dcomplex *b, aocl_int_t *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zgtts2 inputs: itrans %d, n %d, nrhs %d, ldb %d",*itrans, *n, *nrhs, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

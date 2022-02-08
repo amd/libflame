@@ -118,8 +118,8 @@ void dlacon_(aocl_int_t *n, doublereal *v, doublereal *x, aocl_int_t *isgn, doub
              aocl_int_t *kase)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlacon inputs: n %" FLA_IS ", kase %" FLA_IS "",*n, *kase);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

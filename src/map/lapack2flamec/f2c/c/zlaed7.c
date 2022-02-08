@@ -409,10 +409,8 @@ void aocl_lapack_zlaed7(aocl_int64_t *n, aocl_int64_t *cutpnt, aocl_int64_t *qsi
     /* Solve Secular Equation. */
     if(k != 0)
     {
-        aocl_lapack_dlaed9(&k, &c__1, &k, n, &d__[1], &rwork[iq], &k, rho, &rwork[idlmda],
-                           &rwork[iw], &qstore[qptr[curr]], &k, info);
-        aocl_lapack_zlacrm(qsiz, &k, &work[1], qsiz, &qstore[qptr[curr]], &k, &q[q_offset], ldq,
-                           &rwork[iq]);
+        dlaed9_(&k, &c__1, &k, n, &d__[1], &rwork[iq], &k, rho, &rwork[idlmda], &rwork[iw], &qstore[qptr[curr]], &k, info);
+        zlacrm_(qsiz, &k, &work[1], qsiz, &qstore[qptr[curr]], &k, &q[ q_offset], ldq, &rwork[iq]);
         /* Computing 2nd power */
         i__1 = k;
         qptr[curr + 1] = (aocl_int_t)(qptr[curr] + i__1 * i__1);

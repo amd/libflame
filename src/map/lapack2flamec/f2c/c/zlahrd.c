@@ -284,8 +284,7 @@ void aocl_lapack_zlahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, dcom
                             &t[*nb * t_dim1 + 1], &c__1, &c_b2, &a[*k + i__ + i__ * a_dim1], &c__1);
             /* b1 := b1 - V1*w */
             i__2 = i__ - 1;
-            aocl_blas_ztrmv("Lower", "No transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda,
-                            &t[*nb * t_dim1 + 1], &c__1);
+            ztrmv_("Lower", "No transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda, &t[*nb * t_dim1 + 1], &c__1);
             i__2 = i__ - 1;
             z__1.real = -1.;
             z__1.imag = -0.; // , expr subst

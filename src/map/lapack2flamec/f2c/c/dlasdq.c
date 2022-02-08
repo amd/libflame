@@ -215,8 +215,8 @@ void dlasdq_(char *uplo, aocl_int_t *sqre, aocl_int_t *n, aocl_int_t *ncvt, aocl
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlasdq inputs: uplo %c, sqre %" FLA_IS ", n %" FLA_IS ", ncvt %" FLA_IS ", nru %" FLA_IS ", ncc %" FLA_IS ", ldvt %" FLA_IS ", ldu %" FLA_IS ", ldc %" FLA_IS "",*uplo, *sqre, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -227,9 +227,13 @@ void dlasdq_(char *uplo, aocl_int_t *sqre, aocl_int_t *n, aocl_int_t *ncvt, aocl
     doublereal r__, cs, sn;
     aocl_int64_t np1, isub;
     doublereal smin;
-    aocl_int64_t sqre1;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iuplo;
+    integer sqre1;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    integer iuplo;
+    extern /* Subroutine */
+    int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(char *, integer *), dbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     logical rotate;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -452,7 +456,7 @@ void dlasdq_(char *uplo, aocl_int_t *sqre, aocl_int_t *n, aocl_int_t *ncvt, aocl
             }
             if(*nru > 0)
             {
-                aocl_blas_dswap(nru, &u[isub * u_dim1 + 1], &c__1, &u[i__ * u_dim1 + 1], &c__1);
+                dswap_(nru, &u[isub * u_dim1 + 1], &c__1, &u[i__ * u_dim1 + 1], &c__1);
             }
             if(*ncc > 0)
             {

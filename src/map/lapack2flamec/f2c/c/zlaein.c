@@ -452,8 +452,7 @@ void aocl_lapack_zlaein(logical *rightv, logical *noinit, aocl_int64_t *n, dcomp
         /* Solve U*x = scale*v for a right eigenvector */
         /* or U**H *x = scale*v for a left eigenvector, */
         /* overwriting x on v. */
-        aocl_lapack_zlatrs("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &v[1], &scale,
-                           &rwork[1], &ierr);
+        zlatrs_("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &v[1], &scale, &rwork[1], &ierr);
         *(unsigned char *)normin = 'Y';
         /* Test for sufficient growth in the norm of v. */
         vnorm = aocl_blas_dzasum(n, &v[1], &c__1);

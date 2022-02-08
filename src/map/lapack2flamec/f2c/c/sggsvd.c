@@ -384,7 +384,10 @@ void aocl_lapack_sggsvd(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     real anorm, bnorm;
     logical wantq;
     logical wantu, wantv;
-    aocl_int64_t ncycle;
+    extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
+    integer ncycle;
+    extern /* Subroutine */
+    int xerbla_(char *, integer *), stgsja_( char *, char *, char *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), sggsvp_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, real *, real *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

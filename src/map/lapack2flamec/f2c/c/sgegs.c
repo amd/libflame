@@ -274,12 +274,17 @@ void aocl_lapack_sgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, real *a, aoc
     aocl_int64_t irows;
     logical ilascl, ilbscl;
     real safmin;
+    extern /* Subroutine */
+    int sgghrd_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), xerbla_(char *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
     aocl_int64_t ijobvl, iright;
     aocl_int64_t ijobvr;
     real anrmto;
     aocl_int64_t lwkmin;
     real bnrmto;
+    extern /* Subroutine */
+    int shgeqz_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, integer *);
     real smlnum;
     aocl_int64_t lwkopt;
     logical lquery;
@@ -562,10 +567,8 @@ void aocl_lapack_sgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, real *a, aoc
     /* left_permutation, right_permutation, work... */
     iwork = itau;
     i__1 = *lwork + 1 - iwork;
-    aocl_lapack_shgeqz("S", jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb,
-                       &alphar[1], &alphai[1], &beta[1], &vsl[vsl_offset], ldvsl, &vsr[vsr_offset],
-                       ldvsr, &work[iwork], &i__1, &iinfo);
-    if(iinfo >= 0)
+    shgeqz_("S", jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[ b_offset], ldb, &alphar[1], &alphai[1], &beta[1], &vsl[vsl_offset], ldvsl, &vsr[vsr_offset], ldvsr, &work[iwork], &i__1, &iinfo);
+    if (iinfo >= 0)
     {
         /* Computing MAX */
         i__1 = lwkopt;

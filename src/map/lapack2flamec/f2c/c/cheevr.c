@@ -373,11 +373,11 @@ void cheevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, scomplex *a, ao
              aocl_int_t *liwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cheevr inputs: jobz %c, range %c, uplo %c, n %lld, lda %lld, il %lld, iu %lld, ldz %lld, lwork %lld, lrwork %lld, liwrok %lld",*jobz, *range, *uplo, *n, *lda, *il, *iu, *ldz, *lwork, *lrwork, *liwork);
-#else 
+#else
     snprintf(buffer, 256,"cheevr inputs: jobz %c, range %c, uplo %c, n %d, lda %d, il %d, iu %d, ldz %d, lwork %d, lrwork %d, liwork %d",*jobz, *range, *uplo, *n, *lda, *il, *iu, *ldz, *lwork, *lrwork, *liwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -549,7 +549,7 @@ void cheevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, scomplex *a, ao
     {
         i__1 = -(*info);
         xerbla_("CHEEVR", &i__1);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
     else if(lquery)
@@ -741,8 +741,7 @@ void cheevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, scomplex *a, ao
             {
                 indwkn = indwk;
                 llwrkn = *lwork - indwkn + 1;
-                aocl_lapack_cunmtr("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau],
-                                   &z__[z_offset], ldz, &work[indwkn], &llwrkn, &iinfo);
+                cunmtr_("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau], &z__[z_offset], ldz, &work[indwkn], &llwrkn, &iinfo);
             }
         }
         if(*info == 0)

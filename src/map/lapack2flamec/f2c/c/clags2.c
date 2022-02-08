@@ -172,9 +172,7 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
     real csl, csr, snl, snr, aua11, aua12, aua21, aua22, avb11, avb12, avb21, avb22, ua11r, ua22r,
         vb11r, vb22r;
     extern /* Subroutine */
-        void
-        slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *),
-        clartg_(scomplex *, scomplex *, real *, scomplex *, scomplex *);
+    int slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *), clartg_(complex *, complex *, real *, complex *, complex *);
     /* -- LAPACK auxiliary routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -252,8 +250,8 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
             q__1.i = q__2.i + q__3.i; // , expr subst
             vb12.r = q__1.r;
             vb12.i = q__1.i; // , expr subst
-            aua12 = f2c_abs(csl) * ((r__1 = a2->r, f2c_abs(r__1)) + (r__2 = r_imag(a2) , f2c_abs(r__2))) + f2c_abs(snl) * f2c_abs(*a3);
-            avb12 = f2c_abs(csr) * ((r__1 = b2->r, f2c_abs(r__1)) + (r__2 = r_imag(b2) , f2c_abs(r__2))) + f2c_abs(snr) * f2c_abs(*b3);
+            aua12 = f2c_abs(csl) * ((r__1 = a2->r, f2c_abs(r__1)) + (r__2 = r_imag(a2), f2c_abs(r__2))) + f2c_abs(snl) * f2c_abs(*a3);
+            avb12 = f2c_abs(csr) * ((r__1 = b2->r, f2c_abs(r__1)) + (r__2 = r_imag(b2), f2c_abs(r__2))) + f2c_abs(snr) * f2c_abs(*b3);
             /* zero (1,2) elements of U**H *A and V**H *B */
             if (f2c_abs(ua11r) + ((r__1 = ua12.r, f2c_abs(r__1)) + (r__2 = r_imag(& ua12), f2c_abs(r__2))) == 0.f)
             {
@@ -350,8 +348,8 @@ void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomple
             q__1.i = q__2.i; // , expr subst
             vb22.r = q__1.r;
             vb22.i = q__1.i; // , expr subst
-            aua22 = f2c_abs(snl) * ((r__1 = a2->r, f2c_abs(r__1)) + (r__2 = r_imag(a2) , f2c_abs(r__2))) + f2c_abs(csl) * f2c_abs(*a3);
-            avb22 = f2c_abs(snr) * ((r__1 = b2->r, f2c_abs(r__1)) + (r__2 = r_imag(b2) , f2c_abs(r__2))) + f2c_abs(csr) * f2c_abs(*b3);
+            aua22 = f2c_abs(snl) * ((r__1 = a2->r, f2c_abs(r__1)) + (r__2 = r_imag(a2), f2c_abs(r__2))) + f2c_abs(csl) * f2c_abs(*a3);
+            avb22 = f2c_abs(snr) * ((r__1 = b2->r, f2c_abs(r__1)) + (r__2 = r_imag(b2), f2c_abs(r__2))) + f2c_abs(csr) * f2c_abs(*b3);
             /* zero (2,2) elements of U**H *A and V**H *B, and then swap. */
             if ((r__1 = ua21.r, f2c_abs(r__1)) + (r__2 = r_imag(&ua21), f2c_abs(r__2)) + ((r__3 = ua22.r, f2c_abs(r__3)) + (r__4 = r_imag(&ua22), f2c_abs(r__4))) == 0.f)
             {

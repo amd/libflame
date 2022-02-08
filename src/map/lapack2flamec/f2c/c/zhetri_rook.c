@@ -204,7 +204,7 @@ void zhetri_rook_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_
         xerbla_("ZHETRI_ROOK", &i__1);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
-        }
+    }
     /* Quick return if possible */
     if(*n == 0)
     {
@@ -352,12 +352,12 @@ void zhetri_rook_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_
                 i__1 = k + 1 + (k + 1) * a_dim1;
                 i__2 = k + 1 + (k + 1) * a_dim1;
                 i__3 = k - 1;
-                aocl_lapack_zdotc_f2c(&z__2, &i__3, &work[1], &c__1, &a[(k + 1) * a_dim1 + 1], &c__1);
-                d__1 = z__2.real;
-                z__1.real = a[i__2].real - d__1;
-                z__1.imag = a[i__2].imag; // , expr subst
-                a[i__1].real = z__1.real;
-                a[i__1].imag = z__1.imag; // , expr subst
+                zdotc_f2c_(&z__2, &i__3, &work[1], &c__1, &a[(k + 1) * a_dim1 + 1], &c__1);
+                d__1 = z__2.r;
+                z__1.r = a[i__2].r - d__1;
+                z__1.i = a[i__2].i; // , expr subst
+                a[i__1].r = z__1.r;
+                a[i__1].i = z__1.i; // , expr subst
             }
             kstep = 2;
         }

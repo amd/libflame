@@ -227,7 +227,11 @@ void sspgvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *ap,
     aocl_int64_t lwmin;
     char trans[1];
     logical upper, wantz;
-    aocl_int64_t liwmin;
+    extern /* Subroutine */
+    int stpmv_(char *, char *, char *, integer *, real *, real *, integer *), stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(char *, integer *);
+    integer liwmin;
+    extern /* Subroutine */
+    int sspevd_(char *, char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *), spptrf_(char *, integer *, real *, integer *);
     logical lquery;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

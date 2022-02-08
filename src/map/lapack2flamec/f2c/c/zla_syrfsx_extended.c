@@ -3,8 +3,16 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static dcomplex c_b14 = {-1., 0.};
-static dcomplex c_b15 = {1., 0.};
+static doublecomplex c_b14 =
+{
+    -1.,0.
+    }
+;
+static doublecomplex c_b15 =
+{
+    1.,0.
+}
+;
 static doublereal c_b37 = 1.;
 /* > \brief \b ZLA_SYRFSX_EXTENDED improves the computed solution to a system of linear equations
  * for symmetri c indefinite matrices by performing extra-precise iterative refinement and provides
@@ -429,9 +437,7 @@ void zla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     logical incr_prec__;
     doublereal prev_dz_z__;
     extern /* Subroutine */
-        void
-        zla_syamv_(integer *, integer *, doublereal *, dcomplex *, integer *, dcomplex *,
-                   integer *, doublereal *, doublereal *, integer *);
+    int zla_syamv_(integer *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *);
     doublereal yk, final_dx_x__, final_dz_z__;
     extern /* Subroutine */
         void
@@ -440,8 +446,7 @@ void zla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     integer cnt;
     doublereal dyk, eps, incr_thresh__, dx_x__, dz_z__, ymin;
     extern /* Subroutine */
-        void
-        zla_lin_berr_(integer *, integer *, integer *, dcomplex *, doublereal *, doublereal *);
+    int zla_lin_berr_(integer *, integer *, integer *, doublecomplex *, doublereal *, doublereal *);
     integer y_prec_state__, uplo2;
     extern /* Subroutine */
         int

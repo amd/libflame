@@ -145,11 +145,11 @@ void clascl_(char *type__, aocl_int_t *kl, aocl_int_t *ku, real *cfrom, real *ct
              aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clascl inputs: type__ %c, kl %lld, ku %lld, m %lld, n %lld, lda %lld",*type__, *kl, *ku, *m, *n, *lda);
-#else 
+#else
     snprintf(buffer, 256,"clascl inputs: type__ %c, kl %d, ku %d, m %d, n %d, lda %d",*type__, *kl, *ku, *m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

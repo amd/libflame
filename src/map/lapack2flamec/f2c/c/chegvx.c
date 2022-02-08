@@ -318,11 +318,11 @@ void chegvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"chegvx inputs: itype %lld, jobz %c, range %c, uplo %c, n %lld, lda %lld, ldb %lld, il %lld, iu %lld, m %lld, ldz %lld, lwork %lld",*itype, *jobz, *range, *uplo, *n, *lda, *ldb, *il, *iu, *m, *ldz, *lwork);
-#else 
+#else
     snprintf(buffer, 256,"chegvx inputs: itype %d, jobz %c, range %c, uplo %c, n %d, lda %d, ldb %d, il %d, iu %d, m %d, ldz %d, lwork %d",*itype, *jobz, *range, *uplo, *n, *lda, *ldb, *il, *iu, *m, *ldz, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -335,7 +335,12 @@ void chegvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     char trans[1];
     logical upper, wantz, alleig, indeig, valeig;
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    int chegst_(integer *, char *, integer *, complex *, integer *, complex *, integer *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int xerbla_(char *, integer *), cheevx_( char *, char *, char *, integer *, complex *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, complex *, integer *, complex *, integer *, real *, integer *, integer *, integer *), cpotrf_(char *, integer *, complex *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

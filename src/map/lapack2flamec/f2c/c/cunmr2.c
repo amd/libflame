@@ -160,8 +160,8 @@ void cunmr2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"cunmr2 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *k, *lda, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -174,8 +174,12 @@ void cunmr2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     aocl_int64_t i__, i1, i2, i3, mi, ni, nq;
     scomplex aii;
     logical left;
-    scomplex taui;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    complex taui;
+    extern /* Subroutine */
+    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int clacgv_(integer *, complex *, integer *), xerbla_(char *, integer *);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

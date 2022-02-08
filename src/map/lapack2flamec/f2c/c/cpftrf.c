@@ -219,11 +219,11 @@ k=N/2. IF TRANSR = 'C' then RFP is */
 void cpftrf_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cpftrf inputs: transr %c, uplo %c, n %lld",*transr, *uplo, *n);
-#else 
+#else
     snprintf(buffer, 256,"cpftrf inputs: transr %c, uplo %c, n %d",*transr, *uplo, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -387,10 +387,10 @@ void cpftrf_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *i
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return 0;
                 }
-                aocl_blas_ctrsm("R", "U", "N", "N", &n2, &n1, &c_b1, &a[n2 * n2], &n2, a, &n2);
-                aocl_blas_cherk("L", "N", &n2, &n1, &c_b15, a, &n2, &c_b16, &a[n1 * n2], &n2);
-                aocl_lapack_cpotrf("L", &n2, &a[n1 * n2], &n2, info);
-                if(*info > 0)
+                ctrsm_("R", "U", "N", "N", &n2, &n1, &c_b1, &a[n2 * n2], &n2, a, &n2);
+                cherk_("L", "N", &n2, &n1, &c_b15, a, &n2, &c_b16, &a[n1 * n2], &n2);
+                cpotrf_("L", &n2, &a[n1 * n2], &n2, info);
+                if (*info > 0)
                 {
                     *info += n1;
                 }

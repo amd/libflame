@@ -171,8 +171,13 @@ void aocl_lapack_sgerqf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    aocl_int64_t i__, k, ib, nb, ki, kk, mu, nu, nx, iws, nbmin, iinfo;
-    aocl_int64_t ldwork, lwkopt;
+    integer i__, k, ib, nb, ki, kk, mu, nu, nx, iws, nbmin, iinfo;
+    extern /* Subroutine */
+    int sgerq2_(integer *, integer *, real *, integer *, real *, real *, integer *), slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(char *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
+    integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

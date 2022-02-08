@@ -326,8 +326,12 @@ void aocl_lapack_slaqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, ao
     aocl_int64_t jtop, jrow, mtop;
     real alpha;
     logical accum;
-    aocl_int64_t ndcol, incol;
-    aocl_int64_t krcol, nbmps;
+    integer ndcol, incol;
+    extern /* Subroutine */
+    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    integer krcol, nbmps;
+    extern /* Subroutine */
+    int strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), slaqr1_(integer *, real *, integer *, real *, real *, real *, real *, real *), slabad_(real *, real *);
     extern real slamch_(char *);
     real safmin;
     real refsum, smlnum;
@@ -716,7 +720,7 @@ void aocl_lapack_slaqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, ao
                         alpha = vt[0];
                         slarfg_(&c__3, &alpha, &vt[1], &c__1, vt);
                         refsum = vt[0] * (h__[k + 1 + k * h_dim1] + vt[1] * h__[k + 2 + k * h_dim1]);
-                        if ((r__1 = h__[k + 2 + k * h_dim1] - refsum * vt[1], f2c_abs(r__1)) + (r__2 = refsum * vt[2], f2c_abs(r__2) ) > ulp * ((r__3 = h__[k + k * h_dim1], f2c_abs( r__3)) + (r__4 = h__[k + 1 + (k + 1) * h_dim1] , f2c_abs(r__4)) + (r__5 = h__[k + 2 + (k + 2) * h_dim1], f2c_abs(r__5))))
+                        if ((r__1 = h__[k + 2 + k * h_dim1] - refsum * vt[1], f2c_abs(r__1)) + (r__2 = refsum * vt[2], f2c_abs(r__2) ) > ulp * ((r__3 = h__[k + k * h_dim1], f2c_abs( r__3)) + (r__4 = h__[k + 1 + (k + 1) * h_dim1], f2c_abs(r__4)) + (r__5 = h__[k + 2 + (k + 2) * h_dim1], f2c_abs(r__5))))
                         {
                             /* ==== Starting a new bulge here would */
                             /* . create non-negligible fill. Use */
@@ -1009,15 +1013,95 @@ void aocl_lapack_slaqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, ao
                 for(jrow = *iloz; i__6 < 0 ? jrow >= i__3 : jrow <= i__3; jrow += i__6)
                 {
                     /* Computing MIN */
-                    i__7 = *nv;
-                    i__4 = *ihiz - jrow + 1; // , expr subst
-                    jlen = fla_min(i__7, i__4);
-                    aocl_blas_sgemm("N", "N", &jlen, &nu, &nu, &c_b8,
-                                    &z__[jrow + (incol + k1) * z_dim1], ldz, &u[k1 + k1 * u_dim1],
-                                    ldu, &c_b7, &wv[wv_offset], ldwv);
-                    aocl_lapack_slacpy("ALL", &jlen, &nu, &wv[wv_offset], ldwv,
-                                       &z__[jrow + (incol + k1) * z_dim1], ldz);
-                    /* L170: */
+                    i__5 = *nh;
+                    i__7 = jbot - jcol + 1; // , expr subst
+                    jlen = min(i__5,i__7);
+                    /* ==== Copy bottom of H to top+KZS of scratch ==== */
+                    /* (The first KZS rows get multiplied by zero.) ==== */
+                    slacpy_("ALL", &knz, &jlen, &h__[incol + 1 + j2 + jcol * h_dim1], ldh, &wh[kzs + 1 + wh_dim1], ldwh);
+                    /* ==== Multiply by U21**T ==== */
+                    slaset_("ALL", &kzs, &jlen, &c_b7, &c_b7, &wh[wh_offset], ldwh);
+                    strmm_("L", "U", "C", "N", &knz, &jlen, &c_b8, &u[j2 + 1 + (kzs + 1) * u_dim1], ldu, &wh[kzs + 1 + wh_dim1], ldwh);
+                    /* ==== Multiply top of H by U11**T ==== */
+                    sgemm_("C", "N", &i2, &jlen, &j2, &c_b8, &u[u_offset], ldu, &h__[incol + 1 + jcol * h_dim1], ldh, &c_b8, &wh[wh_offset], ldwh);
+                    /* ==== Copy top of H to bottom of WH ==== */
+                    slacpy_("ALL", &j2, &jlen, &h__[incol + 1 + jcol * h_dim1], ldh, &wh[i2 + 1 + wh_dim1], ldwh);
+                    /* ==== Multiply by U21**T ==== */
+                    strmm_("L", "L", "C", "N", &j2, &jlen, &c_b8, &u[(i2 + 1) * u_dim1 + 1], ldu, &wh[i2 + 1 + wh_dim1], ldwh);
+                    /* ==== Multiply by U22 ==== */
+                    i__5 = i4 - i2;
+                    i__7 = j4 - j2;
+                    sgemm_("C", "N", &i__5, &jlen, &i__7, &c_b8, &u[j2 + 1 + ( i2 + 1) * u_dim1], ldu, &h__[incol + 1 + j2 + jcol * h_dim1], ldh, &c_b8, &wh[i2 + 1 + wh_dim1], ldwh);
+                    /* ==== Copy it back ==== */
+                    slacpy_("ALL", &kdu, &jlen, &wh[wh_offset], ldwh, &h__[ incol + 1 + jcol * h_dim1], ldh);
+                    /* L190: */
+                }
+                /* ==== Vertical multiply ==== */
+                i__3 = max(incol,*ktop) - 1;
+                i__4 = *nv;
+                for (jrow = jtop;
+                        i__4 < 0 ? jrow >= i__3 : jrow <= i__3;
+                        jrow += i__4)
+                {
+                    /* Computing MIN */
+                    i__5 = *nv;
+                    i__7 = max(incol,*ktop) - jrow; // , expr subst
+                    jlen = min(i__5,i__7);
+                    /* ==== Copy right of H to scratch (the first KZS */
+                    /* . columns get multiplied by zero) ==== */
+                    slacpy_("ALL", &jlen, &knz, &h__[jrow + (incol + 1 + j2) * h_dim1], ldh, &wv[(kzs + 1) * wv_dim1 + 1], ldwv);
+                    /* ==== Multiply by U21 ==== */
+                    slaset_("ALL", &jlen, &kzs, &c_b7, &c_b7, &wv[wv_offset], ldwv);
+                    strmm_("R", "U", "N", "N", &jlen, &knz, &c_b8, &u[j2 + 1 + (kzs + 1) * u_dim1], ldu, &wv[(kzs + 1) * wv_dim1 + 1], ldwv);
+                    /* ==== Multiply by U11 ==== */
+                    sgemm_("N", "N", &jlen, &i2, &j2, &c_b8, &h__[jrow + ( incol + 1) * h_dim1], ldh, &u[u_offset], ldu, & c_b8, &wv[wv_offset], ldwv);
+                    /* ==== Copy left of H to right of scratch ==== */
+                    slacpy_("ALL", &jlen, &j2, &h__[jrow + (incol + 1) * h_dim1], ldh, &wv[(i2 + 1) * wv_dim1 + 1], ldwv);
+                    /* ==== Multiply by U21 ==== */
+                    i__5 = i4 - i2;
+                    strmm_("R", "L", "N", "N", &jlen, &i__5, &c_b8, &u[(i2 + 1) * u_dim1 + 1], ldu, &wv[(i2 + 1) * wv_dim1 + 1], ldwv);
+                    /* ==== Multiply by U22 ==== */
+                    i__5 = i4 - i2;
+                    i__7 = j4 - j2;
+                    sgemm_("N", "N", &jlen, &i__5, &i__7, &c_b8, &h__[jrow + ( incol + 1 + j2) * h_dim1], ldh, &u[j2 + 1 + (i2 + 1) * u_dim1], ldu, &c_b8, &wv[(i2 + 1) * wv_dim1 + 1], ldwv);
+                    /* ==== Copy it back ==== */
+                    slacpy_("ALL", &jlen, &kdu, &wv[wv_offset], ldwv, &h__[ jrow + (incol + 1) * h_dim1], ldh);
+                    /* L200: */
+                }
+                /* ==== Multiply Z (also vertical) ==== */
+                if (*wantz)
+                {
+                    i__4 = *ihiz;
+                    i__3 = *nv;
+                    for (jrow = *iloz;
+                            i__3 < 0 ? jrow >= i__4 : jrow <= i__4;
+                            jrow += i__3)
+                    {
+                        /* Computing MIN */
+                        i__5 = *nv;
+                        i__7 = *ihiz - jrow + 1; // , expr subst
+                        jlen = min(i__5,i__7);
+                        /* ==== Copy right of Z to left of scratch (first */
+                        /* . KZS columns get multiplied by zero) ==== */
+                        slacpy_("ALL", &jlen, &knz, &z__[jrow + (incol + 1 + j2) * z_dim1], ldz, &wv[(kzs + 1) * wv_dim1 + 1], ldwv);
+                        /* ==== Multiply by U12 ==== */
+                        slaset_("ALL", &jlen, &kzs, &c_b7, &c_b7, &wv[ wv_offset], ldwv);
+                        strmm_("R", "U", "N", "N", &jlen, &knz, &c_b8, &u[j2 + 1 + (kzs + 1) * u_dim1], ldu, &wv[(kzs + 1) * wv_dim1 + 1], ldwv);
+                        /* ==== Multiply by U11 ==== */
+                        sgemm_("N", "N", &jlen, &i2, &j2, &c_b8, &z__[jrow + ( incol + 1) * z_dim1], ldz, &u[u_offset], ldu, &c_b8, &wv[wv_offset], ldwv);
+                        /* ==== Copy left of Z to right of scratch ==== */
+                        slacpy_("ALL", &jlen, &j2, &z__[jrow + (incol + 1) * z_dim1], ldz, &wv[(i2 + 1) * wv_dim1 + 1], ldwv);
+                        /* ==== Multiply by U21 ==== */
+                        i__5 = i4 - i2;
+                        strmm_("R", "L", "N", "N", &jlen, &i__5, &c_b8, &u[( i2 + 1) * u_dim1 + 1], ldu, &wv[(i2 + 1) * wv_dim1 + 1], ldwv);
+                        /* ==== Multiply by U22 ==== */
+                        i__5 = i4 - i2;
+                        i__7 = j4 - j2;
+                        sgemm_("N", "N", &jlen, &i__5, &i__7, &c_b8, &z__[ jrow + (incol + 1 + j2) * z_dim1], ldz, &u[j2 + 1 + (i2 + 1) * u_dim1], ldu, &c_b8, &wv[(i2 + 1) * wv_dim1 + 1], ldwv);
+                        /* ==== Copy the result back to Z ==== */
+                        slacpy_("ALL", &jlen, &kdu, &wv[wv_offset], ldwv, & z__[jrow + (incol + 1) * z_dim1], ldz);
+                        /* L210: */
+                    }
                 }
             }
         }

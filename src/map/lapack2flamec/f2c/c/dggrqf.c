@@ -223,8 +223,8 @@ void dggrqf_(aocl_int_t *m, aocl_int_t *p, aocl_int_t *n, doublereal *a, aocl_in
              aocl_int_t *lwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dggrqf inputs: m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*m, *p, *n, *lda, *ldb, *lwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

@@ -123,8 +123,8 @@ static real c_b16 = -1.f;
 void spptrf_(char *uplo, aocl_int_t *n, real *ap, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"spptrf inputs: uplo %c, n %d",*uplo, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -138,6 +138,8 @@ void spptrf_(char *uplo, aocl_int_t *n, real *ap, aocl_int_t *info)
     real ajj;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
+    extern /* Subroutine */
+    int stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(char *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

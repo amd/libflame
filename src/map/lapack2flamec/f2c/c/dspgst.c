@@ -120,8 +120,8 @@ void dspgst_(aocl_int_t *itype, char *uplo, aocl_int_t *n, doublereal *ap, doubl
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dspgst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS "",*itype, *uplo, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -231,8 +231,7 @@ void dspgst_(aocl_int_t *itype, char *uplo, aocl_int_t *n, doublereal *ap, doubl
                     i__2 = *n - k;
                     aocl_blas_daxpy(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
-                    aocl_blas_dspr2(uplo, &i__2, &c_b9, &ap[kk + 1], &c__1, &bp[kk + 1], &c__1,
-                                    &ap[k1k1]);
+                    dspr2_(uplo, &i__2, &c_b9, &ap[kk + 1], &c__1, &bp[kk + 1], &c__1, &ap[k1k1]);
                     i__2 = *n - k;
                     aocl_blas_daxpy(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;

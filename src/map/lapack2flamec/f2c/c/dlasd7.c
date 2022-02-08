@@ -288,8 +288,8 @@ void dlasd7_(aocl_int_t *icompq, aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqr
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlasd7 inputs: icompq %" FLA_IS ", nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", idxq %" FLA_IS ", ldgcol %" FLA_IS ", ldgnum %" FLA_IS "",*icompq, *nl, *nr, *sqre, *idxq, *ldgcol, *ldgnum);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

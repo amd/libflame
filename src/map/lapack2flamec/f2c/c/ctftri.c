@@ -229,11 +229,11 @@ If UPLO = 'L' the RFP A contains the nt */
 void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctftri inputs: transr %c, uplo %c, diag %c, n %lld",*transr, *uplo, *diag, *n);
-#else 
+#else
     snprintf(buffer, 256,"ctftri inputs: transr %c, uplo %c, diag %c, n %d",*transr, *uplo, *diag, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -353,7 +353,7 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return 0;
                 }
-                aocl_blas_ctrmm("L", "U", "C", diag, &n2, &n1, &c_b1, &a[*n], n, &a[n1], n);
+                ctrmm_("L", "U", "C", diag, &n2, &n1, &c_b1, &a[*n], n, &a[n1], n);
             }
             else
             {
@@ -473,7 +473,7 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                aocl_blas_ctrmm("L", "U", "C", diag, &k, &k, &c_b1, a, &i__1, &a[k + 1], &i__2);
+                ctrmm_("L", "U", "C", diag, &k, &k, &c_b1, a, &i__1, &a[k + 1], &i__2);
             }
             else
             {

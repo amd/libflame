@@ -383,9 +383,14 @@ void ssyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *a, aocl_i
     real abstll, bignum;
     aocl_int64_t indtau, indisp, indiwo, indwkn, liwmin;
     logical tryrac;
-    aocl_int64_t llwrkn, llwork, nsplit;
+    extern /* Subroutine */
+    int sstein_(integer *, real *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *), ssterf_(integer *, real *, real *, integer *);
+    integer llwrkn, llwork, nsplit;
     real smlnum;
-    aocl_int64_t lwkopt;
+    extern real slansy_(char *, char *, integer *, real *, integer *, real *);
+    extern /* Subroutine */
+    int sstebz_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *), sstemr_(char *, char *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, real *, real *, integer *, integer *, integer *, logical *, real *, integer *, integer *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -687,8 +692,7 @@ void ssyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *a, aocl_i
             {
                 indwkn = inde;
                 llwrkn = *lwork - indwkn + 1;
-                aocl_lapack_sormtr("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau],
-                                   &z__[z_offset], ldz, &work[indwkn], &llwrkn, &iinfo);
+                sormtr_("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau], &z__[z_offset], ldz, &work[indwkn], &llwrkn, &iinfo);
             }
         }
         if(*info == 0)

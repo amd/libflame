@@ -114,8 +114,8 @@ void sorgr2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *a, aocl_int_t *l
              real *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"sorgr2 inputs: m %d, n %d, k %d, lda %d",*m, *n, *k, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

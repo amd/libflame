@@ -155,8 +155,8 @@ void dorbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, doublereal *x1, aoc
               aocl_int_t *ldq2, doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dorbdb5 inputs: m1 %" FLA_IS ", m2 %" FLA_IS ", n %" FLA_IS ", incx1 %" FLA_IS ", incx2 %" FLA_IS ", ldq1 %" FLA_IS ", ldq2 %" FLA_IS ", lwork %" FLA_IS "",*m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2, *lwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

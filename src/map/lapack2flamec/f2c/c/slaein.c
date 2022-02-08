@@ -223,8 +223,7 @@ void aocl_lapack_slaein(logical *rightv, logical *noinit, aocl_int64_t *n, real 
     extern real slapy2_(real *, real *);
     real absbii, absbjj;
     extern /* Subroutine */
-        void
-        sladiv_(real *, real *, real *, real *, real *, real *);
+    int sladiv_(real *, real *, real *, real *, real *, real *);
     char normin[1];
     real nrmsml;
     real growto;
@@ -727,7 +726,7 @@ L120: /* Normalize eigenvector. */
         {
             /* Computing MAX */
             r__3 = vnorm;
-            r__4 = (r__1 = vr[i__], f2c_abs(r__1)) + (r__2 = vi[i__] , f2c_abs(r__2)); // , expr subst
+            r__4 = (r__1 = vr[i__], f2c_abs(r__1)) + (r__2 = vi[i__], f2c_abs(r__2));  // , expr subst
             vnorm = max(r__3,r__4);
             /* L290: */
         }

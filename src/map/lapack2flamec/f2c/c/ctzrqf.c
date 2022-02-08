@@ -140,11 +140,11 @@ static aocl_int64_t c__1 = 1;
 void ctzrqf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *tau, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctzrqf inputs: m %lld, n %lld, lda %lld",*m, *n, *lda);
-#else 
+#else
     snprintf(buffer, 256,"ctzrqf inputs: m %d, n %d, lda %d",*m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -155,8 +155,12 @@ void ctzrqf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
     /* Builtin functions */
     void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    aocl_int64_t i__, k, m1;
-    scomplex alpha;
+    integer i__, k, m1;
+    extern /* Subroutine */
+    int cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
+    complex alpha;
+    extern /* Subroutine */
+    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *), xerbla_(char *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

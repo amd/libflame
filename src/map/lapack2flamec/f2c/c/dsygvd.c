@@ -398,8 +398,7 @@ void dsygvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, doublerea
             {
                 *(unsigned char *)trans = 'T';
             }
-            aocl_blas_dtrsm("Left", uplo, trans, "Non-unit", n, n, &c_b11, &b[b_offset], ldb,
-                            &a[a_offset], lda);
+            dtrsm_("Left", uplo, trans, "Non-unit", n, n, &c_b11, &b[b_offset], ldb, &a[a_offset], lda);
         }
         else if(*itype == 3)
         {
@@ -414,8 +413,7 @@ void dsygvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, doublerea
             {
                 *(unsigned char *)trans = 'N';
             }
-            aocl_blas_dtrmm("Left", uplo, trans, "Non-unit", n, n, &c_b11, &b[b_offset], ldb,
-                            &a[a_offset], lda);
+            dtrmm_("Left", uplo, trans, "Non-unit", n, n, &c_b11, &b[b_offset], ldb, &a[a_offset], lda);
         }
     }
     work[1] = (doublereal) lopt;

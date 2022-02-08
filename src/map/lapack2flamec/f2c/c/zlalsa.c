@@ -288,10 +288,12 @@ void zlalsa_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
     double d_imag(dcomplex *);
     integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     /* Local variables */
-    aocl_int64_t i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1,
-        jcol, nlvl, sqre, jrow, jimag;
-    aocl_int64_t jreal, inode, ndiml, ndimr;
-    aocl_int64_t givptr_sca, k_sca;
+    integer i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1, jcol, nlvl, sqre, jrow, jimag;
+    extern /* Subroutine */
+    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    integer jreal, inode, ndiml, ndimr;
+    extern /* Subroutine */
+    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlals0_(integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *), xerbla_(char *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

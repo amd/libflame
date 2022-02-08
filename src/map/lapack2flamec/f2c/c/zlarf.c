@@ -138,8 +138,8 @@ void zlarf_(char *side, aocl_int_t *m, aocl_int_t *n, dcomplex *v, aocl_int_t *i
             dcomplex *tau, dcomplex *c__, aocl_int_t *ldc, dcomplex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zlarf inputs: side %c, m %d, n %d, incv %d, ldc %d",*side, *m, *n, *incv, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

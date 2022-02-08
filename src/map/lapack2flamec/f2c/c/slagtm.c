@@ -146,8 +146,8 @@ void slagtm_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *alpha, real *dl
              real *du, real *x, aocl_int_t *ldx, real *beta, real *b, aocl_int_t *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"slagtm_ inputs: *trans %c, *n %d, *nrhs %d, *ldx %d, *ldb %d",*trans, *n, *nrhs, *ldx, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -185,7 +185,7 @@ void slagtm_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *alpha, real *dl
     /* Function Body */
     if(*n == 0)
     {
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
     /* Multiply B by BETA if BETA.NE.1. */

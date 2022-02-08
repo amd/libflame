@@ -133,11 +133,11 @@ static aocl_int64_t c__1 = 1;
 void clacn2_(aocl_int_t *n, scomplex *v, scomplex *x, real *est, aocl_int_t *kase, aocl_int_t *isave)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clacn2 inputs: n %lld, kase %lld, isave %lld",*n, *kase, *isave);
-#else 
+#else
     snprintf(buffer, 256,"clacn2 inputs: n %d, kase %d, isave %d",*n, *kase, *isave);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

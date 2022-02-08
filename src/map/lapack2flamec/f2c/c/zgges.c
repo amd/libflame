@@ -331,6 +331,8 @@ void aocl_lapack_zgges(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, ao
     logical cursl, ilvsl, ilvsr;
     aocl_int64_t irwrk, irows;
     extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    int zggbak_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublecomplex *, integer *, integer *), zggbal_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     logical ilascl, ilbscl;
     doublereal bignum;
     aocl_int64_t ijobvl, iright;

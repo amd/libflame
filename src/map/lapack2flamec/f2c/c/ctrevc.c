@@ -230,11 +230,11 @@ void ctrevc_(char *side, char *howmny, logical *select, aocl_int_t *n, scomplex 
              aocl_int_t *m, scomplex *work, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctrevc inputs: side %c, howmny %c, n %lld, ldt %lld, ldvl %lld, ldvr %lld, mm %lld",*side, *howmny, *n, *ldt, *ldvl, *ldvr, *mm);
-#else 
+#else
     snprintf(buffer, 256,"ctrevc inputs: side %c, howmny %c, n %d, ldt %d, ldvl %d, ldvr %d, mm %d",*side, *howmny, *n, *ldt, *ldvl, *ldvr, *mm);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -254,10 +254,15 @@ void ctrevc_(char *side, char *howmny, logical *select, aocl_int_t *n, scomplex 
     real unfl, smin;
     logical over;
     real scale;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     real remax;
     logical leftv, bothv, somev;
     extern real slamch_(char *);
+    extern /* Subroutine */
+    int csscal_(integer *, real *, complex *, integer *), xerbla_(char *, integer *), clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *, real *, integer *);
+    extern real scasum_(integer *, complex *, integer *);
     logical rightv;
     real smlnum;
     /* -- LAPACK computational routine -- */

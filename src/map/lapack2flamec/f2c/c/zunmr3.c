@@ -212,8 +212,10 @@ void aocl_lapack_zunmr3(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     /* Local variables */
     aocl_int64_t i__, i1, i2, i3, ja, ic, jc, mi, ni, nq;
     logical left;
-    dcomplex taui;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    doublecomplex taui;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int zlarz_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(char *, integer *);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

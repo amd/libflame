@@ -281,13 +281,18 @@ void aocl_lapack_sggev(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t ileft, icols, irows;
     logical ilascl, ilbscl;
+    extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
+    extern /* Subroutine */
+    int xerbla_(char *, integer *), sgghrd_( char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
     logical ldumma[1];
     char chtemp[1];
     real bignum;
     aocl_int64_t ijobvl, iright;
     aocl_int64_t ijobvr;
     real anrmto, bnrmto;
-    aocl_int64_t minwrk, maxwrk;
+    extern /* Subroutine */
+    int shgeqz_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, integer *);
+    integer minwrk, maxwrk;
     real smlnum;
     logical lquery;
     /* -- LAPACK driver routine -- */

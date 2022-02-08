@@ -101,11 +101,11 @@ void cla_lin_berr_(aocl_int_t *n, aocl_int_t *nz, aocl_int_t *nrhs, scomplex *re
                    real *berr)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cla_lin_berr inputs: n %lld, nz %lld, nrhs %lld",*n, *nz, *nrhs);
-#else 
+#else
     snprintf(buffer, 256,"cla_lin_berr inputs: n %d, nz %d, nrhs %d",*n, *nz, *nrhs);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

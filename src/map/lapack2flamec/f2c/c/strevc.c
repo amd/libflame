@@ -237,8 +237,8 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
              real *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"strevc inputs: side %c, howmny %c, n %d, ldt %d, ldvl %d, ldvr %d, mm %d",*side, *howmny, *n, *ldt, *ldvl, *ldvr, *mm);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -755,7 +755,7 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
                     {
                         /* Computing MAX */
                         r__3 = emax;
-                        r__4 = (r__1 = vr[k + (is - 1) * vr_dim1] , f2c_abs(r__1)) + (r__2 = vr[k + is * vr_dim1], f2c_abs(r__2)); // , expr subst
+                        r__4 = (r__1 = vr[k + (is - 1) * vr_dim1], f2c_abs(r__1)) + (r__2 = vr[k + is * vr_dim1], f2c_abs(r__2));  // , expr subst
                         emax = max(r__3,r__4);
                         /* L100: */
                     }
@@ -793,7 +793,7 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
                     {
                         /* Computing MAX */
                         r__3 = emax;
-                        r__4 = (r__1 = vr[k + (ki - 1) * vr_dim1] , f2c_abs(r__1)) + (r__2 = vr[k + ki * vr_dim1], f2c_abs(r__2)); // , expr subst
+                        r__4 = (r__1 = vr[k + (ki - 1) * vr_dim1], f2c_abs(r__1)) + (r__2 = vr[k + ki * vr_dim1], f2c_abs(r__2));  // , expr subst
                         emax = max(r__3,r__4);
                         /* L120: */
                     }

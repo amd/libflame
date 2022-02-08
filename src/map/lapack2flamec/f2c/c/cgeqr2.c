@@ -126,11 +126,11 @@ void cgeqr2_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgeqr2 inputs: m %lld, n %lld, lda %lld",*m, *n, *lda);
-#else 
+#else
     snprintf(buffer, 256,"cgeqr2 inputs: m %d, n %d, lda %d",*m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -141,8 +141,10 @@ void cgeqr2_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
     /* Builtin functions */
     void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    aocl_int64_t i__, k;
-    scomplex alpha;
+    integer i__, k;
+    complex alpha;
+    extern /* Subroutine */
+    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(char *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -197,9 +199,8 @@ void cgeqr2_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
         i__2 = *m - i__ + 1;
         /* Computing MIN */
         i__3 = i__ + 1;
-        aocl_lapack_clarfg(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3, *m) + i__ * a_dim1],
-                           &c__1, &tau[i__]);
-        if(i__ < *n)
+        clarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[min(i__3,*m) + i__ * a_dim1], &c__1, &tau[i__]);
+        if (i__ < *n)
         {
             /* Apply H(i)**H to A(i:m,i+1:n) from the left */
             i__2 = i__ + i__ * a_dim1;

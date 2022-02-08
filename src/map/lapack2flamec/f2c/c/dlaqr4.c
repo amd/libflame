@@ -277,8 +277,8 @@ void dlaqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
              aocl_int_t *lwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlaqr4 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",*n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz, *lwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -608,8 +608,7 @@ void dlaqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
                         bb = ss;
                         cc = ss * -.4375;
                         dd = aa;
-                        dlanv2_(&aa, &bb, &cc, &dd, &wr[i__ - 1], &wi[i__ - 1], &wr[i__], &wi[i__],
-                                &cs, &sn);
+                        dlanv2_(&aa, &bb, &cc, &dd, &wr[i__ - 1], &wi[i__ - 1], &wr[i__], &wi[i__], &cs, &sn);
                         /* L30: */
                     }
                     if(ks == ktop)
@@ -667,7 +666,7 @@ void dlaqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
                             i__3 = k - 1;
                             for(i__ = ks; i__ <= i__3; ++i__)
                             {
-                                if ((d__1 = wr[i__], f2c_dabs(d__1)) + (d__2 = wi[ i__], f2c_dabs(d__2)) < (d__3 = wr[i__ + 1] , f2c_dabs(d__3)) + (d__4 = wi[i__ + 1], f2c_dabs(d__4)))
+                                if ((d__1 = wr[i__], f2c_dabs(d__1)) + (d__2 = wi[ i__], f2c_dabs(d__2)) < (d__3 = wr[i__ + 1], f2c_dabs(d__3)) + (d__4 = wi[i__ + 1], f2c_dabs(d__4)))
                                 {
                                     sorted = FALSE_;
                                     swap = wr[i__];

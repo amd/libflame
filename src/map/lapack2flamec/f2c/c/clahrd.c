@@ -176,11 +176,11 @@ v(i+k+1:n) is stored on exit in */
 void clahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, scomplex *a, aocl_int_t *lda, scomplex *tau, scomplex *t, aocl_int_t *ldt, scomplex *y, aocl_int_t *ldy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clahrd inputs: n %lld, k %lld, nb %lld, lda %lld, ldt %lld, ldy %lld",*n, *k, *nb, *lda, *ldt, *ldy);
-#else 
+#else
     snprintf(buffer, 256,"clahrd inputs: n %d, k %d, nb %d, lda %d, ldt %d, ldy %d",*n, *k, *nb, *lda, *ldt, *ldy);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -272,8 +272,7 @@ void clahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, scomplex *a, aocl_int
                             &t[*nb * t_dim1 + 1], &c__1, &c_b2, &a[*k + i__ + i__ * a_dim1], &c__1);
             /* b1 := b1 - V1*w */
             i__2 = i__ - 1;
-            aocl_blas_ctrmv("Lower", "No transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda,
-                            &t[*nb * t_dim1 + 1], &c__1);
+            ctrmv_("Lower", "No transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda, &t[*nb * t_dim1 + 1], &c__1);
             i__2 = i__ - 1;
             q__1.real = -1.f;
             q__1.imag = -0.f; // , expr subst

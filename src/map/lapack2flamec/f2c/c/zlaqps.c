@@ -355,10 +355,9 @@ L10:
             i__1 = *m - rk + 1;
             i__2 = k - 1;
             i__3 = k;
-            z__1.real = -tau[i__3].real;
-            z__1.imag = -tau[i__3].imag; // , expr subst
-            aocl_blas_zgemv("Conjugate transpose", &i__1, &i__2, &z__1, &a[rk + a_dim1], lda,
-                            &a[rk + k * a_dim1], &c__1, &c_b1, &auxv[1], &c__1);
+            z__1.r = -tau[i__3].r;
+            z__1.i = -tau[i__3].i; // , expr subst
+            zgemv_("Conjugate transpose", &i__1, &i__2, &z__1, &a[rk + a_dim1], lda, &a[rk + k * a_dim1], &c__1, &c_b1, &auxv[1], &c__1);
             i__1 = k - 1;
             aocl_blas_zgemv("No transpose", n, &i__1, &c_b2, &f[f_dim1 + 1], ldf, &auxv[1], &c__1,
                             &c_b2, &f[k * f_dim1 + 1], &c__1);

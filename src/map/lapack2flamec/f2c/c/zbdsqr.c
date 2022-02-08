@@ -242,8 +242,8 @@ void zbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zbdsqr inputs: uplo %c, n %d, ncvt %d, nru %d, ncc %d, ldvt %d, ldu %d, ldc %d",*uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -277,8 +277,8 @@ void zbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
     aocl_int64_t oldll;
     doublereal shift, sigmn, oldsn, sigmx;
     logical lower;
-    extern void dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-              doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */
+    int zlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zdrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlasq1_(integer *, doublereal *, doublereal *, doublereal *, integer *), dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     doublereal sminoa, thresh;
     logical rotate;
@@ -458,7 +458,7 @@ void zbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
         i__1 = *n;
         for(i__ = 2; i__ <= i__1; ++i__)
         {
-            mu = (d__2 = d__[i__], f2c_dabs(d__2)) * (mu / (mu + (d__1 = e[i__ - 1] , f2c_dabs(d__1))));
+            mu = (d__2 = d__[i__], f2c_dabs(d__2)) * (mu / (mu + (d__1 = e[i__ - 1], f2c_dabs(d__1))));
             sminoa = min(sminoa,mu);
             if (sminoa == 0.)
             {
@@ -638,7 +638,7 @@ L90:
                     e[lll] = 0.;
                     goto L60;
                 }
-                mu = (d__2 = d__[lll], f2c_dabs(d__2)) * (mu / (mu + (d__1 = e[lll] , f2c_dabs(d__1))));
+                mu = (d__2 = d__[lll], f2c_dabs(d__2)) * (mu / (mu + (d__1 = e[lll], f2c_dabs(d__1))));
                 sminl = min(sminl,mu);
                 /* L110: */
             }

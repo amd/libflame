@@ -274,6 +274,8 @@ void aocl_lapack_zggev(char *jobvl, char *jobvr, aocl_int64_t *n, dcomplex *a,
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t ileft, icols, irwrk, irows;
     extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    int zggbak_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublecomplex *, integer *, integer *), zggbal_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     logical ilascl, ilbscl;
     logical ldumma[1];
     char chtemp[1];

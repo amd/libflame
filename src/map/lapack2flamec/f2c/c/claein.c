@@ -156,11 +156,11 @@ void claein_(logical *rightv, logical *noinit, aocl_int_t *n, scomplex *h__, aoc
              real *smlnum, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"claein inputs: n %lld, ldh %lld, ldb %lld",*n, *ldh, *ldb);
-#else 
+#else
     snprintf(buffer, 256,"claein inputs: n %d, ldh %d, ldb %d",*n, *ldh, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -438,8 +438,7 @@ void claein_(logical *rightv, logical *noinit, aocl_int_t *n, scomplex *h__, aoc
         /* Solve U*x = scale*v for a right eigenvector */
         /* or U**H *x = scale*v for a left eigenvector, */
         /* overwriting x on v. */
-        aocl_lapack_clatrs("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &v[1], &scale,
-                           &rwork[1], &ierr);
+        clatrs_("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &v[1], &scale, &rwork[1], &ierr);
         *(unsigned char *)normin = 'Y';
         /* Test for sufficient growth in the norm of v. */
         vnorm = aocl_blas_scasum(n, &v[1], &c__1);

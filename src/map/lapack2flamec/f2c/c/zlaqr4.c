@@ -300,16 +300,19 @@ void aocl_lapack_zlaqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     /* Local variables */
     aocl_int64_t i__, k;
     doublereal s;
-    dcomplex aa, bb, cc, dd;
-    aocl_int64_t ld, nh, it, ks, kt, ku, kv, ls, ns, nw;
-    dcomplex tr2, det;
-    aocl_int64_t inf, kdu, nho, nve, kwh, nsr, nwr, kwv, ndec, ndfl, kbot, nmin;
-    dcomplex swap;
-    aocl_int64_t ktop;
-    dcomplex zdum[1] /* was [1][1] */
-        ;
-    aocl_int64_t kacc22, itmax, nsmax, nwmax, kwtop;
-    aocl_int64_t nibble;
+    doublecomplex aa, bb, cc, dd;
+    integer ld, nh, it, ks, kt, ku, kv, ls, ns, nw;
+    doublecomplex tr2, det;
+    integer inf, kdu, nho, nve, kwh, nsr, nwr, kwv, ndec, ndfl, kbot, nmin;
+    doublecomplex swap;
+    integer ktop;
+    doublecomplex zdum[1] /* was [1][1] */
+    ;
+    integer kacc22, itmax, nsmax, nwmax, kwtop;
+    extern /* Subroutine */
+    int zlaqr2_(logical *, logical *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaqr5_(logical *, logical *, integer *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *);
+    integer nibble;
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     char jbcmpz[2];
     dcomplex rtdisc;
     aocl_int64_t nwupbd;

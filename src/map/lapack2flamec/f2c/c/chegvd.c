@@ -252,11 +252,11 @@ void chegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex 
              aocl_int_t *lrwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"chegvd inputs: itype %lld, jobz %c, uplo %c, n %lld, lda %lld, ldb %lld, lwork %lld, lrwork %lld, liwork %lld",*itype, *jobz, *uplo, *n, *lda, *ldb, *lwork, *lrwork, *liwork);
-#else 
+#else
     snprintf(buffer, 256,"chegvd inputs: itype %d, jobz %c, uplo %c, n %d, lda %d, ldb %d, lwork %d, lrwork %d, liwork %d",*itype, *jobz, *uplo, *n, *lda, *ldb, *lwork, *lrwork, *liwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

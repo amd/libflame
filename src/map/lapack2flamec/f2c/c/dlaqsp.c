@@ -125,8 +125,8 @@ void dlaqsp_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *s, doublerea
              doublereal *amax, char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlaqsp inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

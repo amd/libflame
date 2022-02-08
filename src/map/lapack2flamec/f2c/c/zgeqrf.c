@@ -301,9 +301,7 @@ void zgeqrf_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomple
                 /* Apply H**H to A(i:m,i+ib:n) from the left */
                 i__3 = *m - i__ + 1;
                 i__4 = *n - i__ - ib + 1;
-                aocl_lapack_zlarfb("Left", "Conjugate transpose", "Forward", "Columnwise", &i__3,
-                                   &i__4, &ib, &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
-                                   &a[i__ + (i__ + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
+                zlarfb_("Left", "Conjugate transpose", "Forward", "Columnwise", &i__3, &i__4, &ib, &a[i__ + i__ * a_dim1], lda, & work[1], &ldwork, &a[i__ + (i__ + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
             }
             /* L10: */
         }
@@ -317,7 +315,7 @@ void zgeqrf_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomple
     {
         i__2 = *m - i__ + 1;
         i__1 = *n - i__ + 1;
-        aocl_lapack_zgeqr2(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
+        zgeqr2_(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
     }
     work[1].r = (doublereal) iws;
     work[1].i = 0.; // , expr subst

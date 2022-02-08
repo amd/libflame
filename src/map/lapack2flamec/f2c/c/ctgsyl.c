@@ -4,13 +4,25 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {0.f, 0.f};
-static aocl_int64_t c__2 = 2;
-static aocl_int64_t c_n1 = -1;
-static aocl_int64_t c__5 = 5;
-static aocl_int64_t c__1 = 1;
-static scomplex c_b44 = {-1.f, 0.f};
-static scomplex c_b45 = {1.f, 0.f};
+static complex c_b1 =
+{
+    0.f,0.f
+}
+;
+static integer c__2 = 2;
+static integer c_n1 = -1;
+static integer c__5 = 5;
+static integer c__1 = 1;
+static complex c_b44 =
+{
+    -1.f,0.f
+    }
+;
+static complex c_b45 =
+{
+    1.f,0.f
+}
+;
 /* > \brief \b CTGSYL */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -303,11 +315,11 @@ void ctgsyl_(char *trans, aocl_int_t *ijob, aocl_int_t *m, aocl_int_t *n, scompl
              aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctgsyl inputs: trans %c, ijob %lld, m %lld, n %lld, lda %lld, ldb %lld, ldc %lld, ldd %lld, lde %lld, ldf %lld, lwork %lld",*trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf, *lwork);
-#else 
+#else
     snprintf(buffer, 256,"ctgsyl inputs: trans %c, ijob %d, m %d, n %d, lda %d, ldb %d, ldc %d, ldd %d, lde %d, ldf %d, lwork %d",*trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -322,8 +334,10 @@ void ctgsyl_(char *trans, aocl_int_t *ijob, aocl_int_t *m, aocl_int_t *n, scompl
     /* Local variables */
     aocl_int64_t i__, j, k, p, q, ie, je, mb, nb, is, js, pq;
     real dsum;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t ifunc, linfo, lwmin;
+    extern /* Subroutine */
+    int cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    integer ifunc, linfo, lwmin;
     real scale2;
     real dscale, scaloc;
     aocl_int64_t iround;

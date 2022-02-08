@@ -340,7 +340,12 @@ void dtgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, doublerea
     logical compl ;
     doublereal anorm, bnorm;
     logical compr;
-    doublereal temp2i, temp2r;
+    extern /* Subroutine */
+    int dlaln2_(logical *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    doublereal temp2i;
+    extern /* Subroutine */
+    int dlabad_(doublereal *, doublereal *);
+    doublereal temp2r;
     logical ilabad, ilbbad;
     doublereal acoefa, bcoefa, cimaga, cimagb;
     logical ilback;
@@ -932,10 +937,8 @@ void dtgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, doublerea
                 /* T */
                 /* Solve ( a A - b B ) y = SUM(,) */
                 /* with scaling and perturbation of the denominator */
-                aocl_lapack_dlaln2(&c_true, &na, &nw, &dmin__, &acoef, &s[j + j * s_dim1], lds,
-                                   bdiag, &bdiag[1], sum, &c__2, &bcoefr, &bcoefi,
-                                   &work[(*n << 1) + j], n, &scale, &temp, &iinfo);
-                if(scale < 1.)
+                dlaln2_(&c_true, &na, &nw, &dmin__, &acoef, &s[j + j * s_dim1], lds, bdiag, &bdiag[1], sum, &c__2, &bcoefr, &bcoefi, &work[(*n << 1) + j], n, &scale, &temp, &iinfo);
+                if (scale < 1.)
                 {
                     i__3 = nw - 1;
                     for(jw = 0; jw <= i__3; ++jw)

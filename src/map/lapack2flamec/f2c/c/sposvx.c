@@ -311,8 +311,8 @@ void sposvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, a
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"sposvx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -331,6 +331,8 @@ void sposvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, a
     real bignum;
     aocl_int64_t infequ;
     real smlnum;
+    extern /* Subroutine */
+    int slaqsy_(char *, integer *, real *, integer *, real *, real *, real *, char *), spoequ_(integer *, real *, integer *, real *, real *, real *, integer *), sporfs_( char *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), spotrf_(char *, integer *, real *, integer *, integer *), spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

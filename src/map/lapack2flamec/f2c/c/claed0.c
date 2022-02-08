@@ -150,11 +150,11 @@ void claed0_(aocl_int_t *qsiz, aocl_int_t *n, real *d__, real *e, scomplex *q, a
              scomplex *qstore, aocl_int_t *ldqs, real *rwork, aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"claed0 inputs: qsiz %lld, n %lld, ldq %lld, ldqs %lld",*qsiz, *n, *ldq, *ldqs);
-#else 
+#else
     snprintf(buffer, 256,"claed0 inputs: qsiz %d, n %d, ldq %d, ldqs %d",*qsiz, *n, *ldq, *ldqs);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -408,7 +408,7 @@ L80:
     {
         j = iwork[indxq + i__];
         rwork[i__] = d__[j];
-        aocl_blas_ccopy(qsiz, &qstore[j * qstore_dim1 + 1], &c__1, &q[i__ * q_dim1 + 1], &c__1);
+        ccopy_(qsiz, &qstore[j * qstore_dim1 + 1], &c__1, &q[i__ * q_dim1 + 1], &c__1);
         /* L100: */
     }
     scopy_(n, &rwork[1], &c__1, &d__[1], &c__1);

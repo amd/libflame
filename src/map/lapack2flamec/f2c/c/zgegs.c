@@ -271,6 +271,8 @@ void aocl_lapack_zgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, dcomplex *a,
     logical ilvsr;
     aocl_int64_t irows;
     extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    int zggbak_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublecomplex *, integer *, integer *), zggbal_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     logical ilascl, ilbscl;
     doublereal safmin;
     doublereal bignum;

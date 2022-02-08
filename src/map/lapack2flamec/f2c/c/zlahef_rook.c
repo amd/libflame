@@ -904,10 +904,9 @@ void zlahef_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dco
                 {
                     i__1 = *n - k + 1;
                     i__2 = k - 1;
-                    z__1.real = -1.;
-                    z__1.imag = -0.; // , expr subst
-                    aocl_blas_zgemv("No transpose", &i__1, &i__2, &z__1, &a[k + a_dim1], lda,
-                                    &w[imax + w_dim1], ldw, &c_b1, &w[k + (k + 1) * w_dim1], &c__1);
+                    z__1.r = -1.;
+                    z__1.i = -0.; // , expr subst
+                    zgemv_("No transpose", &i__1, &i__2, &z__1, &a[k + a_dim1], lda, &w[imax + w_dim1], ldw, &c_b1, &w[k + (k + 1) * w_dim1], &c__1);
                     i__1 = imax + (k + 1) * w_dim1;
                     i__2 = imax + (k + 1) * w_dim1;
                     d__1 = w[i__2].real;
@@ -1259,10 +1258,9 @@ void zlahef_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dco
                 a[i__4].imag = 0.; // , expr subst
                 i__4 = j + jb - jj;
                 i__5 = k - 1;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgemv("No transpose", &i__4, &i__5, &z__1, &a[jj + a_dim1], lda,
-                                &w[jj + w_dim1], ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
+                z__1.r = -1.;
+                z__1.i = -0.; // , expr subst
+                zgemv_("No transpose", &i__4, &i__5, &z__1, &a[jj + a_dim1], lda, &w[jj + w_dim1], ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
                 i__4 = jj + jj * a_dim1;
                 i__5 = jj + jj * a_dim1;
                 d__1 = a[i__5].real;

@@ -537,11 +537,11 @@ void aocl_lapack_ztgsna(char *job, char *howmny, logical *select, aocl_int64_t *
             /* eigenvalue. */
             rnrm = dznrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
             lnrm = dznrm2_(n, &vl[ks * vl_dim1 + 1], &c__1);
-            zgemv_("N", n, n, &c_b19, &a[a_offset], lda, &vr[ks * vr_dim1 + 1] , &c__1, &c_b20, &work[1], &c__1);
+            zgemv_("N", n, n, &c_b19, &a[a_offset], lda, &vr[ks * vr_dim1 + 1], &c__1, &c_b20, &work[1], &c__1);
             zdotc_f2c_(&z__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
             yhax.r = z__1.r;
             yhax.i = z__1.i; // , expr subst
-            zgemv_("N", n, n, &c_b19, &b[b_offset], ldb, &vr[ks * vr_dim1 + 1] , &c__1, &c_b20, &work[1], &c__1);
+            zgemv_("N", n, n, &c_b19, &b[b_offset], ldb, &vr[ks * vr_dim1 + 1], &c__1, &c_b20, &work[1], &c__1);
             zdotc_f2c_(&z__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
             yhbx.r = z__1.r;
             yhbx.i = z__1.i; // , expr subst
@@ -575,9 +575,8 @@ void aocl_lapack_ztgsna(char *job, char *howmny, logical *select, aocl_int64_t *
                 aocl_lapack_zlacpy("Full", n, n, &b[b_offset], ldb, &work[*n * *n + 1], n);
                 ifst = k;
                 ilst = 1;
-                aocl_lapack_ztgexc(&c_false, &c_false, n, &work[1], n, &work[*n * *n + 1], n, dummy,
-                                   &c__1, dummy1, &c__1, &ifst, &ilst, &ierr);
-                if(ierr > 0)
+                ztgexc_(&c_false, &c_false, n, &work[1], n, &work[*n * *n + 1], n, dummy, &c__1, dummy1, &c__1, &ifst, &ilst, &ierr) ;
+                if (ierr > 0)
                 {
                     /* Ill-conditioned problem - swap rejected. */
                     dif[ks] = 0.;

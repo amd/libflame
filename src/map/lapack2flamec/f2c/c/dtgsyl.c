@@ -321,9 +321,11 @@ void dtgsyl_(char *trans, aocl_int_t *ijob, aocl_int_t *m, aocl_int_t *n, double
     /* Local variables */
     aocl_int64_t i__, j, k, p, q, ie, je, mb, nb, is, js, pq;
     doublereal dsum;
-    aocl_int64_t ppqq;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t ifunc, linfo, lwmin;
+    integer ppqq;
+    extern /* Subroutine */
+    int dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *);
+    integer ifunc, linfo, lwmin;
     doublereal scale2;
     doublereal dscale, scaloc;
     aocl_int64_t iround;

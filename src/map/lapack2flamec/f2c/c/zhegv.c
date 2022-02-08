@@ -329,9 +329,9 @@ void aocl_lapack_zhegv(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    aocl_lapack_zhegst(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
-    aocl_lapack_zheev(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, &rwork[1], info);
-    if(wantz)
+    zhegst_(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
+    zheev_(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, &rwork[1], info);
+    if (wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
         neig = *n;

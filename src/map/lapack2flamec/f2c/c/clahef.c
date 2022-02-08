@@ -180,11 +180,11 @@ void clahef_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, scomplex
              aocl_int_t *ipiv, scomplex *w, aocl_int_t *ldw, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clahef inputs: uplo %c, n %lld, nb %lld, kb %lld, lda %lld, ldw %lld",*uplo, *n, *nb, *kb, *lda, *ldw);
-#else 
+#else
     snprintf(buffer, 256,"clahef inputs: uplo %c, n %d, nb %d, kb %d, lda %d, ldw %d",*uplo, *n, *nb, *kb, *lda, *ldw);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -202,8 +202,12 @@ void clahef_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, scomplex
     scomplex d11, d21, d22;
     aocl_int64_t jb, jj, kk, jp, kp, kw, kkw, imax, jmax;
     real alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t kstep;
+    extern /* Subroutine */
+    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
+    integer kstep;
     real absakk;
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
@@ -1047,10 +1051,9 @@ void clahef_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, scomplex
                 a[i__4].imag = 0.f; // , expr subst
                 i__4 = j + jb - jj;
                 i__5 = k - 1;
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_cgemv("No transpose", &i__4, &i__5, &q__1, &a[jj + a_dim1], lda,
-                                &w[jj + w_dim1], ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
+                q__1.r = -1.f;
+                q__1.i = -0.f; // , expr subst
+                cgemv_("No transpose", &i__4, &i__5, &q__1, &a[jj + a_dim1], lda, &w[jj + w_dim1], ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
                 i__4 = jj + jj * a_dim1;
                 i__5 = jj + jj * a_dim1;
                 r__1 = a[i__5].real;

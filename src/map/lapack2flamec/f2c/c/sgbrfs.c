@@ -209,8 +209,8 @@ void sgbrfs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
              aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"sgbrfs inputs: trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, ipiv %d, ldb %d, ldx %d",*trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ipiv, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -229,7 +229,11 @@ void sgbrfs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
     real safe1, safe2;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    aocl_int64_t count;
+    extern /* Subroutine */
+    int sgbmv_(char *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    integer count;
+    extern /* Subroutine */
+    int scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     logical notran;
@@ -451,9 +455,8 @@ void sgbrfs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
         if(berr[j] > eps && berr[j] * 2.f <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            aocl_lapack_sgbtrs(trans, n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
-                               &work[*n + 1], n, info);
-            aocl_blas_saxpy(n, &c_b17, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            sgbtrs_(trans, n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1], &work[*n + 1], n, info);
+            saxpy_(n, &c_b17, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1) ;
             lstres = berr[j];
             ++count;
             goto L20;

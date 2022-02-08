@@ -229,6 +229,8 @@ void aocl_lapack_ztrrfs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     logical upper;
+    extern /* Subroutine */
+    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztrmv_( char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlacn2_( integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     logical notran;

@@ -315,10 +315,12 @@ void aocl_lapack_slalsa(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t
     /* Builtin functions */
     integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     /* Local variables */
-    aocl_int64_t i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1,
-        nlvl, sqre, inode, ndiml;
-    aocl_int64_t ndimr;
-    aocl_int64_t givptr_sca, k_sca;
+    integer i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1, nlvl, sqre, inode, ndiml;
+    extern /* Subroutine */
+    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    integer ndimr;
+    extern /* Subroutine */
+    int scopy_(integer *, real *, integer *, real *, integer *), slals0_(integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *), xerbla_(char *, integer *), slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

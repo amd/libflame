@@ -147,7 +147,9 @@ void dlatrz_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, doublereal *a, aocl_in
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    aocl_int64_t i__;
+    integer i__;
+    extern /* Subroutine */
+    int dlarz_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

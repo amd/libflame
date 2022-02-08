@@ -367,13 +367,11 @@ void ssytri_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ip
                 a[k + k * a_dim1]
                     -= aocl_blas_sdot(&i__1, &work[1], &c__1, &a[k + 1 + k * a_dim1], &c__1);
                 i__1 = *n - k;
-                a[k + (k - 1) * a_dim1] -= aocl_blas_sdot(&i__1, &a[k + 1 + k * a_dim1], &c__1,
-                                                          &a[k + 1 + (k - 1) * a_dim1], &c__1);
+                a[k + (k - 1) * a_dim1] -= sdot_(&i__1, &a[k + 1 + k * a_dim1], &c__1, &a[k + 1 + (k - 1) * a_dim1], &c__1);
                 i__1 = *n - k;
                 aocl_blas_scopy(&i__1, &a[k + 1 + (k - 1) * a_dim1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
-                aocl_blas_ssymv(uplo, &i__1, &c_b11, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1],
-                                &c__1, &c_b13, &a[k + 1 + (k - 1) * a_dim1], &c__1);
+                ssymv_(uplo, &i__1, &c_b11, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1, &c_b13, &a[k + 1 + (k - 1) * a_dim1], &c__1);
                 i__1 = *n - k;
                 a[k - 1 + (k - 1) * a_dim1]
                     -= aocl_blas_sdot(&i__1, &work[1], &c__1, &a[k + 1 + (k - 1) * a_dim1], &c__1);

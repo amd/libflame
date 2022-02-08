@@ -282,8 +282,8 @@ void slasda_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"slasda inputs: icompq %d, smlsiz %d, n %d, sqre %d, ldu %d, ldgcol %d",*icompq, *smlsiz, *n, *sqre, *ldu, *ldgcol);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -299,10 +299,13 @@ void slasda_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
     real beta;
     aocl_int64_t idxq, nlvl;
     real alpha;
-    aocl_int64_t inode, ndiml, ndimr, idxqi, itemp, sqrei;
-    aocl_int64_t nwork1, nwork2;
-    aocl_int64_t smlszp;
-    aocl_int64_t givptr_sca, k_sca;
+    integer inode, ndiml, ndimr, idxqi, itemp, sqrei;
+    extern /* Subroutine */
+    int scopy_(integer *, real *, integer *, real *, integer *), slasd6_(integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *, integer *);
+    integer nwork1, nwork2;
+    extern /* Subroutine */
+    int xerbla_(char *, integer *), slasdq_( char *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    integer smlszp;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -400,8 +403,7 @@ void slasda_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
         }
         else
         {
-            aocl_lapack_slasdq("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldu,
-                               &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
+            slasdq_("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldu, &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;

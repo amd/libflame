@@ -147,8 +147,8 @@ void zgerqf_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomple
              dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zgerqf inputs: m %d, n %d, lda %d",*m, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

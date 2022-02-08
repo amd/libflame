@@ -291,8 +291,8 @@ void zsysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *
              aocl_int_t *lwork, doublereal *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zsysvx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -443,9 +443,7 @@ void zsysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *
     aocl_lapack_zsytrs(uplo, n, nrhs, &af[af_offset], ldaf, &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    aocl_lapack_zsyrfs(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1],
-                       &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
-                       &rwork[1], info);
+    zsyrfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
     if(*rcond < dlamch_("Epsilon"))
     {

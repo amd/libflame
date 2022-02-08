@@ -190,7 +190,11 @@ void aocl_lapack_slaexc(logical *wantq, aocl_int64_t *n, real *t, aocl_int64_t *
     aocl_int64_t ierr;
     real temp;
     real scale, dnorm, xnorm;
-    extern void slartg_(real *, real *, real *, real *, real *);
+    extern /* Subroutine */
+    int slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *), slasy2_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, integer *, real *, integer *);
+    extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
+    extern /* Subroutine */
+    int slarfg_(integer *, real *, real *, integer *, real *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slartg_(real *, real *, real *, real *, real *);
     real thresh;
     real smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */

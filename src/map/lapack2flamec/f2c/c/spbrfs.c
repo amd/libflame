@@ -195,8 +195,8 @@ void spbrfs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, real *
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"spbrfs inputs: uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldafb %d, ldb %d, ldx %d",*uplo, *n, *kd, *nrhs, *ldab, *ldafb, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -420,8 +420,8 @@ void spbrfs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, real *
         if(berr[j] > eps && berr[j] * 2.f <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            aocl_lapack_spbtrs(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[*n + 1], n, info);
-            aocl_blas_saxpy(n, &c_b14, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            spbtrs_(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[*n + 1], n, info);
+            saxpy_(n, &c_b14, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1) ;
             lstres = berr[j];
             ++count;
             goto L20;

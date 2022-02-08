@@ -151,11 +151,11 @@ void cgbtrf_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomp
              aocl_int_t *ldab, aocl_int_t *ipiv, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgbtrf inputs: m %lld, n %lld, kl %lld, ku %lld, ldab %lld",*m, *n, *kl, *ku, *ldab);
-#else 
+#else
     snprintf(buffer, 256,"cgbtrf inputs: m %d, n %d, kl %d, ku %d, ldab %d",*m, *n, *kl, *ku, *ldab);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -166,12 +166,21 @@ void cgbtrf_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomp
     /* Builtin functions */
     void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    aocl_int64_t i__, j, i2, i3, j2, j3, k2, jb, nb, ii, jj, jm, ip, jp, km, ju, kv, nw;
-    scomplex temp;
-    scomplex work13[4160] /* was [65][64] */
-        ,
-        work31[4160] /* was [65][64] */
-        ;
+    integer i__, j, i2, i3, j2, j3, k2, jb, nb, ii, jj, jm, ip, jp, km, ju, kv, nw;
+    complex temp;
+    extern /* Subroutine */
+    int cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
+    complex work13[4160] /* was [65][64] */
+    , work31[4160] /* was [65][64] */
+    ;
+    extern /* Subroutine */
+    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), cgbtf2_(integer *, integer *, integer *, integer *, complex *, integer *, integer *, integer *);
+    extern integer icamax_(integer *, complex *, integer *);
+    extern /* Subroutine */
+    int xerbla_(char *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

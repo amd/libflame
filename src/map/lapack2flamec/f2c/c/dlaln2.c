@@ -219,8 +219,8 @@ void dlaln2_(logical *ltrans, aocl_int_t *na, aocl_int_t *nw, doublereal *smin, 
              doublereal *scale, doublereal *xnorm, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlaln2 inputs: na %" FLA_IS ", nw %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*na, *nw, *lda, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -499,7 +499,7 @@ void dlaln2_(logical *ltrans, aocl_int_t *na, aocl_int_t *nw, doublereal *smin, 
             {
                 if ((d__1 = crv[j - 1], f2c_dabs(d__1)) + (d__2 = civ[j - 1], f2c_dabs( d__2)) > cmax)
                 {
-                    cmax = (d__1 = crv[j - 1], f2c_dabs(d__1)) + (d__2 = civ[j - 1] , f2c_dabs(d__2));
+                    cmax = (d__1 = crv[j - 1], f2c_dabs(d__1)) + (d__2 = civ[j - 1], f2c_dabs(d__2));
                     icmax = j;
                 }
                 /* L20: */

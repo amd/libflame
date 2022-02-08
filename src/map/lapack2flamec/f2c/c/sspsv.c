@@ -172,7 +172,9 @@ void sspsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *ap, aocl_int_t *i
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int xerbla_(char *, integer *), ssptrf_( char *, integer *, real *, integer *, integer *), ssptrs_( char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

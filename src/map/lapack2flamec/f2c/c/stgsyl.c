@@ -325,6 +325,8 @@ void stgsyl_(char *trans, aocl_int_t *ijob, aocl_int_t *m, aocl_int_t *n, real *
     aocl_int64_t linfo;
     aocl_int64_t lwmin;
     real scale2, dscale;
+    extern /* Subroutine */
+    int stgsy2_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *, integer *);
     real scaloc;
     aocl_int64_t iround;
     logical notran;

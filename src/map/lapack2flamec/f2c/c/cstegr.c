@@ -259,11 +259,11 @@ void cstegr_(char *jobz, char *range, aocl_int_t *n, real *d__, real *e, real *v
              aocl_int_t *liwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cstegr inputs: jobz %c, range %c, n %lld, il %lld, iu %lld, ldz %lld, lwork %lld, liwork %lld",*jobz, *range, *n, *il, *iu, *ldz, *lwork, *liwork);
-#else 
+#else
     snprintf(buffer, 256,"cstegr inputs: jobz %c, range %c, n %d, il %d, iu %d, ldz %d, lwork %d, liwork %d",*jobz, *range, *n, *il, *iu, *ldz, *lwork, *liwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -299,8 +299,7 @@ void cstegr_(char *jobz, char *range, aocl_int_t *n, real *d__, real *e, real *v
     /* Function Body */
     *info = 0;
     tryrac = FALSE_;
-    aocl_lapack_cstemr(jobz, range, n, &d__[1], &e[1], vl, vu, il, iu, m, &w[1], &z__[z_offset],
-                       ldz, n, &isuppz[1], &tryrac, &work[1], lwork, &iwork[1], liwork, info);
+    cstemr_(jobz, range, n, &d__[1], &e[1], vl, vu, il, iu, m, &w[1], &z__[ z_offset], ldz, n, &isuppz[1], &tryrac, &work[1], lwork, &iwork[1], liwork, info);
     /* End of CSTEGR */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return 0;

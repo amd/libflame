@@ -585,9 +585,8 @@ void aocl_lapack_zheevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, dc
         }
         else
         {
-            aocl_lapack_zlacpy("A", n, n, &a[a_offset], lda, &z__[z_offset], ldz);
-            aocl_lapack_zungtr(uplo, n, &z__[z_offset], ldz, &work[indtau], &work[indwrk], &llwork,
-                               &iinfo);
+            zlacpy_("A", n, n, &a[a_offset], lda, &z__[z_offset], ldz);
+            zungtr_(uplo, n, &z__[z_offset], ldz, &work[indtau], &work[indwrk], &llwork, &iinfo);
             i__1 = *n - 1;
             aocl_blas_dcopy(&i__1, &rwork[inde], &c__1, &rwork[indee], &c__1);
             aocl_lapack_zsteqr(jobz, n, &w[1], &rwork[indee], &z__[z_offset], ldz, &rwork[indrwk],

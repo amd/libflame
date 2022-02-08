@@ -331,9 +331,9 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                 suml.real = z__1.real;
                 suml.imag = z__1.imag; // , expr subst
                 i__2 = l - 1;
-                aocl_lapack_zdotu_f2c(&z__1, &i__2, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1], &c__1);
-                sumr.real = z__1.real;
-                sumr.imag = z__1.imag; // , expr subst
+                zdotu_f2c_(&z__1, &i__2, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1], &c__1);
+                sumr.r = z__1.r;
+                sumr.i = z__1.i; // , expr subst
                 i__2 = k + l * c_dim1;
                 z__3.real = sgn * sumr.real;
                 z__3.imag = sgn * sumr.imag; // , expr subst
@@ -414,9 +414,9 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                 suml.real = z__1.real;
                 suml.imag = z__1.imag; // , expr subst
                 i__3 = l - 1;
-                aocl_lapack_zdotu_f2c(&z__1, &i__3, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1], &c__1);
-                sumr.real = z__1.real;
-                sumr.imag = z__1.imag; // , expr subst
+                zdotu_f2c_(&z__1, &i__3, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1], &c__1);
+                sumr.r = z__1.r;
+                sumr.i = z__1.i; // , expr subst
                 i__3 = k + l * c_dim1;
                 z__3.real = sgn * sumr.real;
                 z__3.imag = sgn * sumr.imag; // , expr subst

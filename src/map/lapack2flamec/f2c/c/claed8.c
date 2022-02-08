@@ -231,11 +231,11 @@ void claed8_(aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz, scomplex *q, aocl_i
              aocl_int_t *givptr, aocl_int_t *givcol, real *givnum, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"claed8 inputs: k %lld, n %lld, qsiz %lld, ldq %lld, cutpnt %lld, ldq2 %lld, indxp %lld, indx %lld, indxq %lld",*k, *n, *qsiz, *ldq, *cutpnt, *ldq2, *indxp, *indx, *indxq);
-#else 
+#else
     snprintf(buffer, 256,"claed8 inputs: k %d, n %d, qsiz %d, ldq %d, cutpnt %d, ldq2 %d, indxp %d, indx %d, indxq %d",*k, *n, *qsiz, *ldq, *cutpnt, *ldq2, *indxp, *indx, *indxq);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -387,7 +387,7 @@ void claed8_(aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz, scomplex *q, aocl_i
         for(j = 1; j <= i__1; ++j)
         {
             perm[j] = indxq[indx[j]];
-            aocl_blas_ccopy(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
+            ccopy_(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
             /* L50: */
         }
         clacpy_("A", qsiz, n, &q2[q2_dim1 + 1], ldq2, &q[q_dim1 + 1], ldq);

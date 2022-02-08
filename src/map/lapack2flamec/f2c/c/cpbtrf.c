@@ -149,11 +149,11 @@ void cpbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab, aocl_int_t
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cpbtrf inputs: uplo %c, n %lld, kd %lld, ldab %lld",*uplo, *n, *kd, *ldab);
-#else 
+#else
     snprintf(buffer, 256,"cpbtrf inputs: uplo %c, n %d, kd %d, ldab %d",*uplo, *n, *kd, *ldab);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -162,10 +162,15 @@ void cpbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab, aocl_int_t
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     scomplex q__1;
     /* Local variables */
-    aocl_int64_t i__, j, i2, i3, ib, nb, ii, jj;
-    scomplex work[1056] /* was [33][32] */
-        ;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j, i2, i3, ib, nb, ii, jj;
+    complex work[1056] /* was [33][32] */
+    ;
+    extern /* Subroutine */
+    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), cpbtf2_(char *, integer *, integer *, complex *, integer *, integer *), cpotf2_(char *, integer *, complex *, integer *, integer *), xerbla_(char *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

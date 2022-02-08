@@ -352,8 +352,8 @@ void dpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
              aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dpbsvx inputs: fact %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *kd, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -586,9 +586,7 @@ void dpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
     aocl_lapack_dpbtrs(uplo, n, kd, nrhs, &afb[afb_offset], ldafb, &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    aocl_lapack_dpbrfs(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb,
-                       &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
-                       &iwork[1], info);
+    dpbrfs_(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(rcequ)

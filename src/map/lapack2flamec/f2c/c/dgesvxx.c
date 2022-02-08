@@ -550,8 +550,8 @@ void dgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, doublereal *a,
               doublereal *params, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dgesvxx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ipiv %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",*fact, *trans, *n, *nrhs, *lda, *ldaf, *ipiv, *equed, *ldb, *ldx, *n_err_bnds__, *nparams);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

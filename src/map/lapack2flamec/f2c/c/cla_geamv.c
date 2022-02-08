@@ -175,11 +175,11 @@ void cla_geamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, real *alpha, sc
                 aocl_int_t *incy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cla_geamv inputs: trans %lld, m %lld, n %lld, lda %lld, incx %lld, incy %lld",*trans, *m, *n, *lda, *incx, *incy);
-#else 
+#else
     snprintf(buffer, 256,"cla_geamv inputs: trans %d, m %d, n %d, lda %d, incx %d, incy %d",*trans, *m, *n, *lda, *incx, *incy);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

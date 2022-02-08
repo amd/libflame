@@ -358,6 +358,8 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
     real salfai;
     real salfar;
     real safmin;
+    extern /* Subroutine */
+    int sgghrd_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
     real safmax;
     char chtemp[1];
     logical ldumma[1];
@@ -365,8 +367,10 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
     logical ilimit;
     aocl_int64_t ijobvr;
     real onepls;
-    aocl_int64_t lwkmin;
-    aocl_int64_t lwkopt;
+    integer lwkmin;
+    extern /* Subroutine */
+    int shgeqz_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, integer *), sorgqr_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

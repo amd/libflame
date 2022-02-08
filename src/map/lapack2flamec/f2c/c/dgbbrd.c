@@ -198,8 +198,8 @@ void dgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
              aocl_int_t *ldc, doublereal *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dgbbrd inputs: vect %c, m %" FLA_IS ", n %" FLA_IS ", ncc %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", ldq %" FLA_IS ", ldpt %" FLA_IS ", ldc %" FLA_IS "",*vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -439,8 +439,7 @@ void dgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
                     i__3 = kb1;
                     for(j = j1; i__3 < 0 ? j >= i__4 : j <= i__4; j += i__3)
                     {
-                        aocl_blas_drot(ncc, &c__[j - 1 + c_dim1], ldc, &c__[j + c_dim1], ldc,
-                                       &work[mn + j], &work[j]);
+                        drot_(ncc, &c__[j - 1 + c_dim1], ldc, &c__[j + c_dim1], ldc, &work[mn + j], &work[j]);
                         /* L30: */
                     }
                 }

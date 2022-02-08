@@ -108,8 +108,8 @@ void dlartv_(aocl_int_t *n, doublereal *x, aocl_int_t *incx, doublereal *y, aocl
              doublereal *c__, doublereal *s, aocl_int_t *incc)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlartv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incy, *incc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

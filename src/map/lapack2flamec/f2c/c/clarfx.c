@@ -122,11 +122,11 @@ void clarfx_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, scomplex *ta
              aocl_int_t *ldc, scomplex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clarfx inputs: side %c, m %lld, n %lld, ldc %lld",*side, *m, *n, *ldc);
-#else 
+#else
     snprintf(buffer, 256,"clarfx inputs: side %c, m %d, n %d, ldc %d",*side, *m, *n, *ldc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -139,9 +139,11 @@ void clarfx_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, scomplex *ta
     /* Builtin functions */
     void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    aocl_int64_t j;
-    scomplex t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10, sum;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer j;
+    complex t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10, sum;
+    extern /* Subroutine */
+    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
+    extern logical lsame_(char *, char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

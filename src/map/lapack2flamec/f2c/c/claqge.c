@@ -141,11 +141,11 @@ void claqge_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *r
              real *rowcnd, real *colcnd, real *amax, char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"claqge inputs: m %lld, n %lld, lda %lld",*m, *n, *lda);
-#else 
+#else
     snprintf(buffer, 256,"claqge inputs: m %d, n %d, lda %d",*m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

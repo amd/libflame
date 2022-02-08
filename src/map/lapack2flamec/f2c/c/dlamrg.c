@@ -99,8 +99,8 @@ void dlamrg_(aocl_int_t *n1, aocl_int_t *n2, doublereal *a, aocl_int_t *dtrd1, a
              aocl_int_t *index)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlamrg inputs: n1 %" FLA_IS ", n2 %" FLA_IS ", dtrd1 %" FLA_IS ", dtrd2 %" FLA_IS "",*n1, *n2, *dtrd1, *dtrd2);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

@@ -206,11 +206,11 @@ void ctgexc_(logical *wantq, logical *wantz, aocl_int_t *n, scomplex *a, aocl_in
              aocl_int_t *ifst, aocl_int_t *ilst, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctgexc inputs: n %lld, lda %lld, ldb %lld, ldq %lld, ldz %lld, ifst %lld, ilst %lld",*n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
-#else 
+#else
     snprintf(buffer, 256,"ctgexc inputs: n %d, lda %d, ldb %d, ldq %d, ldz %d, ifst %d, ilst %d",*n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

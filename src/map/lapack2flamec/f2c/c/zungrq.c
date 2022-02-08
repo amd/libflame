@@ -334,7 +334,7 @@ void aocl_lapack_zungrq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomp
             }
             /* Apply H**H to columns 1:n-k+i+ib-1 of current block */
             i__3 = *n - *k + i__ + ib - 1;
-            aocl_lapack_zungr2(&ib, &i__3, &ib, &a[ii + a_dim1], lda, &tau[i__], &work[1], &iinfo);
+            zungr2_(&ib, &i__3, &ib, &a[ii + a_dim1], lda, &tau[i__], &work[1], &iinfo);
             /* Set columns n-k+i+ib:n of current block to zero */
             i__3 = *n;
             for(l = *n - *k + i__ + ib; l <= i__3; ++l)

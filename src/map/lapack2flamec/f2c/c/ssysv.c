@@ -174,8 +174,8 @@ void ssysv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *ld
             real *b, aocl_int_t *ldb, real *work, aocl_int_t *lwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"ssysv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -185,7 +185,9 @@ void ssysv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *ld
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t lwkopt;
     logical lquery;
-    /* -- LAPACK driver routine -- */
+    extern /* Subroutine */
+    int ssytrf_(char *, integer *, real *, integer *, integer *, real *, integer *, integer *), ssytrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *), ssytrs2_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *);
+    /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */

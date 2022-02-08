@@ -124,11 +124,11 @@ void cgtsv_(aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__, scompl
             aocl_int_t *ldb, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgtsv inputs: n %lld, nrhs %lld, ldb %lld",*n, *nrhs, *ldb);
-#else 
+#else
     snprintf(buffer, 256,"cgtsv inputs: n %d, nrhs %d, ldb %d",*n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -212,7 +212,7 @@ void cgtsv_(aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__, scompl
                 a unique */
                 /* solution can not be found. */
                 *info = k;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return 0;
             }
         }

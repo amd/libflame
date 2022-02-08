@@ -351,8 +351,8 @@ void zpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
              dcomplex *work, doublereal *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zpbsvx inputs: fact %c, uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldafb %d, ldb %d, ldx %d",*fact, *uplo, *n, *kd, *nrhs, *ldab, *ldafb, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -370,7 +370,11 @@ void zpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
     extern doublereal dlamch_(char *);
     logical nofact;
     doublereal bignum;
-    aocl_int64_t infequ;
+    extern /* Subroutine */
+    int zlaqhb_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, char *);
+    integer infequ;
+    extern /* Subroutine */
+    int zpbcon_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zpbequ_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, integer *), zpbrfs_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zpbtrf_(char *, integer *, integer *, doublecomplex *, integer *, integer *);
     doublereal smlnum;
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -593,9 +597,7 @@ void zpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
     aocl_lapack_zpbtrs(uplo, n, kd, nrhs, &afb[afb_offset], ldafb, &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    aocl_lapack_zpbrfs(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb,
-                       &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
-                       &rwork[1], info);
+    zpbrfs_(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(rcequ)

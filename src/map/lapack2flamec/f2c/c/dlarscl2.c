@@ -89,8 +89,8 @@
 void dlarscl2_(aocl_int_t *m, aocl_int_t *n, doublereal *d__, doublereal *x, aocl_int_t *ldx)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlarscl2 inputs: m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS "",*m, *n, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

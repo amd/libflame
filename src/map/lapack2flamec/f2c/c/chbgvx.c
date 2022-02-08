@@ -311,11 +311,11 @@ void chbgvx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *ka,
              aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"chbgvx inputs: jobz %c, range %c, uplo %c, n %lld, ka %lld, kb %lld, ldab %lld, ldbb %lld, ldq %lld, il %lld, iu %lld, ldz %lld",*jobz, *range, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldq, *il, *iu, *ldz);
-#else 
+#else
     snprintf(buffer, 256,"chbgvx inputs: jobz %c, range %c, uplo %c, n %d, ka %d, kb %d, ldab %d, ldbb %d, ldq %d, il %d, iu %d, ldz %d",*jobz, *range, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldq, *il, *iu, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -329,9 +329,11 @@ void chbgvx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *ka,
     aocl_int64_t indd, inde;
     char vect[1];
     logical test;
-    aocl_int64_t itmp1, indee;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    integer itmp1, indee;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    integer iinfo;
     char order[1];
     logical upper;
     logical wantz, alleig, indeig;

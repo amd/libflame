@@ -189,11 +189,11 @@ void cgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int
              aocl_int_t *ldx, real *ferr, real *berr, scomplex *work, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgerfs inputs: trans %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ipiv %lld, ldb %lld, ldx %lld",*trans, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldx);
-#else 
+#else
     snprintf(buffer, 256,"cgerfs inputs: trans %c, n %d, nrhs %d, lda %d, ldaf %d, ipiv %d, ldb %d, ldx %d",*trans, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -212,7 +212,9 @@ void cgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int
     real eps;
     aocl_int64_t kase;
     real safe1, safe2;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     integer isave[3];
     aocl_int64_t count;
     extern real slamch_(char *);

@@ -121,11 +121,11 @@ void csytri_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
              scomplex *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"csytri inputs: uplo %c, n %lld, lda %lld, ipiv %lld",*uplo, *n, *lda, *ipiv);
-#else 
+#else
     snprintf(buffer, 256,"csytri inputs: uplo %c, n %d, lda %d, ipiv %d",*uplo, *n, *lda, *ipiv);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -144,6 +144,8 @@ void csytri_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t kstep;
     logical upper;
+    extern /* Subroutine */
+    int csymv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * ), xerbla_(char *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -345,11 +347,11 @@ void csytri_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
                 i__1 = k + 1 + (k + 1) * a_dim1;
                 i__2 = k + 1 + (k + 1) * a_dim1;
                 i__3 = k - 1;
-                aocl_lapack_cdotu_f2c(&q__2, &i__3, &work[1], &c__1, &a[(k + 1) * a_dim1 + 1], &c__1);
-                q__1.real = a[i__2].real - q__2.real;
-                q__1.imag = a[i__2].imag - q__2.imag; // , expr subst
-                a[i__1].real = q__1.real;
-                a[i__1].imag = q__1.imag; // , expr subst
+                cdotu_f2c_(&q__2, &i__3, &work[1], &c__1, &a[(k + 1) * a_dim1 + 1], &c__1);
+                q__1.r = a[i__2].r - q__2.r;
+                q__1.i = a[i__2].i - q__2.i; // , expr subst
+                a[i__1].r = q__1.r;
+                a[i__1].i = q__1.i; // , expr subst
             }
             kstep = 2;
         }

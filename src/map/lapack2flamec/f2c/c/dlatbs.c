@@ -704,8 +704,7 @@ void dlatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                         i__4 = j - 1; // , expr subst
                         jlen = fla_min(i__3, i__4);
                         d__1 = -x[j] * tscal;
-                        aocl_blas_daxpy(&jlen, &d__1, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1,
-                                        &x[j - jlen], &c__1);
+                        daxpy_(&jlen, &d__1, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen], &c__1);
                         i__3 = j - 1;
                         i__ = idamax_(&i__3, &x[1], &c__1);
                         xmax = (d__1 = x[i__], f2c_dabs(d__1));

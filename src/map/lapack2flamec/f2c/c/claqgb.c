@@ -159,11 +159,11 @@ void claqgb_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomp
              char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"claqgb inputs: m %lld, n %lld, kl %lld, ku %lld, ldab %lld",*m, *n, *kl, *ku, *ldab);
-#else 
+#else
     snprintf(buffer, 256,"claqgb inputs: m %d, n %d, kl %d, ku %d, ldab %d",*m, *n, *kl, *ku, *ldab);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

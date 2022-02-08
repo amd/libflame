@@ -274,11 +274,11 @@ void ctrsen_(char *job, char *compq, logical *select, aocl_int_t *n, scomplex *t
              scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctrsen inputs: job %c, compq %c, n %lld, ldt %lld, ldq %lld, lwork %lld",*job, *compq, *n, *ldt, *ldq, *lwork);
-#else 
+#else
     snprintf(buffer, 256,"ctrsen inputs: job %c, compq %c, n %d, ldt %d, ldq %d, lwork %d",*job, *compq, *n, *ldt, *ldq, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

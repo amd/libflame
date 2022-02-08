@@ -237,7 +237,9 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     real bignum;
     real smlnum;
     logical lquery;
-    /* -- LAPACK driver routine -- */
+    extern /* Subroutine */
+    int sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), strtrs_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+    /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -441,9 +443,8 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                                &b[b_offset], ldb, &work[mn + 1], &i__1, info);
             /* workspace at least NRHS, optimally NRHS*NB */
             /* B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS) */
-            aocl_lapack_strtrs("Upper", "No transpose", "Non-unit", n, nrhs, &a[a_offset], lda,
-                               &b[b_offset], ldb, info);
-            if(*info > 0)
+            strtrs_("Upper", "No transpose", "Non-unit", n, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
+            if (*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -491,9 +492,8 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
         {
             /* underdetermined system of equations A * X = B */
             /* B(1:M,1:NRHS) := inv(L) * B(1:M,1:NRHS) */
-            aocl_lapack_strtrs("Lower", "No transpose", "Non-unit", m, nrhs, &a[a_offset], lda,
-                               &b[b_offset], ldb, info);
-            if(*info > 0)
+            strtrs_("Lower", "No transpose", "Non-unit", m, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
+            if (*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -539,23 +539,19 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     /* Undo scaling */
     if(iascl == 1)
     {
-        aocl_lapack_slascl("G", &c__0, &c__0, &anrm, &smlnum, &scllen, nrhs, &b[b_offset], ldb,
-                           info);
+        slascl_("G", &c__0, &c__0, &anrm, &smlnum, &scllen, nrhs, &b[b_offset], ldb, info);
     }
     else if(iascl == 2)
     {
-        aocl_lapack_slascl("G", &c__0, &c__0, &anrm, &bignum, &scllen, nrhs, &b[b_offset], ldb,
-                           info);
+        slascl_("G", &c__0, &c__0, &anrm, &bignum, &scllen, nrhs, &b[b_offset], ldb, info);
     }
     if(ibscl == 1)
     {
-        aocl_lapack_slascl("G", &c__0, &c__0, &smlnum, &bnrm, &scllen, nrhs, &b[b_offset], ldb,
-                           info);
+        slascl_("G", &c__0, &c__0, &smlnum, &bnrm, &scllen, nrhs, &b[b_offset], ldb, info);
     }
     else if(ibscl == 2)
     {
-        aocl_lapack_slascl("G", &c__0, &c__0, &bignum, &bnrm, &scllen, nrhs, &b[b_offset], ldb,
-                           info);
+        slascl_("G", &c__0, &c__0, &bignum, &bnrm, &scllen, nrhs, &b[b_offset], ldb, info);
     }
 L50:
     work[1] = aocl_lapack_sroundup_lwork(&wsize);

@@ -272,8 +272,8 @@ void dspgvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
              doublereal *work, aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dspgvx inputs: itype %" FLA_IS ", jobz %c, range %c, uplo %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", m %" FLA_IS ", ldz %" FLA_IS ", ifail %" FLA_IS "",*itype, *jobz, *range, *uplo, *n, *il, *iu, *ldz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

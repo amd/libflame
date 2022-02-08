@@ -286,8 +286,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
     extern real slamch_(char *);
     real bignum;
     extern /* Subroutine */
-        void
-        sladiv_(real *, real *, real *, real *, real *, real *);
+    int sladiv_(real *, real *, real *, real *, real *, real *);
     real smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -526,7 +525,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             {
                 if ((r__1 = crv[j - 1], f2c_abs(r__1)) + (r__2 = civ[j - 1], f2c_abs( r__2)) > cmax)
                 {
-                    cmax = (r__1 = crv[j - 1], f2c_abs(r__1)) + (r__2 = civ[j - 1] , f2c_abs(r__2));
+                    cmax = (r__1 = crv[j - 1], f2c_abs(r__1)) + (r__2 = civ[j - 1], f2c_abs(r__2));
                     icmax = j;
                 }
                 /* L20: */

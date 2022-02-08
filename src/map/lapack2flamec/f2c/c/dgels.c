@@ -198,8 +198,8 @@ void dgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doubler
             aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dgels inputs: trans %c, m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*trans, *m, *n, *nrhs, *lda, *ldb, *lwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -422,9 +422,8 @@ void dgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doubler
                                &b[b_offset], ldb, &work[mn + 1], &i__1, info);
             /* workspace at least NRHS, optimally NRHS*NB */
             /* B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS) */
-            aocl_lapack_dtrtrs("Upper", "No transpose", "Non-unit", n, nrhs, &a[a_offset], lda,
-                               &b[b_offset], ldb, info);
-            if(*info > 0)
+            dtrtrs_("Upper", "No transpose", "Non-unit", n, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
+            if (*info > 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return 0;
@@ -472,9 +471,8 @@ void dgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doubler
         {
             /* underdetermined system of equations A * X = B */
             /* B(1:M,1:NRHS) := inv(L) * B(1:M,1:NRHS) */
-            aocl_lapack_dtrtrs("Lower", "No transpose", "Non-unit", m, nrhs, &a[a_offset], lda,
-                               &b[b_offset], ldb, info);
-            if(*info > 0)
+            dtrtrs_("Lower", "No transpose", "Non-unit", m, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
+            if (*info > 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return 0;
@@ -520,23 +518,19 @@ void dgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doubler
     /* Undo scaling */
     if(iascl == 1)
     {
-        aocl_lapack_dlascl("G", &c__0, &c__0, &anrm, &smlnum, &scllen, nrhs, &b[b_offset], ldb,
-                           info);
+        dlascl_("G", &c__0, &c__0, &anrm, &smlnum, &scllen, nrhs, &b[b_offset], ldb, info);
     }
     else if(iascl == 2)
     {
-        aocl_lapack_dlascl("G", &c__0, &c__0, &anrm, &bignum, &scllen, nrhs, &b[b_offset], ldb,
-                           info);
+        dlascl_("G", &c__0, &c__0, &anrm, &bignum, &scllen, nrhs, &b[b_offset], ldb, info);
     }
     if(ibscl == 1)
     {
-        aocl_lapack_dlascl("G", &c__0, &c__0, &smlnum, &bnrm, &scllen, nrhs, &b[b_offset], ldb,
-                           info);
+        dlascl_("G", &c__0, &c__0, &smlnum, &bnrm, &scllen, nrhs, &b[b_offset], ldb, info);
     }
     else if(ibscl == 2)
     {
-        aocl_lapack_dlascl("G", &c__0, &c__0, &bignum, &bnrm, &scllen, nrhs, &b[b_offset], ldb,
-                           info);
+        dlascl_("G", &c__0, &c__0, &bignum, &bnrm, &scllen, nrhs, &b[b_offset], ldb, info);
     }
 L50:
     work[1] = (doublereal) wsize;

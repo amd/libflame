@@ -142,11 +142,11 @@ void cgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomple
              scomplex *du2, aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgttrs inputs: trans %c, n %lld, nrhs %lld, ldb %lld",*trans, *n, *nrhs, *ldb);
-#else 
+#else
     snprintf(buffer, 256,"cgttrs inputs: trans %c, n %d, nrhs %d, ldb %d",*trans, *n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

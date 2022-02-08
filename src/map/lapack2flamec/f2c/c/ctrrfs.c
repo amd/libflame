@@ -186,11 +186,11 @@ void ctrrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
              real *berr, scomplex *work, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctrrfs inputs: uplo %c, trans %c, diag %c, n %lld, nrhs %lld, lda %lld, ldb %lld, ldx %lld",*uplo, *trans, *diag, *n, *nrhs, *lda, *ldb, *ldx);
-#else 
+#else
     snprintf(buffer, 256,"ctrrfs inputs: uplo %c, trans %c, diag %c, n %d, nrhs %d, lda %d, ldb %d, ldx %d",*uplo, *trans, *diag, *n, *nrhs, *lda, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

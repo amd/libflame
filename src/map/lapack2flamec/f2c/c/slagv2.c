@@ -180,8 +180,7 @@ void aocl_lapack_slagv2(real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, 
     real r__, t, h1, h2, h3, wi, qq, rr, wr1, wr2, ulp;
     real anorm, bnorm, scale1, scale2;
     extern /* Subroutine */
-        void
-        slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
+    int slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
     extern real slapy2_(real *, real *);
     real ascale, bscale;
     extern real slamch_(char *);

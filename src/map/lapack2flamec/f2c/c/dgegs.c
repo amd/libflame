@@ -234,8 +234,8 @@ the routine */
 void dgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, doublereal *alphar, doublereal *alphai, doublereal *beta, doublereal *vsl, aocl_int_t *ldvsl, doublereal *vsr, aocl_int_t *ldvsr, doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dgegs inputs: jobvsl %c, jobvsr %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldvsl %" FLA_IS ", ldvsr %" FLA_IS ", lwork %" FLA_IS "",*jobvsl, *jobvsr, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -541,10 +541,8 @@ void dgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, doublereal *a, aocl_int_t
     /* left_permutation, right_permutation, work... */
     iwork = itau;
     i__1 = *lwork + 1 - iwork;
-    aocl_lapack_dhgeqz("S", jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb,
-                       &alphar[1], &alphai[1], &beta[1], &vsl[vsl_offset], ldvsl, &vsr[vsr_offset],
-                       ldvsr, &work[iwork], &i__1, &iinfo);
-    if(iinfo >= 0)
+    dhgeqz_("S", jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[ b_offset], ldb, &alphar[1], &alphai[1], &beta[1], &vsl[vsl_offset], ldvsl, &vsr[vsr_offset], ldvsr, &work[iwork], &i__1, &iinfo);
+    if (iinfo >= 0)
     {
         /* Computing MAX */
         i__1 = lwkopt;

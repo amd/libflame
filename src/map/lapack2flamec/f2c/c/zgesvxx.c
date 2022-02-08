@@ -575,9 +575,7 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, dcomplex *a, i
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern /* Subroutine */
-        void
-        zlaqge_(integer *, integer *, dcomplex *, integer *, doublereal *, doublereal *,
-                doublereal *, doublereal *, doublereal *, char *);
+    int zlaqge_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
     integer infequ;
     logical colequ;
     doublereal rowcnd;

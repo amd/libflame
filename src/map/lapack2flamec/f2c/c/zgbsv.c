@@ -165,8 +165,8 @@ void zgbsv_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *nrhs, dco
             aocl_int_t *ldab, aocl_int_t *ipiv, dcomplex *b, aocl_int_t *ldb, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zgbsv inputs: n %d, kl %d, ku %d, nrhs %d, ldab %d, ldb %d",*n, *kl, *ku, *nrhs, *ldab, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

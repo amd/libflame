@@ -239,11 +239,11 @@ void clatps_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
              scomplex *x, real *scale, real *cnorm, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clatps inputs: uplo %c, trans %c, diag %c, normin %c, n %lld",*uplo, *trans, *diag, *normin, *n);
-#else 
+#else
     snprintf(buffer, 256,"clatps inputs: uplo %c, trans %c, diag %c, normin %c, n %d",*uplo, *trans, *diag, *normin, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -676,7 +676,7 @@ void clatps_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
                     x[i__3].r = q__1.r;
                     x[i__3].i = q__1.i; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]) , f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                 }
                 else if(tjj > 0.f)
                 {
@@ -701,7 +701,7 @@ void clatps_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
                     x[i__3].r = q__1.r;
                     x[i__3].i = q__1.i; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]) , f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                 }
                 else
                 {
@@ -910,7 +910,7 @@ void clatps_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
                     x[i__3].real = q__1.real;
                     x[i__3].imag = q__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]) , f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                     if (nounit)
                     {
                         /* Compute x(j) = x(j) / A(j,j), scaling if necessary. */
@@ -1132,7 +1132,7 @@ void clatps_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
                     x[i__3].real = q__1.real;
                     x[i__3].imag = q__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]) , f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                     if (nounit)
                     {
                         /* Compute x(j) = x(j) / A(j,j), scaling if necessary. */

@@ -293,9 +293,13 @@ void ssyevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *a, aocl_i
     extern real slamch_(char *);
     real safmin;
     real abstll, bignum;
-    aocl_int64_t indtau, indisp, indiwo, indwkn;
-    aocl_int64_t indwrk, lwkmin;
-    aocl_int64_t llwrkn, llwork, nsplit;
+    integer indtau, indisp, indiwo, indwkn;
+    extern /* Subroutine */
+    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    integer indwrk, lwkmin;
+    extern /* Subroutine */
+    int sstein_(integer *, real *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *), ssterf_(integer *, real *, real *, integer *);
+    integer llwrkn, llwork, nsplit;
     real smlnum;
     aocl_int64_t lwkopt;
     logical lquery;
@@ -546,9 +550,8 @@ void ssyevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *a, aocl_i
         }
         else
         {
-            aocl_lapack_slacpy("A", n, n, &a[a_offset], lda, &z__[z_offset], ldz);
-            aocl_lapack_sorgtr(uplo, n, &z__[z_offset], ldz, &work[indtau], &work[indwrk], &llwork,
-                               &iinfo);
+            slacpy_("A", n, n, &a[a_offset], lda, &z__[z_offset], ldz);
+            sorgtr_(uplo, n, &z__[z_offset], ldz, &work[indtau], &work[indwrk], &llwork, &iinfo);
             i__1 = *n - 1;
             aocl_blas_scopy(&i__1, &work[inde], &c__1, &work[indee], &c__1);
             aocl_lapack_ssteqr(jobz, n, &w[1], &work[indee], &z__[z_offset], ldz, &work[indwrk],

@@ -581,7 +581,7 @@ void sstebz_(char *range, char *order, aocl_int_t *n, real *vl, real *vu, aocl_i
         {
             /* Computing MAX */
             r__4 = tnorm;
-            r__5 = (r__1 = d__[j], f2c_abs(r__1)) + (r__2 = e[j - 1] , f2c_abs(r__2)) + (r__3 = e[j], f2c_abs(r__3)); // , expr subst
+            r__5 = (r__1 = d__[j], f2c_abs(r__1)) + (r__2 = e[j - 1], f2c_abs(r__2)) + (r__3 = e[j], f2c_abs(r__3));  // , expr subst
             tnorm = max(r__4,r__5);
             /* L30: */
         }

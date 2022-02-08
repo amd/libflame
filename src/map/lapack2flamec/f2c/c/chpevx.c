@@ -250,11 +250,11 @@ void chpevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, scomplex *ap, r
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"chpevx inputs: jobz %c, range %c, uplo %c, n %lld, il %lld, iu %lld, m %lld, ldz %lld",*jobz, *range, *uplo, *n, *il, *iu, *m, *ldz);
-#else 
+#else
     snprintf(buffer, 256,"chpevx inputs: jobz %c, range %c, uplo %c, n %d, il %d, iu %d, m %d, ldz %d",*jobz, *range, *uplo, *n, *il, *iu, *m, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -277,6 +277,8 @@ void chpevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, scomplex *ap, r
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     char order[1];
+    extern /* Subroutine */
+    int cswap_(integer *, complex *, integer *, complex *, integer *), scopy_(integer *, real *, integer *, real *, integer *);
     logical wantz, alleig, indeig;
     aocl_int64_t iscale;
     logical valeig;

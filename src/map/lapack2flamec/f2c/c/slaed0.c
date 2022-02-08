@@ -212,12 +212,25 @@ void aocl_lapack_slaed0(aocl_int64_t *icompq, aocl_int64_t *qsiz, aocl_int64_t *
     /* Local variables */
     aocl_int64_t i__, j, k, iq, lgn, msd2, smm1, spm1, spm2;
     real temp;
-    aocl_int64_t curr;
-    aocl_int64_t iperm, indxq, iwrem;
-    aocl_int64_t iqptr, tlvls;
-    aocl_int64_t igivcl;
-    aocl_int64_t igivnm, submat;
-    aocl_int64_t curprb, subpbs, igivpt, curlvl, matsiz, iprmpt, smlsiz;
+    integer curr;
+    extern /* Subroutine */
+    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    integer iperm, indxq, iwrem;
+    extern /* Subroutine */
+    int scopy_(integer *, real *, integer *, real *, integer *);
+    integer iqptr, tlvls;
+    extern /* Subroutine */
+    int slaed1_(integer *, real *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *), slaed7_(integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, integer *);
+    integer igivcl;
+    extern /* Subroutine */
+    int xerbla_(char *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer igivnm, submat;
+    extern /* Subroutine */
+    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    integer curprb, subpbs, igivpt, curlvl, matsiz, iprmpt, smlsiz;
+    extern /* Subroutine */
+    int ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -458,11 +471,7 @@ L80:
             }
             else
             {
-                aocl_lapack_slaed7(icompq, &matsiz, qsiz, &tlvls, &curlvl, &curprb, &d__[submat],
-                                   &qstore[submat * qstore_dim1 + 1], ldqs, &iwork[indxq + submat],
-                                   &e[submat + msd2 - 1], &msd2, &work[iq], &iwork[iqptr],
-                                   &iwork[iprmpt], &iwork[iperm], &iwork[igivpt], &iwork[igivcl],
-                                   &work[igivnm], &work[iwrem], &iwork[subpbs + 1], info);
+                slaed7_(icompq, &matsiz, qsiz, &tlvls, &curlvl, &curprb, &d__[ submat], &qstore[submat * qstore_dim1 + 1], ldqs, & iwork[indxq + submat], &e[submat + msd2 - 1], &msd2, & work[iq], &iwork[iqptr], &iwork[iprmpt], &iwork[iperm], &iwork[igivpt], &iwork[igivcl], &work[igivnm], & work[iwrem], &iwork[subpbs + 1], info);
             }
             if(*info != 0)
             {

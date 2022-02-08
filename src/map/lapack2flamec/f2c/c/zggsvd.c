@@ -388,7 +388,12 @@ void aocl_lapack_zggsvd(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     doublereal anorm, bnorm;
     logical wantq, wantu, wantv;
     extern doublereal dlamch_(char *);
-    aocl_int64_t ncycle;
+    integer ncycle;
+    extern /* Subroutine */
+    int xerbla_(char *, integer *);
+    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
+    extern /* Subroutine */
+    int ztgsja_(char *, char *, char *, integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zggsvp_(char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublereal *, doublecomplex *, doublecomplex *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

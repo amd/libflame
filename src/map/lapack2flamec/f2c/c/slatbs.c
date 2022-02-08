@@ -721,8 +721,7 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         i__4 = j - 1; // , expr subst
                         jlen = fla_min(i__3, i__4);
                         r__1 = -x[j] * tscal;
-                        aocl_blas_saxpy(&jlen, &r__1, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1,
-                                        &x[j - jlen], &c__1);
+                        saxpy_(&jlen, &r__1, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen], &c__1);
                         i__3 = j - 1;
                         i__ = isamax_(&i__3, &x[1], &c__1);
                         xmax = (r__1 = x[i__], f2c_abs(r__1));

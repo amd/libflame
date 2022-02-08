@@ -183,8 +183,8 @@ void dlaqps_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, aocl_int_t *nb, a
              doublereal *vn2, doublereal *auxv, doublereal *f, aocl_int_t *ldf)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlaqps inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", jpvt %" FLA_IS ", ldf %" FLA_IS "",*m, *n, *offset, *nb, *lda, *jpvt, *ldf);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

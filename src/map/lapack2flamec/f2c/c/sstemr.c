@@ -363,8 +363,7 @@ void sstemr_(char *jobz, char *range, aocl_int_t *n, real *d__, real *e, real *v
     aocl_int64_t iindw, ilast, lwmin;
     logical wantz;
     extern /* Subroutine */
-        void
-        slaev2_(real *, real *, real *, real *, real *, real *, real *);
+    int slaev2_(real *, real *, real *, real *, real *, real *, real *);
     logical alleig;
     aocl_int64_t ibegin;
     logical indeig;
@@ -374,11 +373,18 @@ void sstemr_(char *jobz, char *range, aocl_int_t *n, real *d__, real *e, real *v
     aocl_int64_t wbegin;
     real safmin;
     real bignum;
-    aocl_int64_t inderr, iindwk, indgrs, offset;
+    integer inderr, iindwk, indgrs, offset;
+    extern /* Subroutine */
+    int slarrc_(char *, integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer * ), slarre_(char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, real *, real *, integer *, integer *) ;
     real thresh;
     aocl_int64_t iinspl, indwrk, ifirst, liwmin, nzcmin;
     real pivmin;
-    aocl_int64_t nsplit;
+    extern real slanst_(char *, integer *, real *, real *);
+    extern /* Subroutine */
+    int slarrj_(integer *, real *, real *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, real *, integer *), slarrr_(integer *, real *, real *, integer *);
+    integer nsplit;
+    extern /* Subroutine */
+    int slarrv_(integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer * );
     real smlnum;
     logical lquery, zquery;
     logical laeswap;

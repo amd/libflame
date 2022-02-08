@@ -216,11 +216,11 @@ void cgghrd_(char *compq, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_
              scomplex *z__, aocl_int_t *ldz, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgghrd inputs: compq %c, compz %c, n %lld, ilo %lld, ihi %lld, lda %lld, ldb %lld, ldq %lld, ldz %lld",*compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
-#else 
+#else
     snprintf(buffer, 256,"cgghrd inputs: compq %c, compz %c, n %d, ilo %d, ihi %d, lda %d, ldb %d, ldq %d, ldz %d",*compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

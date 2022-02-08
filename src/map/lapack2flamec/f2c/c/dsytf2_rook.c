@@ -596,7 +596,7 @@ void dsytf2_rook_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aoc
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    itemp = imax + idamax_(&i__1, &a[imax + 1 + imax * a_dim1] , &c__1);
+                    itemp = imax + idamax_(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     dtemp = (d__1 = a[itemp + imax * a_dim1], f2c_dabs(d__1));
                     if (dtemp > rowmax)
                     {

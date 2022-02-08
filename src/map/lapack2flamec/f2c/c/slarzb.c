@@ -189,8 +189,8 @@ void slarzb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
              real *c__, aocl_int_t *ldc, real *work, aocl_int_t *ldwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"slarzb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, l %d, ldv %d, ldt %d, ldc %d",*side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -323,8 +323,7 @@ void slarzb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
                             &work[work_offset], ldwork);
         }
         /* W( 1:m, 1:k ) = W( 1:m, 1:k ) * T or W( 1:m, 1:k ) * T**T */
-        aocl_blas_strmm("Right", "Lower", trans, "Non-unit", m, k, &c_b13, &t[t_offset], ldt,
-                        &work[work_offset], ldwork);
+        strmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b13, &t[t_offset], ldt, &work[work_offset], ldwork);
         /* C( 1:m, 1:k ) = C( 1:m, 1:k ) - W( 1:m, 1:k ) */
         i__1 = *k;
         for(j = 1; j <= i__1; ++j)

@@ -337,6 +337,8 @@ void aocl_lapack_zgegv(char *jobvl, char *jobvr, aocl_int64_t *n, dcomplex *a, a
     aocl_int64_t ileft, iinfo, icols, iwork, irows;
     extern doublereal dlamch_(char *);
     doublereal salfai;
+    extern /* Subroutine */
+    int zggbak_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublecomplex *, integer *, integer *), zggbal_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal salfar, safmin;
     doublereal safmax;
     char chtemp[1];

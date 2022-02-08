@@ -273,11 +273,11 @@ void chbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
              scomplex *work, real *rwork, aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"chbevx inputs: jobz %c, range %c, uplo %c, n %lld, kd %lld, ldab %lld, ldq %lld, il %lld, iu %lld, m %lld, ldz %lld",*jobz, *range, *uplo, *n, *kd, *ldab, *ldq, *il, *iu, *m, *ldz);
-#else 
+#else
     snprintf(buffer, 256,"chbevx inputs: jobz %c, range %c, uplo %c, n %d, kd %d, ldab %d, ldq %d, il %d, iu %d, m %d, ldz %d",*jobz, *range, *uplo, *n, *kd, *ldab, *ldq, *il, *iu, *m, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -298,8 +298,12 @@ void chbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
     scomplex ctmp1;
     aocl_int64_t itmp1, indee;
     real sigma;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    integer iinfo;
+    extern /* Subroutine */
+    int sscal_(integer *, real *, real *, integer *);
     char order[1];
     logical lower;
     logical wantz;

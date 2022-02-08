@@ -356,7 +356,9 @@ void strsen_(char *job, char *compq, logical *select, aocl_int_t *n, real *t, ao
     logical wantbh;
     aocl_int64_t liwmin;
     logical wantsp, lquery;
-    /* -- LAPACK computational routine -- */
+    extern /* Subroutine */
+    int strsyl_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+    /* -- LAPACK computational routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */

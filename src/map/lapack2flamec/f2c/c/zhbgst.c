@@ -221,6 +221,8 @@ void aocl_lapack_zhbgst(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *k
     logical upper;
     logical wantx;
     logical update;
+    extern /* Subroutine */
+    int zlacgv_(integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), zlartg_( doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *), zlargv_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *), zlartv_( integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -547,8 +549,7 @@ L10:
                 if(i__ - k + *ka < *n && i__ - k > 1)
                 {
                     /* generate rotation to annihilate a(i,i-k+ka+1) */
-                    zlartg_(&ab[k + 1 + (i__ - k + *ka) * ab_dim1], &ra1, &rwork[i__ - k + *ka - m],
-                            &work[i__ - k + *ka - m], &ra);
+                    zlartg_(&ab[k + 1 + (i__ - k + *ka) * ab_dim1], &ra1, & rwork[i__ - k + *ka - m], &work[i__ - k + *ka - m], &ra);
                     /* create nonzero element a(i-k,i-k+ka+1) outside the */
                     /* band and store it in WORK(i-k) */
                     i__2 = kb1 - k + i__ * bb_dim1;
@@ -1107,9 +1108,7 @@ L10:
                 i__1 = *ka - 1;
                 for(l = 1; l <= i__1; ++l)
                 {
-                    aocl_lapack_zlartv(&nr, &ab[l + 1 + (j2 - l) * ab_dim1], &inca,
-                                       &ab[l + 2 + (j2 - l) * ab_dim1], &inca, &rwork[j2 - m],
-                                       &work[j2 - m], &ka1);
+                    zlartv_(&nr, &ab[l + 1 + (j2 - l) * ab_dim1], &inca, &ab[ l + 2 + (j2 - l) * ab_dim1], &inca, &rwork[j2 - m], &work[j2 - m], &ka1);
                     /* L330: */
                 }
                 /* apply rotations in 1st set from both sides to diagonal */
@@ -1251,8 +1250,7 @@ L10:
             {
                 /* generate rotations in 2nd set to annihilate elements */
                 /* which have been created outside the band */
-                aocl_lapack_zlargv(&nr, &ab[ka1 + (j2 - *ka) * ab_dim1], &inca, &work[j2], &ka1,
-                                   &rwork[j2], &ka1);
+                zlargv_(&nr, &ab[ka1 + (j2 - *ka) * ab_dim1], &inca, &work[j2], &ka1, &rwork[j2], &ka1);
                 /* apply rotations in 2nd set from the left */
                 i__4 = *ka - 1;
                 for(l = 1; l <= i__4; ++l)
@@ -2111,9 +2109,7 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_zlartv(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca,
-                                       &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &rwork[j1t],
-                                       &work[j1t], &ka1);
+                    zlartv_(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca, &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &rwork[j1t], &work[j1t], &ka1);
                 }
                 /* L820: */
             }
@@ -2243,9 +2239,7 @@ L490:
                 i__4 = *ka - 1;
                 for(l = 1; l <= i__4; ++l)
                 {
-                    aocl_lapack_zlartv(&nr, &ab[l + 1 + j1 * ab_dim1], &inca,
-                                       &ab[l + 2 + (j1 - 1) * ab_dim1], &inca, &rwork[m - *kb + j1],
-                                       &work[m - *kb + j1], &ka1);
+                    zlartv_(&nr, &ab[l + 1 + j1 * ab_dim1], &inca, &ab[l + 2 + (j1 - 1) * ab_dim1], &inca, &rwork[m - *kb + j1], &work[m - *kb + j1], &ka1);
                     /* L890: */
                 }
                 /* apply rotations in 2nd set from both sides to diagonal */
@@ -2263,9 +2257,7 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_zlartv(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca,
-                                       &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca,
-                                       &rwork[m - *kb + j1t], &work[m - *kb + j1t], &ka1);
+                    zlartv_(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca, &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &rwork[m - *kb + j1t], &work[m - *kb + j1t], &ka1);
                 }
                 /* L900: */
             }
@@ -2298,9 +2290,7 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_zlartv(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca,
-                                       &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &rwork[j1t],
-                                       &work[j1t], &ka1);
+                    zlartv_(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca, &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &rwork[j1t], &work[j1t], &ka1);
                 }
                 /* L930: */
             }

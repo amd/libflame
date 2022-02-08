@@ -102,8 +102,8 @@ void dlapll_(aocl_int_t *n, doublereal *x, aocl_int_t *incx, doublereal *y, aocl
              doublereal *ssmin)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlapll inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*n, *incx, *incy);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

@@ -217,8 +217,8 @@ void zgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl, dcomple
              dcomplex *work, doublereal *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zgtrfs inputs: trans %c, n %d, nrhs %d, ldb %d, ldx %d, ipiv %d",*trans, *n, *nrhs, *ldb, *ldx, *ipiv);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -245,6 +245,8 @@ void zgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl, dcomple
     logical notran;
     char transn[1], transt[1];
     doublereal lstres;
+    extern /* Subroutine */
+    int zgttrs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

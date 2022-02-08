@@ -203,8 +203,8 @@ void dlarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
              doublereal *c__, aocl_int_t *ldc, doublereal *work, aocl_int_t *ldwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlarfb inputs: side %c, trans %c, direct %c, storev %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS ", ldc %" FLA_IS ", ldwork %" FLA_IS "",*side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc, *ldwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -607,9 +607,8 @@ void dlarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
                     /* L190: */
                 }
                 /* W := W * V2**T */
-                aocl_blas_dtrmm("Right", "Lower", "Transpose", "Unit", n, k, &c_b14,
-                                &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
-                if(*m > *k)
+                dtrmm_("Right", "Lower", "Transpose", "Unit", n, k, &c_b14, & v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
+                if (*m > *k)
                 {
                     /* W := W + C1**T * V1**T */
                     i__1 = *m - *k;
@@ -656,9 +655,8 @@ void dlarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
                     /* L220: */
                 }
                 /* W := W * V2**T */
-                aocl_blas_dtrmm("Right", "Lower", "Transpose", "Unit", m, k, &c_b14,
-                                &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
-                if(*n > *k)
+                dtrmm_("Right", "Lower", "Transpose", "Unit", m, k, &c_b14, & v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
+                if (*n > *k)
                 {
                     /* W := W + C1 * V1**T */
                     i__1 = *n - *k;

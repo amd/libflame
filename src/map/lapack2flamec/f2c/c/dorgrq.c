@@ -134,8 +134,8 @@ void dorgrq_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a, aocl_in
              doublereal *tau, doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dorgrq inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *k, *lda, *lwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -312,7 +312,7 @@ void dorgrq_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a, aocl_in
             }
             /* Apply H**T to columns 1:n-k+i+ib-1 of current block */
             i__3 = *n - *k + i__ + ib - 1;
-            aocl_lapack_dorgr2(&ib, &i__3, &ib, &a[ii + a_dim1], lda, &tau[i__], &work[1], &iinfo);
+            dorgr2_(&ib, &i__3, &ib, &a[ii + a_dim1], lda, &tau[i__], &work[1], &iinfo);
             /* Set columns n-k+i+ib:n of current block to zero */
             i__3 = *n;
             for(l = *n - *k + i__ + ib; l <= i__3; ++l)

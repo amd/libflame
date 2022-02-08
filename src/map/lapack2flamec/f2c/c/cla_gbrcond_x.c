@@ -156,11 +156,11 @@ real cla_gbrcond_x_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, 
                     aocl_int_t *info, scomplex *work, real *rwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cla_gbrcond_x inputs: trans %c, n %lld, kl %lld, ku %lld, ldab %lld, ldafb %lld, ipiv %lld",*trans, *n, *kl, *ku, *ldab, *ldafb, *ipiv);
-#else 
+#else
     snprintf(buffer, 256,"cla_gbrcond_x inputs: trans %c, n %d, kl %d, ku %d, ldab %d, ldafb %d, ipiv %d",*trans, *n, *kl, *ku, *ldab, *ldafb, *ipiv);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

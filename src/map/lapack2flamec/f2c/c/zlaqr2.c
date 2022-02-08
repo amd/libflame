@@ -611,8 +611,7 @@ void aocl_lapack_zlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
             aocl_lapack_zlarf("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv,
                               &work[jw + 1]);
             i__1 = *lwork - jw;
-            aocl_lapack_zgehrd(&jw, &c__1, ns, &t[t_offset], ldt, &work[1], &work[jw + 1], &i__1,
-                               &info);
+            zgehrd_(&jw, &c__1, ns, &t[t_offset], ldt, &work[1], &work[jw + 1], &i__1, &info);
         }
         /* ==== Copy updated reduced window into place ==== */
         if(kwtop > 1)
@@ -624,7 +623,7 @@ void aocl_lapack_zlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
             h__[i__1].real = z__1.real;
             h__[i__1].imag = z__1.imag; // , expr subst
         }
-        aocl_lapack_zlacpy("U", &jw, &jw, &t[t_offset], ldt, &h__[kwtop + kwtop * h_dim1], ldh);
+        zlacpy_("U", &jw, &jw, &t[t_offset], ldt, &h__[kwtop + kwtop * h_dim1], ldh);
         i__1 = jw - 1;
         i__2 = *ldt + 1;
         i__3 = *ldh + 1;
@@ -688,11 +687,9 @@ void aocl_lapack_zlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
                 /* Computing MIN */
                 i__3 = *nv;
                 i__4 = *ihiz - krow + 1; // , expr subst
-                kln = fla_min(i__3, i__4);
-                aocl_blas_zgemm("N", "N", &kln, &jw, &jw, &c_b2, &z__[krow + kwtop * z_dim1], ldz,
-                                &v[v_offset], ldv, &c_b1, &wv[wv_offset], ldwv);
-                aocl_lapack_zlacpy("A", &kln, &jw, &wv[wv_offset], ldwv,
-                                   &z__[krow + kwtop * z_dim1], ldz);
+                kln = min(i__3,i__4);
+                zgemm_("N", "N", &kln, &jw, &jw, &c_b2, &z__[krow + kwtop * z_dim1], ldz, &v[v_offset], ldv, &c_b1, &wv[wv_offset], ldwv);
+                zlacpy_("A", &kln, &jw, &wv[wv_offset], ldwv, &z__[krow + kwtop * z_dim1], ldz);
                 /* L80: */
             }
         }

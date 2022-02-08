@@ -159,7 +159,9 @@ void aocl_lapack_slatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, real 
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    aocl_int64_t i__;
+    integer i__;
+    extern /* Subroutine */
+    int slarz_(char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

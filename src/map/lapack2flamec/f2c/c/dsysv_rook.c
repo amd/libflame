@@ -216,8 +216,12 @@ void dsysv_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aoc
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    int dsytrf_rook_(char *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dsytrs_rook_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int xerbla_(char *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -305,8 +309,7 @@ void dsysv_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aoc
     {
         /* Solve the system A*X = B, overwriting B with X. */
         /* Solve with TRS_ROOK ( Use Level 2 BLAS) */
-        aocl_lapack_dsytrs_rook(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
-                                info);
+        dsytrs_rook_(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb, info);
     }
     work[1] = (doublereal) lwkopt;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

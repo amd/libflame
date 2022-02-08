@@ -214,8 +214,8 @@ void slasdq_(char *uplo, aocl_int_t *sqre, aocl_int_t *n, aocl_int_t *ncvt, aocl
              aocl_int_t *ldu, real *c__, aocl_int_t *ldc, real *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"slasdq inputs: uplo %c, sqre %d, n %d, ncvt %d, nru %d, ncc %d, ldvt %d, ldu %d, ldc %d",*uplo, *sqre, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -231,6 +231,8 @@ void slasdq_(char *uplo, aocl_int_t *sqre, aocl_int_t *n, aocl_int_t *ncvt, aocl
     aocl_int64_t iuplo;
     extern void slartg_(real *, real *, real *, real *, real *);
     logical rotate;
+    extern /* Subroutine */
+    int sbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -452,7 +454,7 @@ void slasdq_(char *uplo, aocl_int_t *sqre, aocl_int_t *n, aocl_int_t *ncvt, aocl
             }
             if(*nru > 0)
             {
-                aocl_blas_sswap(nru, &u[isub * u_dim1 + 1], &c__1, &u[i__ * u_dim1 + 1], &c__1);
+                sswap_(nru, &u[isub * u_dim1 + 1], &c__1, &u[i__ * u_dim1 + 1], &c__1);
             }
             if(*ncc > 0)
             {

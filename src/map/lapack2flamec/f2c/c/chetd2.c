@@ -181,11 +181,11 @@ void chetd2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d__,
              scomplex *tau, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"chetd2 inputs: uplo %c, n %lld, lda %lld",*uplo, *n, *lda);
-#else 
+#else
     snprintf(buffer, 256,"chetd2 inputs: uplo %c, n %d, lda %d",*uplo, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -195,10 +195,16 @@ void chetd2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d__,
     real r__1;
     scomplex q__1, q__2, q__3, q__4;
     /* Local variables */
-    aocl_int64_t i__;
-    scomplex taui;
-    scomplex alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__;
+    complex taui;
+    extern /* Subroutine */
+    int cher2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
+    complex alpha;
+    extern /* Complex */
+    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * ), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -282,16 +288,16 @@ void chetd2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d__,
                 aocl_blas_chemv(uplo, &i__, &taui, &a[a_offset], lda, &a[(i__ + 1) * a_dim1 + 1],
                                 &c__1, &c_b2, &tau[1], &c__1);
                 /* Compute w := x - 1/2 * tau * (x**H * v) * v */
-                q__3.real = -.5f;
-                q__3.imag = -0.f; // , expr subst
-                q__2.real = q__3.real * taui.real - q__3.imag * taui.imag;
-                q__2.imag = q__3.real * taui.imag + q__3.imag * taui.real; // , expr subst
-                aocl_lapack_cdotc_f2c(&q__4, &i__, &tau[1], &c__1, &a[(i__ + 1) * a_dim1 + 1], &c__1);
-                q__1.real = q__2.real * q__4.real - q__2.imag * q__4.imag;
-                q__1.imag = q__2.real * q__4.imag + q__2.imag * q__4.real; // , expr subst
-                alpha.real = q__1.real;
-                alpha.imag = q__1.imag; // , expr subst
-                aocl_blas_caxpy(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1], &c__1);
+                q__3.r = -.5f;
+                q__3.i = -0.f; // , expr subst
+                q__2.r = q__3.r * taui.r - q__3.i * taui.i;
+                q__2.i = q__3.r * taui.i + q__3.i * taui.r; // , expr subst
+                cdotc_f2c_(&q__4, &i__, &tau[1], &c__1, &a[(i__ + 1) * a_dim1 + 1], &c__1);
+                q__1.r = q__2.r * q__4.r - q__2.i * q__4.i;
+                q__1.i = q__2.r * q__4.i + q__2.i * q__4.r; // , expr subst
+                alpha.r = q__1.r;
+                alpha.i = q__1.i; // , expr subst
+                caxpy_(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[ 1], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**H - w * v**H */
                 q__1.real = -1.f;

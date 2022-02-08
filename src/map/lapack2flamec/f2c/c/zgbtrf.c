@@ -151,8 +151,8 @@ void zgbtrf_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, dcomp
              aocl_int_t *ldab, aocl_int_t *ipiv, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zgbtrf inputs: m %d, n %d, kl %d, ku %d, ldab %d",*m, *n, *kl, *ku, *ldab);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

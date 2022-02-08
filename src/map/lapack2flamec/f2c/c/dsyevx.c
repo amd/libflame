@@ -256,8 +256,8 @@ void dsyevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, doublereal *a, 
              aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dsyevx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",*jobz, *range, *uplo, *n, *lda, *il, *iu, *ldz, *lwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -286,10 +286,17 @@ void dsyevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, doublereal *a, 
     logical valeig;
     doublereal safmin;
     doublereal abstll, bignum;
-    aocl_int64_t indtau, indisp;
-    aocl_int64_t indiwo, indwkn;
-    aocl_int64_t indwrk, lwkmin;
-    aocl_int64_t llwrkn, llwork, nsplit;
+    integer indtau, indisp;
+    extern /* Subroutine */
+    int dstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *), dsterf_(integer *, doublereal *, doublereal *, integer *);
+    integer indiwo, indwkn;
+    extern doublereal dlansy_(char *, char *, integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */
+    int dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    integer indwrk, lwkmin;
+    extern /* Subroutine */
+    int dorgtr_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *), dormtr_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    integer llwrkn, llwork, nsplit;
     doublereal smlnum;
     aocl_int64_t lwkopt;
     logical lquery;
@@ -541,9 +548,8 @@ void dsyevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, doublereal *a, 
         }
         else
         {
-            aocl_lapack_dlacpy("A", n, n, &a[a_offset], lda, &z__[z_offset], ldz);
-            aocl_lapack_dorgtr(uplo, n, &z__[z_offset], ldz, &work[indtau], &work[indwrk], &llwork,
-                               &iinfo);
+            dlacpy_("A", n, n, &a[a_offset], lda, &z__[z_offset], ldz);
+            dorgtr_(uplo, n, &z__[z_offset], ldz, &work[indtau], &work[indwrk], &llwork, &iinfo);
             i__1 = *n - 1;
             aocl_blas_dcopy(&i__1, &work[inde], &c__1, &work[indee], &c__1);
             aocl_lapack_dsteqr(jobz, n, &w[1], &work[indee], &z__[z_offset], ldz, &work[indwrk],

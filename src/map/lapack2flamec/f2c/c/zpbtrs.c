@@ -125,8 +125,8 @@ void zpbtrs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, dcompl
              aocl_int_t *ldab, dcomplex *b, aocl_int_t *ldb, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zpbtrs inputs: uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldb %d",*uplo, *n, *kd, *nrhs, *ldab, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

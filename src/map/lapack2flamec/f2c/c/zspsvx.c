@@ -282,8 +282,8 @@ void zspsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *
              doublereal *berr, dcomplex *work, doublereal *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zspsvx inputs: fact %c, uplo %c, n %d, nrhs %d, ldb %d, ldx %d",*fact, *uplo, *n, *nrhs, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

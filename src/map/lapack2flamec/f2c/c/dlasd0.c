@@ -158,8 +158,8 @@ void dlasd0_(aocl_int_t *n, aocl_int_t *sqre, doublereal *d__, doublereal *e, do
              aocl_int_t *iwork, doublereal *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlasd0 inputs: n %" FLA_IS ", sqre %" FLA_IS ", ldu %" FLA_IS ", ldvt %" FLA_IS ", smlsiz %" FLA_IS "",*n, *sqre, *ldu, *ldvt, *smlsiz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

@@ -195,8 +195,8 @@ void dpbrfs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, double
              aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dpbrfs inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *n, *kd, *nrhs, *ldab, *ldafb, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -420,8 +420,8 @@ void dpbrfs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, double
         if(berr[j] > eps && berr[j] * 2. <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            aocl_lapack_dpbtrs(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[*n + 1], n, info);
-            aocl_blas_daxpy(n, &c_b14, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            dpbtrs_(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[*n + 1], n, info);
+            daxpy_(n, &c_b14, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1) ;
             lstres = berr[j];
             ++count;
             goto L20;

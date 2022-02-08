@@ -300,9 +300,16 @@ void ssbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
     extern real slamch_(char *);
     real safmin;
     real abstll, bignum;
-    aocl_int64_t indisp, indiwo;
-    aocl_int64_t indwrk;
-    aocl_int64_t nsplit;
+    extern real slansb_(char *, char *, integer *, integer *, real *, integer *, real *);
+    extern /* Subroutine */
+    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    integer indisp, indiwo;
+    extern /* Subroutine */
+    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    integer indwrk;
+    extern /* Subroutine */
+    int ssbtrd_(char *, char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *), sstein_(integer *, real *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *), ssterf_(integer *, real *, real *, integer *);
+    integer nsplit;
     real smlnum;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

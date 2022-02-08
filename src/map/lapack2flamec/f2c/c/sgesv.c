@@ -148,6 +148,8 @@ void aocl_lapack_sgesv(aocl_int64_t *n, aocl_int64_t *nrhs, real *a, aocl_int64_
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
+    extern /* Subroutine */
+    int xerbla_(char *, integer *), sgetrf_( integer *, integer *, real *, integer *, integer *, integer *), sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

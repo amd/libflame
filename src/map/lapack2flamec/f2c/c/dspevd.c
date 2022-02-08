@@ -188,8 +188,8 @@ void dspevd_(char *jobz, char *uplo, aocl_int_t *n, doublereal *ap, doublereal *
              aocl_int_t *liwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dspevd inputs: jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*jobz, *uplo, *n, *ldz, *lwork, *liwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -210,9 +210,14 @@ void dspevd_(char *jobz, char *uplo, aocl_int_t *n, doublereal *ap, doublereal *
     aocl_int64_t iscale;
     doublereal safmin;
     doublereal bignum;
-    aocl_int64_t indtau;
-    aocl_int64_t indwrk, liwmin;
-    aocl_int64_t llwork;
+    extern doublereal dlansp_(char *, char *, integer *, doublereal *, doublereal *);
+    integer indtau;
+    extern /* Subroutine */
+    int dsterf_(integer *, doublereal *, doublereal *, integer *);
+    integer indwrk, liwmin;
+    extern /* Subroutine */
+    int dsptrd_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dopmtr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    integer llwork;
     doublereal smlnum;
     logical lquery;
     /* -- LAPACK driver routine (version 3.4.0) -- */
@@ -366,10 +371,8 @@ void dspevd_(char *jobz, char *uplo, aocl_int_t *n, doublereal *ap, doublereal *
     {
         indwrk = indtau + *n;
         llwork = *lwork - indwrk + 1;
-        aocl_lapack_dstedc("I", n, &w[1], &work[inde], &z__[z_offset], ldz, &work[indwrk], &llwork,
-                           &iwork[1], liwork, info);
-        aocl_lapack_dopmtr("L", uplo, "N", n, n, &ap[1], &work[indtau], &z__[z_offset], ldz,
-                           &work[indwrk], &iinfo);
+        dstedc_("I", n, &w[1], &work[inde], &z__[z_offset], ldz, &work[indwrk], &llwork, &iwork[1], liwork, info);
+        dopmtr_("L", uplo, "N", n, n, &ap[1], &work[indtau], &z__[z_offset], ldz, &work[indwrk], &iinfo);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)

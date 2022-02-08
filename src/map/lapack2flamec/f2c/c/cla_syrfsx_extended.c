@@ -3,8 +3,16 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static scomplex c_b14 = {-1.f, 0.f};
-static scomplex c_b15 = {1.f, 0.f};
+static complex c_b14 =
+{
+    -1.f,0.f
+    }
+;
+static complex c_b15 =
+{
+    1.f,0.f
+}
+;
 static real c_b37 = 1.f;
 /* > \brief \b CLA_SYRFSX_EXTENDED improves the computed solution to a system of linear equations
  * for symmetri c indefinite matrices by performing extra-precise iterative refinement and provides
@@ -408,11 +416,11 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
                           real *dz_ub__, logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cla_syrfsx_extended inputs: prec_type__ %lld, uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ipiv %lld, ldb %lld, ldy %lld, n_norms__ %lld, ithresh %lld",*prec_type__, *uplo, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldy, *n_norms__, *ithresh);
-#else 
+#else
     snprintf(buffer, 256,"cla_syrfsx_extended inputs: prec_type__ %d, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ipiv %d, ldb %d, ldy %d, n_norms__ %d, ithresh %d",*prec_type__, *uplo, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldy, *n_norms__, *ithresh);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -440,14 +448,11 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__;
     extern /* Subroutine */
-        void
-        cla_lin_berr_(integer *, integer *, integer *, scomplex *, real *, real *);
+    int cla_lin_berr_(integer *, integer *, integer *, complex *, real *, real *);
     real ymin;
     integer y_prec_state__;
     extern /* Subroutine */
-        int
-        blas_csymv_x_(integer *, integer *, scomplex *, scomplex *, integer *, scomplex *, integer *,
-                      scomplex *, scomplex *, integer *, integer *);
+    int blas_csymv_x_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     integer uplo2;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
@@ -461,9 +466,7 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         caxpy_(integer *, scomplex *, scomplex *, integer *, scomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-        void
-        csymv_(char *, integer *, scomplex *, scomplex *, integer *, scomplex *, integer *, scomplex *,
-               scomplex *, integer *);
+    int csymv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * );
     real normx, normy;
     extern real slamch_(char *);
     extern /* Subroutine */

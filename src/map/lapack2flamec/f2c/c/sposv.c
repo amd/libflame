@@ -131,15 +131,17 @@ void sposv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *ld
             aocl_int_t *ldb, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"sposv inputs: uplo %c, n %d, nrhs %d, lda %d, ldb %d",*uplo, *n, *nrhs, *lda, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int xerbla_(char *, integer *), spotrf_( char *, integer *, real *, integer *, integer *), spotrs_( char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

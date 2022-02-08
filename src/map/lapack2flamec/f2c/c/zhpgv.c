@@ -204,6 +204,8 @@ void aocl_lapack_zhpgv(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t
     char trans[1];
     logical upper;
     logical wantz;
+    extern /* Subroutine */
+    int ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_( char *, integer *), zhpgst_(integer *, char *, integer *, doublecomplex *, doublecomplex *, integer *), zpptrf_( char *, integer *, doublecomplex *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

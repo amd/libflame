@@ -3,8 +3,16 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static dcomplex c_b6 = {-1., 0.};
-static dcomplex c_b8 = {1., 0.};
+static doublecomplex c_b6 =
+{
+    -1.,0.
+    }
+;
+static doublecomplex c_b8 =
+{
+    1.,0.
+}
+;
 static doublereal c_b31 = 1.;
 /* > \brief \b ZLA_GBRFSX_EXTENDED improves the computed solution to a system of linear equations
  * for general banded matrices by performing extra-precise iterative refinement and provides error
@@ -457,11 +465,7 @@ void zla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
     integer cnt;
     doublereal dyk, eps, incr_thresh__, dx_x__, dz_z__, ymin;
     extern /* Subroutine */
-        void
-        zla_lin_berr_(integer *, integer *, integer *, dcomplex *, doublereal *, doublereal *),
-        blas_zgbmv_x_(integer *, integer *, integer *, integer *, integer *, dcomplex *,
-                      dcomplex *, integer *, dcomplex *, integer *, dcomplex *,
-                      dcomplex *, integer *, integer *);
+    int zla_lin_berr_(integer *, integer *, integer *, doublecomplex *, doublereal *, doublereal *), blas_zgbmv_x_( integer *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *) ;
     integer y_prec_state__;
     extern /* Subroutine */
         int
@@ -470,9 +474,7 @@ void zla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
                        dcomplex *, dcomplex *, integer *, integer *);
     doublereal dxrat, dzrat;
     extern /* Subroutine */
-        void
-        zgbmv_(char *, integer *, integer *, integer *, integer *, dcomplex *, dcomplex *,
-               integer *, dcomplex *, integer *, dcomplex *, dcomplex *, integer *);
+    int zgbmv_(char *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     char trans[1];
     doublereal normx, normy;
     extern /* Subroutine */

@@ -295,8 +295,7 @@ void dstegr_(char *jobz, char *range, aocl_int_t *n, doublereal *d__, doublereal
     /* Function Body */
     *info = 0;
     tryrac = FALSE_;
-    aocl_lapack_dstemr(jobz, range, n, &d__[1], &e[1], vl, vu, il, iu, m, &w[1], &z__[z_offset],
-                       ldz, n, &isuppz[1], &tryrac, &work[1], lwork, &iwork[1], liwork, info);
+    dstemr_(jobz, range, n, &d__[1], &e[1], vl, vu, il, iu, m, &w[1], &z__[ z_offset], ldz, n, &isuppz[1], &tryrac, &work[1], lwork, &iwork[1], liwork, info);
     /* End of DSTEGR */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return 0;

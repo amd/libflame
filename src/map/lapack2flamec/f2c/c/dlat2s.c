@@ -112,8 +112,8 @@ void dlat2s_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, real *sa
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlat2s inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS "",*uplo, *n, *lda, *ldsa);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

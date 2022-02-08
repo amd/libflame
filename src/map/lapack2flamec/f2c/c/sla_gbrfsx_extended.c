@@ -435,9 +435,7 @@ void sla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
     real dxratmax, dzratmax;
     integer i__, j, m;
     extern /* Subroutine */
-        void
-        sla_gbamv_(integer *, integer *, integer *, integer *, integer *, real *, real *, integer *,
-                   real *, integer *, real *, real *, integer *);
+    int sla_gbamv_(integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     logical incr_prec__;
     real prev_dz_z__, yk, final_dx_x__, final_dz_z__;
     extern /* Subroutine */
@@ -447,17 +445,10 @@ void sla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__, ymin;
     extern /* Subroutine */
-        void
-        sla_lin_berr_(integer *, integer *, integer *, real *, real *, real *),
-        blas_sgbmv_x_(integer *, integer *, integer *, integer *, integer *, real *, real *,
-                      integer *, real *, integer *, real *, real *, integer *, integer *);
+    int sla_lin_berr_(integer *, integer *, integer *, real *, real *, real *), blas_sgbmv_x_(integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, integer *);
     integer y_prec_state__;
     extern /* Subroutine */
-        int
-        blas_sgbmv2_x_(integer *, integer *, integer *, integer *, integer *, real *, real *,
-                       integer *, real *, real *, integer *, real *, real *, integer *, integer *),
-        sgbmv_(char *, integer *, integer *, integer *, integer *, real *, real *, integer *,
-               real *, integer *, real *, real *, integer *);
+    int blas_sgbmv2_x_(integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *), sgbmv_(char *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     real dxrat, dzrat;
     char trans[1];
     extern /* Subroutine */

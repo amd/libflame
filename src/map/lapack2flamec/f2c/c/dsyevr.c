@@ -672,8 +672,7 @@ void dsyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, doublereal *a, 
             {
                 indwkn = inde;
                 llwrkn = *lwork - indwkn + 1;
-                aocl_lapack_dormtr("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau],
-                                   &z__[z_offset], ldz, &work[indwkn], &llwrkn, &iinfo);
+                dormtr_("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau], &z__[z_offset], ldz, &work[indwkn], &llwrkn, &iinfo);
             }
         }
         if(*info == 0)

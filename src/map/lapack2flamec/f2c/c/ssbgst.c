@@ -189,6 +189,8 @@ void ssbgst_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper, wantx;
     logical update;
+    extern /* Subroutine */
+    int slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *), slargv_(integer *, real *, integer *, real *, integer *, real *, integer *), slartv_(integer *, real *, integer *, real *, integer *, real *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -977,15 +979,12 @@ L10:
             {
                 /* generate rotations in 2nd set to annihilate elements */
                 /* which have been created outside the band */
-                aocl_lapack_slargv(&nr, &ab[ka1 + (j2 - *ka) * ab_dim1], &inca, &work[j2], &ka1,
-                                   &work[*n + j2], &ka1);
+                slargv_(&nr, &ab[ka1 + (j2 - *ka) * ab_dim1], &inca, &work[j2], &ka1, &work[*n + j2], &ka1);
                 /* apply rotations in 2nd set from the left */
                 i__4 = *ka - 1;
                 for(l = 1; l <= i__4; ++l)
                 {
-                    aocl_lapack_slartv(&nr, &ab[l + 1 + (j2 - l) * ab_dim1], &inca,
-                                       &ab[l + 2 + (j2 - l) * ab_dim1], &inca, &work[*n + j2],
-                                       &work[j2], &ka1);
+                    slartv_(&nr, &ab[l + 1 + (j2 - l) * ab_dim1], &inca, &ab[ l + 2 + (j2 - l) * ab_dim1], &inca, &work[*n + j2], &work[j2], &ka1);
                     /* L410: */
                 }
                 /* apply rotations in 2nd set from both sides to diagonal */
@@ -1607,9 +1606,7 @@ L490:
                 }
                 /* apply rotations in 1st set from both sides to diagonal */
                 /* blocks */
-                aocl_lapack_slar2v(&nr, &ab[j1 * ab_dim1 + 1], &ab[(j1 - 1) * ab_dim1 + 1],
-                                   &ab[(j1 - 1) * ab_dim1 + 2], &inca, &work[*n + j1], &work[j1],
-                                   &ka1);
+                slar2v_(&nr, &ab[j1 * ab_dim1 + 1], &ab[(j1 - 1) * ab_dim1 + 1], &ab[(j1 - 1) * ab_dim1 + 2], &inca, &work[*n + j1], &work[j1], &ka1);
             }
             /* start applying rotations in 1st set from the left */
             i__1 = *kb - k + 1;
@@ -1619,9 +1616,7 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_slartv(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca,
-                                       &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca,
-                                       &work[*n + j1t], &work[j1t], &ka1);
+                    slartv_(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca, &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &work[*n + j1t], &work[j1t], &ka1);
                 }
                 /* L820: */
             }
@@ -1744,9 +1739,7 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_slartv(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca,
-                                       &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca,
-                                       &work[*n + m - *kb + j1t], &work[m - *kb + j1t], &ka1);
+                    slartv_(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca, &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &work[*n + m - *kb + j1t], &work[m - *kb + j1t], &ka1);
                 }
                 /* L900: */
             }
@@ -1778,9 +1771,7 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_slartv(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca,
-                                       &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca,
-                                       &work[*n + j1t], &work[j1t], &ka1);
+                    slartv_(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca, &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &work[*n + j1t], &work[j1t], &ka1);
                 }
                 /* L930: */
             }

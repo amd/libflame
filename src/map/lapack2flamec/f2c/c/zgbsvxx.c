@@ -620,15 +620,7 @@ void zgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
                 integer *, dcomplex *, integer *, integer *);
     logical rowequ;
     extern /* Subroutine */
-        void
-        zlascl2_(integer *, integer *, doublereal *, dcomplex *, integer *),
-        zgbequb_(integer *, integer *, integer *, integer *, dcomplex *, integer *,
-                 doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *),
-        zgbrfsx_(char *, char *, integer *, integer *, integer *, integer *, dcomplex *,
-                 integer *, dcomplex *, integer *, integer *, doublereal *, doublereal *,
-                 dcomplex *, integer *, dcomplex *, integer *, doublereal *, doublereal *,
-                 integer *, doublereal *, doublereal *, integer *, doublereal *, dcomplex *,
-                 doublereal *, integer *);
+    int zlascl2_(integer *, integer *, doublereal *, doublecomplex *, integer *), zgbequb_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), zgbrfsx_(char *, char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublecomplex *, doublereal *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

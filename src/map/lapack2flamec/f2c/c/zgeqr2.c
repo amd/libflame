@@ -193,9 +193,8 @@ void zgeqr2_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomple
         i__2 = *m - i__ + 1;
         /* Computing MIN */
         i__3 = i__ + 1;
-        aocl_lapack_zlarfg(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3, *m) + i__ * a_dim1],
-                           &c__1, &tau[i__]);
-        if(i__ < *n)
+        zlarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[min(i__3,*m) + i__ * a_dim1], &c__1, &tau[i__]);
+        if (i__ < *n)
         {
             /* Apply H(i)**H to A(i:m,i+1:n) from the left */
             i__2 = i__ + i__ * a_dim1;

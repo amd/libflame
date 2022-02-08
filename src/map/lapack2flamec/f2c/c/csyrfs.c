@@ -195,11 +195,11 @@ void csyrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_
              aocl_int_t *ldx, real *ferr, real *berr, scomplex *work, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"csyrfs inputs: uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ipiv %lld, ldb %lld, ldx %lld",*uplo, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldx);
-#else 
+#else
     snprintf(buffer, 256,"csyrfs inputs: uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ipiv %d, ldb %d, ldx %d",*uplo, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -222,6 +222,8 @@ void csyrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_
     integer isave[3];
     aocl_int64_t count;
     logical upper;
+    extern /* Subroutine */
+    int csymv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * ), clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     real lstres;

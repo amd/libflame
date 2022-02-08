@@ -237,8 +237,8 @@ void zptsvx_(char *fact, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomp
              dcomplex *work, doublereal *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zptsvx inputs: fact %c, n %d, nrhs %d, ldb %d, ldx %d",*fact, *n, *nrhs, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -249,6 +249,11 @@ void zptsvx_(char *fact, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomp
     doublereal anorm;
     extern doublereal dlamch_(char *);
     logical nofact;
+    extern /* Subroutine */
+    int xerbla_(char *, integer *);
+    extern doublereal zlanht_(char *, integer *, doublereal *, doublecomplex * );
+    extern /* Subroutine */
+    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zptcon_(integer *, doublereal *, doublecomplex *, doublereal *, doublereal *, doublereal *, integer *), zptrfs_(char *, integer *, integer *, doublereal *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zpttrf_(integer *, doublereal *, doublecomplex *, integer *), zpttrs_(char *, integer *, integer *, doublereal *, doublecomplex *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

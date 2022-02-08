@@ -104,11 +104,11 @@
 void ctpttr_(char *uplo, aocl_int_t *n, scomplex *ap, scomplex *a, aocl_int_t *lda, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctpttr inputs: uplo %c, n %lld, lda %lld",*uplo, *n, *lda);
-#else 
+#else
     snprintf(buffer, 256,"ctpttr inputs: uplo %c, n %d, lda %d",*uplo, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

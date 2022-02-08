@@ -271,7 +271,7 @@ void dsptri_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, double
                 i__1 = k - 1;
                 ap[kc + k - 1] -= aocl_blas_ddot(&i__1, &work[1], &c__1, &ap[kc], &c__1);
                 i__1 = k - 1;
-                ap[kcnext + k - 1] -= aocl_blas_ddot(&i__1, &ap[kc], &c__1, &ap[kcnext], &c__1);
+                ap[kcnext + k - 1] -= ddot_(&i__1, &ap[kc], &c__1, &ap[kcnext], &c__1);
                 i__1 = k - 1;
                 aocl_blas_dcopy(&i__1, &ap[kcnext], &c__1, &work[1], &c__1);
                 i__1 = k - 1;

@@ -431,7 +431,9 @@ void stgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, real *a, a
     logical somcon;
     real alprqt, smlnum;
     logical lquery;
-    /* -- LAPACK computational routine -- */
+    extern /* Subroutine */
+    int stgsyl_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *, integer *);
+    /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */

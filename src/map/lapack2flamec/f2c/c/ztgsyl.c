@@ -4,13 +4,25 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {0., 0.};
-static aocl_int64_t c__2 = 2;
-static aocl_int64_t c_n1 = -1;
-static aocl_int64_t c__5 = 5;
-static aocl_int64_t c__1 = 1;
-static dcomplex c_b44 = {-1., 0.};
-static dcomplex c_b45 = {1., 0.};
+static doublecomplex c_b1 =
+{
+    0.,0.
+}
+;
+static integer c__2 = 2;
+static integer c_n1 = -1;
+static integer c__5 = 5;
+static integer c__1 = 1;
+static doublecomplex c_b44 =
+{
+    -1.,0.
+    }
+;
+static doublecomplex c_b45 =
+{
+    1.,0.
+}
+;
 /* > \brief \b ZTGSYL */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */

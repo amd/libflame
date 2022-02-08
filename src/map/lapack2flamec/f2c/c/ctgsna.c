@@ -324,11 +324,11 @@ void ctgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, scomplex *
              aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctgsna inputs: job %c, howmny %c, n %lld, lda %lld, ldb %lld, ldvl %lld, ldvr %lld, mm %lld, m %lld, lwork %lld",*job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *m, *lwork);
-#else 
+#else
     snprintf(buffer, 256,"ctgsna inputs: job %c, howmny %c, n %d, lda %d, ldb %d, ldvl %d, ldvr %d, mm %d, m %d, lwork %d",*job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *m, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -347,8 +347,12 @@ void ctgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, scomplex *
     scomplex yhax, yhbx;
     aocl_int64_t ilst;
     real rnrm, scale;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t lwmin;
+    extern /* Complex */
+    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    integer lwmin;
     logical wants;
     scomplex dummy[1];
     extern real slapy2_(real *, real *);
@@ -515,11 +519,11 @@ void ctgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, scomplex *
             /* eigenvalue. */
             rnrm = scnrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
             lnrm = scnrm2_(n, &vl[ks * vl_dim1 + 1], &c__1);
-            cgemv_("N", n, n, &c_b19, &a[a_offset], lda, &vr[ks * vr_dim1 + 1] , &c__1, &c_b20, &work[1], &c__1);
+            cgemv_("N", n, n, &c_b19, &a[a_offset], lda, &vr[ks * vr_dim1 + 1], &c__1, &c_b20, &work[1], &c__1);
             cdotc_f2c_(&q__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
             yhax.r = q__1.r;
             yhax.i = q__1.i; // , expr subst
-            cgemv_("N", n, n, &c_b19, &b[b_offset], ldb, &vr[ks * vr_dim1 + 1] , &c__1, &c_b20, &work[1], &c__1);
+            cgemv_("N", n, n, &c_b19, &b[b_offset], ldb, &vr[ks * vr_dim1 + 1], &c__1, &c_b20, &work[1], &c__1);
             cdotc_f2c_(&q__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
             yhbx.r = q__1.r;
             yhbx.i = q__1.i; // , expr subst
@@ -553,9 +557,8 @@ void ctgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, scomplex *
                 aocl_lapack_clacpy("Full", n, n, &b[b_offset], ldb, &work[*n * *n + 1], n);
                 ifst = k;
                 ilst = 1;
-                aocl_lapack_ctgexc(&c_false, &c_false, n, &work[1], n, &work[*n * *n + 1], n, dummy,
-                                   &c__1, dummy1, &c__1, &ifst, &ilst, &ierr);
-                if(ierr > 0)
+                ctgexc_(&c_false, &c_false, n, &work[1], n, &work[*n * *n + 1], n, dummy, &c__1, dummy1, &c__1, &ifst, &ilst, &ierr) ;
+                if (ierr > 0)
                 {
                     /* Ill-conditioned problem - swap rejected. */
                     dif[ks] = 0.f;

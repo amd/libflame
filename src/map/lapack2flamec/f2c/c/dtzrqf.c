@@ -252,8 +252,7 @@ void aocl_lapack_dtzrqf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
                 i__1 = k - 1;
                 i__2 = *n - *m;
                 d__1 = -tau[k];
-                aocl_blas_dger(&i__1, &i__2, &d__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda,
-                               &a[m1 * a_dim1 + 1], lda);
+                dger_(&i__1, &i__2, &d__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda, &a[m1 * a_dim1 + 1], lda);
             }
             /* L20: */
         }

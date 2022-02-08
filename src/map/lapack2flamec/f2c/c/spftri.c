@@ -309,10 +309,10 @@ void aocl_lapack_spftri(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 /* SRPA for LOWER, NORMAL and N is odd ( a(0:n-1,0:N1-1) ) */
                 /* T1 -> a(0,0), T2 -> a(0,1), S -> a(N1,0) */
                 /* T1 -> a(0), T2 -> a(n), S -> a(N1) */
-                aocl_lapack_slauum("L", &n1, a, n, info);
-                aocl_blas_ssyrk("L", "T", &n1, &n2, &c_b11, &a[n1], n, &c_b11, a, n);
-                aocl_blas_strmm("L", "U", "N", "N", &n2, &n1, &c_b11, &a[*n], n, &a[n1], n);
-                aocl_lapack_slauum("U", &n2, &a[*n], n, info);
+                slauum_("L", &n1, a, n, info);
+                ssyrk_("L", "T", &n1, &n2, &c_b11, &a[n1], n, &c_b11, a, n);
+                strmm_("L", "U", "N", "N", &n2, &n1, &c_b11, &a[*n], n, &a[n1], n);
+                slauum_("U", &n2, &a[*n], n, info);
             }
             else
             {
@@ -341,10 +341,10 @@ void aocl_lapack_spftri(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
             {
                 /* SRPA for UPPER, TRANSPOSE, and N is odd */
                 /* T1 -> a(0+N2*N2), T2 -> a(0+N1*N2), S -> a(0) */
-                aocl_lapack_slauum("U", &n1, &a[n2 * n2], &n2, info);
-                aocl_blas_ssyrk("U", "T", &n1, &n2, &c_b11, a, &n2, &c_b11, &a[n2 * n2], &n2);
-                aocl_blas_strmm("L", "L", "T", "N", &n2, &n1, &c_b11, &a[n1 * n2], &n2, a, &n2);
-                aocl_lapack_slauum("L", &n2, &a[n1 * n2], &n2, info);
+                slauum_("U", &n1, &a[n2 * n2], &n2, info);
+                ssyrk_("U", "T", &n1, &n2, &c_b11, a, &n2, &c_b11, &a[n2 * n2], &n2);
+                strmm_("L", "L", "T", "N", &n2, &n1, &c_b11, &a[n1 * n2], &n2, a, &n2);
+                slauum_("L", &n2, &a[n1 * n2], &n2, info);
             }
         }
     }
@@ -366,7 +366,7 @@ void aocl_lapack_spftri(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 aocl_blas_ssyrk("L", "T", &k, &k, &c_b11, &a[k + 1], &i__1, &c_b11, &a[1], &i__2);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                aocl_blas_strmm("L", "U", "N", "N", &k, &k, &c_b11, a, &i__1, &a[k + 1], &i__2);
+                strmm_("L", "U", "N", "N", &k, &k, &c_b11, a, &i__1, &a[k + 1], &i__2);
                 i__1 = *n + 1;
                 aocl_lapack_slauum("U", &k, a, &i__1, info);
             }

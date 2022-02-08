@@ -269,11 +269,11 @@ void cheevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, scomplex *a, ao
              aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cheevx inputs: jobz %c, range %c, uplo %c, n %lld, lda %lld, il %lld, iu %lld, m %lld, ldz %lld, lwork %lld",*jobz, *range, *uplo, *n, *lda, *il, *iu, *m, *ldz, *lwork);
-#else 
+#else
     snprintf(buffer, 256,"cheevx inputs: jobz %c, range %c, uplo %c, n %d, lda %d, il %d, iu %d, m %d, ldz %d, lwork %d",*jobz, *range, *uplo, *n, *lda, *il, *iu, *m, *ldz, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -568,9 +568,8 @@ void cheevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, scomplex *a, ao
         }
         else
         {
-            aocl_lapack_clacpy("A", n, n, &a[a_offset], lda, &z__[z_offset], ldz);
-            aocl_lapack_cungtr(uplo, n, &z__[z_offset], ldz, &work[indtau], &work[indwrk], &llwork,
-                               &iinfo);
+            clacpy_("A", n, n, &a[a_offset], lda, &z__[z_offset], ldz);
+            cungtr_(uplo, n, &z__[z_offset], ldz, &work[indtau], &work[indwrk], &llwork, &iinfo);
             i__1 = *n - 1;
             aocl_blas_scopy(&i__1, &rwork[inde], &c__1, &rwork[indee], &c__1);
             aocl_lapack_csteqr(jobz, n, &w[1], &rwork[indee], &z__[z_offset], ldz, &rwork[indrwk],

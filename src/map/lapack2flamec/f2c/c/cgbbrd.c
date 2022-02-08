@@ -204,12 +204,12 @@ void cgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
              scomplex *work, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
-   snprintf(buffer, 256,"cgbbrd inputs: vect %c, m %lld, n %lld, ncc %lld, kl %lld, ku %lld, ldab %lld, ldq %lld, ldpt %lld, ldc %lld",*vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
-#else 
-   snprintf(buffer, 256,"cgbbrd inputs: vect %c, m %d, n %d, ncc %d, kl %d, ku %d, ldab %d, ldq %d, ldpt %d, ldc %d",*vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
+    snprintf(buffer, 256,"cgbbrd inputs: vect %c, m %lld, n %lld, ncc %lld, kl %lld, ku %lld, ldab %lld, ldq %lld, ldpt %lld, ldc %lld",*vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
+#else
+    snprintf(buffer, 256,"cgbbrd inputs: vect %c, m %d, n %d, ncc %d, kl %d, ku %d, ldab %d, ldq %d, ldpt %d, ldc %d",*vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -460,8 +460,7 @@ void cgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
                     i__3 = kb1;
                     for(j = j1; i__3 < 0 ? j >= i__4 : j <= i__4; j += i__3)
                     {
-                        aocl_lapack_crot(ncc, &c__[j - 1 + c_dim1], ldc, &c__[j + c_dim1], ldc,
-                                         &rwork[j], &work[j]);
+                        crot_(ncc, &c__[j - 1 + c_dim1], ldc, &c__[j + c_dim1], ldc, &rwork[j], &work[j]);
                         /* L30: */
                     }
                 }

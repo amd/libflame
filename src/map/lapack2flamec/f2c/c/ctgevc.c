@@ -230,11 +230,11 @@ void ctgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, scomplex 
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctgevc inputs: side %c, howmny %c, n %lld, lds %lld, ldp %lld, ldvl %lld, ldvr %lld, mm %lld",*side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm);
-#else 
+#else
     snprintf(buffer, 256,"ctgevc inputs: side %c, howmny %c, n %d, lds %d, ldp %d, ldvl %d, ldvr %d, mm %d",*side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -265,9 +265,11 @@ void ctgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, scomplex 
     logical ilall;
     aocl_int64_t iside;
     real sbeta;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    real small_val;
-    logical compl ;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    real small;
+    logical compl;
     real anorm, bnorm;
     logical compr, ilbbad;
     real acoefa, bcoefa, acoeff;

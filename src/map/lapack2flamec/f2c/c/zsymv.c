@@ -158,8 +158,8 @@ void zsymv_(char *uplo, aocl_int_t *n, dcomplex *alpha, dcomplex *a, aocl_int_t 
             aocl_int_t *incy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zsymv inputs: uplo %c, n %d, lda %d, incx %d, incy %d",*uplo, *n, *lda, *incx, *incy);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

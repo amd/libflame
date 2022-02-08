@@ -211,11 +211,11 @@ void clatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, scomplex *a, aocl_int_t 
              scomplex *tau, scomplex *w, aocl_int_t *ldw)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clatrd inputs: uplo %c, n %lld, nb %lld, lda %lld, ldw %lld",*uplo, *n, *nb, *lda, *ldw);
-#else 
+#else
     snprintf(buffer, 256,"clatrd inputs: uplo %c, n %d, nb %d, lda %d, ldw %d",*uplo, *n, *nb, *lda, *ldw);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -225,9 +225,17 @@ void clatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, scomplex *a, aocl_int_t 
     real r__1;
     scomplex q__1, q__2, q__3, q__4;
     /* Local variables */
-    aocl_int64_t i__, iw;
-    scomplex alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, iw;
+    complex alpha;
+    extern /* Subroutine */
+    int cscal_(integer *, complex *, complex *, integer *);
+    extern /* Complex */
+    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+    extern /* Subroutine */
+    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -426,9 +434,7 @@ void clatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, scomplex *a, aocl_int_t 
                 a[i__2].imag = 0.f; // , expr subst
                 /* Compute W(i+1:n,i) */
                 i__2 = *n - i__;
-                aocl_blas_chemv("Lower", &i__2, &c_b2, &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
-                                &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1,
-                                &w[i__ + 1 + i__ * w_dim1], &c__1);
+                chemv_("Lower", &i__2, &c_b2, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &w[ i__ + 1 + i__ * w_dim1], &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
                 aocl_blas_cgemv("Conjugate transpose", &i__2, &i__3, &c_b2, &w[i__ + 1 + w_dim1],

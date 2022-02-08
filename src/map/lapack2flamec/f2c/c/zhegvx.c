@@ -353,7 +353,12 @@ void aocl_lapack_zhegvx(aocl_int64_t *itype, char *jobz, char *range, char *uplo
     char trans[1];
     logical upper, wantz;
     logical alleig, indeig, valeig;
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    int xerbla_(char *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int zhegst_(integer *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zheevx_(char *, char *, char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

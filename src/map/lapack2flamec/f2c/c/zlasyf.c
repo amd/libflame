@@ -185,8 +185,8 @@ void zlasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dcomplex
              aocl_int_t *lda, aocl_int_t *ipiv, dcomplex *w, aocl_int_t *ldw, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zlasyf inputs: uplo %c, n %d, nb %d, lda %d, ldw %d",*uplo, *n, *nb, *lda, *ldw);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -882,10 +882,9 @@ void zlasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dcomplex
             {
                 i__4 = j + jb - jj;
                 i__5 = k - 1;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgemv("No transpose", &i__4, &i__5, &z__1, &a[jj + a_dim1], lda,
-                                &w[jj + w_dim1], ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
+                z__1.r = -1.;
+                z__1.i = -0.; // , expr subst
+                zgemv_("No transpose", &i__4, &i__5, &z__1, &a[jj + a_dim1], lda, &w[jj + w_dim1], ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
                 /* L100: */
             }
             /* Update the rectangular subdiagonal block */

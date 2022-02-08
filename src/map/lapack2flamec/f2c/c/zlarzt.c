@@ -191,8 +191,8 @@ void zlarzt_(char *direct, char *storev, aocl_int_t *n, aocl_int_t *k, dcomplex 
              aocl_int_t *ldv, dcomplex *tau, dcomplex *t, aocl_int_t *ldt)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zlarzt inputs: direct %c, storev %c, n %d, k %d, ldv %d, ldt %d",*direct, *storev, *n, *k, *ldv, *ldt);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -277,9 +277,7 @@ void zlarzt_(char *direct, char *storev, aocl_int_t *n, aocl_int_t *k, dcomplex 
                 aocl_lapack_zlacgv(n, &v[i__ + v_dim1], ldv);
                 /* T(i+1:k,i) = T(i+1:k,i+1:k) * T(i+1:k,i) */
                 i__1 = *k - i__;
-                aocl_blas_ztrmv("Lower", "No transpose", "Non-unit", &i__1,
-                                &t[i__ + 1 + (i__ + 1) * t_dim1], ldt, &t[i__ + 1 + i__ * t_dim1],
-                                &c__1);
+                ztrmv_("Lower", "No transpose", "Non-unit", &i__1, &t[i__ + 1 + (i__ + 1) * t_dim1], ldt, &t[i__ + 1 + i__ * t_dim1], &c__1);
             }
             i__1 = i__ + i__ * t_dim1;
             i__2 = i__;

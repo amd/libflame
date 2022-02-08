@@ -350,10 +350,20 @@ void aocl_lapack_slaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     aocl_int64_t infqr;
     aocl_int64_t kwtop;
     extern /* Subroutine */
-        void
-        slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *);
+    int slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), sgemm_( char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    integer infqr;
+    extern /* Subroutine */
+    int scopy_(integer *, real *, integer *, real *, integer *);
+    integer kwtop;
+    extern /* Subroutine */
+    int slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *), slabad_(real *, real *) ;
     extern real slamch_(char *);
     real safmin;
+    extern /* Subroutine */
+    int slarfg_(integer *, real *, real *, integer *, real *);
+    real safmax;
+    extern /* Subroutine */
+    int slahqr_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     logical sorted;
     real smlnum;
     aocl_int64_t lwkopt;
@@ -721,15 +731,14 @@ L60:
             aocl_lapack_slarf("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv,
                               &work[jw + 1]);
             i__1 = *lwork - jw;
-            aocl_lapack_sgehrd(&jw, &c__1, ns, &t[t_offset], ldt, &work[1], &work[jw + 1], &i__1,
-                               &info);
+            sgehrd_(&jw, &c__1, ns, &t[t_offset], ldt, &work[1], &work[jw + 1], &i__1, &info);
         }
         /* ==== Copy updated reduced window into place ==== */
         if(kwtop > 1)
         {
             h__[kwtop + (kwtop - 1) * h_dim1] = s * v[v_dim1 + 1];
         }
-        aocl_lapack_slacpy("U", &jw, &jw, &t[t_offset], ldt, &h__[kwtop + kwtop * h_dim1], ldh);
+        slacpy_("U", &jw, &jw, &t[t_offset], ldt, &h__[kwtop + kwtop * h_dim1], ldh);
         i__1 = jw - 1;
         i__2 = *ldt + 1;
         i__3 = *ldh + 1;

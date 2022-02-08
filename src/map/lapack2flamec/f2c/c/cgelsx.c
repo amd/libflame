@@ -190,11 +190,11 @@ only the remaining */
 void cgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, aocl_int_t *jpvt, real *rcond, aocl_int_t *rank, scomplex *work, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgelsx inputs: m %lld, n %lld, nrhs %lld, lda %lld, ldb %lld, jpvt %lld",*m, *n, *nrhs, *lda, *ldb, *jpvt);
-#else 
+#else
     snprintf(buffer, 256,"cgelsx inputs: m %d, n %d, nrhs %d, lda %d, ldb %d, jpvt %d",*m, *n, *nrhs, *lda, *ldb, *jpvt);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

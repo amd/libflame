@@ -274,8 +274,7 @@ void stbcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, aocl_int_t *kd, 
             else
             {
                 /* Multiply by inv(A**T). */
-                aocl_lapack_slatbs(uplo, "Transpose", diag, normin, n, kd, &ab[ab_offset], ldab,
-                                   &work[1], &scale, &work[(*n << 1) + 1], info);
+                slatbs_(uplo, "Transpose", diag, normin, n, kd, &ab[ab_offset], ldab, &work[1], &scale, &work[(*n << 1) + 1], info);
             }
             *(unsigned char *)normin = 'Y';
             /* Multiply by 1/SCALE if doing so will not cause overflow. */

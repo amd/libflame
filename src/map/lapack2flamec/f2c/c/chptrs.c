@@ -119,11 +119,11 @@ void chptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, aocl_int
              aocl_int_t *ldb, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"chptrs inputs: uplo %c, n %lld, nrhs %lld, ipiv %lld, ldb %lld",*uplo, *n, *nrhs, *ipiv, *ldb);
-#else 
+#else
     snprintf(buffer, 256,"chptrs inputs: uplo %c, n %d, nrhs %d, ipiv %d, ldb %d",*uplo, *n, *nrhs, *ipiv, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -136,11 +136,13 @@ void chptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, aocl_int
     /* Local variables */
     aocl_int64_t j, k;
     real s;
-    scomplex ak, bk;
-    aocl_int64_t kc, kp;
-    scomplex akm1, bkm1, akm1k;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    scomplex denom;
+    complex ak, bk;
+    integer kc, kp;
+    complex akm1, bkm1, akm1k;
+    extern logical lsame_(char *, char *);
+    complex denom;
+    extern /* Subroutine */
+    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
     logical upper;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -325,11 +327,10 @@ void chptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, aocl_int
             {
                 aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = k - 1;
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[b_offset], ldb,
-                                &ap[kc], &c__1, &c_b1, &b[k + b_dim1], ldb);
-                aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
+                q__1.r = -1.f;
+                q__1.i = -0.f; // , expr subst
+                cgemv_("Conjugate transpose", &i__1, nrhs, &q__1, &b[b_offset], ldb, &ap[kc], &c__1, &c_b1, &b[k + b_dim1], ldb);
+                clacgv_(nrhs, &b[k + b_dim1], ldb);
             }
             /* Interchange rows K and IPIV(K). */
             kp = ipiv[k];
@@ -349,18 +350,16 @@ void chptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, aocl_int
             {
                 aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = k - 1;
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[b_offset], ldb,
-                                &ap[kc], &c__1, &c_b1, &b[k + b_dim1], ldb);
-                aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
-                aocl_lapack_clacgv(nrhs, &b[k + 1 + b_dim1], ldb);
+                q__1.r = -1.f;
+                q__1.i = -0.f; // , expr subst
+                cgemv_("Conjugate transpose", &i__1, nrhs, &q__1, &b[b_offset], ldb, &ap[kc], &c__1, &c_b1, &b[k + b_dim1], ldb);
+                clacgv_(nrhs, &b[k + b_dim1], ldb);
+                clacgv_(nrhs, &b[k + 1 + b_dim1], ldb);
                 i__1 = k - 1;
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[b_offset], ldb,
-                                &ap[kc + k], &c__1, &c_b1, &b[k + 1 + b_dim1], ldb);
-                aocl_lapack_clacgv(nrhs, &b[k + 1 + b_dim1], ldb);
+                q__1.r = -1.f;
+                q__1.i = -0.f; // , expr subst
+                cgemv_("Conjugate transpose", &i__1, nrhs, &q__1, &b[b_offset], ldb, &ap[kc + k], &c__1, &c_b1, &b[k + 1 + b_dim1], ldb);
+                clacgv_(nrhs, &b[k + 1 + b_dim1], ldb);
             }
             /* Interchange rows K and -IPIV(K). */
             kp = -ipiv[k];

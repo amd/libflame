@@ -255,11 +255,16 @@ void aocl_lapack_sgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
     logical ilq, ilz;
     aocl_int64_t jcol;
     real temp;
-    aocl_int64_t jrow;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t icompq;
-    extern void slartg_(real *, real *, real *, real *, real *);
-    aocl_int64_t icompz;
+    integer jrow;
+    extern /* Subroutine */
+    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int xerbla_(char *, integer *);
+    integer icompq;
+    extern /* Subroutine */
+    int slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *);
+    integer icompz;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

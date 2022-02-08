@@ -161,11 +161,11 @@ void ctrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
              real *scale, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctrsyl inputs: trana %c, tranb %c, isgn %lld, m %lld, n %lld, lda %lld, ldb %lld, ldc %lld",*trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
-#else 
+#else
     snprintf(buffer, 256,"ctrsyl inputs: trana %c, tranb %c, isgn %d, m %d, n %d, lda %d, ldb %d, ldc %d",*trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -314,9 +314,9 @@ void ctrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                 suml.real = q__1.real;
                 suml.imag = q__1.imag; // , expr subst
                 i__2 = l - 1;
-                aocl_lapack_cdotu_f2c(&q__1, &i__2, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1], &c__1);
-                sumr.real = q__1.real;
-                sumr.imag = q__1.imag; // , expr subst
+                cdotu_f2c_(&q__1, &i__2, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1], &c__1);
+                sumr.r = q__1.r;
+                sumr.i = q__1.i; // , expr subst
                 i__2 = k + l * c_dim1;
                 q__3.real = sgn * sumr.real;
                 q__3.imag = sgn * sumr.imag; // , expr subst
@@ -397,9 +397,9 @@ void ctrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                 suml.real = q__1.real;
                 suml.imag = q__1.imag; // , expr subst
                 i__3 = l - 1;
-                aocl_lapack_cdotu_f2c(&q__1, &i__3, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1], &c__1);
-                sumr.real = q__1.real;
-                sumr.imag = q__1.imag; // , expr subst
+                cdotu_f2c_(&q__1, &i__3, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1], &c__1);
+                sumr.r = q__1.r;
+                sumr.i = q__1.i; // , expr subst
                 i__3 = k + l * c_dim1;
                 q__3.real = sgn * sumr.real;
                 q__3.imag = sgn * sumr.imag; // , expr subst

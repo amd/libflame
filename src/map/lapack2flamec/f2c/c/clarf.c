@@ -132,11 +132,11 @@ void clarf_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, aocl_int_t *i
             scomplex *c__, aocl_int_t *ldc, scomplex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clarf inputs: side %c, m %lld, n %lld, incv %lld, ldc %lld",*side, *m, *n, *incv, *ldc);
-#else 
+#else
     snprintf(buffer, 256,"clarf inputs: side %c, m %d, n %d, incv %d, ldc %d",*side, *m, *n, *incv, *ldc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

@@ -181,8 +181,8 @@ void dlaed3_(aocl_int_t *k, aocl_int_t *n, aocl_int_t *n1, doublereal *d__, doub
              aocl_int_t *indx, aocl_int_t *ctot, doublereal *w, doublereal *s, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlaed3 inputs: k %" FLA_IS ", n %" FLA_IS ", n1 %" FLA_IS ", ldq %" FLA_IS ", indx %" FLA_IS ", ctot %" FLA_IS "",*k, *n, *n1, *ldq, *indx, *ctot);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

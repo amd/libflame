@@ -362,7 +362,7 @@ void aocl_lapack_ztftri(char *transr, char *uplo, char *diag, aocl_int64_t *n, d
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
-                aocl_blas_ztrmm("L", "U", "C", diag, &n2, &n1, &c_b1, &a[*n], n, &a[n1], n);
+                ztrmm_("L", "U", "C", diag, &n2, &n1, &c_b1, &a[*n], n, &a[n1], n);
             }
             else
             {
@@ -482,7 +482,7 @@ void aocl_lapack_ztftri(char *transr, char *uplo, char *diag, aocl_int64_t *n, d
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                aocl_blas_ztrmm("L", "U", "C", diag, &k, &k, &c_b1, a, &i__1, &a[k + 1], &i__2);
+                ztrmm_("L", "U", "C", diag, &k, &k, &c_b1, a, &i__1, &a[k + 1], &i__2);
             }
             else
             {

@@ -3,8 +3,16 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static scomplex c_b6 = {-1.f, 0.f};
-static scomplex c_b8 = {1.f, 0.f};
+static complex c_b6 =
+{
+    -1.f,0.f
+    }
+;
+static complex c_b8 =
+{
+    1.f,0.f
+}
+;
 static real c_b31 = 1.f;
 /* > \brief \b CLA_GBRFSX_EXTENDED improves the computed solution to a system of linear equations
  * for general banded matrices by performing extra-precise iterative refinement and provides error
@@ -423,11 +431,11 @@ void cla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
                           integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cla_gbrfsx_extended inputs: prec_type__ %lld, trans_type__ %lld, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldafb %lld, ipiv %lld, ldb %lld, ldy %lld, n_norms__ %lld, ithresh %lld",*prec_type__, *trans_type__, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ipiv, *ldb, *ldy, *n_norms__, *ithresh);
-#else 
+#else
     snprintf(buffer, 256,"cla_gbrfsx_extended inputs: prec_type__ %d, trans_type__ %d, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, ipiv %d, ldb %d, ldy %d, n_norms__ %d, ithresh %d",*prec_type__, *trans_type__, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ipiv, *ldb, *ldy, *n_norms__, *ithresh);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -456,13 +464,10 @@ void cla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__;
     extern /* Subroutine */
-        void
-        cla_lin_berr_(integer *, integer *, integer *, scomplex *, real *, real *);
+    int cla_lin_berr_(integer *, integer *, integer *, complex *, real *, real *);
     real ymin;
     extern /* Subroutine */
-        int
-        blas_cgbmv_x_(integer *, integer *, integer *, integer *, integer *, scomplex *, scomplex *,
-                      integer *, scomplex *, integer *, scomplex *, scomplex *, integer *, integer *);
+    int blas_cgbmv_x_(integer *, integer *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     integer y_prec_state__;
     extern /* Subroutine */
         int

@@ -165,8 +165,10 @@ void ssteqr_(char *compz, aocl_int_t *n, real *d__, real *e, real *z__, aocl_int
     real anorm;
     aocl_int64_t lendm1, lendp1;
     extern /* Subroutine */
-        void
-        slaev2_(real *, real *, real *, real *, real *, real *, real *);
+    int slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *);
+    integer lendm1, lendp1;
+    extern /* Subroutine */
+    int slaev2_(real *, real *, real *, real *, real *, real *, real *);
     extern real slapy2_(real *, real *);
     aocl_int64_t iscale;
     extern real slamch_(char *);

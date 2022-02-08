@@ -68,8 +68,7 @@ VOID cladiv_(complex * ret_val, complex *x, complex *y)
     /* Local variables */
     real zi, zr;
     extern /* Subroutine */
-        void
-        sladiv_(real *, real *, real *, real *, real *, real *);
+    int sladiv_(real *, real *, real *, real *, real *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -109,7 +108,7 @@ complex cladiv_(complex *x, complex *y)
     /* Local variables */
     real zi, zr;
     extern /* Subroutine */
-    int sladiv_(real *, real *, real *, real *, real * , real *);
+    int sladiv_(real *, real *, real *, real *, real *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -140,7 +139,7 @@ complex cladiv_(complex *x, complex *y)
 
 void cladiv_f2c_(complex *ret_val, complex *x, complex *y)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5); 
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #ifdef FLA_ENABLE_VOID_RETURN_COMPLEX_FUNCTION
     cladiv_(ret_val, x, y);
 #else

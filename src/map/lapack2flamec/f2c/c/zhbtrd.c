@@ -217,7 +217,11 @@ void aocl_lapack_zhbtrd(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *k
     aocl_int64_t j1end, j1inc, iqend;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical initq, wantq, upper;
-    aocl_int64_t iqaend;
+    extern /* Subroutine */
+    int zlar2v_(integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
+    integer iqaend;
+    extern /* Subroutine */
+    int xerbla_(char *, integer *), zlacgv_( integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *), zlargv_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *), zlartv_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -370,9 +374,7 @@ void aocl_lapack_zhbtrd(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *k
                         {
                             /* generate plane rotation to annihilate a(i,i+k-1) */
                             /* within the band */
-                            zlartg_(&ab[*kd - k + 3 + (i__ + k - 2) * ab_dim1],
-                                    &ab[*kd - k + 2 + (i__ + k - 1) * ab_dim1], &d__[i__ + k - 1],
-                                    &work[i__ + k - 1], &temp);
+                            zlartg_(&ab[*kd - k + 3 + (i__ + k - 2) * ab_dim1], &ab[*kd - k + 2 + (i__ + k - 1) * ab_dim1], &d__[i__ + k - 1], &work[i__ + k - 1], &temp);
                             i__3 = *kd - k + 3 + (i__ + k - 2) * ab_dim1;
                             ab[i__3].real = temp.real;
                             ab[i__3].imag = temp.imag; // , expr subst
@@ -648,9 +650,7 @@ void aocl_lapack_zhbtrd(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *k
                             i__2 = kd1;
                             for(jinc = j1; i__2 < 0 ? jinc >= i__3 : jinc <= i__3; jinc += i__2)
                             {
-                                aocl_lapack_zrot(&kdm1, &ab[*kd + (jinc - *kd) * ab_dim1], &incx,
-                                                 &ab[kd1 + (jinc - *kd) * ab_dim1], &incx,
-                                                 &d__[jinc], &work[jinc]);
+                                zrot_(&kdm1, &ab[*kd + (jinc - *kd) * ab_dim1], &incx, &ab[kd1 + (jinc - *kd) * ab_dim1], &incx, &d__[jinc], &work[ jinc]);
                                 /* L140: */
                             }
                         }

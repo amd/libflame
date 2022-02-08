@@ -132,8 +132,8 @@ void slaqsy_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, real *s, real 
              char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"slaqsy inputs: uplo %c, n %d, lda %d",*uplo, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

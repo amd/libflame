@@ -350,11 +350,10 @@ void zhetrs_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl
             {
                 aocl_lapack_zlacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = k - 1;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgemv("Conjugate transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb,
-                                &a[k * a_dim1 + 1], &c__1, &c_b1, &b[k + b_dim1], ldb);
-                aocl_lapack_zlacgv(nrhs, &b[k + b_dim1], ldb);
+                z__1.r = -1.;
+                z__1.i = -0.; // , expr subst
+                zgemv_("Conjugate transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &a[k * a_dim1 + 1], &c__1, &c_b1, &b[k + b_dim1], ldb);
+                zlacgv_(nrhs, &b[k + b_dim1], ldb);
             }
             /* Interchange rows K and IPIV(K). */
             kp = ipiv[k];
@@ -373,18 +372,16 @@ void zhetrs_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl
             {
                 aocl_lapack_zlacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = k - 1;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgemv("Conjugate transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb,
-                                &a[k * a_dim1 + 1], &c__1, &c_b1, &b[k + b_dim1], ldb);
-                aocl_lapack_zlacgv(nrhs, &b[k + b_dim1], ldb);
-                aocl_lapack_zlacgv(nrhs, &b[k + 1 + b_dim1], ldb);
+                z__1.r = -1.;
+                z__1.i = -0.; // , expr subst
+                zgemv_("Conjugate transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &a[k * a_dim1 + 1], &c__1, &c_b1, &b[k + b_dim1], ldb);
+                zlacgv_(nrhs, &b[k + b_dim1], ldb);
+                zlacgv_(nrhs, &b[k + 1 + b_dim1], ldb);
                 i__1 = k - 1;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgemv("Conjugate transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb,
-                                &a[(k + 1) * a_dim1 + 1], &c__1, &c_b1, &b[k + 1 + b_dim1], ldb);
-                aocl_lapack_zlacgv(nrhs, &b[k + 1 + b_dim1], ldb);
+                z__1.r = -1.;
+                z__1.i = -0.; // , expr subst
+                zgemv_("Conjugate transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &a[(k + 1) * a_dim1 + 1], &c__1, &c_b1, &b[k + 1 + b_dim1], ldb);
+                zlacgv_(nrhs, &b[k + 1 + b_dim1], ldb);
             }
             /* Interchange rows K and -IPIV(K), then K+1 and -IPIV(K+1) */
             kp = -ipiv[k];

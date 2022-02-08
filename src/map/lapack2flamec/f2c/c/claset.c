@@ -107,11 +107,11 @@ void claset_(char *uplo, aocl_int_t *m, aocl_int_t *n, scomplex *alpha, scomplex
              aocl_int_t *lda)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"claset inputs: uplo %c, m %lld, n %lld, lda %lld",*uplo, *m, *n, *lda);
-#else 
+#else
     snprintf(buffer, 256,"claset inputs: uplo %c, m %d, n %d, lda %d",*uplo, *m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

@@ -184,7 +184,7 @@ void aocl_lapack_dsyev(char *jobz, char *uplo, aocl_int64_t *n, doublereal *a, a
     doublereal smlnum;
     aocl_int64_t lwkopt;
     logical lquery;
-    
+
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];

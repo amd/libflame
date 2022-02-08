@@ -197,6 +197,8 @@ void dsygv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, doublereal
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     char trans[1];
     logical upper;
+    extern /* Subroutine */
+    int dsyev_(char *, char *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
     logical wantz;
     aocl_int64_t lwkmin;
     aocl_int64_t lwkopt;

@@ -358,8 +358,8 @@ void zgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex 
              dcomplex *work, doublereal *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zgesvx inputs: fact %c, trans %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d",*fact, *trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -379,9 +379,13 @@ void zgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex 
     doublereal colcnd;
     logical nofact;
     doublereal bignum;
-    aocl_int64_t infequ;
+    extern /* Subroutine */
+    int zlaqge_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *), zgecon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
+    integer infequ;
     logical colequ;
     doublereal rowcnd;
+    extern /* Subroutine */
+    int zgeequ_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
     logical notran;
     doublereal smlnum;
     logical rowequ;

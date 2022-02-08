@@ -194,11 +194,11 @@ void cpbrfs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, scompl
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cpbrfs inputs: uplo %c, n %lld, kd %lld, nrhs %lld, ldab %lld, ldafb %lld, ldb %lld, ldx %lld",*uplo, *n, *kd, *nrhs, *ldab, *ldafb, *ldb, *ldx);
-#else 
+#else
     snprintf(buffer, 256,"cpbrfs inputs: uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldafb %d, ldb %d, ldx %d",*uplo, *n, *kd, *nrhs, *ldab, *ldafb, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -217,7 +217,9 @@ void cpbrfs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, scompl
     real eps;
     aocl_int64_t kase;
     real safe1, safe2;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    int chbmv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    extern logical lsame_(char *, char *);
     integer isave[3];
     aocl_int64_t count;
     logical upper;

@@ -299,8 +299,8 @@ void dgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublerea
              doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dgtsvx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ipiv %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *trans, *n, *nrhs, *ipiv, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -425,9 +425,7 @@ void dgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublerea
                        ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    aocl_lapack_dgtrfs(trans, n, nrhs, &dl[1], &d__[1], &du[1], &dlf[1], &df[1], &duf[1], &du2[1],
-                       &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
-                       &iwork[1], info);
+    dgtrfs_(trans, n, nrhs, &dl[1], &d__[1], &du[1], &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
     if(*rcond < dlamch_("Epsilon"))
     {

@@ -213,6 +213,8 @@ void dtbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
     doublereal safe1, safe2;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
+    extern /* Subroutine */
+    int dtbmv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dtbsv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern doublereal dlamch_(char *);
     doublereal safmin;
@@ -410,7 +412,7 @@ void dtbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                         i__4 = fla_min(i__5, i__3);
                         for(i__ = k; i__ <= i__4; ++i__)
                         {
-                            work[i__] += (d__1 = ab[i__ + 1 - k + k * ab_dim1] , f2c_dabs(d__1)) * xk;
+                            work[i__] += (d__1 = ab[i__ + 1 - k + k * ab_dim1], f2c_dabs(d__1)) * xk;
                             /* L70: */
                         }
                         /* L80: */
@@ -428,7 +430,7 @@ void dtbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                         i__4 = fla_min(i__5, i__3);
                         for(i__ = k + 1; i__ <= i__4; ++i__)
                         {
-                            work[i__] += (d__1 = ab[i__ + 1 - k + k * ab_dim1] , f2c_dabs(d__1)) * xk;
+                            work[i__] += (d__1 = ab[i__ + 1 - k + k * ab_dim1], f2c_dabs(d__1)) * xk;
                             /* L90: */
                         }
                         work[k] += xk;

@@ -150,8 +150,8 @@ void dlaexc_(logical *wantq, aocl_int_t *n, doublereal *t, aocl_int_t *ldt, doub
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlaexc inputs: n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", j1 %" FLA_IS ", n1 %" FLA_IS ", n2 %" FLA_IS "",*n, *ldt, *ldq, *j1, *n1, *n2);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

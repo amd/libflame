@@ -158,8 +158,8 @@ void spbstf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ld
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"spbstf inputs: uplo %c, n %d, kd %d, ldab %d",*uplo, *n, *kd, *ldab);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

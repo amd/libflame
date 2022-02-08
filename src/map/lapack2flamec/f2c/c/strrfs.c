@@ -546,7 +546,7 @@ void strrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(op(A)**T). */
-                aocl_blas_strsv(uplo, transt, diag, n, &a[a_offset], lda, &work[*n + 1], &c__1);
+                strsv_(uplo, transt, diag, n, &a[a_offset], lda, &work[*n + 1], &c__1);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {

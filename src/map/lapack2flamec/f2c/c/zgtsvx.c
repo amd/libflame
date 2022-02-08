@@ -301,8 +301,8 @@ void zgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex 
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zgtsvx inputs: fact %c, trans %c, n %d, nrhs %d, ldb %d, ldx %d",*fact, *trans, *n, *nrhs, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -315,6 +315,8 @@ void zgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex 
     extern doublereal dlamch_(char *);
     logical nofact;
     logical notran;
+    extern /* Subroutine */
+    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgtcon_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zgtrfs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zgttrf_( integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *), zgttrs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -428,9 +430,7 @@ void zgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex 
                        ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    aocl_lapack_zgtrfs(trans, n, nrhs, &dl[1], &d__[1], &du[1], &dlf[1], &df[1], &duf[1], &du2[1],
-                       &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
-                       &rwork[1], info);
+    zgtrfs_(trans, n, nrhs, &dl[1], &d__[1], &du[1], &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
     if(*rcond < dlamch_("Epsilon"))
     {

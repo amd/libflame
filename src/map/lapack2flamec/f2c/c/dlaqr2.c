@@ -288,8 +288,8 @@ void dlaqr2_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
              aocl_int_t *lwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlaqr2 inputs: n %" FLA_IS ", ktop %" FLA_IS ", kbot %" FLA_IS ", nw %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS ", ns %" FLA_IS ", nd %" FLA_IS ", ldv %" FLA_IS ", nh %" FLA_IS ", ldt %" FLA_IS ", nv %" FLA_IS ", ldwv %" FLA_IS ", lwork %" FLA_IS "",*n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ns, *nd, *ldv, *nh, *ldt, *nv, *ldwv, *lwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -308,7 +308,9 @@ void dlaqr2_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
     doublereal tau, ulp;
     aocl_int64_t lwk1, lwk2;
     doublereal beta;
-    aocl_int64_t kend, kcol, info, ifst, ilst, ltop, krow;
+    integer kend, kcol, info, ifst, ilst, ltop, krow;
+    extern /* Subroutine */
+    int dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     logical bulge;
     aocl_int64_t infqr, kwtop;
     extern /* Subroutine */
@@ -684,15 +686,14 @@ L60:
             aocl_lapack_dlarf("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv,
                               &work[jw + 1]);
             i__1 = *lwork - jw;
-            aocl_lapack_dgehrd(&jw, &c__1, ns, &t[t_offset], ldt, &work[1], &work[jw + 1], &i__1,
-                               &info);
+            dgehrd_(&jw, &c__1, ns, &t[t_offset], ldt, &work[1], &work[jw + 1], &i__1, &info);
         }
         /* ==== Copy updated reduced window into place ==== */
         if(kwtop > 1)
         {
             h__[kwtop + (kwtop - 1) * h_dim1] = s * v[v_dim1 + 1];
         }
-        aocl_lapack_dlacpy("U", &jw, &jw, &t[t_offset], ldt, &h__[kwtop + kwtop * h_dim1], ldh);
+        dlacpy_("U", &jw, &jw, &t[t_offset], ldt, &h__[kwtop + kwtop * h_dim1], ldh);
         i__1 = jw - 1;
         i__2 = *ldt + 1;
         i__3 = *ldh + 1;

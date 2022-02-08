@@ -120,8 +120,8 @@ void zhetri_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t
              dcomplex *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zhetri inputs: uplo %c, n %d, lda %d",*uplo, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -338,12 +338,12 @@ void zhetri_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t
                 i__1 = k + 1 + (k + 1) * a_dim1;
                 i__2 = k + 1 + (k + 1) * a_dim1;
                 i__3 = k - 1;
-                aocl_lapack_zdotc_f2c(&z__2, &i__3, &work[1], &c__1, &a[(k + 1) * a_dim1 + 1], &c__1);
-                d__1 = z__2.real;
-                z__1.real = a[i__2].real - d__1;
-                z__1.imag = a[i__2].imag; // , expr subst
-                a[i__1].real = z__1.real;
-                a[i__1].imag = z__1.imag; // , expr subst
+                zdotc_f2c_(&z__2, &i__3, &work[1], &c__1, &a[(k + 1) * a_dim1 + 1], &c__1);
+                d__1 = z__2.r;
+                z__1.r = a[i__2].r - d__1;
+                z__1.i = a[i__2].i; // , expr subst
+                a[i__1].r = z__1.r;
+                a[i__1].i = z__1.i; // , expr subst
             }
             kstep = 2;
         }

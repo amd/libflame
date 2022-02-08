@@ -252,6 +252,12 @@ void aocl_lapack_sgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     real anrm, bnrm, smin, smax;
     aocl_int64_t iascl, ibscl, ismin, ismax;
     real wsize;
+    extern /* Subroutine */
+    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), slaic1_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *), sgeqp3_( integer *, integer *, real *, integer *, integer *, real *, real *, integer *, integer *), slabad_(real *, real *);
+    extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
+    extern /* Subroutine */
+    int xerbla_(char *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
     aocl_int64_t lwkmin;
     real sminpr, smaxpr, smlnum;

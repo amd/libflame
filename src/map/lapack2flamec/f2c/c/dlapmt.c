@@ -104,8 +104,8 @@ void dlapmt_(logical *forwrd, aocl_int_t *m, aocl_int_t *n, doublereal *x, aocl_
              aocl_int_t *k)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlapmt inputs: m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS ", k %" FLA_IS "",*m, *n, *ldx, *k);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

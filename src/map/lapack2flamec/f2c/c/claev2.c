@@ -130,8 +130,7 @@ void claev2_(scomplex *a, scomplex *b, scomplex *c__, real *rt1, real *rt2, real
     real t;
     scomplex w;
     extern /* Subroutine */
-        void
-        slaev2_(real *, real *, real *, real *, real *, real *, real *);
+    int slaev2_(real *, real *, real *, real *, real *, real *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

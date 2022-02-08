@@ -178,8 +178,8 @@ void sormr3_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"sormr3 inputs: side %c, trans %c, m %d, n %d, k %d, l %d, lda %d, ldc %d",*side, *trans, *m, *n, *k, *l, *lda, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -188,7 +188,9 @@ void sormr3_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     /* Local variables */
     aocl_int64_t i__, i1, i2, i3, ja, ic, jc, mi, ni, nq;
     logical left;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int slarz_(char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(char *, integer *);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

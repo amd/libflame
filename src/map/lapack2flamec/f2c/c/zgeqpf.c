@@ -272,8 +272,7 @@ void aocl_lapack_zgeqpf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
         if(ma < *n)
         {
             i__1 = *n - ma;
-            aocl_lapack_zunm2r("Left", "Conjugate transpose", m, &i__1, &ma, &a[a_offset], lda,
-                               &tau[1], &a[(ma + 1) * a_dim1 + 1], lda, &work[1], info);
+            zunm2r_("Left", "Conjugate transpose", m, &i__1, &ma, &a[a_offset], lda, &tau[1], &a[(ma + 1) * a_dim1 + 1], lda, &work[1], info);
         }
     }
     if(itemp < mn)
@@ -354,7 +353,7 @@ void aocl_lapack_zgeqpf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
                         if(*m - i__ > 0)
                         {
                             i__3 = *m - i__;
-                            rwork[j] = aocl_blas_dznrm2(&i__3, &a[i__ + 1 + j * a_dim1], &c__1);
+                            rwork[j] = dznrm2_(&i__3, &a[i__ + 1 + j * a_dim1], &c__1);
                             rwork[*n + j] = rwork[j];
                         }
                         else

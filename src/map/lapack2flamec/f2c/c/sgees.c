@@ -359,10 +359,9 @@ void aocl_lapack_sgees(char *jobvs, char *sort, L_fps2 select, aocl_int64_t *n, 
         {
             maxwrk = (*n << 1) + *n * aocl_lapack_ilaenv(&c__1, "SGEHRD", " ", n, &c__1, n, &c__0);
             minwrk = *n * 3;
-            aocl_lapack_shseqr("S", jobvs, n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1],
-                               &vs[vs_offset], ldvs, &work[1], &c_n1, &ieval);
-            hswork = (integer)work[1];
-            if(!wantvs)
+            shseqr_("S", jobvs, n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1], &vs[vs_offset], ldvs, &work[1], &c_n1, &ieval);
+            hswork = work[1];
+            if (! wantvs)
             {
                 /* Computing MAX */
                 i__1 = maxwrk;

@@ -152,11 +152,11 @@ v(i+1:m) is stored on exit in A(i+1:m,i). */
 void cgeqpf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *jpvt, scomplex *tau, scomplex *work, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgeqpf inputs: m %lld, n %lld, lda %lld, jpvt %lld",*m, *n, *lda, *jpvt);
-#else 
+#else
     snprintf(buffer, 256,"cgeqpf inputs: m %d, n %d, lda %d, jpvt %d",*m, *n, *lda, *jpvt);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -174,7 +174,14 @@ void cgeqpf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_in
     scomplex aii;
     aocl_int64_t pvt;
     real temp, temp2, tol3z;
-    aocl_int64_t itemp;
+    extern /* Subroutine */
+    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), cswap_(integer *, complex *, integer *, complex *, integer *);
+    integer itemp;
+    extern /* Subroutine */
+    int cgeqr2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *);
+    extern real scnrm2_(integer *, complex *, integer *);
+    extern /* Subroutine */
+    int cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern real slamch_(char *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -262,8 +269,7 @@ void cgeqpf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_in
         if(ma < *n)
         {
             i__1 = *n - ma;
-            aocl_lapack_cunm2r("Left", "Conjugate transpose", m, &i__1, &ma, &a[a_offset], lda,
-                               &tau[1], &a[(ma + 1) * a_dim1 + 1], lda, &work[1], info);
+            cunm2r_("Left", "Conjugate transpose", m, &i__1, &ma, &a[a_offset], lda, &tau[1], &a[(ma + 1) * a_dim1 + 1], lda, &work[1], info);
         }
     }
     if(itemp < mn)
@@ -344,7 +350,7 @@ void cgeqpf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_in
                         if(*m - i__ > 0)
                         {
                             i__3 = *m - i__;
-                            rwork[j] = aocl_blas_scnrm2(&i__3, &a[i__ + 1 + j * a_dim1], &c__1);
+                            rwork[j] = scnrm2_(&i__3, &a[i__ + 1 + j * a_dim1], &c__1);
                             rwork[*n + j] = rwork[j];
                         }
                         else

@@ -196,8 +196,8 @@ k=N/2. IF TRANSR = 'T' then RFP is */
 void dpftri_(char *transr, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dpftri inputs: transr %c, uplo %c, n %" FLA_IS "",*transr, *uplo, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -299,10 +299,10 @@ void dpftri_(char *transr, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t 
                 /* SRPA for LOWER, NORMAL and N is odd ( a(0:n-1,0:N1-1) ) */
                 /* T1 -> a(0,0), T2 -> a(0,1), S -> a(N1,0) */
                 /* T1 -> a(0), T2 -> a(n), S -> a(N1) */
-                aocl_lapack_dlauum("L", &n1, a, n, info);
-                aocl_blas_dsyrk("L", "T", &n1, &n2, &c_b11, &a[n1], n, &c_b11, a, n);
-                aocl_blas_dtrmm("L", "U", "N", "N", &n2, &n1, &c_b11, &a[*n], n, &a[n1], n);
-                aocl_lapack_dlauum("U", &n2, &a[*n], n, info);
+                dlauum_("L", &n1, a, n, info);
+                dsyrk_("L", "T", &n1, &n2, &c_b11, &a[n1], n, &c_b11, a, n);
+                dtrmm_("L", "U", "N", "N", &n2, &n1, &c_b11, &a[*n], n, &a[n1], n);
+                dlauum_("U", &n2, &a[*n], n, info);
             }
             else
             {
@@ -331,10 +331,10 @@ void dpftri_(char *transr, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t 
             {
                 /* SRPA for UPPER, TRANSPOSE, and N is odd */
                 /* T1 -> a(0+N2*N2), T2 -> a(0+N1*N2), S -> a(0) */
-                aocl_lapack_dlauum("U", &n1, &a[n2 * n2], &n2, info);
-                aocl_blas_dsyrk("U", "T", &n1, &n2, &c_b11, a, &n2, &c_b11, &a[n2 * n2], &n2);
-                aocl_blas_dtrmm("L", "L", "T", "N", &n2, &n1, &c_b11, &a[n1 * n2], &n2, a, &n2);
-                aocl_lapack_dlauum("L", &n2, &a[n1 * n2], &n2, info);
+                dlauum_("U", &n1, &a[n2 * n2], &n2, info);
+                dsyrk_("U", "T", &n1, &n2, &c_b11, a, &n2, &c_b11, &a[n2 * n2], &n2);
+                dtrmm_("L", "L", "T", "N", &n2, &n1, &c_b11, &a[n1 * n2], &n2, a, &n2);
+                dlauum_("L", &n2, &a[n1 * n2], &n2, info);
             }
         }
     }
@@ -356,7 +356,7 @@ void dpftri_(char *transr, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t 
                 aocl_blas_dsyrk("L", "T", &k, &k, &c_b11, &a[k + 1], &i__1, &c_b11, &a[1], &i__2);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                aocl_blas_dtrmm("L", "U", "N", "N", &k, &k, &c_b11, a, &i__1, &a[k + 1], &i__2);
+                dtrmm_("L", "U", "N", "N", &k, &k, &c_b11, a, &i__1, &a[k + 1], &i__2);
                 i__1 = *n + 1;
                 aocl_lapack_dlauum("U", &k, a, &i__1, info);
             }

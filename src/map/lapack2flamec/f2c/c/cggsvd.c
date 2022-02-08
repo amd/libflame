@@ -341,11 +341,11 @@ LDQ >= 1 otherwise. */
 void cggsvd_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, aocl_int_t *k, aocl_int_t *l, scomplex *a, aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, real *alpha, real *beta, scomplex *u, aocl_int_t *ldu, scomplex *v, aocl_int_t *ldv, scomplex *q, aocl_int_t *ldq, scomplex *work, real *rwork, aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cggsvd inputs: jobu %c, jobv %c, jobq %c, m %lld, n %lld, p %lld, lda %lld, ldb %lld, ldu %lld, ldv %lld, ldq %lld",*jobu, *jobv, *jobq, *m, *n, *p, *lda, *ldb, *ldu, *ldv, *ldq);
-#else 
+#else
     snprintf(buffer, 256,"cggsvd inputs: jobu %c, jobv %c, jobq %c, m %d, n %d, p %d, lda %d, ldb %d, ldu %d, ldv %d, ldq %d",*jobu, *jobv, *jobq, *m, *n, *p, *lda, *ldb, *ldu, *ldv, *ldq);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -364,8 +364,12 @@ void cggsvd_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *n, a
     real anorm, bnorm;
     logical wantq;
     logical wantu, wantv;
-    extern real  slamch_(char *);
-    aocl_int64_t ncycle;
+    extern real clange_(char *, integer *, integer *, complex *, integer *, real *), slamch_(char *);
+    extern /* Subroutine */
+    int ctgsja_(char *, char *, char *, integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, real *, real *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+    integer ncycle;
+    extern /* Subroutine */
+    int xerbla_(char *, integer *), cggsvp_( char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, real *, complex *, complex *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

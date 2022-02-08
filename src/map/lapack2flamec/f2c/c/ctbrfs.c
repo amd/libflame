@@ -193,11 +193,11 @@ void ctbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
              aocl_int_t *ldx, real *ferr, real *berr, scomplex *work, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctbrfs inputs: uplo %c, trans %c, diag %c, n %lld, kd %lld, nrhs %lld, ldab %lld, ldb %lld, ldx %lld",*uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb, *ldx);
-#else 
+#else
     snprintf(buffer, 256,"ctbrfs inputs: uplo %c, trans %c, diag %c, n %d, kd %d, nrhs %d, ldab %d, ldb %d, ldx %d",*uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -218,6 +218,8 @@ void ctbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
     real safe1, safe2;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
+    extern /* Subroutine */
+    int ctbmv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern real slamch_(char *);
     real safmin;

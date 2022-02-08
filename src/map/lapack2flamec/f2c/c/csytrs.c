@@ -124,11 +124,11 @@ void csytrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_
              aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"csytrs inputs: uplo %c, n %lld, nrhs %lld, lda %lld, ipiv %lld, ldb %lld",*uplo, *n, *nrhs, *lda, *ipiv, *ldb);
-#else 
+#else
     snprintf(buffer, 256,"csytrs inputs: uplo %c, n %d, nrhs %d, lda %d, ipiv %d, ldb %d",*uplo, *n, *nrhs, *lda, *ipiv, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -139,12 +139,16 @@ void csytrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_
     /* Builtin functions */
     void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    aocl_int64_t j, k;
-    scomplex ak, bk;
-    aocl_int64_t kp;
-    scomplex akm1, bkm1, akm1k;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    scomplex denom;
+    integer j, k;
+    complex ak, bk;
+    integer kp;
+    complex akm1, bkm1, akm1k;
+    extern /* Subroutine */
+    int cscal_(integer *, complex *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    complex denom;
+    extern /* Subroutine */
+    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
     logical upper;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

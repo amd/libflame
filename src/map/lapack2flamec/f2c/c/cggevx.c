@@ -390,11 +390,11 @@ void cggevx_(char *balanc, char *jobvl, char *jobvr, char *sense, aocl_int_t *n,
              logical *bwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cggevx inputs: balanc %c, jobvl %c, jobvr %c, sense %c, n %lld, lda %lld, ldb %lld, ldvl %lld, ldvr %lld, lwork %lld",*balanc, *jobvl, *jobvr, *sense, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);
-#else 
+#else
     snprintf(buffer, 256,"cggevx inputs: balanc %c, jobvl %c, jobvr %c, sense %c, n %d, lda %d, ldb %d, ldvl %d, ldvr %d, lwork %d",*balanc, *jobvl, *jobvr, *sense, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -423,7 +423,12 @@ void cggevx_(char *balanc, char *jobvl, char *jobvr, char *sense, aocl_int_t *n,
     logical ldumma[1];
     char chtemp[1];
     real bignum;
-    aocl_int64_t ijobvl;
+    extern /* Subroutine */
+    int chgeqz_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *), ctgsna_(char *, char *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *, integer *);
+    integer ijobvl;
+    extern /* Subroutine */
+    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), xerbla_(char *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern real slamch_(char *);
     aocl_int64_t ijobvr;
     logical wantsb;
@@ -766,10 +771,8 @@ void cggevx_(char *balanc, char *jobvl, char *jobvr, char *sense, aocl_int_t *n,
         *(unsigned char *)chtemp = 'E';
     }
     i__1 = *lwork + 1 - iwrk;
-    aocl_lapack_chgeqz(chtemp, jobvl, jobvr, n, ilo, ihi, &a[a_offset], lda, &b[b_offset], ldb,
-                       &alpha[1], &beta[1], &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, &work[iwrk],
-                       &i__1, &rwork[1], &ierr);
-    if(ierr != 0)
+    chgeqz_(chtemp, jobvl, jobvr, n, ilo, ihi, &a[a_offset], lda, &b[b_offset], ldb, &alpha[1], &beta[1], &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, &work[iwrk], &i__1, &rwork[1], &ierr);
+    if (ierr != 0)
     {
         if(ierr > 0 && ierr <= *n)
         {

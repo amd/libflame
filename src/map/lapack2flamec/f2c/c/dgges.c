@@ -298,8 +298,8 @@ void dgges_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, aocl_int_t *n
             aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dgges inputs: jobvsl %c, jobvsr %c, sort %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", sdim %" FLA_IS ", ldvsl %" FLA_IS ", ldvsr %" FLA_IS ", lwork  %" FLA_IS "",*jobvsl, *jobvsr, *sort, *n, *lda, *ldb, *sdim, *ldvsl, *ldvsr, *lwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -598,10 +598,8 @@ void dgges_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, aocl_int_t *n
     /* (Workspace: need N) */
     iwrk = itau;
     i__1 = *lwork + 1 - iwrk;
-    aocl_lapack_dhgeqz("S", jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb,
-                       &alphar[1], &alphai[1], &beta[1], &vsl[vsl_offset], ldvsl, &vsr[vsr_offset],
-                       ldvsr, &work[iwrk], &i__1, &ierr);
-    if(ierr != 0)
+    dhgeqz_("S", jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[ b_offset], ldb, &alphar[1], &alphai[1], &beta[1], &vsl[vsl_offset], ldvsl, &vsr[vsr_offset], ldvsr, &work[iwrk], &i__1, &ierr);
+    if (ierr != 0)
     {
         if(ierr > 0 && ierr <= *n)
         {

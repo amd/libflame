@@ -145,11 +145,11 @@ void cgtcon_(char *norm, aocl_int_t *n, scomplex *dl, scomplex *d__, scomplex *d
              aocl_int_t *ipiv, real *anorm, real *rcond, scomplex *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgtcon inputs: norm %c, n %lld, ipiv %lld",*norm, *n, *ipiv);
-#else 
+#else
     snprintf(buffer, 256,"cgtcon inputs: norm %c, n %d, ipiv %d",*norm, *n, *ipiv);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -256,8 +256,7 @@ L20:
         if(kase == kase1)
         {
             /* Multiply by inv(U)*inv(L). */
-            aocl_lapack_cgttrs("No transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1],
-                               &work[1], n, info);
+            cgttrs_("No transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &work[1], n, info);
         }
         else
         {

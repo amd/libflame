@@ -349,8 +349,8 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS ", ldv2t %" FLA_IS ", lwork %" FLA_IS "",*jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t, *lwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -370,11 +370,14 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     aocl_int64_t imin, mini, imax, iter;
     doublereal unfl, temp;
     extern /* Subroutine */
-        void
-        dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
-    aocl_int64_t iu1cs, iu2cs, iu1sn, iu2sn;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t maxit;
+    int dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    integer iu1cs, iu2cs, iu1sn, iu2sn;
+    extern /* Subroutine */
+    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    integer maxit;
     doublereal dummy;
     aocl_int64_t iv1tcs, iv2tcs;
     logical wantu1, wantu2;

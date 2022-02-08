@@ -411,7 +411,7 @@ void aocl_lapack_zlaed8(aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *qsiz, dc
         for(j = 1; j <= i__1; ++j)
         {
             perm[j] = indxq[indx[j]];
-            aocl_blas_zcopy(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
+            zcopy_(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
             /* L50: */
         }
         aocl_lapack_zlacpy("A", qsiz, n, &q2[q2_dim1 + 1], ldq2, &q[q_dim1 + 1], ldq);

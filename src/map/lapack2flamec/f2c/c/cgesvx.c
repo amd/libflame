@@ -357,11 +357,11 @@ void cgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex 
              real *berr, scomplex *work, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgesvx inputs: fact %c, trans %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ldb %lld, ldx %lld",*fact, *trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
-#else 
+#else
     snprintf(buffer, 256,"cgesvx inputs: fact %c, trans %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d",*fact, *trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -378,6 +378,9 @@ void cgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real rcmin, rcmax, anorm;
     logical equil;
+    extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
+    extern /* Subroutine */
+    int claqge_(integer *, integer *, complex *, integer *, real *, real *, real *, real *, real *, char *), cgecon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *);
     real colcnd;
     extern real slamch_(char *);
     logical nofact;

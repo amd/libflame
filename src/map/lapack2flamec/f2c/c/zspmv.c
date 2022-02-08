@@ -151,8 +151,8 @@ void zspmv_(char *uplo, aocl_int_t *n, dcomplex *alpha, dcomplex *ap, dcomplex *
             aocl_int_t *incx, dcomplex *beta, dcomplex *y, aocl_int_t *incy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zspmv inputs: uplo %c, n %d, incx %d, incy %d",*uplo, *n, *incx, *incy);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

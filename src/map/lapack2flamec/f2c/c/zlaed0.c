@@ -423,7 +423,7 @@ L80:
     {
         j = iwork[indxq + i__];
         rwork[i__] = d__[j];
-        aocl_blas_zcopy(qsiz, &qstore[j * qstore_dim1 + 1], &c__1, &q[i__ * q_dim1 + 1], &c__1);
+        zcopy_(qsiz, &qstore[j * qstore_dim1 + 1], &c__1, &q[i__ * q_dim1 + 1], &c__1);
         /* L100: */
     }
     aocl_blas_dcopy(n, &rwork[1], &c__1, &d__[1], &c__1);

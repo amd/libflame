@@ -272,11 +272,11 @@ void clalsa_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
              real *s, real *rwork, aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clalsa inputs: icompq %lld, smlsiz %lld, n %lld, nrhs %lld, ldb %lld, ldbx %lld, ldu %lld, k %lld, ldgcol %lld",*icompq, *smlsiz, *n, *nrhs, *ldb, *ldbx, *ldu, *k, *ldgcol);
-#else 
+#else
     snprintf(buffer, 256,"clalsa inputs: icompq %d, smlsiz %d, n %d, nrhs %d, ldb %d, ldbx %d, ldu %d, k %d, ldgcol %d",*icompq, *smlsiz, *n, *nrhs, *ldb, *ldbx, *ldu, *k, *ldgcol);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -291,9 +291,12 @@ void clalsa_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
     double r_imag(scomplex *);
     integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     /* Local variables */
-    aocl_int64_t i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1,
-        jcol, nlvl, sqre, jrow, jimag, jreal, inode, ndiml,  givptr_sca, k_sca;
-    aocl_int64_t ndimr;
+    integer i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1, jcol, nlvl, sqre, jrow, jimag, jreal, inode, ndiml;
+    extern /* Subroutine */
+    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    integer ndimr;
+    extern /* Subroutine */
+    int ccopy_(integer *, complex *, integer *, complex *, integer *), clals0_(integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *), xerbla_(char *, integer *), slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer * );
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

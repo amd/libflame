@@ -293,16 +293,16 @@ void aocl_lapack_zhetd2(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
                 aocl_blas_zhemv(uplo, &i__, &taui, &a[a_offset], lda, &a[(i__ + 1) * a_dim1 + 1],
                                 &c__1, &c_b2, &tau[1], &c__1);
                 /* Compute w := x - 1/2 * tau * (x**H * v) * v */
-                z__3.real = -.5;
-                z__3.imag = -0.; // , expr subst
-                z__2.real = z__3.real * taui.real - z__3.imag * taui.imag;
-                z__2.imag = z__3.real * taui.imag + z__3.imag * taui.real; // , expr subst
-                aocl_lapack_zdotc_f2c(&z__4, &i__, &tau[1], &c__1, &a[(i__ + 1) * a_dim1 + 1], &c__1);
-                z__1.real = z__2.real * z__4.real - z__2.imag * z__4.imag;
-                z__1.imag = z__2.real * z__4.imag + z__2.imag * z__4.real; // , expr subst
-                alpha.real = z__1.real;
-                alpha.imag = z__1.imag; // , expr subst
-                aocl_blas_zaxpy(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1], &c__1);
+                z__3.r = -.5;
+                z__3.i = -0.; // , expr subst
+                z__2.r = z__3.r * taui.r - z__3.i * taui.i;
+                z__2.i = z__3.r * taui.i + z__3.i * taui.r; // , expr subst
+                zdotc_f2c_(&z__4, &i__, &tau[1], &c__1, &a[(i__ + 1) * a_dim1 + 1], &c__1);
+                z__1.r = z__2.r * z__4.r - z__2.i * z__4.i;
+                z__1.i = z__2.r * z__4.i + z__2.i * z__4.r; // , expr subst
+                alpha.r = z__1.r;
+                alpha.i = z__1.i; // , expr subst
+                zaxpy_(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[ 1], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**H - w * v**H */
                 z__1.real = -1.;

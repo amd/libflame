@@ -174,14 +174,18 @@ void aocl_lapack_zpteqr(char *compz, aocl_int64_t *n, doublereal *d__, doublerea
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    dcomplex c__[1] /* was [1][1] */
-        ;
-    aocl_int64_t i__;
-    dcomplex vt[1] /* was [1][1] */
-        ;
-    aocl_int64_t nru;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t icompz;
+    doublecomplex c__[1] /* was [1][1] */
+    ;
+    integer i__;
+    doublecomplex vt[1] /* was [1][1] */
+    ;
+    integer nru;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int xerbla_(char *, integer *);
+    integer icompz;
+    extern /* Subroutine */
+    int zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), dpttrf_(integer *, doublereal *, doublereal *, integer *), zbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

@@ -207,11 +207,11 @@ void cgees_(char *jobvs, char *sort, L_fp1 select, aocl_int_t *n, scomplex *a, a
             aocl_int_t *lwork, real *rwork, logical *bwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgees inputs: jobvs %c, sort %c, n %lld, lda %lld, ldvs %lld, lwork %lld",*jobvs, *sort, *n, *lda, *ldvs, *lwork);
-#else 
+#else
     snprintf(buffer, 256,"cgees inputs: jobvs %c, sort %c, n %d, lda %d, ldvs %d, lwork %d",*jobvs, *sort, *n, *lda, *ldvs, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

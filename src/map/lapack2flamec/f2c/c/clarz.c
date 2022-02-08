@@ -149,11 +149,11 @@ void clarz_(char *side, aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, scomplex *v
             scomplex *tau, scomplex *c__, aocl_int_t *ldc, scomplex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clarz inputs: side %c, m %lld, n %lld, l %lld, incv %lld, ldc %lld",*side, *m, *n, *l, *incv, *ldc);
-#else 
+#else
     snprintf(buffer, 256,"clarz inputs: side %c, m %d, n %d, l %d, incv %d, ldc %d",*side, *m, *n, *l, *incv, *ldc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

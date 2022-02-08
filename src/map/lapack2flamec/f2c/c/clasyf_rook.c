@@ -191,11 +191,11 @@ void clasyf_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, sco
                   aocl_int_t *lda, aocl_int_t *ipiv, scomplex *w, aocl_int_t *ldw, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clasyf_rook inputs: uplo %c, n %lld, nb %lld, lda %lld, ldw %lld",*uplo, *n, *nb, *lda, *ldw);
-#else 
+#else
     snprintf(buffer, 256,"clasyf_rook inputs: uplo %c, n %d, nb %d, lda %d, ldw %d",*uplo, *n, *nb, *lda, *ldw);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -214,7 +214,11 @@ void clasyf_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, sco
     logical done;
     aocl_int64_t imax, jmax;
     real alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    int cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     real sfmin;
     aocl_int64_t itemp;
     aocl_int64_t kstep;
@@ -719,10 +723,9 @@ void clasyf_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, sco
                 {
                     i__1 = *n - k + 1;
                     i__2 = k - 1;
-                    q__1.real = -1.f;
-                    q__1.imag = -0.f; // , expr subst
-                    aocl_blas_cgemv("No transpose", &i__1, &i__2, &q__1, &a[k + a_dim1], lda,
-                                    &w[imax + w_dim1], ldw, &c_b1, &w[k + (k + 1) * w_dim1], &c__1);
+                    q__1.r = -1.f;
+                    q__1.i = -0.f; // , expr subst
+                    cgemv_("No transpose", &i__1, &i__2, &q__1, &a[k + a_dim1], lda, &w[imax + w_dim1], ldw, &c_b1, &w[k + (k + 1) * w_dim1], &c__1);
                 }
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value. */
@@ -960,10 +963,9 @@ void clasyf_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, sco
             {
                 i__4 = j + jb - jj;
                 i__5 = k - 1;
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_cgemv("No transpose", &i__4, &i__5, &q__1, &a[jj + a_dim1], lda,
-                                &w[jj + w_dim1], ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
+                q__1.r = -1.f;
+                q__1.i = -0.f; // , expr subst
+                cgemv_("No transpose", &i__4, &i__5, &q__1, &a[jj + a_dim1], lda, &w[jj + w_dim1], ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
                 /* L100: */
             }
             /* Update the rectangular subdiagonal block */

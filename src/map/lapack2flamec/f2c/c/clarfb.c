@@ -203,11 +203,11 @@ void clarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
              aocl_int_t *ldc, scomplex *work, aocl_int_t *ldwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clarfb inputs: side %c, trans %c, direct %c, storev %c, m %lld, n %lld, k %lld, ldv %lld, ldt %lld, ldc %lld, ldwork %lld",*side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc, *ldwork);
-#else 
+#else
     snprintf(buffer, 256,"clarfb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, ldv %d, ldt %d, ldc %d, ldwork %d",*side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc, *ldwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -307,11 +307,9 @@ void clarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
                 {
                     /* C2 := C2 - V2 * W**H */
                     i__1 = *m - *k;
-                    q__1.real = -1.f;
-                    q__1.imag = -0.f; // , expr subst
-                    aocl_blas_cgemm("No transpose", "Conjugate transpose", &i__1, n, k, &q__1,
-                                    &v[*k + 1 + v_dim1], ldv, &work[work_offset], ldwork, &c_b1,
-                                    &c__[*k + 1 + c_dim1], ldc);
+                    q__1.r = -1.f;
+                    q__1.i = -0.f; // , expr subst
+                    cgemm_("No transpose", "Conjugate transpose", &i__1, n, k, &q__1, &v[*k + 1 + v_dim1], ldv, &work[ work_offset], ldwork, &c_b1, &c__[*k + 1 + c_dim1], ldc);
                 }
                 /* W := W * V1**H */
                 aocl_blas_ctrmm("Right", "Lower", "Conjugate transpose", "Unit", n, k, &c_b1,
@@ -554,9 +552,7 @@ void clarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
                 {
                     /* W := W + C2**H * V2**H */
                     i__1 = *m - *k;
-                    aocl_blas_cgemm("Conjugate transpose", "Conjugate transpose", n, k, &i__1,
-                                    &c_b1, &c__[*k + 1 + c_dim1], ldc, &v[(*k + 1) * v_dim1 + 1],
-                                    ldv, &c_b1, &work[work_offset], ldwork);
+                    cgemm_("Conjugate transpose", "Conjugate transpose", n, k, &i__1, &c_b1, &c__[*k + 1 + c_dim1], ldc, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b1, &work[work_offset], ldwork);
                 }
                 /* W := W * T**H or W * T */
                 aocl_blas_ctrmm("Right", "Upper", transt, "Non-unit", n, k, &c_b1, &t[t_offset],
@@ -616,9 +612,7 @@ void clarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
                 {
                     /* W := W + C2 * V2**H */
                     i__1 = *n - *k;
-                    aocl_blas_cgemm("No transpose", "Conjugate transpose", m, k, &i__1, &c_b1,
-                                    &c__[(*k + 1) * c_dim1 + 1], ldc, &v[(*k + 1) * v_dim1 + 1],
-                                    ldv, &c_b1, &work[work_offset], ldwork);
+                    cgemm_("No transpose", "Conjugate transpose", m, k, &i__1, &c_b1, &c__[(*k + 1) * c_dim1 + 1], ldc, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b1, &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**H */
                 aocl_blas_ctrmm("Right", "Upper", trans, "Non-unit", m, k, &c_b1, &t[t_offset], ldt,

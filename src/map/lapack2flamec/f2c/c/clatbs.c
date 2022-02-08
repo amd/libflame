@@ -255,11 +255,11 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
              scomplex *ab, aocl_int_t *ldab, scomplex *x, real *scale, real *cnorm, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clatbs inputs: uplo %c, trans %c, diag %c, normin %c, n %lld, kd %lld, ldab %lld",*uplo, *trans, *diag, *normin, *n, *kd, *ldab);
-#else 
+#else
     snprintf(buffer, 256,"clatbs inputs: uplo %c, trans %c, diag %c, normin %c, n %d, kd %d, ldab %d",*uplo, *trans, *diag, *normin, *n, *kd, *ldab);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -283,9 +283,13 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
     aocl_int64_t maind;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real tscal;
-    scomplex uscal;
-    aocl_int64_t jlast;
-    scomplex csumj;
+    complex uscal;
+    integer jlast;
+    extern /* Complex */
+    VOID cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+    complex csumj;
+    extern /* Subroutine */
+    int ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Complex */
         void
@@ -704,7 +708,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                     x[i__3].r = q__1.r;
                     x[i__3].i = q__1.i; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]) , f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                 }
                 else if(tjj > 0.f)
                 {
@@ -729,7 +733,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                     x[i__3].r = q__1.r;
                     x[i__3].i = q__1.i; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]) , f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                 }
                 else
                 {
@@ -781,12 +785,11 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                         i__4 = j - 1; // , expr subst
                         jlen = fla_min(i__3, i__4);
                         i__3 = j;
-                        q__2.real = -x[i__3].real;
-                        q__2.imag = -x[i__3].imag; // , expr subst
-                        q__1.real = tscal * q__2.real;
-                        q__1.imag = tscal * q__2.imag; // , expr subst
-                        aocl_blas_caxpy(&jlen, &q__1, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1,
-                                        &x[j - jlen], &c__1);
+                        q__2.r = -x[i__3].r;
+                        q__2.i = -x[i__3].i; // , expr subst
+                        q__1.r = tscal * q__2.r;
+                        q__1.i = tscal * q__2.i; // , expr subst
+                        caxpy_(&jlen, &q__1, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen], &c__1);
                         i__3 = j - 1;
                         i__ = aocl_blas_icamax(&i__3, &x[1], &c__1);
                         i__3 = i__;
@@ -881,11 +884,10 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
-                        jlen = fla_min(i__3, i__4);
-                        aocl_lapack_cdotu_f2c(&q__1, &jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1,
-                                   &x[j - jlen], &c__1);
-                        csumj.real = q__1.real;
-                        csumj.imag = q__1.imag; // , expr subst
+                        jlen = min(i__3,i__4);
+                        cdotu_f2c_(&q__1, &jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen], &c__1);
+                        csumj.r = q__1.r;
+                        csumj.i = q__1.i; // , expr subst
                     }
                     else
                     {
@@ -962,7 +964,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                     x[i__3].real = q__1.real;
                     x[i__3].imag = q__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]) , f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                     if (nounit)
                     {
                         /* Compute x(j) = x(j) / A(j,j), scaling if necessary. */
@@ -1117,11 +1119,10 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
-                        jlen = fla_min(i__3, i__4);
-                        aocl_lapack_cdotc_f2c(&q__1, &jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1,
-                                   &x[j - jlen], &c__1);
-                        csumj.real = q__1.real;
-                        csumj.imag = q__1.imag; // , expr subst
+                        jlen = min(i__3,i__4);
+                        cdotc_f2c_(&q__1, &jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen], &c__1);
+                        csumj.r = q__1.r;
+                        csumj.i = q__1.i; // , expr subst
                     }
                     else
                     {
@@ -1198,7 +1199,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                     x[i__3].real = q__1.real;
                     x[i__3].imag = q__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]) , f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                     if (nounit)
                     {
                         /* Compute x(j) = x(j) / A(j,j), scaling if necessary. */

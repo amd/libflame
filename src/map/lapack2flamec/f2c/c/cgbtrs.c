@@ -142,11 +142,11 @@ void cgbtrs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgbtrs inputs: trans %c, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ipiv %lld, ldb %lld",*trans, *n, *kl, *ku, *nrhs, *ldab, *ipiv, *ldb);
-#else 
+#else
     snprintf(buffer, 256,"cgbtrs inputs: trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ipiv %d, ldb %d",*trans, *n, *kl, *ku, *nrhs, *ldab, *ipiv, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -155,8 +155,10 @@ void cgbtrs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
     aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1, i__2, i__3;
     scomplex q__1;
     /* Local variables */
-    aocl_int64_t i__, j, l, kd, lm;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j, l, kd, lm;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *), ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *);
     logical lnoti;
     logical notran;
     /* -- LAPACK computational routine (version 3.4.0) -- */

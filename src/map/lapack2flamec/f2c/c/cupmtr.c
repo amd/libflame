@@ -155,8 +155,8 @@ void cupmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
              scomplex *tau, scomplex *c__, aocl_int_t *ldc, scomplex *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"cupmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *uplo, *trans, *m, *n, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -169,8 +169,10 @@ void cupmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
     aocl_int64_t i__, i1, i2, i3, ic, jc, ii, mi, ni, nq;
     scomplex aii;
     logical left;
-    scomplex taui;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    complex taui;
+    extern /* Subroutine */
+    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
+    extern logical lsame_(char *, char *);
     logical upper;
     logical notran, forwrd;
     /* -- LAPACK computational routine (version 3.4.0) -- */

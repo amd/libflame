@@ -136,8 +136,8 @@ void slacn2_(aocl_int_t *n, real *v, real *x, aocl_int_t *isgn, real *est, aocl_
              aocl_int_t *isave)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"slacn2 inputs: n %d, isgn %d, kase %d, isave %d",*n, *isgn, *kase, *isave);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

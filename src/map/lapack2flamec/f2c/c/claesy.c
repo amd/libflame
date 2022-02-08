@@ -124,7 +124,7 @@ void claesy_(scomplex *a, scomplex *b, scomplex *c__, scomplex *rt1, scomplex *r
     scomplex q__1, q__2, q__3, q__4, q__5, q__6, q__7;
     /* Builtin functions */
     double c_abs(complex *);
-    void pow_ci(complex *, complex *, integer *), c_sqrt(complex *, complex *) , c_div(complex *, complex *, complex *);
+    void pow_ci(complex *, complex *, integer *), c_sqrt(complex *, complex *), c_div(complex *, complex *, complex *);
     /* Local variables */
     scomplex s, t;
     real z__;

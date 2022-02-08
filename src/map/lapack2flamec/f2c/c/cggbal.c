@@ -184,11 +184,11 @@ void cggbal_(char *job, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cggbal inputs: job %c, n %lld, lda %lld, ldb %lld",*job, *n, *lda, *ldb);
-#else 
+#else
     snprintf(buffer, 256,"cggbal inputs: job %c, n %d, lda %d, ldb %d",*job, *n, *lda, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -512,8 +512,7 @@ L190:
     it = 1;
     /* Start generalized conjugate gradient iteration */
 L250:
-    gamma = aocl_blas_sdot(&nr, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + (*n << 2)], &c__1)
-            + aocl_blas_sdot(&nr, &work[*ilo + *n * 5], &c__1, &work[*ilo + *n * 5], &c__1);
+    gamma = sdot_(&nr, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + (*n << 2)], &c__1) + sdot_(&nr, &work[*ilo + *n * 5], &c__1, &work[*ilo + * n * 5], &c__1);
     ew = 0.f;
     ewc = 0.f;
     i__1 = *ihi;
@@ -635,7 +634,7 @@ L250:
         goto L350;
     }
     r__1 = -alpha;
-    aocl_blas_saxpy(&nr, &r__1, &work[*ilo + (*n << 1)], &c__1, &work[*ilo + (*n << 2)], &c__1);
+    saxpy_(&nr, &r__1, &work[*ilo + (*n << 1)], &c__1, &work[*ilo + (*n << 2)], &c__1);
     r__1 = -alpha;
     aocl_blas_saxpy(&nr, &r__1, &work[*ilo + *n * 3], &c__1, &work[*ilo + *n * 5], &c__1);
     pgamma = gamma;

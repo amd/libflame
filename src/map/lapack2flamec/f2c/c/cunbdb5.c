@@ -155,11 +155,11 @@ void cunbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
               aocl_int_t *ldq2, scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cunbdb5 inputs: m1 %lld, m2 %lld, n %lld, incx1 %lld, incx2 %lld, ldq1 %lld, ldq2 %lld",*m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2);
-#else 
+#else
     snprintf(buffer, 256,"cunbdb5 inputs: m1 %d, m2 %d, n %d, incx1 %d, incx2 %d, ldq1 %d, ldq2 %d",*m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -241,7 +241,7 @@ void cunbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
     {
         i__1 = -(*info);
         xerbla_("CUNBDB5", &i__1);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
     eps = slamch_("Precision");
@@ -253,7 +253,7 @@ void cunbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
     norm = scl * sqrt(ssq);
     if(norm > *n * eps)
     {
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
     /* Project each standard basis vector e_1,...,e_M1 in turn, stopping */
@@ -282,7 +282,7 @@ void cunbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
                             &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
         if(aocl_blas_scnrm2(m1, &x1[1], incx1) != 0.f || aocl_blas_scnrm2(m2, &x2[1], incx2) != 0.f)
         {
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return 0;
         }
     }
@@ -312,7 +312,7 @@ void cunbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
                             &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
         if(aocl_blas_scnrm2(m1, &x1[1], incx1) != 0.f || aocl_blas_scnrm2(m2, &x2[1], incx2) != 0.f)
         {
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return 0;
         }
     }

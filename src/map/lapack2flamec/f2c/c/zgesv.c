@@ -124,8 +124,8 @@ void zgesv_(aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_t *lda, aocl_
             dcomplex *b, aocl_int_t *ldb, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zgesv inputs: n %d, nrhs %d, lda %d, ldb %d",*n, *nrhs, *lda, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

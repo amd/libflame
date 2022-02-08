@@ -217,7 +217,12 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     real c1, c2, s1, s2, t1, t2;
     aocl_int64_t mn;
     real anrm, bnrm, smin, smax;
-    aocl_int64_t iascl, ibscl, ismin, ismax;
+    integer iascl, ibscl, ismin, ismax;
+    extern /* Subroutine */
+    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), slaic1_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *), sorm2r_( char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), slabad_(real *, real *);
+    extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
+    extern /* Subroutine */
+    int xerbla_(char *, integer *);
     real bignum;
     real sminpr, smaxpr, smlnum;
     /* -- LAPACK driver routine (version 3.4.0) -- */

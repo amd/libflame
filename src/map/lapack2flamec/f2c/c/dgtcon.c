@@ -151,8 +151,8 @@ void dgtcon_(char *norm, aocl_int_t *n, doublereal *dl, doublereal *d__, doubler
              doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dgtcon inputs: norm %c, n %" FLA_IS ", ipiv %" FLA_IS "",*norm, *n, *ipiv);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -256,8 +256,7 @@ L20:
         if(kase == kase1)
         {
             /* Multiply by inv(U)*inv(L). */
-            aocl_lapack_dgttrs("No transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1],
-                               &work[1], n, info);
+            dgttrs_("No transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &work[1], n, info);
         }
         else
         {

@@ -149,11 +149,11 @@ void claqp2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, scomplex *a, aocl
              aocl_int_t *jpvt, scomplex *tau, real *vn1, real *vn2, scomplex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"claqp2 inputs: m %lld, n %lld, offset %lld, lda %lld, jpvt %lld",*m, *n, *offset, *lda, *jpvt);
-#else 
+#else
     snprintf(buffer, 256,"claqp2 inputs: m %d, n %d, offset %d, lda %d, jpvt %d",*m, *n, *offset, *lda, *jpvt);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -171,8 +171,15 @@ void claqp2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, scomplex *a, aocl
     scomplex aii;
     aocl_int64_t pvt;
     real temp, temp2, tol3z;
-    aocl_int64_t offpi;
-    aocl_int64_t itemp;
+    extern /* Subroutine */
+    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
+    integer offpi;
+    extern /* Subroutine */
+    int cswap_(integer *, complex *, integer *, complex *, integer *);
+    integer itemp;
+    extern real scnrm2_(integer *, complex *, integer *);
+    extern /* Subroutine */
+    int clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

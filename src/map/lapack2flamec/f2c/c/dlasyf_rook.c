@@ -193,8 +193,8 @@ void dlasyf_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dou
                   aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlasyf_rook inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldw %" FLA_IS "",*uplo, *n, *nb, *lda, *ldw);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -210,7 +210,11 @@ void dlasyf_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dou
     logical done;
     aocl_int64_t imax, jmax;
     doublereal alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    int dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     doublereal dtemp, sfmin;
     aocl_int64_t itemp;
     aocl_int64_t kstep;
@@ -641,9 +645,7 @@ void dlasyf_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dou
                 {
                     i__1 = *n - k + 1;
                     i__2 = k - 1;
-                    aocl_blas_dgemv("No transpose", &i__1, &i__2, &c_b9, &a[k + a_dim1], lda,
-                                    &w[imax + w_dim1], ldw, &c_b10, &w[k + (k + 1) * w_dim1],
-                                    &c__1);
+                    dgemv_("No transpose", &i__1, &i__2, &c_b9, &a[k + a_dim1], lda, &w[imax + w_dim1], ldw, &c_b10, &w[k + (k + 1) * w_dim1], &c__1);
                 }
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value. */

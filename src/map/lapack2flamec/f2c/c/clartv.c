@@ -107,11 +107,11 @@ void clartv_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, scomplex *y, aocl_int
              scomplex *s, aocl_int_t *incc)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clartv inputs: n %lld, incx %lld, incy %lld, incc %lld",*n, *incx, *incy, *incc);
-#else 
+#else
     snprintf(buffer, 256,"clartv inputs: n %d, incx %d, incy %d, incc %d",*n, *incx, *incy, *incc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

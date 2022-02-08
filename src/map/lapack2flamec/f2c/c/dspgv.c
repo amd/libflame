@@ -169,16 +169,18 @@ void dspgv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, doublereal
             aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dspgv inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",*itype, *jobz, *uplo, *n, *ldz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1;
     /* Local variables */
-    aocl_int64_t j, neig;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer j, neig;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int dspev_(char *, char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     char trans[1];
     logical upper;
     logical wantz;

@@ -119,8 +119,8 @@ void zsptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *ap, aocl_int
              dcomplex *b, aocl_int_t *ldb, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"zsptrs inputs: uplo %c, n %d, nrhs %d, ldb %d, ipiv %d",*uplo, *n, *nrhs, *ldb, *ipiv);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -314,10 +314,9 @@ void zsptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *ap, aocl_int
             /* Multiply by inv(U**T(K)), where U(K) is the transformation */
             /* stored in column K of A. */
             i__1 = k - 1;
-            z__1.real = -1.;
-            z__1.imag = -0.; // , expr subst
-            aocl_blas_zgemv("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &ap[kc], &c__1,
-                            &c_b1, &b[k + b_dim1], ldb);
+            z__1.r = -1.;
+            z__1.i = -0.; // , expr subst
+            zgemv_("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &ap[kc], &c__1, &c_b1, &b[k + b_dim1], ldb);
             /* Interchange rows K and IPIV(K). */
             kp = ipiv[k];
             if(kp != k)
@@ -333,10 +332,9 @@ void zsptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *ap, aocl_int
             /* Multiply by inv(U**T(K+1)), where U(K+1) is the transformation */
             /* stored in columns K and K+1 of A. */
             i__1 = k - 1;
-            z__1.real = -1.;
-            z__1.imag = -0.; // , expr subst
-            aocl_blas_zgemv("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &ap[kc], &c__1,
-                            &c_b1, &b[k + b_dim1], ldb);
+            z__1.r = -1.;
+            z__1.i = -0.; // , expr subst
+            zgemv_("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &ap[kc], &c__1, &c_b1, &b[k + b_dim1], ldb);
             i__1 = k - 1;
             z__1.real = -1.;
             z__1.imag = -0.; // , expr subst

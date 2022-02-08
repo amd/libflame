@@ -320,8 +320,8 @@ void dlaebz_(aocl_int_t *ijob, aocl_int_t *nitmax, aocl_int_t *n, aocl_int_t *mm
              aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlaebz inputs: ijob %" FLA_IS ", nitmax %" FLA_IS ", n %" FLA_IS ", mmax %" FLA_IS ", minp %" FLA_IS ", nbmin %" FLA_IS ", nval %" FLA_IS ", nab %" FLA_IS "",*ijob, *nitmax, *n, *mmax, *minp, *nbmin, *nval, *nab);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

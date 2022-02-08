@@ -402,6 +402,8 @@ void aocl_lapack_zggesx(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, c
     logical cursl, ilvsl, ilvsr;
     aocl_int64_t irwrk, irows;
     extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    int zggbak_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublecomplex *, integer *, integer *), zggbal_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     logical ilascl, ilbscl;
     doublereal bignum;
     aocl_int64_t ijobvl, iright;
@@ -414,6 +416,8 @@ void aocl_lapack_zggesx(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, c
     logical wantsn;
     aocl_int64_t minwrk;
     doublereal smlnum;
+    extern /* Subroutine */
+    int zhgeqz_(char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
     logical wantst, lquery, wantsv;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

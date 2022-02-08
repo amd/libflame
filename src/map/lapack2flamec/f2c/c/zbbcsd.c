@@ -4,7 +4,11 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {-1., 0.};
+static doublecomplex c_b1 =
+{
+    -1.,0.
+    }
+;
 static doublereal c_b11 = -.125;
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZBBCSD */
@@ -881,13 +885,11 @@ void aocl_lapack_zbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
             }
             else if(mu <= nu)
             {
-                dlartgs_(&b11d[i__], &b11e[i__], &mu, &rwork[iv1tcs + i__ - 1],
-                         &rwork[iv1tsn + i__ - 1]);
+                dlartgs_(&b11d[i__], &b11e[i__], &mu, &rwork[iv1tcs + i__ - 1], &rwork[iv1tsn + i__ - 1]);
             }
             else
             {
-                dlartgs_(&b21d[i__], &b21e[i__], &nu, &rwork[iv1tcs + i__ - 1],
-                         &rwork[iv1tsn + i__ - 1]);
+                dlartgs_(&b21d[i__], &b21e[i__], &nu, &rwork[iv1tcs + i__ - 1], &rwork[iv1tsn + i__ - 1]);
             }
             rwork[iv1tcs + i__ - 1] = -rwork[iv1tcs + i__ - 1];
             rwork[iv1tsn + i__ - 1] = -rwork[iv1tsn + i__ - 1];

@@ -425,8 +425,8 @@ void dla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
                           integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dla_gbrfsx_extended inputs: prec_type__ %" FLA_IS ", trans_type__ %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ipiv %" FLA_IS ", ldb %" FLA_IS ", ldy %" FLA_IS ", n_norms__ %" FLA_IS ", ithresh %" FLA_IS "",*prec_type__, *trans_type__, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ipiv, *ldb, *ldy, *n_norms__, *ithresh);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -453,14 +453,10 @@ void dla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
     integer cnt;
     doublereal dyk, eps, incr_thresh__, dx_x__, dz_z__;
     extern /* Subroutine */
-        void
-        dla_lin_berr_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *);
+    int dla_lin_berr_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *);
     doublereal ymin;
     extern /* Subroutine */
-        int
-        blas_dgbmv_x_(integer *, integer *, integer *, integer *, integer *, doublereal *,
-                      doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                      integer *, integer *);
+    int blas_dgbmv_x_(integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
     integer y_prec_state__;
     extern /* Subroutine */
         int

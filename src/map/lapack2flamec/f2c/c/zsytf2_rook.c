@@ -702,7 +702,7 @@ void aocl_lapack_zsytf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    itemp = imax + aocl_blas_izamax(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
+                    itemp = imax + izamax_(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     i__1 = itemp + imax * a_dim1;
                     dtemp = (d__1 = a[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[ itemp + imax * a_dim1]), f2c_dabs(d__2));
                     if (dtemp > rowmax)

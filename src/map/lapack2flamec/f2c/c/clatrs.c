@@ -246,11 +246,11 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
              aocl_int_t *lda, scomplex *x, real *scale, real *cnorm, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clatrs inputs: uplo %c, trans %c, diag %c, normin %c, n %lld, lda %lld",*uplo, *trans, *diag, *normin, *n, *lda);
-#else 
+#else
     snprintf(buffer, 256,"clatrs inputs: uplo %c, trans %c, diag %c, normin %c, n %d, lda %d",*uplo, *trans, *diag, *normin, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -774,7 +774,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
                     x[i__3].r = q__1.r;
                     x[i__3].i = q__1.i; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]) , f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                 }
                 else if(tjj > 0.f)
                 {
@@ -799,7 +799,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
                     x[i__3].r = q__1.r;
                     x[i__3].i = q__1.i; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]) , f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                 }
                 else
                 {
@@ -1005,7 +1005,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
                     x[i__3].real = q__1.real;
                     x[i__3].imag = q__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]) , f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                     if (nounit)
                     {
                         i__3 = j + j * a_dim1;
@@ -1223,7 +1223,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
                     x[i__3].real = q__1.real;
                     x[i__3].imag = q__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]) , f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                     if (nounit)
                     {
                         r_cnjg(&q__2, &a[j + j * a_dim1]);

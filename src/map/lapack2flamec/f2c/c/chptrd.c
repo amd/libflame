@@ -158,11 +158,11 @@ void chptrd_(char *uplo, aocl_int_t *n, scomplex *ap, real *d__, real *e, scompl
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"chptrd inputs: uplo %c, n %lld",*uplo, *n);
-#else 
+#else
     snprintf(buffer, 256,"chptrd inputs: uplo %c, n %d",*uplo, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -172,10 +172,16 @@ void chptrd_(char *uplo, aocl_int_t *n, scomplex *ap, real *d__, real *e, scompl
     real r__1;
     scomplex q__1, q__2, q__3, q__4;
     /* Local variables */
-    aocl_int64_t i__, i1, ii, i1i1;
-    scomplex taui;
-    scomplex alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, i1, ii, i1i1;
+    complex taui;
+    extern /* Subroutine */
+    int chpr2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *);
+    complex alpha;
+    extern /* Complex */
+    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int chpmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

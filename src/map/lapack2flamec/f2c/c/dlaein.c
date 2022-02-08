@@ -182,8 +182,8 @@ void dlaein_(logical *rightv, logical *noinit, aocl_int_t *n, doublereal *h__, a
              doublereal *bignum, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlaein inputs: n %" FLA_IS ", ldh %" FLA_IS ", ldb %" FLA_IS "",*n, *ldh, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -204,6 +204,9 @@ void dlaein_(logical *rightv, logical *noinit, aocl_int_t *n, doublereal *h__, a
     doublereal vcrit, rootn, vnorm;
     extern doublereal dlapy2_(doublereal *, doublereal *);
     doublereal absbii, absbjj;
+    extern integer idamax_(integer *, doublereal *, integer *);
+    extern /* Subroutine */
+    int dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlatrs_( char *, char *, char *, char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     char normin[1];
     doublereal nrmsml, growto;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -705,7 +708,7 @@ L120: /* Normalize eigenvector. */
         {
             /* Computing MAX */
             d__3 = vnorm;
-            d__4 = (d__1 = vr[i__], f2c_dabs(d__1)) + (d__2 = vi[i__] , f2c_dabs(d__2)); // , expr subst
+            d__4 = (d__1 = vr[i__], f2c_dabs(d__1)) + (d__2 = vi[i__], f2c_dabs(d__2));  // , expr subst
             vnorm = max(d__3,d__4);
             /* L290: */
         }

@@ -932,10 +932,8 @@ void stgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *s, 
                 /* T */
                 /* Solve ( a A - b B ) y = SUM(,) */
                 /* with scaling and perturbation of the denominator */
-                aocl_lapack_slaln2(&c_true, &na, &nw, &dmin__, &acoef, &s[j + j * s_dim1], lds,
-                                   bdiag, &bdiag[1], sum, &c__2, &bcoefr, &bcoefi,
-                                   &work[(*n << 1) + j], n, &scale, &temp, &iinfo);
-                if(scale < 1.f)
+                slaln2_(&c_true, &na, &nw, &dmin__, &acoef, &s[j + j * s_dim1], lds, bdiag, &bdiag[1], sum, &c__2, &bcoefr, &bcoefi, &work[(*n << 1) + j], n, &scale, &temp, &iinfo);
+                if (scale < 1.f)
                 {
                     i__3 = nw - 1;
                     for(jw = 0; jw <= i__3; ++jw)

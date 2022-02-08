@@ -581,7 +581,7 @@ L110: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
             jp = indxp[j];
             dlambda[j] = d__[jp];
             perm[j] = indxq[indx[jp]];
-            aocl_blas_scopy(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
+            scopy_(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
             /* L130: */
         }
     }

@@ -114,11 +114,11 @@ static aocl_int64_t c__1 = 1;
 void clacon_(aocl_int_t *n, scomplex *v, scomplex *x, real *est, aocl_int_t *kase)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clacon inputs: n %lld, kase %lld",*n, *kase);
-#else 
+#else
     snprintf(buffer, 256,"clacon inputs: n %d, kase %d",*n, *kase);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

@@ -110,8 +110,8 @@ void dlar2v_(aocl_int_t *n, doublereal *x, doublereal *y, doublereal *z__, aocl_
              doublereal *c__, doublereal *s, aocl_int_t *incc)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
     snprintf(buffer, 256,"dlar2v inputs: n %" FLA_IS ", incx %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

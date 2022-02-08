@@ -359,10 +359,9 @@ void aocl_lapack_zgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, dcomp
         aocl_blas_zcopy(p, &d__[1], &c__1, &x[*n - *p + 1], &c__1);
         /* Update c1 */
         i__1 = *n - *p;
-        z__1.real = -1.;
-        z__1.imag = -0.; // , expr subst
-        aocl_blas_zgemv("No transpose", &i__1, p, &z__1, &a[(*n - *p + 1) * a_dim1 + 1], lda,
-                        &d__[1], &c__1, &c_b1, &c__[1], &c__1);
+        z__1.r = -1.;
+        z__1.i = -0.; // , expr subst
+        zgemv_("No transpose", &i__1, p, &z__1, &a[(*n - *p + 1) * a_dim1 + 1], lda, &d__[1], &c__1, &c_b1, &c__[1], &c__1);
     }
     /* Solve R11*x1 = c1 for x1 */
     if(*n > *p)

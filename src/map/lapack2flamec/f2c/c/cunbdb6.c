@@ -4,10 +4,22 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {-1.f, 0.f};
-static scomplex c_b2 = {1.f, 0.f};
-static scomplex c_b3 = {0.f, 0.f};
-static aocl_int64_t c__1 = 1;
+static complex c_b1 =
+{
+    -1.f,0.f
+    }
+;
+static complex c_b2 =
+{
+    1.f,0.f
+}
+;
+static complex c_b3 =
+{
+    0.f,0.f
+}
+;
+static integer c__1 = 1;
 /* > \brief \b CUNBDB6 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -163,11 +175,11 @@ void cunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
               aocl_int_t *ldq2, scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cunbdb6 inputs: m1 %lld, m2 %lld, n %lld, incx1 %lld, incx2 %lld, ldq1 %lld, ldq2 %lld, lwork %lld",*m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2, *lwork);
-#else 
+#else
     snprintf(buffer, 256,"cunbdb6 inputs: m1 %d, m2 %d, n %d, incx1 %d, incx2 %d, ldq1 %d, ldq2 %d, lwork %d",*m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
@@ -177,11 +189,12 @@ void cunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    real norm_new__;
-    aocl_int64_t i__, ix;
-    real scl, eps, ssq, norm;
-    extern real slamch_(char *);
-    /* -- LAPACK computational routine -- */
+    integer i__;
+    real scl1, scl2, ssq1, ssq2;
+    extern /* Subroutine */
+    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), xerbla_(char *, integer *), classq_( integer *, complex *, integer *, real *, real *);
+    real normsq1, normsq2;
+    /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */

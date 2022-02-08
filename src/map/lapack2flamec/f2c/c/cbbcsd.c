@@ -4,7 +4,11 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {-1.f, 0.f};
+static complex c_b1 =
+{
+    -1.f,0.f
+    }
+;
 static doublereal c_b11 = -.125;
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CBBCSD */
@@ -347,12 +351,12 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
              real *b21e, real *b22d, real *b22e, real *rwork, aocl_int_t *lrwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-#if FLA_ENABLE_ILP64 
-   snprintf(buffer, 256,"cbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %lld, p %lld, q %lld, ldu1 %lld, ldu2 %lld, ldv1t %lld, ldv2t %lld, lrwork %lld",*jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t, *lrwork);
-#else 
-   snprintf(buffer, 256,"cbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %d, p %d, q %d, ldu1 %d, ldu2 %d, ldv1t %d, ldv2t %d, lrwork %d",*jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t, *lrwork);
+#if AOCL_DTL_LOG_ENABLE
+    char buffer[256];
+#if FLA_ENABLE_ILP64
+    snprintf(buffer, 256,"cbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %lld, p %lld, q %lld, ldu1 %lld, ldu2 %lld, ldv1t %lld, ldv2t %lld, lrwork %lld",*jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t, *lrwork);
+#else
+    snprintf(buffer, 256,"cbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %d, p %d, q %d, ldu1 %d, ldu2 %d, ldv1t %d, ldv2t %d, lrwork %d",*jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t, *lrwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -439,7 +443,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     --b22d;
     --b22e;
     --rwork;
-    
+
     /* Function Body */
     *info = 0;
     lquery = *lrwork == -1;
@@ -485,7 +489,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     {
         lrworkmin = 1;
         rwork[1] = (real) lrworkmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
     /* Compute workspace */
@@ -511,12 +515,12 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     {
         i__1 = -(*info);
         xerbla_("CBBCSD", &i__1);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
     else if(lquery)
     {
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
     /* Get machine constants */
@@ -618,7 +622,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
                     ++(*info);
                 }
             }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return 0;
         }
         iter = iter + imax - imin;
@@ -856,13 +860,11 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             }
             else if(mu <= nu)
             {
-                slartgs_(&b11d[i__], &b11e[i__], &mu, &rwork[iv1tcs + i__ - 1],
-                         &rwork[iv1tsn + i__ - 1]);
+                slartgs_(&b11d[i__], &b11e[i__], &mu, &rwork[iv1tcs + i__ - 1], &rwork[iv1tsn + i__ - 1]);
             }
             else
             {
-                slartgs_(&b21d[i__], &b21e[i__], &nu, &rwork[iv1tcs + i__ - 1],
-                         &rwork[iv1tsn + i__ - 1]);
+                slartgs_(&b21d[i__], &b21e[i__], &nu, &rwork[iv1tcs + i__ - 1], &rwork[iv1tsn + i__ - 1]);
             }
             rwork[iv1tcs + i__ - 1] = -rwork[iv1tcs + i__ - 1];
             rwork[iv1tsn + i__ - 1] = -rwork[iv1tsn + i__ - 1];

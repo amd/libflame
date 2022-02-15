@@ -1,402 +1,413 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+	Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_lapack.h"
-#if ENABLE_CPP_TEST
-#include <invoke_common.hh>
-#endif
-#include <invoke_lapacke.h>
+#include "test_libflame.h"
+#include "test_common.h"
+#include "test_prototype.h"
 
-extern double perf;
-extern double time_min;
-integer row_major_gerqf_lda;
+#define NUM_PARAM_COMBOS 1
+#define NUM_MATRIX_ARGS  1
+
+
+// Static variables.
+static char* op_str = "RQ factorization";
+static char* front_str = "GERQF";
+static char* lapack_str = "LAPACK";
+static char* pc_str[NUM_PARAM_COMBOS] = { "" };
+static test_thresh_t thresh = { 50, 20,   // warn, pass for s
+								50, 20,   // warn, pass for d
+								50, 20,   // warn, pass for c
+								50, 20 }; // warn, pass for z
 
 // Local prototypes.
-void fla_test_gerqf_experiment(char *tst_api, test_params_t *params, integer datatype,
-                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                               integer einfo);
-void prepare_gerqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype,
-                       integer *info, integer interfacetype, int matrix_layout,
-                       test_params_t *params);
-void invoke_gerqf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
-                  void *work, integer *lwork, integer *info);
-double prepare_lapacke_gerqf_run(integer datatype, int matrix_layout, integer m_A, integer n_A,
-                                 void *A, integer lda, void *T, integer *info);
+void fla_test_gerqf_experiment(test_params_t params, integer  datatype, integer  p_cur, integer pci,
+									integer n_repeats, double* perf, double* t, double* residual);
+void GERQF_run(integer m_A, integer n_A, void *A, void *T, integer datatype, integer n_repeats, double* time_min_);
+inline void GERQF_API(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau, void *work, integer *lwork, integer *info);
+void GERQF_solve(integer m_A, integer n_A, void *A, void *A_test, void *T_test, integer datatype, double* residual);
 
-void fla_test_gerqf(integer argc, char **argv, test_params_t *params)
+
+void fla_test_gerqf(test_params_t params)
 {
-    char *op_str = "RQ factorization";
-    char *front_str = "GERQF";
-    integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
-    params->imatrix_char = '\0';
-    if(argc == 1)
-    {
-        g_lwork = -1;
-        g_config_data = 1;
-        fla_test_output_info("--- %s ---\n", op_str);
-        fla_test_output_info("\n");
-        fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_gerqf_experiment);
-        tests_not_run = 0;
-    }
-    if(argc == 9)
-    {
-        FLA_TEST_PARSE_LAST_ARG(argv[8]);
-    }
-    if(argc >= 8 && argc <= 9)
-    {
-        integer i, num_types, M, N;
-        integer datatype, n_repeats;
-        char stype, type_flag[4] = {0};
-        char *endptr;
 
-        /* Parse the arguments */
-        num_types = strlen(argv[2]);
-        M = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
-        N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
-        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
-        {
-            row_major_gerqf_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-            params->lin_solver_paramslist[0].lda = N;
-        }
-        else
-        {
-            params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-        }
-        g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+	fla_test_output_info("--- %s ---\n", op_str);
+	fla_test_output_info("\n");
+	fla_test_op_driver(front_str, lapack_str, NUM_PARAM_COMBOS, pc_str, NUM_MATRIX_ARGS,
+							params, thresh, fla_test_gerqf_experiment);
 
-        n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        params->n_repeats = n_repeats;
-
-        if(n_repeats > 0)
-        {
-            params->lin_solver_paramslist[0].solver_threshold = CLI_NORM_THRESH;
-
-            for(i = 0; i < num_types; i++)
-            {
-                stype = argv[2][i];
-                datatype = get_datatype(stype);
-
-                /* Check for invalide dataype */
-                if(datatype == INVALID_TYPE)
-                {
-                    invalid_dtype = 1;
-                    continue;
-                }
-
-                /* Check for duplicate datatype presence */
-                if(type_flag[datatype - FLOAT] == 1)
-                    continue;
-                type_flag[datatype - FLOAT] = 1;
-
-                /* Call the test code */
-                fla_test_gerqf_experiment(front_str, params, datatype, M, N, 0, n_repeats, einfo);
-                tests_not_run = 0;
-            }
-        }
-    }
-
-    /* Print error messages */
-    if(tests_not_run)
-    {
-        printf("\nIllegal arguments for gerqf\n");
-        printf("./<EXE> gerqf <precisions - sdcz> <M> <N> <LDA> <LWORK> <repeats>\n");
-    }
-    if(invalid_dtype)
-    {
-        printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
-    }
-    if(g_ext_fptr != NULL)
-    {
-        fclose(g_ext_fptr);
-        g_ext_fptr = NULL;
-    }
-
-    return;
 }
 
-void fla_test_gerqf_experiment(char *tst_api, test_params_t *params, integer datatype,
-                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                               integer einfo)
+
+void fla_test_gerqf_experiment(test_params_t params,
+	integer  datatype,
+	integer  p_cur,
+	integer pci,
+	integer n_repeats,
+	double* perf,
+	double* t,
+	double* residual)
 {
-    integer m, n, lda;
-    integer info = 0;
-    void *A, *A_test, *T;
-    double residual, err_thresh;
-    void *filename = NULL;
+	integer m, n;
+	void *A, *A_test, *T;
+	double time_min = 1e9;
 
-    integer interfacetype = params->interfacetype;
-    int layout = params->matrix_major;
 
-    // Get input matrix dimensions.
-    m = p_cur;
-    n = q_cur;
-    lda = params->lin_solver_paramslist[pci].lda;
-    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
+	// Determine the dimensions.
+	m = p_cur;
+	n = p_cur;
 
-    /* If leading dimensions = -1, set them to default value
-       when inputs are from config files */
-    if(g_config_data)
-    {
-        if(lda == -1)
-        {
-            lda = fla_max(1, m);
-        }
-    }
+	// Create the matrices for the current operation.
+	create_matrix(datatype, m, n, &A);
+	create_matrix(datatype, m, n, &A_test);
+	create_matrix(datatype, min(m, n), 1, &T);
 
-    // Create input matrix parameters
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
-    create_vector(datatype, &T, fla_min(m, n));
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
+	// Initialize the test matrices.
+	rand_matrix(datatype, m, n, A);
 
-    /* This code path is run to generate the matrix to be passed to the API. This is the default
-     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
-     * Test cases. For verification runs the input is loaded from the input generated during Ground
-     * truth run */
-    if(!FLA_BRT_VERIFICATION_RUN)
-    {
-        /* initialize input matrix */
-        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        {
-            scale_matrix_underflow_overflow_geqrf(datatype, m, n, A, lda, params->imatrix_char);
-        }
-    }
-    /* This macro is used in the BRT test cases for the following purposes:
-     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
-     * reference
-     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
-     * passed as input to the API
-     * */
-    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, A, lda, "dddd", m, n, lda, g_lwork)
+	// Save the original matrix.
+	copy_matrix(datatype, m, n, A, A_test);
 
-    // Make a copy of input matrix A. This is required to validate the API functionality.
-    copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
+	// call to API
+	GERQF_run(m, n, A_test, T, datatype, n_repeats, &time_min);
 
-    prepare_gerqf_run(m, n, A_test, lda, T, datatype, &info, interfacetype, layout, params);
+	// execution time
+	*t = time_min;
 
-    /* performance computation */
-    if(m >= n)
-        perf = (double)((2.0 * m * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min
-               / FLOPS_PER_UNIT_PERF;
-    else
-        perf = (double)((2.0 * n * m * m) - ((2.0 / 3.0) * m * m * m)) / time_min
-               / FLOPS_PER_UNIT_PERF;
-    if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        perf *= 4.0;
+	// TODO
+	// performance computation will be added later
+	*perf = 0;
 
-    /* output validation */
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    /* Bit reproducibility tests path
-     * This path is taken when BRT is enabled.
-     *     - In the Ground truth runs (BRT_char => G, F), the output is stored in a file and the
-     * default validation function is called
-     *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
-     * compared with the generated output
-     *  */
-    IF_FLA_BRT_VALIDATION(
-        m, n,
-        store_outputs_base(filename, params, 1, 1, datatype, m, n, A_test, lda, datatype,
-                           fla_min(m, n), T),
-        validate_gerqf(tst_api, m, n, A, A_test, lda, T, datatype, residual, params),
-        check_reproducibility_base(filename, params, 1, 1, datatype, m, n, A_test, lda, datatype,
-                                   fla_min(m, n), T))
-    else if(FLA_SKIP_VALIDATION_MODE)
-    {
-        /* Skip validation for performance modes */
-        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
-    }
-    else if(!FLA_EXTREME_CASE_TEST)
-    {
-        validate_gerqf(tst_api, m, n, A, A_test, lda, T, datatype, residual, params);
-    }
-    /* check for output matrix when inputs as extreme values */
-    else
-    {
-        if(!check_extreme_value(datatype, m, n, A_test, lda, params->imatrix_char))
-        {
-            residual = DBL_MAX;
-        }
-        else
-        {
-            residual = err_thresh;
-        }
-        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
-    }
+	// output validation
+	GERQF_solve(m, n, A, A_test, T, datatype, residual);
 
-    // Free up the buffers
-free_buffers:
-    FLA_FREE_FILENAME(filename)
-    free_matrix(A);
-    free_matrix(A_test);
-    free_vector(T);
+	free_matrix(A);
+	free_matrix(A_test);
+	free_matrix(T);
 }
 
-void prepare_gerqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype,
-                       integer *info, integer interfacetype, int layout, test_params_t *params)
+
+void GERQF_run(integer m_A,
+	integer n_A,
+	void *A,
+	void *T,
+	integer datatype,
+	integer n_repeats,
+	double* time_min_)
 {
-    integer min_A;
-    void *A_save, *T_test, *work;
-    integer lwork = -1;
-    double exe_time;
+	integer cs_A;
+	unsigned int i;
+	void *A_save, *T_test, *work;
+	integer lwork;
+	integer info = 0;
+	double time_min = 1e9, exe_time;
 
-    min_A = fla_min(m_A, n_A);
+	// Get column stride
+	cs_A = m_A;
 
-    /* Make a copy of the input matrix A. Same input values will be passed in
-       each itertaion.*/
-    create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &A_save, lda);
-    copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
+	// Save the original matrix.
+	create_matrix(datatype, m_A, n_A, &A_save);
+	copy_matrix(datatype, m_A, n_A, A, A_save);
 
-    /* Make a workspace query the first time. This will provide us with
-       and ideal workspace size based on internal block size.
-       NOTE: LAPACKE interface handles workspace query internally */
-    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST)
-       && (g_lwork <= 0))
-    {
-        lwork = -1;
-        create_vector(datatype, &work, 1);
+	// Make a workspace query the first time through. This will provide us with
+	// and ideal workspace size based on an internal block size.
+	lwork = -1;
+	create_matrix(datatype, 1, 1, &work);
+	create_matrix(datatype, min(m_A, n_A), 1, &T_test);
 
-        /* call to gerqf API */
-#if ENABLE_CPP_TEST
-        if(interfacetype == LAPACK_CPP_TEST)
-        {
-            invoke_cpp_gerqf(datatype, &m_A, &n_A, NULL, &lda, NULL, work, &lwork, info);
-        }
-        else
-#endif
-        {
-            invoke_gerqf(datatype, &m_A, &n_A, NULL, &lda, NULL, work, &lwork, info);
-        }
-        if(*info == 0)
-        {
-            /* Get work size */
-            lwork = get_work_value(datatype, work);
-        }
+	// call to API
+	GERQF_API(datatype, &m_A, &n_A, A, &cs_A, T_test, work, &lwork, &info);
 
-        /* Output buffers will be freshly allocated for each iterations, free up
-       the current output buffers.*/
-        free_vector(work);
-    }
-    else
-    {
-        lwork = g_lwork;
-    }
+	lwork = get_work_value( datatype, work );
 
-    *info = 0;
-    FLA_EXEC_LOOP_BEGIN
-    {
-        /* Restore input matrix A value and allocate memory to output buffers
-           for each iteration*/
-        copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
+	for (i = 0; i < n_repeats; ++i)
+	{
+		// reallocate memory
+		free(T_test);
+		free(work);
+		create_matrix(datatype, min(m_A, n_A), 1, &T_test);
+		create_matrix(datatype, lwork, 1, &work);
 
-        // T_test vector will hold the scalar factors of the elementary reflectors.
-        create_vector(datatype, &T_test, min_A);
+		// Copy original input data
+		copy_matrix(datatype, m_A, n_A, A_save, A);
 
-        // create work buffer
-        create_vector(datatype, &work, lwork);
+		fla_start_timer();
 
-        /* Check if LAPACKE interface is enabled */
-        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
-        {
-            exe_time = prepare_lapacke_gerqf_run(datatype, layout, m_A, n_A, A, lda, T_test, info);
-        }
-#if ENABLE_CPP_TEST
-        else if(interfacetype == LAPACK_CPP_TEST)
-        {
-            exe_time = fla_test_clock();
-            /* Call CPP gerqf API */
-            invoke_cpp_gerqf(datatype, &m_A, &n_A, A, &lda, T_test, work, &lwork, info);
-            exe_time = fla_test_clock() - exe_time;
-        }
-#endif
-        else
-        {
-            exe_time = fla_test_clock();
-            /* Call LAPACK gerqf API */
-            invoke_gerqf(datatype, &m_A, &n_A, A, &lda, T_test, work, &lwork, info);
+		// call to API
+		GERQF_API(datatype, &m_A, &n_A, A, &cs_A, T_test, work, &lwork, &info);
 
-            exe_time = fla_test_clock() - exe_time;
-        }
+		exe_time = fla_end_timer();
 
-        /* Update ctx and loop conditions */
-        FLA_EXEC_LOOP_UPDATE_WITH_INFO
+		// Get the best execution time
+		time_min = min(time_min, exe_time);
+	}
 
-        // Make a copy of the output buffers. This is required to validate the API functionality.
-        copy_vector(datatype, min_A, T_test, 1, T, 1);
+	copy_matrix(datatype, min(m_A, n_A), 1, T_test, T);
 
-        // Free up the output buffers
-        free_vector(work);
-        free_vector(T_test);
-    }
+	*time_min_ = time_min;
 
-    free_matrix(A_save);
+	free_matrix(A_save);
+	free_matrix(T_test);
+	free_matrix(work);
 }
 
-double prepare_lapacke_gerqf_run(integer datatype, int layout, integer m_A, integer n_A, void *A,
-                                 integer lda, void *T, integer *info)
+
+/*
+ *  GERQF_API calls LAPACK interface of
+ *  Singular value decomposition - gesvd
+ *  */
+inline void GERQF_API(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau, void *work, integer *lwork, integer *info)
 {
-    double exe_time;
-    integer lda_t = lda;
-    void *A_t = NULL;
+	switch(datatype)
+	{
+		case FLOAT:
+		{
+			sgerqf_(m, n, a, lda, tau, work, lwork, info);
+			break;
+		}
+		
+		case DOUBLE:
+		{
+			dgerqf_(m, n, a, lda, tau, work, lwork, info);
+			break;
+		}
 
-    /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_gerqf_lda, lda_t);
+		case COMPLEX:
+		{
+			cgerqf_(m, n, a, lda, tau, work, lwork, info);
+			break;
+		}
 
-    A_t = A;
-
-    /* In case of row_major matrix layout,
-       convert input matrix to row_major */
-    if(layout == LAPACK_ROW_MAJOR)
-    {
-        /* Create temporary buffers for converting matrix layout */
-        create_matrix(datatype, layout, m_A, n_A, &A_t, fla_max(n_A, lda_t));
-        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m_A, n_A, A, lda, A_t, lda_t);
-    }
-
-    exe_time = fla_test_clock();
-
-    /* Call LAPACKE gerqf API */
-    *info = invoke_lapacke_gerqf(datatype, layout, m_A, n_A, A_t, lda_t, T);
-
-    exe_time = fla_test_clock() - exe_time;
-
-    if(layout == LAPACK_ROW_MAJOR)
-    {
-        /* In case of row_major matrix layout, convert output matrices
-           to column_major layout */
-        convert_matrix_layout(layout, datatype, m_A, n_A, A_t, lda_t, A, lda);
-        /* free temporary buffers */
-        free_matrix(A_t);
-    }
-
-    return exe_time;
+		case DOUBLE_COMPLEX:
+		{
+			zgerqf_(m, n, a, lda, tau, work, lwork, info);
+			break;
+		}
+	}
 }
 
-void invoke_gerqf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
-                  void *work, integer *lwork, integer *info)
+
+void GERQF_solve(integer m_A,
+	integer n_A,
+	void *A,
+	void *A_test,
+	void *T_test,
+	integer datatype,
+	double* residual)
 {
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            fla_lapack_sgerqf(m, n, a, lda, tau, work, lwork, info);
-            break;
-        }
-        case DOUBLE:
-        {
-            fla_lapack_dgerqf(m, n, a, lda, tau, work, lwork, info);
-            break;
-        }
-        case COMPLEX:
-        {
-            fla_lapack_cgerqf(m, n, a, lda, tau, work, lwork, info);
-            break;
-        }
-        case DOUBLE_COMPLEX:
-        {
-            fla_lapack_zgerqf(m, n, a, lda, tau, work, lwork, info);
-            break;
-        }
-    }
+
+	void *b, *b_copy, *qbt, *work;
+	integer cs_A, cs_b, mb, nb;
+	integer  inc_qbt, inc_b;
+	integer lwork, tinfo;
+	integer min_m_n;
+
+	// Compute the minimum dimension.
+	min_m_n = min(m_A, n_A);
+
+	// Get column stride.
+	cs_A = m_A;
+
+	// Create vectors to form a linear system.
+	create_matrix(datatype, m_A, 1, &b);
+
+	// Create a random vector b
+	rand_matrix(datatype, m_A, 1, b);
+
+	// copy the required dimensions of vector b.
+	mb = m_A;
+	nb = 1;
+	cs_b = mb;
+	inc_b = 1;
+
+	// make a copy of vector b.
+	create_matrix(datatype, m_A, 1, &b_copy);
+	copy_matrix(datatype, m_A, 1, b, b_copy);
+
+	// create a vector to hold the solution
+	create_matrix(datatype, min_m_n, 1, &qbt);
+	inc_qbt = 1;
+
+	// Make a workspace query the first time through. This will provide us with
+	// and ideal workspace size based on an internal block size.
+	lwork = -1;
+	create_matrix(datatype, 1, 1, &work);
+
+	switch( datatype )
+	{
+		case FLOAT:
+		{
+			float one = 1, n_one = -1;
+			float norm, norm_b;
+			float eps;
+
+			/* Solve R*x = QT*b linear equation*/
+			// Rx' = b 
+			strsm_( "left", "Upper", "No-Tran", "Non-unit", &mb, &nb, &one, A_test, &cs_A, b, &cs_b);
+
+			// b' = QT*b
+			sormrq_( "left", "Transpose", &mb, &nb, &min_m_n, A_test, &cs_A, T_test, b, &cs_b, work, &lwork, &tinfo );
+
+			// allocate work buffer and calculate b'
+			lwork = (integer) (*(float*)work);
+			free(work);
+			create_matrix(datatype, lwork, 1, &work);
+
+			sormrq_( "left", "Transpose", &mb, &nb, &min_m_n, A_test, &cs_A, T_test, b, &cs_b, work, &lwork, &tinfo );
+
+			free( work );
+
+			for(integer i = 0; i < min_m_n; i++ )
+				((float *)qbt)[i] = ((float *)b)[i];
+
+			// compute norm of b
+			norm_b = snrm2_(&m_A, b_copy, &inc_b);
+
+			// compute output residue (b'-b)
+			sgemv_("N", &m_A, &n_A, &one, A, &cs_A, qbt, &inc_qbt, &n_one, b_copy, &inc_b);
+			
+			// compute norm of norm(b'-b)
+			norm = snrm2_(&m_A, b_copy, &inc_b);
+
+			// get machine precision
+			eps = slamch_("P");
+
+			*residual = (double)(norm / (eps * norm_b * (float)m_A));
+
+			break;
+		}
+
+		case DOUBLE:
+		{
+			double one = 1, n_one = -1;
+			double norm, norm_b;
+			double eps;
+
+			/* Solve R*x = QT*b linear equation*/
+			// Rx' = b 
+			dtrsm_( "left", "Upper", "No-Tran", "Non-unit", &mb, &nb, &one, A_test, &cs_A, b, &cs_b);
+
+			// b' = QT*b
+			dormrq_( "left", "Transpose", &mb, &nb, &min_m_n, A_test, &cs_A, T_test, b, &cs_b, work, &lwork, &tinfo );
+
+			// allocate work buffer and calculate b'
+			lwork = (integer) (*(double*)work);
+			free(work);
+			create_matrix(datatype, lwork, 1, &work);
+
+			dormrq_( "left", "Transpose", &mb, &nb, &min_m_n, A_test, &cs_A, T_test, b, &cs_b, work, &lwork, &tinfo );
+
+			free( work );
+
+			for(integer i = 0; i < min_m_n; i++ )
+				((double *)qbt)[i] = ((double *)b)[i];
+
+			// compute norm of b
+			norm_b = dnrm2_(&m_A, b_copy, &inc_b);
+
+			// compute output residue (b'-b)
+			dgemv_("N", &m_A, &n_A, &one, A, &cs_A, qbt, &inc_qbt, &n_one, b_copy, &inc_b);
+			
+			// compute norm of norm(b'-b)
+			norm = dnrm2_(&m_A, b_copy, &inc_b);
+
+			// get machine precision
+			eps = dlamch_("P");
+
+			*residual = (double)(norm / (eps * norm_b * (double)m_A));
+			
+			break;
+		}
+		case COMPLEX:
+		{
+			scomplex one = {1, 0}, n_one = {-1, 0};
+			float norm, norm_b;
+			float eps;
+
+			/* Solve R*x = QT*b linear equation*/
+			// Rx' = b 
+			ctrsm_( "left", "Upper", "No-Tran", "Non-unit", &mb, &nb, &one, A_test, &cs_A, b, &cs_b);
+
+			// b' = QT*b
+			cunmrq_( "left", "Conjugate Transpose", &mb, &nb, &min_m_n, A_test, &cs_A, T_test, b, &cs_b, work, &lwork, &tinfo );
+
+			// allocate work buffer and calculate b'
+			lwork = (integer) (*(float*)work);
+			free(work);
+			create_matrix(datatype, lwork, 1, &work);
+
+			cunmrq_( "left", "Conjugate Transpose", &mb, &nb, &min_m_n, A_test, &cs_A, T_test, b, &cs_b, work, &lwork, &tinfo );
+
+			free( work );
+
+			for(integer i = 0; i < min_m_n; i++ )
+			{
+				((scomplex *)qbt)[i].real = ((scomplex *)b)[i].real;
+				((scomplex *)qbt)[i].imag = ((scomplex *)b)[i].imag;
+			}
+
+			// compute norm of b
+			norm_b = scnrm2_(&m_A, b_copy, &inc_b);
+
+			// compute output residue (b'-b)
+			cgemv_("N", &m_A, &n_A, &one, A, &cs_A, qbt, &inc_qbt, &n_one, b_copy, &inc_b);
+			
+			// compute norm of norm(b'-b)
+			norm = scnrm2_(&m_A, b_copy, &inc_b);
+
+			// get machine precision
+			eps = slamch_("P");
+
+			*residual = (double)(norm / (eps * norm_b * (float)m_A));
+
+			break;
+		}
+		case DOUBLE_COMPLEX:
+		{
+			dcomplex one = {1, 0}, n_one = {-1, 0};
+			double norm, norm_b;
+			double eps;
+
+			/* Solve R*x = QT*b linear equation*/
+			// Rx' = b 
+			ztrsm_( "left", "Upper", "No-Tran", "Non-unit", &mb, &nb, &one, A_test, &cs_A, b, &cs_b);
+
+			// b' = QT*b
+			zunmrq_( "left", "Conjugate Transpose", &mb, &nb, &min_m_n, A_test, &cs_A, T_test, b, &cs_b, work, &lwork, &tinfo );
+
+			// allocate work buffer and calculate b'
+			lwork = (integer) (*(double*)work);
+			free(work);
+			create_matrix(datatype, lwork, 1, &work);
+
+			zunmrq_( "left", "Conjugate Transpose", &mb, &nb, &min_m_n, A_test, &cs_A, T_test, b, &cs_b, work, &lwork, &tinfo );
+			free( work );
+
+			for(integer i = 0; i < min_m_n; i++ )
+			{
+				((dcomplex *)qbt)[i].real = ((dcomplex *)b)[i].real;
+				((dcomplex *)qbt)[i].imag = ((dcomplex *)b)[i].imag;
+			}
+
+			// compute norm of b
+			norm_b = dznrm2_(&m_A, b_copy, &inc_b);
+
+			// compute output residue (b'-b)
+			zgemv_("N", &m_A, &n_A, &one, A, &cs_A, qbt, &inc_qbt, &n_one, b_copy, &inc_b);
+			
+			// compute norm of norm(b'-b)
+			norm = dznrm2_(&m_A, b_copy, &inc_b);
+
+			// get machine precision
+			eps = dlamch_("P");
+
+			*residual = (double)(norm / (eps * norm_b * (double)m_A));
+
+			break;
+		}
+	}
+
+	free_matrix( b );
+	free_matrix( b_copy );
+	free_matrix( qbt );
 }

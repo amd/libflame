@@ -1,566 +1,436 @@
 /*
-    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
+	Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_lapack.h"
-#if ENABLE_CPP_TEST
-#include <invoke_common.hh>
-#endif
-#include <invoke_lapacke.h>
+#include "test_libflame.h"
+#include "test_common.h"
+#include "test_prototype.h"
 
-extern double perf;
-extern double time_min;
-integer row_major_geqp3_lda;
+#define NUM_PARAM_COMBOS 1
+#define NUM_MATRIX_ARGS  1
 
-/* Local prototypes */
-void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer datatype,
-                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                               integer einfo);
-void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *jpvt, void *T,
-                       integer datatype, integer *info, integer interfacetype, int layout,
-                       test_params_t *params, int is_geqpf);
-void invoke_geqp3(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *jpvt,
-                  void *tau, void *work, integer *lwork, void *rwork, integer *info);
-double prepare_lapacke_geqp3_run(integer datatype, int layout, integer m_A, integer n_A, void *A,
-                                 integer lda, integer *jpvt, void *T, integer *info, int is_geqpf);
-void invoke_geqpf(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *jpvt,
-                  void *tau, void *work, void *rwork, integer *info);
-void fla_test_geqpf(integer argc, char **argv, test_params_t *params);
 
-void fla_test_geqp3(integer argc, char **argv, test_params_t *params)
+// Static variables
+static char* op_str = "QR factorization with column pivoting";
+static char* front_str = "GEQP3";
+static char* lapack_str = "LAPACK";
+static char* pc_str[NUM_PARAM_COMBOS] = { ""};
+static test_thresh_t thresh = { 50, 20,   // warn, pass for s
+								50, 20,   // warn, pass for d
+								50, 20,   // warn, pass for c
+								50, 20 }; // warn, pass for z
+
+
+// Local prototypes.
+void fla_test_geqp3_experiment(test_params_t params, integer datatype, integer  p_cur, integer  pci, integer  n_repeats,
+									double* perf, double* t,double* residual);
+void GEQP3_run(integer m_A, integer n_A, void *A, void *j, void *T, integer datatype, integer n_repeats, double* time_min_);
+inline void GEQP3_API(integer datatype, integer* m, integer* n, void* a, integer* lda, integer* jpvt, void* tau, void* work, void* rwork, integer* lwork, integer* info);
+void GEQP3_solve(integer m_A, integer n_A, void *A, void *A_test, void *j_test, void *T_test, integer datatype, double* residual);
+
+
+void fla_test_geqp3(test_params_t params)
 {
-    char *op_str = "QR factorization with column pivoting";
-    char *front_str = "GEQP3";
-    integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
-    int geqpf_mode = 0;
-    params->imatrix_char = '\0';
-
-    /* Detect variant */
-    if(argc > 1 && argv[1] && same_string(argv[1], "geqpf"))
-    {
-        geqpf_mode = 1;
-    }
-
-    /* Store mode into per-test params */
-    params->lin_solver_paramslist[0].geqpf_mode = geqpf_mode;
-
-    if(geqpf_mode)
-    {
-        front_str = "GEQPF";
-        op_str = "QR factorization with column pivoting (deprecated)";
-    }
-
-    if(argc == 1)
-    {
-        /* GEQPF fixed workspace; GEQP3 triggers query (-1) */
-        g_lwork = geqpf_mode ? 3 : -1;
-        g_config_data = 1;
-        fla_test_output_info("--- %s ---\n", op_str);
-        fla_test_output_info("\n");
-        fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_geqp3_experiment);
-        tests_not_run = 0;
-    }
-
-    integer max_args = geqpf_mode ? 8 : 9;
-    integer min_args = geqpf_mode ? 7 : 8;
-
-    if(argc == max_args)
-    {
-        FLA_TEST_PARSE_LAST_ARG(argv[max_args - 1]);
-    }
-    if(argc >= min_args && argc <= max_args)
-    {
-        integer i, num_types, M, N;
-        integer datatype, n_repeats;
-        char stype, type_flag[4] = {0};
-        char *endptr;
-
-        /* Parse the arguments */
-        num_types = strlen(argv[2]);
-        M = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
-        N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
-        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
-        {
-            row_major_geqp3_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-            params->lin_solver_paramslist[0].lda = N;
-        }
-        else
-        {
-            params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-        }
-        if(geqpf_mode)
-        {
-            g_lwork = 3; // Fixed workspace for GEQPF
-            n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
-        }
-        else
-        {
-            g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
-            n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        }
-        params->n_repeats = n_repeats;
-
-        if(n_repeats > 0)
-        {
-            params->lin_solver_paramslist[0].solver_threshold = CLI_NORM_THRESH;
-
-            for(i = 0; i < num_types; i++)
-            {
-                stype = argv[2][i];
-                datatype = get_datatype(stype);
-
-                /* Check for invalide dataype */
-                if(datatype == INVALID_TYPE)
-                {
-                    invalid_dtype = 1;
-                    continue;
-                }
-
-                /* Check for duplicate datatype presence */
-                if(type_flag[datatype - FLOAT] == 1)
-                    continue;
-                type_flag[datatype - FLOAT] = 1;
-
-                /* Call the test code */
-                fla_test_geqp3_experiment(front_str, params, datatype, M, N, 0, n_repeats, einfo);
-                tests_not_run = 0;
-            }
-        }
-    }
-
-    /* Print error messages */
-    if(tests_not_run)
-    {
-        if(geqpf_mode)
-            printf("\nIllegal arguments for geqpf\n./<EXE> geqpf <precisions - sdcz> <M> <N> <LDA> "
-                   "<repeats>\n");
-        else
-            printf("\nIllegal arguments for geqp3\n./<EXE> geqp3 <precisions - sdcz> <M> <N> <LDA> "
-                   "<LWORK> <repeats>\n");
-    }
-    if(invalid_dtype)
-    {
-        printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
-    }
-    if(g_ext_fptr != NULL)
-    {
-        fclose(g_ext_fptr);
-        g_ext_fptr = NULL;
-    }
-    return;
+	fla_test_output_info("--- %s ---\n", op_str);
+	fla_test_output_info("\n");
+	fla_test_op_driver(front_str, lapack_str, NUM_PARAM_COMBOS, pc_str, NUM_MATRIX_ARGS,
+							params, thresh, fla_test_geqp3_experiment);
 }
 
-void fla_test_geqpf(integer argc, char **argv, test_params_t *params)
+
+void fla_test_geqp3_experiment(test_params_t params,
+	int  datatype,
+	integer  p_cur,
+	integer  pci,
+	integer  n_repeats,
+	double* perf,
+	double* t,
+	double* residual)
 {
-    /* Mark this run as GEQPF in per-test params */
-    params->lin_solver_paramslist[0].geqpf_mode = 1;
+	integer m, n;
+	void *A, *T, *A_test, *j;
+	double time_min = 1e9;
 
-    /* CONFIG MODE: called from input.global.operations with no CLI args */
-    if(argc == 1)
-    {
-        char *op_str = "QR factorization with column pivoting (deprecated)";
-        char *front_str = "GEQPF";
+	// Determine the dimensions.
+	m = p_cur;
+	n = p_cur;
 
-        /* Fixed workspace for GEQPF */
-        g_lwork = 3;
-        g_config_data = 1;
+	// Create the matrices for the current operation.
+	create_matrix(datatype, m, n, &A);
+	create_matrix(datatype, m, n, &A_test);
+	create_matrix(datatype, min(m, n), 1, &T);
 
-        fla_test_output_info("--- %s ---\n", op_str);
-        fla_test_output_info("\n");
+	create_matrix(INT, n, 1, &j);
 
-        /* Use the same experiment as GEQP3, but with front_str = "GEQPF" */
-        fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_geqp3_experiment);
-        return;
-    }
+	// Initialize the test matrices.
+	rand_matrix(datatype, m, n, A);
 
-    /* CLI MODE: ./test_lapack.x geqpf <prec> <M> <N> <LDA> <repeats> */
-    argv[1] = (char *)"geqpf";
-    fla_test_geqp3(argc, argv, params);
+	// Save the original matrix.
+	copy_matrix(datatype, m, n, A, A_test);
+
+	// call to API
+	GEQP3_run(m, n, A_test, j, T, datatype, n_repeats, &time_min);
+
+	// execution time
+	*t = time_min;
+
+	// TODO
+	// performance computation will be added later
+	*perf = 0;
+
+	// output validation
+	GEQP3_solve(m, n, A, A_test, j, T, datatype, residual);
+
+	free(A);
+	free(A_test);
+	free(T);
+	free(j);
 }
 
-void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer datatype,
-                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                               integer einfo)
+
+void GEQP3_run(integer m_A, integer n_A,
+	void *A,
+	void *j,
+	void *T,
+	integer datatype,
+	integer n_repeats,
+	double* time_min_)
 {
-    integer m, n, lda;
-    integer info = 0;
-    void *A = NULL, *A_test = NULL, *T = NULL;
-    integer *jpvt;
-    double residual, err_thresh;
-    void *filename = NULL;
+	integer cs_A;
+	integer lwork, lrwork;
+	void *A_save, *j_test, *T_test, *work, *rwork;
+	integer i;
+	integer info = 0;
+	double time_min = 1e9, exe_time;
 
-    integer interfacetype = params->interfacetype;
-    int layout = params->matrix_major;
+	// Get column stride
+	cs_A = m_A;
 
-    /* Per-test mode: 0 => GEQP3, 1 => GEQPF */
-    int is_geqpf = params->lin_solver_paramslist[pci].geqpf_mode;
+	// Save the original matrix.
+	create_matrix(datatype, m_A, n_A, &A_save);
+	copy_matrix(datatype, m_A, n_A, A, A_save);
 
-    if(tst_api != NULL)
-    {
-        if(same_string(tst_api, "GEQPF"))
-        {
-            is_geqpf = 1;
-        }
-        else if(same_string(tst_api, "GEQP3"))
-        {
-            is_geqpf = 0;
-        }
-        params->lin_solver_paramslist[pci].geqpf_mode = is_geqpf;
-    }
+	// Allocate the rwork array up front since its size is not dependent on internal block sizes.
+	lrwork = 2 * n_A;
+	if ( datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+		create_realtype_matrix(datatype, lrwork, 1, &rwork);
+	else
+		rwork = NULL;
 
-    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
+	// Make a workspace query the first time through. This will provide us with
+	// and ideal workspace size based on an internal block size.
+	lwork = -1;
+	create_matrix(datatype, 1, 1, &work);
 
-    /* Get input matrix dimensions */
-    m = p_cur;
-    n = q_cur;
-    lda = params->lin_solver_paramslist[pci].lda;
+	create_matrix(INT, n_A, 1, &j_test);
+	create_matrix(datatype, min(m_A, n_A), 1, &T_test);
 
-    /* If leading dimensions = -1, set them to default value
-       when inputs are from config files */
-    if(g_config_data)
-    {
-        if(lda == -1)
-        {
-            lda = fla_max(1, m);
-        }
-    }
+	GEQP3_API(datatype, &m_A, &n_A, A, &cs_A, j_test, T_test, work, rwork, &lwork, &info);
 
-    /* Create input matrix parameters */
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
-    create_vector(datatype, &T, fla_min(m, n));
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
+	lwork = get_work_value( datatype, work );
 
-    /* Create pivot array */
-    create_vector(INTEGER, (void **)&jpvt, n);
+	for (i = 0; i < n_repeats; ++i)
+	{
+		// reallocate memory
+		free(j_test);
+		free(T_test);
+		free(work);
+		free(rwork);
+		create_matrix(INT, n_A, 1, &j_test);
+		create_matrix(datatype, min(m_A, n_A), 1, &T_test);
+		create_matrix(datatype, lwork, 1, &work);
 
-    /* This code path is run to generate the matrix to be passed to the API. This is the default
-     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
-     * Test cases. For verification runs the input is loaded from the input generated during Ground
-     * truth run */
-    if(!FLA_BRT_VERIFICATION_RUN)
-    {
-        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+		if ( datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+			create_realtype_matrix(datatype, lrwork, 1, &rwork);
+		else
+			rwork = NULL;
 
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        {
-            scale_matrix_underflow_overflow_geqp3(datatype, m, n, A, lda, params->imatrix_char);
-        }
-    }
+		// Make a copy of the matrix
+		copy_matrix(datatype, m_A, n_A, A_save, A);
 
-    /* This macro is used in the BRT test cases for the following purposes:
-     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
-     * reference
-     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
-     * passed as input to the API
-     * */
-    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, A, lda, "dddd", m, n, lda, g_lwork)
+		fla_start_timer();
 
-    /* Make a copy of input matrix A,required for validation. */
-    copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
+		// call to API
+		GEQP3_API(datatype, &m_A, &n_A, A, &cs_A, j_test, T_test, work, rwork, &lwork, &info);
 
-    prepare_geqp3_run(m, n, A_test, lda, jpvt, T, datatype, &info, interfacetype, layout, params,
-                      is_geqpf);
+		exe_time = fla_end_timer();
 
-    /* performance computation
-     * 2mn^2 - (2/3)n^3 flops
-     */
-    if(m >= n)
-        perf = (double)((2.0 * m * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min
-               / FLOPS_PER_UNIT_PERF;
-    else
-        perf = (double)((2.0 * n * m * m) - ((2.0 / 3.0) * m * m * m)) / time_min
-               / FLOPS_PER_UNIT_PERF;
-    if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        perf *= 4.0;
+		// Get the best execution time
+		time_min = min(time_min, exe_time);
+	}
 
-    /* output validation */
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    /* Bit reproducibility tests path
-     * This path is taken when BRT is enabled.
-     *     - In the Ground truth runs (BRT_char => G, F), the output is stored in a file and the
-     * default validation function is called
-     *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
-     * compared with the generated output
-     *  */
-    IF_FLA_BRT_VALIDATION(m, n,
-                          store_outputs_base(filename, params, 1, 2, datatype, m, n, A_test, lda,
-                                             datatype, fla_min(m, n), T, INTEGER, n, jpvt),
-                          validate_geqp3(tst_api, m, n, A, A_test, lda, jpvt, T, datatype, residual,
-                                         params->imatrix_char, params),
-                          check_reproducibility_base(filename, params, 1, 2, datatype, m, n, A_test,
-                                                     lda, datatype, fla_min(m, n), T, INTEGER, n,
-                                                     jpvt))
-    else if(FLA_SKIP_VALIDATION_MODE)
-    {
-        /* Skip validation for performance modes */
-        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
-    }
-    else if(!FLA_EXTREME_CASE_TEST)
-    {
-        validate_geqp3(tst_api, m, n, A, A_test, lda, jpvt, T, datatype, residual,
-                       params->imatrix_char, params);
-    }
-    /* check for output matrix when inputs as extreme values */
-    else
-    {
-        if((!check_extreme_value(datatype, m, n, A_test, lda, params->imatrix_char)))
-        {
-            residual = DBL_MAX;
-        }
-        else
-        {
-            residual = err_thresh;
-        }
-        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
-    }
+	copy_matrix(INT, n_A, 1, j_test, j);
+	copy_matrix(datatype, min(m_A, n_A), 1, T_test, T);
 
-    /* Free up the buffers */
-free_buffers:
-    FLA_FREE_FILENAME(filename)
-    free_matrix(A);
-    free_matrix(A_test);
-    free_vector(T);
-    free_vector(jpvt);
+	*time_min_ = time_min;
+
+	free(A_save);
+	free(j_test);
+	free(T_test);
+	free(work);
+	if ( datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+		free(rwork);
 }
 
-void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *jpvt, void *T,
-                       integer datatype, integer *info, integer interfacetype, int layout,
-                       test_params_t *params, int is_geqpf)
+
+/*
+ *  GEQP3 calls LAPACK interface of
+ *  QR factorisation with column pivot - geqp3
+ *  */
+inline void GEQP3_API(integer datatype, integer* m, integer* n, void* a, integer* lda, integer* jpvt, void* tau, void* work, void* rwork, integer* lwork, integer* info)
 {
-    integer min_A;
-    void *A_save = NULL, *T_test = NULL, *work = NULL;
-    void *rwork = NULL;
-    integer lwork = -1;
-    double exe_time;
+	switch(datatype)
+	{
+		case FLOAT:
+		{
+			sgeqp3_(m, n, a, lda, jpvt, tau, work, lwork, info);
+			break;
+		}
+		
+		case DOUBLE:
+		{
+			dgeqp3_(m, n, a, lda, jpvt, tau, work, lwork, info);
+			break;
+		}
 
-    min_A = fla_min(m_A, n_A);
+		case COMPLEX:
+		{
+			cgeqp3_(m, n, a, lda, jpvt, tau, work, lwork, rwork, info);
+			break;
+		}
 
-    /* Make a copy of the input matrix A. Same input values will be passed in
-       each itertaion. */
-    create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &A_save, lda);
-    copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
-
-    /* Make a workspace query the first time. This will provide us with
-       and ideal workspace size based on internal block size.
-       NOTE: LAPACKE interface handles workspace query internally */
-    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST))
-    {
-        if(is_geqpf)
-        {
-            if(datatype == FLOAT || datatype == DOUBLE)
-                lwork = 3 * n_A;
-            else
-                lwork = 2 * n_A; // COMPLEX geqpf
-        }
-        else if(g_lwork <= 0)
-        {
-            lwork = -1;
-            create_vector(datatype, &work, 1);
-#if ENABLE_CPP_TEST
-            if(interfacetype == LAPACK_CPP_TEST)
-                invoke_cpp_geqp3(datatype, &m_A, &n_A, NULL, &lda, NULL, NULL, work, &lwork, rwork,
-                                 info);
-            else
-#endif
-                invoke_geqp3(datatype, &m_A, &n_A, NULL, &lda, NULL, NULL, work, &lwork, rwork,
-                             info);
-            if(*info == 0)
-                lwork = get_work_value(datatype, work);
-            free_vector(work);
-        }
-        else
-        {
-            lwork = g_lwork;
-        }
-    }
-    else
-    {
-        /* LAPACKE interfaces ignore manual lwork; still need fixed sizes for GEQPF */
-        if(is_geqpf)
-        {
-            if(datatype == FLOAT || datatype == DOUBLE)
-                lwork = 3 * n_A;
-            else
-                lwork = 2 * n_A;
-        }
-        else
-        {
-            lwork = g_lwork;
-        }
-    }
-
-    /* rwork is now allocated per-iteration in the loop below to avoid unnecessary memory allocation
-     * for non-complex types or LAPACKE interfaces. */
-
-    *info = 0;
-    FLA_EXEC_LOOP_BEGIN
-    {
-        /* Restore input matrix A value and allocate memory to output buffers
-         for each iteration */
-        copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
-
-        /* Reset pivot buffer */
-        reset_vector(INTEGER, jpvt, n_A, 1);
-
-        /* T_test vector will hold the scalar factors of the elementary reflectors. */
-        create_vector(datatype, &T_test, min_A);
-
-        /* Create work buffer */
-        create_vector(datatype, &work, lwork);
-
-        /* Allocate rwork only when needed (native / cpp, complex) */
-        void *rwork_iter = NULL;
-        if(datatype >= COMPLEX && (interfacetype != LAPACKE_COLUMN_TEST)
-           && (interfacetype != LAPACKE_ROW_TEST))
-        {
-            integer rws = 2 * n_A;
-            create_realtype_vector(datatype, &rwork_iter, rws);
-        }
-
-        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
-        {
-            exe_time = prepare_lapacke_geqp3_run(datatype, layout, m_A, n_A, A, lda, jpvt, T_test,
-                                                 info, is_geqpf);
-        }
-#if ENABLE_CPP_TEST
-        else if(interfacetype == LAPACK_CPP_TEST)
-        {
-            exe_time = fla_test_clock();
-            if(is_geqpf)
-                /* Call CPP geqpf API */
-                invoke_cpp_geqpf(datatype, &m_A, &n_A, A, &lda, jpvt, T_test, work, rwork_iter,
-                                 info);
-            else
-                /* Call CPP geqp3 API */
-                invoke_cpp_geqp3(datatype, &m_A, &n_A, A, &lda, jpvt, T_test, work, &lwork,
-                                 rwork_iter, info);
-            exe_time = fla_test_clock() - exe_time;
-        }
-#endif
-        else
-        {
-            exe_time = fla_test_clock();
-            if(is_geqpf)
-                /* Call LAPACK geqpf API */
-                invoke_geqpf(datatype, &m_A, &n_A, A, &lda, jpvt, T_test, work, rwork_iter, info);
-            else
-                /* Call LAPACK geqp3 API */
-                invoke_geqp3(datatype, &m_A, &n_A, A, &lda, jpvt, T_test, work, &lwork, rwork_iter,
-                             info);
-            exe_time = fla_test_clock() - exe_time;
-        }
-
-        /* Update ctx and loop condition */
-        FLA_EXEC_LOOP_UPDATE_WITH_INFO
-
-        /* Make a copy of the output buffers, for validation. */
-        copy_vector(datatype, min_A, T_test, 1, T, 1);
-
-        /* Free up the output buffers */
-        free_vector(work);
-        free_vector(T_test);
-        if(rwork_iter)
-            free_vector(rwork_iter);
-    }
-
-    free_matrix(A_save);
+		case DOUBLE_COMPLEX:
+		{
+			zgeqp3_(m, n, a, lda, jpvt, tau, work, lwork, rwork, info);
+			break;
+		}
+	}
 }
 
-double prepare_lapacke_geqp3_run(integer datatype, int layout, integer m_A, integer n_A, void *A,
-                                 integer lda, integer *jpvt, void *T, integer *info, int is_geqpf)
+
+void GEQP3_solve(integer m_A,
+	integer n_A,
+	void *A,
+	void *A_test,
+	void *j_test,
+	void *T_test,
+	int datatype,
+	double* residual)
 {
-    double exe_time;
-    integer lda_t = lda;
-    void *A_t = NULL;
+	
+	void *qbt, *b, *y, *b_copy, *work;
+	integer cs_A, cs_b, mb, nb;
+	integer  inc_qbt, inc_b;
+	integer lwork, tinfo;
+	integer min_m_n;
 
-    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_geqp3_lda, lda_t);
+	// Compute the minimum dimension.
+	min_m_n = min(m_A, n_A);
 
-    A_t = A;
+	// Get column stride and row stride
+	cs_A = m_A;
 
-    /* GEQPF requires jpvt to be initialized to 0 for LAPACKE */
-    if(is_geqpf)
-        reset_vector(INTEGER, jpvt, n_A, 0);
+	// Create vectors to form a linear system.
+	create_matrix(datatype, m_A, 1, &b);
+	create_matrix(datatype, n_A, 1, &y);
 
-    /* Configure leading dimensions as per the input matrix layout */
-    if(layout == LAPACK_ROW_MAJOR)
-    {
-        /* Create temporary buffers for converting matrix layout */
-        create_matrix(datatype, layout, m_A, n_A, &A_t, fla_max(n_A, lda_t));
-        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m_A, n_A, A, lda, A_t, lda_t);
-    }
+	// Create a random vector b
+	rand_matrix(datatype, m_A, 1, b);
 
-    exe_time = fla_test_clock();
+	// copy the required dimensions of vector b.
+	mb = m_A;
+	nb = 1;
+	cs_b = mb;
+	inc_b = 1;
 
-    /* Call to LAPACKE geqp3 or geqpf API based on mode */
-    if(is_geqpf)
-        /* Call to LAPACKE geqpf API */
-        *info = invoke_lapacke_geqpf(datatype, layout, m_A, n_A, A_t, lda_t, jpvt, T);
-    else
-        /* Call to LAPACKE geqp3 API */
-        *info = invoke_lapacke_geqp3(datatype, layout, m_A, n_A, A_t, lda_t, jpvt, T);
+	// make a copy of vector b.
+	create_matrix(datatype, m_A, 1, &b_copy);
+	copy_matrix(datatype, m_A, 1, b, b_copy);
 
-    exe_time = fla_test_clock() - exe_time;
+	// create a vector to hold the solution
+	create_matrix(datatype, min_m_n, 1, &qbt);
+	inc_qbt = 1;
 
-    if(layout == LAPACK_ROW_MAJOR)
-    {
-        /* In case of row_major matrix layout, convert output matrices
-           to column_major layout */
-        convert_matrix_layout(layout, datatype, m_A, n_A, A_t, lda_t, A, lda);
-        /* free temporary buffers */
-        free_matrix(A_t);
-    }
+	// Make a workspace query the first time through. This will provide us with
+	// and ideal workspace size based on an internal block size.
+	lwork = -1;
+	create_matrix(datatype, 1, 1, &work);
 
-    return exe_time;
-}
+	switch( datatype )
+	{
+		case FLOAT:
+		{
+			float one = 1, n_one = -1;
+			float norm, norm_b;
+			float eps;
 
-void invoke_geqp3(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *jpvt,
-                  void *tau, void *work, integer *lwork, void *rwork, integer *info)
-{
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            fla_lapack_sgeqp3(m, n, a, lda, jpvt, tau, work, lwork, info);
-            break;
-        }
+			// Solve R*x = QT*b linear equation
+			// b' = QT*b
+			sormqr_( "Left", "Transpose", &mb, &nb, &min_m_n, A_test, &cs_A, T_test, b, &cs_b, work, &lwork, &tinfo );
 
-        case DOUBLE:
-        {
-            fla_lapack_dgeqp3(m, n, a, lda, jpvt, tau, work, lwork, info);
-            break;
-        }
+			// allocate work buffer and calculate b'
+			lwork = (integer) (*(float*)work);
+			free(work);
+			create_matrix(datatype, lwork, 1, &work);
+			
+			sormqr_( "Left", "Transpose", &mb, &nb, &min_m_n, A_test, &cs_A, T_test, b, &cs_b, work, &lwork, &tinfo );
+			
+			free( work );
+			
+			// Triangular Solve to find x in Ax=b
+			strtrs_( "Upper", "No-Tran", "Non-unit", &min_m_n, &nb, A_test, &cs_A, b, &cs_b, &tinfo );
+			
+			for(int i = 0; i < min_m_n; i++ )
+				((float *)qbt)[((integer *)j_test)[i]-1] = ((float *)b)[i];
 
-        case COMPLEX:
-        {
-            fla_lapack_cgeqp3(m, n, a, lda, jpvt, tau, work, lwork, rwork, info);
-            break;
-        }
+			// compute norm of b
+			norm_b = snrm2_(&m_A, b_copy, &inc_b);
 
-        case DOUBLE_COMPLEX:
-        {
-            fla_lapack_zgeqp3(m, n, a, lda, jpvt, tau, work, lwork, rwork, info);
-            break;
-        }
-    }
-}
+			// compute output residue (b'-b)
+			sgemv_("N", &m_A, &n_A, &one, A, &cs_A, qbt, &inc_qbt, &n_one, b_copy, &inc_b);
+			
+			// compute norm of norm(b'-b)
+			norm = snrm2_(&m_A, b_copy, &inc_b);
 
-void invoke_geqpf(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *jpvt,
-                  void *tau, void *work, void *rwork, integer *info)
-{
-    switch(datatype)
-    {
-        case FLOAT:
-            fla_lapack_sgeqpf(m, n, a, lda, jpvt, tau, work, info);
-            break;
-        case DOUBLE:
-            fla_lapack_dgeqpf(m, n, a, lda, jpvt, tau, work, info);
-            break;
-        case COMPLEX:
-            fla_lapack_cgeqpf(m, n, a, lda, jpvt, tau, work, rwork, info);
-            break;
-        case DOUBLE_COMPLEX:
-            fla_lapack_zgeqpf(m, n, a, lda, jpvt, tau, work, rwork, info);
-            break;
-    }
+			// get machine precision
+			eps = slamch_("P");
+
+			*residual = (double)(norm / (eps * norm_b * (double)m_A));
+
+			break;
+		}
+		case DOUBLE:
+		{
+			double one = 1, n_one = -1;
+			double norm, norm_b;
+			double eps;
+
+			// Solve R*x = QT*b linear equation
+			// b' = QT*b
+			dormqr_( "Left", "Transpose", &mb, &nb, &min_m_n, A_test, &cs_A, T_test, b, &cs_b, work, &lwork, &tinfo );
+			
+			// allocate work buffer and calculate b'
+			lwork = (integer) (*(double*)work);
+			free(work);
+			create_matrix(datatype, lwork, 1, &work);
+			
+			dormqr_( "Left", "Transpose", &mb, &nb, &min_m_n, A_test, &cs_A, T_test, b, &cs_b, work, &lwork, &tinfo );
+			
+			free( work );
+			
+			// Triangular Solve to find x in Ax=b
+			dtrtrs_( "Upper", "No-Tran", "Non-unit", &min_m_n, &nb, A_test, &cs_A, b, &cs_b, &tinfo );
+			
+			for(int i = 0; i < min_m_n; i++ )
+				((double *)qbt)[((integer *)j_test)[i]-1] = ((double *)b)[i];
+
+			// compute norm of b
+			norm_b = dnrm2_(&m_A, b_copy, &inc_b);
+
+			// compute output residue (b'-b)
+			dgemv_("N", &m_A, &n_A, &one, A, &cs_A, qbt, &inc_qbt, &n_one, b_copy, &inc_b);
+			
+			// compute norm of norm(b'-b)
+			norm = dnrm2_(&m_A, b_copy, &inc_b);
+
+			// get machine precision
+			eps = dlamch_("P");
+
+			*residual = (double)(norm / (eps * norm_b * (double)m_A));
+
+			break;
+		}
+		case COMPLEX:
+		{
+			scomplex one = {1, 0}, n_one = {-1, 0};
+			float norm, norm_b;
+			float eps;
+
+			// Solve R*x = QT*b linear equation
+			// b' = QT*b	
+			cunmqr_( "Left", "Conjugate Transpose", &mb, &nb, &min_m_n, A_test, &cs_A, T_test, b, &cs_b, work, &lwork, &tinfo );
+			
+			// allocate work buffer and calculate b'
+			lwork = (integer) (*(float*)work);
+			free(work);
+			create_matrix(datatype, lwork, 1, &work);
+			
+			cunmqr_( "Left", "Conjugate Transpose", &mb, &nb, &min_m_n, A_test, &cs_A, T_test, b, &cs_b, work, &lwork, &tinfo );
+			
+			free( work );
+			
+			// Triangular Solve to find x in Ax=b
+			ctrtrs_( "Upper", "No-Tran", "Non-unit", &min_m_n, &nb, A_test, &cs_A, b, &cs_b, &tinfo );
+			
+			for(int i = 0; i < min_m_n; i++ )
+			{
+				((scomplex *)qbt)[((integer *)j_test)[i]-1].real = ((scomplex *)b)[i].real;
+				((scomplex *)qbt)[((integer *)j_test)[i]-1].imag = ((scomplex *)b)[i].imag;
+			}
+
+			// compute norm of b
+			norm_b = scnrm2_(&m_A, b_copy, &inc_b);
+
+			// compute output residue (b'-b)
+			cgemv_("N", &m_A, &n_A, &one, A, &cs_A, qbt, &inc_qbt, &n_one, b_copy, &inc_b);
+			
+			// compute norm of norm(b'-b)
+			norm = scnrm2_(&m_A, b_copy, &inc_b);
+
+			// get machine precision
+			eps = slamch_("P");
+
+			*residual = (double)(norm / (eps * norm_b * (double)m_A));
+
+			break;
+		}
+		case DOUBLE_COMPLEX:
+		{
+			dcomplex one = {1, 0}, n_one = {-1, 0};
+			double norm, norm_b;
+			double eps;
+
+			// Solve R*x = QT*b linear equation
+			// b' = QT*b
+			zunmqr_( "Left", "Conjugate Transpose", &mb, &nb, &min_m_n, A_test, &cs_A, T_test, b, &cs_b, work, &lwork, &tinfo );
+			
+			// allocate work buffer and calculate b'
+			lwork = (integer) (*(double*)work);
+			free(work);
+			create_matrix(datatype, lwork, 1, &work);
+			
+			zunmqr_( "Left", "Conjugate Transpose", &mb, &nb, &min_m_n, A_test, &cs_A, T_test, b, &cs_b, work, &lwork, &tinfo );
+			
+			free( work );
+			// Triangular Solve to find x in Ax=b
+			ztrtrs_( "Upper", "No-Tran", "Non-unit", &min_m_n, &nb, A_test, &cs_A, b, &cs_b, &tinfo );
+			
+			for(int i = 0; i < min_m_n; i++ )
+			{
+				((dcomplex *)qbt)[((integer *)j_test)[i]-1].real = ((dcomplex *)b)[i].real;
+				((dcomplex *)qbt)[((integer *)j_test)[i]-1].imag = ((dcomplex *)b)[i].imag;
+			}
+
+			// compute norm of b
+			norm_b = dznrm2_(&m_A, b_copy, &inc_b);
+
+			// compute output residue (b'-b)
+			zgemv_("N", &m_A, &n_A, &one, A, &cs_A, qbt, &inc_qbt, &n_one, b_copy, &inc_b);
+			
+			// compute norm of norm(b'-b)
+			norm = dznrm2_(&m_A, b_copy, &inc_b);
+
+			// get machine precision
+			eps = dlamch_("P");
+
+			*residual = (double)(norm / (eps * norm_b * (double)m_A));
+
+			break;
+		}
+	}
+	
+	free( b );
+	free( b_copy );
+	free( qbt );
+	free( y );
 }

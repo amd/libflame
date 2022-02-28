@@ -278,7 +278,7 @@ LAPACK_geqpf_complex(z)
                                integer* info )
 LAPACK_geqp3(s)
 {
-  
+#if !FLA_AMD_OPT
     {
         LAPACK_geqpf_body(s) fla_error = 0;
     }
@@ -295,12 +295,23 @@ LAPACK_geqp3(s)
     {
         LAPACK_geqpf_body(s)
     }
+#else
+    {
+        sgeqp3_fla( m, n,
+                    buff_A, ldim_A,
+                    buff_p,
+                    buff_t,
+                    buff_w, lwork,
+                    info ) ;
+	return 0;
+    }
 #endif
 }
 
 LAPACK_geqp3(d)
 {
-   {
+#if !FLA_AMD_OPT
+    {
         LAPACK_RETURN_CHECK( dgeqp3_check( m, n,
                                            buff_A, ldim_A,
                                            buff_p,
@@ -318,9 +329,18 @@ LAPACK_geqp3(d)
             return 0;
         }
     }
-
     {
         LAPACK_geqpf_body(d)
+    }
+#else
+    {
+        dgeqp3_fla( m, n,
+                    buff_A, ldim_A,
+                    buff_p,
+                    buff_t,
+                    buff_w, lwork,
+                    info ) ;
+	return 0;
     }
 #endif
 }

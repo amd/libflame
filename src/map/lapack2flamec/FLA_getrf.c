@@ -62,7 +62,6 @@ extern void DTL_Trace(
 
 /* FLA_AMD_OPT enables the code which selects algorithm variants based on size */
 #define LAPACK_getrf_body_d(prefix)                                                    \
-  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                                        \
   if( *m <= FLA_DGETRF_SMALL_THRESH0 && *n <= FLA_DGETRF_SMALL_THRESH0 )               \
   {                                                                                    \
     FLA_LU_piv_small_d_var0( m, n, buff_A, ldim_A, buff_p, info );                     \
@@ -74,15 +73,12 @@ extern void DTL_Trace(
   else                                                                                 \
   {                                                                                    \
     dgetrf2_( m, n, buff_A, ldim_A, buff_p, info);                                     \
-  }                                                                                    \
-  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                                         \
-  return 0;
+  }
 
 #else /* FLA_AMD_OPT */
 
 /* Original FLA path */
 #define LAPACK_getrf_body_d(prefix)                                                    \
-  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                                        \
   FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                               \
   FLA_Obj      A, p;                                                                   \
   integer      min_m_n    = min( *m, *n );                                             \
@@ -106,15 +102,12 @@ extern void DTL_Trace(
                                                                                        \
   FLA_Finalize_safe( init_result );                                                    \
                                                                                        \
-  if ( e_val != FLA_SUCCESS ) *info = e_val + 1;                                       \
-  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                                         \
-  return 0;
+  if ( e_val != FLA_SUCCESS ) *info = e_val + 1;
 
 #endif /* FLA_AMD_OPT */
 
 // Note that p should be set zero.
 #define LAPACK_getrf_body(prefix)                               \
-  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                 \
   FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);        \
   FLA_Obj      A, p;                                            \
   integer      min_m_n    = min( *m, *n );                      \
@@ -171,9 +164,7 @@ extern void DTL_Trace(
   }                                                                                    \
                                                                                        \
   if ( e_val != FLA_SUCCESS ) *info = e_val + 1;                                       \
-  else if( skip != TRUE )       *info = 0;                                             \
-  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                                         \
-  return 0;
+  else if( skip != TRUE )       *info = 0;
 
 #else /* FLA_ENABLE_MULTITHREADING */
 
@@ -181,7 +172,6 @@ extern void DTL_Trace(
 
 // Note that p should be set zero.
 #define LAPACK_getrf_body(prefix)                               \
-  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                 \
   FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);        \
   FLA_Obj      A, p, AH, ph;                                    \
   integer      min_m_n    = min( *m, *n );                      \
@@ -221,10 +211,7 @@ extern void DTL_Trace(
   FLA_Finalize_safe( init_result );                             \
                                                                 \
   if ( e_val != FLA_SUCCESS ) *info = e_val + 1;                \
-  else                        *info = 0;                        \
-                                                                \
-  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                  \
-  return 0;
+  else                        *info = 0;
 
 #endif /* FLA_ENABLE_MULTITHREADING */
 
@@ -232,85 +219,83 @@ LAPACK_getrf(s)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgetrf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
+    AOCL_DTL_SNPRINTF("sgetrf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
 
     {
-        LAPACK_RETURN_CHECK_VAR1(sgetrf_check(m, n, buff_A, ldim_A, buff_p, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1( sgetrf_check( m, n,
+                                           buff_A, ldim_A,
+                                           buff_p,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
-        LAPACK_getrf_body_s(s)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        LAPACK_getrf_body(s)
+         /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 LAPACK_getrf(d)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgetrf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
+    AOCL_DTL_SNPRINTF("dgetrf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(dgetrf_check(m, n, buff_A, ldim_A, buff_p, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1( dgetrf_check( m, n,
+                                           buff_A, ldim_A,
+                                           buff_p,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_getrf_body_d(d)
+             /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 LAPACK_getrf(c)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cgetrf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
+    AOCL_DTL_SNPRINTF("cgetrf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(cgetrf_check(m, n, buff_A, ldim_A, buff_p, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1( cgetrf_check( m, n,
+                                           buff_A, ldim_A,
+                                           buff_p,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_getrf_body(c)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+         /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
 
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 LAPACK_getrf(z)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgetrf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
+    AOCL_DTL_SNPRINTF("zgetrf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(zgetrf_check(m, n, buff_A, ldim_A, buff_p, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1( zgetrf_check( m, n,
+                                           buff_A, ldim_A,
+                                           buff_p,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
-        extern fla_context fla_global_context;
-        aocl_fla_init();
-        if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
-        {
-            LAPACK_getrf_body_z(z)
-        }
-        else
-        {
-            LAPACK_getrf_body(z)
-        }
-
+        LAPACK_getrf_body(z)
         /** fla_error set to 0 on LAPACK_SUCCESS */
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 
 
@@ -325,74 +310,78 @@ LAPACK_getf2(s)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgetf2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
+    AOCL_DTL_SNPRINTF("sgetf2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
         LAPACK_RETURN_CHECK_VAR1(sgetf2_check(m, n, buff_A, ldim_A, buff_p, info), fla_error)
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if(fla_error==LAPACK_SUCCESS)
     {
         LAPACK_getrf_body(s)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+         /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 LAPACK_getf2(d)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgetf2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
+    AOCL_DTL_SNPRINTF("dgetf2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(dgetf2_check(m, n, buff_A, ldim_A, buff_p, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1( dgetf2_check( m, n,
+                                           buff_A, ldim_A,
+                                           buff_p,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_getrf_body_d(d)
+         /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 LAPACK_getf2(c)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cgetf2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
+    AOCL_DTL_SNPRINTF("cgetf2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(cgetf2_check(m, n, buff_A, ldim_A, buff_p, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1( cgetf2_check( m, n,
+                                           buff_A, ldim_A,
+                                           buff_p,
+                                           info ), fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_getrf_body(c)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+         /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 LAPACK_getf2(z)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgetf2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *ldim_A);
+    AOCL_DTL_SNPRINTF("zgetf2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(zgetf2_check(m, n, buff_A, ldim_A, buff_p, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1( zgetf2_check( m, n,
+                                           buff_A, ldim_A,
+                                           buff_p,
+                                           info ), fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_getrf_body(z)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+         /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 
 #endif

@@ -102,16 +102,17 @@ LAPACK_potrf(s)
     }
     if (fla_error == LAPACK_SUCCESS)
     {
-        #if FLA_AMD_OPT
-            {   
-                LAPACK_potrf_body_s(s);
-            }
-        #else
-            {
-                LAPACK_potrf_body(s)
-            }
-        #endif
-        fla_error=0;
+#if FLA_AMD_OPT
+        {   
+            LAPACK_potrf_body_s(s);
+        }
+#else
+        {
+            LAPACK_potrf_body(s)
+        }
+#endif
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return fla_error;
@@ -125,15 +126,11 @@ LAPACK_potrf(d)
     {
         LAPACK_RETURN_CHECK_VAR1(dpotrf_check(uplo, n, buff_A, ldim_A, info), fla_error)
     }
+    if (fla_error == LAPACK_SUCCESS)
+    {
 #if FLA_AMD_OPT
-    {
-        LAPACK_potrf_body_d(d)
-    }
-#else
-    {
-#if FLA_ENABLE_AMD_OPT
         {
-            LAPACK_potrf_body_d(d)
+        LAPACK_potrf_body_d(d)
         }
 #else
         {
@@ -143,8 +140,8 @@ LAPACK_potrf(d)
         /** fla_error set to 0 on LAPACK_SUCCESS */
         fla_error = 0;
     }
-#endif
-    return 0;
+    AOCL_DTL_TRACE_LOG_EXIT
+    return fla_error;
 }
 LAPACK_potrf(c)
 {
@@ -152,16 +149,18 @@ LAPACK_potrf(c)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cpotrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(cpotrf_check(uplo, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1( cpotrf_check( uplo, n,
+                                           buff_A, ldim_A,
+                                           info ), fla_error)
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_potrf_body(c)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
-    return 0;
+    AOCL_DTL_TRACE_LOG_EXIT
+    return fla_error;
 }
 LAPACK_potrf(z)
 {
@@ -169,16 +168,18 @@ LAPACK_potrf(z)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpotrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(zpotrf_check(uplo, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1( zpotrf_check( uplo, n,
+                                           buff_A, ldim_A,
+                                           info ), fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_potrf_body(z)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
-    return 0;
+    AOCL_DTL_TRACE_LOG_EXIT
+    return fla_error;
 }
 
 
@@ -195,15 +196,13 @@ LAPACK_potf2(s)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("spotf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(spotf2_check(uplo, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1( spotf2_check( uplo, n,
+                                           buff_A, ldim_A,
+                                           info ), fla_error)
     }
+    if (fla_error == LAPACK_SUCCESS)
+    {
 #if FLA_AMD_OPT
-    {
-        LAPACK_potrf_body_s(s)
-    }
-#else
-    {
-#if FLA_ENABLE_AMD_OPT
         {
             LAPACK_potrf_body_s(s)
         }
@@ -215,8 +214,8 @@ LAPACK_potf2(s)
         /** fla_error set to 0 on LAPACK_SUCCESS */
         fla_error = 0;
     }
-#endif
-    return 0;
+    AOCL_DTL_TRACE_LOG_EXIT
+    return fla_error;
 }
 LAPACK_potf2(d)
 {
@@ -224,17 +223,15 @@ LAPACK_potf2(d)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpotf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(dpotf2_check(uplo, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1(dpotf2_check(uplo, n,
+                                              buff_A, ldim_A,
+                                              info), fla_error)
     }
+    if (fla_error == LAPACK_SUCCESS)
+    {
 #if FLA_AMD_OPT
-    {
-        LAPACK_potrf_body_d(d)
-    }
-#else
-    {
-#if FLA_ENABLE_AMD_OPT
         {
-            LAPACK_potrf_body_d(d)
+            LAPACK_potrf_body_s(d)
         }
 #else
         {
@@ -244,8 +241,8 @@ LAPACK_potf2(d)
         /** fla_error set to 0 on LAPACK_SUCCESS */
         fla_error = 0;
     }
-#endif
-    return 0;
+    AOCL_DTL_TRACE_LOG_EXIT
+    return fla_error;
 }
 LAPACK_potf2(c)
 {
@@ -253,16 +250,18 @@ LAPACK_potf2(c)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cpotf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(cpotf2_check(uplo, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1( cpotf2_check( uplo, n,
+                                           buff_A, ldim_A,
+                                           info ), fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_potrf_body(c)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
-    return 0;
+    AOCL_DTL_TRACE_LOG_EXIT
+    return fla_error;
 }
 LAPACK_potf2(z)
 {
@@ -270,15 +269,17 @@ LAPACK_potf2(z)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpotf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(zpotf2_check(uplo, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1(zpotf2_check(uplo, n,
+                                              buff_A, ldim_A,
+                                              info), fla_error)
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_potrf_body(z)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
-    return 0;
+    AOCL_DTL_TRACE_LOG_EXIT
+    return fla_error;
 }
 #endif

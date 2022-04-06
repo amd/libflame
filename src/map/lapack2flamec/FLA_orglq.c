@@ -78,8 +78,7 @@ extern void dorglq_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double
                                                                         \
   *info = 0;                                                            \
                                                                         \
-  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                          \                                                                     
-  return 0;
+
 
     *info = (aocl_int_t)info_64;
 #endif
@@ -183,60 +182,46 @@ void dorgl2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *buff_A, ao
 
 LAPACK_orglq(s, org)
 {
-
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sorglq inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
-                      *m, *n, *k, *ldim_A);
-#if !FLA_ENABLE_AMD_OPT
     int fla_error = LAPACK_SUCCESS;
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sorglq inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "", *m, *n, *k, *ldim_A);
+
     {
-        LAPACK_RETURN_CHECK_VAR1(sorglq_check(m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info),
-                                 fla_error)
+        LAPACK_RETURN_CHECK_VAR1( sorglq_check( m, n, k,
+                                           buff_A, ldim_A,
+                                           buff_t,
+                                           buff_w, lwork,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if(fla_error==LAPACK_SUCCESS)
     {
         LAPACK_orglq_body(s)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
-#else
-    {
-        sorglq_fla(m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
-    }
-#endif
+    return fla_error;
 }
 LAPACK_orglq(d, org)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dorglq inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
-                      *m, *n, *k, *ldim_A);
-#if !FLA_ENABLE_AMD_OPT
     int fla_error = LAPACK_SUCCESS;
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dorglq inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "", *m, *n, *k, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(dorglq_check(m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info),
-                                 fla_error)
+        LAPACK_RETURN_CHECK_VAR1( dorglq_check( m, n, k,
+                                           buff_A, ldim_A,
+                                           buff_t,
+                                           buff_w, lwork,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_orglq_body(d)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
-#else
-    {
-        dorglq_fla(m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
-    }
-#endif
+    return fla_error;
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
@@ -244,41 +229,43 @@ LAPACK_orglq(c, ung)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cunglq inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
-                      *m, *n, *k, *ldim_A);
+    AOCL_DTL_SNPRINTF("cunglq inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "", *m, *n, *k, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(cunglq_check(m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info),
-                                 fla_error)
+        LAPACK_RETURN_CHECK_VAR1( cunglq_check( m, n, k,
+                                           buff_A, ldim_A,
+                                           buff_t,
+                                           buff_w, lwork,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_orglq_body(c)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 LAPACK_orglq(z, ung)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zunglq inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
-                      *m, *n, *k, *ldim_A);
+    AOCL_DTL_SNPRINTF("zunglq inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "", *m, *n, *k, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(zunglq_check(m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info),
-                                 fla_error)
+        LAPACK_RETURN_CHECK_VAR1( zunglq_check( m, n, k,
+                                           buff_A, ldim_A,
+                                           buff_t,
+                                           buff_w, lwork,
+                                           info ), fla_error)
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_orglq_body(z)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 #endif
 
@@ -296,41 +283,40 @@ LAPACK_orgl2(s, org)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sorgl2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
-                      *m, *n, *k, *ldim_A);
+    AOCL_DTL_SNPRINTF("sorgl2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "", *m, *n, *k, *ldim_A);
     {
         LAPACK_RETURN_CHECK_VAR1(sorgl2_check(m, n, k, buff_A, ldim_A, buff_t, buff_w, info),
                                  fla_error)
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_orglq_body(s)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 LAPACK_orgl2(d, org)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dorgl2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
-                      *m, *n, *k, *ldim_A);
+    AOCL_DTL_SNPRINTF("dorgl2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "", *m, *n, *k, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(dorgl2_check(m, n, k, buff_A, ldim_A, buff_t, buff_w, info),
-                                 fla_error)
+        LAPACK_RETURN_CHECK_VAR1( dorgl2_check( m, n, k,
+                                           buff_A, ldim_A,
+                                           buff_t,
+                                           buff_w,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_orglq_body(d)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
@@ -338,41 +324,43 @@ LAPACK_orgl2(c, ung)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cungl2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
-                      *m, *n, *k, *ldim_A);
+    AOCL_DTL_SNPRINTF("cungl2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "", *m, *n, *k, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(cungl2_check(m, n, k, buff_A, ldim_A, buff_t, buff_w, info),
-                                 fla_error)
+        LAPACK_RETURN_CHECK_VAR1( cungl2_check( m, n, k,
+                                           buff_A, ldim_A,
+                                           buff_t,
+                                           buff_w,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_orglq_body(c)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 LAPACK_orgl2(z, ung)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zungl2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
-                      *m, *n, *k, *ldim_A);
+    AOCL_DTL_SNPRINTF("zungl2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "", *m, *n, *k, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(zungl2_check(m, n, k, buff_A, ldim_A, buff_t, buff_w, info),
-                                 fla_error)
+        LAPACK_RETURN_CHECK_VAR1( zungl2_check( m, n, k,
+                                           buff_A, ldim_A,
+                                           buff_t,
+                                           buff_w,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_orglq_body(z)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 #endif
 

@@ -48,7 +48,6 @@ extern int sormqr_fla(char *side, char *trans, integer *m, integer *n, integer *
                                     integer* info )
 
 #define LAPACK_ormqr_body(prefix)                                       \
-  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                         \
   FLA_Datatype datatype   = PREFIX2FLAME_DATATYPE(prefix);              \
   FLA_Side     side_fla;                                                \
   FLA_Trans    trans_fla;                                               \
@@ -95,25 +94,31 @@ extern int sormqr_fla(char *side, char *trans, integer *m, integer *n, integer *
   FLA_Finalize_safe( init_result );                                     \
                                                                         \
   *info = 0;                                                            \
-  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                          \
-                                                                        \
-  return 0;
+
 
 LAPACK_ormqr(s, orm)
 {
+    int fla_error = LAPACK_SUCCESS;
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sormqr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "", *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
 #if !FLA_AMD_OPT
     {
-        LAPACK_RETURN_CHECK_VAR1(sormqr_check(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B,
-                                              ldim_B, buff_w, lwork, info),
-                                 fla_error)
+        LAPACK_RETURN_CHECK_VAR1( sormqr_check( side, trans,
+                                           m, n, k,
+                                           buff_A, ldim_A,
+                                           buff_t,
+                                           buff_B, ldim_B,
+                                           buff_w, lwork,
+                                           info ) )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if(fla_error==LAPACK_SUCCESS)
     {
         LAPACK_ormqr_body(s)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
+    AOCL_DTL_TRACE_LOG_EXIT
+    return fla_error;
 #else
     {
         sormqr_fla(side, trans, m, n, k,
@@ -121,25 +126,34 @@ LAPACK_ormqr(s, orm)
                    buff_t,
                    buff_B, ldim_B,
                    buff_w, lwork, info);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
 #endif
 }
 LAPACK_ormqr(d, orm)
 {
+    int fla_error = LAPACK_SUCCESS;
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dormqr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "", *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
 #if !FLA_AMD_OPT
     {
-        LAPACK_RETURN_CHECK_VAR1(dormqr_check(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B,
-                                              ldim_B, buff_w, lwork, info),
-                                 fla_error)
+        LAPACK_RETURN_CHECK_VAR1( dormqr_check( side, trans,
+                                           m, n, k,
+                                           buff_A, ldim_A,
+                                           buff_t,
+                                           buff_B, ldim_B,
+                                           buff_w, lwork,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_ormqr_body(d)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
+    AOCL_DTL_TRACE_LOG_EXIT
+    return fla_error;
 #else
     {
         dormqr_fla(side, trans, m, n, k,
@@ -147,6 +161,7 @@ LAPACK_ormqr(d, orm)
                    buff_t,
                    buff_B, ldim_B,
                    buff_w, lwork, info);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
 #endif
@@ -157,45 +172,47 @@ LAPACK_ormqr(c, unm)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cunmqr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
-                      ", lda %" FLA_IS ", ldc %" FLA_IS "",
-                      *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
+    AOCL_DTL_SNPRINTF("cunmqr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "", *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
     {
-        LAPACK_RETURN_CHECK_VAR1(cunmqr_check(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B,
-                                              ldim_B, buff_w, lwork, info),
-                                 fla_error)
+        LAPACK_RETURN_CHECK_VAR1( cunmqr_check( side, trans,
+                                           m, n, k,
+                                           buff_A, ldim_A,
+                                           buff_t,
+                                           buff_B, ldim_B,
+                                           buff_w, lwork,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_ormqr_body(c)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 LAPACK_ormqr(z, unm)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zunmqr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
-                      ", lda %" FLA_IS ", ldc %" FLA_IS "",
-                      *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
+    AOCL_DTL_SNPRINTF("zunmqr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "", *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
     {
-        LAPACK_RETURN_CHECK_VAR1(zunmqr_check(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B,
-                                              ldim_B, buff_w, lwork, info),
-                                 fla_error)
+        LAPACK_RETURN_CHECK_VAR1( zunmqr_check( side, trans,
+                                           m, n, k,
+                                           buff_A, ldim_A,
+                                           buff_t,
+                                           buff_B, ldim_B,
+                                           buff_w, lwork,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_ormqr_body(z)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 #endif
 
@@ -213,54 +230,51 @@ LAPACK_ormqr(z, unm)
 
 LAPACK_orm2r(s, orm)
 {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sorm2r inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
-                      ", lda %" FLA_IS ", ldc %" FLA_IS "",
-                      *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
-    extern void sorm2r_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real *a,
-                           aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc, real *work,
-                           aocl_int64_t *info);
-
-#if !FLA_ENABLE_AMD_OPT
     int fla_error = LAPACK_SUCCESS;
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sorm2r inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "", *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
     {
-        LAPACK_RETURN_CHECK_VAR1(sorm2r_check(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B,
-                                              ldim_B, buff_w, info),
-                                 fla_error)
+        LAPACK_RETURN_CHECK_VAR1( sorm2r_check( side, trans,
+                                           m, n, k,
+                                           buff_A, ldim_A,
+                                           buff_t,
+                                           buff_B, ldim_B,
+                                           buff_w,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_ormqr_body(s)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
-#else
-    {
-        sorm2r_fla(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, info);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
-    }
-#endif
+    return fla_error;
 }
 
 LAPACK_orm2r(d, orm)
 {
+    int fla_error = LAPACK_SUCCESS;
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dorm2r inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "", *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
 #if !FLA_AMD_OPT
     {
-        LAPACK_RETURN_CHECK_VAR1(dorm2r_check(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B,
-                                              ldim_B, buff_w, info),
-                                 fla_error)
+        LAPACK_RETURN_CHECK_VAR1( dorm2r_check( side, trans,
+                                           m, n, k,
+                                           buff_A, ldim_A,
+                                           buff_t,
+                                           buff_B, ldim_B,
+                                           buff_w,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_ormqr_body(d)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
+    AOCL_DTL_TRACE_LOG_EXIT
+    return fla_error;
 #else
     {
         dorm2r_fla( side, trans,
@@ -270,6 +284,7 @@ LAPACK_orm2r(d, orm)
                     buff_B, ldim_B,
                     buff_w,
                     info );
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
 
     }
@@ -281,45 +296,47 @@ LAPACK_orm2r(c, unm)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cunm2r inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
-                      ", lda %" FLA_IS ", ldc %" FLA_IS "",
-                      *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
+    AOCL_DTL_SNPRINTF("cunm2r inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "", *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
     {
-        LAPACK_RETURN_CHECK_VAR1(cunm2r_check(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B,
-                                              ldim_B, buff_w, info),
-                                 fla_error)
+        LAPACK_RETURN_CHECK_VAR1( cunm2r_check( side, trans,
+                                           m, n, k,
+                                           buff_A, ldim_A,
+                                           buff_t,
+                                           buff_B, ldim_B,
+                                           buff_w,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_ormqr_body(c)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 LAPACK_orm2r(z, unm)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zunm2r inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
-                      ", lda %" FLA_IS ", ldc %" FLA_IS "",
-                      *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
+    AOCL_DTL_SNPRINTF("zunm2r inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "", *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
     {
-        LAPACK_RETURN_CHECK_VAR1(zunm2r_check(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B,
-                                              ldim_B, buff_w, info),
-                                 fla_error)
+        LAPACK_RETURN_CHECK_VAR1( zunm2r_check( side, trans,
+                                           m, n, k,
+                                           buff_A, ldim_A,
+                                           buff_t,
+                                           buff_B, ldim_B,
+                                           buff_w,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_ormqr_body(z)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 #endif
 

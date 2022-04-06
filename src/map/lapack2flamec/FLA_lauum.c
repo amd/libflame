@@ -32,148 +32,28 @@
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
                                integer* info )
 
-    aocl_lapack_slauum(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
+#define LAPACK_lauum_body(prefix)                               \
+  FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);        \
+  FLA_Uplo     uplo_fla;                                        \
+  FLA_Obj      A;                                               \
+  FLA_Error    init_result;                                     \
+                                                                \
+  FLA_Init_safe( &init_result );                                \
+                                                                \
+  FLA_Param_map_netlib_to_flame_uplo( uplo, &uplo_fla );        \
+                                                                \
+  FLA_Obj_create_without_buffer( datatype, *n, *n, &A );        \
+  FLA_Obj_attach_buffer( buff_A, 1, *ldim_A, &A );              \
+                                                                \
+  FLA_Ttmm( uplo_fla, A );                                      \
+                                                                \
+  FLA_Obj_free_without_buffer( &A );                            \
+                                                                \
+  FLA_Finalize_safe( init_result );                             \
+                                                                \
+  *info = 0;                                                    \
+                                                                \
 
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void dlauum_(char *uplo, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlauum(uplo, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlauum(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void clauum_(char *uplo, aocl_int_t *n, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clauum(uplo, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_clauum(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void zlauum_(char *uplo, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlauum(uplo, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zlauum(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void slauu2_(char *uplo, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slauu2(uplo, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slauu2(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void dlauu2_(char *uplo, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlauu2(uplo, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dlauu2(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void clauu2_(char *uplo, aocl_int_t *n, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clauu2(uplo, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_clauu2(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void zlauu2_(char *uplo, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlauu2(uplo, n, buff_A, ldim_A, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zlauu2(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-#define LAPACK_lauum(prefix)                                                                 \
-    void aocl_lapack_##prefix##lauum(char *uplo, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                             aocl_int64_t * ldim_A, aocl_int64_t * info)
-
-#define LAPACK_lauum_body(prefix)                          \
-    FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix); \
-    FLA_Uplo uplo_fla;                                     \
-    FLA_Obj A;                                             \
-    FLA_Error init_result;                                 \
-                                                           \
-    FLA_Init_safe(&init_result);                           \
-                                                           \
-    FLA_Param_map_netlib_to_flame_uplo(uplo, &uplo_fla);   \
-                                                           \
-    FLA_Obj_create_without_buffer(datatype, *n, *n, &A);   \
-    FLA_Obj_attach_buffer(buff_A, 1, *ldim_A, &A);         \
-                                                           \
-    FLA_Ttmm(uplo_fla, A);                                 \
-                                                           \
-    FLA_Obj_free_without_buffer(&A);                       \
-                                                           \
-    FLA_Finalize_safe(init_result);                        \
-                                                           \
-    *info = 0;
 
 LAPACK_lauum(s)
 {
@@ -182,17 +62,17 @@ LAPACK_lauum(s)
     AOCL_DTL_SNPRINTF("slauum inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *ldim_A);
 
     {
-        LAPACK_RETURN_CHECK_VAR1(slauum_check(uplo, n, buff_A, ldim_A, info), fla_error)
-    }
-    if(fla_error == LAPACK_SUCCESS)
+        LAPACK_RETURN_CHECK_VAR1( slauum_check( uplo, n,
+                                           buff_A, ldim_A,
+                                           info ),fla_error )
+    }if(fla_error==LAPACK_SUCCESS)
     {
         LAPACK_lauum_body(s)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 LAPACK_lauum(d)
 {
@@ -201,17 +81,19 @@ LAPACK_lauum(d)
     AOCL_DTL_SNPRINTF("dlauum inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *ldim_A);
 
     {
-        LAPACK_RETURN_CHECK_VAR1(dlauum_check(uplo, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1(dlauum_check(uplo, n,
+                                              buff_A, ldim_A,
+                                              info),
+                                 fla_error)
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_lauum_body(d)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 LAPACK_lauum(c)
 {
@@ -220,17 +102,19 @@ LAPACK_lauum(c)
     AOCL_DTL_SNPRINTF("clauum inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *ldim_A);
 
     {
-        LAPACK_RETURN_CHECK_VAR1(clauum_check(uplo, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1(clauum_check(uplo, n,
+                                              buff_A, ldim_A,
+                                              info),
+                                 fla_error)
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_lauum_body(c)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+      /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 LAPACK_lauum(z)
 {
@@ -239,17 +123,19 @@ LAPACK_lauum(z)
     AOCL_DTL_SNPRINTF("zlauum inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *ldim_A);
 
     {
-        LAPACK_RETURN_CHECK_VAR1(zlauum_check(uplo, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1(zlauum_check(uplo, n,
+                                              buff_A, ldim_A,
+                                              info),
+                                 fla_error)
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_lauum_body(z)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+    /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 
 #define LAPACK_lauu2(prefix)                                            \
@@ -265,17 +151,18 @@ LAPACK_lauu2(s)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slauu2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(slauu2_check(uplo, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1( slauu2_check( uplo, n,
+                                           buff_A, ldim_A,
+                                           info ),fla_error )
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_lauum_body(s)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+    /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 LAPACK_lauu2(d)
 {
@@ -283,17 +170,19 @@ LAPACK_lauu2(d)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlauu2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(dlauu2_check(uplo, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1(dlauu2_check(uplo, n,
+                                              buff_A, ldim_A,
+                                              info),
+                                 fla_error)
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_lauum_body(d)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+   /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 LAPACK_lauu2(c)
 {
@@ -301,17 +190,19 @@ LAPACK_lauu2(c)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("clauu2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(clauu2_check(uplo, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1(clauu2_check(uplo, n,
+                                              buff_A, ldim_A,
+                                              info),
+                                 fla_error)
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_lauum_body(c)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+    /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 LAPACK_lauu2(z)
 {
@@ -319,17 +210,19 @@ LAPACK_lauu2(z)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlauu2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(zlauu2_check(uplo, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1(zlauu2_check(uplo, n,
+                                              buff_A, ldim_A,
+                                              info),
+                                 fla_error)
     }
-    if(fla_error == LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_lauum_body(z)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+    /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return fla_error;
 }
 
 #endif

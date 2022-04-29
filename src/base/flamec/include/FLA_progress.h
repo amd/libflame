@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2022-2025 Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (c) 2022 Advanced Micro Devices, Inc. All rights reserved.
 */
 /* typedef long integer integer; */
 #ifdef __cplusplus
@@ -30,36 +30,22 @@ typedef unsigned long int uinteger;
 
 #define AOCL_FLA_PROGRESS_H 1
 typedef int (*aocl_fla_progress_callback)(
-const char* const api,
-const aocl_int64_t lenapi,
-const aocl_int64_t* const progress,
-const aocl_int64_t* const current_thread,
-const aocl_int64_t* const total_threads
+char* api,
+integer lenapi,
+integer *progress,
+integer *current_thread,
+integer *total_threads
 );
 
-#ifdef _WIN32
-  #ifdef FLA_ENABLE_WINDOWS_BUILD
-     #if defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
-       #define FLA_ATTRI_WEAK __attribute__((weak))
-     #else
-       #define FLA_ATTRI_WEAK
-     #endif
-  #else
-	   #define FLA_ATTRI_WEAK
-  #endif
-#else
-  #define FLA_ATTRI_WEAK __attribute__((weak))
-#endif
-
 void aocl_fla_set_progress(aocl_fla_progress_callback func);
-extern volatile aocl_fla_progress_callback aocl_fla_progress_glb_ptr;
-  
-FLA_ATTRI_WEAK int aocl_fla_progress(
-const char* const api,
-const aocl_int64_t lenapi,
-const aocl_int64_t* const progress,
-const aocl_int64_t* const current_thread,
-const aocl_int64_t* const total_threads
+extern aocl_fla_progress_callback aocl_fla_progress_ptr;
+__attribute__((weak))
+int aocl_fla_progress(
+char* api,
+integer lenapi,
+integer *progress,
+integer *current_thread,
+integer *total_threads
 );
 
 // Macro to send update using api name
@@ -69,24 +55,16 @@ const aocl_int64_t* const total_threads
 			exit(0);\
          }\
 
-#if FLA_OPENMP_MULTITHREADING
-
 #define AOCL_FLA_PROGRESS_VAR \
-        aocl_fla_progress_callback aocl_fla_progress_ptr = aocl_fla_progress_glb_ptr;\
-        static TLS_CLASS_SPEC aocl_int64_t progress_step_count = 0;\
-        static TLS_CLASS_SPEC aocl_int64_t progress_thread_id = 0;\
-        static TLS_CLASS_SPEC aocl_int64_t progress_total_threads = 1;\
-        progress_thread_id = omp_get_thread_num();\
-        progress_total_threads = omp_get_num_threads();\
-
-#else
-
-#define AOCL_FLA_PROGRESS_VAR \
-        aocl_fla_progress_callback aocl_fla_progress_ptr = aocl_fla_progress_glb_ptr;\
-        static TLS_CLASS_SPEC aocl_int64_t progress_step_count = 0;\
-        static TLS_CLASS_SPEC aocl_int64_t progress_thread_id = 0;\
-        static TLS_CLASS_SPEC aocl_int64_t progress_total_threads = 1;\
-        progress_thread_id = 0;\
-        progress_total_threads = 1;\
-
-#endif
+        static TLS_CLASS_SPEC integer step_count=0;\
+        static TLS_CLASS_SPEC integer size=0;\
+        static TLS_CLASS_SPEC integer thread_id = 0;\
+        static TLS_CLASS_SPEC integer total_threads = 0;\
+        if(aocl_fla_progress_ptr || aocl_fla_progress)\
+        {\
+        /* Current implementation returns threadid as 0 and total_threads as 1*/ \
+        /* even if invoked from multithreaded application. */ \
+        /* Support for actual thread number will be added in future */ \
+            thread_id = 0;\
+            total_threads =  1;\
+        }\

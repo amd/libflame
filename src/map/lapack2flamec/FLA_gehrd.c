@@ -197,7 +197,7 @@ LAPACK_gehd2(s)
                                            buff_A, ldim_A,
                                            buff_t,
                                            buff_w,
-                                           info ) )
+                                           info ),fla_error )
     }
     if (fla_error == LAPACK_SUCCESS)
     {
@@ -219,7 +219,7 @@ LAPACK_gehd2(d)
                                               buff_A, ldim_A,
                                               buff_t,
                                               buff_w,
-                                              info))
+                                              info),fla_error)
     }
     if (fla_error == LAPACK_SUCCESS)
     {
@@ -243,7 +243,7 @@ LAPACK_gehd2(c)
                                               buff_A, ldim_A,
                                               buff_t,
                                               buff_w,
-                                              info))
+                                              info),fla_error)
     }
     if (fla_error == LAPACK_SUCCESS)
     {
@@ -265,7 +265,7 @@ LAPACK_gehd2(z)
                                               buff_A, ldim_A,
                                               buff_t,
                                               buff_w,
-                                              info))
+                                              info),fla_error)
     }
     if (fla_error == LAPACK_SUCCESS)
     {

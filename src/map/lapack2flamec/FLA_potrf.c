@@ -124,7 +124,9 @@ LAPACK_potrf(d)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpotrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1(dpotrf_check(uplo, n, buff_A, ldim_A, info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1( dpotrf_check( uplo, n,
+                                           buff_A, ldim_A,
+                                           info ),fla_error )
     }
     if (fla_error == LAPACK_SUCCESS)
     {

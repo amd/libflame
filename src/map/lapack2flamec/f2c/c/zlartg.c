@@ -126,7 +126,6 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
     doublecomplex z__1, z__2, z__3;
     /* Builtin functions */
     double log(doublereal), pow_di(doublereal *, integer *), d_imag( doublecomplex *), z_abs(doublecomplex *), sqrt(doublereal);
-    void d_cnjg(doublecomplex *, doublecomplex *);
     /* Local variables */
     doublereal d__, u, v, w, f1, f2, g1, g2, h2;
     doublereal d__1, d__2, d__3, d__4;
@@ -303,16 +302,28 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
     }
     else
     {
-        /* Computing MAX */
-        d__3 = (d__1 = f__t.real, f2c_dabs(d__1));
-        d__4 = (d__2 = d_imag(&f__t), f2c_dabs(d__2)); // , expr subst
-        f1 = fla_max(d__3, d__4);
-        /* Computing MAX */
-        d__3 = (d__1 = g__t.real, f2c_dabs(d__1));
-        d__4 = (d__2 = d_imag(&g__t), f2c_dabs(d__2)); // , expr subst
-        g1 = fla_max(d__3, d__4);
-        rtmax = sqrt(safmax / 4);
-        if(f1 > rtmin && f1 < rtmax && g1 > rtmin && g1 < rtmax)
+        /* This is the most common case. */
+        /* Neither F2 nor F2/G2 are less than SAFMIN */
+        /* F2S cannot overflow, and it is accurate */
+        f2s = sqrt(g2 / f2 + 1.);
+        /* Do the F2S(real)*FS(complex) multiply with two real multiplies */
+        d__1 = f2s * fs.r;
+        d__2 = f2s * d_imag(&fs);
+        z__1.r = d__1;
+        z__1.i = d__2; // , expr subst
+        r__->r = z__1.r, r__->i = z__1.i;
+        *cs = 1. / f2s;
+        d__ = f2 + g2;
+        /* Do complex/real division explicitly with two real divisions */
+        d__1 = r__->r / d__;
+        d__2 = d_imag(r__) / d__;
+        z__1.r = d__1;
+        z__1.i = d__2; // , expr subst
+        sn->r = z__1.r, sn->i = z__1.i;
+        z__1.r = sn->r * gs.r + sn->i * gs.i;
+        z__1.i = sn->i * gs.r - sn->r * gs.i; // , expr subst
+        sn->r = z__1.r, sn->i = z__1.i;
+        if (count != 0)
         {
             /* Use unscaled algorithm */
             /* Computing 2nd power */

@@ -1,18 +1,7 @@
-/* ../netlib/zrot.f -- translated by f2c (version 20100827). You must link the resulting object file
- with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-
-/*
-    Copyright (c) 2022 Advanced Micro Devices, Inc.  All rights reserved.
-*/
-
-#include "FLA_f2c.h" /* > \brief \b ZROT applies a plane rotation with real cosine and scomplex sine to a pair of scomplex vectors. */
-#ifdef FLA_ENABLE_AMD_OPT
+/* ../netlib/zrot.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+#include "FLA_f2c.h" /* > \brief \b ZROT applies a plane rotation with real cosine and complex sine to a pair of complex vectors. */
 #include "immintrin.h"
-#endif
-
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -166,11 +155,16 @@ void fla_zrot_native(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomplex
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t i__1;
-    dcomplex z__1, z__2, z__3;
+    integer i__1;
+    doublecomplex z__1, z__2, z__3;
     /* Local variables */
-    aocl_int64_t i__, ix, iy;
+    integer i__, ix, iy;
     doublereal lc, sr, si;
+
+    __m256d cmm, srmm, simm;
+    __m256d xmm, ymm, sxmm, symm;
+    __m256d oxmm, oymm;
+    __m128d hxmm0, hxmm1, hymm0, hymm1;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -190,16 +184,20 @@ void fla_zrot_native(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomplex
     --cx;
     /* Function Body */
 
-    if(*n <= 0)
+    if (*n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
-    lc = *c__;
-    sr = s->real;
-    si = s->imag;
+    lc  = *c__;
+    sr = s->r;
+    si = s->i;
 
-    if(*incx == 1 && *incy == 1)
+    cmm  = _mm256_broadcast_sd((double const *) &lc);
+    srmm = _mm256_broadcast_sd((double const *) &sr);
+    simm = _mm256_broadcast_sd((double const *) &si);
+
+    if (*incx == 1 && *incy == 1)
     {
         goto L20;
     }
@@ -216,28 +214,91 @@ void fla_zrot_native(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomplex
     }
 
     i__1 = *n;
-    if(*incx != *incy)
+    if (*incx != *incy)
     {
-        for(i__ = 1; i__ <= i__1; ++i__)
+        for (i__ = 1; i__ <= i__1; ++i__)
         {
-            z__2.real = lc * cx[ix].real;
-            z__2.imag = lc * cx[ix].imag; // , expr subst
-            z__3.real = sr * cy[iy].real - si * cy[iy].imag;
-            z__3.imag = sr * cy[iy].imag + si * cy[iy].real; // , expr subst
-            z__1.real = z__2.real + z__3.real;
-            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+            z__2.r = lc * cx[ix].r;
+            z__2.i = lc * cx[ix].i; // , expr subst
+            z__3.r = sr * cy[iy].r - si * cy[iy].i;
+            z__3.i = sr * cy[iy].i + si * cy[iy].r; // , expr subst
+            z__1.r = z__2.r + z__3.r;
+            z__1.i = z__2.i + z__3.i; // , expr subst
 
-            z__2.real = lc * cy[iy].real;
-            z__2.imag = lc * cy[iy].imag; // , expr subst
-            z__3.real = sr * cx[ix].real + si * cx[ix].imag;
-            z__3.imag = sr * cx[ix].imag - si * cx[ix].real; // , expr subst
+            z__2.r = lc * cy[iy].r;
+            z__2.i = lc * cy[iy].i; // , expr subst
+            z__3.r = sr * cx[ix].r + si * cx[ix].i;
+            z__3.i = sr * cx[ix].i - si * cx[ix].r; // , expr subst
 
-            cy[iy].real = z__2.real - z__3.real;
-            cy[iy].imag = z__2.imag - z__3.imag; // , expr subst
-            cx[ix].real = z__1.real;
-            cx[ix].imag = z__1.imag; // , expr subst
+            cy[iy].r = z__2.r - z__3.r;
+            cy[iy].i = z__2.i - z__3.i; // , expr subst
+            cx[ix].r = z__1.r;
+            cx[ix].i = z__1.i; // , expr subst
             ix += *incx;
             iy += *incy;
+        }
+    }
+    else
+    {
+        for (i__ = 1; i__ <= (i__1 - 1); i__ += 2)
+        {
+            /* load complex inputs from x & y */
+            xmm   = _mm256_loadu_pd((double const *) &cx[ix]);
+            hxmm1 = _mm_loadu_pd((double const *) &cx[ix + *incx]);
+            ymm   = _mm256_loadu_pd((double const *) &cy[ix]);
+            hymm1 = _mm_loadu_pd((double const *) &cy[ix + *incx]);
+
+            /* pack the inputs into 256-bit registers */
+            xmm = _mm256_insertf128_pd(xmm, hxmm1, 0x1);
+            ymm = _mm256_insertf128_pd(ymm, hymm1, 0x1);
+
+            /* shuffle the loaded inputs */
+            sxmm = _mm256_permute_pd(xmm, 0x5);
+            symm = _mm256_permute_pd(ymm, 0x5);
+
+            /* compute x outputs */
+            oxmm = _mm256_mul_pd(simm, symm);
+            oxmm = _mm256_fmaddsub_pd(srmm, ymm, oxmm);
+            oxmm = _mm256_fmadd_pd(cmm, xmm, oxmm);
+
+            /* compute y outputs */
+            oymm = _mm256_mul_pd(simm, sxmm);
+            oymm = _mm256_fmsubadd_pd(srmm, xmm, oymm);
+            oymm = _mm256_fmsub_pd(cmm, ymm, oymm);
+
+            /* extract the results */
+            hxmm0 = _mm256_extractf128_pd(oxmm, 0x0);
+            hxmm1 = _mm256_extractf128_pd(oxmm, 0x1);
+            hymm0 = _mm256_extractf128_pd(oymm, 0x0);
+            hymm1 = _mm256_extractf128_pd(oymm, 0x1);
+
+            /* store the results */
+            _mm_storeu_pd((double *) &cx[ix], hxmm0);
+            _mm_storeu_pd((double *) &cx[ix + *incx], hxmm1);
+            _mm_storeu_pd((double *) &cy[ix], hymm0);
+            _mm_storeu_pd((double *) &cy[ix + *incx], hymm1);
+
+            ix += 2 * *incx;
+        }
+        for ( ; i__ <= i__1; ++i__)
+        {
+            z__2.r = lc * cx[ix].r;
+            z__2.i = lc * cx[ix].i; // , expr subst
+            z__3.r = sr * cy[ix].r - si * cy[ix].i;
+            z__3.i = sr * cy[ix].i + si * cy[ix].r; // , expr subst
+            z__1.r = z__2.r + z__3.r;
+            z__1.i = z__2.i + z__3.i; // , expr subst
+
+            z__2.r = lc * cy[ix].r;
+            z__2.i = lc * cy[ix].i; // , expr subst
+            z__3.r = sr * cx[ix].r + si * cx[ix].i;
+            z__3.i = sr * cx[ix].i - si * cx[ix].r; // , expr subst
+
+            cy[ix].r = z__2.r - z__3.r;
+            cy[ix].i = z__2.i - z__3.i; // , expr subst
+            cx[ix].r = z__1.r;
+            cx[ix].i = z__1.i; // , expr subst
+            ix += *incx;
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -245,24 +306,50 @@ void fla_zrot_native(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomplex
     /* Code for both increments equal to 1 */
 L20:
     i__1 = *n;
-    for(i__ = 1; i__ <= i__1; ++i__)
+    for (i__ = 1; i__ <= (i__1 - 1); i__ += 2)
     {
-        z__2.real = lc * cx[i__].real;
-        z__2.imag = lc * cx[i__].imag; // , expr subst
-        z__3.real = sr * cy[i__].real - si * cy[i__].imag;
-        z__3.imag = sr * cy[i__].imag + si * cy[i__].real; // , expr subst
-        z__1.real = z__2.real + z__3.real;
-        z__1.imag = z__2.imag + z__3.imag; // , expr subst
+        /* load complex inputs from x & y */
+        xmm = _mm256_loadu_pd((double const *) &cx[i__]);
+        ymm = _mm256_loadu_pd((double const *) &cy[i__]);
 
-        z__2.real = lc * cy[i__].real;
-        z__2.imag = lc * cy[i__].imag; // , expr subst
-        z__3.real = sr * cx[i__].real + si * cx[i__].imag;
-        z__3.imag = sr * cx[i__].imag - si * cx[i__].real; // , expr subst
+        /* shuffle the loaded inputs */
+        sxmm = _mm256_permute_pd(xmm, 0x5);
+        symm = _mm256_permute_pd(ymm, 0x5);
 
-        cy[i__].real = z__2.real - z__3.real;
-        cy[i__].imag = z__2.imag - z__3.imag; // , expr subst
-        cx[i__].real = z__1.real;
-        cx[i__].imag = z__1.imag; // , expr subst
+        /* compute x outputs */
+        oxmm = _mm256_mul_pd(simm, symm);
+        oxmm = _mm256_fmaddsub_pd(srmm, ymm, oxmm);
+        oxmm = _mm256_fmadd_pd(cmm, xmm, oxmm);
+
+        /* compute y outputs */
+        oymm = _mm256_mul_pd(simm, sxmm);
+        oymm = _mm256_fmsubadd_pd(srmm, xmm, oymm);
+        oymm = _mm256_fmsub_pd(cmm, ymm, oymm);
+
+        /* store the results */
+        _mm256_storeu_pd((double *) &cx[i__], oxmm);
+        _mm256_storeu_pd((double *) &cy[i__], oymm);
+    }
+
+    for ( ; i__ <= i__1; ++i__)
+    {
+        i__ = i__1;
+        z__2.r = lc * cx[i__].r;
+        z__2.i = lc * cx[i__].i; // , expr subst
+        z__3.r = sr * cy[i__].r - si * cy[i__].i;
+        z__3.i = sr * cy[i__].i + si * cy[i__].r; // , expr subst
+        z__1.r = z__2.r + z__3.r;
+        z__1.i = z__2.i + z__3.i; // , expr subst
+
+        z__2.r = lc * cy[i__].r;
+        z__2.i = lc * cy[i__].i; // , expr subst
+        z__3.r = sr * cx[i__].r + si * cx[i__].i;
+        z__3.i = sr * cx[i__].i - si * cx[i__].r; // , expr subst
+
+        cy[i__].r = z__2.r - z__3.r;
+        cy[i__].i = z__2.i - z__3.i; // , expr subst
+        cx[i__].r = z__1.r;
+        cx[i__].i = z__1.i; // , expr subst
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return 0;

@@ -1,610 +1,77 @@
-##########################################################################################
+###############################################################################
 libFLAME test suite usage guidelines
-##########################################################################################
+###############################################################################
 
 ## Introduction
 
 This wiki explains how to use the test suite included with libFLAME.
 
-The test suite directory has (test/main) the following contents,
-   1. config - This folder contains config files to control the input combinations to
+The test suite directory has the following contents,
+   1. Config - This folder contains config files to control the input combinations to
       test different set of APIs. See ReadMe under this folder for more information.
-   2. input.global.operations - This file controls the list of LAPACK APIs to be tested.
-      input.global.operations.lapacke - This file controls the list of LAPACKE APIs
-      to be tested.
+   2. input.global.operations - This file controls the list of APIs to be tested.
    3. Makefile - Controls how the test suite executable is compiled and linked.
    4. obj - The object files upon being built are placed in this folder.
    5. src - This folder contains the source code.
-   6. test_lapack.x - Test suite executable is created upon successfull build
+   6. test_libflame.x - Test suite executable is created upon successfull build
       completion.
+
 
 
 ## Compiling
 
-Before running the test suite, we must set BLAS, LAPACK and AOCL-Utils library paths.
-
-BLAS library and header paths has to be set using 'LIBBLAS' and 'BLAS_HEADER_PATH' flags
-respectively. AOCL-Utils library path has to be set using LIBAOCLUTILS_LIBRARY_PATH flag.
-   $ make BLAS_HEADER_PATH=<path to BLAS API prototypes header file>
-          LIBBLAS=<full path to BLAS library including library file>
-          LIBAOCLUTILS_LIBRARY_PATH=<full path to AOCL-Utils library including library file>
+Before running the test suite, we must link BLAS and LAPACK library.
 
 By default, the make file is programmed to look for libflame.a in `../../lib/
-x86_64-unknown-linux-gnu` directory for LAPACK library. However, if the users
-wish to link different LAPACK library, they must set the envrionment variable `LIB_PATH`
+x86_64-unknown-linux-gnu` directory for LAPACK library. However, If the users
+wish to link different LAPACK library, you must set the envrionment variable `LIB_PATH`
 to the install path and `LIBFLAME` to the LAPACK library name like the example given
 below.
 
+   ```
    $ export LIBFLAME=lapack.a LIB_PATH=/usr/local
-
-   NOTE: set LAPACK_INC_PATH=<path to LAPACK include folder>
-
+   $ make
+   ```
+   
 Alternatively, you may set the `make` variable `LIB_PATH` on the command line as you
 execute `make`:
 
+   ```
    $ make LIBFLAME=lapack.a LIB_PATH=/usr/local
-          BLAS_HEADER_PATH=<path to BLAS API prototypes header file>
-          LIBBLAS=<full path to BLAS library including library file>
-          LIBAOCLUTILS_LIBRARY_PATH=<full path to AOCL-Utils library including library file>
+   ```
+
+Similarly, user has to provide the path for BLAS library by setting the environment
+varaiable 'LIBBLAS'.
 
 When you are ready to compile, simply run `make` from the current directory.
-After `make` is complete, an executable named `test_lapack.x` is created.
-There are different ways to use the executable to perform different tests as given
-below.
 
-NOTE: PyYAML is required for YAML parsing and YAML‑based test generation.
+After `make` is complete, an executable named `test_libflame.x` is created.
 
-1. Config file based tests
 
-   In this method, input parameters to APIs are taken from config files present in
-   'config' folder. The APIs to test are selected from the file
-   'input.general.operations'.
 
-   ## Selecting APIs for testing
+## Selecting APIs for testing
 
-      ### `input.general.operations`
+### `input.general.operations`
 
-      The `input.general.operations` file contains the list of all the APIs
-      supported by the test suite. User can enable/disable the testing of a
-      particular API by setting/resetting the corresponding API flag. Below is
-      a representative example of the default contents of `input.general.operations`.
+The `input.general.operations` file conatins the list of all the APIs supported by the
+test suite. User can enable/disable the testing of a particular API by setting/resetting
+the corresponding API flag. Below is a representative example of the default contents of
+`input.general.operations`.
 
-         1 geqrf QR factorization (0 = disable; 1 = enable, 2 = run APIs with value 2)
-         1 gerqf RQ factorisation (0 = disable; 1 = enable, 2 = run APIs with value 2)
-         1 getrf LU factorization (0 = disable; 1 = enable, 2 = run APIs with value 2)
+```
+1   geqrf   QR factorization                              (0 = disable; 1 = enable)
+1   gerqf   RQ factorisation                              (0 = disable; 1 = enable)
+1   gerq2   RQ factorisation with unblocked algorithm     (0 = disable; 1 = enable)
+1   potrf   Cholesky factorisation                        (0 = disable; 1 = enable)
+1   getrf   LU factorization                              (0 = disable; 1 = enable)
+```
 
-   ## Selecting Subgroup of APIs for testing
 
-      ### `input.general.operations`
+## Running tests
 
-      The `input.general.operations` file also contains the list of all sub-groups of APIs
-      like all LIN,EIG etc. User can enable/disable the testing of a particular sub-group
-      of APIs by setting/resetting the corresponding group's flag. Below is the content
-      in `input.general.operations` corresponding to subgroup testing.
+Once `input.general.operations` and Config files have been tailored to your liking,
+simply run the test suit executable:
 
-         1   LIN     for testing all LIN APIs               (0 = disable; 1 = enable)
-         1   EIG     for testing all Eigen APIs             (0 = disable; 1 = enable)
-         1   SVD     for testing all SVD APIs               (0 = disable; 1 = enable)
-
-      Note: If any sub-group is enabled then individual API test will not execute.
-
-   ## Running tests
-
-   Once `input.general.operations` and config files have been tailored to your liking,
-   simply run the test suit executable:
-
-
-      $ ./test_lapack.x
-
-   Input matrix sizes and other parameters can be configured by the user by changing the
-   config files. Config files support providing input parameters for four tests. For each
-   of the four tests, a range of input dimensions can be specified.
-
-   ## Running test with different config directory.
-
-   This method can be used to test APIs with config files from any directory.
-   Name of the directory can be specified through command-line option --config_dir as
-     given below.
-      $ ./test_lapack.x --config-dir=weekly
-   Folder chosen for this option will be 'config/weekly' relative to the test-suite folder.
-   The default directory chosen when --config-dir option is not specified is 'config'.
-
-   Note:Directory must be inside 'config' directory.
-
-2. Command line tests
-
-   This method can be used to test a single API with a single set of parameters. To run
-   this mode, name of  the API and corresponding parameters are to be specified as
-   command line arguments.
-
-   For example, command-line options for the API GGEVX are:
-      ggevx <precisions - sdcz> <balanc> <jobvl> <jobvr> <sense>
-            <N> <LDA> <LDB> <LDVL> <LDVR> <LWORK> <repeats>
-
-   Specific instances of calling GGEVX are:
-      ./test_lapack.x GGEVX d P N N E 10 10 10 10 10 -1 100
-      ./test_lapack.x GGEVX sdcz P N N E 10 10 10 10 10 -1 100
-   The first instance tests the double precision GGEVX (DGGEVX) for 10x10 matrices and
-   the second runs the same test for all precisions.
-
-   The last parameter 'repeats' is the number of times the API will be called repeatedly.
-   This is used to get best performance out of the multiple runs.
-
-   Command-line options for any supported API can be obtained by giving only the API name
-   as the only argument.
-
-   NOTE: Method to pass customised input data:
-         Customised input matrices can be copied to a file and passed(as the last argument)
-         to the API through command line. Input matrix data is assumed to be in column major
-         format. (All the elements of a column are continously copied to the file)
-
-      Ex: ./test_lapack.x GGEVX d P N N E 10 10 10 10 10 -1 100 inputdata.txt
-          where inputdata.txt file is in the same location as the test_lapack.x
-
-3. Thread Safety Test
-
-   This test is used to check the thread safety of all supported APIs and can be invoked
-   by setting the environment variable FLA_TEST_NUM_THREADS to value greater than 1. Both
-   the config based and command-line based tests can be used to run this test as given
-   below:
-      $ FLA_TEST_NUM_THREADS=4 ./test_lapack.x
-   These runs create 4 threads and call APIs from all the threads.
-
-
-4. Tests from the DTL Logs
-
-   Execute run_tests_from_dtl_logs.py located under test/main/scripts folder with
-   following parameters as given below:
-
-      --filename  (required) // The filename or filepath of the DTL log files
-      --apiname   (optional) // To execute for Specific API with it's name
-      --nrepeats  (optional) // Set number of repeats for the execution of each API
-
-      $ run_tests_from_dtl_logs.py --filename="logs.txt"
-      $ run_tests_from_dtl_logs.py --filename="logs.txt" --apiname="ggevx"
-      $ run_tests_from_dtl_logs.py --filename="logs.txt" --apiname="ggevx" --nrepeats=4
-
-   To execute the test with thread safety, set the environment variable
-   FLA_TEST_NUM_THREADS to a value greater than 1.
-
-   For windows system you need to set the environment variable using the set command and
-   then need to execute the script.
-
-      > set FLA_TEST_NUM_THREADS=4
-      > run_tests_from_dtl_logs.py --filename="logs.txt"
-
-   For linux system you can set the environment variable along with the execution of the command
-
-      $ OMP_NUM_THREADS=4 run_tests_from_dtl_logs.py --filename="logs.txt"
-
-
-5. Unaligned Memory test
-
-   To enable allocate dynamic memory unaligned we need to set below flags while building main testsuite
-       Windows -- FLA_MEM_UNALIGNED is set, unaligned memory is allocated
-       Linux   -- MEM_UNALN=1
-
-## Enabling non-default API naming convention in testsuite:
-
-    LAPACK's default API naming convention is lowercase with underscore. (Ex: getrf_ )
-    For enabling UPPERCASE w/, w/o underscore and LOWERCASE w/o underscore API naming
-    convention, set API_CALLING_CONVENTION to "upper_","upper","lower" strings respectively
-    in test/main/Makefile.
-    Testsuite default calling convention is lower_
-
-NOTE:
-   To execute test on windows, its recommended to keep the following in same path/folder:
-
-   1) libflame binary(AOCL-LibFlame-Win-MT-dll or -lib)
-   2) test_libFLAME_main.exe
-   3) config (default path - test/main/config/)
-   4) Specify header file paths of libflame and BLIS to get the LAPACK and BLAS API prototypes respectively
-      example: $ cmake -DBLAS_HEADER_PATH="<path to BLIS header file blis.h>"
-
-   To execute the test using libflame shared/dynamic binary, AOCL-LibBlis-Win-MT-dll
-   should be in the same path along with the above files.
-
-6. Tests with invalid input parameters using --einfo option:
-
- � Tests to check proper functioning of APIs while sending invalid value for any of the input parameters
- � can be done using --einfo option. This option is available only through command-line execution.
-
- � Example:
- �� ./test_lapack.x GGEVX d P N N E -10 10 10 10 10 -1 100 --einfo=-5
-
- � In the above example, the value of the M has been given -10 which is an invalid value.
- � The --einfo parameter states the expected value of 'info' coming out of GGEVX API given the invalid input.
- � The test-suite checks the actual value of 'info' against this expected value and reurns PASS if they match
- � and FAIL if they don't.
-
- � All parameter related testing commands are compiled in test/main/scripts run_negative_test_cases.py which
- � can be used for this purpose.
-
-7. Tests with special inputs using --imatrix option for extreme values test:
-
-   Test the APIs by intializing matrix with special input values such as NAN or INFINITY using --imatrix.
-   The test-suite checks the propagation of special values and return PASS if the propagation happens and
-   FAIL if they don't.
-   This option is available only through command line execution.
-
-   Example:
-    ./test_lapack.x GETRF d 10 10 10 1 --imatrix=N
-    ./test_lapack.x GETRF d 10 10 10 1 --imatrix=I
-    ./test_lapack.x GESV d 10 10 10 10 1 --imatrix=A
-    ./test_lapack.x GESV d 10 10 10 10 1 --imatrix=F
-
-   Test behaviour for --imatrix=
-   N:initialize the matrix with NAN values in all locations
-   I:initialize the matrix with INFINITY values in all locations
-   A:initialize the matrix with the NAN values in few random locations
-   F:initialize the matrix with the INFINITY values in few random locations
-
-8. Tests with special inputs using --imatrix option for overflow/underflow test:
-
-   Test and validate the APIs for inputs with maximum and minimum values of repective datatypes
-
-   Test Explanation:
-   Step1: The input matrix are created with predefined properties specific to the API
-   Step2: For overflow(O), scale up the input and for underflow(U), scale down the input
-   to sufficiently large / small values
-
-   Example:
-    ./test_lapack.x gesvd sdcz S S 10 10 10 10 10 -1 1 --imatrix=O
-    ./test_lapack.x gesvd sdcz S S 10 10 10 10 10 -1 1 --imatrix=U
-
-   Test behaviour for --imatrix:
-   O: Performs overflow test
-   U: Performs underflow test
-
-9. Tests with -1 for leading dimensions from config files
-
-   When -1 is passed as any of the leading dimensions(lda, ldab, ldu, ldvt, ldz etc) from config files,
-   least valid value is assigned to the corresponding leading dimension.
-
-   Example: If lda = -1 passed(from config file) to test_geev API
-            then main test-suite sets lda = fla_max(1,n) before calling lapack API geev.
-
-            If lda = -1 is passed through command line, then -1 will be taken as the given lda
-            without any change.
-
-10. AOCL_FLA_PROGRESS feature test.
-
-   Enable a macro 'AOCL_FLA_SET_PROGRESS_ENABLE' for aocl progress and build libflame main test suite for sequential/multithread and run the
-   executable.
-
-   For testing sequential mode : ./test_lapack.x
-
-   output:
-   In AOCL Progress thread  0, at API  DGETRF, progress 8 total threads= 1
-   In AOCL Progress thread  0, at API  DGETRF, progress 16 total threads= 1
-   In AOCL Progress thread  0, at API  DGETRF, progress 24 total threads= 1
-   In AOCL Progress thread  0, at API  DGETRF, progress 32 total threads= 1
-   In AOCL Progress thread  0, at API  DGETRF, progress 40 total threads= 1
-   In AOCL Progress thread  0, at API  DGETRF, progress 48 total threads= 1
-   In AOCL Progress thread  0, at API  DGETRF, progress 56 total threads= 1
-
-   For testing multithread mode: FLA_TEST_NUM_THREADS=4 ./test_lapack.x
-
-   output:
-   In AOCL Progress thread  1, at API  DGETRF, progress 8 total threads= 4
-   In AOCL Progress thread  1, at API  DGETRF, progress 16 total threads= 4
-   In AOCL Progress thread  2, at API  DGETRF, progress 8 total threads= 4
-   In AOCL Progress thread  1, at API  DGETRF, progress 24 total threads= 4
-   In AOCL Progress thread  2, at API  DGETRF, progress 16 total threads= 4
-   In AOCL Progress thread  1, at API  DGETRF, progress 32 total threads= 4
-   In AOCL Progress thread  3, at API  DGETRF, progress 8 total threads= 4
-   In AOCL Progress thread  2, at API  DGETRF, progress 24 total threads= 4
-   In AOCL Progress thread  0, at API  DGETRF, progress 8 total threads= 4
-
-11. Common interface support:
-   Test suite supports the interfaces as follows:
-   a. "--interface=lapack" : Uses LAPACK interface for testing.
-   b. "--interface=lapacke_row" : Uses LAPACKE interface with row major for testing.
-   c. "--interface=lapacke_column" : Uses LAPACKE interface with column major for testing.
-   d. "--interface=cpp" : Uses CPP interface for testing.
-
-   Note :
-   1) In case user specifies anything incorrect, returns error and prints all interfaces.
-   2) ENABLE_CPP_TEST flag is used to enable/disable CPP interface, it is enabled by default.
-   3) If ENABLE_CPP_TEST is disabled & "--interface=cpp" is used, then returns error to enable
-      ENABLE_CPP_TEST flag. Also the test cases which are not yet implemented in cpp,
-      uses LAPACK interface.
-
-   Example: ./test_lapack.x --interface=cpp    --> for CPP interface
-            ./test_lapack.x --interface=lapacke_column --> for column major layout of lapacke interface
-
-12. Benchmark and Statistics Options
-
-   The test suite supports various options for benchmarking and collecting statistics:
-
-   a. Benchmark Mode
-      --bench=<k>: Execute tests in benchmark mode for a minimum duration of <k> seconds.
-      The test will run for at least <k> seconds, but will always complete the specified
-      number of <repeats> iterations. The total number of iterations will be the maximum
-      of <repeats> and the iterations needed to reach <k> seconds.
-
-      Examples:
-         i. With repeats=10, k=2, and 1 second per iteration:
-            The test runs 10 iterations (repeats takes precedence)
-        ii. With repeats=10, k=30, and 1 second per iteration:
-            The test runs 30 iterations (duration takes precedence)
-
-      Note: By default, 10% of iterations are dedicated to warmup in benchmark mode.
-
-   b. Warmup Options
-      --warmup=<k>: Configure the number of warmup invocations where <k> can be:
-        - 0: Disable warmup
-        - Decimal k in range (0,1): Use ceil(k * repeat) invocations as warmup
-        - Integer k >= 1: Use k invocations as warmup
-
-   c. Statistics Collection
-      --stats=<stats_list>: Specify comma-separated list of statistics to print.
-      Available statistics include:
-        - min: Minimum runtime
-        - max: Maximum runtime
-        - avg: Average runtime
-        - var: Variance
-        - stddev: Standard deviation
-        - p<1-99>: Percentiles (e.g., p95 for 95th percentile)
-
-      Example: --stats=min,avg,p95,var
-      Default statistics in benchmark mode: min, avg, p95
-      Default statistics in normal mode: min only
-
-   d. Output Formatting
-      --print-header: Print the header for test output in CLI mode
-      --time-unit=<unit>: Specify time unit for output (s, ms, us, ns, ps, auto)
-      Default unit is 'auto' which automatically selects based on test duration
-
-   e. Data Analysis
-      --filter-outliers[=<multiplier>]: Filter outliers from test results
-      Default multiplier is 2.0
-      Filters values greater than (multiplier * stddev + mean)
-
-      --dump-runtimes=<file_path>: Save runtime data to specified file
-      Only valid in CLI mode
-
-   Example usage:
-   $ ./test_lapack.x --bench=60 --warmup=0.1 --stats=min,avg,p95 --time-unit=ms
-   $ ./test_lapack.x --filter-outliers=2.5 --dump-runtimes=results.txt
-
-   Note:
-   - These options are particularly useful for performance testing and analysis.
-   - The benchmark mode ensures consistent test duration while the statistics options
-     provide detailed performance metrics for analysis.
-   - These options can be used along with special matrix (--imatrix) and
-     interface (--interface) options. However these options should
-     be provided after special matrix and interface options.
-
-13. APIs with only Benchmark test without output Validation
-   Test suite provides support to run only performance benchmark tests for
-   few APIs. Support for more APIs in this mode is being added.
-   These tests are available only through command line mode (config mode
-   is not supported) and only for LAPACK interfaces.
-   Refer to input.global.operations file for APIs with only Benchmark test without
-   Validation. All these APIs will be listed after appropriate comment in that file.
-
-14. Bit Reproducibility Test options
-
-   The test suite contains options for checking bitwise matching outputs for LAPACK APIs.
-   This test is run with a ground truth and verification concept,
-   with the output of one run being used as a reference to compare all successive outputs.
-
-   This option is available only through command line execution.
-
-   Example:
-   Ground truth runs
-   (CRC - checksum)
-   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=G
-   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=G
-   (Complete binary data)
-   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=F
-   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=F
-
-   Verification runs
-   (CRC - checksum)
-   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=V
-   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=V
-   (Complete binary data)
-   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=M
-   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=M
-
-   CTEST integration:
-   The CRC variant of ground truth and verification test cases have been added to the ctest.
-   By default, the "ctest" command will skip both GT and V runs.
-
-   For running Repeatability test, from within the build folder run the command
-      command : "REPEATABILITY_TEST=TRUE ctest -L "repeatability_tests""
-   This will run both the Ground truth run and the verification run in the same environment setup.
-
-   For running Bit Reproducibility test,
-   First run,
-      Command : "RUN_BRT_GT=TRUE ctest -L "brt_gt_tests""
-      This will generate the binary files containing GT outputs inside the build folder.
-   Then after making changes to the environment run
-      command : "RUN_BRT_V=TRUE ctest -L "brt_v_tests""
-      This will verify the outputs using the ground truth run as reference
-
-   Incase of a need for testing between different builds,
-      The binary files containing the GT outputs can be found under : <Build_folder>/test/main/BRT
-      This BRT folder can be stored and moved across different machines for testing.
-
-   Note:
-   It is important to specify the seed when running BR tests between different runs/builds.
-
-15. Test Mode Control
-
-   The test suite supports different test modes that control both input matrix
-   initialization and output validation behavior.
-
-   This option is available through command line execution using the --test-mode parameter.
-
-   Available modes:
-   - default     : API-specific initialization + output validation (default, no flag needed)
-   - perf        : API-specific initialization + skip output validation
-   - random      : Random initialization + output validation
-   - random-perf : Random initialization + skip output validation
-
-   Examples:
-   # Default mode - standard correctness testing
-   ./test_lapack.x GETRF d 100 100 100 10
-
-   # Performance mode - skip validation for benchmarking
-   ./test_lapack.x GETRF d 100 100 100 10 --test-mode=perf
-
-   # Random mode - test correctness with random input matrices
-   ./test_lapack.x GETRF d 100 100 100 10 --test-mode=random
-
-   # Random performance mode - random input matrices without validation
-   ./test_lapack.x GETRF d 100 100 100 10 --test-mode=random-perf
-
-   Mode Behaviors:
-   ┌─────────────┬─────────────────┬─────────────────┬─────────────────────┐
-   │    Mode     │ Initialization  │   Validation    │      Purpose        │
-   ├─────────────┼─────────────────┼─────────────────┼─────────────────────┤
-   │ default     │ API-specific    │ Full validation │ Standard testing    │
-   │ perf        │ API-specific    │ Skipped         │ Performance only    │
-   │ random      │ Random matrices │ Full validation │ Random correctness  │
-   │ random-perf │ Random matrices │ Skipped         │ Random performance  │
-   └─────────────┴─────────────────┴─────────────────┴─────────────────────┘
-
-   Note:
-   - This mode is particularly useful for debugging and performance analysis
-   - Random initialization can be combined with other test options like benchmark mode
-   - The following APIs are compatible only with specific input matrices,
-     so random initialization cannot be applied.
-     - HGEQZ, HSEQR, ORGQR, POTRF, POTRI, POTRS, GBTRF, GEHRD, GGHRD, GETRI,
-       SPFFRTX, SPFFRT2
-
-16. YAML-Based Test Generation
-
-   The test suite includes a YAML-based test generation system that automatically creates
-   CMake CTest definitions for LAPACK API validation tests. This system provides automatic
-   size-based labeling and group label assignment, eliminating the need to manually edit
-   individual test definitions across multiple API files.
-
-   Location:
-   The validation_ctests directory (test/main/validation_ctests/) contains:
-   - YAML files (*.yaml): Test definitions for each API (e.g., getrf.yaml, syev.yaml)
-   - auto_generate_tests.py: Python script that generates CMake test files from YAML
-   - auto_generate_label_groups.yaml: Global configuration for label groups and size thresholds
-
-   Usage:
-   Tests are automatically generated during CMake configuration when BUILD_TEST=ON.
-   Generated files are in <build_dir>/test/main/validation_ctests/*_tests.cmake
-
-   Dependency:
-   YAML‑based CTest generation depends on the PyYAML package for YAML parsing.
-   Ensure that PyYAML is installed on your system.
-
-   For manual generation:
-     $ cd test/main/validation_ctests
-     $ python3 auto_generate_tests.py --api getrf /tmp/output
-     $ python3 auto_generate_tests.py --all /tmp/output
-
-   Running tests:
-     # Filter by label (case-insensitive for API name and group)
-     $ ctest -L yaml_generated  # Run all the ctests generated from yaml files
-     $ ctest -L GETRF           # Run all getrf tests
-     $ ctest -L medium          # Run all tests with small_size or medium_size (medium group)
-     $ ctest -L precision_d     # Run all double precision tests
-     $ ctest -L getrf -R medium # Run all GETRF medium size tests
-
-   NOTE: For detailed documentation, see test/main/validation_ctests/ReadMe.txt
-
-
-17. Runtime Test Arguments (extra_args.txt)
-
-   This feature adds extra command-line flags to main-suite CTest runs (for example
-   runtime selection of --interface= as in section 11) without CMake reconfigure or
-   rebuild. Flags are read from test/main/extra_args.txt and appended after each test's
-   normal arguments.
-
-   Usage:
-   1. Edit test/main/extra_args.txt in the libFLAME source tree.
-   2. Add one or more lines of flags (blank lines and
-      lines starting with # are ignored).
-   3. From the build directory, run ctest again.
-
-   Example:
-   In extra_args.txt:
-     --interface=lapacke_column --test-mode=perf
-
-   Running tests:
-     $ ctest -R main_test_short
-
-   The above appends those flags to each matching main-suite CTest that uses this
-   mechanism.
-
-   Benefits:
-   - Change behavior at ctest time with no CMake reconfigure.
-   - One file applies the same flags across many main-suite tests (interface, perf mode,
-     benchmark options; see sections 11, 12, and 15).
-
-   Note:
-   - Applies only to main-suite CTests wired through test/main (not when you run
-     ./test_lapack.x directly).
-   - Does not apply to repeatability or Bit Reproducibility CTest flows (section 14).
-   - Avoid duplicating flags already present on a given CTest.
-
-18. Parallel CTest Execution (Per-API Test Splitting)
-
-   The test suite supports parallel execution of config-based tests at the per-API
-   granularity through CTest. Instead of running one monolithic test per config type
-   (long/medium/short/micro), each API is registered as a separate CTest entry, allowing
-   `ctest -j N` to run multiple APIs in parallel and significantly reducing wall-clock
-   test time.
-
-   How it works:
-   At CMake configure time, the file `main_ctest.cmake` parses `input.global.operations`
-   and `input.global.operations.lapacke` to extract the list of enabled APIs. For each
-   API and each config type (long, medium, short, micro), a dedicated working directory
-   is created under `<build_dir>/test/main/per_api_ops/` with an operations file that
-   enables only that single API (flag=2). The shared `config/` directory is symlinked
-   (or copied as fallback) into each per-API directory.
-
-   Limitation:
-   The per-API CTest splitting logic currently derives its API list only from APIs that
-   are individually enabled in `input.global.operations` / `input.global.operations.lapacke`.
-   If those files enable only a subgroup such as LIN, EIG, SVD, or AUX, that subgroup is
-   not expanded into per-API CTest entries by the current `main_ctest.cmake` logic.
-   To use per-API CTest splitting, enable the desired APIs explicitly in the operations
-   files rather than relying only on subgroup selection.
-
-   Running parallel tests:
-
-     # Run all long-config tests in parallel with 4 jobs (Linux)
-     $ ctest -R main_test_long -j4 -V
-
-     # On Windows, specify the build configuration with -C
-     $ ctest -C Release -R main_test_long -j4 -V
-
-   Controlling threads per API:
-   The environment variable OMP_NUM_THREADS can be used to control the number of
-   threads each API test uses. This is especially useful with parallel jobs (-jN)
-   to balance total CPU utilisation.
-
-     # Run 8 API tests in parallel, each limited to 4 OpenMP threads
-     $ OMP_NUM_THREADS=4 ctest -R main_test_long -j8 -V
-
-   Notes:
-   - The number of parallel jobs (-jN) can be tuned based on available CPU cores
-     and memory. Each API test runs the full test binary for that single API, so
-     memory usage scales with the number of parallel jobs.
-   - When using ctest -j with OMP_NUM_THREADS, ensure that the product of parallel
-     jobs and threads per job does not exceed available CPU cores to avoid
-     oversubscription (e.g., on a 32-core machine: -j8 with OMP_NUM_THREADS=4).
-   - The per-API operations files and symlinks are generated during CMake configure
-     time. A reconfigure (re-run cmake) is needed if `input.global.operations` or
-     `input.global.operations.lapacke` is modified.
-   - On Windows, the config directory is copied instead of symlinked if symlink
-     creation fails.
-   - For LAPACKE column major interface tests, use `lapacke_test_col_major_long`
-     instead of `main_test_long` (and similarly `lapacke_test_col_major_medium`,
-     `lapacke_test_col_major_short`, `lapacke_test_col_major_micro`). For LAPACKE
-     row major, use `lapacke_test_row_major_long` and so on. For the CPP interface,
-     use `cpp_test_long` and so on.
-     Example:
-       $ ctest -R lapacke_test_col_major_long -j4 -V
-       $ ctest -R lapacke_test_row_major_long -j4 -V
-       $ ctest -R cpp_test_long -j4 -V
+```
+$ ./test_libflame.x
+```

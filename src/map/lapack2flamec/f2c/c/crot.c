@@ -113,8 +113,8 @@ void crot_(aocl_int_t *n, scomplex *cx, aocl_int_t *incx, scomplex *cy, aocl_int
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t i__1;
-    scomplex q__1, q__2, q__3;
+    integer i__1, i__2, i__3, i__4;
+    complex q__1, q__2, q__3, q__4;
     /* Local variables */
     aocl_int64_t i__, ix, iy;
     scomplex stemp;
@@ -157,28 +157,30 @@ void crot_(aocl_int_t *n, scomplex *cx, aocl_int_t *incx, scomplex *cy, aocl_int
         iy = (-(*n) + 1) * *incy + 1;
     }
     i__1 = *n;
-    real sr = s->real;
-    real si = s->imag;
-    for(i__ = 1; i__ <= i__1; ++i__)
+	real sr = s->r;
+    real si = s->i;
+    for (i__ = 1;
+            i__ <= i__1;
+            ++i__)
     {
-        q__2.real = *c__ * cx[ix].real;
-        q__2.imag = *c__ * cx[ix].imag; // , expr subst
-        q__3.real = sr * cy[iy].real - si * cy[iy].imag;
-        q__3.imag = sr * cy[iy].imag + si * cy[iy].real; // , expr subst
-        q__1.real = q__2.real + q__3.real;
-        q__1.imag = q__2.imag + q__3.imag; // , expr subst
-        stemp.real = q__1.real;
-        stemp.imag = q__1.imag; // , expr subst
-        q__2.real = *c__ * cy[iy].real;
-        q__2.imag = *c__ * cy[iy].imag; // , expr subst
-        q__3.real = sr * cx[ix].real + si * cx[ix].imag;
-        q__3.imag = sr * cx[ix].imag - si * cx[ix].real; // , expr subst
-        q__1.real = q__2.real - q__3.real;
-        q__1.imag = q__2.imag - q__3.imag; // , expr subst
-        cy[iy].real = q__1.real;
-        cy[iy].imag = q__1.imag; // , expr subst
-        cx[ix].real = stemp.real;
-        cx[ix].imag = stemp.imag; // , expr subst
+        q__2.r = *c__ * cx[ix].r;
+        q__2.i = *c__ * cx[ix].i; // , expr subst
+        q__3.r = sr * cy[iy].r - si * cy[iy].i;
+        q__3.i = sr * cy[iy].i + si * cy[iy].r; // , expr subst
+        q__1.r = q__2.r + q__3.r;
+        q__1.i = q__2.i + q__3.i; // , expr subst
+        stemp.r = q__1.r;
+        stemp.i = q__1.i; // , expr subst
+        q__2.r = *c__ * cy[iy].r;
+        q__2.i = *c__ * cy[iy].i; // , expr subst
+        q__3.r = sr * cx[ix].r + si * cx[ix].i;
+        q__3.i = sr * cx[ix].i - si * cx[ix].r; // , expr subst
+        q__1.r = q__2.r - q__3.r;
+        q__1.i = q__2.i - q__3.i; // , expr subst
+        cy[iy].r = q__1.r;
+        cy[iy].i = q__1.i; // , expr subst
+        cx[ix].r = stemp.r;
+        cx[ix].i = stemp.i; // , expr subst
         ix += *incx;
         iy += *incy;
         /* L10: */
@@ -187,29 +189,29 @@ void crot_(aocl_int_t *n, scomplex *cx, aocl_int_t *incx, scomplex *cy, aocl_int
     return 0;
     /* Code for both increments equal to 1 */
 L20:
-    sr = s->real;
-    si = s->imag;
+	sr = s->r;
+    si = s->i;
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        q__2.real = *c__ * cx[i__].real;
-        q__2.imag = *c__ * cx[i__].imag; // , expr subst
-        q__3.real = sr * cy[i__].real - si * cy[i__].imag;
-        q__3.imag = sr * cy[i__].imag + si * cy[i__].real; // , expr subst
-        q__1.real = q__2.real + q__3.real;
-        q__1.imag = q__2.imag + q__3.imag; // , expr subst
-        stemp.real = q__1.real;
-        stemp.imag = q__1.imag; // , expr subst
-        q__2.real = *c__ * cy[i__].real;
-        q__2.imag = *c__ * cy[i__].imag; // , expr subst
-        q__3.real = sr * cx[i__].real + si * cx[i__].imag;
-        q__3.imag = sr * cx[i__].imag - si * cx[i__].real; // , expr subst
-        q__1.real = q__2.real - q__3.real;
-        q__1.imag = q__2.imag - q__3.imag; // , expr subst
-        cy[i__].real = q__1.real;
-        cy[i__].imag = q__1.imag; // , expr subst
-        cx[i__].real = stemp.real;
-        cx[i__].imag = stemp.imag; // , expr subst
+        q__2.r = *c__ * cx[i__].r;
+        q__2.i = *c__ * cx[i__].i; // , expr subst
+        q__3.r = sr * cy[i__].r - si * cy[i__].i;
+        q__3.i = sr * cy[i__].i + si * cy[i__].r; // , expr subst
+        q__1.r = q__2.r + q__3.r;
+        q__1.i = q__2.i + q__3.i; // , expr subst
+        stemp.r = q__1.r;
+        stemp.i = q__1.i; // , expr subst
+        q__2.r = *c__ * cy[i__].r;
+        q__2.i = *c__ * cy[i__].i; // , expr subst
+        q__3.r = sr * cx[i__].r + si * cx[i__].i;
+        q__3.i = sr * cx[i__].i - si * cx[i__].r; // , expr subst
+        q__1.r = q__2.r - q__3.r;
+        q__1.i = q__2.i - q__3.i; // , expr subst
+        cy[i__].r = q__1.r;
+        cy[i__].i = q__1.i; // , expr subst
+        cx[i__].r = stemp.r;
+        cx[i__].i = stemp.i; // , expr subst
         /* L30: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

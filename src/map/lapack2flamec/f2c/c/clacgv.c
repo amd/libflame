@@ -83,8 +83,8 @@ void clacgv_(aocl_int_t *n, scomplex *x, aocl_int_t *incx)
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t i__1;
-    scomplex q__1;
+    integer i__1, i__2;
+    complex q__1;
     /* Local variables */
     aocl_int64_t i__, ioff;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -109,10 +109,10 @@ void clacgv_(aocl_int_t *n, scomplex *x, aocl_int_t *incx)
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            q__1.real = x[i__].real;
-            q__1.imag = -x[i__].imag;
-            x[i__].real = q__1.real;
-            x[i__].imag = q__1.imag; // , expr subst
+            q__1.r = x[i__].r;
+            q__1.i = -x[i__].i;
+            x[i__].r = q__1.r;
+            x[i__].i = q__1.i; // , expr subst
             /* L10: */
         }
     }
@@ -126,10 +126,10 @@ void clacgv_(aocl_int_t *n, scomplex *x, aocl_int_t *incx)
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            q__1.real = x[ioff].real;
-            q__1.imag = -x[ioff].imag;
-            x[ioff].real = q__1.real;
-            x[ioff].imag = q__1.imag; // , expr subst
+            q__1.r = x[ioff].r;
+            q__1.i = -x[ioff].i;
+            x[ioff].r = q__1.r;
+            x[ioff].i = q__1.i; // , expr subst
             ioff += *incx;
             /* L20: */
         }

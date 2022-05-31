@@ -1,8 +1,5 @@
-/* claqr4.f -- translated by f2c (version 20160102). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* claqr4.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__13 = 13;
 static aocl_int64_t c__15 = 15;
@@ -126,7 +123,7 @@ static aocl_int64_t c__3 = 3;
 /* > \param[in] LDH */
 /* > \verbatim */
 /* > LDH is INTEGER */
-/* > The leading dimension of the array H. LDH >= fla_max(1,N). */
+/* > The leading dimension of the array H. LDH >= max(1,N). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] W */
@@ -180,7 +177,7 @@ IHI <= IHIZ <= N. */
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
-/* > The dimension of the array WORK. LWORK >= fla_max(1,N) */
+/* > The dimension of the array WORK. LWORK >= max(1,N) */
 /* > is sufficient, but LWORK typically as large as 6*N may */
 /* > be required for optimal performance. A workspace query */
 /* > to determine the optimal workspace size is recommended. */
@@ -273,7 +270,7 @@ void claqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
     real r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8;
     scomplex q__1, q__2, q__3, q__4, q__5;
     /* Builtin functions */
-    void c_sqrt(scomplex *, scomplex *);
+    void c_sqrt(complex *, complex *);
     /* Local variables */
     aocl_int64_t i__, k;
     real s;
@@ -291,7 +288,7 @@ void claqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
     scomplex rtdisc;
     aocl_int64_t nwupbd;
     logical sorted;
-    aocl_int64_t lwkopt;
+    integer lwkopt;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -348,7 +345,7 @@ void claqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
-    if(*n <= 15)
+    if (*n <= 15)
     {
         /* ==== Tiny matrices must use CLAHQR. ==== */
         lwkopt = 1;
@@ -386,8 +383,8 @@ void claqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
         /* . subdiagonal workspace for NWR.GE.2 as required. */
         /* . (In fact, there is enough subdiagonal space for */
         /* . NWR.GE.4.) ==== */
-        nwr = aocl_lapack_ilaenv(&c__13, "CLAQR4", jbcmpz, n, ilo, ihi, lwork);
-        nwr = fla_max(2, nwr);
+        nwr = ilaenv_(&c__13, "CLAQR4", jbcmpz, n, ilo, ihi, lwork);
+        nwr = max(2,nwr);
         /* Computing MIN */
         i__1 = *ihi - *ilo + 1;
         i__2 = (*n - 1) / 3;
@@ -400,7 +397,7 @@ void claqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
         nsr = aocl_lapack_ilaenv(&c__15, "CLAQR4", jbcmpz, n, ilo, ihi, lwork);
         /* Computing MIN */
         i__1 = nsr, i__2 = (*n - 3) / 6;
-        i__1 = fla_min(i__1, i__2);
+        i__1 = min(i__1,i__2);
         i__2 = *ihi - *ilo; // ; expr subst
         nsr = fla_min(i__1, i__2);
         /* Computing MAX */
@@ -430,8 +427,8 @@ void claqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
             return 0;
         }
         /* ==== CLAHQR/CLAQR0 crossover point ==== */
-        nmin = aocl_lapack_ilaenv(&c__12, "CLAQR4", jbcmpz, n, ilo, ihi, lwork);
-        nmin = fla_max(15, nmin);
+        nmin = ilaenv_(&c__12, "CLAQR4", jbcmpz, n, ilo, ihi, lwork);
+        nmin = max(15,nmin);
         /* ==== Nibble crossover point ==== */
         nibble = aocl_lapack_ilaenv(&c__14, "CLAQR4", jbcmpz, n, ilo, ihi, lwork);
         nibble = fla_max(0, nibble);
@@ -525,7 +522,7 @@ void claqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
                     kwtop = kbot - nw + 1;
                     i__2 = kwtop + (kwtop - 1) * h_dim1;
                     i__3 = kwtop - 1 + (kwtop - 2) * h_dim1;
-                    if ((r__1 = h__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[ kwtop + (kwtop - 1) * h_dim1]), f2c_abs(r__2)) > ( r__3 = h__[i__3].r, f2c_abs(r__3)) + (r__4 = r_imag(& h__[kwtop - 1 + (kwtop - 2) * h_dim1]), f2c_abs(r__4)) )
+                    if ((r__1 = h__[i__2].r, f2c_abs(r__1)) + (r__2 = h__[i__2].i, f2c_abs(r__2)) > ( r__3 = h__[i__3].r, f2c_abs(r__3)) + (r__4 = h__[i__3].i, f2c_abs(r__4)) )
                     {
                         ++nw;
                     }
@@ -601,7 +598,7 @@ void claqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
                         i__3 = i__;
                         i__4 = i__ + i__ * h_dim1;
                         i__5 = i__ + (i__ - 1) * h_dim1;
-                        r__3 = ((r__1 = h__[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[i__ + (i__ - 1) * h_dim1]), f2c_abs( r__2))) * .75f;
+                        r__3 = ((r__1 = h__[i__5].r, f2c_abs(r__1)) + (r__2 = h__[i__5].i, f2c_abs( r__2))) * .75f;
                         q__1.r = h__[i__4].r + r__3;
                         q__1.i = h__[i__4].i; // , expr subst
                         w[i__3].r = q__1.r;
@@ -641,7 +638,7 @@ void claqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
                             i__3 = kbot + (kbot - 1) * h_dim1;
                             i__4 = kbot - 1 + kbot * h_dim1;
                             i__5 = kbot + kbot * h_dim1;
-                            s = (r__1 = h__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[kbot - 1 + (kbot - 1) * h_dim1]), f2c_abs(r__2)) + ((r__3 = h__[i__3] .r, f2c_abs(r__3)) + (r__4 = r_imag(&h__[kbot + (kbot - 1) * h_dim1]), f2c_abs(r__4))) + (( r__5 = h__[i__4].r, f2c_abs(r__5)) + (r__6 = r_imag(&h__[kbot - 1 + kbot * h_dim1]), f2c_abs(r__6))) + ((r__7 = h__[i__5].r, f2c_abs( r__7)) + (r__8 = r_imag(&h__[kbot + kbot * h_dim1]), f2c_abs(r__8)));
+                            s = (r__1 = h__[i__2].r, f2c_abs(r__1)) + (r__2 = h__[i__2].i, f2c_abs(r__2)) + ((r__3 = h__[i__3] .r, f2c_abs(r__3)) + (r__4 = h__[i__3].i, f2c_abs(r__4))) + (( r__5 = h__[i__4].r, f2c_abs(r__5)) + (r__6 = h__[i__4].i, f2c_abs(r__6))) + ((r__7 = h__[i__5].r, f2c_abs( r__7)) + (r__8 = h__[i__5].i, f2c_abs(r__8)));
                             i__2 = kbot - 1 + (kbot - 1) * h_dim1;
                             q__1.real = h__[i__2].real / s;
                             q__1.imag = h__[i__2].imag / s; // , expr subst
@@ -718,15 +715,15 @@ void claqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
                             for(i__ = ks; i__ <= i__3; ++i__)
                             {
                                 i__5 = i__ + 1;
-                                if ((r__1 = w[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&w[i__]), f2c_abs(r__2)) < (r__3 = w[i__5].r, f2c_abs(r__3)) + (r__4 = r_imag(&w[i__ + 1]), f2c_abs(r__4)))
+                                if ((r__1 = w[i__].r, f2c_abs(r__1)) + (r__2 = w[i__].i, f2c_abs(r__2)) < (r__3 = w[i__5].r, f2c_abs(r__3)) + (r__4 = w[i__5].i, f2c_abs(r__4)))
                                 {
                                     sorted = FALSE_;
-                                    swap.real = w[i__].real;
-                                    swap.imag = w[i__].imag; // , expr subst
-                                    w[i__].real = w[i__5].real;
-                                    w[i__].imag = w[i__5].imag; // , expr subst
-                                    w[i__5].real = swap.real;
-                                    w[i__5].imag = swap.imag; // , expr subst
+                                    swap.r = w[i__].r;
+                                    swap.i = w[i__].i; // , expr subst
+                                    w[i__].r = w[i__5].r;
+                                    w[i__].i = w[i__5] .i; // , expr subst
+                                    w[i__5].r = swap.r;
+                                    w[i__5].i = swap.i; // , expr subst
                                 }
                                 /* L40: */
                             }
@@ -746,20 +743,19 @@ void claqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
                     q__1.real = q__2.real;
                     q__1.imag = q__2.imag; // , expr subst
                     i__4 = kbot - 1;
-                    i__5 = kbot + kbot * h_dim1;
-                    q__4.r = w[i__4].r - h__[i__5].r;
-                    q__4.i = w[i__4].i - h__[i__5].i; // , expr subst
+                    q__4.r = w[i__4].r - h__[i__3].r;
+                    q__4.i = w[i__4].i - h__[i__3].i; // , expr subst
                     q__3.r = q__4.r;
                     q__3.i = q__4.i; // , expr subst
-                    if ((r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2)) < (r__3 = q__3.r, f2c_abs(r__3)) + (r__4 = r_imag(&q__3), f2c_abs(r__4)))
+                    if ((r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = q__1.i, f2c_abs(r__2)) < (r__3 = q__3.r, f2c_abs(r__3)) + (r__4 = q__3.i, f2c_abs(r__4)))
                     {
-                        w[i__4].real = w[i__2].real;
-                        w[i__4].imag = w[i__2].imag; // , expr subst
+                        w[i__4].r = w[i__2].r;
+                        w[i__4].i = w[i__2].i; // , expr subst
                     }
                     else
                     {
-                        w[i__2].real = w[i__4].real;
-                        w[i__2].imag = w[i__4].imag; // , expr subst
+                        w[i__2].r = w[i__4].r;
+                        w[i__2].i = w[i__4].i; // , expr subst
                     }
                 }
                 /* ==== Use up to NS of the the smallest magnitude */

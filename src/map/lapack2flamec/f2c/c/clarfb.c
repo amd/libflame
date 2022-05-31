@@ -213,9 +213,8 @@ void clarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
-        i__2, i__3, i__4, i__5;
-    scomplex q__1, q__2;
+    integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5;
+    complex q__1, q__2;
     /* Local variables */
     aocl_int64_t i__, j;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
@@ -316,21 +315,25 @@ void clarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
                                 &v[v_offset], ldv, &work[work_offset], ldwork);
                 /* C1 := C1 - W**H */
                 i__1 = *k;
-                aocl_int64_t jw_;
-                for(j = 1; j <= i__1; ++j)
+                integer jw_;
+                for (j = 1;
+                        j <= i__1;
+                        ++j)
                 {
                     i__2 = *n;
                     jw_ = j * work_dim1;
-                    for(i__ = 1; i__ <= i__2; ++i__)
+                    for (i__ = 1;
+                            i__ <= i__2;
+                            ++i__)
                     {
                         i__3 = j + i__ * c_dim1;
                         i__4 = j + i__ * c_dim1;
-                        q__2.real = work[i__ + jw_].real;
-                        q__2.imag = -work[i__ + jw_].imag;
-                        q__1.real = c__[i__4].real - q__2.real;
-                        q__1.imag = c__[i__4].imag - q__2.imag; // , expr subst
-                        c__[i__3].real = q__1.real;
-                        c__[i__3].imag = q__1.imag; // , expr subst
+                        q__2.r =  work[i__ + jw_].r;
+                        q__2.i = -work[i__ + jw_].i;
+                        q__1.r = c__[i__4].r - q__2.r;
+                        q__1.i = c__[i__4].i - q__2.i; // , expr subst
+                        c__[i__3].r = q__1.r;
+                        c__[i__3].i = q__1.i; // , expr subst
                         /* L20: */
                     }
                     /* L30: */
@@ -445,21 +448,25 @@ void clarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
                                 &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
                 /* C2 := C2 - W**H */
                 i__1 = *k;
-                aocl_int64_t jw_;
-                for(j = 1; j <= i__1; ++j)
+                integer jw_;
+                for (j = 1;
+                        j <= i__1;
+                        ++j)
                 {
                     i__2 = *n;
-                    jw_ = j * work_dim1;
-                    for(i__ = 1; i__ <= i__2; ++i__)
+                    jw_ =  j * work_dim1;
+                    for (i__ = 1;
+                            i__ <= i__2;
+                            ++i__)
                     {
                         i__3 = *m - *k + j + i__ * c_dim1;
                         i__4 = *m - *k + j + i__ * c_dim1;
-                        q__2.real = work[i__ + jw_].real;
-                        q__2.imag = -work[i__ + jw_].imag;
-                        q__1.real = c__[i__4].real - q__2.real;
-                        q__1.imag = c__[i__4].imag - q__2.imag; // , expr subst
-                        c__[i__3].real = q__1.real;
-                        c__[i__3].imag = q__1.imag; // , expr subst
+                        q__2.r = work[i__ + jw_].r;
+                        q__2.i = -work[i__ + jw_].i;
+                        q__1.r = c__[i__4].r - q__2.r;
+                        q__1.i = c__[i__4].i - q__2.i; // , expr subst
+                        c__[i__3].r = q__1.r;
+                        c__[i__3].i = q__1.i; // , expr subst
                         /* L80: */
                     }
                     /* L90: */
@@ -573,21 +580,25 @@ void clarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
                                 ldv, &work[work_offset], ldwork);
                 /* C1 := C1 - W**H */
                 i__1 = *k;
-                aocl_int64_t jw_;
-                for(j = 1; j <= i__1; ++j)
+                integer jw_;
+                for (j = 1;
+                        j <= i__1;
+                        ++j)
                 {
                     i__2 = *n;
-                    jw_ = j * work_dim1;
-                    for(i__ = 1; i__ <= i__2; ++i__)
+                    jw_ =  j * work_dim1;
+                    for (i__ = 1;
+                            i__ <= i__2;
+                            ++i__)
                     {
                         i__3 = j + i__ * c_dim1;
                         i__4 = j + i__ * c_dim1;
-                        q__2.real = work[i__ + jw_].real;
-                        q__2.imag = -work[i__ + jw_].imag;
-                        q__1.real = c__[i__4].real - q__2.real;
-                        q__1.imag = c__[i__4].imag - q__2.imag; // , expr subst
-                        c__[i__3].real = q__1.real;
-                        c__[i__3].imag = q__1.imag; // , expr subst
+                        q__2.r = work[i__ + jw_].r;
+                        q__2.i = -work[i__ + jw_].i;
+                        q__1.r = c__[i__4].r - q__2.r;
+                        q__1.i = c__[i__4].i - q__2.i; // , expr subst
+                        c__[i__3].r = q__1.r;
+                        c__[i__3].i = q__1.i; // , expr subst
                         /* L140: */
                     }
                     /* L150: */
@@ -699,21 +710,25 @@ void clarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
                                 &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
                 /* C2 := C2 - W**H */
                 i__1 = *k;
-                aocl_int64_t jw_;
-                for(j = 1; j <= i__1; ++j)
+                integer jw_;
+                for (j = 1;
+                        j <= i__1;
+                        ++j)
                 {
                     i__2 = *n;
                     jw_ = j * work_dim1;
-                    for(i__ = 1; i__ <= i__2; ++i__)
+                    for (i__ = 1;
+                            i__ <= i__2;
+                            ++i__)
                     {
                         i__3 = *m - *k + j + i__ * c_dim1;
                         i__4 = *m - *k + j + i__ * c_dim1;
-                        q__2.real = work[i__ + jw_].real;
-                        q__2.imag = -work[i__ + jw_].imag;
-                        q__1.real = c__[i__4].real - q__2.real;
-                        q__1.imag = c__[i__4].imag - q__2.imag; // , expr subst
-                        c__[i__3].real = q__1.real;
-                        c__[i__3].imag = q__1.imag; // , expr subst
+                        q__2.r = work[i__ + jw_].r;
+                        q__2.i = -work[i__ + jw_].i;
+                        q__1.r = c__[i__4].r - q__2.r;
+                        q__1.i = c__[i__4].i - q__2.i; // , expr subst
+                        c__[i__3].r = q__1.r;
+                        c__[i__3].i = q__1.i; // , expr subst
                         /* L200: */
                     }
                     /* L210: */

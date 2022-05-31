@@ -164,8 +164,8 @@ void cgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, scomplex *a, aocl_
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
-    scomplex q__1;
+    integer a_dim1, a_offset, i__1, i__2, i__3;
+    complex q__1;
     /* Local variables */
     integer i__;
     complex alpha;
@@ -242,10 +242,9 @@ void cgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, scomplex *a, aocl_
         /* Apply H(i)**H to A(i+1:ihi,i+1:n) from the left */
         i__2 = *ihi - i__;
         i__3 = *n - i__;
-        q__1.real = tau[i__].real;
-        q__1.imag = -tau[i__].imag;
-        aocl_lapack_clarf("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &q__1,
-                          &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
+        q__1.r =  tau[i__].r;
+        q__1.i = -tau[i__].i;
+        clarf_("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &q__1, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
         i__2 = i__ + 1 + i__ * a_dim1;
         a[i__2].real = alpha.real;
         a[i__2].imag = alpha.imag; // , expr subst

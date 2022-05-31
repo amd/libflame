@@ -1,423 +1,174 @@
 /*
-    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
-#if ENABLE_CPP_TEST
-#include <invoke_common.hh>
-#endif
-#include <invoke_lapacke.h>
 
-#define GETRS_VL 0.1
-#define GETRS_VU 10
-
-extern double perf;
-extern double time_min;
-integer row_major_getrs_lda;
-integer row_major_getrs_ldb;
+#define NUM_PARAM_COMBOS 1
+#define NUM_MATRIX_ARGS  1
 
 /* Local prototypes */
-void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer datatype,
-                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                               integer einfo);
-void prepare_getrs_run(char *trans, integer m_A, integer n_A, void *A, integer lda, void *B,
-                       integer ldb, integer *ipiv, integer datatype, integer *info,
-                       integer interfacetype, int matrix_layout, test_params_t *params);
-void invoke_getrs(integer datatype, char *trans, integer *nrhs, integer *n, void *a, integer *lda,
-                  integer *ipiv, void *b, integer *ldb, integer *info);
-double prepare_lapacke_getrs_run(integer datatype, int matrix_layout, char *trans, integer n,
-                                 integer nrhs, void *A, integer lda, void *B, integer ldb,
-                                 integer *ipiv, integer *info);
+void fla_test_getrs_experiment(test_params_t *params, integer  datatype, integer  p_cur, integer  q_cur, integer pci,
+                                    integer n_repeats, double* perf, double* t, double* residual);
+void prepare_getrs_run(char *trans, integer m_A, integer n_A, void *A, void *B, integer* ipiv, integer datatype, integer n_repeats, double* time_min_);
+void invoke_getrs(integer datatype, char *trans, integer *nrhs, integer *n, void *a, integer *lda, integer *ipiv, void *b, integer *ldb, integer *info);
 
-void fla_test_getrs(integer argc, char **argv, test_params_t *params)
+void fla_test_getrs(test_params_t *params)
 {
-    char *op_str = "LU factorization";
-    char *front_str = "GETRS";
-    integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
-    params->imatrix_char = '\0';
+    char* op_str = "LU factorization";
+    char* front_str = "GETRS";
+    char* lapack_str = "LAPACK";
+    char* pc_str[NUM_PARAM_COMBOS] = { "" };
 
-    if(argc == 1)
-    {
-        g_config_data = 1;
-        fla_test_output_info("--- %s ---\n", op_str);
-        fla_test_output_info("\n");
-        fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_getrs_experiment);
-        tests_not_run = 0;
-    }
-    if(argc == 10)
-    {
-        FLA_TEST_PARSE_LAST_ARG(argv[9]);
-    }
-    if(argc >= 9 && argc <= 10)
-    {
-        /* Test with parameters from commandline */
-        integer i, num_types, N;
-        integer datatype, n_repeats;
-        char stype, type_flag[4] = {0};
-        char *endptr;
+    fla_test_output_info("--- %s ---\n", op_str);
+    fla_test_output_info("\n");
+    fla_test_op_driver(front_str, lapack_str, NUM_PARAM_COMBOS, pc_str, NUM_MATRIX_ARGS,
+                            params, LIN, fla_test_getrs_experiment);
 
-        /* Parse the arguments */
-        num_types = strlen(argv[2]);
-        params->lin_solver_paramslist[0].transr = argv[3][0];
-        N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
-        params->lin_solver_paramslist[0].nrhs = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
-        {
-            row_major_getrs_lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
-            row_major_getrs_ldb = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-            params->lin_solver_paramslist[0].lda = N;
-            params->lin_solver_paramslist[0].ldb = N;
-        }
-        else
-        {
-            params->lin_solver_paramslist[0].lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
-            params->lin_solver_paramslist[0].ldb = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        }
-
-        n_repeats = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
-        params->n_repeats = n_repeats;
-
-        if(n_repeats > 0)
-        {
-            params->lin_solver_paramslist[0].solver_threshold = CLI_NORM_THRESH;
-
-            for(i = 0; i < num_types; i++)
-            {
-                stype = argv[2][i];
-                datatype = get_datatype(stype);
-
-                /* Check for invalide dataype */
-                if(datatype == INVALID_TYPE)
-                {
-                    invalid_dtype = 1;
-                    continue;
-                }
-
-                /* Check for duplicate datatype presence */
-                if(type_flag[datatype - FLOAT] == 1)
-                    continue;
-                type_flag[datatype - FLOAT] = 1;
-
-                /* Call the test code */
-                fla_test_getrs_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
-                tests_not_run = 0;
-            }
-        }
-    }
-
-    /* Print error messages */
-    if(tests_not_run)
-    {
-        printf("\nIllegal arguments for getrs\n");
-        printf("./<EXE> getrs <precisions - sdcz> <TRANS> <N> <NRHS> <LDA> <LDB> <repeats>\n");
-    }
-    if(invalid_dtype)
-    {
-        printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
-    }
-    if(g_ext_fptr != NULL)
-    {
-        fclose(g_ext_fptr);
-        g_ext_fptr = NULL;
-    }
 }
 
-void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer datatype,
-                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                               integer einfo)
+
+void fla_test_getrs_experiment(test_params_t *params,
+    integer  datatype,
+    integer  p_cur,
+    integer  q_cur,
+    integer pci,
+    integer n_repeats,
+    double* perf,
+    double* t,
+    double* residual)
 {
-    integer n, lda, ldb, NRHS;
-    integer info = 0;
-    void *IPIV, *IPIV_save = NULL, *s_test = NULL;
-    char range = 'U';
-    void *A, *A_test, *B, *B_save, *X, *scal = NULL, *A_test_save = NULL;
+    integer m, cs_A;
+    void* IPIV;
+    void *A, *A_test, *B, *B_save, *X;
+    double time_min = 1e9;
     char TRANS = params->lin_solver_paramslist[pci].transr;
-    double residual, err_thresh;
-    void *filename = NULL;
-
-    integer interfacetype = params->interfacetype;
-    int layout = params->matrix_major;
-
-    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
-    NRHS = params->lin_solver_paramslist[pci].nrhs;
 
     /* Determine the dimensions*/
-    n = p_cur;
-    lda = params->lin_solver_paramslist[pci].lda;
-    ldb = params->lin_solver_paramslist[pci].ldb;
-
-    /* If leading dimensions = -1, set them to default value
-       when inputs are from config files */
-    if(g_config_data)
-    {
-        if(lda == -1)
-        {
-            lda = fla_max(1, n);
-        }
-        if(ldb == -1)
-        {
-            ldb = fla_max(1, n);
-        }
-    }
-
+    m = p_cur;
+    cs_A = m;
     /* Create the matrices for the current operation*/
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
-    create_vector(INTEGER, &IPIV, n);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &B, ldb);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &B_save, ldb);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &X, ldb);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
-
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        create_realtype_vector(get_datatype(datatype), &scal, n);
-    }
-
-    /* This code path is run to generate the matrix to be passed to the API. This is the default
-     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
-     * Test cases. For verification runs the input is loaded from the input generated during Ground
-     * truth run */
-    if(!FLA_BRT_VERIFICATION_RUN)
-    {
-        /* Initialize the test matrices*/
-        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST) || (FLA_RANDOM_INIT_MODE))
-        {
-            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-        }
-        else
-        {
-            /* Generate input matrix with condition number <= 100 */
-            create_realtype_vector(datatype, &s_test, n);
-            create_svd_matrix(datatype, range, n, n, A, lda, s_test, GETRS_VL, GETRS_VU, i_zero,
-                              i_zero, info);
-            free_vector(s_test);
-            if(FLA_OVERFLOW_UNDERFLOW_TEST)
-            {
-                scale_matrix_underflow_overflow_getrs(datatype, &TRANS, n, n, A, lda,
-                                                      params->imatrix_char, scal);
-            }
-        }
-        init_matrix(datatype, B, n, NRHS, ldb, g_ext_fptr, params->imatrix_char);
-    }
-    /* This macro is used in the BRT test cases for the following purposes:
-     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
-     * reference
-     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
-     * passed as input to the API
-     * */
-    FLA_BRT_PROCESS_TWO_INPUT(datatype, n, n, A, lda, datatype, n, NRHS, B, ldb, "cdddd", TRANS, n,
-                              NRHS, lda, ldb)
-
+    create_matrix(datatype, &A, m, m);
+    create_vector(INTEGER, &IPIV, m);
+    create_vector(datatype, &B, m);
+    create_vector(datatype, &B_save, m);
+    create_vector(datatype, &X, m);
+    /* Initialize the test matrices*/
+    rand_matrix(datatype, A, m, m, cs_A);
+    rand_vector(datatype, B, m, 1);
     /* Save the original matrix*/
-
-    copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
-    copy_matrix(datatype, "full", n, NRHS, B, ldb, B_save, ldb);
-
-    /*  call to API getrf to get AFACT */
-    invoke_getrf(datatype, &n, &n, A_test, &lda, IPIV, &info);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test_save, lda);
-    copy_matrix(datatype, "full", n, n, A_test, lda, A_test_save, lda);
-    create_vector(INTEGER, &IPIV_save, n);
-    copy_vector(INTEGER, n, IPIV, 1, IPIV_save, 1);
-
+    create_matrix(datatype, &A_test, m, m);
+    copy_matrix(datatype, "full", m, m, A, cs_A, A_test, cs_A);
+    copy_vector(datatype, m, B, 1, B_save, 1);
     /* call to API */
-    prepare_getrs_run(&TRANS, n, NRHS, A_test, lda, B, ldb, IPIV, datatype, &info, interfacetype,
-                      layout, params);
-    copy_matrix(datatype, "full", n, NRHS, B, ldb, X, ldb);
+    prepare_getrs_run(&TRANS, m, m, A_test, B, IPIV, datatype, n_repeats, &time_min);
+    copy_vector(datatype, m, B, 1, X, 1);
+    /* execution time */
+    *t = time_min;
 
     /* performance computation */
-    /* 2*n^2 * nrhs flops */
-    perf = (double)(2.0 * n * n * NRHS) / time_min / FLOPS_PER_UNIT_PERF;
-    if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        perf *= 4.0;
+    /* 2mn^2 - (2/3)n^3 flops */
+    *perf = (double)((2.0 * m * m * m) - ((2.0 / 3.0) * m * m * m)) / time_min / FLOPS_PER_UNIT_PERF;
+    if (datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+        *perf *= 4.0;
 
     /* output validation */
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    /* Bit reproducibility tests path
-     * This path is taken when BRT is enabled.
-     *     - In the Ground truth runs (BRT_char => G, F), the output is stored in a file and the
-     * default validation function is called
-     *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
-     * compared with the generated output
-     *  */
-    IF_FLA_BRT_VALIDATION(
-        n, n, store_outputs_base(filename, params, 1, 0, datatype, n, NRHS, X, ldb),
-        validate_getrs(tst_api, &TRANS, n, NRHS, A, lda, A_test, A_test_save, IPIV, IPIV_save,
-                       B_save, ldb, X, datatype, residual, params->imatrix_char, scal, params),
-        check_reproducibility_base(filename, params, 1, 0, datatype, n, NRHS, X, ldb))
-    else if(FLA_SKIP_VALIDATION_MODE)
-    {
-        /* Skip validation for performance modes */
-        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    }
-    else if(!FLA_EXTREME_CASE_TEST)
-    {
-        validate_getrs(tst_api, &TRANS, n, NRHS, A, lda, A_test, A_test_save, IPIV, IPIV_save,
-                       B_save, ldb, X, datatype, residual, params->imatrix_char, scal, params);
-    }
-    /* check for output matrix when inputs as extreme values */
-    else
-    {
-        if(!check_extreme_value(datatype, n, NRHS, B, ldb, params->imatrix_char))
-        {
-            residual = DBL_MAX;
-        }
-        else
-        {
-            residual = err_thresh;
-        }
-        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    }
+    validate_getrs(m, m, A, B_save, X, datatype, residual);
 
     /* Free up the buffers */
-    free_matrix(A_test_save);
-    free_vector(IPIV_save);
-free_buffers:
-    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
     free_vector(IPIV);
-    free_matrix(B);
-    free_matrix(X);
-    free_matrix(B_save);
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal);
-    }
+    free_vector(B);
+    free_vector(X);
+    free_vector(B_save);
 }
 
-void prepare_getrs_run(char *TRANS, integer n_A, integer nrhs, void *A, integer lda, void *B,
-                       integer ldb, integer *IPIV, integer datatype, integer *info,
-                       integer interfacetype, int layout, test_params_t *params)
+
+void prepare_getrs_run(char *TRANS,
+    integer m_A,
+    integer n_A,
+    void* A,
+    void* B,
+    integer* IPIV,
+    integer datatype,
+    integer n_repeats,
+    double* time_min_)
 {
+    integer cs_A, lwork;
+    integer i;
     void *A_save, *B_test;
-    double exe_time;
-
+    integer info = 0, nrhs=1;
+    double time_min = 1e9, exe_time;
+    /* Get column stride */
+    cs_A = m_A;
     /* Save the original matrix */
-    create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &A_save, lda);
-    copy_matrix(datatype, "full", n_A, n_A, A, lda, A_save, lda);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n_A, nrhs, &B_test, ldb);
+    create_matrix(datatype, &A_save, m_A, m_A);
+    copy_matrix(datatype, "full", m_A, m_A, A, cs_A, A_save, cs_A);
+    create_vector(datatype, &B_test, m_A);
 
-    *info = 0;
-    FLA_EXEC_LOOP_BEGIN
+
+    for (i = 0; i < n_repeats; ++i)
     {
+
         /* Copy original input data */
-        copy_matrix(datatype, "full", n_A, n_A, A, lda, A_save, lda);
-        copy_matrix(datatype, "full", n_A, nrhs, B, ldb, B_test, ldb);
+        copy_matrix(datatype, "full", m_A, m_A, A, cs_A, A_save, cs_A);
+        copy_vector(datatype, m_A, B, 1, B_test, 1);
 
-        /* Check if LAPACKE interface is enabled */
-        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
-        {
-            exe_time = prepare_lapacke_getrs_run(datatype, layout, TRANS, n_A, nrhs, A_save, lda,
-                                                 B_test, ldb, IPIV, info);
-        }
-#if ENABLE_CPP_TEST
-        else if(interfacetype == LAPACK_CPP_TEST) /* Call CPP getrs API */
-        {
-            exe_time = fla_test_clock();
-            invoke_cpp_getrs(datatype, TRANS, &n_A, &nrhs, A_save, &lda, IPIV, B_test, &ldb, info);
-            exe_time = fla_test_clock() - exe_time;
-        }
-#endif
-        else
-        {
-            exe_time = fla_test_clock();
-            /* Call LAPACK getrs API */
-            invoke_getrs(datatype, TRANS, &n_A, &nrhs, A_save, &lda, IPIV, B_test, &ldb, info);
+        exe_time = fla_test_clock();
 
-            exe_time = fla_test_clock() - exe_time;
-        }
+        /*  call to API getrf to get AFACT */
+        invoke_getrf(datatype, &m_A, &m_A, A_save, &cs_A, IPIV, &info);
+        /*  call  getrs API with AFACT */
+        invoke_getrs(datatype, TRANS, &m_A, &nrhs, A_save, &n_A, IPIV, B_test, &m_A, &info);
 
-        /* Update ctx and loop conditions */
-        FLA_EXEC_LOOP_UPDATE_WITH_INFO
+        exe_time = fla_test_clock() - exe_time;
+
+        /* Get the best execution time */
+        time_min = min(time_min, exe_time);
+        /*  Save the final result to B matrix*/
+        copy_vector(datatype, m_A, B_test, 1, B, 1);
     }
 
-    /*  Save the final result to B matrix*/
-    copy_matrix(datatype, "full", n_A, nrhs, B_test, ldb, B, ldb);
+    *time_min_ = time_min;
 
     free_matrix(A_save);
     free_vector(B_test);
+
 }
 
-double prepare_lapacke_getrs_run(integer datatype, int layout, char *trans, integer n_A,
-                                 integer nrhs, void *A, integer lda, void *B, integer ldb,
-                                 integer *ipiv, integer *info)
-{
-    double exe_time;
-    integer lda_t = lda;
-    integer ldb_t = ldb;
-    void *A_t = NULL, *B_t = NULL;
-
-    /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_getrs_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, g_config_data, layout, nrhs, row_major_getrs_ldb, ldb_t);
-
-    A_t = A;
-    B_t = B;
-    /* In case of row_major matrix layout,
-       convert input matrix to row_major */
-    if(layout == LAPACK_ROW_MAJOR)
-    {
-        /* Create temporary buffers for converting matrix layout */
-        create_matrix(datatype, layout, n_A, n_A, &A_t, fla_max(n_A, lda_t));
-        create_matrix(datatype, layout, n_A, nrhs, &B_t, fla_max(nrhs, ldb_t));
-        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n_A, n_A, A, lda, A_t, lda_t);
-        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n_A, nrhs, B, ldb, B_t, ldb_t);
-    }
-
-    exe_time = fla_test_clock();
-
-    /* Call LAPACKE getrs API */
-    *info = invoke_lapacke_getrs(datatype, layout, *trans, n_A, nrhs, A_t, lda_t, ipiv, B_t, ldb_t);
-
-    exe_time = fla_test_clock() - exe_time;
-
-    if(layout == LAPACK_ROW_MAJOR)
-    {
-        /* In case of row_major matrix layout, convert output matrices
-           to column_major layout */
-        convert_matrix_layout(layout, datatype, n_A, n_A, A_t, lda_t, A, lda);
-        convert_matrix_layout(layout, datatype, n_A, nrhs, B_t, ldb_t, B, ldb);
-        /* free temporary buffers */
-        free_matrix(A_t);
-        free_matrix(B_t);
-    }
-    return exe_time;
-}
 
 /*
- *  Call to LAPACK interface of
- *  GETRS to solve the system of linear equations
- *  A * X = B, where A is a square matrix.
+ *  GETRS_API calls LAPACK interface of
+ *  Singular value decomposition - gesvd
  *  */
-void invoke_getrs(integer datatype, char *trans, integer *n, integer *nrhs, void *a, integer *lda,
-                  integer *ipiv, void *b, integer *ldb, integer *info)
+void invoke_getrs(integer datatype, char* trans, integer *n, integer *nrhs, void *a, integer *lda, integer *ipiv, void* b, integer *ldb, integer *info)
 {
     switch(datatype)
     {
         case FLOAT:
         {
-            fla_lapack_sgetrs(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
+            sgetrs_(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
             break;
         }
-
+        
         case DOUBLE:
         {
-            fla_lapack_dgetrs(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
+            dgetrs_(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
             break;
         }
 
         case COMPLEX:
         {
-            fla_lapack_cgetrs(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
+            cgetrs_(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
             break;
         }
 
         case DOUBLE_COMPLEX:
         {
-            fla_lapack_zgetrs(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
+            zgetrs_(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
             break;
         }
     }
 }
+

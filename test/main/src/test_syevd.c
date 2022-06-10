@@ -1,349 +1,147 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
-#if ENABLE_CPP_TEST
-#include <invoke_common.hh>
-#endif
-#include <invoke_lapacke.h>
+#include "test_common.h"
+#include "test_prototype.h"
 
-extern double perf;
-extern double time_min;
-integer row_major_syevd_lda;
+#define NUM_PARAM_COMBOS 1
+#define NUM_MATRIX_ARGS  1
 
 /* Local prototypes.*/
-void fla_test_syevd_experiment(char *tst_api, test_params_t *params, integer datatype,
-                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                               integer einfo);
-void prepare_syevd_run(char *jobz, char *uplo, integer n, void *A, integer lda, void *w,
-                       integer datatype, integer *info, integer interfacetype, int matrix_layout,
-                       test_params_t *params);
-void invoke_syevd(integer datatype, char *jobz, char *uplo, integer *n, void *a, integer *lda,
-                  void *w, void *work, integer *lwork, void *rwork, integer *lrwork, void *iwork,
-                  integer *liwork, integer *info);
-double prepare_lapacke_syevd_run(integer datatype, int matrix_layout, char *jobz, char *uplo,
-                                 integer n, void *A, integer lda, void *w, integer *info);
+void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer p_cur, integer  q_cur, integer pci,
+integer n_repeats, double* perf, double* t, double* residual);
+void prepare_syevd_run(char* jobz, char* uplo, integer n, void* A, void* w, integer datatype, integer n_repeats, double* time_min_);
+void invoke_syevd(integer datatype, char* jobz, char* uplo, integer* n, void* a, integer* lda, void* w, void* work, integer* lwork, void* rwork, integer* lrwork, void* iwork, integer* liwork, integer* info);
 
-/* Helper functions for Bit reproducibility tests */
-void store_syevd_outputs(void *filename, integer datatype, char jobz, integer n, void *A_test,
-                         integer lda, void *w, void *params);
-integer check_bit_reproducibility_syevd(void *filename, integer datatype, char jobz, integer n,
-                                        void *A_test, integer lda, void *w, void *params);
-
-#define SYEVD_VL 1
-#define SYEVD_VU 5
-
-void fla_test_syevd(integer argc, char **argv, test_params_t *params)
+void fla_test_syevd(test_params_t *params)
 {
-    char *op_str = "Eigen Decomposition";
-    char *front_str = "SYEVD";
-    integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
-    params->imatrix_char = '\0';
+    char* op_str = "Eigen Decomposition";
+    char* front_str = "SYEVD";
+    char* lapack_str = "LAPACK";
+    char* pc_str[NUM_PARAM_COMBOS] = {""};
 
-    if(argc == 1)
-    {
-        g_lwork = -1;
-        g_liwork = -1;
-        g_lrwork = -1;
-        g_config_data = 1;
-        fla_test_output_info("--- %s ---\n", op_str);
-        fla_test_output_info("\n");
-        fla_test_op_driver(front_str, SQUARE_INPUT, params, EIG_SYM, fla_test_syevd_experiment);
-        tests_not_run = 0;
-    }
-    if(argc == 12)
-    {
-        FLA_TEST_PARSE_LAST_ARG(argv[11]);
-    }
-    if(argc >= 11 && argc <= 12)
-    {
-        integer i, num_types, N;
-        integer datatype, n_repeats;
-        char stype, type_flag[4] = {0};
-        char *endptr;
-
-        /* Parse the arguments */
-        num_types = strlen(argv[2]);
-        params->eig_sym_paramslist[0].jobz = argv[3][0];
-        params->eig_sym_paramslist[0].uplo = argv[4][0];
-        N = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
-        {
-            row_major_syevd_lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
-            params->eig_sym_paramslist[0].lda = N;
-        }
-        else
-        {
-            params->eig_sym_paramslist[0].lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
-        }
-        g_lwork = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        g_liwork = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
-        g_lrwork = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
-
-        n_repeats = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
-        params->n_repeats = n_repeats;
-
-        if(n_repeats > 0)
-        {
-            params->eig_sym_paramslist[0].threshold_value = CLI_NORM_THRESH;
-
-            for(i = 0; i < num_types; i++)
-            {
-                stype = argv[2][i];
-                datatype = get_datatype(stype);
-
-                /* Check for invalide dataype */
-                if(datatype == INVALID_TYPE)
-                {
-                    invalid_dtype = 1;
-                    continue;
-                }
-
-                /* Check for duplicate datatype presence */
-                if(type_flag[datatype - FLOAT] == 1)
-                    continue;
-                type_flag[datatype - FLOAT] = 1;
-
-                /* Call the test code */
-                fla_test_syevd_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
-                tests_not_run = 0;
-            }
-        }
-    }
-
-    /* Print error messages */
-    if(tests_not_run)
-    {
-        printf("\nIllegal arguments for syevd/heevd\n");
-        printf("./<EXE> syevd <precisions - sd> <JOBZ> <UPLO> <N> <LDA>"
-               " <LWORK> <LIWORK> <LRWORK> <repeats>\n");
-        printf("./<EXE> heevd <precisions - cz> <JOBZ> <UPLO> <N> <LDA>"
-               " <LWORK> <LIWORK> <LRWORK> <repeats>\n");
-    }
-    if(invalid_dtype)
-    {
-        printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
-    }
-    if(g_ext_fptr != NULL)
-    {
-        fclose(g_ext_fptr);
-        g_ext_fptr = NULL;
-    }
-    return;
+    fla_test_output_info("--- %s ---\n", op_str);
+    fla_test_output_info("\n");
+    fla_test_op_driver(front_str, lapack_str, NUM_PARAM_COMBOS, pc_str, NUM_MATRIX_ARGS, params, EIG_SYM, fla_test_syevd_experiment);
 }
 
-void fla_test_syevd_experiment(char *tst_api, test_params_t *params, integer datatype,
-                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                               integer einfo)
+void fla_test_syevd_experiment(test_params_t *params,
+                               integer  datatype,
+                               integer  p_cur,
+                               integer  q_cur,
+                               integer pci,
+                               integer n_repeats,
+                               double* perf,
+                               double *time_min,
+                               double* residual)
 {
-    integer n, lda, info = 0;
-    char jobz, uplo, range = 'R';
-    void *A = NULL, *w = NULL, *A_test = NULL, *L = NULL, *scal = NULL;
-    double residual, err_thresh;
-    void *filename = NULL;
-
-    integer interfacetype = params->interfacetype;
-    int layout = params->matrix_major;
+    integer n, lda;
+    char jobz, uplo;
+    void *A = NULL, *w = NULL, *A_test = NULL;
 
     /* Get input matrix dimensions.*/
     jobz = params->eig_sym_paramslist[pci].jobz;
     uplo = params->eig_sym_paramslist[pci].uplo;
-    err_thresh = params->eig_sym_paramslist[pci].threshold_value;
+    *residual = params->eig_sym_paramslist[pci].threshold_value;
 
     n = p_cur;
-    lda = params->eig_sym_paramslist[pci].lda;
-
-    /* If leading dimensions = -1, set them to default value
-       when inputs are from config files */
-    if(g_config_data)
-    {
-        if(lda == -1)
-        {
-            lda = fla_max(1, n);
-        }
-    }
+    lda = max(1,n);
 
     /* Create input matrix parameters */
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
+    create_matrix(datatype, &A, n, n);
     create_realtype_vector(datatype, &w, n);
 
-    /* This code path is run to generate the matrix to be passed to the API. This is the default
-     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
-     * Test cases. For verification runs the input is loaded from the input generated during Ground
-     * truth run */
-    if(!FLA_BRT_VERIFICATION_RUN)
-    {
-        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
-        {
-            /* Initialize input matrix with custom data */
-            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-        }
-        else if(FLA_RANDOM_INIT_MODE)
-        {
-            /* Generate random matrix for random test mode */
-            rand_matrix(datatype, A, n, n, lda);
-            /* SYEV expects symmentric matrix as input
-               So make the matrix symmetric/Hermitian */
-            if(datatype == FLOAT || datatype == DOUBLE)
-                form_symmetric_matrix(datatype, n, A, lda, "S", uplo);
-            else
-                form_symmetric_matrix(datatype, n, A, lda, "C", uplo);
-        }
-        else
-        {
-            /*  Creating input matrix A by generating random eigen values.
-                When range = V, generate EVs in given range (vl,vu)  */
-            create_realtype_vector(datatype, &L, n);
-            generate_matrix_from_EVs(datatype, range, n, A, lda, L, SYEVD_VL, n * SYEVD_VU,
-                                     USE_ABS_EIGEN_VALUES);
-            if(FLA_OVERFLOW_UNDERFLOW_TEST)
-            {
-                create_realtype_vector(get_datatype(datatype), &scal, 1);
-                scale_matrix_underflow_overflow_syevd(datatype, n, A, lda, &params->imatrix_char,
-                                                      scal);
-            }
-        }
-    }
-
-    /* This macro is used in the BRT test cases for the following purposes:
-     *    - In the Ground truth runs (BRT_char => G, F), the input is stored in a file for future
-     * reference
-     *    - In the verification runs (BRT_char => V, M), the input is loaded from the file and
-     * passed as input to the API
-     * */
-    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, n, n, A, lda, "ccddddd", jobz, uplo, n, lda, g_lwork,
-                                 g_liwork, g_lrwork)
+    /* input matrix A with random symmetric numbers or complex hermitian matrix */
+    if(datatype == FLOAT || datatype == DOUBLE)
+        rand_sym_matrix(datatype, A, n, n, lda);
+    else
+        rand_hermitian_matrix(datatype, n, &A, lda);
 
     /* Make a copy of input matrix A. This is required to validate the API functionality.*/
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
+    create_matrix(datatype, &A_test, n, n);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
 
-    prepare_syevd_run(&jobz, &uplo, n, A_test, lda, w, datatype, &info, interfacetype, layout,
-                      params);
+    prepare_syevd_run(&jobz, &uplo, n, A_test, w, datatype, n_repeats, time_min);
 
     /* performance computation
-    (8/3)n^3 flops for eigen vectors
-    (4/3)n^3 flops for eigen values */
-    if(same_char(jobz, 'V'))
-        perf = (double)((8.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
+       (8/3)n^3 flops for eigen vectors
+       (4/3)n^3 flops for eigen values */
+    if( jobz == 'V')
+        *perf = (double)((8.0 / 3.0) * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
     else
-        perf = (double)((4.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
+        *perf = (double)((4.0 / 3.0) * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        perf *= 4.0;
+        *perf *= 4.0;
 
     /* output validation */
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    IF_FLA_BRT_VALIDATION(
-        n, n, store_syevd_outputs(filename, datatype, jobz, n, A_test, lda, w, params),
-        validate_syev(tst_api, &jobz, &range, n, A, A_test, lda, 0, 0, L, w, NULL, datatype,
-                      residual, params->imatrix_char, scal, params),
-        check_bit_reproducibility_syevd(filename, datatype, jobz, n, A_test, lda, w, params))
-    else if(FLA_SKIP_VALIDATION_MODE)
-    {
-        /* Skip validation for performance modes */
-        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    }
-    else if(!FLA_EXTREME_CASE_TEST)
-    {
-        validate_syev(tst_api, &jobz, &range, n, A, A_test, lda, 0, 0, L, w, NULL, datatype,
-                      residual, params->imatrix_char, scal, params);
-    }
-    /* check for output matrix when inputs as extreme values */
-    else if(FLA_EXTREME_CASE_TEST)
-    {
-        if((!check_extreme_value(datatype, n, n, A_test, lda, params->imatrix_char)))
-        {
-            residual = DBL_MAX;
-        }
-        else
-        {
-            residual = err_thresh;
-        }
-        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    }
+    if( jobz == 'V')
+        validate_syevd(&jobz, &uplo, n, A, A_test, w, datatype, residual);
 
     /* Free up the buffers */
-    if(!FLA_BRT_VERIFICATION_RUN)
-    {
-        if(!(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST) || (FLA_RANDOM_INIT_MODE)))
-        {
-            free_vector(L);
-            if(FLA_OVERFLOW_UNDERFLOW_TEST)
-            {
-                free_vector(scal);
-            }
-        }
-    }
-    free_matrix(A_test);
-free_buffers:
-    FLA_FREE_FILENAME(filename);
     free_matrix(A);
+    free_matrix(A_test);
     free_vector(w);
 }
 
-void prepare_syevd_run(char *jobz, char *uplo, integer n, void *A, integer lda, void *w,
-                       integer datatype, integer *info, integer interfacetype, int layout,
-                       test_params_t *params)
+void prepare_syevd_run(char *jobz,
+		       char *uplo,
+                       integer n,
+                       void *A,
+                       void *w,
+                       integer datatype,
+                       integer n_repeats,
+                       double* time_min_)
 {
-    void *A_save, *w_test, *work, *iwork, *rwork = NULL;
+    integer lda;
+    void *A_save, *w_test, *work, *iwork, *rwork=NULL;
     integer lwork, liwork, lrwork;
-    double exe_time;
+    integer i;
+    integer info = 0;
+    double time_min = 1e9, exe_time;
+
+    lda = max(1,n);
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
+    create_matrix(datatype, &A_save, n, n);
     copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
 
     /* Make a workspace query the first time through. This will provide us with
-       and ideal workspace size based on an internal block size.
-       NOTE: LAPACKE interface handles workspace query internally */
-    if((interfacetype != LAPACKE_ROW_TEST) && (interfacetype != LAPACKE_COLUMN_TEST)
-       && (g_lwork <= 0 || ((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && g_lrwork <= 0)
-           || g_liwork <= 0))
+       and ideal workspace size based on an internal block size.*/
+    lwork = -1;
+    liwork = -1;
+
+    create_vector(datatype, &work, 1);
+    create_vector(INTEGER, &iwork, 1);
+
+    if ( datatype == COMPLEX || datatype == DOUBLE_COMPLEX )
     {
-        lwork = -1;
-        liwork = -1;
-        lrwork = -1;
-
-        create_vector(datatype, &work, 1);
-        create_vector(INTEGER, &iwork, 1);
+	lrwork = -1;
         create_realtype_vector(datatype, &rwork, 1);
-        /* call to  syevd API */
-#if ENABLE_CPP_TEST
-        if(interfacetype == LAPACK_CPP_TEST)
-        {
-            invoke_cpp_syevd(datatype, jobz, uplo, &n, NULL, &lda, NULL, work, &lwork, rwork,
-                             &lrwork, iwork, &liwork, info);
-        }
-        else
-#endif
-        {
-            invoke_syevd(datatype, jobz, uplo, &n, NULL, &lda, NULL, work, &lwork, rwork, &lrwork,
-                         iwork, &liwork, info);
-        }
-        /* Get work size */
-        if(*info == 0)
-        {
-            lwork = get_work_value(datatype, work);
-            liwork = get_work_value(INTEGER, iwork);
-            lrwork = get_work_value(datatype, rwork);
-        }
-
-        free_vector(work);
-        free_vector(iwork);
-        free_vector(rwork);
     }
     else
     {
-        lwork = g_lwork;
-        liwork = g_liwork;
-        lrwork = g_lrwork;
+        rwork = NULL;
     }
 
-    *info = 0;
-    FLA_EXEC_LOOP_BEGIN
+    /* call to  gesdd API */
+    invoke_syevd(datatype, jobz, uplo, &n, NULL, &lda, NULL, work, &lwork, rwork, &lrwork, iwork, &liwork, &info);
+
+    /* Get work size */
+    lwork = get_work_value( datatype, work );
+    liwork = get_work_value( INTEGER, iwork );
+    lrwork = get_work_value( datatype, rwork );
+
+    /* Output buffers will be freshly allocated for each iterations, free up
+       the current output buffers.*/
+    free_vector(work);
+    free_vector(iwork);
+    if ( datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+        free_vector(rwork);
+
+    for (i = 0; i < n_repeats; ++i)
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
@@ -353,37 +151,20 @@ void prepare_syevd_run(char *jobz, char *uplo, integer n, void *A, integer lda, 
         create_vector(datatype, &work, lwork);
         create_vector(INTEGER, &iwork, liwork);
 
-        if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+	if ( datatype == COMPLEX || datatype == DOUBLE_COMPLEX )
             create_realtype_vector(datatype, &rwork, lrwork);
         else
             rwork = NULL;
 
-        /* Check if LAPACKE interface is enabled */
-        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
-        {
-            exe_time
-                = prepare_lapacke_syevd_run(datatype, layout, jobz, uplo, n, A, lda, w_test, info);
-        }
-#if ENABLE_CPP_TEST
-        else if(interfacetype == LAPACK_CPP_TEST) /* Call CPP SYEVD API */
-        {
-            exe_time = fla_test_clock();
-            invoke_cpp_syevd(datatype, jobz, uplo, &n, A, &lda, w_test, work, &lwork, rwork,
-                             &lrwork, iwork, &liwork, info);
-            exe_time = fla_test_clock() - exe_time;
-        }
-#endif
-        else
-        {
-            exe_time = fla_test_clock();
-            /* Call LAPACK API */
-            invoke_syevd(datatype, jobz, uplo, &n, A, &lda, w_test, work, &lwork, rwork, &lrwork,
-                         iwork, &liwork, info);
-            exe_time = fla_test_clock() - exe_time;
-        }
+        exe_time = fla_test_clock();
 
-        /* Update ctx and loop conditions */
-        FLA_EXEC_LOOP_UPDATE_WITH_INFO
+        /* call to API */
+        invoke_syevd(datatype, jobz, uplo, &n, A, &lda, w_test, work, &lwork, rwork, &lrwork, iwork, &liwork, &info);
+
+        exe_time = fla_test_clock() - exe_time;
+
+        /* Get the best execution time */
+        time_min = min(time_min, exe_time);
 
         /* Make a copy of the output buffers. This is required to validate the API functionality.*/
         copy_realtype_vector(datatype, n, w_test, 1, w, 1);
@@ -392,117 +173,40 @@ void prepare_syevd_run(char *jobz, char *uplo, integer n, void *A, integer lda, 
         free_vector(work);
         free_vector(iwork);
 
-        if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+	if ( datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
             free_vector(rwork);
 
-        free_vector(w_test);
+	free_vector(w_test);
     }
 
-    free_matrix(A_save);
+    *time_min_ = time_min;
+
+    free(A_save);
 }
 
-double prepare_lapacke_syevd_run(integer datatype, int layout, char *jobz, char *uplo, integer n,
-                                 void *A, integer lda, void *w, integer *info)
-{
-    double exe_time;
-    integer lda_t = lda;
-    void *A_t = NULL;
-
-    /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_syevd_lda, lda_t);
-
-    A_t = A;
-
-    /* In case of row_major matrix layout,
-       convert input matrix to row_major */
-    if(layout == LAPACK_ROW_MAJOR)
-    {
-        /* Create temporary buffers for converting matrix layout */
-        create_matrix(datatype, layout, n, n, &A_t, fla_max(n, lda_t));
-        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, A, lda, A_t, lda_t);
-    }
-    exe_time = fla_test_clock();
-
-    /* call LAPACKE syevd API */
-    *info = invoke_lapacke_syevd(datatype, layout, *jobz, *uplo, n, A_t, lda_t, w);
-
-    exe_time = fla_test_clock() - exe_time;
-    if(layout == LAPACK_ROW_MAJOR)
-    {
-        /* In case of row_major matrix layout, convert output matrices
-           to column_major layout */
-        convert_matrix_layout(layout, datatype, n, n, A_t, lda_t, A, lda);
-        /* free temporary buffers */
-        free_matrix(A_t);
-    }
-
-    return exe_time;
-}
-
-void invoke_syevd(integer datatype, char *jobz, char *uplo, integer *n, void *a, integer *lda,
-                  void *w, void *work, integer *lwork, void *rwork, integer *lrwork, void *iwork,
-                  integer *liwork, integer *info)
+void invoke_syevd(integer datatype, char* jobz, char* uplo, integer* n, void* a, integer* lda, void* w, void* work, integer* lwork, void* rwork, integer* lrwork, void* iwork, integer* liwork, integer* info)
 {
     switch(datatype)
     {
         case FLOAT:
         {
-            fla_lapack_ssyevd(jobz, uplo, n, a, lda, w, work, lwork, iwork, liwork, info);
+            ssyevd_(jobz, uplo, n, a, lda, w, work, lwork, iwork, liwork, info);
             break;
         }
         case DOUBLE:
         {
-            fla_lapack_dsyevd(jobz, uplo, n, a, lda, w, work, lwork, iwork, liwork, info);
+            dsyevd_(jobz, uplo, n, a, lda, w, work, lwork, iwork, liwork, info);
             break;
         }
         case COMPLEX:
         {
-            fla_lapack_cheevd(jobz, uplo, n, a, lda, w, work, lwork, rwork, lrwork, iwork, liwork,
-                              info);
+            cheevd_(jobz, uplo, n, a, lda, w, work, lwork, rwork, lrwork, iwork, liwork, info);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            fla_lapack_zheevd(jobz, uplo, n, a, lda, w, work, lwork, rwork, lrwork, iwork, liwork,
-                              info);
+            zheevd_(jobz, uplo, n, a, lda, w, work, lwork, rwork, lrwork, iwork, liwork, info);
             break;
         }
     }
-}
-
-void store_syevd_outputs(void *filename, integer datatype, char jobz, integer n, void *A_test,
-                         integer lda, void *w, void *params)
-{
-    /* Create and open a file for storing Ground truth*/
-    FLA_OPEN_GT_FILE_STORE
-
-    /* Always store eigenvalues */
-    FLA_STORE_BRT_VECTOR(get_realtype(datatype), n, w)
-
-    /* Only store eigenvectors if jobz = 'V' */
-    if(!same_char(jobz, 'N'))
-    {
-        FLA_STORE_BRT_MATRIX(datatype, n, n, A_test, lda)
-    }
-
-    FLA_CLOSE_GT_FILE_STORE
-}
-
-integer check_bit_reproducibility_syevd(void *filename, integer datatype, char jobz, integer n,
-                                        void *A_test, integer lda, void *w, void *params)
-{
-    /* Open the file for reading Ground truth */
-    FLA_OPEN_GT_FILE_READ
-
-    /* Always verify eigenvalues */
-    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), n, w)
-
-    /* Only verify eigenvectors if jobz = 'V' */
-    if(!same_char(jobz, 'N'))
-    {
-        FLA_VERIFY_BRT_MATRIX(datatype, n, n, A_test, lda)
-    }
-
-    fclose(gt_file);
-    return 1;
 }

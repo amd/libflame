@@ -348,12 +348,8 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
              doublereal *b22d, doublereal *b22e, doublereal *work, aocl_int_t *lwork,
              aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS ", ldv2t %" FLA_IS ", lwork %" FLA_IS "",*jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t, *lwork);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS ", ldv2t %" FLA_IS ", lwork %" FLA_IS "",*jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t, *lwork);
     /* System generated locals */
     aocl_int64_t u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset,
         i__1, i__2;
@@ -481,7 +477,7 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     {
         lworkmin = 1;
         work[1] = (doublereal) lworkmin;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Compute workspace */
@@ -507,12 +503,12 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     {
         i__1 = -(*info);
         xerbla_("DBBCSD", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Get machine constants */
@@ -613,7 +609,7 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
                     ++(*info);
                 }
             }
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return 0;
         }
         iter = iter + imax - imin;
@@ -1346,7 +1342,7 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             }
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DBBCSD */
 }

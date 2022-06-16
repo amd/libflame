@@ -197,12 +197,8 @@ void dgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
              doublereal *q, aocl_int_t *ldq, doublereal *pt, aocl_int_t *ldpt, doublereal *c__,
              aocl_int_t *ldc, doublereal *work, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dgbbrd inputs: vect %c, m %" FLA_IS ", n %" FLA_IS ", ncc %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", ldq %" FLA_IS ", ldpt %" FLA_IS ", ldc %" FLA_IS "",*vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dgbbrd inputs: vect %c, m %" FLA_IS ", n %" FLA_IS ", ncc %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", ldq %" FLA_IS ", ldpt %" FLA_IS ", ldc %" FLA_IS "",*vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, c_dim1, c_offset, pt_dim1, pt_offset, q_dim1, q_offset, i__1,
         i__2, i__3, i__4, i__5, i__6, i__7;
@@ -305,7 +301,7 @@ void dgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
     {
         i__1 = -(*info);
         xerbla_("DGBBRD", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Initialize Q and P**T to the unit matrix, if needed */
@@ -320,7 +316,7 @@ void dgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
     /* Quick return if possible. */
     if(*m == 0 || *n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     minmn = fla_min(*m, *n);
@@ -643,7 +639,7 @@ void dgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
             /* L150: */
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGBBRD */
 }

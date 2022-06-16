@@ -164,12 +164,8 @@ elements marked */
 void dgbsv_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *nrhs, doublereal *ab,
             aocl_int_t *ldab, aocl_int_t *ipiv, doublereal *b, aocl_int_t *ldb, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dgbsv inputs: n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*n, *kl, *ku, *nrhs, *ldab, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dgbsv inputs: n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*n, *kl, *ku, *nrhs, *ldab, *ldb);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
@@ -226,7 +222,7 @@ void dgbsv_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *nrhs, dou
     {
         i__1 = -(*info);
         xerbla_("DGBSV ", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Compute the LU factorization of the band matrix A. */
@@ -237,7 +233,7 @@ void dgbsv_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *nrhs, dou
         aocl_lapack_dgbtrs("No transpose", n, kl, ku, nrhs, &ab[ab_offset], ldab, &ipiv[1],
                            &b[b_offset], ldb, info);
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGBSV */
 }

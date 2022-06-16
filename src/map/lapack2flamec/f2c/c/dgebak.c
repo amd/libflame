@@ -133,12 +133,8 @@ ILO=1 and IHI=0, if N=0. */
 void dgebak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
              doublereal *scale, aocl_int_t *m, doublereal *v, aocl_int_t *ldv, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dgebak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", m %" FLA_IS ", ldv %" FLA_IS "",*job, *side, *n, *ilo, *ihi, *m, *ldv);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dgebak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", m %" FLA_IS ", ldv %" FLA_IS "",*job, *side, *n, *ilo, *ihi, *m, *ldv);
     /* System generated locals */
     aocl_int64_t v_dim1, v_offset, i__1;
     /* Local variables */
@@ -211,23 +207,23 @@ void dgebak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *
     {
         i__1 = -(*info);
         xerbla_("DGEBAK", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(*m == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(lsame_(job, "N", 1, 1))
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(*ilo == *ihi)
@@ -311,7 +307,7 @@ L30:
             }
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGEBAK */
 }

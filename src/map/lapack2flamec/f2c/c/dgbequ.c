@@ -152,12 +152,8 @@ void dgbequ_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doubl
              aocl_int_t *ldab, doublereal *r__, doublereal *c__, doublereal *rowcnd,
              doublereal *colcnd, doublereal *amax, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dgbequ inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS "",*m, *n, *kl, *ku, *ldab);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dgbequ inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS "",*m, *n, *kl, *ku, *ldab);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3;
@@ -219,7 +215,7 @@ void dgbequ_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doubl
     {
         i__1 = -(*info);
         xerbla_("DGBEQU", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
@@ -228,7 +224,7 @@ void dgbequ_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doubl
         *rowcnd = 1.;
         *colcnd = 1.;
         *amax = 0.;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Get machine constants. */
@@ -287,7 +283,7 @@ void dgbequ_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doubl
             if(r__[i__] == 0.)
             {
                 *info = i__;
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return 0;
             }
             /* L50: */
@@ -362,7 +358,7 @@ void dgbequ_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doubl
             if(c__[j] == 0.)
             {
                 *info = *m + j;
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return 0;
             }
             /* L110: */
@@ -384,7 +380,7 @@ void dgbequ_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doubl
         /* Compute COLCND = fla_min(C(J)) / fla_max(C(J)) */
         *colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGBEQU */
 }

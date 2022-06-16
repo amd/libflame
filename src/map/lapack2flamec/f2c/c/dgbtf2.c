@@ -332,12 +332,8 @@ elements marked */
 void dgbtf2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doublereal *ab,
              aocl_int_t *ldab, aocl_int_t *ipiv, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dgbtf2 inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS "",*m, *n, *kl, *ku, *ldab);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dgbtf2 inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS "",*m, *n, *kl, *ku, *ldab);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal d__1;
@@ -413,13 +409,13 @@ void dgbtf2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doubl
     {
         i__1 = -(*info);
         xerbla_("DGBTF2", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
 #if AOCL_FLA_PROGRESS_H
@@ -525,7 +521,7 @@ void dgbtf2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doubl
         }
         /* L40: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGBTF2 */
 }

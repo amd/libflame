@@ -118,12 +118,8 @@
 void ddisna_(char *job, aocl_int_t *m, aocl_int_t *n, doublereal *d__, doublereal *sep,
              aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"ddisna inputs: job %c, m %" FLA_IS ", n %" FLA_IS "",*job, *m, *n);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("ddisna inputs: job %c, m %" FLA_IS ", n %" FLA_IS "",*job, *m, *n);
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal d__1, d__2, d__3;
@@ -224,13 +220,13 @@ void ddisna_(char *job, aocl_int_t *m, aocl_int_t *n, doublereal *d__, doublerea
     {
         i__1 = -(*info);
         xerbla_("DDISNA", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(k == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Compute reciprocal condition numbers */
@@ -295,7 +291,7 @@ void ddisna_(char *job, aocl_int_t *m, aocl_int_t *n, doublereal *d__, doublerea
         sep[i__] = fla_max(d__1, thresh);
         /* L30: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DDISNA */
 }

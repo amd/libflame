@@ -132,12 +132,8 @@ static aocl_int64_t c__1 = 1;
 void dgecon_(char *norm, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *anorm,
              doublereal *rcond, doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dgecon inputs: norm %c, n %" FLA_IS ", lda %" FLA_IS "",*norm, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dgecon inputs: norm %c, n %" FLA_IS ", lda %" FLA_IS "",*norm, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
     doublereal d__1;
@@ -207,7 +203,7 @@ void dgecon_(char *norm, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublere
     {
         i__1 = -(*info);
         xerbla_("DGECON", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
@@ -215,12 +211,12 @@ void dgecon_(char *norm, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublere
     if(*n == 0)
     {
         *rcond = 1.;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(*anorm == 0.)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     smlnum = dlamch_("Safe minimum");
@@ -289,7 +285,7 @@ L10:
         *info = 1;
     }
 L20:
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGECON */
 }

@@ -145,12 +145,8 @@ void dgeequb_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doub
               doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax,
               aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dgeequb inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dgeequb inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1, d__2, d__3;
@@ -206,7 +202,7 @@ void dgeequb_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doub
     {
         i__1 = -(*info);
         xerbla_("DGEEQUB", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible. */
@@ -215,7 +211,7 @@ void dgeequb_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doub
         *rowcnd = 1.;
         *colcnd = 1.;
         *amax = 0.;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Get machine constants. Assume SMLNUM is a power of the radix. */
@@ -280,7 +276,7 @@ void dgeequb_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doub
             if(r__[i__] == 0.)
             {
                 *info = i__;
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return 0;
             }
             /* L50: */
@@ -355,7 +351,7 @@ void dgeequb_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doub
             if(c__[j] == 0.)
             {
                 *info = *m + j;
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return 0;
             }
             /* L110: */
@@ -377,7 +373,7 @@ void dgeequb_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doub
         /* Compute COLCND = fla_min(C(J)) / fla_max(C(J)). */
         *colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGEEQUB */
 }

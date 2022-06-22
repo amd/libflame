@@ -153,12 +153,8 @@ v(i+2:ihi) is stored on */
 void dgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, doublereal *a, aocl_int_t *lda,
              doublereal *tau, doublereal *work, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dgehd2 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS "",*n, *ilo, *ihi, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dgehd2 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS "",*n, *ilo, *ihi, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -211,7 +207,7 @@ void dgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, doublereal *a, aoc
     {
         i__1 = -(*info);
         xerbla_("DGEHD2", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     i__1 = *ihi - 1;
@@ -237,7 +233,7 @@ void dgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, doublereal *a, aoc
         a[i__ + 1 + i__ * a_dim1] = aii;
         /* L10: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGEHD2 */
 }

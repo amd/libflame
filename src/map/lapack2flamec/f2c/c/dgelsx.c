@@ -183,12 +183,8 @@ only the remaining */
 /** Generated wrapper function */
 void dgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, aocl_int_t *jpvt, doublereal *rcond, aocl_int_t *rank, doublereal *work, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dgelsx inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", jpvt %" FLA_IS "",*m, *n, *nrhs, *lda, *ldb, *jpvt);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dgelsx inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", jpvt %" FLA_IS "",*m, *n, *nrhs, *lda, *ldb, *jpvt);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     doublereal d__1;
@@ -264,7 +260,7 @@ void dgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl
     {
         i__1 = -(*info);
         xerbla_("DGELSX", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
@@ -273,7 +269,7 @@ void dgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl
     if(fla_min(i__1, *nrhs) == 0)
     {
         *rank = 0;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Get machine parameters */
@@ -460,7 +456,7 @@ L10:
         aocl_lapack_dlascl("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L100:
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGELSX */
 }

@@ -189,12 +189,8 @@ void dgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_i
              doublereal *x, aocl_int_t *ldx, doublereal *ferr, doublereal *berr, doublereal *work,
              aocl_int_t *iwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dgerfs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ipiv %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*trans, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldx);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dgerfs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ipiv %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*trans, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldx);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2, i__3;
@@ -290,7 +286,7 @@ void dgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_i
     {
         i__1 = -(*info);
         xerbla_("DGERFS", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
@@ -303,7 +299,7 @@ void dgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_i
             berr[j] = 0.;
             /* L10: */
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(notran)
@@ -491,7 +487,7 @@ void dgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_i
         }
         /* L140: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGERFS */
 }

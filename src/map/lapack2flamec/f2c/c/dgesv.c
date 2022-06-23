@@ -123,12 +123,8 @@ the unit diagonal elements of L are not stored. */
 void dgesv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_int_t *lda, aocl_int_t *ipiv,
             doublereal *b, aocl_int_t *ldb, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dgesv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *lda, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dgesv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
@@ -177,7 +173,7 @@ void dgesv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_int_t *lda, aoc
     {
         i__1 = -(*info);
         xerbla_("DGESV ", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Compute the LU factorization of A. */
@@ -188,7 +184,7 @@ void dgesv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_int_t *lda, aoc
         aocl_lapack_dgetrs("No transpose", n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
                            info);
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGESV */
 }

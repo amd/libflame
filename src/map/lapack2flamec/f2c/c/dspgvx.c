@@ -271,12 +271,8 @@ void dspgvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
              doublereal *abstol, aocl_int_t *m, doublereal *w, doublereal *z__, aocl_int_t *ldz,
              doublereal *work, aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dspgvx inputs: itype %" FLA_IS ", jobz %c, range %c, uplo %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", m %" FLA_IS ", ldz %" FLA_IS ", ifail %" FLA_IS "",*itype, *jobz, *range, *uplo, *n, *il, *iu, *ldz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dspgvx inputs: itype %" FLA_IS ", jobz %c, range %c, uplo %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", m %" FLA_IS ", ldz %" FLA_IS ", ifail %" FLA_IS "",*itype, *jobz, *range, *uplo, *n, *il, *iu, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1;
     /* Local variables */
@@ -373,14 +369,14 @@ void dspgvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     {
         i__1 = -(*info);
         xerbla_("DSPGVX", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Form a Cholesky factorization of B. */
@@ -388,7 +384,7 @@ void dspgvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     if(*info != 0)
     {
         *info = *n + *info;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
@@ -443,7 +439,7 @@ void dspgvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
             }
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DSPGVX */
 }

@@ -171,12 +171,8 @@ doublereal dla_gbrcond_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *
                         aocl_int_t *cmode, doublereal *c__, aocl_int_t *info, doublereal *work,
                         aocl_int_t *iwork)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dla_gbrcond inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ipiv %" FLA_IS ", cmode %" FLA_IS ", work %" FLA_IS ", iwork %" FLA_IS "",*trans, *n, *kl, *ku, *ldab, *ldafb, *ipiv, *cmode, *work, *iwork);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dla_gbrcond inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ipiv %" FLA_IS ", cmode %" FLA_IS ", work %" FLA_IS ", iwork %" FLA_IS "",*trans, *n, *kl, *ku, *ldab, *ldafb, *ipiv, *cmode, *work, *iwork);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1;
@@ -251,13 +247,13 @@ doublereal dla_gbrcond_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *
     {
         i__1 = -(*info);
         xerbla_("DLA_GBRCOND", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return ret_val;
     }
     if(*n == 0)
     {
         ret_val = 1.;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return ret_val;
     }
     /* Compute the equilibration matrix R such that */
@@ -440,7 +436,7 @@ L10:
     {
         ret_val = 1. / ainvnm;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return ret_val;
 }
 /* dla_gbrcond__ */

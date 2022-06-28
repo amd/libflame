@@ -162,12 +162,8 @@ void dorbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, doublereal *x1, aoc
               doublereal *x2, aocl_int_t *incx2, doublereal *q1, aocl_int_t *ldq1, doublereal *q2,
               aocl_int_t *ldq2, doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dorbdb6 inputs: m1 %" FLA_IS ", m2 %" FLA_IS ", n %" FLA_IS ", incx1 %" FLA_IS ", incx2 %" FLA_IS ", ldq1 %" FLA_IS ", ldq2 %" FLA_IS ", lwork %" FLA_IS "",*m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2, *lwork);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dorbdb6 inputs: m1 %" FLA_IS ", m2 %" FLA_IS ", n %" FLA_IS ", incx1 %" FLA_IS ", incx2 %" FLA_IS ", ldq1 %" FLA_IS ", ldq2 %" FLA_IS ", lwork %" FLA_IS "",*m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2, *lwork);
     /* System generated locals */
     aocl_int64_t q1_dim1, q1_offset, q2_dim1, q2_offset, i__1, i__2;
     /* Builtin functions */
@@ -245,7 +241,7 @@ void dorbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, doublereal *x1, aoc
     {
         i__1 = -(*info);
         xerbla_("DORBDB6", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     eps = dlamch_("Precision");
@@ -285,12 +281,12 @@ void dorbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, doublereal *x1, aoc
     /* Otherwise, project again. */
     if(norm_new__ >= norm * .83)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(norm_new__ <= *n * eps * norm)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     norm = norm_new__;
@@ -340,7 +336,7 @@ void dorbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, doublereal *x1, aoc
             x2[ix] = 0.;
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DORBDB6 */
 }

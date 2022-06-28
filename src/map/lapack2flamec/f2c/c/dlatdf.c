@@ -175,12 +175,8 @@ for 1 <= j <= N, column j of the */
 void dlatdf_(aocl_int_t *ijob, aocl_int_t *n, doublereal *z__, aocl_int_t *ldz, doublereal *rhs,
              doublereal *rdsum, doublereal *rdscal, aocl_int_t *ipiv, aocl_int_t *jpiv)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-    snprintf(buffer, 256,"dlatdf inputs: ijob %" FLA_IS ", n %" FLA_IS ", ldz %" FLA_IS "",*ijob, *n, *ldz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlatdf inputs: ijob %" FLA_IS ", n %" FLA_IS ", ldz %" FLA_IS "",*ijob, *n, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1, i__2;
     doublereal d__1;
@@ -328,7 +324,7 @@ void dlatdf_(aocl_int_t *ijob, aocl_int_t *n, doublereal *z__, aocl_int_t *ldz, 
         /* Compute the sum of squares */
         aocl_lapack_dlassq(n, &rhs[1], &c__1, rdscal, rdsum);
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLATDF */
 }

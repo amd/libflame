@@ -151,12 +151,8 @@ static aocl_int64_t c__1 = 1;
 void dpteqr_(char *compz, aocl_int_t *n, doublereal *d__, doublereal *e, doublereal *z__,
              aocl_int_t *ldz, doublereal *work, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dpteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dpteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1;
     /* Builtin functions */
@@ -234,13 +230,13 @@ void dpteqr_(char *compz, aocl_int_t *n, doublereal *d__, doublereal *e, doubler
     {
         i__1 = -(*info);
         xerbla_("DPTEQR", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(*n == 1)
@@ -249,7 +245,7 @@ void dpteqr_(char *compz, aocl_int_t *n, doublereal *d__, doublereal *e, doubler
         {
             z__[z_dim1 + 1] = 1.;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(icompz == 2)
@@ -260,7 +256,7 @@ void dpteqr_(char *compz, aocl_int_t *n, doublereal *d__, doublereal *e, doubler
     aocl_lapack_dpttrf(n, &d__[1], &e[1], info);
     if(*info != 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     i__1 = *n;
@@ -301,7 +297,7 @@ void dpteqr_(char *compz, aocl_int_t *n, doublereal *d__, doublereal *e, doubler
     {
         *info = *n + *info;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DPTEQR */
 }

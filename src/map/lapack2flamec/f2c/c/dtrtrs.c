@@ -142,12 +142,8 @@ static doublereal c_b12 = 1.;
 void dtrtrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a,
              aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-    snprintf(buffer, 256,"dtrtrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *trans, *diag, *n, *nrhs, *lda, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dtrtrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *trans, *diag, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
@@ -216,13 +212,13 @@ void dtrtrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
     {
         i__1 = -(*info);
         xerbla_("DTRTRS", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Check for singularity. */
@@ -233,7 +229,7 @@ void dtrtrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
         {
             if(a[*info + *info * a_dim1] == 0.)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return 0;
             }
             /* L10: */
@@ -242,7 +238,7 @@ void dtrtrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
     *info = 0;
     /* Solve A * x = b or A**T * x = b. */
     dtrsm_("Left", uplo, trans, diag, n, nrhs, &c_b12, &a[a_offset], lda, &b[ b_offset], ldb);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DTRTRS */
 }

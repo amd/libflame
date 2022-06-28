@@ -111,12 +111,8 @@ static aocl_int64_t c_n1 = -1;
 void dpttrs_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, doublereal *b,
              aocl_int_t *ldb, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dpttrs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dpttrs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -164,13 +160,13 @@ void dpttrs_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, do
     {
         i__1 = -(*info);
         xerbla_("DPTTRS", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Determine the number of right-hand sides to solve at a time. */
@@ -202,7 +198,7 @@ void dpttrs_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, do
             /* L10: */
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DPTTRS */
 }

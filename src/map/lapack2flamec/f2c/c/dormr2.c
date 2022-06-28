@@ -159,12 +159,8 @@ void dormr2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
              aocl_int_t *lda, doublereal *tau, doublereal *c__, aocl_int_t *ldc, doublereal *work,
              aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dormr2 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *k, *lda, *ldc);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dormr2 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *k, *lda, *ldc);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
     /* Local variables */
@@ -248,13 +244,13 @@ void dormr2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     {
         i__1 = -(*info);
         xerbla_("DORMR2", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || *k == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(left && !notran || !left && notran)
@@ -299,7 +295,7 @@ void dormr2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
         a[i__ + (nq - *k + i__) * a_dim1] = aii;
         /* L10: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DORMR2 */
 }

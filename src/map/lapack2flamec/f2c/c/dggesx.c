@@ -383,12 +383,8 @@ void dggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, char *sense,
              doublereal *rcondv, doublereal *work, aocl_int_t *lwork, aocl_int_t *iwork,
              aocl_int_t *liwork, logical *bwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dggesx inputs: jobvsl %c, jobvsr %c, sort %c, sense %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", sdim %" FLA_IS ", ldvsl %" FLA_IS ", ldvsr %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*jobvsl, *jobvsr, *sort, *sense, *n, *lda, *ldb, *sdim, *ldvsl, *ldvsr, *lwork, *liwork);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dggesx inputs: jobvsl %c, jobvsr %c, sort %c, sense %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", sdim %" FLA_IS ", ldvsl %" FLA_IS ", ldvsr %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*jobvsl, *jobvsr, *sort, *sense, *n, *lda, *ldb, *sdim, *ldvsl, *ldvsr, *lwork, *liwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, vsr_dim1, vsr_offset,
         i__1, i__2;
@@ -631,19 +627,19 @@ void dggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, char *sense,
     {
         i__1 = -(*info);
         xerbla_("DGGESX", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *sdim = 0;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Get machine constants */
@@ -939,7 +935,7 @@ void dggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, char *sense,
 L60:
     work[1] = (doublereal) maxwrk;
     iwork[1] = liwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGGESX */
 }

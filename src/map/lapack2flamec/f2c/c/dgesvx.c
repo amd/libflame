@@ -356,12 +356,8 @@ void dgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublerea
              aocl_int_t *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr,
              doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dgesvx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ipiv %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *trans, *n, *nrhs, *lda, *ldaf, *ipiv, *equed, *ldb, *ldx);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dgesvx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ipiv %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *trans, *n, *nrhs, *lda, *ldaf, *ipiv, *equed, *ldb, *ldx);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2;
@@ -550,7 +546,7 @@ void dgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublerea
     {
         i__1 = -(*info);
         xerbla_("DGESVX", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(equil)
@@ -620,7 +616,7 @@ void dgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublerea
             }
             work[1] = rpvgrw;
             *rcond = 0.;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return 0;
         }
     }
@@ -705,7 +701,7 @@ void dgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublerea
     {
         *info = *n + 1;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGESVX */
 }

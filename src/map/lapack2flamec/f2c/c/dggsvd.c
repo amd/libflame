@@ -336,12 +336,8 @@ LDQ >= 1 otherwise. */
 /** Generated wrapper function */
 void dggsvd_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, aocl_int_t *k, aocl_int_t *l, doublereal *a, aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, doublereal *alpha, doublereal *beta, doublereal *u, aocl_int_t *ldu, doublereal *v, aocl_int_t *ldv, doublereal *q, aocl_int_t *ldq, doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dggsvd inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", n %" FLA_IS ", p %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS "",*jobu, *jobv, *jobq, *m, *n, *p, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dggsvd inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", n %" FLA_IS ", p %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS "",*jobu, *jobv, *jobq, *m, *n, *p, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
         v_offset, i__1, i__2;
@@ -448,7 +444,7 @@ void dggsvd_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *n, a
     {
         i__1 = -(*info);
         xerbla_("DGGSVD", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Compute the Frobenius norm of matrices A and B */
@@ -504,7 +500,7 @@ void dggsvd_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *n, a
         }
         /* L20: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGGSVD */
 }

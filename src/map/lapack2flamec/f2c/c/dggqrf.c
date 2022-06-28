@@ -223,12 +223,8 @@ void dggqrf_(aocl_int_t *n, aocl_int_t *m, aocl_int_t *p, doublereal *a, aocl_in
              doublereal *taua, doublereal *b, aocl_int_t *ldb, doublereal *taub, doublereal *work,
              aocl_int_t *lwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dggqrf inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*n, *m, *p, *lda, *ldb, *lwork);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dggqrf inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*n, *m, *p, *lda, *ldb, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
@@ -311,12 +307,12 @@ void dggqrf_(aocl_int_t *n, aocl_int_t *m, aocl_int_t *p, doublereal *a, aocl_in
     {
         i__1 = -(*info);
         xerbla_("DGGQRF", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* QR factorization of N-by-M matrix A: A = Q*R */
@@ -336,7 +332,7 @@ void dggqrf_(aocl_int_t *n, aocl_int_t *m, aocl_int_t *p, doublereal *a, aocl_in
     i__1 = lopt;
     i__2 = (integer) work[1]; // , expr subst
     work[1] = (doublereal) max(i__1,i__2);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGGQRF */
 }

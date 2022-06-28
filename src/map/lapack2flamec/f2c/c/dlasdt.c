@@ -104,12 +104,8 @@
 void dlasdt_(aocl_int_t *n, aocl_int_t *lvl, aocl_int_t *nd, aocl_int_t *inode, aocl_int_t *ndiml,
              aocl_int_t *ndimr, aocl_int_t *msub)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlasdt inputs: n %" FLA_IS ", msub %" FLA_IS "",*n, *msub);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlasdt inputs: n %" FLA_IS ", msub %" FLA_IS "",*n, *msub);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     /* Builtin functions */
@@ -173,7 +169,7 @@ void dlasdt_(aocl_int_t *n, aocl_int_t *lvl, aocl_int_t *nd, aocl_int_t *inode, 
         /* L20: */
     }
     *nd = (llst << 1) - 1;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLASDT */
 }

@@ -210,12 +210,8 @@ v(i+1:n) is stored on exit in A(i+1:n,i), */
 void dlatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, doublereal *a, aocl_int_t *lda,
              doublereal *e, doublereal *tau, doublereal *w, aocl_int_t *ldw)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-    snprintf(buffer, 256,"dlatrd inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldw %" FLA_IS "",*uplo, *n, *nb, *lda, *ldw);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlatrd inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldw %" FLA_IS "",*uplo, *n, *nb, *lda, *ldw);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -255,7 +251,7 @@ void dlatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, doublereal *a, aocl_int_
     /* Function Body */
     if(*n <= 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(lsame_(uplo, "U", 1, 1))
@@ -388,7 +384,7 @@ void dlatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, doublereal *a, aocl_int_
             /* L20: */
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLATRD */
 }

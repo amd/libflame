@@ -120,12 +120,8 @@ static aocl_int64_t c__1 = 1;
 /** Generated wrapper function */
 void dtptri_(char *uplo, char *diag, aocl_int_t *n, doublereal *ap, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-    snprintf(buffer, 256,"dtptri inputs: uplo %c, diag %c, n %" FLA_IS "",*uplo, *diag, *n);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dtptri inputs: uplo %c, diag %c, n %" FLA_IS "",*uplo, *diag, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     /* Local variables */
@@ -177,7 +173,7 @@ void dtptri_(char *uplo, char *diag, aocl_int_t *n, doublereal *ap, aocl_int_t *
     {
         i__1 = -(*info);
         xerbla_("DTPTRI", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Check for singularity if non-unit. */
@@ -192,7 +188,7 @@ void dtptri_(char *uplo, char *diag, aocl_int_t *n, doublereal *ap, aocl_int_t *
                 jj += *info;
                 if(ap[jj] == 0.)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 /* L10: */
@@ -206,7 +202,7 @@ void dtptri_(char *uplo, char *diag, aocl_int_t *n, doublereal *ap, aocl_int_t *
             {
                 if(ap[jj] == 0.)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 jj = jj + *n - *info + 1;
@@ -269,7 +265,7 @@ void dtptri_(char *uplo, char *diag, aocl_int_t *n, doublereal *ap, aocl_int_t *
             /* L40: */
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DTPTRI */
 }

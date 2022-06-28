@@ -149,12 +149,8 @@ static aocl_int64_t c__1 = 1;
 void dtbtrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs,
              doublereal *ab, aocl_int_t *ldab, doublereal *b, aocl_int_t *ldb, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-    snprintf(buffer, 256,"dtbtrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dtbtrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
@@ -230,13 +226,13 @@ void dtbtrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
     {
         i__1 = -(*info);
         xerbla_("DTBTRS", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Check for singularity. */
@@ -249,7 +245,7 @@ void dtbtrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
             {
                 if(ab[*kd + 1 + *info * ab_dim1] == 0.)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 /* L10: */
@@ -262,7 +258,7 @@ void dtbtrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
             {
                 if(ab[*info * ab_dim1 + 1] == 0.)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 /* L20: */
@@ -277,7 +273,7 @@ void dtbtrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
         aocl_blas_dtbsv(uplo, trans, diag, n, kd, &ab[ab_offset], ldab, &b[j * b_dim1 + 1], &c__1);
         /* L30: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DTBTRS */
 }

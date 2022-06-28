@@ -173,12 +173,8 @@ void dla_geamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, doublereal *alp
                 aocl_int_t *lda, doublereal *x, aocl_int_t *incx, doublereal *beta, doublereal *y,
                 aocl_int_t *incy)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dla_geamv inputs: trans %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*trans, *m, *n, *lda, *incx, *incy);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dla_geamv inputs: trans %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*trans, *m, *n, *lda, *incx, *incy);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1;
@@ -249,13 +245,13 @@ void dla_geamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, doublereal *alp
     if(info != 0)
     {
         xerbla_("DLA_GEAMV ", &info);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible. */
     if(*m == 0 || *n == 0 || *alpha == 0. && *beta == 1.)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Set LENX and LENY, the lengths of the vectors x and y, and set */
@@ -449,7 +445,7 @@ void dla_geamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, doublereal *alp
             }
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLA_GEAMV */
 }

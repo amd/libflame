@@ -107,7 +107,8 @@ static doublereal c_b2 = 1.;
 /* Subroutine */
 void dlartg_(doublereal *f, doublereal *g, doublereal *c__, doublereal *s, doublereal *r__)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlartg inputs : f %lf, g %lf", *f, *g);
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2;
@@ -238,7 +239,7 @@ L30:
             *r__ = -(*r__);
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLARTG */
 }

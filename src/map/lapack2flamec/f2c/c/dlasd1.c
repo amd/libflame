@@ -213,12 +213,8 @@ void dlasd1_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, doublereal *d__, 
              doublereal *beta, doublereal *u, aocl_int_t *ldu, doublereal *vt, aocl_int_t *ldvt,
              aocl_int_t *idxq, aocl_int_t *iwork, doublereal *work, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlasd1 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", ldu %" FLA_IS ", ldvt %" FLA_IS "",*nl, *nr, *sqre, *ldu, *ldvt);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlasd1 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", ldu %" FLA_IS ", ldvt %" FLA_IS "",*nl, *nr, *sqre, *ldu, *ldvt);
     /* System generated locals */
     aocl_int64_t u_dim1, u_offset, vt_dim1, vt_offset, i__1;
     doublereal d__1, d__2;
@@ -275,7 +271,7 @@ void dlasd1_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, doublereal *d__, 
     {
         i__1 = -(*info);
         xerbla_("DLASD1", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     n = *nl + *nr + 1;
@@ -323,7 +319,7 @@ void dlasd1_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, doublereal *d__, 
                        &iwork[coltyp], &work[iz], info);
     if(*info != 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Unscale. */
@@ -332,7 +328,7 @@ void dlasd1_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, doublereal *d__, 
     n1 = k;
     n2 = n - k;
     dlamrg_(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLASD1 */
 }

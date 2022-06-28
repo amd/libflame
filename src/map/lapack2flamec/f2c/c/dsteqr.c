@@ -137,12 +137,8 @@ on exit, D */
 
 int dsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal *z__, integer *ldz, doublereal *work, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dsteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dsteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
  /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -236,13 +232,13 @@ int dsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal 
     {
         i__1 = -(*info);
         xerbla_("DSTEQR", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(*n == 1)
@@ -251,7 +247,7 @@ int dsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal 
         {
             z__[z_dim1 + 1] = 1.;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
 
@@ -292,7 +288,7 @@ int dsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal 
         dsteqr_helper_("V", "L", &N, &z__[z_offset], &LDZ, &d__[1],  worker,&lwork, iwork, &liwork, &info);
         free(worker);
         free(iwork);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
   }
 else
@@ -486,7 +482,7 @@ L60:
                     work[*n - 1 + i__] = -s;
                 }
                 /* L70: */
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
             }
             /* If eigenvectors are desired, then apply saved rotations. */
             if (icompz > 0)
@@ -698,7 +694,7 @@ L160:
             }
         }
 L190:
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
 }
     /* End of DSTEQR */

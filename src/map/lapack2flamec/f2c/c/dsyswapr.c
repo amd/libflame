@@ -103,12 +103,8 @@ if UPLO = 'L', the interchanges are applied to */
 void dsyswapr_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *i1,
                aocl_int_t *i2)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-    snprintf(buffer, 256,"dsyswapr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", i1 %" FLA_IS ", i2 %" FLA_IS "",*uplo, *n, *lda, *i1, *i2);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dsyswapr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", i1 %" FLA_IS ", i2 %" FLA_IS "",*uplo, *n, *lda, *i1, *i2);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
@@ -185,7 +181,7 @@ void dsyswapr_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_i
                             &c__1);
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
 }
 /* dsyswapr_ */

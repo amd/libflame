@@ -289,12 +289,8 @@ void dsysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal
              doublereal *berr, doublereal *work, aocl_int_t *lwork, aocl_int_t *iwork,
              aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-    snprintf(buffer, 256,"dsysvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ipiv %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS ", lwork %" FLA_IS "",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldx, *lwork);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dsysvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ipiv %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS ", lwork %" FLA_IS "",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldx, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2;
@@ -411,12 +407,12 @@ void dsysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal
     {
         i__1 = -(*info);
         xerbla_("DSYSVX", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(nofact)
@@ -428,7 +424,7 @@ void dsysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal
         if(*info > 0)
         {
             *rcond = 0.;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return 0;
         }
     }
@@ -449,7 +445,7 @@ void dsysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal
         *info = *n + 1;
     }
     work[1] = (doublereal) lwkopt;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DSYSVX */
 }

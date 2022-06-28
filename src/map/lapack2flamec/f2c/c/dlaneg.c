@@ -116,12 +116,8 @@
 aocl_int_t dlaneg_(aocl_int_t *n, doublereal *d__, doublereal *lld, doublereal *sigma,
                    doublereal *pivmin, aocl_int_t *r__)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlaneg inputs: n %" FLA_IS ", r__ %" FLA_IS "",*n, *r__);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlaneg inputs: n %" FLA_IS ", r__ %" FLA_IS "",*n, *r__);
     /* System generated locals */
     aocl_int64_t ret_val, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -275,7 +271,7 @@ aocl_int_t dlaneg_(aocl_int_t *n, doublereal *d__, doublereal *lld, doublereal *
         ++negcnt;
     }
     ret_val = negcnt;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return ret_val;
 }
 /* dlaneg_ */

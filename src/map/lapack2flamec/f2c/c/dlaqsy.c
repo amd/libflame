@@ -131,12 +131,8 @@
 void dlaqsy_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *s,
              doublereal *scond, doublereal *amax, char *equed)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlaqsy inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlaqsy inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -171,7 +167,7 @@ void dlaqsy_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublere
     if(*n <= 0)
     {
         *(unsigned char *)equed = 'N';
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Initialize LARGE and SMALL. */
@@ -219,7 +215,7 @@ void dlaqsy_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublere
         }
         *(unsigned char *)equed = 'Y';
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLAQSY */
 }

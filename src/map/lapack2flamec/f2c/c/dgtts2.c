@@ -129,12 +129,8 @@ IPIV(i) = i indicates a row interchange was not */
 void dgtts2_(aocl_int_t *itrans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doublereal *d__,
              doublereal *du, doublereal *du2, aocl_int_t *ipiv, doublereal *b, aocl_int_t *ldb)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dgtts2 inputs: itrans %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ipiv %" FLA_IS ", ldb %" FLA_IS "",*itrans, *n, *nrhs, *ipiv, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dgtts2 inputs: itrans %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ipiv %" FLA_IS ", ldb %" FLA_IS "",*itrans, *n, *nrhs, *ipiv, *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2;
     /* Local variables */
@@ -165,7 +161,7 @@ void dgtts2_(aocl_int_t *itrans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl
     /* Function Body */
     if(*n == 0 || *nrhs == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(*itrans == 0)
@@ -319,7 +315,7 @@ void dgtts2_(aocl_int_t *itrans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl
         }
     }
     /* End of DGTTS2 */
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
 }
 /* dgtts2_ */

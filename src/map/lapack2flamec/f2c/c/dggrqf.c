@@ -222,12 +222,8 @@ void dggrqf_(aocl_int_t *m, aocl_int_t *p, aocl_int_t *n, doublereal *a, aocl_in
              doublereal *taua, doublereal *b, aocl_int_t *ldb, doublereal *taub, doublereal *work,
              aocl_int_t *lwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dggrqf inputs: m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*m, *p, *n, *lda, *ldb, *lwork);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dggrqf inputs: m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*m, *p, *n, *lda, *ldb, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -310,12 +306,12 @@ void dggrqf_(aocl_int_t *m, aocl_int_t *p, aocl_int_t *n, doublereal *a, aocl_in
     {
         i__1 = -(*info);
         xerbla_("DGGRQF", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* RQ factorization of M-by-N matrix A: A = R*Q */
@@ -338,7 +334,7 @@ void dggrqf_(aocl_int_t *m, aocl_int_t *p, aocl_int_t *n, doublereal *a, aocl_in
     i__1 = lopt;
     i__2 = (integer) work[1]; // , expr subst
     work[1] = (doublereal) max(i__1,i__2);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGGRQF */
 }

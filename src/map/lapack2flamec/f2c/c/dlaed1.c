@@ -166,12 +166,8 @@ void dlaed1_(aocl_int_t *n, doublereal *d__, doublereal *q, aocl_int_t *ldq, aoc
              doublereal *rho, aocl_int_t *cutpnt, doublereal *work, aocl_int_t *iwork,
              aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlaed1 inputs: n %" FLA_IS ", ldq %" FLA_IS ", indxq %" FLA_IS ", cutpnt %" FLA_IS "",*n, *ldq, *indxq, *cutpnt);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlaed1 inputs: n %" FLA_IS ", ldq %" FLA_IS ", indxq %" FLA_IS ", cutpnt %" FLA_IS "",*n, *ldq, *indxq, *cutpnt);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, i__1, i__2;
     /* Local variables */
@@ -228,13 +224,13 @@ void dlaed1_(aocl_int_t *n, doublereal *d__, doublereal *q, aocl_int_t *ldq, aoc
     {
         i__1 = -(*info);
         xerbla_("DLAED1", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* The following values are integer pointers which indicate */
@@ -288,7 +284,7 @@ void dlaed1_(aocl_int_t *n, doublereal *d__, doublereal *q, aocl_int_t *ldq, aoc
         }
     }
 L20:
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLAED1 */
 }

@@ -171,12 +171,8 @@ void dlaeda_(aocl_int_t *n, aocl_int_t *tlvls, aocl_int_t *curlvl, aocl_int_t *c
              doublereal *givnum, doublereal *q, aocl_int_t *qptr, doublereal *z__,
              doublereal *ztemp, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlaeda inputs: n %" FLA_IS ", tlvls %" FLA_IS ", curlvl %" FLA_IS ", curpbm %" FLA_IS ", prmptr %" FLA_IS ", perm %" FLA_IS ", givptr %" FLA_IS ", givcol %" FLA_IS ", qptr %" FLA_IS "",*n, *tlvls, *curlvl, *curpbm, *prmptr, *perm, *givptr, *givcol, *qptr);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlaeda inputs: n %" FLA_IS ", tlvls %" FLA_IS ", curlvl %" FLA_IS ", curpbm %" FLA_IS ", prmptr %" FLA_IS ", perm %" FLA_IS ", givptr %" FLA_IS ", givcol %" FLA_IS ", qptr %" FLA_IS "",*n, *tlvls, *curlvl, *curpbm, *prmptr, *perm, *givptr, *givcol, *qptr);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
     /* Builtin functions */
@@ -224,13 +220,13 @@ void dlaeda_(aocl_int_t *n, aocl_int_t *tlvls, aocl_int_t *curlvl, aocl_int_t *c
     {
         i__1 = -(*info);
         xerbla_("DLAEDA", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Determine location of first number in second half. */
@@ -328,7 +324,7 @@ void dlaeda_(aocl_int_t *n, aocl_int_t *tlvls, aocl_int_t *curlvl, aocl_int_t *c
         ptr += pow_ii(&c__2, &i__2);
         /* L70: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLAEDA */
 }

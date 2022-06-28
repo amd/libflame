@@ -112,12 +112,8 @@ static doublereal c_b9 = 1.;
 void dpotrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_int_t *lda,
              doublereal *b, aocl_int_t *ldb, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dpotrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dpotrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
@@ -178,13 +174,13 @@ void dpotrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_in
     {
         i__1 = -(*info);
         xerbla_("DPOTRS", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(upper)
@@ -207,7 +203,7 @@ void dpotrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_in
         aocl_blas_dtrsm("Left", "Lower", "Transpose", "Non-unit", n, nrhs, &c_b9, &a[a_offset], lda,
                         &b[b_offset], ldb);
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DPOTRS */
 }

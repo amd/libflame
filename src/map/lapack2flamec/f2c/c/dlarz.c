@@ -146,12 +146,8 @@ static doublereal c_b5 = 1.;
 void dlarz_(char *side, aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, doublereal *v,
             aocl_int_t *incv, doublereal *tau, doublereal *c__, aocl_int_t *ldc, doublereal *work)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlarz inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *l, *incv, *ldc);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlarz inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *l, *incv, *ldc);
     /* System generated locals */
     aocl_int64_t c_dim1, c_offset;
     doublereal d__1;
@@ -220,7 +216,7 @@ void dlarz_(char *side, aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, doublereal 
                            &c__[(*n - *l + 1) * c_dim1 + 1], ldc);
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLARZ */
 }

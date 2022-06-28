@@ -190,12 +190,8 @@ the corresponding */
 void dlarzt_(char *direct, char *storev, aocl_int_t *n, aocl_int_t *k, doublereal *v,
              aocl_int_t *ldv, doublereal *tau, doublereal *t, aocl_int_t *ldt)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlarzt inputs: direct %c, storev %c, n %" FLA_IS ", k %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS "",*direct, *storev, *n, *k, *ldv, *ldt);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlarzt inputs: direct %c, storev %c, n %" FLA_IS ", k %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS "",*direct, *storev, *n, *k, *ldv, *ldt);
     /* System generated locals */
     aocl_int64_t t_dim1, t_offset, v_dim1, v_offset, i__1;
     doublereal d__1;
@@ -243,7 +239,7 @@ void dlarzt_(char *direct, char *storev, aocl_int_t *n, aocl_int_t *k, doublerea
     {
         i__1 = -info;
         xerbla_("DLARZT", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     for(i__ = *k; i__ >= 1; --i__)
@@ -276,7 +272,7 @@ void dlarzt_(char *direct, char *storev, aocl_int_t *n, aocl_int_t *k, doublerea
         }
         /* L20: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLARZT */
 }

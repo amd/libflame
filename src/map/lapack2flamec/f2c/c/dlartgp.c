@@ -93,7 +93,8 @@ static doublereal c_b6 = 1.;
 /* Subroutine */
 void dlartgp_(doublereal *f, doublereal *g, doublereal *cs, doublereal *sn, doublereal *r__)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlartgp inputs : f %lf, g %lf", *f, *g);
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal d__1, d__2;
@@ -233,7 +234,7 @@ void dlartgp_(doublereal *f, doublereal *g, doublereal *cs, doublereal *sn, doub
             *r__ = -(*r__);
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLARTGP */
 }

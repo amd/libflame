@@ -225,12 +225,8 @@ void dlasd3_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, do
              aocl_int_t *ldvt2, aocl_int_t *idxc, aocl_int_t *ctot, doublereal *z__,
              aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlasd3 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", k %" FLA_IS ", ldq %" FLA_IS ", ldu %" FLA_IS ", ldu2 %" FLA_IS ", ldvt %" FLA_IS ", ldvt2 %" FLA_IS ", idxc %" FLA_IS ", ctot %" FLA_IS "",*nl, *nr, *sqre, *k, *ldq, *ldu, *ldu2, *ldvt, *ldvt2, *idxc, *ctot);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlasd3 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", k %" FLA_IS ", ldq %" FLA_IS ", ldu %" FLA_IS ", ldu2 %" FLA_IS ", ldvt %" FLA_IS ", ldvt2 %" FLA_IS ", idxc %" FLA_IS ", ctot %" FLA_IS "",*nl, *nr, *sqre, *k, *ldq, *ldu, *ldu2, *ldvt, *ldvt2, *idxc, *ctot);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, u_dim1, u_offset, u2_dim1, u2_offset, vt_dim1, vt_offset,
         vt2_dim1, vt2_offset, i__1, i__2;
@@ -332,7 +328,7 @@ void dlasd3_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, do
     {
         i__1 = -(*info);
         xerbla_("DLASD3", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
@@ -353,7 +349,7 @@ void dlasd3_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, do
                 /* L10: */
             }
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Modify values DSIGMA(i) to make sure all DSIGMA(i)-DSIGMA(j) can */
@@ -396,7 +392,7 @@ void dlasd3_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, do
         /* If the zero finder fails, report the convergence failure. */
         if(*info != 0)
         {
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return 0;
         }
         /* L30: */
@@ -503,7 +499,7 @@ L100:
     if(*k == 2)
     {
         dgemm_("N", "N", k, &m, k, &c_b13, &q[q_offset], ldq, &vt2[vt2_offset], ldvt2, &c_b26, &vt[vt_offset], ldvt);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     ktemp = ctot[1] + 1;
@@ -535,7 +531,7 @@ L100:
     }
     ctemp = ctot[2] + 1 + ctot[3];
     dgemm_("N", "N", k, &nrp1, &ctemp, &c_b13, &q[ktemp * q_dim1 + 1], ldq, & vt2[ktemp + nlp2 * vt2_dim1], ldvt2, &c_b26, &vt[nlp2 * vt_dim1 + 1], ldvt);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLASD3 */
 }

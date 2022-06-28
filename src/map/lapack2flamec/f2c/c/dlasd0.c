@@ -157,12 +157,8 @@ void dlasd0_(aocl_int_t *n, aocl_int_t *sqre, doublereal *d__, doublereal *e, do
              aocl_int_t *ldu, doublereal *vt, aocl_int_t *ldvt, aocl_int_t *smlsiz,
              aocl_int_t *iwork, doublereal *work, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlasd0 inputs: n %" FLA_IS ", sqre %" FLA_IS ", ldu %" FLA_IS ", ldvt %" FLA_IS ", smlsiz %" FLA_IS "",*n, *sqre, *ldu, *ldvt, *smlsiz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlasd0 inputs: n %" FLA_IS ", sqre %" FLA_IS ", ldu %" FLA_IS ", ldvt %" FLA_IS ", smlsiz %" FLA_IS "",*n, *sqre, *ldu, *ldvt, *smlsiz);
     /* System generated locals */
     aocl_int64_t u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
     /* Builtin functions */
@@ -227,14 +223,14 @@ void dlasd0_(aocl_int_t *n, aocl_int_t *sqre, doublereal *d__, doublereal *e, do
     {
         i__1 = -(*info);
         xerbla_("DLASD0", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* If the input matrix is too small, call DLASDQ to find the SVD. */
     if(*n <= *smlsiz)
     {
         dlasdq_("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt, &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Set up the computation tree. */
@@ -270,7 +266,7 @@ void dlasd0_(aocl_int_t *n, aocl_int_t *sqre, doublereal *d__, doublereal *e, do
                            &u[nlf + nlf * u_dim1], ldu, &work[1], info);
         if(*info != 0)
         {
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return 0;
         }
         itemp = idxq + nlf - 2;
@@ -294,7 +290,7 @@ void dlasd0_(aocl_int_t *n, aocl_int_t *sqre, doublereal *d__, doublereal *e, do
                            &u[nrf + nrf * u_dim1], ldu, &work[1], info);
         if(*info != 0)
         {
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return 0;
         }
         itemp = idxq + ic;
@@ -346,14 +342,14 @@ void dlasd0_(aocl_int_t *n, aocl_int_t *sqre, doublereal *d__, doublereal *e, do
                                &work[1], info);
             if(*info != 0)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return 0;
             }
             /* L40: */
         }
         /* L50: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLASD0 */
 }

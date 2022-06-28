@@ -178,12 +178,8 @@ void dlaed0_(aocl_int_t *icompq, aocl_int_t *qsiz, aocl_int_t *n, doublereal *d_
              doublereal *q, aocl_int_t *ldq, doublereal *qstore, aocl_int_t *ldqs, doublereal *work,
              aocl_int_t *iwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlaed0 inputs: icompq %" FLA_IS ", qsiz %" FLA_IS ", n %" FLA_IS ", ldq %" FLA_IS ", ldqs %" FLA_IS "",*icompq, *qsiz, *n, *ldq, *ldqs);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlaed0 inputs: icompq %" FLA_IS ", qsiz %" FLA_IS ", n %" FLA_IS ", ldq %" FLA_IS ", ldqs %" FLA_IS "",*icompq, *qsiz, *n, *ldq, *ldqs);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, qstore_dim1, qstore_offset, i__1, i__2;
     doublereal d__1;
@@ -266,13 +262,13 @@ void dlaed0_(aocl_int_t *icompq, aocl_int_t *qsiz, aocl_int_t *n, doublereal *d_
     {
         i__1 = -(*info);
         xerbla_("DLAED0", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     smlsiz = aocl_lapack_ilaenv(&c__9, "DLAED0", " ", &c__0, &c__0, &c__0, &c__0);
@@ -497,7 +493,7 @@ L80:
 L130:
     *info = submat * (*n + 1) + submat + matsiz - 1;
 L140:
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLAED0 */
 }

@@ -107,12 +107,8 @@
 void dlaed5_(aocl_int_t *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho,
              doublereal *dlam)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlaed5 inputs: i__ %" FLA_IS "",*i__);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlaed5 inputs: i__ %" FLA_IS "",*i__);
     /* System generated locals */
     doublereal d__1;
     /* Builtin functions */
@@ -194,7 +190,7 @@ void dlaed5_(aocl_int_t *i__, doublereal *d__, doublereal *z__, doublereal *delt
         delta[1] /= temp;
         delta[2] /= temp;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End OF DLAED5 */
 }

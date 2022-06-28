@@ -245,12 +245,8 @@ void dlaed8_(aocl_int_t *icompq, aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz,
              aocl_int_t *perm, aocl_int_t *givptr, aocl_int_t *givcol, doublereal *givnum,
              aocl_int_t *indxp, aocl_int_t *indx, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlaed8 inputs: icompq %" FLA_IS ", n %" FLA_IS ", qsiz %" FLA_IS ", ldq %" FLA_IS ", indxq %" FLA_IS ", cutpnt %" FLA_IS ", ldq2 %" FLA_IS "",*icompq, *n, *qsiz, *ldq, *indxq, *cutpnt, *ldq2);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlaed8 inputs: icompq %" FLA_IS ", n %" FLA_IS ", qsiz %" FLA_IS ", ldq %" FLA_IS ", indxq %" FLA_IS ", cutpnt %" FLA_IS ", ldq2 %" FLA_IS "",*icompq, *n, *qsiz, *ldq, *indxq, *cutpnt, *ldq2);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, q2_dim1, q2_offset, i__1;
     doublereal d__1;
@@ -332,7 +328,7 @@ void dlaed8_(aocl_int_t *icompq, aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz,
     {
         i__1 = -(*info);
         xerbla_("DLAED8", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Need to initialize GIVPTR to O here in case of quick exit */
@@ -343,7 +339,7 @@ void dlaed8_(aocl_int_t *icompq, aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz,
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     n1 = *cutpnt;
@@ -418,7 +414,7 @@ void dlaed8_(aocl_int_t *icompq, aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz,
             }
             aocl_lapack_dlacpy("A", qsiz, n, &q2[q2_dim1 + 1], ldq2, &q[q_dim1 + 1], ldq);
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* If there are multiple eigenvalues then the problem deflates. Here */
@@ -573,7 +569,7 @@ L110: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
                                &q[(*k + 1) * q_dim1 + 1], ldq);
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLAED8 */
 }

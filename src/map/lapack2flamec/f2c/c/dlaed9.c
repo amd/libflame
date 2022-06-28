@@ -156,12 +156,8 @@ void dlaed9_(aocl_int_t *k, aocl_int_t *kstart, aocl_int_t *kstop, aocl_int_t *n
              doublereal *q, aocl_int_t *ldq, doublereal *rho, doublereal *dlambda, doublereal *w,
              doublereal *s, aocl_int_t *lds, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlaed9 inputs: k %" FLA_IS ", kstart %" FLA_IS ", kstop %" FLA_IS ", n %" FLA_IS ", ldq %" FLA_IS ", lds %" FLA_IS "",*k, *kstart, *kstop, *n, *ldq, *lds);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlaed9 inputs: k %" FLA_IS ", kstart %" FLA_IS ", kstop %" FLA_IS ", n %" FLA_IS ", ldq %" FLA_IS ", lds %" FLA_IS "",*k, *kstart, *kstop, *n, *ldq, *lds);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, s_dim1, s_offset, i__1, i__2;
     doublereal d__1;
@@ -228,13 +224,13 @@ void dlaed9_(aocl_int_t *k, aocl_int_t *kstart, aocl_int_t *kstop, aocl_int_t *n
     {
         i__1 = -(*info);
         xerbla_("DLAED9", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*k == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Modify values DLAMDA(i) to make sure all DLAMDA(i)-DLAMDA(j) can */
@@ -338,7 +334,7 @@ void dlaed9_(aocl_int_t *k, aocl_int_t *kstart, aocl_int_t *kstop, aocl_int_t *n
     }
     AOCL_DTL_TRACE_LOG_EXIT
 L120:
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLAED9 */
 }

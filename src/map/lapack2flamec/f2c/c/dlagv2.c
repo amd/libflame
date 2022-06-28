@@ -159,12 +159,8 @@ void dlagv2_(doublereal *a, aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, dou
              doublereal *alphai, doublereal *beta, doublereal *csl, doublereal *snl,
              doublereal *csr, doublereal *snr)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlagv2 inputs: lda %" FLA_IS ", ldb %" FLA_IS "",*lda, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlagv2 inputs: lda %" FLA_IS ", ldb %" FLA_IS "",*lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
@@ -370,7 +366,7 @@ void dlagv2_(doublereal *a, aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, dou
         beta[1] = 1.;
         beta[2] = 1.;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLAGV2 */
 }

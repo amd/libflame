@@ -176,12 +176,8 @@ v(i+k+1:n) is stored on exit in */
 /** Generated wrapper function */
 void dlahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, doublereal *a, aocl_int_t *lda, doublereal *tau, doublereal *t, aocl_int_t *ldt, doublereal *y, aocl_int_t *ldy)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlahrd inputs: n %" FLA_IS ", k %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", ldy %" FLA_IS "",*n, *k, *nb, *lda, *ldt, *ldy);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlahrd inputs: n %" FLA_IS ", k %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", ldy %" FLA_IS "",*n, *k, *nb, *lda, *ldt, *ldy);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, y_dim1, y_offset, i__1, i__2, i__3;
     doublereal d__1;
@@ -222,7 +218,7 @@ void dlahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, doublereal *a, aocl_i
     ei = 0.;
     if(*n <= 1)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     i__1 = *nb;
@@ -300,7 +296,7 @@ void dlahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, doublereal *a, aocl_i
         /* L10: */
     }
     a[*k + *nb + *nb * a_dim1] = ei;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLAHRD */
 }

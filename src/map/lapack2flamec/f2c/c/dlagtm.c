@@ -146,12 +146,8 @@ void dlagtm_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *alpha, do
              doublereal *d__, doublereal *du, doublereal *x, aocl_int_t *ldx, doublereal *beta,
              doublereal *b, aocl_int_t *ldb)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlagtm inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldx %" FLA_IS ", ldb %" FLA_IS "",*trans, *n, *nrhs, *ldx, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlagtm inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldx %" FLA_IS ", ldb %" FLA_IS "",*trans, *n, *nrhs, *ldx, *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
     /* Local variables */
@@ -186,7 +182,7 @@ void dlagtm_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *alpha, do
     /* Function Body */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Multiply B by BETA if BETA.NE.1. */
@@ -336,7 +332,7 @@ void dlagtm_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *alpha, do
             }
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLAGTM */
 }

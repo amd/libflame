@@ -270,12 +270,8 @@ void dstebz_(char *range, char *order, aocl_int_t *n, doublereal *vl, doublereal
              aocl_int_t *m, aocl_int_t *nsplit, doublereal *w, aocl_int_t *iblock,
              aocl_int_t *isplit, doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-    snprintf(buffer, 256,"dstebz inputs: range %c, order %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS "",*range, *order, *n, *il, *iu);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dstebz inputs: range %c, order %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS "",*range, *order, *n, *il, *iu);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
     doublereal d__1, d__2, d__3, d__4, d__5;
@@ -405,7 +401,7 @@ void dstebz_(char *range, char *order, aocl_int_t *n, doublereal *vl, doublereal
     {
         i__1 = -(*info);
         xerbla_("DSTEBZ", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Initialize error flags */
@@ -416,7 +412,7 @@ void dstebz_(char *range, char *order, aocl_int_t *n, doublereal *vl, doublereal
     *m = 0;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Simplifications: */
@@ -450,7 +446,7 @@ void dstebz_(char *range, char *order, aocl_int_t *n, doublereal *vl, doublereal
             iblock[1] = 1;
             *m = 1;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Compute Splitting Points */
@@ -565,7 +561,7 @@ void dstebz_(char *range, char *order, aocl_int_t *n, doublereal *vl, doublereal
         if(nwl < 0 || nwl >= *n || nwu < 1 || nwu > *n)
         {
             *info = 4;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return 0;
         }
     }
@@ -887,7 +883,7 @@ void dstebz_(char *range, char *order, aocl_int_t *n, doublereal *vl, doublereal
     {
         *info += 2;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DSTEBZ */
 }

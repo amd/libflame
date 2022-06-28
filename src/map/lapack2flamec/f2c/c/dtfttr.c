@@ -196,12 +196,8 @@
 void dtfttr_(char *transr, char *uplo, aocl_int_t *n, doublereal *arf, doublereal *a,
              aocl_int_t *lda, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-    snprintf(buffer, 256,"dtfttr inputs: transr %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*transr, *uplo, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dtfttr inputs: transr %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*transr, *uplo, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -258,7 +254,7 @@ void dtfttr_(char *transr, char *uplo, aocl_int_t *n, doublereal *arf, doublerea
     {
         i__1 = -(*info);
         xerbla_("DTFTTR", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
@@ -268,7 +264,7 @@ void dtfttr_(char *transr, char *uplo, aocl_int_t *n, doublereal *arf, doublerea
         {
             a[0] = arf[0];
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Size of array ARF(0:nt-1) */
@@ -552,7 +548,7 @@ void dtfttr_(char *transr, char *uplo, aocl_int_t *n, doublereal *arf, doublerea
             }
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DTFTTR */
 }

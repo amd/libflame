@@ -7,9 +7,9 @@
  *  Copyright (c) 2021-2025 Advanced Micro Devices, Inc.  All rights reserved.
  */
 #include "FLA_f2c.h" /* Table of constant values */
-#if FLA_ENABLE_AOCL_BLAS
-#include "blis.h"
-#endif
+
+/* TODO : Move thread related macros to a seperate header file */
+#define MAX_THREADS_DLABRD  8
 
 static doublereal c_b4 = -1.;
 static doublereal c_b5 = 1.;
@@ -277,14 +277,12 @@ void fla_dlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
-    aocl_int64_t i__;
-    int thread_id;
-#if FLA_OPENMP_MULTITHREADING
-    aocl_int64_t i__4, i__5;
-    int actual_num_threads;
-#endif
+    integer i__;
+    int thread_id, actual_num_threads;
+    extern /* Subroutine */
+    int dscal_(integer *, doublereal *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -323,6 +321,16 @@ void fla_dlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *
     y_offset = 1 + y_dim1;
     y -= y_offset;
 
+#ifdef FLA_ENABLE_MULTITHREADING
+    /* TODO : Add this logic as a separate function */ 
+    /* Get number of threads for parallel region */
+    actual_num_threads = omp_get_max_threads();
+    if(actual_num_threads > MAX_THREADS_DLABRD)
+        actual_num_threads = MAX_THREADS_DLABRD;
+#else
+    actual_num_threads = 1;
+#endif
+
     /* Function Body */
     if(*m <= 0 || *n <= 0)
     {
@@ -346,37 +354,35 @@ void fla_dlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *
     {
         /* Reduce to upper bidiagonal form */
         i__1 = *nb;
-#ifdef FLA_OPENMP_MULTITHREADING
-#pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
+#ifdef FLA_ENABLE_MULTITHREADING
+        #pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
         {
             thread_id = omp_get_thread_num();
 #else
         {
             thread_id = 0;
 #endif
-            for(i__ = 1; i__ <= i__1; ++i__)
+            for (i__ = 1;
+                    i__ <= i__1;
+                    ++i__)
             {
                 if(thread_id == 0)
                 {
                     /* Update A(i:m,i) */
                     i__2 = *m - i__ + 1;
                     i__3 = i__ - 1;
-                    aocl_blas_dgemv("No transpose", &i__2, &i__3, &c_b4, &a[i__ + a_dim1], lda,
-                                    &y[i__ + y_dim1], ldy, &c_b5, &a[i__ + i__ * a_dim1], &c__1);
+                    dgemv_("No transpose", &i__2, &i__3, &c_b4, &a[i__ + a_dim1], lda, &y[i__ + y_dim1], ldy, &c_b5, &a[i__ + i__ * a_dim1], & c__1);
                     i__2 = *m - i__ + 1;
                     i__3 = i__ - 1;
-                    aocl_blas_dgemv("No transpose", &i__2, &i__3, &c_b4, &x[i__ + x_dim1], ldx,
-                                    &a[i__ * a_dim1 + 1], &c__1, &c_b5, &a[i__ + i__ * a_dim1],
-                                    &c__1);
+                    dgemv_("No transpose", &i__2, &i__3, &c_b4, &x[i__ + x_dim1], ldx, &a[i__ * a_dim1 + 1], &c__1, &c_b5, &a[i__ + i__ * a_dim1], &c__1);
                     /* Generate reflection Q(i) to annihilate A(i+1:m,i) */
                     i__2 = *m - i__ + 1;
                     /* Computing MIN */
                     i__3 = i__ + 1;
-                    aocl_lapack_dlarfg(&i__2, &a[i__ + i__ * a_dim1],
-                                       &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tauq[i__]);
+                    dlarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
                     d__[i__] = a[i__ + i__ * a_dim1];
                 }
-                if(i__ < *n)
+                if (i__ < *n)
                 {
                     if(thread_id == 0)
                     {
@@ -385,103 +391,71 @@ void fla_dlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *
                     /* Compute Y(i+1:n,i) */
                     i__2 = *m - i__ + 1;
                     i__3 = *n - i__;
-#ifdef FLA_OPENMP_MULTITHREADING
-                    /* Determine the sub partition range of current thread */
+#ifdef FLA_ENABLE_MULTITHREADING
+                    /* Divide column wise equally among each threads */ 
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__3, &i__4, &i__5);
-#pragma omp barrier
-                    aocl_blas_dgemv("Transpose", &i__2, &i__4, &c_b5,
-                                    &a[i__ + (i__5 + i__ + 1) * a_dim1], lda,
-                                    &a[i__ + i__ * a_dim1], &c__1, &c_b16,
-                                    &y[i__5 + i__ + 1 + i__ * y_dim1], &c__1);
-#pragma omp barrier
+                    #pragma omp barrier
+                    dgemv_("Transpose", &i__2, &i__4, &c_b5, &a[i__ + (i__5 + i__ + 1) * a_dim1], lda, &a[i__ + i__ * a_dim1], &c__1, &c_b16, &y[i__5 + i__ + 1 + i__ * y_dim1], &c__1);
+                    #pragma omp barrier
 #else
-                    aocl_blas_dgemv("Transpose", &i__2, &i__3, &c_b5, &a[i__ + (i__ + 1) * a_dim1],
-                                    lda, &a[i__ + i__ * a_dim1], &c__1, &c_b16,
-                                    &y[i__ + 1 + i__ * y_dim1], &c__1);
+                    dgemv_("Transpose", &i__2, &i__3, &c_b5, &a[i__ + (i__ + 1) * a_dim1], lda, &a[i__ + i__ * a_dim1], &c__1, &c_b16, & y[i__ + 1 + i__ * y_dim1], &c__1);
 #endif
                     if(thread_id == 0)
                     {
                         i__2 = *m - i__ + 1;
                         i__3 = i__ - 1;
-                        aocl_blas_dgemv("Transpose", &i__2, &i__3, &c_b5, &a[i__ + a_dim1], lda,
-                                        &a[i__ + i__ * a_dim1], &c__1, &c_b16, &y[i__ * y_dim1 + 1],
-                                        &c__1);
+                        dgemv_("Transpose", &i__2, &i__3, &c_b5, &a[i__ + a_dim1], lda, &a[i__ + i__ * a_dim1], &c__1, &c_b16, &y[i__ * y_dim1 + 1], &c__1);
                         i__2 = *n - i__;
                         i__3 = i__ - 1;
-                        aocl_blas_dgemv("No transpose", &i__2, &i__3, &c_b4, &y[i__ + 1 + y_dim1],
-                                        ldy, &y[i__ * y_dim1 + 1], &c__1, &c_b5,
-                                        &y[i__ + 1 + i__ * y_dim1], &c__1);
+                        dgemv_("No transpose", &i__2, &i__3, &c_b4, &y[i__ + 1 + y_dim1], ldy, &y[i__ * y_dim1 + 1], &c__1, &c_b5, &y[ i__ + 1 + i__ * y_dim1], &c__1);
                         i__2 = *m - i__ + 1;
                         i__3 = i__ - 1;
-                        aocl_blas_dgemv("Transpose", &i__2, &i__3, &c_b5, &x[i__ + x_dim1], ldx,
-                                        &a[i__ + i__ * a_dim1], &c__1, &c_b16, &y[i__ * y_dim1 + 1],
-                                        &c__1);
+                        dgemv_("Transpose", &i__2, &i__3, &c_b5, &x[i__ + x_dim1], ldx, &a[i__ + i__ * a_dim1], &c__1, &c_b16, &y[i__ * y_dim1 + 1], &c__1);
                         i__2 = i__ - 1;
                         i__3 = *n - i__;
-                        aocl_blas_dgemv("Transpose", &i__2, &i__3, &c_b4,
-                                        &a[(i__ + 1) * a_dim1 + 1], lda, &y[i__ * y_dim1 + 1],
-                                        &c__1, &c_b5, &y[i__ + 1 + i__ * y_dim1], &c__1);
+                        dgemv_("Transpose", &i__2, &i__3, &c_b4, &a[(i__ + 1) * a_dim1 + 1], lda, &y[i__ * y_dim1 + 1], &c__1, &c_b5, &y[i__ + 1 + i__ * y_dim1], &c__1);
                         i__2 = *n - i__;
-                        aocl_blas_dscal(&i__2, &tauq[i__], &y[i__ + 1 + i__ * y_dim1], &c__1);
+                        dscal_(&i__2, &tauq[i__], &y[i__ + 1 + i__ * y_dim1], &c__1);
                         /* Update A(i,i+1:n) */
                         i__2 = *n - i__;
-                        aocl_blas_dgemv("No transpose", &i__2, &i__, &c_b4, &y[i__ + 1 + y_dim1],
-                                        ldy, &a[i__ + a_dim1], lda, &c_b5,
-                                        &a[i__ + (i__ + 1) * a_dim1], lda);
+                        dgemv_("No transpose", &i__2, &i__, &c_b4, &y[i__ + 1 + y_dim1], ldy, &a[i__ + a_dim1], lda, &c_b5, &a[i__ + ( i__ + 1) * a_dim1], lda);
                         i__2 = i__ - 1;
                         i__3 = *n - i__;
-                        aocl_blas_dgemv("Transpose", &i__2, &i__3, &c_b4,
-                                        &a[(i__ + 1) * a_dim1 + 1], lda, &x[i__ + x_dim1], ldx,
-                                        &c_b5, &a[i__ + (i__ + 1) * a_dim1], lda);
+                        dgemv_("Transpose", &i__2, &i__3, &c_b4, &a[(i__ + 1) * a_dim1 + 1], lda, &x[i__ + x_dim1], ldx, &c_b5, &a[ i__ + (i__ + 1) * a_dim1], lda);
                         /* Generate reflection P(i) to annihilate A(i,i+2:n) */
                         i__2 = *n - i__;
                         /* Computing MIN */
                         i__3 = i__ + 2;
-                        aocl_lapack_dlarfg(&i__2, &a[i__ + (i__ + 1) * a_dim1],
-                                           &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &taup[i__]);
+                        dlarfg_(&i__2, &a[i__ + (i__ + 1) * a_dim1], &a[i__ + min( i__3,*n) * a_dim1], lda, &taup[i__]);
                         e[i__] = a[i__ + (i__ + 1) * a_dim1];
                         a[i__ + (i__ + 1) * a_dim1] = 1.;
                     }
                     /* Compute X(i+1:m,i) */
                     i__2 = *m - i__;
                     i__3 = *n - i__;
-#ifdef FLA_OPENMP_MULTITHREADING
-                    /* Determine the sub partition range of current thread */
+#ifdef FLA_ENABLE_MULTITHREADING
+                    /* Divide row wise equally among each threads */ 
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__2, &i__4, &i__5);
-#pragma omp barrier
-                    aocl_blas_dgemv("No transpose", &i__4, &i__3, &c_b5,
-                                    &a[i__5 + i__ + 1 + (i__ + 1) * a_dim1], lda,
-                                    &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16,
-                                    &x[i__5 + i__ + 1 + i__ * x_dim1], &c__1);
-#pragma omp barrier
+                    #pragma omp barrier
+                    dgemv_("No transpose", &i__4, &i__3, &c_b5, &a[i__5 + i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16, &x[i__5 + i__ + 1 + i__ * x_dim1], &c__1);
+                    #pragma omp barrier
 #else
-                    aocl_blas_dgemv("No transpose", &i__2, &i__3, &c_b5,
-                                    &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
-                                    &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16,
-                                    &x[i__ + 1 + i__ * x_dim1], &c__1);
+                    dgemv_("No transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16, &x[i__ + 1 + i__ * x_dim1], &c__1);
 #endif
                     if(thread_id == 0)
                     {
                         i__2 = *n - i__;
-                        aocl_blas_dgemv("Transpose", &i__2, &i__, &c_b5, &y[i__ + 1 + y_dim1], ldy,
-                                        &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16,
-                                        &x[i__ * x_dim1 + 1], &c__1);
+                        dgemv_("Transpose", &i__2, &i__, &c_b5, &y[i__ + 1 + y_dim1], ldy, &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16, &x[ i__ * x_dim1 + 1], &c__1);
                         i__2 = *m - i__;
-                        aocl_blas_dgemv("No transpose", &i__2, &i__, &c_b4, &a[i__ + 1 + a_dim1],
-                                        lda, &x[i__ * x_dim1 + 1], &c__1, &c_b5,
-                                        &x[i__ + 1 + i__ * x_dim1], &c__1);
+                        dgemv_("No transpose", &i__2, &i__, &c_b4, &a[i__ + 1 + a_dim1], lda, &x[i__ * x_dim1 + 1], &c__1, &c_b5, &x[ i__ + 1 + i__ * x_dim1], &c__1);
                         i__2 = i__ - 1;
                         i__3 = *n - i__;
-                        aocl_blas_dgemv(
-                            "No transpose", &i__2, &i__3, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda,
-                            &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16, &x[i__ * x_dim1 + 1], &c__1);
+                        dgemv_("No transpose", &i__2, &i__3, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda, &a[i__ + (i__ + 1) * a_dim1], lda, & c_b16, &x[i__ * x_dim1 + 1], &c__1);
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
-                        aocl_blas_dgemv("No transpose", &i__2, &i__3, &c_b4, &x[i__ + 1 + x_dim1],
-                                        ldx, &x[i__ * x_dim1 + 1], &c__1, &c_b5,
-                                        &x[i__ + 1 + i__ * x_dim1], &c__1);
+                        dgemv_("No transpose", &i__2, &i__3, &c_b4, &x[i__ + 1 + x_dim1], ldx, &x[i__ * x_dim1 + 1], &c__1, &c_b5, &x[ i__ + 1 + i__ * x_dim1], &c__1);
                         i__2 = *m - i__;
-                        aocl_blas_dscal(&i__2, &taup[i__], &x[i__ + 1 + i__ * x_dim1], &c__1);
+                        dscal_(&i__2, &taup[i__], &x[i__ + 1 + i__ * x_dim1], &c__1);
                     }
                 }
                 /* L10: */
@@ -637,32 +611,3 @@ void fla_dlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *
     /* End of DLABRD */
 }
 /* dlabrd_ */
-
-// DLABRD, size thresholds to choose number of threads
-// TODO: Move the macro definitions to corresponding headers
-#define FLA_DLABRD_THREADS_THRESH0 (1200)
-#define FLA_DLABRD_THREADS_THRESH1 (1900)
-
-extern int fla_thread_get_num_threads();
-static int get_opt_threads_dlabrd(aocl_int64_t m, aocl_int64_t n)
-{
-    aocl_int64_t min_m_n = fla_min(m, n);
-    int num_threads;
-
-    if(min_m_n < FLA_DLABRD_THREADS_THRESH0)
-    {
-        num_threads = 1;
-    }
-    else if(min_m_n < FLA_DLABRD_THREADS_THRESH1)
-    {
-        num_threads = 64;
-    }
-    else
-    {
-        num_threads = 128;
-    }
-
-    num_threads = fla_min(num_threads, fla_thread_get_num_threads());
-
-    return num_threads;
-}

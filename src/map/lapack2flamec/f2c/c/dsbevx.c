@@ -270,12 +270,8 @@ void dsbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
              doublereal *z__, aocl_int_t *ldz, doublereal *work, aocl_int_t *iwork,
              aocl_int_t *ifail, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dsbevx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", ldq %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",*jobz, *range, *uplo, *n, *kd, *ldab, *ldq, *il, *iu, *ldz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dsbevx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", ldq %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",*jobz, *range, *uplo, *n, *kd, *ldab, *ldq, *il, *iu, *ldz);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -408,14 +404,14 @@ void dsbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
     {
         i__1 = -(*info);
         xerbla_("DSBEVX", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(*n == 1)
@@ -444,7 +440,7 @@ void dsbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
                 z__[z_dim1 + 1] = 1.;
             }
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Get machine constants. */
@@ -634,7 +630,7 @@ L30:
             /* L50: */
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DSBEVX */
 }

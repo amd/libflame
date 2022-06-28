@@ -187,12 +187,8 @@ void dspevd_(char *jobz, char *uplo, aocl_int_t *n, doublereal *ap, doublereal *
              aocl_int_t *ldz, doublereal *work, aocl_int_t *lwork, aocl_int_t *iwork,
              aocl_int_t *liwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dspevd inputs: jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*jobz, *uplo, *n, *ldz, *lwork, *liwork);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dspevd inputs: jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*jobz, *uplo, *n, *ldz, *lwork, *liwork);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1;
     doublereal d__1;
@@ -306,18 +302,18 @@ void dspevd_(char *jobz, char *uplo, aocl_int_t *n, doublereal *ap, doublereal *
     {
         i__1 = -(*info);
         xerbla_("DSPEVD", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(*n == 1)
@@ -327,7 +323,7 @@ void dspevd_(char *jobz, char *uplo, aocl_int_t *n, doublereal *ap, doublereal *
         {
             z__[z_dim1 + 1] = 1.;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Get machine constants. */
@@ -382,7 +378,7 @@ void dspevd_(char *jobz, char *uplo, aocl_int_t *n, doublereal *ap, doublereal *
     }
     work[1] = (doublereal) lwmin;
     iwork[1] = liwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DSPEVD */
 }

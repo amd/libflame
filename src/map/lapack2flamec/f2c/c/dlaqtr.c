@@ -172,12 +172,8 @@ void dlaqtr_(logical *ltran, logical *lreal, aocl_int_t *n, doublereal *t, aocl_
              doublereal *b, doublereal *w, doublereal *scale, doublereal *x, doublereal *work,
              aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlaqtr inputs: n %" FLA_IS ", ldt %" FLA_IS "",*n, *ldt);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlaqtr inputs: n %" FLA_IS ", ldt %" FLA_IS "",*n, *ldt);
     /* System generated locals */
     aocl_int64_t t_dim1, t_offset, i__1, i__2;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
@@ -241,7 +237,7 @@ void dlaqtr_(logical *ltran, logical *lreal, aocl_int_t *n, doublereal *t, aocl_
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Set constants to control overflow */
@@ -860,7 +856,7 @@ void dlaqtr_(logical *ltran, logical *lreal, aocl_int_t *n, doublereal *t, aocl_
             }
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLAQTR */
 }

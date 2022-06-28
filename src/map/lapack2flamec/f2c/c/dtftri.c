@@ -209,12 +209,8 @@ If UPLO = 'L' the RFP A contains the nt */
 /** Generated wrapper function */
 void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-    snprintf(buffer, 256,"dtftri inputs: transr %c, uplo %c, diag %c, n %" FLA_IS "",*transr, *uplo, *diag, *n);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dtftri inputs: transr %c, uplo %c, diag %c, n %" FLA_IS "",*transr, *uplo, *diag, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     /* Local variables */
@@ -267,13 +263,13 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
     {
         i__1 = -(*info);
         xerbla_("DTFTRI", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* If N is odd, set NISODD = .TRUE. */
@@ -313,7 +309,7 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
                 aocl_lapack_dtrtri("L", diag, &n1, a, n, info);
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 aocl_blas_dtrmm("R", "L", "N", diag, &n2, &n1, &c_b13, a, n, &a[n1], n);
@@ -324,7 +320,7 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
                 }
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 aocl_blas_dtrmm("L", "U", "T", diag, &n2, &n1, &c_b18, &a[*n], n, &a[n1], n);
@@ -337,7 +333,7 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
                 aocl_lapack_dtrtri("L", diag, &n1, &a[n2], n, info);
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 aocl_blas_dtrmm("L", "L", "T", diag, &n1, &n2, &c_b13, &a[n2], n, a, n);
@@ -348,7 +344,7 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
                 }
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 aocl_blas_dtrmm("R", "U", "N", diag, &n1, &n2, &c_b18, &a[n1], n, a, n);
@@ -364,7 +360,7 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
                 aocl_lapack_dtrtri("U", diag, &n1, a, &n1, info);
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 aocl_blas_dtrmm("L", "U", "N", diag, &n1, &n2, &c_b13, a, &n1, &a[n1 * n1], &n1);
@@ -375,7 +371,7 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
                 }
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 aocl_blas_dtrmm("R", "L", "T", diag, &n1, &n2, &c_b18, &a[1], &n1, &a[n1 * n1],
@@ -388,7 +384,7 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
                 aocl_lapack_dtrtri("U", diag, &n1, &a[n2 * n2], &n2, info);
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 aocl_blas_dtrmm("R", "U", "T", diag, &n2, &n1, &c_b13, &a[n2 * n2], &n2, a, &n2);
@@ -399,7 +395,7 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
                 }
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 aocl_blas_dtrmm("L", "L", "N", diag, &n2, &n1, &c_b18, &a[n1 * n2], &n2, a, &n2);
@@ -421,7 +417,7 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
                 aocl_lapack_dtrtri("L", diag, &k, &a[1], &i__1, info);
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 i__1 = *n + 1;
@@ -436,7 +432,7 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
                 }
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 i__1 = *n + 1;
@@ -452,7 +448,7 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
                 aocl_lapack_dtrtri("L", diag, &k, &a[k + 1], &i__1, info);
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 i__1 = *n + 1;
@@ -466,7 +462,7 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
                 }
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 i__1 = *n + 1;
@@ -486,7 +482,7 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
                 aocl_lapack_dtrtri("U", diag, &k, &a[k], &k, info);
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 aocl_blas_dtrmm("L", "U", "N", diag, &k, &k, &c_b13, &a[k], &k, &a[k * (k + 1)],
@@ -498,7 +494,7 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
                 }
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 aocl_blas_dtrmm("R", "L", "T", diag, &k, &k, &c_b18, a, &k, &a[k * (k + 1)], &k);
@@ -512,7 +508,7 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
                 aocl_lapack_dtrtri("U", diag, &k, &a[k * (k + 1)], &k, info);
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 aocl_blas_dtrmm("R", "U", "T", diag, &k, &k, &c_b13, &a[k * (k + 1)], &k, a, &k);
@@ -523,14 +519,14 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
                 }
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 aocl_blas_dtrmm("L", "L", "N", diag, &k, &k, &c_b18, &a[k * k], &k, a, &k);
             }
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DTFTRI */
 }

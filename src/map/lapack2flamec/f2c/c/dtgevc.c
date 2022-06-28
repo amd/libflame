@@ -308,12 +308,8 @@ void dtgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, doublerea
              doublereal *vr, aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m, doublereal *work,
              aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-    snprintf(buffer, 256,"dtgevc inputs: side %c, howmny %c, n %" FLA_IS ", lds %" FLA_IS ", ldp %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",*side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dtgevc inputs: side %c, howmny %c, n %" FLA_IS ", lds %" FLA_IS ", ldp %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",*side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm);
     /* System generated locals */
     aocl_int64_t p_dim1, p_offset, s_dim1, s_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1,
         i__2, i__3, i__4, i__5;
@@ -464,7 +460,7 @@ void dtgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, doublerea
     {
         i__1 = -(*info);
         xerbla_("DTGEVC", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Count the number of eigenvectors to be computed */
@@ -555,14 +551,14 @@ void dtgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, doublerea
     {
         i__1 = -(*info);
         xerbla_("DTGEVC", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     *m = im;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Machine Constants */
@@ -764,7 +760,7 @@ void dtgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, doublerea
                 if(bcoefi == 0.)
                 {
                     *info = je;
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 /* Scale to avoid over/underflow */
@@ -1183,7 +1179,7 @@ void dtgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, doublerea
                 if(bcoefi == 0.)
                 {
                     *info = je - 1;
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return 0;
                 }
                 /* Scale to avoid over/underflow */
@@ -1507,7 +1503,7 @@ void dtgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, doublerea
         L500:;
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DTGEVC */
 }

@@ -132,12 +132,8 @@ void dsycon_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
              doublereal *anorm, doublereal *rcond, doublereal *work, aocl_int_t *iwork,
              aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-    snprintf(buffer, 256,"dsycon inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ipiv %" FLA_IS "",*uplo, *n, *lda, *ipiv);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dsycon inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ipiv %" FLA_IS "",*uplo, *n, *lda, *ipiv);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
@@ -199,7 +195,7 @@ void dsycon_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
     {
         i__1 = -(*info);
         xerbla_("DSYCON", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
@@ -207,12 +203,12 @@ void dsycon_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
     if(*n == 0)
     {
         *rcond = 1.;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(*anorm <= 0.)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Check that the diagonal matrix D is nonsingular. */
@@ -223,7 +219,7 @@ void dsycon_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
         {
             if(ipiv[i__] > 0 && a[i__ + i__ * a_dim1] == 0.)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return 0;
             }
             /* L10: */
@@ -237,7 +233,7 @@ void dsycon_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
         {
             if(ipiv[i__] > 0 && a[i__ + i__ * a_dim1] == 0.)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return 0;
             }
             /* L20: */
@@ -258,7 +254,7 @@ L30:
     {
         *rcond = 1. / ainvnm / *anorm;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DSYCON */
 }

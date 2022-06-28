@@ -142,12 +142,8 @@ void dgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doubl
              doublereal *du, doublereal *du2, aocl_int_t *ipiv, doublereal *b, aocl_int_t *ldb,
              aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dgttrs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ipiv %" FLA_IS ", ldb %" FLA_IS "",*trans, *n, *nrhs, *ipiv, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dgttrs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ipiv %" FLA_IS ", ldb %" FLA_IS "",*trans, *n, *nrhs, *ipiv, *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -205,13 +201,13 @@ void dgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doubl
     {
         i__1 = -(*info);
         xerbla_("DGTTRS", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Decode TRANS */
@@ -255,7 +251,7 @@ void dgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doubl
         }
     }
     /* End of DGTTRS */
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
 }
 /* dgttrs_ */

@@ -187,12 +187,8 @@ void dgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, doublereal *a, aocl_in
              doublereal *b, aocl_int_t *ldb, doublereal *c__, doublereal *d__, doublereal *x,
              doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dgglse inputs: m %" FLA_IS ", n %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *p, *lda, *ldb, *lwork);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dgglse inputs: m %" FLA_IS ", n %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *p, *lda, *ldb, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
@@ -292,18 +288,18 @@ void dgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, doublereal *a, aocl_in
     {
         i__1 = -(*info);
         xerbla_("DGGLSE", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Compute the GRQ factorization of matrices B and A: */
@@ -334,7 +330,7 @@ void dgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, doublereal *a, aocl_in
         if(*info > 0)
         {
             *info = 1;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return 0;
         }
         /* Put the solution in X */
@@ -354,7 +350,7 @@ void dgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, doublereal *a, aocl_in
         if(*info > 0)
         {
             *info = 2;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return 0;
         }
         /* Put the solutions in X */
@@ -390,7 +386,7 @@ void dgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, doublereal *a, aocl_in
     i__1 = lopt;
     i__2 = (integer) work[*p + mn + 1]; // , expr subst
     work[1] = (doublereal) (*p + mn + max(i__1,i__2));
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGGLSE */
 }

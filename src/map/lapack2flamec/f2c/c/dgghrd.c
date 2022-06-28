@@ -218,12 +218,8 @@ void dgghrd_(char *compq, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_
              doublereal *a, aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, doublereal *q,
              aocl_int_t *ldq, doublereal *z__, aocl_int_t *ldz, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dgghrd inputs: compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS "",*compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dgghrd inputs: compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS "",*compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
         i__3;
@@ -351,7 +347,7 @@ void dgghrd_(char *compq, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_
     {
         i__1 = -(*info);
         xerbla_("DGGHRD", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Initialize Q and Z if desired. */
@@ -366,7 +362,7 @@ void dgghrd_(char *compq, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_
     /* Quick return if possible */
     if(*n <= 1)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Zero out lower triangle of B */
@@ -421,7 +417,7 @@ void dgghrd_(char *compq, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_
         }
         /* L40: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGGHRD */
 }

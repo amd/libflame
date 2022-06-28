@@ -150,12 +150,8 @@ void dgtcon_(char *norm, aocl_int_t *n, doublereal *dl, doublereal *d__, doubler
              doublereal *du2, aocl_int_t *ipiv, doublereal *anorm, doublereal *rcond,
              doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dgtcon inputs: norm %c, n %" FLA_IS ", ipiv %" FLA_IS "",*norm, *n, *ipiv);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dgtcon inputs: norm %c, n %" FLA_IS ", ipiv %" FLA_IS "",*norm, *n, *ipiv);
     /* System generated locals */
     aocl_int64_t i__1;
     /* Local variables */
@@ -212,7 +208,7 @@ void dgtcon_(char *norm, aocl_int_t *n, doublereal *dl, doublereal *d__, doubler
     {
         i__1 = -(*info);
         xerbla_("DGTCON", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
@@ -220,12 +216,12 @@ void dgtcon_(char *norm, aocl_int_t *n, doublereal *dl, doublereal *d__, doubler
     if(*n == 0)
     {
         *rcond = 1.;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(*anorm == 0.)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Check that D(1:N) is non-zero. */
@@ -234,7 +230,7 @@ void dgtcon_(char *norm, aocl_int_t *n, doublereal *dl, doublereal *d__, doubler
     {
         if(d__[i__] == 0.)
         {
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return 0;
         }
         /* L10: */
@@ -271,7 +267,7 @@ L20:
     {
         *rcond = 1. / ainvnm / *anorm;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGTCON */
 }

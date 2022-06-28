@@ -122,12 +122,8 @@ static aocl_int64_t c__1 = 1;
 void dlarfx_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, doublereal *tau,
              doublereal *c__, aocl_int_t *ldc, doublereal *work)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dlarfx inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *ldc);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlarfx inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *ldc);
     /* System generated locals */
     aocl_int64_t c_dim1, c_offset, i__1;
     /* Local variables */
@@ -162,7 +158,7 @@ void dlarfx_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, doublereal
     /* Function Body */
     if(*tau == 0.)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(lsame_(side, "L", 1, 1))
@@ -740,7 +736,7 @@ void dlarfx_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, doublereal
         goto L410;
     }
 L410:
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLARFX */
 }

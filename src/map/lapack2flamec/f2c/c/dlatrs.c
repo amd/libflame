@@ -244,12 +244,8 @@ b(i), i=1,..,n}
 void dlatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, doublereal *a,
              aocl_int_t *lda, doublereal *x, doublereal *scale, doublereal *cnorm, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE 
-    char buffer[256]; 
-    snprintf(buffer, 256,"dlatrs inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *trans, *diag, *normin, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlatrs inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *trans, *diag, *normin, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1, d__2, d__3;
@@ -331,14 +327,14 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, d
     {
         i__1 = -(*info);
         xerbla_("DLATRS", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     *scale = 1.;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Determine machine dependent parameters to control overflow. */
@@ -944,7 +940,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, d
         d__1 = 1. / tscal;
         aocl_blas_dscal(n, &d__1, &cnorm[1], &c__1);
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLATRS */
 }

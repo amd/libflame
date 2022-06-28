@@ -145,12 +145,8 @@
 void dppsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *ap, doublereal *b,
             aocl_int_t *ldb, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dppsv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dppsv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
@@ -199,7 +195,7 @@ void dppsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *ap, doubler
     {
         i__1 = -(*info);
         xerbla_("DPPSV ", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Compute the Cholesky factorization A = U**T*U or A = L*L**T. */
@@ -209,7 +205,7 @@ void dppsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *ap, doubler
         /* Solve the system A*X = B, overwriting B with X. */
         aocl_lapack_dpptrs(uplo, n, nrhs, &ap[1], &b[b_offset], ldb, info);
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DPPSV */
 }

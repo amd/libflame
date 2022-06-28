@@ -121,12 +121,8 @@ static aocl_int64_t c__1 = 1;
 void dppcon_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *anorm, doublereal *rcond,
              doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dppcon inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dppcon inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal d__1;
@@ -188,7 +184,7 @@ void dppcon_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *anorm, doubl
     {
         i__1 = -(*info);
         xerbla_("DPPCON", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
@@ -196,12 +192,12 @@ void dppcon_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *anorm, doubl
     if(*n == 0)
     {
         *rcond = 1.;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(*anorm == 0.)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     smlnum = dlamch_("Safe minimum");
@@ -251,7 +247,7 @@ L10:
         *rcond = 1. / ainvnm / *anorm;
     }
 L20:
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DPPCON */
 }

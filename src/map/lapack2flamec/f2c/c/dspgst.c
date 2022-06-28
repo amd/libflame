@@ -119,12 +119,8 @@ static doublereal c_b11 = 1.;
 void dspgst_(aocl_int_t *itype, char *uplo, aocl_int_t *n, doublereal *ap, doublereal *bp,
              aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"dspgst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS "",*itype, *uplo, *n);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dspgst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS "",*itype, *uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     doublereal d__1;
@@ -178,7 +174,7 @@ void dspgst_(aocl_int_t *itype, char *uplo, aocl_int_t *n, doublereal *ap, doubl
     {
         i__1 = -(*info);
         xerbla_("DSPGST", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(*itype == 1)
@@ -301,7 +297,7 @@ void dspgst_(aocl_int_t *itype, char *uplo, aocl_int_t *n, doublereal *ap, doubl
             }
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DSPGST */
 }

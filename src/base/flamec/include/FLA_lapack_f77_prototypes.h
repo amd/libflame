@@ -22,8 +22,6 @@ extern "C" {
 // --- Name-mangling macro definitions -----------------------------------------
 
 // --- Define Fortran name-mangling macro --------------------------
-#define AOCL_LAPACK_FUNC(name,NAME) aocl_lapack_ ## name
-
 #define F77_dlamch F77_FUNC( dlamch , DLAMCH )
 #define F77_dlamc3 F77_FUNC( dlamc3 , DLAMC3 )
 #define F77_dladiv2 F77_FUNC( dladiv2 , DLADIV2 )
@@ -2109,7 +2107,6 @@ extern "C" {
 #define F77_dormhr F77_FUNC( dormhr, DORMHR )
 
 // Function Prototypes declaration
-
 double F77_dlamch(char* cmach);
 double F77_dlamc3(double* a, double* b);
 doublereal F77_dladiv2(doublereal* a, doublereal* b, doublereal* c__, doublereal* d__, doublereal* r__, doublereal* t);

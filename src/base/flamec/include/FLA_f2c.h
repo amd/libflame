@@ -2692,6 +2692,8 @@ typedef struct Namelist Namelist;
 #define  zlaqz3_  zlaqz3
 #define  zlarfb_gett_  zlarfb_gett
 #define	 zungtsqr_row_  zungtsqr_row
+#define sroundup_lwork sroundup_lwork
+#define droundup_lwork droundup_lwork
 
 #define  isamax_   isamax     
 #define  idamax_   idamax     

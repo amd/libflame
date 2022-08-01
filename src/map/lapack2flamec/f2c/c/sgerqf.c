@@ -1,8 +1,5 @@
-/* ./sgerqf.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* sgerqf.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
@@ -120,7 +117,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup gerqf */
+/* > \ingroup realGEcomputational */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -146,28 +143,8 @@ v(1:n-k+i-1) is stored on exit in */
 void sgerqf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, real *work,
              aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgerqf(m, n, a, lda, tau, work, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgerqf(&m_64, &n_64, a, &lda_64, tau, work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sgerqf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau,
-                        real *work, aocl_int64_t *lwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgerqf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS
-                      "",
-                      *m, *n, *lda, *lwork);
+    AOCL_DTL_SNPRINTF("sgerqf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *lda, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -218,11 +195,10 @@ void aocl_lapack_sgerqf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     {
         *info = -4;
     }
-    nb = aocl_lapack_ilaenv(&c__1, "SGERQF", " ", m, n, &c_n1, &c_n1);
-    if(*info == 0)
+    if (*info == 0)
     {
-        k = fla_min(*m, *n);
-        if(k == 0)
+        k = min(*m,*n);
+        if (k == 0)
         {
             lwkopt = 1;
         }
@@ -230,10 +206,10 @@ void aocl_lapack_sgerqf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
         {
             lwkopt = *m * nb;
         }
-        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
-        if(!lquery)
+        work[1] = (real) lwkopt;
+        if (! lquery)
         {
-            if(*lwork <= 0 || *n > 0 && *lwork < fla_max(1, *m))
+            if (*lwork <= 0 || *n > 0 && *lwork < max(1,*m))
             {
                 *info = -7;
             }
@@ -242,20 +218,20 @@ void aocl_lapack_sgerqf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGERQF", &i__1, (ftnlen)6);
+        xerbla_("SGERQF", &i__1);
         AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     /* Quick return if possible */
     if(k == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     nbmin = 2;
     nx = 1;
@@ -334,9 +310,9 @@ void aocl_lapack_sgerqf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     {
         aocl_lapack_sgerq2(&mu, &nu, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
     }
-    work[1] = aocl_lapack_sroundup_lwork(&iws);
+    work[1] = (real) iws;
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of SGERQF */
 }
 /* sgerqf_ */

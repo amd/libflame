@@ -1,11 +1,5 @@
-/* ./cgeqrf.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-/******************************************************************************
- * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/* cgeqrf.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 #if !FLA_ENABLE_AMD_OPT
 static aocl_int64_t c__1 = 1;
@@ -51,7 +45,7 @@ integer get_block_size_cgeqrf(aocl_int64_t *m, aocl_int64_t *n);
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGEQRF computes a QR factorization of a scomplex M-by-N matrix A: */
+/* > CGEQRF computes a QR factorization of a complex M-by-N matrix A: */
 /* > */
 /* > A = Q * ( R ), */
 /* > ( 0 ) */
@@ -59,9 +53,9 @@ integer get_block_size_cgeqrf(aocl_int64_t *m, aocl_int64_t *n);
 /* > where: */
 /* > */
 /* > Q is a M-by-M orthogonal matrix;
- */
+*/
 /* > R is an upper-triangular N-by-N matrix;
- */
+*/
 /* > 0 is a (M-N)-by-N zero matrix, if M > N. */
 /* > */
 /* > \endverbatim */
@@ -138,7 +132,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup geqrf */
+/* > \ingroup complexGEcomputational */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -209,13 +203,9 @@ void cgeqrf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
     --tau;
     --work;
     /* Function Body */
-#if FLA_ENABLE_AMD_OPT
-    nb = get_block_size_cgeqrf(m, n);
-#else
-    nb = aocl_lapack_ilaenv(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
-#endif
-    k = fla_min(*m, *n);
+    k = min(*m,*n);
     *info = 0;
+    nb = ilaenv_(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -229,9 +219,9 @@ void cgeqrf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
     {
         *info = -4;
     }
-    else if(!lquery)
+    else if (! lquery)
     {
-        if(*lwork <= 0 || *m > 0 && *lwork < fla_max(1, *n))
+        if (*lwork <= 0 || *m > 0 && *lwork < max(1,*n))
         {
             *info = -7;
         }
@@ -240,20 +230,30 @@ void cgeqrf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
     {
         i__1 = -(*info);
         xerbla_("CGEQRF", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        if (k == 0)
+        {
+            lwkopt = 1;
+        }
+        else
+        {
+            lwkopt = *n * nb;
+        }
+        work[1].r = (real) lwkopt;
+        work[1].i = 0.f; // , expr subst
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
     /* Quick return if possible */
-    if(k == 0)
+    if (k == 0)
     {
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
     nbmin = 2;

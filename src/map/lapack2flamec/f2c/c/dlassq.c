@@ -1,8 +1,5 @@
-/* dlassq.f -- translated by f2c (version 20160102). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlassq.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h"
 /* > \brief \b DLASSQ updates a sum of squares represented in scaled form. */
 /* =========== DOCUMENTATION =========== */
@@ -10,17 +7,11 @@
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLASSQ + dependencies */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlassq.f90">
- */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlassq.f90"> */
 /* > [TGZ]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlassq.f90">
- */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlassq.f90"> */
 /* > [ZIP]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlassq.f90">
- */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlassq.f90"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -45,7 +36,7 @@
 /* > where x( i ) = X( 1 + ( i - 1 )*INCX ). The value of sumsq is */
 /* > assumed to be non-negative and scl returns the value */
 /* > */
-/* > scl = max( scale, f2c_dabs( x( i ) ) ). */
+/* > scl = max( scale, f2c_abs( x( i ) ) ). */
 /* > */
 /* > scale and sumsq must be supplied in SCALE and SUMSQ and */
 /* > scl and smsq are overwritten on SCALE and SUMSQ respectively. */
@@ -116,24 +107,22 @@
 /* > https://doi.org/10.1145/355769.355771 */
 /* > */
 /* > \endverbatim */
-/* > \ingroup lassq */
+/* > \ingroup OTHERauxiliary */
 /* ===================================================================== */
 
 /* la_isnan__ */
 /* Subroutine */
-/** Generated wrapper function */
-void dlassq_(aocl_int_t *n, doublereal *x, aocl_int_t *incx, doublereal *scl, doublereal *sumsq)
-{
+int dlassq_(integer *n, doublereal *x, integer *incx, doublereal *scl, doublereal *sumsq) {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlassq inputs: n %" FLA_IS ", incx %" FLA_IS "",*n, *incx);
     /* System generated locals */
-    aocl_int64_t i__1;
+    integer i__1, i__2;
     doublereal r__1, r__2;
     /* Builtin functions */
     double pow_ri(doublereal *, doublereal *), sqrt(doublereal);
-    aocl_int64_t i__;
+    integer i__;
     doublereal ax;
-    aocl_int64_t ix;
+    integer ix;
     doublereal abig, amed, sbig, tbig, asml, ymin, ssml, tsml, ymax;
     logical notbig;
     /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 09:17:33 8/30/21 */
@@ -152,22 +141,18 @@ void dlassq_(aocl_int_t *n, doublereal *x, aocl_int_t *incx, doublereal *scl, do
 
     /* .. */
     /* Quick return if possible */
-    if(*scl != *scl || *sumsq != *sumsq)
-    {
-        return;
+    if (scl != scl || sumsq != sumsq) {
+        return 0;
     }
-    if(*sumsq == 0.)
-    {
+    if (*sumsq == 0.) {
         *scl = 1.;
     }
-    if(*scl == 0.)
-    {
+    if (*scl == 0.) {
         *scl = 1.;
         *sumsq = 0.;
     }
-    if(*n <= 0)
-    {
-        return;
+    if (*n <= 0) {
+        return 0;
     }
     /* Compute the sum of squares in 3 accumulators: */
     /* abig -- sums of squares scaled down to avoid overflow */
@@ -181,26 +166,28 @@ void dlassq_(aocl_int_t *n, doublereal *x, aocl_int_t *incx, doublereal *scl, do
     amed = 0.;
     abig = 0.;
     ix = 1;
-    if(*incx < 0)
-    {
+    if (*incx < 0) {
         ix = 1 - (*n - 1) * *incx;
     }
     i__1 = *n;
-    for(i__ = 1; i__ <= i__1; ++i__)
-    {
+    for (i__ = 1;
+            i__ <= i__1;
+            ++i__) {
         ax = f2c_dabs(x[ix]);
-        if(ax > tbig)
-        {
-            absxi = (d__1 = x[ix], f2c_dabs(d__1));
-            if (absxi > 0. || disnan_(&absxi))
-            {
+        if (ax > tbig) {
+            /* Computing 2nd power */
+            r__1 = ax * sbig;
+            abig += r__1 * r__1;
+            notbig = FALSE_;
+        }
+        else if (ax < tsml) {
+            if (notbig) {
                 /* Computing 2nd power */
                 r__1 = ax * ssml;
                 asml += r__1 * r__1;
             }
         }
-        else
-        {
+        else {
             /* Computing 2nd power */
             r__1 = ax;
             amed += r__1 * r__1;
@@ -208,45 +195,67 @@ void dlassq_(aocl_int_t *n, doublereal *x, aocl_int_t *incx, doublereal *scl, do
         ix += *incx;
     }
     /* Put the existing sum of squares into one of the accumulators */
-    if(*sumsq > 0.)
-    {
+    if (*sumsq > 0.) {
         ax = *scl * sqrt(*sumsq);
-        if(ax > tbig)
-        {
-            if(*scl > 1.0)
-            {
-                *scl *= sbig;
-                abig += (*scl) * (*scl) * (*sumsq);
-            }
-            else
-            {
-                abig += (*scl) * (*scl) * (sbig * (sbig * (*sumsq)));
+        if (ax > tbig) {
+            /* Computing 2nd power */
+            r__1 = *scl * sbig;
+            abig += (r__1 * r__1)* *sumsq;
+            notbig = FALSE_;
+        }
+        else if (ax < tsml) {
+            if (notbig) {
+                /* Computing 2nd power */
+                r__1 = *scl * ssml;
+                asml += (r__1 * r__1)* *sumsq;
             }
         }
-        else if(ax < tsml)
-        {
-            if(notbig)
-            {
-                if(*scl < 1.0)
-                {
-                    *scl *= ssml;
-                    asml += (*scl) * (*scl) * (*sumsq);
-                }
-                else
-                {
-                    asml += (*scl) * (*scl) * (ssml * (ssml * (*sumsq)));
-                }
-            }
-        }
-        else
-        {
+        else {
             /* Computing 2nd power */
             r__1 = *scl;
-            amed += (r__1 * r__1) * *sumsq;
+            amed += (r__1 * r__1)* *sumsq;
         }
+    }
+    /* Combine abig and amed or amed and asml if more than one */
+    /* accumulator was used. */
+    if (abig > 0.) {
+        if (amed > 0. || amed != amed) {
+            abig += amed * sbig * sbig;
+        }
+        *scl = 1. / sbig;
+        *sumsq = abig;
+    }
+    else if (asml > 0.) {
+        /* Combine amed and asml if asml > 0. */
+        if (amed > 0. ||  amed != amed) {
+            amed = sqrt(amed);
+            asml = sqrt(asml) / ssml;
+            if (asml > amed) {
+                ymin = amed;
+                ymax = asml;
+            }
+            else {
+                ymin = asml;
+                ymax = amed;
+            }
+            *scl = 1.;
+            /* Computing 2nd power */
+            r__1 = ymax;
+            /* Computing 2nd power */
+            r__2 = ymin / ymax;
+            *sumsq = r__1 * r__1 * (r__2 * r__2 + 1.);
+        }
+        else {
+            *scl = 1. / ssml;
+            *sumsq = asml;
+        }
+    }
+    else {
+        /* Otherwise all values are mid-range or zero */
+        *scl = 1.;
+        *sumsq = amed;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return 0;
-    /* End of DLASSQ */
 }
 /* dlassq_ */

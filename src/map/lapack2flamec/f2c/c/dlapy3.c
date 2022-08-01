@@ -1,8 +1,5 @@
-/* dlapy3.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlapy3.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLAPY3 returns sqrt(x2+y2+z2). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -87,13 +84,14 @@ doublereal dlapy3_(doublereal *x, doublereal *y, doublereal *z__)
     /* .. Intrinsic Functions .. */
     /* .. */
     /* .. Executable Statements .. */
+    hugeval = dlamch_("Overflow");
     xabs = f2c_dabs(*x);
     yabs = f2c_dabs(*y);
     zabs = f2c_dabs(*z__);
     /* Computing MAX */
-    d__1 = fla_max(xabs, yabs);
-    w = fla_max(d__1, zabs);
-    if(w == 0. || w > hugeval)
+    d__1 = max(xabs,yabs);
+    w = max(d__1,zabs);
+    if (w == 0. || w > hugeval)
     {
         /* W can be zero for fla_max(0,nan,0) */
         /* adding all three entries together will make sure */

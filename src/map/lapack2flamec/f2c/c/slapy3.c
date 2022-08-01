@@ -1,8 +1,5 @@
-/* slapy3.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slapy3.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLAPY3 returns sqrt(x2+y2+z2). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -63,7 +60,7 @@
 /* ===================================================================== */
 real slapy3_(real *x, real *y, real *z__)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
     real ret_val, r__1, r__2, r__3;
     /* Builtin functions */
@@ -87,13 +84,14 @@ real slapy3_(real *x, real *y, real *z__)
     /* .. Intrinsic Functions .. */
     /* .. */
     /* .. Executable Statements .. */
+    hugeval = slamch_("Overflow");
     xabs = f2c_abs(*x);
     yabs = f2c_abs(*y);
     zabs = f2c_abs(*z__);
     /* Computing MAX */
-    r__1 = fla_max(xabs, yabs);
-    w = fla_max(r__1, zabs);
-    if(w == 0.f || w > hugeval)
+    r__1 = max(xabs,yabs);
+    w = max(r__1,zabs);
+    if (w == 0.f || w > hugeval)
     {
         /* W can be zero for fla_max(0,nan,0) */
         /* adding all three entries together will make sure */
@@ -110,7 +108,7 @@ real slapy3_(real *x, real *y, real *z__)
         r__3 = zabs / w;
         ret_val = w * sqrt(r__1 * r__1 + r__2 * r__2 + r__3 * r__3);
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_EXIT_INDENT
     return ret_val;
     /* End of SLAPY3 */
 }

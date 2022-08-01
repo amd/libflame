@@ -1,25 +1,17 @@
-/* ./classq.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CLASSQ updates a sum of squares represented in scaled form. */
+/* classq.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+#include "FLA_f2c.h" /* Table of constant values */
+/* > \brief \b CLASSQ updates a sum of squares represented in scaled form. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLASSQ + dependencies */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/classq.
- * f90"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/classq. f90"> */
 /* > [TGZ]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/classq.
- * f90"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/classq. f90"> */
 /* > [ZIP]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/classq.
- * f90"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/classq. f90"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -37,25 +29,18 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CLASSQ returns the values scale_out and sumsq_out such that */
+/* > CLASSQ returns the values scl and smsq such that */
 /* > */
-/* > (scale_out**2)*sumsq_out = x( 1 )**2 +...+ x( n )**2 + (scale**2)*sumsq, */
+/* > ( scl**2 )*smsq = x( 1 )**2 +...+ x( n )**2 + ( scale**2 )*sumsq, */
 /* > */
-/* > where x( i ) = f2c_abs( X( 1 + ( i - 1 )*INCX ) ). The value of sumsq is */
-/* > assumed to be at least unity and the value of ssq will then satisfy */
+/* > where x( i ) = X( 1 + ( i - 1 )*INCX ). The value of sumsq is */
+/* > assumed to be non-negative and scl returns the value */
+/* > */
+/* > scl = max( scale, f2c_abs( x( i ) ) ). */
 /* > */
 /* > scale and sumsq must be supplied in SCALE and SUMSQ and */
-/* > scale_out and sumsq_out are overwritten on SCALE and SUMSQ respectively. */
+/* > scl and smsq are overwritten on SCALE and SUMSQ respectively. */
 /* > */
-/* > scale is assumed to be non-negative and scl returns the value */
-/* > */
-/* > scl = max( scale, f2c_abs( real( x( i ) ) ), f2c_abs( aimag( x( i ) ) ) ), */
-/* > i */
-/* > */
-/* > scale and sumsq must be supplied in SCALE and SUMSQ respectively. */
-/* > SCALE and SUMSQ are overwritten by scl and ssq respectively. */
-/* > */
-/* > The routine makes only one pass through the vector X. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -67,7 +52,7 @@
 /* > */
 /* > \param[in] X */
 /* > \verbatim */
-/* > X is COMPLEX array, dimension (1+(N-1)*abs(INCX)) */
+/* > X is COMPLEX array, dimension (1+(N-1)*f2c_abs(INCX)) */
 /* > The vector for which a scaled sum of squares is computed. */
 /* > x( i ) = X( 1 + ( i - 1 )*INCX ), 1 <= i <= n. */
 /* > \endverbatim */
@@ -87,7 +72,7 @@
 /* > \verbatim */
 /* > SCALE is REAL */
 /* > On entry, the value scale in the equation above. */
-/* > On exit, SCALE is overwritten by scale_out, the scaling factor */
+/* > On exit, SCALE is overwritten with scl , the scaling factor */
 /* > for the sum of squares. */
 /* > \endverbatim */
 /* > */
@@ -95,8 +80,8 @@
 /* > \verbatim */
 /* > SUMSQ is REAL */
 /* > On entry, the value sumsq in the equation above. */
-/* > On exit, SUMSQ is overwritten by sumsq_out, the basic sum of */
-/* > squares from which scale_out has been factored out. */
+/* > On exit, SUMSQ is overwritten with smsq , the basic sum of */
+/* > squares from which scl has been factored out. */
 /* > \endverbatim */
 /* Authors: */
 /* ======== */
@@ -122,12 +107,10 @@
 /* > https://doi.org/10.1145/355769.355771 */
 /* > */
 /* > \endverbatim */
-/* > \ingroup lassq */
+/* > \ingroup OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void classq_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, real *scale, real *sumsq)
-{
+int classq_(integer *n, complex *x, integer *incx, real *scl, real *sumsq) {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
@@ -139,33 +122,28 @@ void classq_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, real *scale, real *su
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t i__1, i__2;
+    integer i__1, i__2;
     real r__1, r__2;
     /* Builtin functions */
-    double r_imag(scomplex *), sqrt(doublereal);
+    double pow_ri(real *, integer *), r_imag(complex *), sqrt(doublereal);
     /* Local variables */
-    aocl_int64_t i__;
+    extern logical sisnan_(real *);
+    integer i__;
     real ax;
-    aocl_int64_t ix;
-    real abig, amed, sbig, tbig, asml, ymin, ymax, tsml, ssml;
+    integer ix;
+    real sbi, abig, amed, sbig, tbig, asml, ymin, ssml, tsml, ymax;
     logical notbig;
-    /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 02:55:34 11/27/24 */
+    /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 09:17:33 8/30/21 */
     /* ...Switches: */
     /* use LA_CONSTANTS, & */
     /* only: wp=>sp, zero=>szero, one=>sone, & */
     /* sbig=>ssbig, ssml=>sssml, tbig=>stbig, tsml=>stsml */
     /* use LA_XISNAN */
-    /* -- LAPACK auxiliary routine -- */
-    /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
-    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
     /* .. */
     /* .. Local Scalars .. */
-    /* .. */
-    /* Quick return if possible */
-    /* if( LA_ISNAN(scale) .or. LA_ISNAN(sumsq) ) return */
     /* Parameter adjustments */
     --x;
     /* Function Body */
@@ -175,24 +153,20 @@ void classq_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, real *scale, real *su
     tbig = 4.50359963E+15;
     /* .. */
     /* Quick return if possible */
-    if(*scale != *scale || *sumsq != *sumsq)
-    {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+    if (sisnan_(scl) || sisnan_(sumsq)) {
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
-    if(*sumsq == 0.f)
-    {
-        *scale = 1.f;
+    if (*sumsq == 0.f) {
+        *scl = 1.f;
     }
-    if(*scale == 0.f)
-    {
-        *scale = 1.f;
+    if (*scl == 0.f) {
+        *scl = 1.f;
         *sumsq = 0.f;
     }
-    if(*n <= 0)
-    {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+    if (*n <= 0) {
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return 0;
     }
     /* Compute the sum of squares in 3 accumulators: */
     /* abig -- sums of squares scaled down to avoid overflow */
@@ -206,51 +180,48 @@ void classq_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, real *scale, real *su
     amed = 0.f;
     abig = 0.f;
     ix = 1;
-    if(*incx < 0)
-    {
+    if (*incx < 0) {
         ix = 1 - (*n - 1) * *incx;
     }
     i__1 = *n;
-    for(i__ = 1; i__ <= i__1; ++i__)
-    {
+    for (i__ = 1;
+            i__ <= i__1;
+            ++i__) {
         i__2 = ix;
-        ax = (r__1 = x[i__2].real, f2c_abs(r__1));
-        if(ax > tbig)
-        {
-            i__3 = ix;
-            temp1 = (r__1 = x[i__3].r, f2c_abs(r__1));
-            if (temp1 > 0.f || sisnan_(&temp1))
-            {
-                /* Computing 2nd power */
-                r__1 = ax * ssml;
-                asml += r__1 * r__1;
-            }
-        }
-        else
-        {
-            /* Computing 2nd power */
-            r__1 = ax;
-            amed += r__1 * r__1;
-        }
-        ax = (r__1 = r_imag(&x[ix]), f2c_abs(r__1));
-        if(ax > tbig)
-        {
+        ax = (r__1 = x[i__2].r, f2c_abs(r__1));
+        if (ax > tbig) {
             /* Computing 2nd power */
             r__1 = ax * sbig;
             abig += r__1 * r__1;
             notbig = FALSE_;
         }
-        else if(ax < tsml)
-        {
-            if(notbig)
-            {
+        else if (ax < tsml) {
+            if (notbig) {
                 /* Computing 2nd power */
                 r__1 = ax * ssml;
                 asml += r__1 * r__1;
             }
         }
-        else
-        {
+        else {
+            /* Computing 2nd power */
+            r__1 = ax;
+            amed += r__1 * r__1;
+        }
+        ax = (r__1 = r_imag(&x[ix]), f2c_abs(r__1));
+        if (ax > tbig) {
+            /* Computing 2nd power */
+            r__1 = ax * sbig;
+            abig += r__1 * r__1;
+            notbig = FALSE_;
+        }
+        else if (ax < tsml) {
+            if (notbig) {
+                /* Computing 2nd power */
+                r__1 = ax * ssml;
+                asml += r__1 * r__1;
+            }
+        }
+        else {
             /* Computing 2nd power */
             r__1 = ax;
             amed += r__1 * r__1;
@@ -258,59 +229,68 @@ void classq_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, real *scale, real *su
         ix += *incx;
     }
     /* Put the existing sum of squares into one of the accumulators */
-    if(*sumsq > 0.f)
-    {
-        ax = *scale * sqrt(*sumsq);
-        if(ax > tbig)
-        {
-            if(*scale > 1.)
-            {
-                *scale *= sbig;
-                abig += *scale * (*scale * *sumsq);
-            }
-            else
-            {
-                /* sumsq > tbig^2 => (sbig * (sbig * sumsq)) is representable */
-                abig += *scale * (*scale * (sbig * (sbig * *sumsq)));
+    if (*sumsq > 0.f) {
+        ax = *scl * sqrt(*sumsq);
+        if (ax > tbig) {
+            /* Computing 2nd power */
+            r__1 = *scl * sbig;
+            abig += (r__1 * r__1)* *sumsq;
+            notbig = FALSE_;
+        }
+        else if (ax < tsml) {
+            if (notbig) {
+                /* Computing 2nd power */
+                r__1 = *scl * ssml;
+                asml += (r__1 * r__1)* *sumsq;
             }
         }
-        else if(ax < tsml)
-        {
-            if(notbig)
-            {
-                if(*scale < 1.)
-                {
-                    *scale *= ssml;
-                    asml += *scale * (*scale * *sumsq);
-                }
-                else
-                {
-                    /* sumsq < tsml^2 => (ssml * (ssml * sumsq)) is representa */
-                    asml += *scale * (*scale * (ssml * (ssml * *sumsq)));
-                }
-            }
-            temp1 = (r__1 = r_imag(&x[ix]), f2c_abs(r__1));
-            if (temp1 > 0.f || sisnan_(&temp1))
-            {
-                if (*scale < temp1 || sisnan_(&temp1))
-                {
-                    /* Computing 2nd power */
-                    r__1 = *scale / temp1;
-                    *sumsq = *sumsq * (r__1 * r__1) + 1;
-                    *scale = temp1;
-                }
-                else
-                {
-                    /* Computing 2nd power */
-                    r__1 = temp1 / *scale;
-                    *sumsq += r__1 * r__1;
-                }
-            }
-            /* L10: */
+        else {
+            /* Computing 2nd power */
+            r__1 = *scl;
+            amed += (r__1 * r__1)* *sumsq;
         }
+    }
+    /* Combine abig and amed or amed and asml if more than one */
+    /* accumulator was used. */
+    if (abig > 0.f) {
+        if (amed > 0.f || sisnan_(&amed)) {
+            abig += amed * sbig * sbi;
+        }
+        *scl = 1.f / sbig;
+        *sumsq = abig;
+    }
+    else if (asml > 0.f) {
+        /* Combine amed and asml if asml > 0. */
+        if (amed > 0.f || sisnan_(&amed)) {
+            amed = sqrt(amed);
+            asml = sqrt(asml) / ssml;
+            if (asml > amed) {
+                ymin = amed;
+                ymax = asml;
+            }
+            else {
+                ymin = asml;
+                ymax = amed;
+            }
+            *scl = 1.f;
+            /* Computing 2nd power */
+            r__1 = ymax;
+            /* Computing 2nd power */
+            r__2 = ymin / ymax;
+            *sumsq = r__1 * r__1 * (r__2 * r__2 + 1.f);
+        }
+        else {
+            *scl = 1.f / ssml;
+            *sumsq = asml;
+        }
+    }
+    else {
+        /* Otherwise all values are mid-range or zero */
+        *scl = 1.f;
+        *sumsq = amed;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return 0;
-    /* End of CLASSQ */
 }
 /* classq_ */
+

@@ -184,7 +184,7 @@ LAPACK_geqpf(s)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", jpvt %" FLA_IS "", *m, *n, *ldim_A, *buff_p);
+    AOCL_DTL_SNPRINTF("sgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
         for(aocl_int64_t i = 0; i < *n; ++i)
             buff_p[i] = (i + 1);
@@ -209,7 +209,7 @@ LAPACK_geqpf(d)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", jpvt %" FLA_IS "", *m, *n, *ldim_A, *buff_p);
+    AOCL_DTL_SNPRINTF("dgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
         for ( int i=0; i<*n; ++i) buff_p[i] = (i+1);
     }
@@ -245,7 +245,7 @@ LAPACK_geqpf_complex(c)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", jpvt %" FLA_IS "", *m, *n, *ldim_A, *buff_p);
+    AOCL_DTL_SNPRINTF("cgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
         for(int i = 0; i < *n; ++i)
             buff_p[i] = (i + 1);
@@ -271,7 +271,7 @@ LAPACK_geqpf_complex(z)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", jpvt %" FLA_IS "", *m, *n, *ldim_A, *buff_p);
+    AOCL_DTL_SNPRINTF("zgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
         for(int i = 0; i < *n; ++i)
             buff_p[i] = (i + 1);
@@ -308,7 +308,7 @@ LAPACK_geqp3(s)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgeqp3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", jpvt %" FLA_IS "", *m, *n, *ldim_A, *buff_p);
+    AOCL_DTL_SNPRINTF("sgeqp3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
 #if !FLA_AMD_OPT
         {
             LAPACK_RETURN_CHECK_VAR1(sgeqp3_check(m, n,
@@ -319,6 +319,11 @@ LAPACK_geqp3(s)
                                              info), fla_error)
         }
     {
+        if( *lwork == -1 )
+        {
+            AOCL_DTL_TRACE_LOG_EXIT
+            return 0;
+        }
         for (int i = 0; i < *n; ++i) buff_p[i] = (i + 1);
         if( *m == 0 || *n == 0 )
         {
@@ -351,7 +356,7 @@ LAPACK_geqp3(d)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgeqp3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", jpvt %" FLA_IS "", *m, *n, *ldim_A, *buff_p);
+    AOCL_DTL_SNPRINTF("dgeqp3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
 #if !FLA_AMD_OPT
     {
         LAPACK_RETURN_CHECK_VAR1( dgeqp3_check( m, n,
@@ -365,6 +370,11 @@ LAPACK_geqp3(d)
     return;
 #else
     {
+        if( *lwork == -1 )
+        {
+            AOCL_DTL_TRACE_LOG_EXIT
+            return 0;
+        }
         for (int i = 0; i < *n; ++i) buff_p[i] = (i + 1);
         if( *m == 0 || *n == 0 )
         {
@@ -410,7 +420,7 @@ LAPACK_geqp3_complex(c)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cgeqp3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", jpvt %" FLA_IS "", *m, *n, *lda, *jpvt);
+    AOCL_DTL_SNPRINTF("cgeqp3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
     {
         for(int i = 0; i < *n; ++i)
             buff_p[i] = (i + 1);
@@ -436,7 +446,7 @@ LAPACK_geqp3_complex(z)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgeqp3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", jpvt %" FLA_IS "", *m, *n, *lda, *jpvt);
+    AOCL_DTL_SNPRINTF("zgeqp3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
     {
         for(int i = 0; i < *n; ++i)
             buff_p[i] = (i + 1);

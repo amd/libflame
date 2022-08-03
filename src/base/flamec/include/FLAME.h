@@ -82,6 +82,9 @@
 
   #include "aocldtl.h"
 
+  // Include prototypes for FLA thread functions.
+  #include "FLA_Threads.h"
+
 // End extern "C" construct block.
 #ifdef __cplusplus
 }

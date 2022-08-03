@@ -25,6 +25,7 @@
 #include "aocldtl.h"
 #include "FLA_config.h"
 #include "FLA_progress.h"
+#include "FLA_Threads.h"
 
 #ifndef F2C_INCLUDE
 #define F2C_INCLUDE

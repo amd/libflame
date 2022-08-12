@@ -231,32 +231,8 @@ the routine */
 /** Generated wrapper function */
 void zgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb, dcomplex *alpha, dcomplex *beta, dcomplex *vsl, aocl_int_t *ldvsl, dcomplex *vsr, aocl_int_t *ldvsr, dcomplex *work, aocl_int_t *lwork, doublereal *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgegs(jobvsl, jobvsr, n, a, lda, b, ldb, alpha, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldvsl_64 = *ldvsl;
-    aocl_int64_t ldvsr_64 = *ldvsr;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgegs(jobvsl, jobvsr, &n_64, a, &lda_64, b, &ldb_64, alpha, beta, vsl, &ldvsl_64, vsr, &ldvsr_64, work, &lwork_64, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
-            dcomplex *b, aocl_int64_t *ldb, dcomplex *alpha, dcomplex *beta,
-            dcomplex *vsl, aocl_int64_t *ldvsl, dcomplex *vsr, aocl_int64_t *ldvsr,
-            dcomplex *work, aocl_int64_t *lwork, doublereal *rwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgegs inputs: jobvsl %c, jobvsr %c, n %" FLA_IS ", lda %" FLA_IS
-                      ", ldb %" FLA_IS ", ldvsl %" FLA_IS ", ldvsr %" FLA_IS "",
-                      *jobvsl, *jobvsr, *n, *lda, *ldb, *ldvsl, *ldvsr);
+    AOCL_DTL_SNPRINTF("zgegs inputs: jobvsl %c, jobvsr %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldvsl %" FLA_IS ", ldvsr %" FLA_IS "",*jobvsl, *jobvsr, *n, *lda, *ldb, *ldvsl, *ldvsr);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, vsr_dim1, vsr_offset,
         i__1, i__2, i__3;
@@ -409,20 +385,20 @@ void aocl_lapack_zgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, dcomplex *a,
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGEGS ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZGEGS ", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Get machine constants */
     eps = dlamch_("E") * dlamch_("B");
@@ -448,8 +424,8 @@ void aocl_lapack_zgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, dcomplex *a,
         if(iinfo != 0)
         {
             *info = *n + 9;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+    AOCL_DTL_TRACE_LOG_EXIT
+            return 0;
         }
     }
     /* Scale B if max element outside range [SMLNUM,BIGNUM] */
@@ -471,8 +447,8 @@ void aocl_lapack_zgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, dcomplex *a,
         if(iinfo != 0)
         {
             *info = *n + 9;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+    AOCL_DTL_TRACE_LOG_EXIT
+            return 0;
         }
     }
     /* Permute the matrix to make it more nearly triangular */
@@ -618,15 +594,15 @@ void aocl_lapack_zgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, dcomplex *a,
         if(iinfo != 0)
         {
             *info = *n + 9;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+    AOCL_DTL_TRACE_LOG_EXIT
+            return 0;
         }
         aocl_lapack_zlascl("G", &c_n1, &c_n1, &anrmto, &anrm, n, &c__1, &alpha[1], n, &iinfo);
         if(iinfo != 0)
         {
             *info = *n + 9;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+    AOCL_DTL_TRACE_LOG_EXIT
+            return 0;
         }
     }
     if(ilbscl)
@@ -635,22 +611,22 @@ void aocl_lapack_zgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, dcomplex *a,
         if(iinfo != 0)
         {
             *info = *n + 9;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+    AOCL_DTL_TRACE_LOG_EXIT
+            return 0;
         }
         aocl_lapack_zlascl("G", &c_n1, &c_n1, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &iinfo);
         if(iinfo != 0)
         {
             *info = *n + 9;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+    AOCL_DTL_TRACE_LOG_EXIT
+            return 0;
         }
     }
 L10:
-    work[1].real = (doublereal)lwkopt;
-    work[1].imag = 0.; // , expr subst
+    work[1].r = (doublereal) lwkopt;
+    work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZGEGS */
 }
 /* zgegs_ */

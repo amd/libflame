@@ -196,12 +196,9 @@ void zgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomple
             aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb, dcomplex *work,
             aocl_int_t *lwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zgels inputs: trans %c, m %d, n %d, nrhs %d, lda %d, ldb %d",*trans, *m, *n, *nrhs, *lda, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zgels inputs: trans %c, m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*trans, *m, *n, *nrhs, *lda, *ldb);
+
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
     doublereal d__1;
@@ -348,12 +345,12 @@ void zgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomple
     {
         i__1 = -(*info);
         xerbla_("ZGELS ", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
@@ -363,7 +360,7 @@ void zgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomple
     {
         i__1 = max(*m,*n);
         zlaset_("Full", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Get machine parameters */
@@ -428,7 +425,7 @@ void zgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomple
             ztrtrs_("Upper", "No transpose", "Non-unit", n, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
             if (*info > 0)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return 0;
             }
             scllen = *n;
@@ -441,7 +438,7 @@ void zgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomple
                                lda, &b[b_offset], ldb, info);
             if(*info > 0)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return 0;
             }
             /* B(N+1:M,1:NRHS) = ZERO */
@@ -479,7 +476,7 @@ void zgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomple
             ztrtrs_("Lower", "No transpose", "Non-unit", m, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
             if (*info > 0)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return 0;
             }
             /* B(M+1:N,1:NRHS) = 0 */
@@ -516,7 +513,7 @@ void zgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomple
                                lda, &b[b_offset], ldb, info);
             if(*info > 0)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return 0;
             }
             scllen = *m;
@@ -543,7 +540,7 @@ L50:
     d__1 = (doublereal) wsize;
     work[1].r = d__1;
     work[1].i = 0.; // , expr subst
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZGELS */
 }

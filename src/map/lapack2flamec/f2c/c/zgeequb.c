@@ -146,27 +146,8 @@ void zgeequb_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, double
               doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax,
               aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgeequb(m, n, a, lda, r__, c__, rowcnd, colcnd, amax, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgeequb(&m_64, &n_64, a, &lda_64, r__, c__, rowcnd, colcnd, amax, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zgeequb(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
-                         doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd,
-                         doublereal *amax, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgeequb inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
-                      *lda);
+    AOCL_DTL_SNPRINTF("zgeequb inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1, d__2, d__3, d__4;
@@ -225,9 +206,9 @@ void aocl_lapack_zgeequb(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGEEQUB", &i__1, (ftnlen)7);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZGEEQUB", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible. */
     if(*m == 0 || *n == 0)
@@ -235,8 +216,8 @@ void aocl_lapack_zgeequb(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
         *rowcnd = 1.;
         *colcnd = 1.;
         *amax = 0.;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Get machine constants. Assume SMLNUM is a power of the radix. */
     smlnum = dlamch_("S");
@@ -301,8 +282,8 @@ void aocl_lapack_zgeequb(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
             if(r__[i__] == 0.)
             {
                 *info = i__;
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+    AOCL_DTL_TRACE_LOG_EXIT
+                return 0;
             }
             /* L50: */
         }
@@ -377,8 +358,8 @@ void aocl_lapack_zgeequb(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
             if(c__[j] == 0.)
             {
                 *info = *m + j;
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+    AOCL_DTL_TRACE_LOG_EXIT
+                return 0;
             }
             /* L110: */
         }
@@ -400,7 +381,7 @@ void aocl_lapack_zgeequb(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
         *colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZGEEQUB */
 }
 /* zgeequb_ */

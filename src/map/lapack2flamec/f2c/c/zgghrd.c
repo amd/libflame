@@ -215,35 +215,8 @@ void zgghrd_(char *compq, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_
              dcomplex *a, aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb, dcomplex *q,
              aocl_int_t *ldq, dcomplex *z__, aocl_int_t *ldz, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgghrd(compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z__, ldz, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgghrd(compq, compz, &n_64, &ilo_64, &ihi_64, a, &lda_64, b, &ldb_64, q, &ldq_64,
-                       z__, &ldz_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t *ilo,
-                        aocl_int64_t *ihi, dcomplex *a, aocl_int64_t *lda, dcomplex *b,
-                        aocl_int64_t *ldb, dcomplex *q, aocl_int64_t *ldq, dcomplex *z__,
-                        aocl_int64_t *ldz, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgghrd inputs: compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
-                      ", ihi %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS
-                      ", ldz %" FLA_IS "",
-                      *compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
+    AOCL_DTL_SNPRINTF("zgghrd inputs: compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS "",*compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
         i__3;
@@ -374,9 +347,9 @@ void aocl_lapack_zgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGGHRD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZGGHRD", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Initialize Q and Z if desired. */
     if(icompq == 3)
@@ -390,8 +363,8 @@ void aocl_lapack_zgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
     /* Quick return if possible */
     if(*n <= 1)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Zero out lower triangle of B */
     i__1 = *n - 1;
@@ -457,7 +430,7 @@ void aocl_lapack_zgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
         /* L40: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZGGHRD */
 }
 /* zgghrd_ */

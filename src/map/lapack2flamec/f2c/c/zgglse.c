@@ -186,33 +186,8 @@ void zgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, dcomplex *a, aocl_int_
              dcomplex *b, aocl_int_t *ldb, dcomplex *c__, dcomplex *d__,
              dcomplex *x, dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgglse(m, n, p, a, lda, b, ldb, c__, d__, x, work, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t p_64 = *p;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgglse(&m_64, &n_64, &p_64, a, &lda_64, b, &ldb_64, c__, d__, x, work, &lwork_64,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, dcomplex *a,
-                        aocl_int64_t *lda, dcomplex *b, aocl_int64_t *ldb, dcomplex *c__,
-                        dcomplex *d__, dcomplex *x, dcomplex *work,
-                        aocl_int64_t *lwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgglse inputs: m %" FLA_IS ", n %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS
-                      ", ldb %" FLA_IS "",
-                      *m, *n, *p, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("zgglse inputs: m %" FLA_IS ", n %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*m, *n, *p, *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     dcomplex z__1;
@@ -307,20 +282,20 @@ void aocl_lapack_zgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, dcomp
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGGLSE", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZGGLSE", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Compute the GRQ factorization of matrices B and A: */
     /* B*Q**H = ( 0 T12 ) P Z**H*A*Q**H = ( R11 R12 ) N-P */
@@ -352,8 +327,8 @@ void aocl_lapack_zgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, dcomp
         if(*info > 0)
         {
             *info = 1;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+    AOCL_DTL_TRACE_LOG_EXIT
+            return 0;
         }
         /* Put the solution in X */
         aocl_blas_zcopy(p, &d__[1], &c__1, &x[*n - *p + 1], &c__1);
@@ -373,8 +348,8 @@ void aocl_lapack_zgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, dcomp
         if(*info > 0)
         {
             *info = 2;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+    AOCL_DTL_TRACE_LOG_EXIT
+            return 0;
         }
         /* Put the solutions in X */
         i__1 = *n - *p;
@@ -412,12 +387,12 @@ void aocl_lapack_zgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, dcomp
     /* Computing MAX */
     i__4 = *p + mn + 1;
     i__2 = lopt;
-    i__3 = (integer)work[i__4].real; // , expr subst
-    i__1 = *p + mn + fla_max(i__2, i__3);
-    work[1].real = (doublereal)i__1;
-    work[1].imag = 0.; // , expr subst
+    i__3 = (integer) work[i__4].r; // , expr subst
+    i__1 = *p + mn + max(i__2,i__3);
+    work[1].r = (doublereal) i__1;
+    work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZGGLSE */
 }
 /* zgglse_ */

@@ -346,44 +346,8 @@ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
              dcomplex *work, aocl_int_t *lwork, doublereal *rwork, aocl_int_t *iwork,
              aocl_int_t *liwork, logical *bwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zggesx(jobvsl, jobvsr, sort, selctg, sense, n, a, lda, b, ldb, sdim, alpha, beta,
-                       vsl, ldvsl, vsr, ldvsr, rconde, rcondv, work, lwork, rwork, iwork, liwork,
-                       bwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t sdim_64 = *sdim;
-    aocl_int64_t ldvsl_64 = *ldvsl;
-    aocl_int64_t ldvsr_64 = *ldvsr;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t liwork_64 = *liwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zggesx(jobvsl, jobvsr, sort, selctg, sense, &n_64, a, &lda_64, b, &ldb_64, &sdim_64,
-                       alpha, beta, vsl, &ldvsl_64, vsr, &ldvsr_64, rconde, rcondv, work, &lwork_64,
-                       rwork, iwork, &liwork_64, bwork, &info_64);
-
-    *sdim = (aocl_int_t)sdim_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zggesx(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
-                        aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomplex *b,
-                        aocl_int64_t *ldb, aocl_int64_t *sdim, dcomplex *alpha,
-                        dcomplex *beta, dcomplex *vsl, aocl_int64_t *ldvsl,
-                        dcomplex *vsr, aocl_int64_t *ldvsr, doublereal *rconde,
-                        doublereal *rcondv, dcomplex *work, aocl_int64_t *lwork,
-                        doublereal *rwork, aocl_int_t *iwork, aocl_int64_t *liwork, logical *bwork,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zggesx inputs: jobvsl %c, jobvsr %c, sort %c, sense %c, n %" FLA_IS
-                      ", lda %" FLA_IS ", ldb %" FLA_IS ", sdim %" FLA_IS ", ldvsl %" FLA_IS
-                      ", ldvsr %" FLA_IS "",
-                      *jobvsl, *jobvsr, *sort, *sense, *n, *lda, *ldb, *sdim, *ldvsl, *ldvsr);
+    AOCL_DTL_SNPRINTF("zggesx inputs: jobvsl %c, jobvsr %c, sort %c, sense %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", sdim %" FLA_IS ", ldvsl %" FLA_IS ", ldvsr %" FLA_IS "",*jobvsl, *jobvsr, *sort, *sense, *n, *lda, *ldb, *sdim, *ldvsl, *ldvsr);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, vsr_dim1, vsr_offset,
         i__1, i__2;
@@ -620,21 +584,21 @@ void aocl_lapack_zggesx(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, c
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGGESX", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZGGESX", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *sdim = 0;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Get machine constants */
     eps = dlamch_("P");
@@ -851,11 +815,11 @@ void aocl_lapack_zggesx(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, c
         }
     }
 L40:
-    work[1].real = (doublereal)maxwrk;
-    work[1].imag = 0.; // , expr subst
-    iwork[1] = (aocl_int_t)(liwmin);
+    work[1].r = (doublereal) maxwrk;
+    work[1].i = 0.; // , expr subst
+    iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZGGESX */
 }
 /* zggesx_ */

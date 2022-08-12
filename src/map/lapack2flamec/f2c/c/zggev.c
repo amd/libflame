@@ -226,35 +226,8 @@ void zggev_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
             dcomplex *vl, aocl_int_t *ldvl, dcomplex *vr, aocl_int_t *ldvr,
             dcomplex *work, aocl_int_t *lwork, doublereal *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zggev(jobvl, jobvr, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr, ldvr, work, lwork,
-                      rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldvl_64 = *ldvl;
-    aocl_int64_t ldvr_64 = *ldvr;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zggev(jobvl, jobvr, &n_64, a, &lda_64, b, &ldb_64, alpha, beta, vl, &ldvl_64, vr,
-                      &ldvr_64, work, &lwork_64, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zggev(char *jobvl, char *jobvr, aocl_int64_t *n, dcomplex *a,
-                       aocl_int64_t *lda, dcomplex *b, aocl_int64_t *ldb, dcomplex *alpha,
-                       dcomplex *beta, dcomplex *vl, aocl_int64_t *ldvl,
-                       dcomplex *vr, aocl_int64_t *ldvr, dcomplex *work,
-                       aocl_int64_t *lwork, doublereal *rwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zggev inputs: jobvl %c, jobvr %c, n %" FLA_IS ", lda %" FLA_IS
-                      ", ldb %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", lwork %" FLA_IS "",
-                      *jobvl, *jobvr, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);
+    AOCL_DTL_SNPRINTF("zggev inputs: jobvl %c, jobvr %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS "",*jobvl, *jobvr, *n, *lda, *ldb, *ldvl, *ldvr);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1,
         i__2, i__3, i__4;
@@ -437,20 +410,20 @@ void aocl_lapack_zggev(char *jobvl, char *jobvr, aocl_int64_t *n, dcomplex *a,
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGGEV ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZGGEV ", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Get machine constants */
     eps = dlamch_("E") * dlamch_("B");
@@ -702,10 +675,10 @@ L70:
     {
         aocl_lapack_zlascl("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &ierr);
     }
-    work[1].real = (doublereal)lwkopt;
-    work[1].imag = 0.; // , expr subst
+    work[1].r = (doublereal) lwkopt;
+    work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZGGEV */
 }
 /* zggev_ */

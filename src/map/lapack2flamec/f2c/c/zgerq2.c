@@ -125,12 +125,9 @@ conjg(v(1:n-k+i-1)) is stored on */
 void zgerq2_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomplex *tau,
              dcomplex *work, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zgerq2 inputs: m %d, n %d, lda %d",*m, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zgerq2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
+
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -179,7 +176,7 @@ void zgerq2_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomple
     {
         i__1 = -(*info);
         xerbla_("ZGERQ2", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     k = fla_min(*m, *n);
@@ -209,7 +206,7 @@ void zgerq2_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomple
         aocl_lapack_zlacgv(&i__1, &a[*m - k + i__ + a_dim1], lda);
         /* L10: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZGERQ2 */
 }

@@ -123,12 +123,9 @@ the unit diagonal elements of L are not stored. */
 void zgesv_(aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
             dcomplex *b, aocl_int_t *ldb, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zgesv inputs: n %d, nrhs %d, lda %d, ldb %d",*n, *nrhs, *lda, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zgesv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *lda, *ldb);
+
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
@@ -177,7 +174,7 @@ void zgesv_(aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_t *lda, aocl_
     {
         i__1 = -(*info);
         xerbla_("ZGESV ", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Compute the LU factorization of A. */
@@ -188,7 +185,7 @@ void zgesv_(aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_t *lda, aocl_
         aocl_lapack_zgetrs("No transpose", n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
                            info);
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZGESV */
 }

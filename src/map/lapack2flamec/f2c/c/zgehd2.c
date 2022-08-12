@@ -153,29 +153,8 @@ v(i+2:ihi) is stored on */
 void zgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, dcomplex *a, aocl_int_t *lda,
              dcomplex *tau, dcomplex *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgehd2(n, ilo, ihi, a, lda, tau, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgehd2(&n_64, &ilo_64, &ihi_64, a, &lda_64, tau, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, dcomplex *a,
-                        aocl_int64_t *lda, dcomplex *tau, dcomplex *work,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgehd2 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS
-                      "",
-                      *n, *ilo, *ihi, *lda);
+    AOCL_DTL_SNPRINTF("zgehd2 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS "",*n, *ilo, *ihi, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     dcomplex z__1;
@@ -230,9 +209,9 @@ void aocl_lapack_zgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGEHD2", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZGEHD2", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     i__1 = *ihi - 1;
     for(i__ = *ilo; i__ <= i__1; ++i__)
@@ -264,7 +243,7 @@ void aocl_lapack_zgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZGEHD2 */
 }
 /* zgehd2_ */

@@ -151,26 +151,8 @@ v(i+1:m) is stored on exit in A(i+1:m,i). */
 /** Generated wrapper function */
 void zgeqpf_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *jpvt, dcomplex *tau, dcomplex *work, doublereal *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgeqpf(m, n, a, lda, jpvt, tau, work, rwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgeqpf(&m_64, &n_64, a, &lda_64, jpvt, tau, work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zgeqpf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
-             aocl_int_t *jpvt, dcomplex *tau, dcomplex *work, doublereal *rwork,
-             aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
+    AOCL_DTL_SNPRINTF("zgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1, d__2;
@@ -232,9 +214,9 @@ void aocl_lapack_zgeqpf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGEQPF", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZGEQPF", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     mn = fla_min(*m, *n);
     tol3z = sqrt(dlamch_("Epsilon"));
@@ -373,7 +355,7 @@ void aocl_lapack_zgeqpf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZGEQPF */
 }
 /* zgeqpf_ */

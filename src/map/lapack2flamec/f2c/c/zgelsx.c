@@ -189,33 +189,8 @@ only the remaining */
 /** Generated wrapper function */
 void zgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb, aocl_int_t *jpvt, doublereal *rcond, aocl_int_t *rank, dcomplex *work, doublereal *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgelsx(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, rwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t rank_64 = *rank;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgelsx(&m_64, &n_64, &nrhs_64, a, &lda_64, b, &ldb_64, jpvt, rcond, &rank_64, work, rwork, &info_64);
-
-    *rank = (aocl_int_t)rank_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *a,
-             aocl_int64_t *lda, dcomplex *b, aocl_int64_t *ldb, aocl_int_t *jpvt,
-             doublereal *rcond, aocl_int64_t *rank, dcomplex *work, doublereal *rwork,
-             aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgelsx inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
-                      ", ldb %" FLA_IS ", rank %" FLA_IS "",
-                      *m, *n, *nrhs, *lda, *ldb, *rank);
+    AOCL_DTL_SNPRINTF("zgelsx inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", rank %" FLA_IS "",*m, *n, *nrhs, *lda, *ldb, *rank);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
     dcomplex z__1;
@@ -295,9 +270,9 @@ void aocl_lapack_zgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, dc
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGELSX", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZGELSX", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     /* Computing MIN */
@@ -305,8 +280,8 @@ void aocl_lapack_zgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, dc
     if(fla_min(i__1, *nrhs) == 0)
     {
         *rank = 0;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Get machine parameters */
     smlnum = dlamch_("S") / dlamch_("P");
@@ -532,7 +507,7 @@ L10:
     }
 L100:
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZGELSX */
 }
 /* zgelsx_ */

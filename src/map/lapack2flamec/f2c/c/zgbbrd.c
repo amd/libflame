@@ -204,40 +204,8 @@ void zgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
              dcomplex *c__, aocl_int_t *ldc, dcomplex *work, doublereal *rwork,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgbbrd(vect, m, n, ncc, kl, ku, ab, ldab, d__, e, q, ldq, pt, ldpt, c__, ldc, work,
-                       rwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ncc_64 = *ncc;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t ldpt_64 = *ldpt;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgbbrd(vect, &m_64, &n_64, &ncc_64, &kl_64, &ku_64, ab, &ldab_64, d__, e, q,
-                       &ldq_64, pt, &ldpt_64, c__, &ldc_64, work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *ncc,
-                        aocl_int64_t *kl, aocl_int64_t *ku, dcomplex *ab, aocl_int64_t *ldab,
-                        doublereal *d__, doublereal *e, dcomplex *q, aocl_int64_t *ldq,
-                        dcomplex *pt, aocl_int64_t *ldpt, dcomplex *c__,
-                        aocl_int64_t *ldc, dcomplex *work, doublereal *rwork,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgbbrd inputs: vect %c, m %" FLA_IS ", n %" FLA_IS ", ncc %" FLA_IS
-                      ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", ldq %" FLA_IS
-                      ", ldpt %" FLA_IS ", ldc %" FLA_IS "",
-                      *vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
+    AOCL_DTL_SNPRINTF("zgbbrd inputs: vect %c, m %" FLA_IS ", n %" FLA_IS ", ncc %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", ldq %" FLA_IS ", ldpt %" FLA_IS ", ldc %" FLA_IS "",*vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, c_dim1, c_offset, pt_dim1, pt_offset, q_dim1, q_offset, i__1,
         i__2, i__3, i__4, i__5, i__6, i__7;
@@ -348,9 +316,9 @@ void aocl_lapack_zgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGBBRD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZGBBRD", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Initialize Q and P**H to the unit matrix, if needed */
     if(wantq)
@@ -364,8 +332,8 @@ void aocl_lapack_zgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     /* Quick return if possible. */
     if(*m == 0 || *n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     minmn = fla_min(*m, *n);
     if(*kl + *ku > 1)
@@ -798,7 +766,7 @@ void aocl_lapack_zgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
         /* L120: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZGBBRD */
 }
 /* zgbbrd_ */

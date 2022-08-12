@@ -352,44 +352,8 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
              doublereal *b21e, doublereal *b22d, doublereal *b22e, doublereal *rwork,
              aocl_int_t *lrwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zbbcsd(jobu1, jobu2, jobv1t, jobv2t, trans, m, p, q, theta, phi, u1, ldu1, u2, ldu2,
-                       v1t, ldv1t, v2t, ldv2t, b11d, b11e, b12d, b12e, b21d, b21e, b22d, b22e,
-                       rwork, lrwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t p_64 = *p;
-    aocl_int64_t q_64 = *q;
-    aocl_int64_t ldu1_64 = *ldu1;
-    aocl_int64_t ldu2_64 = *ldu2;
-    aocl_int64_t ldv1t_64 = *ldv1t;
-    aocl_int64_t ldv2t_64 = *ldv2t;
-    aocl_int64_t lrwork_64 = *lrwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zbbcsd(jobu1, jobu2, jobv1t, jobv2t, trans, &m_64, &p_64, &q_64, theta, phi, u1,
-                       &ldu1_64, u2, &ldu2_64, v1t, &ldv1t_64, v2t, &ldv2t_64, b11d, b11e, b12d,
-                       b12e, b21d, b21e, b22d, b22e, rwork, &lrwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans,
-                        aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, doublereal *theta,
-                        doublereal *phi, dcomplex *u1, aocl_int64_t *ldu1, dcomplex *u2,
-                        aocl_int64_t *ldu2, dcomplex *v1t, aocl_int64_t *ldv1t,
-                        dcomplex *v2t, aocl_int64_t *ldv2t, doublereal *b11d, doublereal *b11e,
-                        doublereal *b12d, doublereal *b12e, doublereal *b21d, doublereal *b21e,
-                        doublereal *b22d, doublereal *b22e, doublereal *rwork, aocl_int64_t *lrwork,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-        "zbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %" FLA_IS
-        ", p %" FLA_IS ", q %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS
-        ", ldv2t %" FLA_IS "",
-        *jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t);
+    AOCL_DTL_SNPRINTF("zbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS ", ldv2t %" FLA_IS "",*jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t);
     /* System generated locals */
     aocl_int64_t u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset,
         i__1, i__2;
@@ -514,9 +478,9 @@ void aocl_lapack_zbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
     if(*info == 0 && *q == 0)
     {
         lrworkmin = 1;
-        rwork[1] = (doublereal)lrworkmin;
+        rwork[1] = (doublereal) lrworkmin;
         AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     /* Compute workspace */
     if(*info == 0)
@@ -540,14 +504,14 @@ void aocl_lapack_zbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZBBCSD", &i__1, (ftnlen)6);
+        xerbla_("ZBBCSD", &i__1);
         AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     /* Get machine constants */
     eps = dlamch_("Epsilon");
@@ -648,7 +612,7 @@ void aocl_lapack_zbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
                 }
             }
             AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            return 0;
         }
         iter = iter + imax - imin;
         /* Compute shifts */
@@ -1381,7 +1345,7 @@ void aocl_lapack_zbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZBBCSD */
 }
 /* zbbcsd_ */

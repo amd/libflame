@@ -134,30 +134,8 @@ ILO=1 and IHI=0, if N=0. */
 void zgebak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
              doublereal *scale, aocl_int_t *m, dcomplex *v, aocl_int_t *ldv, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgebak(job, side, n, ilo, ihi, scale, m, v, ldv, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t ldv_64 = *ldv;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgebak(job, side, &n_64, &ilo_64, &ihi_64, scale, &m_64, v, &ldv_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zgebak(char *job, char *side, aocl_int64_t *n, aocl_int64_t *ilo,
-                        aocl_int64_t *ihi, doublereal *scale, aocl_int64_t *m, dcomplex *v,
-                        aocl_int64_t *ldv, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgebak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS
-                      ", m %" FLA_IS ", ldv %" FLA_IS "",
-                      *job, *side, *n, *ilo, *ihi, *m, *ldv);
+    AOCL_DTL_SNPRINTF("zgebak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", m %" FLA_IS ", ldv %" FLA_IS "",*job, *side, *n, *ilo, *ihi, *m, *ldv);
     /* System generated locals */
     aocl_int64_t v_dim1, v_offset, i__1;
     /* Local variables */
@@ -229,25 +207,25 @@ void aocl_lapack_zgebak(char *job, char *side, aocl_int64_t *n, aocl_int64_t *il
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGEBAK", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZGEBAK", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(*m == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(lsame_(job, "N", 1, 1))
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(*ilo == *ihi)
     {
@@ -331,7 +309,7 @@ L30:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZGEBAK */
 }
 /* zgebak_ */

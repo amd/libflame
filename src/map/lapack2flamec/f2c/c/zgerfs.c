@@ -189,12 +189,9 @@ void zgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int
              aocl_int_t *ldb, dcomplex *x, aocl_int_t *ldx, doublereal *ferr, doublereal *berr,
              dcomplex *work, doublereal *rwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zgerfs inputs: trans %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d, ipiv %d",*trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *ipiv);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zgerfs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
+
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2, i__3, i__4, i__5;
@@ -297,7 +294,7 @@ void zgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int
     {
         i__1 = -(*info);
         xerbla_("ZGERFS", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
@@ -310,7 +307,7 @@ void zgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int
             berr[j] = 0.;
             /* L10: */
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(notran)
@@ -522,7 +519,7 @@ void zgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int
         }
         /* L140: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZGERFS */
 }

@@ -550,11 +550,7 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, dcomplex *a, i
               doublereal *params, dcomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgesvxx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS
-                      ", lda %" FLA_IS ", ldaf %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS
-                      ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",
-                      *fact, *trans, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx, *n_err_bnds__,
-                      *nparams);
+    AOCL_DTL_SNPRINTF("zgesvxx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",*fact, *trans, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx, *n_err_bnds__, *nparams);
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset,
         err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1;
@@ -774,9 +770,9 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, dcomplex *a, i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGESVXX", &i__1, (ftnlen)7);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZGESVXX", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(equil)
     {
@@ -833,9 +829,9 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, dcomplex *a, i
             /* Pivot in column INFO is exactly 0 */
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
-            *rpvgrw = zla_gerpvgrw_(n, info, &a[a_offset], lda, &af[af_offset], ldaf);
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            *rpvgrw = zla_gerpvgrw_(n, info, &a[a_offset], lda, &af[ af_offset], ldaf);
+    AOCL_DTL_TRACE_LOG_EXIT
+            return 0;
         }
     }
     /* Compute the reciprocal pivot growth factor RPVGRW. */
@@ -859,7 +855,7 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, dcomplex *a, i
         zlascl2_(n, nrhs, &r__[1], &x[x_offset], ldx);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZGESVXX */
 }
 /* zgesvxx_ */

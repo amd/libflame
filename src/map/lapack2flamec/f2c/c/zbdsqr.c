@@ -241,12 +241,9 @@ void zbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
              aocl_int_t *ldu, dcomplex *c__, aocl_int_t *ldc, doublereal *rwork,
              aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zbdsqr inputs: uplo %c, n %d, ncvt %d, nru %d, ncc %d, ldvt %d, ldu %d, ldc %d",*uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zbdsqr inputs: uplo %c, n %" FLA_IS ", ncvt %" FLA_IS ", nru %" FLA_IS ", ncc %" FLA_IS ", ldvt %" FLA_IS ", ldu %" FLA_IS ", ldc %" FLA_IS "",*uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
+
     /* System generated locals */
     aocl_int64_t c_dim1, c_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
     doublereal d__1, d__2, d__3, d__4;
@@ -356,12 +353,12 @@ void zbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
     {
         i__1 = -(*info);
         xerbla_("ZBDSQR", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(*n == 1)
@@ -377,7 +374,7 @@ void zbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
         /* If INFO equals 2, dqds didn't finish, try to finish */
         if(*info != 2)
         {
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return 0;
         }
         *info = 0;
@@ -983,7 +980,7 @@ L200:
         /* L210: */
     }
 L220:
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZBDSQR */
 }

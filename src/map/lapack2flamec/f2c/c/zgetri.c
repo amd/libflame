@@ -121,12 +121,9 @@ the matrix is */
 void zgetri_(aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
              dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zgetri inputs: n %d, lda %d, ipiv %d",*n, *lda, *ipiv);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zgetri inputs: n %" FLA_IS ", lda %" FLA_IS "",*n, *lda);
+
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     dcomplex z__1;
@@ -184,18 +181,18 @@ void zgetri_(aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
     {
         i__1 = -(*info);
         xerbla_("ZGETRI", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Form inv(U). If INFO > 0 from ZTRTRI, then U is singular, */
@@ -203,7 +200,7 @@ void zgetri_(aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
     aocl_lapack_ztrtri("Upper", "Non-unit", n, &a[a_offset], lda, info);
     if(*info > 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     nbmin = 2;
@@ -314,7 +311,7 @@ void zgetri_(aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
     }
     work[1].r = (doublereal) iws;
     work[1].i = 0.; // , expr subst
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZGETRI */
 }

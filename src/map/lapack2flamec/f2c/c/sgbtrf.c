@@ -195,9 +195,9 @@ void sgbtrf_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, real 
     ab_dim1 = *ldab;
     ab_offset = 1 + ab_dim1;
     ab -= ab_offset;
-#if AOCL_FLA_PROGRESS_H
-    AOCL_FLA_PROGRESS_VAR;
-#endif
+    #if AOCL_FLA_PROGRESS_H
+        AOCL_FLA_PROGRESS_VAR;
+    #endif
 
     --ipiv;
     /* Function Body */
@@ -237,23 +237,16 @@ void sgbtrf_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, real 
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
-#if AOCL_FLA_PROGRESS_H
-    progress_step_count = 0;
-#ifndef FLA_ENABLE_WINDOWS_BUILD
-    if(!aocl_fla_progress_ptr)
-        aocl_fla_progress_ptr = aocl_fla_progress;
-#endif
-#endif
+    #if AOCL_FLA_PROGRESS_H
+        step_count =0;
+     #ifndef FLA_ENABLE_WINDOWS_BUILD
+        if(!aocl_fla_progress_ptr)
+              aocl_fla_progress_ptr=aocl_fla_progress;
+     #endif
+    #endif
 
-        /* Determine the block size for this environment */
-#if FLA_ENABLE_AMD_OPT
-    if(*ku <= 64)
-        nb = 1;
-    else
-        nb = 32;
-#else
-    nb = aocl_lapack_ilaenv(&c__1, "SGBTRF", " ", m, n, kl, ku);
-#endif
+    /* Determine the block size for this environment */
+    nb = ilaenv_(&c__1, "SGBTRF", " ", m, n, kl, ku);
     /* The block size must not exceed the limit set by the size of the */
     /* local arrays WORK13 and WORK31. */
     nb = fla_min(nb, 64);
@@ -311,17 +304,15 @@ void sgbtrf_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, real 
         {
             /* Computing MIN */
             i__3 = nb;
-            i__4 = fla_min(*m, *n) - j + 1; // , expr subst
-            jb = fla_min(i__3, i__4);
-#if AOCL_FLA_PROGRESS_H
-            if(aocl_fla_progress_ptr)
-            {
-                progress_step_count += jb;
-                AOCL_FLA_PROGRESS_FUNC_PTR("SGBTRF", 6, &progress_step_count, &progress_thread_id,
-                                           &progress_total_threads);
-            }
+            i__4 = min(*m,*n) - j + 1; // , expr subst
+            jb = min(i__3,i__4);
+	    #if AOCL_FLA_PROGRESS_H
+                if(aocl_fla_progress_ptr){
+                        step_count+=jb;
+                        AOCL_FLA_PROGRESS_FUNC_PTR("SGBTRF",6,&step_count,&thread_id,&total_threads);
+                }
 
-#endif
+            #endif
             /* The active part of the matrix is partitioned */
             /* A11 A12 A13 */
             /* A21 A22 A23 */

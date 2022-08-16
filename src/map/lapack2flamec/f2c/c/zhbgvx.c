@@ -311,45 +311,8 @@ void zhbgvx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *ka,
              aocl_int_t *ldz, dcomplex *work, doublereal *rwork, aocl_int_t *iwork,
              aocl_int_t *ifail, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zhbgvx(jobz, range, uplo, n, ka, kb, ab, ldab, bb, ldbb, q, ldq, vl, vu, il, iu,
-                       abstol, m, w, z__, ldz, work, rwork, iwork, ifail, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ka_64 = *ka;
-    aocl_int64_t kb_64 = *kb;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldbb_64 = *ldbb;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t il_64 = *il;
-    aocl_int64_t iu_64 = *iu;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zhbgvx(jobz, range, uplo, &n_64, &ka_64, &kb_64, ab, &ldab_64, bb, &ldbb_64, q,
-                       &ldq_64, vl, vu, &il_64, &iu_64, abstol, &m_64, w, z__, &ldz_64, work, rwork,
-                       iwork, ifail, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zhbgvx(char *jobz, char *range, char *uplo, aocl_int64_t *n, aocl_int64_t *ka,
-                        aocl_int64_t *kb, dcomplex *ab, aocl_int64_t *ldab, dcomplex *bb,
-                        aocl_int64_t *ldbb, dcomplex *q, aocl_int64_t *ldq, doublereal *vl,
-                        doublereal *vu, aocl_int64_t *il, aocl_int64_t *iu, doublereal *abstol,
-                        aocl_int64_t *m, doublereal *w, dcomplex *z__, aocl_int64_t *ldz,
-                        dcomplex *work, doublereal *rwork, aocl_int_t *iwork,
-                        aocl_int_t *ifail, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-        "zhbgvx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS
-        ", ldab %" FLA_IS ", ldbb %" FLA_IS ", ldq %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS
-        ", m %" FLA_IS ", ldz %" FLA_IS ", ifail %" FLA_IS "",
-        *jobz, *range, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldq, *il, *iu, *m, *ldz, *ifail);
+    AOCL_DTL_SNPRINTF("zhbgvx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS ", ldab %" FLA_IS ", ldbb %" FLA_IS ", ldq %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", m %" FLA_IS ", ldz %" FLA_IS ", ifail %" FLA_IS "",*jobz, *range, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldq, *il, *iu, *m, *ldz, *ifail);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, bb_dim1, bb_offset, q_dim1, q_offset, z_dim1, z_offset, i__1,
         i__2;
@@ -480,24 +443,24 @@ void aocl_lapack_zhbgvx(char *jobz, char *range, char *uplo, aocl_int64_t *n, ao
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZHBGVX", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZHBGVX", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Form a split Cholesky factorization of B. */
     aocl_lapack_zpbstf(uplo, n, kb, &bb[bb_offset], ldbb, info);
     if(*info != 0)
     {
         *info = *n + *info;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Transform problem to standard eigenvalue problem. */
     aocl_lapack_zhbgst(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb,
@@ -629,7 +592,7 @@ L30: /* If eigenvalues are not in order, then sort them, along with */
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZHBGVX */
 }
 /* zhbgvx_ */

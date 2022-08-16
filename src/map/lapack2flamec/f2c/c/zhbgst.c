@@ -173,33 +173,8 @@ void zhbgst_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *
              dcomplex *x, aocl_int_t *ldx, dcomplex *work, doublereal *rwork,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zhbgst(vect, uplo, n, ka, kb, ab, ldab, bb, ldbb, x, ldx, work, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ka_64 = *ka;
-    aocl_int64_t kb_64 = *kb;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldbb_64 = *ldbb;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zhbgst(vect, uplo, &n_64, &ka_64, &kb_64, ab, &ldab_64, bb, &ldbb_64, x, &ldx_64,
-                       work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zhbgst(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *ka, aocl_int64_t *kb,
-                        dcomplex *ab, aocl_int64_t *ldab, dcomplex *bb,
-                        aocl_int64_t *ldbb, dcomplex *x, aocl_int64_t *ldx,
-                        dcomplex *work, doublereal *rwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhbgst inputs: vect %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS
-                      ", ldab %" FLA_IS ", ldbb %" FLA_IS ", ldx %" FLA_IS "",
-                      *vect, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldx);
+    AOCL_DTL_SNPRINTF("zhbgst inputs: vect %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS ", ldab %" FLA_IS ", ldbb %" FLA_IS ", ldx %" FLA_IS "",*vect, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldx);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, bb_dim1, bb_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4,
         i__5, i__6, i__7, i__8;
@@ -298,15 +273,15 @@ void aocl_lapack_zhbgst(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *k
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZHBGST", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZHBGST", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     inca = *ldab * ka1;
     /* Initialize X to the unit matrix, if needed */
@@ -1365,8 +1340,8 @@ L490:
             i0 = m + 1;
             if(*ka == 0)
             {
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+    AOCL_DTL_TRACE_LOG_EXIT
+                return 0;
             }
             goto L490;
         }
@@ -1376,8 +1351,8 @@ L490:
         i__ -= *ka;
         if(i__ < 2)
         {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+    AOCL_DTL_TRACE_LOG_EXIT
+            return 0;
         }
     }
     if(i__ < m - kbt)

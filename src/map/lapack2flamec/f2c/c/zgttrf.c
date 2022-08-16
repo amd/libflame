@@ -125,12 +125,9 @@ IPIV(i) = i indicates a row interchange was not */
 void zgttrf_(aocl_int_t *n, dcomplex *dl, dcomplex *d__, dcomplex *du,
              dcomplex *du2, aocl_int_t *ipiv, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zgttrf inputs: n %d",*n);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zgttrf inputs: n %" FLA_IS "",*n);
+
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3, d__4;
@@ -176,13 +173,13 @@ void zgttrf_(aocl_int_t *n, dcomplex *dl, dcomplex *d__, dcomplex *du,
         *info = -1;
         i__1 = -(*info);
         xerbla_("ZGTTRF", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Initialize IPIV(i) = i and DU2(i) = 0 */
@@ -342,7 +339,7 @@ void zgttrf_(aocl_int_t *n, dcomplex *dl, dcomplex *d__, dcomplex *du,
         /* L40: */
     }
 L50:
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZGTTRF */
 }

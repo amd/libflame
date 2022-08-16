@@ -142,12 +142,9 @@ void zgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl, dcomple
              dcomplex *du, dcomplex *du2, aocl_int_t *ipiv, dcomplex *b,
              aocl_int_t *ldb, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zgttrs inputs: trans %c, n %d, nrhs %d, ldb %d",*trans, *n, *nrhs, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zgttrs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*trans, *n, *nrhs, *ldb);
+
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -208,13 +205,13 @@ void zgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl, dcomple
     {
         i__1 = -(*info);
         xerbla_("ZGTTRS", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Decode TRANS */
@@ -262,7 +259,7 @@ void zgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl, dcomple
         }
     }
     /* End of ZGTTRS */
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
 }
 /* zgttrs_ */

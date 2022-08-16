@@ -228,36 +228,8 @@ void zhbevd_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab
              dcomplex *work, aocl_int_t *lwork, doublereal *rwork, aocl_int_t *lrwork,
              aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zhbevd(jobz, uplo, n, kd, ab, ldab, w, z__, ldz, work, lwork, rwork, lrwork, iwork,
-                       liwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kd_64 = *kd;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t lrwork_64 = *lrwork;
-    aocl_int64_t liwork_64 = *liwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zhbevd(jobz, uplo, &n_64, &kd_64, ab, &ldab_64, w, z__, &ldz_64, work, &lwork_64,
-                       rwork, &lrwork_64, iwork, &liwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zhbevd(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *kd,
-                        dcomplex *ab, aocl_int64_t *ldab, doublereal *w, dcomplex *z__,
-                        aocl_int64_t *ldz, dcomplex *work, aocl_int64_t *lwork,
-                        doublereal *rwork, aocl_int64_t *lrwork, aocl_int_t *iwork,
-                        aocl_int64_t *liwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhbevd inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS
-                      ", ldab %" FLA_IS ", ldz %" FLA_IS "",
-                      *jobz, *uplo, *n, *kd, *ldab, *ldz);
+    AOCL_DTL_SNPRINTF("zhbevd inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", ldz %" FLA_IS "",*jobz, *uplo, *n, *kd, *ldab, *ldz);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, z_dim1, z_offset, i__1;
     doublereal d__1;
@@ -394,20 +366,20 @@ void aocl_lapack_zhbevd(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *k
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZHBEVD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZHBEVD", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(*n == 1)
     {
@@ -419,8 +391,8 @@ void aocl_lapack_zhbevd(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *k
             z__[i__1].real = 1.;
             z__[i__1].imag = 0.; // , expr subst
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -488,12 +460,12 @@ void aocl_lapack_zhbevd(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *k
         d__1 = 1. / sigma;
         aocl_blas_dscal(&imax, &d__1, &w[1], &c__1);
     }
-    work[1].real = (doublereal)lwmin;
-    work[1].imag = 0.; // , expr subst
-    rwork[1] = (doublereal)lrwmin;
-    iwork[1] = (aocl_int_t)(liwmin);
+    work[1].r = (doublereal) lwmin;
+    work[1].i = 0.; // , expr subst
+    rwork[1] = (doublereal) lrwmin;
+    iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZHBEVD */
 }
 /* zhbevd_ */

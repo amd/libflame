@@ -108,12 +108,9 @@
 #ifdef FLA_ENABLE_AMD_OPT
 int zrot_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zrot inputs: n %d, incx %d, incy %d",*n, *incx, *incy);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zrot inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*n, *incx, *incy);
+
     /* System generated locals */
     integer i__1;
     doublecomplex z__1, z__2, z__3;
@@ -149,7 +146,7 @@ int zrot_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integ
 
     if (*n <= 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     lc  = *c__;
@@ -273,7 +270,7 @@ int zrot_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integ
             ix += *incx;
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* Code for both increments equal to 1 */
 L20:
@@ -341,18 +338,15 @@ L20:
         cx[i__].r = z__1.r;
         cx[i__].i = z__1.i; // , expr subst
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
 }
 #else /* FLA_ENABLE_AMD_OPT */
 int zrot_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zrot inputs: n %d, incx %d, incy %d",*n, *incx, *incy);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zrot inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*n, *incx, *incy);
+
     /* System generated locals */
     integer i__1;
     doublecomplex z__1, z__2, z__3;
@@ -380,7 +374,7 @@ int zrot_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integ
 
     if (*n <= 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     lc  = *c__;
@@ -451,7 +445,7 @@ int zrot_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integ
             ix += *incx;
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* Code for both increments equal to 1 */
 L20:
@@ -475,7 +469,7 @@ L20:
         cx[i__].r = z__1.r;
         cx[i__].i = z__1.i; // , expr subst
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
 }
 #endif /* FLA_ENABLE_AMD_OPT */

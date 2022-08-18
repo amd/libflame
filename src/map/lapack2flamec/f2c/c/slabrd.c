@@ -260,14 +260,12 @@ void fla_slabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, real *a, aoc
                 aocl_int64_t *ldy)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
-    aocl_int64_t i__;
-    int thread_id;
-#if FLA_OPENMP_MULTITHREADING
-    aocl_int64_t i__4, i__5;
-    int actual_num_threads;
-#endif
+    integer i__;
+    int thread_id, actual_num_threads;
+    extern /* Subroutine */
+    int sscal_(integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), slarfg_( integer *, real *, real *, integer *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -306,9 +304,9 @@ void fla_slabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, real *a, aoc
     y_offset = 1 + y_dim1;
     y -= y_offset;
 
-#ifdef FLA_OPENMP_MULTITHREADING
+#ifdef FLA_ENABLE_MULTITHREADING
     /* Get optimum thread number for DLABRD*/
-    FLA_Thread_optimum(FLA_LABRD, &actual_num_threads);
+    FLA_Thread_optimum( FLA_LABRD, &actual_num_threads);
 #endif
 
     /* Function Body */
@@ -320,37 +318,35 @@ void fla_slabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, real *a, aoc
     {
         /* Reduce to upper bidiagonal form */
         i__1 = *nb;
-#ifdef FLA_OPENMP_MULTITHREADING
-#pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
+#ifdef FLA_ENABLE_MULTITHREADING
+        #pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
         {
             thread_id = omp_get_thread_num();
 #else
         {
             thread_id = 0;
 #endif
-            for(i__ = 1; i__ <= i__1; ++i__)
+            for (i__ = 1;
+                    i__ <= i__1;
+                    ++i__)
             {
                 if(thread_id == 0)
                 {
                     /* Update A(i:m,i) */
                     i__2 = *m - i__ + 1;
                     i__3 = i__ - 1;
-                    aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b4, &a[i__ + a_dim1], lda,
-                                    &y[i__ + y_dim1], ldy, &c_b5, &a[i__ + i__ * a_dim1], &c__1);
+                    sgemv_("No transpose", &i__2, &i__3, &c_b4, &a[i__ + a_dim1], lda, &y[i__ + y_dim1], ldy, &c_b5, &a[i__ + i__ * a_dim1], & c__1);
                     i__2 = *m - i__ + 1;
                     i__3 = i__ - 1;
-                    aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b4, &x[i__ + x_dim1], ldx,
-                                    &a[i__ * a_dim1 + 1], &c__1, &c_b5, &a[i__ + i__ * a_dim1],
-                                    &c__1);
+                    sgemv_("No transpose", &i__2, &i__3, &c_b4, &x[i__ + x_dim1], ldx, &a[i__ * a_dim1 + 1], &c__1, &c_b5, &a[i__ + i__ * a_dim1], &c__1);
                     /* Generate reflection Q(i) to annihilate A(i+1:m,i) */
                     i__2 = *m - i__ + 1;
                     /* Computing MIN */
                     i__3 = i__ + 1;
-                    aocl_lapack_slarfg(&i__2, &a[i__ + i__ * a_dim1],
-                                       &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tauq[i__]);
+                    slarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
                     d__[i__] = a[i__ + i__ * a_dim1];
                 }
-                if(i__ < *n)
+                if (i__ < *n)
                 {
                     if(thread_id == 0)
                     {
@@ -359,103 +355,71 @@ void fla_slabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, real *a, aoc
                     /* Compute Y(i+1:n,i) */
                     i__2 = *m - i__ + 1;
                     i__3 = *n - i__;
-#ifdef FLA_OPENMP_MULTITHREADING
-                    /* Divide column wise equally among each threads */
+#ifdef FLA_ENABLE_MULTITHREADING
+                    /* Divide column wise equally among each threads */ 
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__3, &i__4, &i__5);
-#pragma omp barrier
-                    aocl_blas_sgemv("Transpose", &i__2, &i__4, &c_b5,
-                                    &a[i__ + (i__5 + i__ + 1) * a_dim1], lda,
-                                    &a[i__ + i__ * a_dim1], &c__1, &c_b16,
-                                    &y[i__5 + i__ + 1 + i__ * y_dim1], &c__1);
-#pragma omp barrier
+                    #pragma omp barrier
+                    sgemv_("Transpose", &i__2, &i__4, &c_b5, &a[i__ + (i__5 + i__ + 1) * a_dim1], lda, &a[i__ + i__ * a_dim1], &c__1, &c_b16, & y[i__5 + i__ + 1 + i__ * y_dim1], &c__1);
+                    #pragma omp barrier
 #else
-                    aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b5, &a[i__ + (i__ + 1) * a_dim1],
-                                    lda, &a[i__ + i__ * a_dim1], &c__1, &c_b16,
-                                    &y[i__ + 1 + i__ * y_dim1], &c__1);
+                    sgemv_("Transpose", &i__2, &i__3, &c_b5, &a[i__ + (i__ + 1) * a_dim1], lda, &a[i__ + i__ * a_dim1], &c__1, &c_b16, & y[i__ + 1 + i__ * y_dim1], &c__1);
 #endif
                     if(thread_id == 0)
                     {
                         i__2 = *m - i__ + 1;
                         i__3 = i__ - 1;
-                        aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b5, &a[i__ + a_dim1], lda,
-                                        &a[i__ + i__ * a_dim1], &c__1, &c_b16, &y[i__ * y_dim1 + 1],
-                                        &c__1);
+                        sgemv_("Transpose", &i__2, &i__3, &c_b5, &a[i__ + a_dim1], lda, &a[i__ + i__ * a_dim1], &c__1, &c_b16, &y[i__ * y_dim1 + 1], &c__1);
                         i__2 = *n - i__;
                         i__3 = i__ - 1;
-                        aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b4, &y[i__ + 1 + y_dim1],
-                                        ldy, &y[i__ * y_dim1 + 1], &c__1, &c_b5,
-                                        &y[i__ + 1 + i__ * y_dim1], &c__1);
+                        sgemv_("No transpose", &i__2, &i__3, &c_b4, &y[i__ + 1 + y_dim1], ldy, &y[i__ * y_dim1 + 1], &c__1, &c_b5, &y[ i__ + 1 + i__ * y_dim1], &c__1);
                         i__2 = *m - i__ + 1;
                         i__3 = i__ - 1;
-                        aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b5, &x[i__ + x_dim1], ldx,
-                                        &a[i__ + i__ * a_dim1], &c__1, &c_b16, &y[i__ * y_dim1 + 1],
-                                        &c__1);
+                        sgemv_("Transpose", &i__2, &i__3, &c_b5, &x[i__ + x_dim1], ldx, &a[i__ + i__ * a_dim1], &c__1, &c_b16, &y[i__ * y_dim1 + 1], &c__1);
                         i__2 = i__ - 1;
                         i__3 = *n - i__;
-                        aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b4,
-                                        &a[(i__ + 1) * a_dim1 + 1], lda, &y[i__ * y_dim1 + 1],
-                                        &c__1, &c_b5, &y[i__ + 1 + i__ * y_dim1], &c__1);
+                        sgemv_("Transpose", &i__2, &i__3, &c_b4, &a[(i__ + 1) * a_dim1 + 1], lda, &y[i__ * y_dim1 + 1], &c__1, &c_b5, &y[i__ + 1 + i__ * y_dim1], &c__1);
                         i__2 = *n - i__;
-                        aocl_blas_sscal(&i__2, &tauq[i__], &y[i__ + 1 + i__ * y_dim1], &c__1);
+                        sscal_(&i__2, &tauq[i__], &y[i__ + 1 + i__ * y_dim1], &c__1);
                         /* Update A(i,i+1:n) */
                         i__2 = *n - i__;
-                        aocl_blas_sgemv("No transpose", &i__2, &i__, &c_b4, &y[i__ + 1 + y_dim1],
-                                        ldy, &a[i__ + a_dim1], lda, &c_b5,
-                                        &a[i__ + (i__ + 1) * a_dim1], lda);
+                        sgemv_("No transpose", &i__2, &i__, &c_b4, &y[i__ + 1 + y_dim1], ldy, &a[i__ + a_dim1], lda, &c_b5, &a[i__ + ( i__ + 1) * a_dim1], lda);
                         i__2 = i__ - 1;
                         i__3 = *n - i__;
-                        aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b4,
-                                        &a[(i__ + 1) * a_dim1 + 1], lda, &x[i__ + x_dim1], ldx,
-                                        &c_b5, &a[i__ + (i__ + 1) * a_dim1], lda);
+                        sgemv_("Transpose", &i__2, &i__3, &c_b4, &a[(i__ + 1) * a_dim1 + 1], lda, &x[i__ + x_dim1], ldx, &c_b5, &a[ i__ + (i__ + 1) * a_dim1], lda);
                         /* Generate reflection P(i) to annihilate A(i,i+2:n) */
                         i__2 = *n - i__;
                         /* Computing MIN */
                         i__3 = i__ + 2;
-                        aocl_lapack_slarfg(&i__2, &a[i__ + (i__ + 1) * a_dim1],
-                                           &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &taup[i__]);
+                        slarfg_(&i__2, &a[i__ + (i__ + 1) * a_dim1], &a[i__ + min( i__3,*n) * a_dim1], lda, &taup[i__]);
                         e[i__] = a[i__ + (i__ + 1) * a_dim1];
                         a[i__ + (i__ + 1) * a_dim1] = 1.f;
                     }
                     /* Compute X(i+1:m,i) */
                     i__2 = *m - i__;
                     i__3 = *n - i__;
-#ifdef FLA_OPENMP_MULTITHREADING
-                    /* Divide row wise equally among each threads */
+#ifdef FLA_ENABLE_MULTITHREADING
+                    /* Divide row wise equally among each threads */ 
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__2, &i__4, &i__5);
-#pragma omp barrier
-                    aocl_blas_sgemv("No transpose", &i__4, &i__3, &c_b5,
-                                    &a[i__5 + i__ + 1 + (i__ + 1) * a_dim1], lda,
-                                    &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16,
-                                    &x[i__5 + i__ + 1 + i__ * x_dim1], &c__1);
-#pragma omp barrier
+                    #pragma omp barrier
+                    sgemv_("No transpose", &i__4, &i__3, &c_b5, &a[i__5 + i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16, &x[i__5 + i__ + 1 + i__ * x_dim1], &c__1);
+                    #pragma omp barrier
 #else
-                    aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b5,
-                                    &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
-                                    &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16,
-                                    &x[i__ + 1 + i__ * x_dim1], &c__1);
+                    sgemv_("No transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16, &x[i__ + 1 + i__ * x_dim1], &c__1);
 #endif
                     if(thread_id == 0)
                     {
                         i__2 = *n - i__;
-                        aocl_blas_sgemv("Transpose", &i__2, &i__, &c_b5, &y[i__ + 1 + y_dim1], ldy,
-                                        &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16,
-                                        &x[i__ * x_dim1 + 1], &c__1);
+                        sgemv_("Transpose", &i__2, &i__, &c_b5, &y[i__ + 1 + y_dim1], ldy, &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16, &x[ i__ * x_dim1 + 1], &c__1);
                         i__2 = *m - i__;
-                        aocl_blas_sgemv("No transpose", &i__2, &i__, &c_b4, &a[i__ + 1 + a_dim1],
-                                        lda, &x[i__ * x_dim1 + 1], &c__1, &c_b5,
-                                        &x[i__ + 1 + i__ * x_dim1], &c__1);
+                        sgemv_("No transpose", &i__2, &i__, &c_b4, &a[i__ + 1 + a_dim1], lda, &x[i__ * x_dim1 + 1], &c__1, &c_b5, &x[ i__ + 1 + i__ * x_dim1], &c__1);
                         i__2 = i__ - 1;
                         i__3 = *n - i__;
-                        aocl_blas_sgemv(
-                            "No transpose", &i__2, &i__3, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda,
-                            &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16, &x[i__ * x_dim1 + 1], &c__1);
+                        sgemv_("No transpose", &i__2, &i__3, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda, &a[i__ + (i__ + 1) * a_dim1], lda, & c_b16, &x[i__ * x_dim1 + 1], &c__1);
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
-                        aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b4, &x[i__ + 1 + x_dim1],
-                                        ldx, &x[i__ * x_dim1 + 1], &c__1, &c_b5,
-                                        &x[i__ + 1 + i__ * x_dim1], &c__1);
+                        sgemv_("No transpose", &i__2, &i__3, &c_b4, &x[i__ + 1 + x_dim1], ldx, &x[i__ * x_dim1 + 1], &c__1, &c_b5, &x[ i__ + 1 + i__ * x_dim1], &c__1);
                         i__2 = *m - i__;
-                        aocl_blas_sscal(&i__2, &taup[i__], &x[i__ + 1 + i__ * x_dim1], &c__1);
+                        sscal_(&i__2, &taup[i__], &x[i__ + 1 + i__ * x_dim1], &c__1);
                     }
                 }
                 /* L10: */
@@ -466,36 +430,35 @@ void fla_slabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, real *a, aoc
     {
         /* Reduce to lower bidiagonal form */
         i__1 = *nb;
-#ifdef FLA_OPENMP_MULTITHREADING
-#pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
+#ifdef FLA_ENABLE_MULTITHREADING
+        #pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
         {
             thread_id = omp_get_thread_num();
 #else
         {
             thread_id = 0;
 #endif
-            for(i__ = 1; i__ <= i__1; ++i__)
+            for (i__ = 1;
+                    i__ <= i__1;
+                    ++i__)
             {
                 if(thread_id == 0)
                 {
                     /* Update A(i,i:n) */
                     i__2 = *n - i__ + 1;
                     i__3 = i__ - 1;
-                    aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b4, &y[i__ + y_dim1], ldy,
-                                    &a[i__ + a_dim1], lda, &c_b5, &a[i__ + i__ * a_dim1], lda);
+                    sgemv_("No transpose", &i__2, &i__3, &c_b4, &y[i__ + y_dim1], ldy, &a[i__ + a_dim1], lda, &c_b5, &a[i__ + i__ * a_dim1], lda);
                     i__2 = i__ - 1;
                     i__3 = *n - i__ + 1;
-                    aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b4, &a[i__ * a_dim1 + 1], lda,
-                                    &x[i__ + x_dim1], ldx, &c_b5, &a[i__ + i__ * a_dim1], lda);
+                    sgemv_("Transpose", &i__2, &i__3, &c_b4, &a[i__ * a_dim1 + 1], lda, &x[i__ + x_dim1], ldx, &c_b5, &a[i__ + i__ * a_dim1], lda);
                     /* Generate reflection P(i) to annihilate A(i,i+1:n) */
                     i__2 = *n - i__ + 1;
                     /* Computing MIN */
                     i__3 = i__ + 1;
-                    aocl_lapack_slarfg(&i__2, &a[i__ + i__ * a_dim1],
-                                       &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &taup[i__]);
+                    slarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[i__ + min(i__3,*n) * a_dim1], lda, &taup[i__]);
                     d__[i__] = a[i__ + i__ * a_dim1];
                 }
-                if(i__ < *m)
+                if (i__ < *m)
                 {
                     if(thread_id == 0)
                     {
@@ -504,102 +467,71 @@ void fla_slabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, real *a, aoc
                     /* Compute X(i+1:m,i) */
                     i__2 = *m - i__;
                     i__3 = *n - i__ + 1;
-#ifdef FLA_OPENMP_MULTITHREADING
-                    /* Divide row wise equally among each threads */
+#ifdef FLA_ENABLE_MULTITHREADING
+                    /* Divide row wise equally among each threads */ 
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__2, &i__4, &i__5);
-#pragma omp barrier
-                    aocl_blas_sgemv("No transpose", &i__4, &i__3, &c_b5,
-                                    &a[i__5 + i__ + 1 + i__ * a_dim1], lda, &a[i__ + i__ * a_dim1],
-                                    lda, &c_b16, &x[i__5 + i__ + 1 + i__ * x_dim1], &c__1);
-#pragma omp barrier
+                    #pragma omp barrier
+                    sgemv_("No transpose", &i__4, &i__3, &c_b5, &a[i__5 + i__ + 1 + i__ * a_dim1], lda, &a[i__ + i__ * a_dim1], lda, &c_b16, & x[i__5 + i__ + 1 + i__ * x_dim1], &c__1);
+                    #pragma omp barrier
 #else
-                    aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + i__ * a_dim1],
-                                    lda, &a[i__ + i__ * a_dim1], lda, &c_b16,
-                                    &x[i__ + 1 + i__ * x_dim1], &c__1);
+                    sgemv_("No transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + i__ * a_dim1], lda, &a[i__ + i__ * a_dim1], lda, &c_b16, & x[i__ + 1 + i__ * x_dim1], &c__1);
 #endif
                     if(thread_id == 0)
                     {
                         i__2 = *n - i__ + 1;
                         i__3 = i__ - 1;
-                        aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b5, &y[i__ + y_dim1], ldy,
-                                        &a[i__ + i__ * a_dim1], lda, &c_b16, &x[i__ * x_dim1 + 1],
-                                        &c__1);
+                        sgemv_("Transpose", &i__2, &i__3, &c_b5, &y[i__ + y_dim1], ldy, &a[i__ + i__ * a_dim1], lda, &c_b16, &x[i__ * x_dim1 + 1], &c__1);
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
-                        aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b4, &a[i__ + 1 + a_dim1],
-                                        lda, &x[i__ * x_dim1 + 1], &c__1, &c_b5,
-                                        &x[i__ + 1 + i__ * x_dim1], &c__1);
+                        sgemv_("No transpose", &i__2, &i__3, &c_b4, &a[i__ + 1 + a_dim1], lda, &x[i__ * x_dim1 + 1], &c__1, &c_b5, &x[ i__ + 1 + i__ * x_dim1], &c__1);
                         i__2 = i__ - 1;
                         i__3 = *n - i__ + 1;
-                        aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b5, &a[i__ * a_dim1 + 1],
-                                        lda, &a[i__ + i__ * a_dim1], lda, &c_b16,
-                                        &x[i__ * x_dim1 + 1], &c__1);
+                        sgemv_("No transpose", &i__2, &i__3, &c_b5, &a[i__ * a_dim1 + 1], lda, &a[i__ + i__ * a_dim1], lda, &c_b16, &x[i__ * x_dim1 + 1], &c__1);
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
-                        aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b4, &x[i__ + 1 + x_dim1],
-                                        ldx, &x[i__ * x_dim1 + 1], &c__1, &c_b5,
-                                        &x[i__ + 1 + i__ * x_dim1], &c__1);
+                        sgemv_("No transpose", &i__2, &i__3, &c_b4, &x[i__ + 1 + x_dim1], ldx, &x[i__ * x_dim1 + 1], &c__1, &c_b5, &x[ i__ + 1 + i__ * x_dim1], &c__1);
                         i__2 = *m - i__;
-                        aocl_blas_sscal(&i__2, &taup[i__], &x[i__ + 1 + i__ * x_dim1], &c__1);
+                        sscal_(&i__2, &taup[i__], &x[i__ + 1 + i__ * x_dim1], &c__1);
                         /* Update A(i+1:m,i) */
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
-                        aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b4, &a[i__ + 1 + a_dim1],
-                                        lda, &y[i__ + y_dim1], ldy, &c_b5,
-                                        &a[i__ + 1 + i__ * a_dim1], &c__1);
+                        sgemv_("No transpose", &i__2, &i__3, &c_b4, &a[i__ + 1 + a_dim1], lda, &y[i__ + y_dim1], ldy, &c_b5, &a[i__ + 1 + i__ * a_dim1], &c__1);
                         i__2 = *m - i__;
-                        aocl_blas_sgemv("No transpose", &i__2, &i__, &c_b4, &x[i__ + 1 + x_dim1],
-                                        ldx, &a[i__ * a_dim1 + 1], &c__1, &c_b5,
-                                        &a[i__ + 1 + i__ * a_dim1], &c__1);
+                        sgemv_("No transpose", &i__2, &i__, &c_b4, &x[i__ + 1 + x_dim1], ldx, &a[i__ * a_dim1 + 1], &c__1, &c_b5, &a[ i__ + 1 + i__ * a_dim1], &c__1);
                         /* Generate reflection Q(i) to annihilate A(i+2:m,i) */
                         i__2 = *m - i__;
                         /* Computing MIN */
                         i__3 = i__ + 2;
-                        aocl_lapack_slarfg(&i__2, &a[i__ + 1 + i__ * a_dim1],
-                                           &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tauq[i__]);
+                        slarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
                         e[i__] = a[i__ + 1 + i__ * a_dim1];
                         a[i__ + 1 + i__ * a_dim1] = 1.f;
                     }
                     /* Compute Y(i+1:n,i) */
                     i__2 = *m - i__;
                     i__3 = *n - i__;
-#ifdef FLA_OPENMP_MULTITHREADING
-                    /* Divide column wise equally among each threads */
+#ifdef FLA_ENABLE_MULTITHREADING
+                    /* Divide column wise equally among each threads */ 
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__3, &i__4, &i__5);
-#pragma omp barrier
-                    aocl_blas_sgemv("Transpose", &i__2, &i__4, &c_b5,
-                                    &a[i__ + 1 + (i__5 + i__ + 1) * a_dim1], lda,
-                                    &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16,
-                                    &y[i__5 + i__ + 1 + i__ * y_dim1], &c__1);
-#pragma omp barrier
+                    #pragma omp barrier
+                    sgemv_("Transpose", &i__2, &i__4, &c_b5, &a[i__ + 1 + (i__5 + i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &y[i__5 + i__ + 1 + i__ * y_dim1], &c__1);
+                    #pragma omp barrier
 #else
-                    aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b5,
-                                    &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
-                                    &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16,
-                                    &y[i__ + 1 + i__ * y_dim1], &c__1);
+                    sgemv_("Transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &y[i__ + 1 + i__ * y_dim1], &c__1);
 #endif
                     if(thread_id == 0)
                     {
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
-                        aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + a_dim1], lda,
-                                        &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16,
-                                        &y[i__ * y_dim1 + 1], &c__1);
+                        sgemv_("Transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &y[ i__ * y_dim1 + 1], &c__1);
                         i__2 = *n - i__;
                         i__3 = i__ - 1;
-                        aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b4, &y[i__ + 1 + y_dim1],
-                                        ldy, &y[i__ * y_dim1 + 1], &c__1, &c_b5,
-                                        &y[i__ + 1 + i__ * y_dim1], &c__1);
+                        sgemv_("No transpose", &i__2, &i__3, &c_b4, &y[i__ + 1 + y_dim1], ldy, &y[i__ * y_dim1 + 1], &c__1, &c_b5, &y[ i__ + 1 + i__ * y_dim1], &c__1);
                         i__2 = *m - i__;
-                        aocl_blas_sgemv("Transpose", &i__2, &i__, &c_b5, &x[i__ + 1 + x_dim1], ldx,
-                                        &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16,
-                                        &y[i__ * y_dim1 + 1], &c__1);
+                        sgemv_("Transpose", &i__2, &i__, &c_b5, &x[i__ + 1 + x_dim1], ldx, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &y[ i__ * y_dim1 + 1], &c__1);
                         i__2 = *n - i__;
-                        aocl_blas_sgemv("Transpose", &i__, &i__2, &c_b4, &a[(i__ + 1) * a_dim1 + 1],
-                                        lda, &y[i__ * y_dim1 + 1], &c__1, &c_b5,
-                                        &y[i__ + 1 + i__ * y_dim1], &c__1);
+                        sgemv_("Transpose", &i__, &i__2, &c_b4, &a[(i__ + 1) * a_dim1 + 1], lda, &y[i__ * y_dim1 + 1], &c__1, &c_b5, &y[i__ + 1 + i__ * y_dim1], &c__1);
                         i__2 = *n - i__;
-                        aocl_blas_sscal(&i__2, &tauq[i__], &y[i__ + 1 + i__ * y_dim1], &c__1);
+                        sscal_(&i__2, &tauq[i__], &y[i__ + 1 + i__ * y_dim1], &c__1);
                     }
                 }
                 /* L20: */

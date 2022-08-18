@@ -1,27 +1,17 @@
-/* ../netlib/sgebd2.f -- translated by f2c (version 20000121). You must link the resulting object
- * file with the libraries: -lf2c -lm (in that order) */
-/**
- * Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
- */
+/* ../netlib/sgebd2.f -- translated by f2c (version 20000121). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b SGEBD2 reduces a general matrix to bidiagonal form using an unblocked algorithm. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SGEBD2 + dependencies */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgebd2.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgebd2. f"> */
 /* > [TGZ]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgebd2.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgebd2. f"> */
 /* > [ZIP]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgebd2.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgebd2. f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -72,7 +62,7 @@ the */
 /* > reflectors, and the elements above the first superdiagonal, */
 /* > with the array TAUP, represent the orthogonal matrix P as */
 /* > a product of elementary reflectors;
- */
+*/
 /* > if m < n, the diagonal and the first subdiagonal are */
 /* > overwritten with the lower bidiagonal matrix B;
 the */
@@ -87,42 +77,42 @@ the */
 /* > \param[in] LDA */
 /* > \verbatim */
 /* > LDA is INTEGER */
-/* > The leading dimension of the array A. LDA >= fla_max(1,M). */
+/* > The leading dimension of the array A. LDA >= max(1,M). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] D */
 /* > \verbatim */
-/* > D is REAL array, dimension (fla_min(M,N)) */
+/* > D is REAL array, dimension (min(M,N)) */
 /* > The diagonal elements of the bidiagonal matrix B: */
 /* > D(i) = A(i,i). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] E */
 /* > \verbatim */
-/* > E is REAL array, dimension (fla_min(M,N)-1) */
+/* > E is REAL array, dimension (min(M,N)-1) */
 /* > The off-diagonal elements of the bidiagonal matrix B: */
 /* > if m >= n, E(i) = A(i,i+1) for i = 1,2,...,n-1;
- */
+*/
 /* > if m < n, E(i) = A(i+1,i) for i = 1,2,...,m-1. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] TAUQ */
 /* > \verbatim */
-/* > TAUQ is REAL array, dimension (fla_min(M,N)) */
+/* > TAUQ is REAL array, dimension (min(M,N)) */
 /* > The scalar factors of the elementary reflectors which */
 /* > represent the orthogonal matrix Q. See Further Details. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] TAUP */
 /* > \verbatim */
-/* > TAUP is REAL array, dimension (fla_min(M,N)) */
+/* > TAUP is REAL array, dimension (min(M,N)) */
 /* > The scalar factors of the elementary reflectors which */
 /* > represent the orthogonal matrix P. See Further Details. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WORK */
 /* > \verbatim */
-/* > WORK is REAL array, dimension (fla_max(M,N)) */
+/* > WORK is REAL array, dimension (max(M,N)) */
 /* > \endverbatim */
 /* > */
 /* > \param[out] INFO */
@@ -155,11 +145,11 @@ the */
 /* > H(i) = I - tauq * v * v**T and G(i) = I - taup * u * u**T */
 /* > */
 /* > where tauq and taup are real scalars, and v and u are real vectors;
- */
+*/
 /* > v(1:i-1) = 0, v(i) = 1, and v(i+1:m) is stored on exit in A(i+1:m,i);
- */
+*/
 /* > u(1:i) = 0, u(i+1) = 1, and u(i+2:n) is stored on exit in A(i,i+2:n);
- */
+*/
 /* > tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* > If m < n, */
@@ -171,11 +161,11 @@ the */
 /* > H(i) = I - tauq * v * v**T and G(i) = I - taup * u * u**T */
 /* > */
 /* > where tauq and taup are real scalars, and v and u are real vectors;
- */
+*/
 /* > v(1:i) = 0, v(i+1) = 1, and v(i+2:m) is stored on exit in A(i+2:m,i);
- */
+*/
 /* > u(1:i-1) = 0, u(i) = 1, and u(i+1:n) is stored on exit in A(i,i+1:n);
- */
+*/
 /* > tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* > The contents of A on exit are illustrated by the following examples: */
@@ -196,13 +186,14 @@ the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int lapack_sgebd2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *d__, real *e,
-                  real *tauq, real *taup, real *work, aocl_int64_t *info)
+int lapack_sgebd2(integer *m, integer *n, real *a, integer *lda, real *d__, real *e, real *tauq, real *taup, real *work, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    aocl_int64_t i__;
+    integer i__;
+    extern /* Subroutine */
+    int slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_( char *, integer *), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -232,63 +223,61 @@ int lapack_sgebd2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     --work;
     /* Function Body */
     *info = 0;
-    if(*m < 0)
+    if (*m < 0)
     {
         *info = -1;
     }
-    else if(*n < 0)
+    else if (*n < 0)
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < max(1,*m))
     {
         *info = -4;
     }
-    if(*info < 0)
+    if (*info < 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGEBD2", &i__1, (ftnlen)6);
+        xerbla_("SGEBD2", &i__1);
         return 0;
     }
-    if(*m >= *n)
+    if (*m >= *n)
     {
         /* Reduce to upper bidiagonal form */
         i__1 = *n;
-        for(i__ = 1; i__ <= i__1; ++i__)
+        for (i__ = 1;
+                i__ <= i__1;
+                ++i__)
         {
             /* Generate elementary reflector H(i) to annihilate A(i+1:m,i) */
             i__2 = *m - i__ + 1;
             /* Computing MIN */
             i__3 = i__ + 1;
-            aocl_lapack_slarfg(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3, *m) + i__ * a_dim1],
-                               &c__1, &tauq[i__]);
+            slarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
             d__[i__] = a[i__ + i__ * a_dim1];
             a[i__ + i__ * a_dim1] = 1.f;
             /* Apply H(i) to A(i:m,i+1:n) from the left */
-            if(i__ < *n)
+            if (i__ < *n)
             {
                 i__2 = *m - i__ + 1;
                 i__3 = *n - i__;
-                aocl_lapack_slarf1f("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &tauq[i__],
-                                  &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+                slarf_("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, & tauq[i__], &a[i__ + (i__ + 1) * a_dim1], lda, &work[1] );
             }
             a[i__ + i__ * a_dim1] = d__[i__];
-            if(i__ < *n)
+            if (i__ < *n)
             {
                 /* Generate elementary reflector G(i) to annihilate */
                 /* A(i,i+2:n) */
                 i__2 = *n - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                aocl_lapack_slarfg(&i__2, &a[i__ + (i__ + 1) * a_dim1],
-                                   &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &taup[i__]);
+                slarfg_(&i__2, &a[i__ + (i__ + 1) * a_dim1], &a[i__ + min( i__3,*n) * a_dim1], lda, &taup[i__]);
                 e[i__] = a[i__ + (i__ + 1) * a_dim1];
                 a[i__ + (i__ + 1) * a_dim1] = 1.f;
                 /* Apply G(i) to A(i+1:m,i+1:n) from the right */
                 i__2 = *m - i__;
                 i__3 = *n - i__;
-                aocl_lapack_slarf1f("Right", &i__2, &i__3, &a[i__ + (i__ + 1) * a_dim1], lda,
-                                  &taup[i__], &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
+                slarf_("Right", &i__2, &i__3, &a[i__ + (i__ + 1) * a_dim1], lda, &taup[i__], &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
                 a[i__ + (i__ + 1) * a_dim1] = e[i__];
             }
             else
@@ -302,41 +291,39 @@ int lapack_sgebd2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     {
         /* Reduce to lower bidiagonal form */
         i__1 = *m;
-        for(i__ = 1; i__ <= i__1; ++i__)
+        for (i__ = 1;
+                i__ <= i__1;
+                ++i__)
         {
             /* Generate elementary reflector G(i) to annihilate A(i,i+1:n) */
             i__2 = *n - i__ + 1;
             /* Computing MIN */
             i__3 = i__ + 1;
-            aocl_lapack_slarfg(&i__2, &a[i__ + i__ * a_dim1], &a[i__ + fla_min(i__3, *n) * a_dim1],
-                               lda, &taup[i__]);
+            slarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[i__ + min(i__3,*n) * a_dim1], lda, &taup[i__]);
             d__[i__] = a[i__ + i__ * a_dim1];
             a[i__ + i__ * a_dim1] = 1.f;
             /* Apply G(i) to A(i+1:m,i:n) from the right */
-            if(i__ < *m)
+            if (i__ < *m)
             {
                 i__2 = *m - i__;
                 i__3 = *n - i__ + 1;
-                aocl_lapack_slarf1f("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &taup[i__],
-                                  &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
+                slarf_("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, & taup[i__], &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             }
             a[i__ + i__ * a_dim1] = d__[i__];
-            if(i__ < *m)
+            if (i__ < *m)
             {
                 /* Generate elementary reflector H(i) to annihilate */
                 /* A(i+2:m,i) */
                 i__2 = *m - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                aocl_lapack_slarfg(&i__2, &a[i__ + 1 + i__ * a_dim1],
-                                   &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tauq[i__]);
+                slarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
                 e[i__] = a[i__ + 1 + i__ * a_dim1];
                 a[i__ + 1 + i__ * a_dim1] = 1.f;
                 /* Apply H(i) to A(i+1:m,i+1:n) from the left */
                 i__2 = *m - i__;
                 i__3 = *n - i__;
-                aocl_lapack_slarf1f("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1,
-                                  &tauq[i__], &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
+                slarf_("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], & c__1, &tauq[i__], &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
                 a[i__ + 1 + i__ * a_dim1] = e[i__];
             }
             else

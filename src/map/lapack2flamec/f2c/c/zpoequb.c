@@ -112,24 +112,8 @@
 void zpoequb_(aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *s, doublereal *scond,
               doublereal *amax, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zpoequb(n, a, lda, s, scond, amax, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zpoequb(&n_64, a, &lda_64, s, scond, amax, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zpoequb(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, doublereal *s,
-                         doublereal *scond, doublereal *amax, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpoequb inputs: n %" FLA_IS ", lda %" FLA_IS "", *n, *lda);
+    AOCL_DTL_SNPRINTF("zpoequb inputs: n %" FLA_IS ", lda %" FLA_IS "",*n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1, d__2;
@@ -179,17 +163,17 @@ void aocl_lapack_zpoequb(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, double
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZPOEQUB", &i__1, (ftnlen)7);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZPOEQUB", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible. */
     if(*n == 0)
     {
         *scond = 1.;
         *amax = 0.;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     base = dlamch_("B");
     tmp = -.5 / log(base);
@@ -223,8 +207,8 @@ void aocl_lapack_zpoequb(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, double
             if(s[i__] <= 0.)
             {
                 *info = i__;
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+    AOCL_DTL_TRACE_LOG_EXIT
+                return 0;
             }
             /* L20: */
         }
@@ -244,7 +228,7 @@ void aocl_lapack_zpoequb(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, double
         *scond = sqrt(smin) / sqrt(*amax);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZPOEQUB */
 }
 /* zpoequb_ */

@@ -150,31 +150,8 @@ void zlaed0_(aocl_int_t *qsiz, aocl_int_t *n, doublereal *d__, doublereal *e, dc
              aocl_int_t *ldq, dcomplex *qstore, aocl_int_t *ldqs, doublereal *rwork,
              aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlaed0(qsiz, n, d__, e, q, ldq, qstore, ldqs, rwork, iwork, info);
-#else
-    aocl_int64_t qsiz_64 = *qsiz;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t ldqs_64 = *ldqs;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zlaed0(&qsiz_64, &n_64, d__, e, q, &ldq_64, qstore, &ldqs_64, rwork, iwork,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zlaed0(aocl_int64_t *qsiz, aocl_int64_t *n, doublereal *d__, doublereal *e,
-                        dcomplex *q, aocl_int64_t *ldq, dcomplex *qstore,
-                        aocl_int64_t *ldqs, doublereal *rwork, aocl_int_t *iwork,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaed0 inputs: qsiz %" FLA_IS ", n %" FLA_IS ", ldq %" FLA_IS
-                      ", ldqs %" FLA_IS "",
-                      *qsiz, *n, *ldq, *ldqs);
+    AOCL_DTL_SNPRINTF("zlaed0 inputs: qsiz %" FLA_IS ", n %" FLA_IS ", ldq %" FLA_IS ", ldqs %" FLA_IS "",*qsiz, *n, *ldq, *ldqs);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, qstore_dim1, qstore_offset, i__1, i__2;
     doublereal d__1;
@@ -247,15 +224,15 @@ void aocl_lapack_zlaed0(aocl_int64_t *qsiz, aocl_int64_t *n, doublereal *d__, do
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZLAED0", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZLAED0", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     smlsiz = aocl_lapack_ilaenv(&c__9, "ZLAED0", " ", &c__0, &c__0, &c__0, &c__0);
     /* Determine the size and placement of the submatrices, and save in */
@@ -354,8 +331,8 @@ L10:
         if(*info > 0)
         {
             *info = submat * (*n + 1) + submat + matsiz - 1;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+    AOCL_DTL_TRACE_LOG_EXIT
+            return 0;
         }
         k = 1;
         i__2 = iwork[i__ + 1];
@@ -405,8 +382,8 @@ L80:
             if(*info > 0)
             {
                 *info = submat * (*n + 1) + submat + matsiz - 1;
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+    AOCL_DTL_TRACE_LOG_EXIT
+                return 0;
             }
             iwork[i__ / 2 + 1] = iwork[i__ + 2];
             /* L90: */
@@ -426,9 +403,9 @@ L80:
         zcopy_(qsiz, &qstore[j * qstore_dim1 + 1], &c__1, &q[i__ * q_dim1 + 1], &c__1);
         /* L100: */
     }
-    aocl_blas_dcopy(n, &rwork[1], &c__1, &d__[1], &c__1);
+    dcopy_(n, &rwork[1], &c__1, &d__[1], &c__1);
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLAED0 */
 }
 /* zlaed0_ */

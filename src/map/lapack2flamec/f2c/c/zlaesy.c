@@ -269,7 +269,7 @@ void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
         }
     }
     AOCL_DTL_TRACE_EXIT_INDENT
-    return;
+    return 0;
     /* End of ZLAESY */
 }
 /* zlaesy_ */

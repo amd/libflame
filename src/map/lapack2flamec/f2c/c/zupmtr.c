@@ -155,28 +155,8 @@ void zupmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
              dcomplex *tau, dcomplex *c__, aocl_int_t *ldc, dcomplex *work,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zupmtr(side, uplo, trans, m, n, ap, tau, c__, ldc, work, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zupmtr(side, uplo, trans, &m_64, &n_64, ap, tau, c__, &ldc_64, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zupmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n,
-                        dcomplex *ap, dcomplex *tau, dcomplex *c__,
-                        aocl_int64_t *ldc, dcomplex *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zupmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS
-                      ", ldc %" FLA_IS "",
-                      *side, *uplo, *trans, *m, *n, *ldc);
+    AOCL_DTL_SNPRINTF("zupmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *uplo, *trans, *m, *n, *ldc);
     /* System generated locals */
     aocl_int64_t c_dim1, c_offset, i__1, i__2, i__3;
     dcomplex z__1;
@@ -259,15 +239,15 @@ void aocl_lapack_zupmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZUPMTR", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZUPMTR", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(upper)
     {
@@ -424,7 +404,7 @@ void aocl_lapack_zupmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZUPMTR */
 }
 /* zupmtr_ */

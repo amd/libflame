@@ -149,26 +149,8 @@ void zlaqp2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, dcomplex *a, aocl
              aocl_int_t *jpvt, dcomplex *tau, doublereal *vn1, doublereal *vn2,
              dcomplex *work)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlaqp2(m, n, offset, a, lda, jpvt, tau, vn1, vn2, work);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t offset_64 = *offset;
-    aocl_int64_t lda_64 = *lda;
-
-    aocl_lapack_zlaqp2(&m_64, &n_64, &offset_64, a, &lda_64, jpvt, tau, vn1, vn2, work);
-#endif
-}
-
-void aocl_lapack_zlaqp2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, dcomplex *a,
-                        aocl_int64_t *lda, aocl_int_t *jpvt, dcomplex *tau, doublereal *vn1,
-                        doublereal *vn2, dcomplex *work)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaqp2 inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS
-                      ", lda %" FLA_IS "",
-                      *m, *n, *offset, *lda);
+    AOCL_DTL_SNPRINTF("zlaqp2 inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", lda %" FLA_IS "",*m, *n, *offset, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1;
@@ -304,7 +286,7 @@ void aocl_lapack_zlaqp2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, 
         /* L20: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLAQP2 */
 }
 /* zlaqp2_ */

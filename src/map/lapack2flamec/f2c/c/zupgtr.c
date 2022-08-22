@@ -114,25 +114,8 @@
 void zupgtr_(char *uplo, aocl_int_t *n, dcomplex *ap, dcomplex *tau, dcomplex *q,
              aocl_int_t *ldq, dcomplex *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zupgtr(uplo, n, ap, tau, q, ldq, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zupgtr(uplo, &n_64, ap, tau, q, &ldq_64, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zupgtr(char *uplo, aocl_int64_t *n, dcomplex *ap, dcomplex *tau,
-                        dcomplex *q, aocl_int64_t *ldq, dcomplex *work,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zupgtr inputs: uplo %c, n %" FLA_IS ", ldq %" FLA_IS "", *uplo, *n, *ldq);
+    AOCL_DTL_SNPRINTF("zupgtr inputs: uplo %c, n %" FLA_IS ", ldq %" FLA_IS "",*uplo, *n, *ldq);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -186,15 +169,15 @@ void aocl_lapack_zupgtr(char *uplo, aocl_int64_t *n, dcomplex *ap, dcomplex *tau
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZUPGTR", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZUPGTR", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(upper)
     {
@@ -287,7 +270,7 @@ void aocl_lapack_zupgtr(char *uplo, aocl_int64_t *n, dcomplex *ap, dcomplex *tau
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZUPGTR */
 }
 /* zupgtr_ */

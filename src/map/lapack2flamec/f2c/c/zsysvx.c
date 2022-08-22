@@ -290,12 +290,9 @@ void zsysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *
              doublereal *rcond, doublereal *ferr, doublereal *berr, dcomplex *work,
              aocl_int_t *lwork, doublereal *rwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zsysvx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zsysvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
+
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2;
@@ -413,12 +410,12 @@ void zsysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *
     {
         i__1 = -(*info);
         xerbla_("ZSYSVX", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(nofact)
@@ -430,7 +427,7 @@ void zsysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *
         if(*info > 0)
         {
             *rcond = 0.;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return 0;
         }
     }
@@ -451,7 +448,7 @@ void zsysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *
     }
     work[1].r = (doublereal) lwkopt;
     work[1].i = 0.; // , expr subst
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZSYSVX */
 }

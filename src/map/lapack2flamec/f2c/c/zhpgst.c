@@ -118,25 +118,8 @@ static aocl_int64_t c__1 = 1;
 void zhpgst_(aocl_int_t *itype, char *uplo, aocl_int_t *n, dcomplex *ap, dcomplex *bp,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zhpgst(itype, uplo, n, ap, bp, info);
-#else
-    aocl_int64_t itype_64 = *itype;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zhpgst(&itype_64, uplo, &n_64, ap, bp, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zhpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcomplex *ap,
-                        dcomplex *bp, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhpgst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS "", *itype, *uplo,
-                      *n);
+    AOCL_DTL_SNPRINTF("zhpgst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS "",*itype, *uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3, i__4;
     doublereal d__1, d__2;
@@ -195,9 +178,9 @@ void aocl_lapack_zhpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcompl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZHPGST", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZHPGST", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(*itype == 1)
     {
@@ -360,7 +343,7 @@ void aocl_lapack_zhpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcompl
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZHPGST */
 }
 /* zhpgst_ */

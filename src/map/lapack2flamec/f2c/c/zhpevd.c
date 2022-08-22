@@ -211,32 +211,8 @@ void zhpevd_(char *jobz, char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *w,
              doublereal *rwork, aocl_int_t *lrwork, aocl_int_t *iwork, aocl_int_t *liwork,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zhpevd(jobz, uplo, n, ap, w, z__, ldz, work, lwork, rwork, lrwork, iwork, liwork,
-                       info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t lrwork_64 = *lrwork;
-    aocl_int64_t liwork_64 = *liwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zhpevd(jobz, uplo, &n_64, ap, w, z__, &ldz_64, work, &lwork_64, rwork, &lrwork_64,
-                       iwork, &liwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zhpevd(char *jobz, char *uplo, aocl_int64_t *n, dcomplex *ap, doublereal *w,
-                        dcomplex *z__, aocl_int64_t *ldz, dcomplex *work,
-                        aocl_int64_t *lwork, doublereal *rwork, aocl_int64_t *lrwork,
-                        aocl_int_t *iwork, aocl_int64_t *liwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhpevd inputs: jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "", *jobz,
-                      *uplo, *n, *ldz);
+    AOCL_DTL_SNPRINTF("zhpevd inputs: jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",*jobz, *uplo, *n, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1;
     doublereal d__1;
@@ -355,20 +331,20 @@ void aocl_lapack_zhpevd(char *jobz, char *uplo, aocl_int64_t *n, dcomplex *ap, d
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZHPEVD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZHPEVD", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(*n == 1)
     {
@@ -379,8 +355,8 @@ void aocl_lapack_zhpevd(char *jobz, char *uplo, aocl_int64_t *n, dcomplex *ap, d
             z__[i__1].real = 1.;
             z__[i__1].imag = 0.; // , expr subst
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -442,12 +418,12 @@ void aocl_lapack_zhpevd(char *jobz, char *uplo, aocl_int64_t *n, dcomplex *ap, d
         d__1 = 1. / sigma;
         aocl_blas_dscal(&imax, &d__1, &w[1], &c__1);
     }
-    work[1].real = (doublereal)lwmin;
-    work[1].imag = 0.; // , expr subst
-    rwork[1] = (doublereal)lrwmin;
-    iwork[1] = (aocl_int_t)(liwmin);
+    work[1].r = (doublereal) lwmin;
+    work[1].i = 0.; // , expr subst
+    rwork[1] = (doublereal) lrwmin;
+    iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZHPEVD */
 }
 /* zhpevd_ */

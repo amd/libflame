@@ -281,12 +281,8 @@ void zhpsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *
              dcomplex *x, aocl_int_t *ldx, doublereal *rcond, doublereal *ferr,
              doublereal *berr, dcomplex *work, doublereal *rwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zhpsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *nrhs, *ldb, *ldx);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zhpsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *nrhs, *ldb, *ldx);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1;
     /* Local variables */
@@ -360,7 +356,7 @@ void zhpsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *
     {
         i__1 = -(*info);
         xerbla_("ZHPSVX", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(nofact)
@@ -373,7 +369,7 @@ void zhpsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *
         if(*info > 0)
         {
             *rcond = 0.;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return 0;
         }
     }
@@ -393,7 +389,7 @@ void zhpsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *
     {
         *info = *n + 1;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZHPSVX */
 }

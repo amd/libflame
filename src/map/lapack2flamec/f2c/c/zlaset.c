@@ -106,12 +106,9 @@
 void zlaset_(char *uplo, aocl_int_t *m, aocl_int_t *n, dcomplex *alpha, dcomplex *beta,
              dcomplex *a, aocl_int_t *lda)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zlaset inputs: uplo %c, m %d, n %d, lda %d",*uplo, *m, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zlaset inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*uplo, *m, *n, *lda);
+
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -218,7 +215,7 @@ void zlaset_(char *uplo, aocl_int_t *m, aocl_int_t *n, dcomplex *alpha, dcomplex
             /* L90: */
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZLASET */
 }

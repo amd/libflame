@@ -173,25 +173,8 @@ void zlatdf_(aocl_int_t *ijob, aocl_int_t *n, dcomplex *z__, aocl_int_t *ldz,
              dcomplex *rhs, doublereal *rdsum, doublereal *rdscal, aocl_int_t *ipiv,
              aocl_int_t *jpiv)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlatdf(ijob, n, z__, ldz, rhs, rdsum, rdscal, ipiv, jpiv);
-#else
-    aocl_int64_t ijob_64 = *ijob;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldz_64 = *ldz;
-
-    aocl_lapack_zlatdf(&ijob_64, &n_64, z__, &ldz_64, rhs, rdsum, rdscal, ipiv, jpiv);
-#endif
-}
-
-void aocl_lapack_zlatdf(aocl_int64_t *ijob, aocl_int64_t *n, dcomplex *z__, aocl_int64_t *ldz,
-                        dcomplex *rhs, doublereal *rdsum, doublereal *rdscal, aocl_int_t *ipiv,
-                        aocl_int_t *jpiv)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlatdf inputs: ijob %" FLA_IS ", n %" FLA_IS ", ldz %" FLA_IS
-                      ", rdsum %lf, rdscal %lf",
-                      *ijob, *n, *ldz, *rdsum, *rdscal);
+    AOCL_DTL_SNPRINTF("zlatdf inputs: ijob %" FLA_IS ", n %" FLA_IS ", ldz %" FLA_IS ", rdsum %lf, rdscal %lf",*ijob, *n, *ldz, *rdsum, *rdscal);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
     dcomplex z__1, z__2, z__3;
@@ -389,9 +372,9 @@ void aocl_lapack_zlatdf(aocl_int64_t *ijob, aocl_int64_t *n, dcomplex *z__, aocl
         i__1 = *n - 1;
         aocl_lapack_zlaswp(&c__1, &rhs[1], ldz, &c__1, &i__1, &jpiv[1], &c_n1);
         /* Compute the sum of squares */
-        aocl_lapack_zlassq(n, &rhs[1], &c__1, rdscal, rdsum);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        zlassq_(n, &rhs[1], &c__1, rdscal, rdsum);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* ENTRY IJOB = 2 */
     /* Compute approximate nullvector XM of Z */
@@ -418,9 +401,9 @@ void aocl_lapack_zlatdf(aocl_int64_t *ijob, aocl_int64_t *n, dcomplex *z__, aocl
         aocl_blas_zcopy(n, xp, &c__1, &rhs[1], &c__1);
     }
     /* Compute the sum of squares */
-    aocl_lapack_zlassq(n, &rhs[1], &c__1, rdscal, rdsum);
+    zlassq_(n, &rhs[1], &c__1, rdscal, rdsum);
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLATDF */
 }
 /* zlatdf_ */

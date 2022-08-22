@@ -218,25 +218,8 @@
 void ztfttr_(char *transr, char *uplo, aocl_int_t *n, dcomplex *arf, dcomplex *a,
              aocl_int_t *lda, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ztfttr(transr, uplo, n, arf, a, lda, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ztfttr(transr, uplo, &n_64, arf, a, &lda_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ztfttr(char *transr, char *uplo, aocl_int64_t *n, dcomplex *arf,
-                        dcomplex *a, aocl_int64_t *lda, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztfttr inputs: transr %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *transr,
-                      *uplo, *n, *lda);
+    AOCL_DTL_SNPRINTF("ztfttr inputs: transr %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*transr, *uplo, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     dcomplex z__1;
@@ -296,9 +279,9 @@ void aocl_lapack_ztfttr(char *transr, char *uplo, aocl_int64_t *n, dcomplex *arf
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZTFTTR", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZTFTTR", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n <= 1)
@@ -317,8 +300,8 @@ void aocl_lapack_ztfttr(char *transr, char *uplo, aocl_int64_t *n, dcomplex *arf
                 a[0].imag = z__1.imag; // , expr subst
             }
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Size of array ARF(1:2,0:nt-1) */
     nt = *n * (*n + 1) / 2;
@@ -692,7 +675,7 @@ void aocl_lapack_ztfttr(char *transr, char *uplo, aocl_int64_t *n, dcomplex *arf
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZTFTTR */
 }
 /* ztfttr_ */

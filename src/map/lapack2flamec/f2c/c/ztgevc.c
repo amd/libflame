@@ -229,38 +229,8 @@ void ztgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, dcomplex 
              aocl_int_t *ldvl, dcomplex *vr, aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m,
              dcomplex *work, doublereal *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ztgevc(side, howmny, select, n, s, lds, p, ldp, vl, ldvl, vr, ldvr, mm, m, work,
-                       rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lds_64 = *lds;
-    aocl_int64_t ldp_64 = *ldp;
-    aocl_int64_t ldvl_64 = *ldvl;
-    aocl_int64_t ldvr_64 = *ldvr;
-    aocl_int64_t mm_64 = *mm;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ztgevc(side, howmny, select, &n_64, s, &lds_64, p, &ldp_64, vl, &ldvl_64, vr,
-                       &ldvr_64, &mm_64, &m_64, work, rwork, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ztgevc(char *side, char *howmny, logical *select, aocl_int64_t *n,
-                        dcomplex *s, aocl_int64_t *lds, dcomplex *p, aocl_int64_t *ldp,
-                        dcomplex *vl, aocl_int64_t *ldvl, dcomplex *vr,
-                        aocl_int64_t *ldvr, aocl_int64_t *mm, aocl_int64_t *m, dcomplex *work,
-                        doublereal *rwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztgevc inputs: side %c, howmny %c, n %" FLA_IS ", lds %" FLA_IS
-                      ", ldp %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS
-                      ", m %" FLA_IS "",
-                      *side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm, *m);
+    AOCL_DTL_SNPRINTF("ztgevc inputs: side %c, howmny %c, n %" FLA_IS ", lds %" FLA_IS ", ldp %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", m %" FLA_IS "",*side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm, *m);
     /* System generated locals */
     aocl_int64_t p_dim1, p_offset, s_dim1, s_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1,
         i__2, i__3, i__4, i__5;
@@ -417,9 +387,9 @@ void aocl_lapack_ztgevc(char *side, char *howmny, logical *select, aocl_int64_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZTGEVC", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZTGEVC", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Count the number of eigenvectors */
     if(!ilall)
@@ -469,16 +439,16 @@ void aocl_lapack_ztgevc(char *side, char *howmny, logical *select, aocl_int64_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZTGEVC", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZTGEVC", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     *m = im;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Machine Constants */
     safmin = dlamch_("Safe minimum");
@@ -1141,7 +1111,7 @@ void aocl_lapack_ztgevc(char *side, char *howmny, logical *select, aocl_int64_t 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZTGEVC */
 }
 /* ztgevc_ */

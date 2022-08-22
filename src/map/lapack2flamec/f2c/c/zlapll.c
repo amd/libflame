@@ -99,23 +99,8 @@
 void zlapll_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx, dcomplex *y, aocl_int_t *incy,
              doublereal *ssmin)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlapll(n, x, incx, y, incy, ssmin);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incy_64 = *incy;
-
-    aocl_lapack_zlapll(&n_64, x, &incx_64, y, &incy_64, ssmin);
-#endif
-}
-
-void aocl_lapack_zlapll(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, dcomplex *y,
-                        aocl_int64_t *incy, doublereal *ssmin)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlapll inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *n, *incx,
-                      *incy);
+    AOCL_DTL_SNPRINTF("zlapll inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *n, *incx, *incy);
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal d__1, d__2, d__3;
@@ -158,7 +143,7 @@ void aocl_lapack_zlapll(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, dcompl
     {
         *ssmin = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     /* Compute the QR factorization of the N-by-2 matrix ( X Y ) */
     aocl_lapack_zlarfg(n, &x[1], &x[*incx + 1], incx, &tau);
@@ -188,7 +173,7 @@ void aocl_lapack_zlapll(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, dcompl
     d__3 = z_abs(&a22);
     dlas2_(&d__1, &d__2, &d__3, ssmin, &ssmax);
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLAPLL */
 }
 /* zlapll_ */

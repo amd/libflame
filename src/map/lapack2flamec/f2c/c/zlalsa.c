@@ -272,12 +272,8 @@ void zlalsa_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
              aocl_int_t *ldgcol, aocl_int_t *perm, doublereal *givnum, doublereal *c__,
              doublereal *s, doublereal *rwork, aocl_int_t *iwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zlalsa inputs: icompq %" FLA_IS ", smlsiz %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldbx %" FLA_IS ", ldu %" FLA_IS ", k %" FLA_IS ", givptr %" FLA_IS ", givcol %" FLA_IS ", ldgcol %" FLA_IS ", perm %" FLA_IS "",*icompq, *smlsiz, *n, *nrhs, *ldb, *ldbx, *ldu, *k, *givptr, *givcol, *ldgcol, *perm);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zlalsa inputs: icompq %" FLA_IS ", smlsiz %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldbx %" FLA_IS ", ldu %" FLA_IS ", ldgcol %" FLA_IS "",*icompq, *smlsiz, *n, *nrhs, *ldb, *ldbx, *ldu, *ldgcol);
     /* System generated locals */
     aocl_int64_t givcol_dim1, givcol_offset, perm_dim1, perm_offset, difl_dim1, difl_offset,
         difr_dim1, difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, u_dim1,
@@ -391,7 +387,7 @@ void zlalsa_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
     {
         i__1 = -(*info);
         xerbla_("ZLALSA", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Book-keeping and setting up the computation tree. */
@@ -784,7 +780,7 @@ L170: /* First now go through the right singular vector matrices of all */
         /* L320: */
     }
 L330:
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZLALSA */
 }

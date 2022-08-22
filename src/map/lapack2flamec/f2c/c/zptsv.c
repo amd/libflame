@@ -114,12 +114,9 @@
 void zptsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomplex *e, dcomplex *b,
             aocl_int_t *ldb, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zptsv inputs: n %d, nrhs %d, ldb %d",*n, *nrhs, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zptsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
+
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
@@ -162,7 +159,7 @@ void zptsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomplex *e, dcomp
     {
         i__1 = -(*info);
         xerbla_("ZPTSV ", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Compute the L*D*L**H (or U**H*D*U) factorization of A. */
@@ -172,7 +169,7 @@ void zptsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomplex *e, dcomp
         /* Solve the system A*X = B, overwriting B with X. */
         aocl_lapack_zpttrs("Lower", n, nrhs, &d__[1], &e[1], &b[b_offset], ldb, info);
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZPTSV */
 }

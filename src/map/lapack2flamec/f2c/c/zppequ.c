@@ -118,12 +118,9 @@
 void zppequ_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *s, doublereal *scond,
              doublereal *amax, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zppequ inputs: uplo %c, n %d",*uplo, *n);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zppequ inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
+
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     doublereal d__1, d__2;
@@ -173,7 +170,7 @@ void zppequ_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *s, doublereal 
     {
         i__1 = -(*info);
         xerbla_("ZPPEQU", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
@@ -181,7 +178,7 @@ void zppequ_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *s, doublereal 
     {
         *scond = 1.;
         *amax = 0.;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Initialize SMIN and AMAX. */
@@ -241,7 +238,7 @@ void zppequ_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *s, doublereal 
             if(s[i__] <= 0.)
             {
                 *info = i__;
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return 0;
             }
             /* L30: */
@@ -260,7 +257,7 @@ void zppequ_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *s, doublereal 
         /* Compute SCOND = fla_min(S(I)) / fla_max(S(I)) */
         *scond = sqrt(smin) / sqrt(*amax);
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZPPEQU */
 }

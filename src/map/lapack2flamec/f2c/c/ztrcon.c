@@ -140,26 +140,8 @@ static aocl_int64_t c__1 = 1;
 void ztrcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
              doublereal *rcond, dcomplex *work, doublereal *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ztrcon(norm, uplo, diag, n, a, lda, rcond, work, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ztrcon(norm, uplo, diag, &n_64, a, &lda_64, rcond, work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ztrcon(char *norm, char *uplo, char *diag, aocl_int64_t *n, dcomplex *a,
-                        aocl_int64_t *lda, doublereal *rcond, dcomplex *work,
-                        doublereal *rwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztrcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "",
-                      *norm, *uplo, *diag, *n, *lda);
+    AOCL_DTL_SNPRINTF("ztrcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "",*norm, *uplo, *diag, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
     doublereal d__1, d__2;
@@ -240,16 +222,16 @@ void aocl_lapack_ztrcon(char *norm, char *uplo, char *diag, aocl_int64_t *n, dco
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZTRCON", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZTRCON", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *rcond = 1.;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     *rcond = 0.;
     smlnum = dlamch_("Safe minimum") * (doublereal)fla_max(1, *n);
@@ -309,7 +291,7 @@ void aocl_lapack_ztrcon(char *norm, char *uplo, char *diag, aocl_int64_t *n, dco
     }
 L20:
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZTRCON */
 }
 /* ztrcon_ */

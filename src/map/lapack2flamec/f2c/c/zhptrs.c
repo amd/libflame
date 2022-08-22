@@ -118,12 +118,8 @@ static aocl_int64_t c__1 = 1;
 void zhptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *ap, aocl_int_t *ipiv,
              dcomplex *b, aocl_int_t *ldb, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zhptrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zhptrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2;
     dcomplex z__1, z__2, z__3;
@@ -188,13 +184,13 @@ void zhptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *ap, aocl_int
     {
         i__1 = -(*info);
         xerbla_("ZHPTRS", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(upper)
@@ -548,7 +544,7 @@ void zhptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *ap, aocl_int
         goto L90;
     L100:;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZHPTRS */
 }

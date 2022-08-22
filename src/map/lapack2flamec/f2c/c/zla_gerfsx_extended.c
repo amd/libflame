@@ -417,12 +417,7 @@ void zla_gerfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
                           integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zla_gerfsx_extended inputs: prec_type__ %" FLA_IS ", trans_type__ %" FLA_IS
-                      ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS
-                      ", ldb %" FLA_IS ", ldy %" FLA_IS ", n_norms__ %" FLA_IS ", ithresh %" FLA_IS
-                      ", rthresh %lf, dz_ub__ %lf, ignore_cwise__ %" FLA_IS "",
-                      *prec_type__, *trans_type__, *n, *nrhs, *lda, *ldaf, *ldb, *ldy, *n_norms__,
-                      *ithresh, *rthresh, *dz_ub__, *ignore_cwise__);
+    AOCL_DTL_SNPRINTF("zla_gerfsx_extended inputs: prec_type__ %" FLA_IS ", trans_type__ %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldy %" FLA_IS ", n_norms__ %" FLA_IS ", ithresh %" FLA_IS ", rthresh %lf, dz_ub__ %lf, ignore_cwise__ %" FLA_IS "", *prec_type__, *trans_type__, *n, *nrhs, *lda, *ldaf, *ldb, *ldy, *n_norms__, *ithresh, *rthresh, *dz_ub__, *ignore_cwise__);
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, y_dim1, y_offset, errs_n_dim1,
         errs_n_offset, errs_c_dim1, errs_c_offset, i__1, i__2, i__3, i__4;
@@ -527,7 +522,7 @@ void zla_gerfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
     if(*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     chla_transtype_(ch__1, trans_type__);
     *(unsigned char *)trans = *(unsigned char *)&ch__1[0];
@@ -808,7 +803,7 @@ void zla_gerfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
         /* End of loop for each RHS. */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
 }
 /* zla_gerfsx_extended__ */
 #endif

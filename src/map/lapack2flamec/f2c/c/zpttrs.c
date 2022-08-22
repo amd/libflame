@@ -123,12 +123,9 @@ static aocl_int64_t c_n1 = -1;
 void zpttrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomplex *e,
              dcomplex *b, aocl_int_t *ldb, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zpttrs inputs: uplo %c, n %d, nrhs %d, ldb %d",*uplo, *n, *nrhs, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zpttrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *ldb);
+
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -182,13 +179,13 @@ void zpttrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomp
     {
         i__1 = -(*info);
         xerbla_("ZPTTRS", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Determine the number of right-hand sides to solve at a time. */
@@ -229,7 +226,7 @@ void zpttrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomp
             /* L10: */
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZPTTRS */
 }

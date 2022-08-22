@@ -131,12 +131,9 @@
 void zspr_(char *uplo, aocl_int_t *n, dcomplex *alpha, dcomplex *x, aocl_int_t *incx,
            dcomplex *ap)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zspr inputs: uplo %c, n %d, incx %d",*uplo, *n, *incx);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zspr inputs: uplo %c, n %" FLA_IS ", incx %" FLA_IS "",*uplo, *n, *incx);
+
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3, i__4, i__5;
     dcomplex z__1, z__2;
@@ -184,13 +181,13 @@ void zspr_(char *uplo, aocl_int_t *n, dcomplex *alpha, dcomplex *x, aocl_int_t *
     if(info != 0)
     {
         xerbla_("ZSPR ", &info);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible. */
     if(*n == 0 || alpha->real == 0. && alpha->imag == 0.)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Set the start point in X if the increment is not unity. */
@@ -417,7 +414,7 @@ void zspr_(char *uplo, aocl_int_t *n, dcomplex *alpha, dcomplex *x, aocl_int_t *
             }
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZSPR */
 }

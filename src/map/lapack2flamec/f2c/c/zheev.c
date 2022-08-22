@@ -148,28 +148,8 @@ i */
 void zheev_(char *jobz, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *w,
             dcomplex *work, aocl_int_t *lwork, doublereal *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zheev(jobz, uplo, n, a, lda, w, work, lwork, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zheev(jobz, uplo, &n_64, a, &lda_64, w, work, &lwork_64, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zheev(char *jobz, char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
-                       doublereal *w, dcomplex *work, aocl_int64_t *lwork, doublereal *rwork,
-                       aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zheev inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
-                      ", lwork %" FLA_IS "",
-                      *jobz, *uplo, *n, *lda, *lwork);
+    AOCL_DTL_SNPRINTF("zheev inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*jobz, *uplo, *n, *lda, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1;
@@ -265,20 +245,20 @@ void aocl_lapack_zheev(char *jobz, char *uplo, aocl_int64_t *n, dcomplex *a, aoc
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZHEEV ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZHEEV ", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(*n == 1)
     {
@@ -292,8 +272,8 @@ void aocl_lapack_zheev(char *jobz, char *uplo, aocl_int64_t *n, dcomplex *a, aoc
             a[i__1].real = 1.;
             a[i__1].imag = 0.; // , expr subst
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -353,11 +333,11 @@ void aocl_lapack_zheev(char *jobz, char *uplo, aocl_int64_t *n, dcomplex *a, aoc
         d__1 = 1. / sigma;
         aocl_blas_dscal(&imax, &d__1, &w[1], &c__1);
     }
-    /* Set WORK(1) to optimal scomplex workspace size. */
-    work[1].real = (doublereal)lwkopt;
-    work[1].imag = 0.; // , expr subst
+    /* Set WORK(1) to optimal complex workspace size. */
+    work[1].r = (doublereal) lwkopt;
+    work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZHEEV */
 }
 /* zheev_ */

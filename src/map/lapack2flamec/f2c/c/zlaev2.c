@@ -168,11 +168,11 @@ void zlaev2_(dcomplex *a, dcomplex *b, dcomplex *c__, doublereal *rt1,
     d__2 = z_abs(b);
     d__3 = c__->r;
     dlaev2_(&d__1, &d__2, &d__3, rt1, rt2, cs1, &t);
-    z__1.real = t * w.real;
-    z__1.imag = t * w.imag; // , expr subst
-    sn1->real = z__1.real, sn1->imag = z__1.imag;
+    z__1.r = t * w.r;
+    z__1.i = t * w.i; // , expr subst
+    sn1->r = z__1.r, sn1->i = z__1.i;
     AOCL_DTL_TRACE_EXIT_INDENT
-    return;
+    return 0;
     /* End of ZLAEV2 */
 }
 /* zlaev2_ */

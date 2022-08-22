@@ -155,29 +155,8 @@ void zlaein_(logical *rightv, logical *noinit, aocl_int_t *n, dcomplex *h__, aoc
              dcomplex *w, dcomplex *v, dcomplex *b, aocl_int_t *ldb,
              doublereal *rwork, doublereal *eps3, doublereal *smlnum, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlaein(rightv, noinit, n, h__, ldh, w, v, b, ldb, rwork, eps3, smlnum, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldh_64 = *ldh;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zlaein(rightv, noinit, &n_64, h__, &ldh_64, w, v, b, &ldb_64, rwork, eps3, smlnum,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zlaein(logical *rightv, logical *noinit, aocl_int64_t *n, dcomplex *h__,
-                        aocl_int64_t *ldh, dcomplex *w, dcomplex *v, dcomplex *b,
-                        aocl_int64_t *ldb, doublereal *rwork, doublereal *eps3, doublereal *smlnum,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaein inputs: n %" FLA_IS ", ldh %" FLA_IS ", ldb %" FLA_IS "", *n, *ldh,
-                      *ldb);
+    AOCL_DTL_SNPRINTF("zlaein inputs: n %" FLA_IS ", ldh %" FLA_IS ", ldb %" FLA_IS "",*n, *ldh, *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, h_dim1, h_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4;
@@ -488,6 +467,7 @@ L120: /* Normalize eigenvector. */
     i__1 = i__;
     d__3 = 1. / ((d__1 = v[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&v[i__]), f2c_dabs( d__2)));
     zdscal_(n, &d__3, &v[1], &c__1);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZLAEIN */
 }

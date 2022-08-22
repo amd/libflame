@@ -104,23 +104,8 @@
 void zlacrt_(aocl_int_t *n, dcomplex *cx, aocl_int_t *incx, dcomplex *cy,
              aocl_int_t *incy, dcomplex *c__, dcomplex *s)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlacrt(n, cx, incx, cy, incy, c__, s);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incy_64 = *incy;
-
-    aocl_lapack_zlacrt(&n_64, cx, &incx_64, cy, &incy_64, c__, s);
-#endif
-}
-
-void aocl_lapack_zlacrt(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomplex *cy,
-                        aocl_int64_t *incy, dcomplex *c__, dcomplex *s)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlacrt inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *n, *incx,
-                      *incy);
+    AOCL_DTL_SNPRINTF("zlacrt inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*n, *incx, *incy);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3, i__4;
     dcomplex z__1, z__2, z__3;
@@ -145,8 +130,8 @@ void aocl_lapack_zlacrt(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomp
     /* Function Body */
     if(*n <= 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(*incx == 1 && *incy == 1)
     {
@@ -195,7 +180,7 @@ void aocl_lapack_zlacrt(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomp
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* Code for both increments equal to 1 */
 L20:
     i__1 = *n;
@@ -228,6 +213,6 @@ L20:
         /* L30: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
 }
 /* zlacrt_ */

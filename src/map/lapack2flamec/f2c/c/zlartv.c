@@ -106,25 +106,8 @@
 void zlartv_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx, dcomplex *y, aocl_int_t *incy,
              doublereal *c__, dcomplex *s, aocl_int_t *incc)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlartv(n, x, incx, y, incy, c__, s, incc);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incy_64 = *incy;
-    aocl_int64_t incc_64 = *incc;
-
-    aocl_lapack_zlartv(&n_64, x, &incx_64, y, &incy_64, c__, s, &incc_64);
-#endif
-}
-
-void aocl_lapack_zlartv(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, dcomplex *y,
-                        aocl_int64_t *incy, doublereal *c__, dcomplex *s, aocl_int64_t *incc)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlartv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS
-                      ", incc %" FLA_IS "",
-                      *n, *incx, *incy, *incc);
+    AOCL_DTL_SNPRINTF("zlartv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incy, *incc);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3, i__4;
     dcomplex z__1, z__2, z__3, z__4;
@@ -193,7 +176,7 @@ void aocl_lapack_zlartv(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, dcompl
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLARTV */
 }
 /* zlartv_ */

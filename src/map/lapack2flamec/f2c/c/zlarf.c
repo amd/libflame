@@ -137,12 +137,9 @@ static aocl_int64_t c__1 = 1;
 void zlarf_(char *side, aocl_int_t *m, aocl_int_t *n, dcomplex *v, aocl_int_t *incv,
             dcomplex *tau, dcomplex *c__, aocl_int_t *ldc, dcomplex *work)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zlarf inputs: side %c, m %d, n %d, incv %d, ldc %d",*side, *m, *n, *incv, *ldc);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zlarf inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *incv, *ldc);
+
     /* System generated locals */
     aocl_int64_t c_dim1, c_offset, i__1;
     dcomplex z__1;
@@ -278,7 +275,7 @@ void zlarf_(char *side, aocl_int_t *m, aocl_int_t *n, dcomplex *v, aocl_int_t *i
                             ldc);
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZLARF */
 }

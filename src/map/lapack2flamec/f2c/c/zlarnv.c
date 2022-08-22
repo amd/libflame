@@ -97,12 +97,9 @@ the array */
 /** Generated wrapper function */
 void zlarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, dcomplex *x)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zlarnv inputs: idist %d, iseed %d, n %d",*idist, *iseed, *n);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zlarnv inputs: idist %" FLA_IS ", n %" FLA_IS "",*idist, *n);
+
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2;
@@ -238,7 +235,7 @@ void zlarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, dcomplex *x)
         }
         /* L60: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZLARNV */
 }

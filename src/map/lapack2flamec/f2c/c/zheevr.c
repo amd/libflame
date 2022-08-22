@@ -363,44 +363,8 @@ void zheevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *a, ao
              dcomplex *work, aocl_int_t *lwork, doublereal *rwork, aocl_int_t *lrwork,
              aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zheevr(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z__, ldz, isuppz,
-                       work, lwork, rwork, lrwork, iwork, liwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t il_64 = *il;
-    aocl_int64_t iu_64 = *iu;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t lrwork_64 = *lrwork;
-    aocl_int64_t liwork_64 = *liwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zheevr(jobz, range, uplo, &n_64, a, &lda_64, vl, vu, &il_64, &iu_64, abstol, &m_64,
-                       w, z__, &ldz_64, isuppz, work, &lwork_64, rwork, &lrwork_64, iwork,
-                       &liwork_64, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zheevr(char *jobz, char *range, char *uplo, aocl_int64_t *n, dcomplex *a,
-                        aocl_int64_t *lda, doublereal *vl, doublereal *vu, aocl_int64_t *il,
-                        aocl_int64_t *iu, doublereal *abstol, aocl_int64_t *m, doublereal *w,
-                        dcomplex *z__, aocl_int64_t *ldz, aocl_int_t *isuppz,
-                        dcomplex *work, aocl_int64_t *lwork, doublereal *rwork,
-                        aocl_int64_t *lrwork, aocl_int_t *iwork, aocl_int64_t *liwork,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zheevr inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
-                      ", il %" FLA_IS ", iu %" FLA_IS ", vl %lf, vu %lf, abstol %lf, ldz %" FLA_IS
-                      ", lwork %" FLA_IS ", lrwork %" FLA_IS ", liwork %" FLA_IS "",
-                      *jobz, *range, *uplo, *n, *lda, *il, *iu, *vl, *vu, *abstol, *ldz, *lwork,
-                      *lrwork, *liwork);
+    AOCL_DTL_SNPRINTF("zheevr inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", vl %lf, vu %lf, abstol %lf, ldz %" FLA_IS ", lwork %" FLA_IS ", lrwork %" FLA_IS ", liwork %" FLA_IS "", *jobz, *range, *uplo, *n, *lda, *il, *iu, *vl, *vu, *abstol, *ldz, *lwork, *lrwork, liwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -568,23 +532,23 @@ void aocl_lapack_zheevr(char *jobz, char *range, char *uplo, aocl_int64_t *n, dc
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZHEEVR", &i__1, (ftnlen)6);
+        xerbla_("ZHEEVR", &i__1);
         AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
-        work[1].real = 1.;
-        work[1].imag = 0.; // , expr subst
+        work[1].r = 1.;
+        work[1].i = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     if(*n == 1)
     {
@@ -616,7 +580,7 @@ void aocl_lapack_zheevr(char *jobz, char *range, char *uplo, aocl_int64_t *n, dc
             isuppz[2] = 1;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -843,12 +807,12 @@ L30:
         }
     }
     /* Set WORK(1) to optimal workspace size. */
-    work[1].real = (doublereal)lwkopt;
-    work[1].imag = 0.; // , expr subst
-    rwork[1] = (doublereal)lrwmin;
-    iwork[1] = (aocl_int_t)(liwmin);
+    work[1].r = (doublereal) lwkopt;
+    work[1].i = 0.; // , expr subst
+    rwork[1] = (doublereal) lrwmin;
+    iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZHEEVR */
 }
 /* zheevr_ */

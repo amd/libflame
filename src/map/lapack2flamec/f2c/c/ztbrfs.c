@@ -193,35 +193,8 @@ void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
              dcomplex *x, aocl_int_t *ldx, doublereal *ferr, doublereal *berr,
              dcomplex *work, doublereal *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ztbrfs(uplo, trans, diag, n, kd, nrhs, ab, ldab, b, ldb, x, ldx, ferr, berr, work,
-                       rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kd_64 = *kd;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ztbrfs(uplo, trans, diag, &n_64, &kd_64, &nrhs_64, ab, &ldab_64, b, &ldb_64, x,
-                       &ldx_64, ferr, berr, work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ztbrfs(char *uplo, char *trans, char *diag, aocl_int64_t *n, aocl_int64_t *kd,
-                        aocl_int64_t *nrhs, dcomplex *ab, aocl_int64_t *ldab, dcomplex *b,
-                        aocl_int64_t *ldb, dcomplex *x, aocl_int64_t *ldx, doublereal *ferr,
-                        doublereal *berr, dcomplex *work, doublereal *rwork,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztbrfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", kd %" FLA_IS
-                      ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
-                      *uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("ztbrfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb, *ldx);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4,
         i__5;
@@ -330,9 +303,9 @@ void aocl_lapack_ztbrfs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZTBRFS", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZTBRFS", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -344,8 +317,8 @@ void aocl_lapack_ztbrfs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
             berr[j] = 0.;
             /* L10: */
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(notran)
     {
@@ -690,7 +663,7 @@ void aocl_lapack_ztbrfs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
         /* L250: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZTBRFS */
 }
 /* ztbrfs_ */

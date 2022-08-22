@@ -123,29 +123,8 @@ static aocl_int64_t c__1 = 1;
 void zsytrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_t *lda,
              aocl_int_t *ipiv, dcomplex *b, aocl_int_t *ldb, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zsytrs(uplo, n, nrhs, a, lda, ipiv, b, ldb, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zsytrs(uplo, &n_64, &nrhs_64, a, &lda_64, ipiv, b, &ldb_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zsytrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *a,
-                        aocl_int64_t *lda, aocl_int_t *ipiv, dcomplex *b, aocl_int64_t *ldb,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zsytrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
-                      ", ldb %" FLA_IS "",
-                      *uplo, *n, *nrhs, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("zsytrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     dcomplex z__1, z__2, z__3;
@@ -213,15 +192,15 @@ void aocl_lapack_zsytrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomple
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZSYTRS", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZSYTRS", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(upper)
     {
@@ -543,7 +522,7 @@ void aocl_lapack_zsytrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomple
     L100:;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZSYTRS */
 }
 /* zsytrs_ */

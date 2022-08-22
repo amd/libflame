@@ -89,23 +89,8 @@
 /** Generated wrapper function */
 void zlascl2_(aocl_int_t *m, aocl_int_t *n, doublereal *d__, dcomplex *x, aocl_int_t *ldx)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlascl2(m, n, d__, x, ldx);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldx_64 = *ldx;
-
-    aocl_lapack_zlascl2(&m_64, &n_64, d__, x, &ldx_64);
-#endif
-}
-
-void aocl_lapack_zlascl2(aocl_int64_t *m, aocl_int64_t *n, doublereal *d__, dcomplex *x,
-                         aocl_int64_t *ldx)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlascl2 inputs: m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS "", *m, *n,
-                      *ldx);
+    AOCL_DTL_SNPRINTF("zlascl2 inputs: m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS "",*m, *n, *ldx);
     /* System generated locals */
     aocl_int64_t x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5;
     dcomplex z__1;
@@ -145,6 +130,6 @@ void aocl_lapack_zlascl2(aocl_int64_t *m, aocl_int64_t *n, doublereal *d__, dcom
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
 }
 /* zlascl2_ */

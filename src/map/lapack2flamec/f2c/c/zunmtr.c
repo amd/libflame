@@ -180,32 +180,8 @@ void zunmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
              aocl_int_t *lda, dcomplex *tau, dcomplex *c__, aocl_int_t *ldc,
              dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zunmtr(side, uplo, trans, m, n, a, lda, tau, c__, ldc, work, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zunmtr(side, uplo, trans, &m_64, &n_64, a, &lda_64, tau, c__, &ldc_64, work,
-                       &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zunmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n,
-                        dcomplex *a, aocl_int64_t *lda, dcomplex *tau, dcomplex *c__,
-                        aocl_int64_t *ldc, dcomplex *work, aocl_int64_t *lwork,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zunmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS
-                      ", lda %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "",
-                      *side, *uplo, *trans, *m, *n, *lda, *ldc, *lwork);
+    AOCL_DTL_SNPRINTF("zunmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "", *side, *uplo, *trans, *m, *n, *lda, *ldc, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
     char ch__1[2];
@@ -335,22 +311,22 @@ void aocl_lapack_zunmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
     if(*info != 0)
     {
         i__2 = -(*info);
-        aocl_blas_xerbla("ZUNMTR", &i__2, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZUNMTR", &i__2);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || nq == 1)
     {
-        work[1].real = 1.;
-        work[1].imag = 0.; // , expr subst
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        work[1].r = 1.;
+        work[1].i = 0.; // , expr subst
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(left)
     {
@@ -386,10 +362,10 @@ void aocl_lapack_zunmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
         aocl_lapack_zunmqr(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1],
                            &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     }
-    work[1].real = (doublereal)lwkopt;
-    work[1].imag = 0.; // , expr subst
+    work[1].r = (doublereal) lwkopt;
+    work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZUNMTR */
 }
 /* zunmtr_ */

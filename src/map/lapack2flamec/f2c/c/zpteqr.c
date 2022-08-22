@@ -151,24 +151,8 @@ static aocl_int64_t c__1 = 1;
 void zpteqr_(char *compz, aocl_int_t *n, doublereal *d__, doublereal *e, dcomplex *z__,
              aocl_int_t *ldz, doublereal *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zpteqr(compz, n, d__, e, z__, ldz, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zpteqr(compz, &n_64, d__, e, z__, &ldz_64, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zpteqr(char *compz, aocl_int64_t *n, doublereal *d__, doublereal *e,
-                        dcomplex *z__, aocl_int64_t *ldz, doublereal *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n, *ldz);
+    AOCL_DTL_SNPRINTF("zpteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1;
     /* Builtin functions */
@@ -249,15 +233,15 @@ void aocl_lapack_zpteqr(char *compz, aocl_int64_t *n, doublereal *d__, doublerea
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZPTEQR", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZPTEQR", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(*n == 1)
     {
@@ -267,8 +251,8 @@ void aocl_lapack_zpteqr(char *compz, aocl_int64_t *n, doublereal *d__, doublerea
             z__[i__1].real = 1.;
             z__[i__1].imag = 0.; // , expr subst
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(icompz == 2)
     {
@@ -278,8 +262,8 @@ void aocl_lapack_zpteqr(char *compz, aocl_int64_t *n, doublereal *d__, doublerea
     aocl_lapack_dpttrf(n, &d__[1], &e[1], info);
     if(*info != 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -320,7 +304,7 @@ void aocl_lapack_zpteqr(char *compz, aocl_int64_t *n, doublereal *d__, doublerea
         *info = *n + *info;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZPTEQR */
 }
 /* zpteqr_ */

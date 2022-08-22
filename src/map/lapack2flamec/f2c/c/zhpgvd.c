@@ -242,35 +242,8 @@ void zhpgvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, dcomplex 
              dcomplex *work, aocl_int_t *lwork, doublereal *rwork, aocl_int_t *lrwork,
              aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zhpgvd(itype, jobz, uplo, n, ap, bp, w, z__, ldz, work, lwork, rwork, lrwork, iwork,
-                       liwork, info);
-#else
-    aocl_int64_t itype_64 = *itype;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t lrwork_64 = *lrwork;
-    aocl_int64_t liwork_64 = *liwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zhpgvd(&itype_64, jobz, uplo, &n_64, ap, bp, w, z__, &ldz_64, work, &lwork_64,
-                       rwork, &lrwork_64, iwork, &liwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zhpgvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t *n,
-                        dcomplex *ap, dcomplex *bp, doublereal *w, dcomplex *z__,
-                        aocl_int64_t *ldz, dcomplex *work, aocl_int64_t *lwork,
-                        doublereal *rwork, aocl_int64_t *lrwork, aocl_int_t *iwork,
-                        aocl_int64_t *liwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhpgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
-                      ", ldz %" FLA_IS "",
-                      *itype, *jobz, *uplo, *n, *ldz);
+    AOCL_DTL_SNPRINTF("zhpgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",*itype, *jobz, *uplo, *n, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1;
     doublereal d__1, d__2;
@@ -388,28 +361,28 @@ void aocl_lapack_zhpgvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZHPGVD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZHPGVD", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Form a Cholesky factorization of B. */
     aocl_lapack_zpptrf(uplo, n, &bp[1], info);
     if(*info != 0)
     {
         *info = *n + *info;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     aocl_lapack_zhpgst(itype, uplo, n, &ap[1], &bp[1], info);
@@ -475,12 +448,12 @@ void aocl_lapack_zhpgvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_
             }
         }
     }
-    work[1].real = (doublereal)lwmin;
-    work[1].imag = 0.; // , expr subst
-    rwork[1] = (doublereal)lrwmin;
-    iwork[1] = (aocl_int_t)(liwmin);
+    work[1].r = (doublereal) lwmin;
+    work[1].i = 0.; // , expr subst
+    rwork[1] = (doublereal) lrwmin;
+    iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZHPGVD */
 }
 /* zhpgvd_ */

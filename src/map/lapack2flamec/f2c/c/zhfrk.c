@@ -167,25 +167,8 @@
 void zhfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k, doublereal *alpha,
             dcomplex *a, aocl_int_t *lda, doublereal *beta, dcomplex *c__)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zhfrk(transr, uplo, trans, n, k, alpha, a, lda, beta, c__);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t lda_64 = *lda;
-
-    aocl_lapack_zhfrk(transr, uplo, trans, &n_64, &k_64, alpha, a, &lda_64, beta, c__);
-#endif
-}
-
-void aocl_lapack_zhfrk(char *transr, char *uplo, char *trans, aocl_int64_t *n, aocl_int64_t *k,
-                       doublereal *alpha, dcomplex *a, aocl_int64_t *lda, doublereal *beta,
-                       dcomplex *c__)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhfrk inputs: transr %c, uplo %c, trans %c, n %" FLA_IS ", k %" FLA_IS
-                      ", lda %" FLA_IS "",
-                      *transr, *uplo, *trans, *n, *k, *lda);
+    AOCL_DTL_SNPRINTF("zhfrk inputs: transr %c, uplo %c, trans %c, n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",*transr, *uplo, *trans, *n, *k, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     dcomplex z__1;
@@ -264,17 +247,17 @@ void aocl_lapack_zhfrk(char *transr, char *uplo, char *trans, aocl_int64_t *n, a
     if(info != 0)
     {
         i__1 = -info;
-        aocl_blas_xerbla("ZHFRK ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZHFRK ", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible. */
     /* The quick return case: ((ALPHA.EQ.0).AND.(BETA.NE.ZERO)) is not */
     /* done (it is in ZHERK for example) and left in the general case. */
     if(*n == 0 || (*alpha == 0. || *k == 0) && *beta == 1.)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(*alpha == 0. && *beta == 0.)
     {
@@ -285,8 +268,8 @@ void aocl_lapack_zhfrk(char *transr, char *uplo, char *trans, aocl_int64_t *n, a
             c__[i__2].real = 0.;
             c__[i__2].imag = 0.; // , expr subst
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     z__1.real = *alpha;
     z__1.imag = 0.; // , expr subst
@@ -537,7 +520,7 @@ void aocl_lapack_zhfrk(char *transr, char *uplo, char *trans, aocl_int64_t *n, a
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZHFRK */
 }
 /* zhfrk_ */

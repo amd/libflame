@@ -105,24 +105,8 @@
 void ztrttp_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomplex *ap,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ztrttp(uplo, n, a, lda, ap, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ztrttp(uplo, &n_64, a, &lda_64, ap, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ztrttp(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
-                        dcomplex *ap, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztrttp inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
+    AOCL_DTL_SNPRINTF("ztrttp inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -171,9 +155,9 @@ void aocl_lapack_ztrttp(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZTRTTP", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZTRTTP", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(lower)
     {
@@ -210,7 +194,7 @@ void aocl_lapack_ztrttp(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZTRTTP */
 }
 /* ztrttp_ */

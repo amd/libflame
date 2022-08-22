@@ -275,33 +275,8 @@ void ztrsen_(char *job, char *compq, logical *select, aocl_int_t *n, dcomplex *t
              doublereal *s, doublereal *sep, dcomplex *work, aocl_int_t *lwork,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ztrsen(job, compq, select, n, t, ldt, q, ldq, w, m, s, sep, work, lwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ztrsen(job, compq, select, &n_64, t, &ldt_64, q, &ldq_64, w, &m_64, s, sep, work,
-                       &lwork_64, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ztrsen(char *job, char *compq, logical *select, aocl_int64_t *n, dcomplex *t,
-                        aocl_int64_t *ldt, dcomplex *q, aocl_int64_t *ldq, dcomplex *w,
-                        aocl_int64_t *m, doublereal *s, doublereal *sep, dcomplex *work,
-                        aocl_int64_t *lwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztrsen inputs: job %c, compq %c, n %" FLA_IS ", ldt %" FLA_IS
-                      ", ldq %" FLA_IS ", m %" FLA_IS "",
-                      *job, *compq, *n, *ldt, *ldq, *m);
+    AOCL_DTL_SNPRINTF("ztrsen inputs: job %c, compq %c, n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", m %" FLA_IS "",*job, *compq, *n, *ldt, *ldq, *m);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, t_dim1, t_offset, i__1, i__2, i__3;
     /* Builtin functions */
@@ -421,14 +396,14 @@ void aocl_lapack_ztrsen(char *job, char *compq, logical *select, aocl_int64_t *n
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZTRSEN", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZTRSEN", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*m == *n || *m == 0)
@@ -515,10 +490,10 @@ L40: /* Copy reordered eigenvalues to W. */
         w[i__2].imag = t[i__3].imag; // , expr subst
         /* L50: */
     }
-    work[1].real = (doublereal)lwmin;
-    work[1].imag = 0.; // , expr subst
+    work[1].r = (doublereal) lwmin;
+    work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZTRSEN */
 }
 /* ztrsen_ */

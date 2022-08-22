@@ -206,35 +206,8 @@ void ztgexc_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
              dcomplex *z__, aocl_int_t *ldz, aocl_int_t *ifst, aocl_int_t *ilst,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ztgexc(wantq, wantz, n, a, lda, b, ldb, q, ldq, z__, ldz, ifst, ilst, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t ifst_64 = *ifst;
-    aocl_int64_t ilst_64 = *ilst;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ztgexc(wantq, wantz, &n_64, a, &lda_64, b, &ldb_64, q, &ldq_64, z__, &ldz_64,
-                       &ifst_64, &ilst_64, &info_64);
-
-    *ilst = (aocl_int_t)ilst_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ztgexc(logical *wantq, logical *wantz, aocl_int64_t *n, dcomplex *a,
-                        aocl_int64_t *lda, dcomplex *b, aocl_int64_t *ldb, dcomplex *q,
-                        aocl_int64_t *ldq, dcomplex *z__, aocl_int64_t *ldz,
-                        aocl_int64_t *ifst, aocl_int64_t *ilst, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztgexc inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS
-                      ", ldz %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS "",
-                      *n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
+    AOCL_DTL_SNPRINTF("ztgexc inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS "",*n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1;
     /* Local variables */
@@ -302,20 +275,20 @@ void aocl_lapack_ztgexc(logical *wantq, logical *wantz, aocl_int64_t *n, dcomple
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZTGEXC", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZTGEXC", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n <= 1)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(*ifst == *ilst)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(*ifst < *ilst)
     {
@@ -326,8 +299,8 @@ void aocl_lapack_ztgexc(logical *wantq, logical *wantz, aocl_int64_t *n, dcomple
         if(*info != 0)
         {
             *ilst = here;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+    AOCL_DTL_TRACE_LOG_EXIT
+            return 0;
         }
         ++here;
         if(here < *ilst)
@@ -345,8 +318,8 @@ void aocl_lapack_ztgexc(logical *wantq, logical *wantz, aocl_int64_t *n, dcomple
         if(*info != 0)
         {
             *ilst = here;
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+    AOCL_DTL_TRACE_LOG_EXIT
+            return 0;
         }
         --here;
         if(here >= *ilst)
@@ -357,7 +330,7 @@ void aocl_lapack_ztgexc(logical *wantq, logical *wantz, aocl_int64_t *n, dcomple
     }
     *ilst = here;
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZTGEXC */
 }
 /* ztgexc_ */

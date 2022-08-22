@@ -324,39 +324,8 @@ void ztgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, dcomplex *
              aocl_int_t *mm, aocl_int_t *m, dcomplex *work, aocl_int_t *lwork,
              aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ztgsna(job, howmny, select, n, a, lda, b, ldb, vl, ldvl, vr, ldvr, s, dif, mm, m,
-                       work, lwork, iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldvl_64 = *ldvl;
-    aocl_int64_t ldvr_64 = *ldvr;
-    aocl_int64_t mm_64 = *mm;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ztgsna(job, howmny, select, &n_64, a, &lda_64, b, &ldb_64, vl, &ldvl_64, vr,
-                       &ldvr_64, s, dif, &mm_64, &m_64, work, &lwork_64, iwork, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ztgsna(char *job, char *howmny, logical *select, aocl_int64_t *n, dcomplex *a,
-                        aocl_int64_t *lda, dcomplex *b, aocl_int64_t *ldb, dcomplex *vl,
-                        aocl_int64_t *ldvl, dcomplex *vr, aocl_int64_t *ldvr, doublereal *s,
-                        doublereal *dif, aocl_int64_t *mm, aocl_int64_t *m, dcomplex *work,
-                        aocl_int64_t *lwork, aocl_int_t *iwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztgsna inputs: job %c, howmny %c, n %" FLA_IS ", lda %" FLA_IS
-                      ", ldb %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS
-                      ", m %" FLA_IS "",
-                      *job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *m);
+    AOCL_DTL_SNPRINTF("ztgsna inputs: job %c, howmny %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", m %" FLA_IS "",*job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *m);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1;
     doublereal d__1, d__2;
@@ -502,20 +471,20 @@ void aocl_lapack_ztgsna(char *job, char *howmny, logical *select, aocl_int64_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZTGSNA", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZTGSNA", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     ks = 0;
     i__1 = *n;
@@ -600,10 +569,10 @@ void aocl_lapack_ztgsna(char *job, char *howmny, logical *select, aocl_int64_t *
         }
     L20:;
     }
-    work[1].real = (doublereal)lwmin;
-    work[1].imag = 0.; // , expr subst
+    work[1].r = (doublereal) lwmin;
+    work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZTGSNA */
 }
 /* ztgsna_ */

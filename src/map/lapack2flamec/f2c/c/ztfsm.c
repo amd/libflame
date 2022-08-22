@@ -302,25 +302,8 @@ void ztfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
             aocl_int_t *n, dcomplex *alpha, dcomplex *a, dcomplex *b,
             aocl_int_t *ldb)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ztfsm(transr, side, uplo, trans, diag, m, n, alpha, a, b, ldb);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldb_64 = *ldb;
-
-    aocl_lapack_ztfsm(transr, side, uplo, trans, diag, &m_64, &n_64, alpha, a, b, &ldb_64);
-#endif
-}
-
-void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *diag,
-                       aocl_int64_t *m, aocl_int64_t *n, dcomplex *alpha, dcomplex *a,
-                       dcomplex *b, aocl_int64_t *ldb)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztfsm inputs: transr %c, side %c, uplo %c, trans %c, diag %c, m %" FLA_IS
-                      ", n %" FLA_IS ", ldb %" FLA_IS "",
-                      *transr, *side, *uplo, *trans, *diag, *m, *n, *ldb);
+    AOCL_DTL_SNPRINTF("ztfsm inputs: transr %c, side %c, uplo %c, trans %c, diag %c, m %" FLA_IS ", n %" FLA_IS ", ldb %" FLA_IS "",*transr, *side, *uplo, *trans, *diag, *m, *n, *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2, i__3;
     dcomplex z__1;
@@ -397,15 +380,15 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
     if(info != 0)
     {
         i__1 = -info;
-        aocl_blas_xerbla("ZTFSM ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZTFSM ", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return when ( (N.EQ.0).OR.(M.EQ.0) ) */
     if(*m == 0 || *n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return when ALPHA.EQ.(0D+0,0D+0) */
     if(alpha->real == 0. && alpha->imag == 0.)
@@ -423,8 +406,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
             }
             /* L20: */
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(lside)
     {
@@ -1028,7 +1011,7 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZTFSM */
 }
 /* ztfsm_ */

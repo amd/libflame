@@ -134,25 +134,8 @@ static aocl_int64_t c__1 = 1;
 void ztpcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, dcomplex *ap,
              doublereal *rcond, dcomplex *work, doublereal *rwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_ztpcon(norm, uplo, diag, n, ap, rcond, work, rwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_ztpcon(norm, uplo, diag, &n_64, ap, rcond, work, rwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_ztpcon(char *norm, char *uplo, char *diag, aocl_int64_t *n, dcomplex *ap,
-                        doublereal *rcond, dcomplex *work, doublereal *rwork,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztpcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS "", *norm, *uplo,
-                      *diag, *n);
+    AOCL_DTL_SNPRINTF("ztpcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS "",*norm, *uplo, *diag, *n);
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal d__1, d__2;
@@ -227,16 +210,16 @@ void aocl_lapack_ztpcon(char *norm, char *uplo, char *diag, aocl_int64_t *n, dco
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZTPCON", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZTPCON", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *rcond = 1.;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     *rcond = 0.;
     smlnum = dlamch_("Safe minimum") * (doublereal)fla_max(1, *n);
@@ -296,7 +279,7 @@ void aocl_lapack_ztpcon(char *norm, char *uplo, char *diag, aocl_int64_t *n, dco
     }
 L20:
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZTPCON */
 }
 /* ztpcon_ */

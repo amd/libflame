@@ -112,23 +112,8 @@ static const integer c__1 = 1;
 /** Generated wrapper function */
 void zlacon_(aocl_int_t *n, dcomplex *v, dcomplex *x, doublereal *est, aocl_int_t *kase)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlacon(n, v, x, est, kase);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kase_64 = *kase;
-
-    aocl_lapack_zlacon(&n_64, v, x, est, &kase_64);
-
-    *kase = (aocl_int_t)kase_64;
-#endif
-}
-
-void aocl_lapack_zlacon(aocl_int64_t *n, dcomplex *v, dcomplex *x, doublereal *est,
-                        aocl_int64_t *kase)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlacon inputs: n %" FLA_IS ", est %lf, kase %" FLA_IS "", *n, *est, *kase);
+    AOCL_DTL_SNPRINTF("zlacon inputs: n %" FLA_IS ", est %lf, kase %" FLA_IS "",*n, *est, *kase);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
     doublereal d__1, d__2;
@@ -189,7 +174,7 @@ void aocl_lapack_zlacon(aocl_int64_t *n, dcomplex *v, dcomplex *x, doublereal *e
         *kase = 1;
         jump = 1;
         AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     switch(jump)
     {
@@ -244,7 +229,7 @@ L20:
     *kase = 2;
     jump = 2;
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* ................ ENTRY (JUMP = 2) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L40:
@@ -266,7 +251,7 @@ L50:
     *kase = 1;
     jump = 3;
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* ................ ENTRY (JUMP = 3) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L70:
@@ -304,7 +289,7 @@ L70:
     *kase = 2;
     jump = 4;
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* ................ ENTRY (JUMP = 4) */
     /* X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L90:
@@ -333,7 +318,7 @@ L100:
     *kase = 1;
     jump = 5;
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* ................ ENTRY (JUMP = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L120:
@@ -346,7 +331,7 @@ L120:
 L130:
     *kase = 0;
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLACON */
 }
 /* zlacon_ */

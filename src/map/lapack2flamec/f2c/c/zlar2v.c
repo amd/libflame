@@ -112,23 +112,8 @@ the elements of y are assumed to be real. */
 void zlar2v_(aocl_int_t *n, dcomplex *x, dcomplex *y, dcomplex *z__,
              aocl_int_t *incx, doublereal *c__, dcomplex *s, aocl_int_t *incc)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlar2v(n, x, y, z__, incx, c__, s, incc);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incc_64 = *incc;
-
-    aocl_lapack_zlar2v(&n_64, x, y, z__, &incx_64, c__, s, &incc_64);
-#endif
-}
-
-void aocl_lapack_zlar2v(aocl_int64_t *n, dcomplex *x, dcomplex *y, dcomplex *z__,
-                        aocl_int64_t *incx, doublereal *c__, dcomplex *s, aocl_int64_t *incc)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlar2v inputs: n %" FLA_IS ", incx %" FLA_IS ", incc %" FLA_IS "", *n, *incx,
-                      *incc);
+    AOCL_DTL_SNPRINTF("zlar2v inputs: n %" FLA_IS ", incx %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incc);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     doublereal d__1;
@@ -235,7 +220,7 @@ void aocl_lapack_zlar2v(aocl_int64_t *n, dcomplex *x, dcomplex *y, dcomplex *z__
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLAR2V */
 }
 /* zlar2v_ */

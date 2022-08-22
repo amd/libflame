@@ -120,25 +120,8 @@
 void zlargv_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx, dcomplex *y, aocl_int_t *incy,
              doublereal *c__, aocl_int_t *incc)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlargv(n, x, incx, y, incy, c__, incc);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incy_64 = *incy;
-    aocl_int64_t incc_64 = *incc;
-
-    aocl_lapack_zlargv(&n_64, x, &incx_64, y, &incy_64, c__, &incc_64);
-#endif
-}
-
-void aocl_lapack_zlargv(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, dcomplex *y,
-                        aocl_int64_t *incy, doublereal *c__, aocl_int64_t *incc)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlargv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS
-                      ", incc %" FLA_IS "",
-                      *n, *incx, *incy, *incc);
+    AOCL_DTL_SNPRINTF("zlargv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incy, *incc);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6, d__7, d__8, d__9, d__10;
@@ -446,7 +429,7 @@ void aocl_lapack_zlargv(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, dcompl
         /* L60: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLARGV */
 }
 /* zlargv_ */

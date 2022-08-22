@@ -140,24 +140,8 @@ on exit, D */
 void zsteqr_(char *compz, aocl_int_t *n, doublereal *d__, doublereal *e, dcomplex *z__,
              aocl_int_t *ldz, doublereal *work, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zsteqr(compz, n, d__, e, z__, ldz, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zsteqr(compz, &n_64, d__, e, z__, &ldz_64, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zsteqr(char *compz, aocl_int64_t *n, doublereal *d__, doublereal *e,
-                        dcomplex *z__, aocl_int64_t *ldz, doublereal *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zsteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n, *ldz);
+    AOCL_DTL_SNPRINTF("zsteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -252,15 +236,15 @@ void aocl_lapack_zsteqr(char *compz, aocl_int64_t *n, doublereal *d__, doublerea
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZSTEQR", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZSTEQR", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(*n == 1)
     {
@@ -270,8 +254,8 @@ void aocl_lapack_zsteqr(char *compz, aocl_int64_t *n, doublereal *d__, doublerea
             z__[i__1].real = 1.;
             z__[i__1].imag = 0.; // , expr subst
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Determine the unit roundoff and over/underflow thresholds. */
     eps = dlamch_("E");
@@ -622,8 +606,8 @@ L140:
             }
             /* L150: */
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     goto L10;
     /* Order eigenvalues and eigenvectors. */
@@ -662,7 +646,7 @@ L160:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZSTEQR */
 }
 /* zsteqr_ */

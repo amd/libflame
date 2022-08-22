@@ -130,30 +130,8 @@ the routine */
 void zunghr_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, dcomplex *a, aocl_int_t *lda,
              dcomplex *tau, dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zunghr(n, ilo, ihi, a, lda, tau, work, lwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zunghr(&n_64, &ilo_64, &ihi_64, a, &lda_64, tau, work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zunghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, dcomplex *a,
-                        aocl_int64_t *lda, dcomplex *tau, dcomplex *work,
-                        aocl_int64_t *lwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zunghr inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS
-                      ", lwork %" FLA_IS "",
-                      *n, *ilo, *ihi, *lda, *lwork);
+    AOCL_DTL_SNPRINTF("zunghr inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "", *n, *ilo, *ihi, *lda, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -221,22 +199,22 @@ void aocl_lapack_zunghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZUNGHR", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZUNGHR", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        work[1].real = 1.;
-        work[1].imag = 0.; // , expr subst
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        work[1].r = 1.;
+        work[1].i = 0.; // , expr subst
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Shift the vectors which define the elementary reflectors one */
     /* column to the right, and set the first ilo and the last n-ihi */
@@ -309,10 +287,10 @@ void aocl_lapack_zunghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
         aocl_lapack_zungqr(&nh, &nh, &nh, &a[*ilo + 1 + (*ilo + 1) * a_dim1], lda, &tau[*ilo],
                            &work[1], lwork, &iinfo);
     }
-    work[1].real = (doublereal)lwkopt;
-    work[1].imag = 0.; // , expr subst
+    work[1].r = (doublereal) lwkopt;
+    work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZUNGHR */
 }
 /* zunghr_ */

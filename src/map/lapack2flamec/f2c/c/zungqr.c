@@ -135,30 +135,8 @@ the routine */
 void zungqr_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, dcomplex *a, aocl_int_t *lda,
              dcomplex *tau, dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zungqr(m, n, k, a, lda, tau, work, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zungqr(&m_64, &n_64, &k_64, a, &lda_64, tau, work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zungqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
-                        aocl_int64_t *lda, dcomplex *tau, dcomplex *work,
-                        aocl_int64_t *lwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zungqr inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS
-                      ", lwork %" FLA_IS "",
-                      *m, *n, *k, *lda, *lwork);
+    AOCL_DTL_SNPRINTF("zungqr inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "", *m, *n, *k, *lda, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -228,22 +206,22 @@ void aocl_lapack_zungqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomp
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZUNGQR", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZUNGQR", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n <= 0)
     {
-        work[1].real = 1.;
-        work[1].imag = 0.; // , expr subst
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        work[1].r = 1.;
+        work[1].i = 0.; // , expr subst
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     nbmin = 2;
     nx = 0;
@@ -354,10 +332,10 @@ void aocl_lapack_zungqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomp
             /* L50: */
         }
     }
-    work[1].real = (doublereal)iws;
-    work[1].imag = 0.; // , expr subst
+    work[1].r = (doublereal) iws;
+    work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZUNGQR */
 }
 /* zungqr_ */

@@ -104,25 +104,8 @@ if UPLO = 'L', only the lower trapezium is */
 void zlacp2_(char *uplo, aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda,
              dcomplex *b, aocl_int_t *ldb)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlacp2(uplo, m, n, a, lda, b, ldb);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-
-    aocl_lapack_zlacp2(uplo, &m_64, &n_64, a, &lda_64, b, &ldb_64);
-#endif
-}
-
-void aocl_lapack_zlacp2(char *uplo, aocl_int64_t *m, aocl_int64_t *n, doublereal *a,
-                        aocl_int64_t *lda, dcomplex *b, aocl_int64_t *ldb)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlacp2 inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
-                      ", ldb %" FLA_IS "",
-                      *uplo, *m, *n, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("zlacp2 inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *m, *n, *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -204,7 +187,7 @@ void aocl_lapack_zlacp2(char *uplo, aocl_int64_t *m, aocl_int64_t *n, doublereal
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLACP2 */
 }
 /* zlacp2_ */

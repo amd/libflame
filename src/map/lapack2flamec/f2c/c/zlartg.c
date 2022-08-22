@@ -119,7 +119,7 @@
 void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
              dcomplex *r__)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6, d__7, d__8, d__9, d__10;
@@ -177,7 +177,7 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
             *cs = 1.;
             sn->r = 0., sn->i = 0.;
             r__->r = f->r, r__->i = f->i;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_EXIT_INDENT
             return 0;
         }
         else if(d_imag(&g__t) == 0.)
@@ -214,7 +214,7 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
             z__1.r = d__1;
             z__1.i = d__2; // , expr subst
             sn->r = z__1.r, sn->i = z__1.i;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_EXIT_INDENT
             return 0;
         }
         d__1 = fs.r;
@@ -524,7 +524,7 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
             r__->real = z__1.real, r__->imag = z__1.imag;
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_EXIT_INDENT
     return 0;
     /* End of ZLARTG */
 }

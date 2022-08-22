@@ -118,27 +118,8 @@ B is M by N and scomplex;
 void zlarcm_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, dcomplex *b,
              aocl_int_t *ldb, dcomplex *c__, aocl_int_t *ldc, doublereal *rwork)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlarcm(m, n, a, lda, b, ldb, c__, ldc, rwork);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldc_64 = *ldc;
-
-    aocl_lapack_zlarcm(&m_64, &n_64, a, &lda_64, b, &ldb_64, c__, &ldc_64, rwork);
-#endif
-}
-
-void aocl_lapack_zlarcm(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
-                        dcomplex *b, aocl_int64_t *ldb, dcomplex *c__, aocl_int64_t *ldc,
-                        doublereal *rwork)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlarcm inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
-                      ", ldc %" FLA_IS "",
-                      *m, *n, *lda, *ldb, *ldc);
+    AOCL_DTL_SNPRINTF("zlarcm inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS "",*m, *n, *lda, *ldb, *ldc);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1;
@@ -180,8 +161,8 @@ void aocl_lapack_zlarcm(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
     /* Function Body */
     if(*m == 0 || *n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
@@ -242,7 +223,7 @@ void aocl_lapack_zlarcm(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
         /* L80: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLARCM */
 }
 /* zlarcm_ */

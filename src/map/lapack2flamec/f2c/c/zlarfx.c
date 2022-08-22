@@ -121,24 +121,8 @@ static aocl_int64_t c__1 = 1;
 void zlarfx_(char *side, aocl_int_t *m, aocl_int_t *n, dcomplex *v, dcomplex *tau,
              dcomplex *c__, aocl_int_t *ldc, dcomplex *work)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlarfx(side, m, n, v, tau, c__, ldc, work);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldc_64 = *ldc;
-
-    aocl_lapack_zlarfx(side, &m_64, &n_64, v, tau, c__, &ldc_64, work);
-#endif
-}
-
-void aocl_lapack_zlarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v,
-                        dcomplex *tau, dcomplex *c__, aocl_int64_t *ldc,
-                        dcomplex *work)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlarfx inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",
-                      *side, *m, *n, *ldc);
+    AOCL_DTL_SNPRINTF("zlarfx inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *ldc);
     /* System generated locals */
     aocl_int64_t c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10,
         i__11;
@@ -180,8 +164,8 @@ void aocl_lapack_zlarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *
     /* Function Body */
     if(tau->real == 0. && tau->imag == 0.)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(lsame_(side, "L", 1, 1))
     {
@@ -2629,7 +2613,7 @@ void aocl_lapack_zlarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *
     }
 L410:
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLARFX */
 }
 /* zlarfx_ */

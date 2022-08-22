@@ -433,13 +433,7 @@ void zla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
                           integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zla_gbrfsx_extended inputs: prec_type__ %" FLA_IS ", trans_type__ %" FLA_IS
-                      ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS
-                      ", ldab %" FLA_IS ", ldafb %" FLA_IS ",ldb %" FLA_IS ", ldy %" FLA_IS
-                      ", n_norms__ %" FLA_IS ", rcond %lf, ithresh %" FLA_IS
-                      ", rthresh %lf, dz_ub__ %lf, ignore_cwise__ %" FLA_IS "",
-                      *prec_type__, *trans_type__, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldy,
-                      *n_norms__, *rcond, *ithresh, *rthresh, *dz_ub__, *ignore_cwise__);
+    AOCL_DTL_SNPRINTF("zla_gbrfsx_extended inputs: prec_type__ %" FLA_IS ", trans_type__ %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ",ldb %" FLA_IS ", ldy %" FLA_IS ", n_norms__ %" FLA_IS ", rcond %lf, ithresh %" FLA_IS ", rthresh %lf, dz_ub__ %lf, ignore_cwise__ %" FLA_IS "", *prec_type__, *trans_type__, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldy, *n_norms__, *rcond, *ithresh, *rthresh, *dz_ub__, *ignore_cwise__);
     /* System generated locals */
     integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, y_dim1, y_offset,
         err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1,
@@ -544,7 +538,7 @@ void zla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
     if(*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     chla_transtype_(ch__1, trans_type__);
     *(unsigned char *)trans = *(unsigned char *)&ch__1[0];
@@ -827,7 +821,7 @@ void zla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
         /* End of loop for each RHS. */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
 }
 /* zla_gbrfsx_extended__ */
 #endif

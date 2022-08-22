@@ -158,23 +158,8 @@ v(i+2:n) is stored on exit in AP, */
 void zhptrd_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *d__, doublereal *e,
              dcomplex *tau, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zhptrd(uplo, n, ap, d__, e, tau, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zhptrd(uplo, &n_64, ap, d__, e, tau, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zhptrd(char *uplo, aocl_int64_t *n, dcomplex *ap, doublereal *d__,
-                        doublereal *e, dcomplex *tau, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhptrd inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
+    AOCL_DTL_SNPRINTF("zhptrd inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
     doublereal d__1;
@@ -225,15 +210,15 @@ void aocl_lapack_zhptrd(char *uplo, aocl_int64_t *n, dcomplex *ap, doublereal *d
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZHPTRD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZHPTRD", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n <= 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(upper)
     {
@@ -365,7 +350,7 @@ void aocl_lapack_zhptrd(char *uplo, aocl_int64_t *n, dcomplex *ap, doublereal *d
         d__[i__1] = ap[i__2].real;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZHPTRD */
 }
 /* zhptrd_ */

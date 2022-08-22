@@ -137,31 +137,8 @@ doublereal zla_gercond_x_(char *trans, aocl_int_t *n, dcomplex *a, aocl_int_t *l
                           dcomplex *af, aocl_int_t *ldaf, aocl_int_t *ipiv, dcomplex *x,
                           aocl_int_t *info, dcomplex *work, doublereal *rwork)
 {
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_zla_gercond_x(trans, n, a, lda, af, ldaf, ipiv, x, info, work, rwork);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldaf_64 = *ldaf;
-    aocl_int64_t info_64 = *info;
-
-    doublereal ret_val = aocl_lapack_zla_gercond_x(trans, &n_64, a, &lda_64, af, &ldaf_64, ipiv, x,
-                                                   &info_64, work, rwork);
-
-    *info = (aocl_int_t)info_64;
-    return ret_val;
-#endif
-}
-
-doublereal aocl_lapack_zla_gercond_x(char *trans, aocl_int64_t *n, dcomplex *a,
-                                     aocl_int64_t *lda, dcomplex *af, aocl_int64_t *ldaf,
-                                     aocl_int_t *ipiv, dcomplex *x, aocl_int64_t *info,
-                                     dcomplex *work, doublereal *rwork)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zla_gercond_x inputs: trans %c, n %" FLA_IS ", lda %" FLA_IS
-                      ", ldaf %" FLA_IS "",
-                      *trans, *n, *lda, *ldaf);
+    AOCL_DTL_SNPRINTF("zla_gercond_x inputs: trans %c, n %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS "", *trans, *n, *lda, *ldaf);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1, d__2;
@@ -236,7 +213,7 @@ doublereal aocl_lapack_zla_gercond_x(char *trans, aocl_int64_t *n, dcomplex *a,
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZLA_GERCOND_X", &i__1, (ftnlen)13);
+        xerbla_("ZLA_GERCOND_X", &i__1);
         AOCL_DTL_TRACE_LOG_EXIT
         return ret_val;
     }

@@ -177,27 +177,8 @@ void zla_heamv_(aocl_int_t *uplo, aocl_int_t *n, doublereal *alpha, dcomplex *a,
                 aocl_int_t *lda, dcomplex *x, aocl_int_t *incx, doublereal *beta,
                 doublereal *y, aocl_int_t *incy)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zla_heamv(uplo, n, alpha, a, lda, x, incx, beta, y, incy);
-#else
-    aocl_int64_t uplo_64 = *uplo;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incy_64 = *incy;
-
-    aocl_lapack_zla_heamv(&uplo_64, &n_64, alpha, a, &lda_64, x, &incx_64, beta, y, &incy_64);
-#endif
-}
-
-void aocl_lapack_zla_heamv(aocl_int64_t *uplo, aocl_int64_t *n, doublereal *alpha, dcomplex *a,
-                           aocl_int64_t *lda, dcomplex *x, aocl_int64_t *incx,
-                           doublereal *beta, doublereal *y, aocl_int64_t *incy)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zla_heamv inputs: uplo %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
-                      ", incx %" FLA_IS ", incy %" FLA_IS "",
-                      *uplo, *n, *lda, *incx, *incy);
+    AOCL_DTL_SNPRINTF("zla_heamv inputs: uplo %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *uplo, *n, *lda, *incx, *incy);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1, d__2;
@@ -265,15 +246,15 @@ void aocl_lapack_zla_heamv(aocl_int64_t *uplo, aocl_int64_t *n, doublereal *alph
     }
     if(info != 0)
     {
-        aocl_blas_xerbla("ZHEMV ", &info, (ftnlen)6);
+        xerbla_("ZHEMV ", &info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     /* Quick return if possible. */
     if(*n == 0 || *alpha == 0. && *beta == 1.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     /* Set up the start points in X and Y. */
     if(*incx > 0)
@@ -518,7 +499,7 @@ void aocl_lapack_zla_heamv(aocl_int64_t *uplo, aocl_int64_t *n, doublereal *alph
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLA_HEAMV */
 }
 /* zla_heamv__ */

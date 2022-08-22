@@ -114,12 +114,9 @@ the matrix is singular and its */
 void zhptri_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, dcomplex *work,
              aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"zhptri inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("zhptri inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
     doublereal d__1;
@@ -180,13 +177,13 @@ void zhptri_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, dcomplex
     {
         i__1 = -(*info);
         xerbla_("ZHPTRI", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Check that the diagonal matrix D is nonsingular. */
@@ -199,7 +196,7 @@ void zhptri_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, dcomplex
             i__1 = kp;
             if(ipiv[*info] > 0 && (ap[i__1].real == 0. && ap[i__1].imag == 0.))
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return 0;
             }
             kp -= *info;
@@ -216,7 +213,7 @@ void zhptri_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, dcomplex
             i__2 = kp;
             if(ipiv[*info] > 0 && (ap[i__2].real == 0. && ap[i__2].imag == 0.))
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return 0;
             }
             kp = kp + *n - *info + 1;
@@ -584,7 +581,7 @@ void zhptri_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, dcomplex
         goto L60;
     L80:;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of ZHPTRI */
 }

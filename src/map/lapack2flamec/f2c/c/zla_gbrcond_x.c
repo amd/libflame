@@ -156,35 +156,8 @@ doublereal zla_gbrcond_x_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t
                           aocl_int_t *ldafb, aocl_int_t *ipiv, dcomplex *x, aocl_int_t *info,
                           dcomplex *work, doublereal *rwork)
 {
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_zla_gbrcond_x(trans, n, kl, ku, ab, ldab, afb, ldafb, ipiv, x, info, work,
-                                     rwork);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldafb_64 = *ldafb;
-    aocl_int64_t info_64 = *info;
-
-    doublereal ret_val = aocl_lapack_zla_gbrcond_x(trans, &n_64, &kl_64, &ku_64, ab, &ldab_64, afb,
-                                                   &ldafb_64, ipiv, x, &info_64, work, rwork);
-
-    *info = (aocl_int_t)info_64;
-    return ret_val;
-#endif
-}
-
-doublereal aocl_lapack_zla_gbrcond_x(char *trans, aocl_int64_t *n, aocl_int64_t *kl,
-                                     aocl_int64_t *ku, dcomplex *ab, aocl_int64_t *ldab,
-                                     dcomplex *afb, aocl_int64_t *ldafb, aocl_int_t *ipiv,
-                                     dcomplex *x, aocl_int64_t *info, dcomplex *work,
-                                     doublereal *rwork)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zla_gbrcond_x inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
-                      ", ldab %" FLA_IS ", ldafb %" FLA_IS "",
-                      *trans, *n, *kl, *ku, *ldab, *ldafb);
+    AOCL_DTL_SNPRINTF("zla_gbrcond_x inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS "", *trans, *n, *kl, *ku, *ldab, *ldafb);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1, d__2;

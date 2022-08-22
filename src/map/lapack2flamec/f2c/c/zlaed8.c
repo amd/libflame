@@ -231,39 +231,8 @@ void zlaed8_(aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz, dcomplex *q, aocl_i
              aocl_int_t *indxp, aocl_int_t *indx, aocl_int_t *indxq, aocl_int_t *perm,
              aocl_int_t *givptr, aocl_int_t *givcol, doublereal *givnum, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlaed8(k, n, qsiz, q, ldq, d__, rho, cutpnt, z__, dlambda, q2, ldq2, w, indxp, indx,
-                       indxq, perm, givptr, givcol, givnum, info);
-#else
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t qsiz_64 = *qsiz;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t cutpnt_64 = *cutpnt;
-    aocl_int64_t ldq2_64 = *ldq2;
-    aocl_int64_t givptr_64 = *givptr;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zlaed8(&k_64, &n_64, &qsiz_64, q, &ldq_64, d__, rho, &cutpnt_64, z__, dlambda, q2,
-                       &ldq2_64, w, indxp, indx, indxq, perm, &givptr_64, givcol, givnum, &info_64);
-
-    *k = (aocl_int_t)k_64;
-    *givptr = (aocl_int_t)givptr_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zlaed8(aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *qsiz, dcomplex *q,
-                        aocl_int64_t *ldq, doublereal *d__, doublereal *rho, aocl_int64_t *cutpnt,
-                        doublereal *z__, doublereal *dlambda, dcomplex *q2, aocl_int64_t *ldq2,
-                        doublereal *w, aocl_int_t *indxp, aocl_int_t *indx, aocl_int_t *indxq,
-                        aocl_int_t *perm, aocl_int64_t *givptr, aocl_int_t *givcol,
-                        doublereal *givnum, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaed8 inputs: k %" FLA_IS ", n %" FLA_IS ", qsiz %" FLA_IS ", ldq %" FLA_IS
-                      ", cutpnt %" FLA_IS ", ldq2 %" FLA_IS "",
-                      *k, *n, *qsiz, *ldq, *cutpnt, *ldq2);
+    AOCL_DTL_SNPRINTF("zlaed8 inputs: k %" FLA_IS ", n %" FLA_IS ", qsiz %" FLA_IS ", ldq %" FLA_IS ", cutpnt %" FLA_IS ", ldq2 %" FLA_IS "",*k, *n, *qsiz, *ldq, *cutpnt, *ldq2);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, q2_dim1, q2_offset, i__1;
     doublereal d__1;
@@ -340,9 +309,9 @@ void aocl_lapack_zlaed8(aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *qsiz, dc
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZLAED8", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZLAED8", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Need to initialize GIVPTR to O here in case of quick exit */
     /* to prevent an unspecified code behavior (usually sigfault) */
@@ -352,8 +321,8 @@ void aocl_lapack_zlaed8(aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *qsiz, dc
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     n1 = *cutpnt;
     n2 = *n - n1;
@@ -414,9 +383,9 @@ void aocl_lapack_zlaed8(aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *qsiz, dc
             zcopy_(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
             /* L50: */
         }
-        aocl_lapack_zlacpy("A", qsiz, n, &q2[q2_dim1 + 1], ldq2, &q[q_dim1 + 1], ldq);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        zlacpy_("A", qsiz, n, &q2[q2_dim1 + 1], ldq2, &q[q_dim1 + 1], ldq);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* If there are multiple eigenvalues then the problem deflates. Here */
     /* the number of equal eigenvalues are found. As each equal */
@@ -546,7 +515,7 @@ L100: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
                            &q[(*k + 1) * q_dim1 + 1], ldq);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLAED8 */
 }
 /* zlaed8_ */

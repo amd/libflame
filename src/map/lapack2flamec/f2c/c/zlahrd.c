@@ -175,28 +175,8 @@ v(i+k+1:n) is stored on exit in */
 /** Generated wrapper function */
 void zlahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, dcomplex *a, aocl_int_t *lda, dcomplex *tau, dcomplex *t, aocl_int_t *ldt, dcomplex *y, aocl_int_t *ldy)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlahrd(n, k, nb, a, lda, tau, t, ldt, y, ldy);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t nb_64 = *nb;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t ldy_64 = *ldy;
-
-    aocl_lapack_zlahrd(&n_64, &k_64, &nb_64, a, &lda_64, tau, t, &ldt_64, y, &ldy_64);
-#endif
-}
-
-void aocl_lapack_zlahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, dcomplex *a,
-             aocl_int64_t *lda, dcomplex *tau, dcomplex *t, aocl_int64_t *ldt,
-             dcomplex *y, aocl_int64_t *ldy)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlahrd inputs: n %" FLA_IS ", k %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
-                      ", ldt %" FLA_IS ", ldy %" FLA_IS "",
-                      *n, *k, *nb, *lda, *ldt, *ldy);
+    AOCL_DTL_SNPRINTF("zlahrd inputs: n %" FLA_IS ", k %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", ldy %" FLA_IS "",*n, *k, *nb, *lda, *ldt, *ldy);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, y_dim1, y_offset, i__1, i__2, i__3;
     dcomplex z__1;
@@ -236,8 +216,8 @@ void aocl_lapack_zlahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, dcom
     /* Function Body */
     if(*n <= 1)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     i__1 = *nb;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -336,10 +316,10 @@ void aocl_lapack_zlahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, dcom
         /* L10: */
     }
     i__1 = *k + *nb + *nb * a_dim1;
-    a[i__1].real = ei.real;
-    a[i__1].imag = ei.imag; // , expr subst
+    a[i__1].r = ei.r;
+    a[i__1].i = ei.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLAHRD */
 }
 /* zlahrd_ */

@@ -254,40 +254,8 @@ void zlaed7_(aocl_int_t *n, aocl_int_t *cutpnt, aocl_int_t *qsiz, aocl_int_t *tl
              aocl_int_t *givcol, doublereal *givnum, dcomplex *work, doublereal *rwork,
              aocl_int_t *iwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlaed7(n, cutpnt, qsiz, tlvls, curlvl, curpbm, d__, q, ldq, rho, indxq, qstore,
-                       qptr, prmptr, perm, givptr, givcol, givnum, work, rwork, iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t cutpnt_64 = *cutpnt;
-    aocl_int64_t qsiz_64 = *qsiz;
-    aocl_int64_t tlvls_64 = *tlvls;
-    aocl_int64_t curlvl_64 = *curlvl;
-    aocl_int64_t curpbm_64 = *curpbm;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zlaed7(&n_64, &cutpnt_64, &qsiz_64, &tlvls_64, &curlvl_64, &curpbm_64, d__, q,
-                       &ldq_64, rho, indxq, qstore, qptr, prmptr, perm, givptr, givcol, givnum,
-                       work, rwork, iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zlaed7(aocl_int64_t *n, aocl_int64_t *cutpnt, aocl_int64_t *qsiz,
-                        aocl_int64_t *tlvls, aocl_int64_t *curlvl, aocl_int64_t *curpbm,
-                        doublereal *d__, dcomplex *q, aocl_int64_t *ldq, doublereal *rho,
-                        aocl_int_t *indxq, doublereal *qstore, aocl_int_t *qptr, aocl_int_t *prmptr,
-                        aocl_int_t *perm, aocl_int_t *givptr, aocl_int_t *givcol,
-                        doublereal *givnum, dcomplex *work, doublereal *rwork,
-                        aocl_int_t *iwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaed7 inputs: n %" FLA_IS ", cutpnt %" FLA_IS ", qsiz %" FLA_IS
-                      ", tlvls %" FLA_IS ", curlvl %" FLA_IS ", curpbm %" FLA_IS ", ldq %" FLA_IS
-                      "",
-                      *n, *cutpnt, *qsiz, *tlvls, *curlvl, *curpbm, *ldq);
+    AOCL_DTL_SNPRINTF("zlaed7 inputs: n %" FLA_IS ", cutpnt %" FLA_IS ", qsiz %" FLA_IS ", tlvls %" FLA_IS ", curlvl %" FLA_IS ", curpbm %" FLA_IS ", ldq %" FLA_IS "",*n, *cutpnt, *qsiz, *tlvls, *curlvl, *curpbm, *ldq);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, i__1, i__2;
     /* Builtin functions */
@@ -354,15 +322,15 @@ void aocl_lapack_zlaed7(aocl_int64_t *n, aocl_int64_t *cutpnt, aocl_int64_t *qsi
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZLAED7", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZLAED7", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* The following values are for bookkeeping purposes only. They are */
     /* integer pointers which indicate the portion of the workspace */
@@ -416,8 +384,8 @@ void aocl_lapack_zlaed7(aocl_int64_t *n, aocl_int64_t *cutpnt, aocl_int64_t *qsi
         qptr[curr + 1] = (aocl_int_t)(qptr[curr] + i__1 * i__1);
         if(*info != 0)
         {
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+    AOCL_DTL_TRACE_LOG_EXIT
+            return 0;
         }
         /* Prepare the INDXQ sorting premutation. */
         n1 = k;
@@ -435,7 +403,7 @@ void aocl_lapack_zlaed7(aocl_int64_t *n, aocl_int64_t *cutpnt, aocl_int64_t *qsi
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLAED7 */
 }
 /* zlaed7_ */

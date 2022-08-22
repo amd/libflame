@@ -418,12 +418,7 @@ void zla_herfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
                           logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zla_herfsx_extended inputs: prec_type__ %" FLA_IS ", uplo %c, n %" FLA_IS
-                      ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS
-                      ", ldy %" FLA_IS ", n_norms__ %" FLA_IS ", rcond %lf, ithresh %" FLA_IS
-                      ", rthresh %lf",
-                      *prec_type__, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldy, *n_norms__, *rcond,
-                      *ithresh, *rthresh);
+AOCL_DTL_SNPRINTF("zla_herfsx_extended inputs: prec_type__ %" FLA_IS ", uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldy %" FLA_IS ", n_norms__ %" FLA_IS ", rcond %lf, ithresh %" FLA_IS ", rthresh %lf", *prec_type__, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldy, *n_norms__, *rcond, *ithresh, *rthresh);
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, y_dim1, y_offset,
         err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1,
@@ -566,9 +561,9 @@ void zla_herfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZLA_HERFSX_EXTENDED", &i__1, (ftnlen)19);
+        xerbla_("ZLA_HERFSX_EXTENDED", &i__1);
         AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     eps = dlamch_("Epsilon");
     hugeval = dlamch_("Overflow");
@@ -841,7 +836,7 @@ void zla_herfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         /* End of loop for each RHS. */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
 }
 /* zla_herfsx_extended__ */
 #endif

@@ -153,26 +153,8 @@ static aocl_int64_t c__1 = 1;
 /** Generated wrapper function */
 void zlatzm_(char *side, aocl_int_t *m, aocl_int_t *n, dcomplex *v, aocl_int_t *incv, dcomplex *tau, dcomplex *c1, dcomplex *c2, aocl_int_t *ldc, dcomplex *work)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlatzm(side, m, n, v, incv, tau, c1, c2, ldc, work);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incv_64 = *incv;
-    aocl_int64_t ldc_64 = *ldc;
-
-    aocl_lapack_zlatzm(side, &m_64, &n_64, v, &incv_64, tau, c1, c2, &ldc_64, work);
-#endif
-}
-
-void aocl_lapack_zlatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v, aocl_int64_t *incv,
-             dcomplex *tau, dcomplex *c1, dcomplex *c2, aocl_int64_t *ldc,
-             dcomplex *work)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlatzm inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS
-                      ", ldc %" FLA_IS "",
-                      *side, *m, *n, *incv, *ldc);
+    AOCL_DTL_SNPRINTF("zlatzm inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *incv, *ldc);
     /* System generated locals */
     aocl_int64_t c1_dim1, c1_offset, c2_dim1, c2_offset, i__1;
     dcomplex z__1;
@@ -210,8 +192,8 @@ void aocl_lapack_zlatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *
     /* Function Body */
     if(fla_min(*m, *n) == 0 || tau->real == 0. && tau->imag == 0.)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(lsame_(side, "L", 1, 1))
     {
@@ -249,7 +231,7 @@ void aocl_lapack_zlatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *
         aocl_blas_zgerc(m, &i__1, &z__1, &work[1], &c__1, &v[1], incv, &c2[c2_offset], ldc);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLATZM */
 }
 /* zlatzm_ */

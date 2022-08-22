@@ -179,33 +179,8 @@ void zlaqps_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, aocl_int_t *nb, a
              doublereal *vn1, doublereal *vn2, dcomplex *auxv, dcomplex *f,
              aocl_int_t *ldf)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlaqps(m, n, offset, nb, kb, a, lda, jpvt, tau, vn1, vn2, auxv, f, ldf);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t offset_64 = *offset;
-    aocl_int64_t nb_64 = *nb;
-    aocl_int64_t kb_64 = *kb;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldf_64 = *ldf;
-
-    aocl_lapack_zlaqps(&m_64, &n_64, &offset_64, &nb_64, &kb_64, a, &lda_64, jpvt, tau, vn1, vn2,
-                       auxv, f, &ldf_64);
-
-    *kb = (aocl_int_t)kb_64;
-#endif
-}
-
-void aocl_lapack_zlaqps(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, aocl_int64_t *nb,
-                        aocl_int64_t *kb, dcomplex *a, aocl_int64_t *lda, aocl_int_t *jpvt,
-                        dcomplex *tau, doublereal *vn1, doublereal *vn2, dcomplex *auxv,
-                        dcomplex *f, aocl_int64_t *ldf)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaqps inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", nb %" FLA_IS
-                      ", kb %" FLA_IS ", lda %" FLA_IS ", ldf %" FLA_IS "",
-                      *m, *n, *offset, *nb, *kb, *lda, *ldf);
+    AOCL_DTL_SNPRINTF("zlaqps inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", nb %" FLA_IS ", kb %" FLA_IS ", lda %" FLA_IS ", ldf %" FLA_IS "",*m, *n, *offset, *nb, *kb, *lda, *ldf);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, f_dim1, f_offset, i__1, i__2, i__3;
     doublereal d__1, d__2;
@@ -443,7 +418,7 @@ L60:
         goto L60;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLAQPS */
 }
 /* zlaqps_ */

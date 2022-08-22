@@ -140,24 +140,8 @@
 void zlaqhb_(char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab, aocl_int_t *ldab,
              doublereal *s, doublereal *scond, doublereal *amax, char *equed)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlaqhb(uplo, n, kd, ab, ldab, s, scond, amax, equed);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kd_64 = *kd;
-    aocl_int64_t ldab_64 = *ldab;
-
-    aocl_lapack_zlaqhb(uplo, &n_64, &kd_64, ab, &ldab_64, s, scond, amax, equed);
-#endif
-}
-
-void aocl_lapack_zlaqhb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, dcomplex *ab,
-                        aocl_int64_t *ldab, doublereal *s, doublereal *scond, doublereal *amax,
-                        char *equed)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaqhb inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",
-                      *uplo, *n, *kd, *ldab);
+    AOCL_DTL_SNPRINTF("zlaqhb inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",*uplo, *n, *kd, *ldab);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal d__1;
@@ -196,8 +180,8 @@ void aocl_lapack_zlaqhb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, dcomplex 
     if(*n <= 0)
     {
         *(unsigned char *)equed = 'N';
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Initialize LARGE and SMALL. */
     small_val = dlamch_("Safe minimum") / dlamch_("Precision");
@@ -273,7 +257,7 @@ void aocl_lapack_zlaqhb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, dcomplex 
         *(unsigned char *)equed = 'Y';
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLAQHB */
 }
 /* zlaqhb_ */

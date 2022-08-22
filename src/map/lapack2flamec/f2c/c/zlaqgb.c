@@ -158,28 +158,8 @@ void zlaqgb_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, dcomp
              aocl_int_t *ldab, doublereal *r__, doublereal *c__, doublereal *rowcnd,
              doublereal *colcnd, doublereal *amax, char *equed)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlaqgb(m, n, kl, ku, ab, ldab, r__, c__, rowcnd, colcnd, amax, equed);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t ldab_64 = *ldab;
-
-    aocl_lapack_zlaqgb(&m_64, &n_64, &kl_64, &ku_64, ab, &ldab_64, r__, c__, rowcnd, colcnd, amax,
-                       equed);
-#endif
-}
-
-void aocl_lapack_zlaqgb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
-                        dcomplex *ab, aocl_int64_t *ldab, doublereal *r__, doublereal *c__,
-                        doublereal *rowcnd, doublereal *colcnd, doublereal *amax, char *equed)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaqgb inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
-                      ", ldab %" FLA_IS "",
-                      *m, *n, *kl, *ku, *ldab);
+    AOCL_DTL_SNPRINTF("zlaqgb inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS "",*m, *n, *kl, *ku, *ldab);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1;
@@ -217,8 +197,8 @@ void aocl_lapack_zlaqgb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
     if(*m <= 0 || *n <= 0)
     {
         *(unsigned char *)equed = 'N';
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Initialize LARGE and SMALL. */
     small_val = dlamch_("Safe minimum") / dlamch_("Precision");
@@ -318,7 +298,7 @@ void aocl_lapack_zlaqgb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
         *(unsigned char *)equed = 'B';
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLAQGB */
 }
 /* zlaqgb_ */

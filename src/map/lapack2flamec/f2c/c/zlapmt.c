@@ -103,23 +103,8 @@
 void zlapmt_(logical *forwrd, aocl_int_t *m, aocl_int_t *n, dcomplex *x, aocl_int_t *ldx,
              aocl_int_t *k)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlapmt(forwrd, m, n, x, ldx, k);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldx_64 = *ldx;
-
-    aocl_lapack_zlapmt(forwrd, &m_64, &n_64, x, &ldx_64, k);
-#endif
-}
-
-void aocl_lapack_zlapmt(logical *forwrd, aocl_int64_t *m, aocl_int64_t *n, dcomplex *x,
-                        aocl_int64_t *ldx, aocl_int_t *k)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlapmt inputs: m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS ", k %" FLA_IS "",
-                      *m, *n, *ldx, *k);
+    AOCL_DTL_SNPRINTF("zlapmt inputs: m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS ", k %" FLA_IS "",*m, *n, *ldx, *k);
     /* System generated locals */
     aocl_int64_t x_dim1, x_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -145,8 +130,8 @@ void aocl_lapack_zlapmt(logical *forwrd, aocl_int64_t *m, aocl_int64_t *n, dcomp
     /* Function Body */
     if(*n <= 1)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -235,7 +220,7 @@ void aocl_lapack_zlapmt(logical *forwrd, aocl_int64_t *m, aocl_int64_t *n, dcomp
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLAPMT */
 }
 /* zlapmt_ */

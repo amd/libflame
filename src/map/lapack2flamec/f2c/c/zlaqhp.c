@@ -125,21 +125,8 @@
 void zlaqhp_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *s, doublereal *scond,
              doublereal *amax, char *equed)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlaqhp(uplo, n, ap, s, scond, amax, equed);
-#else
-    aocl_int64_t n_64 = *n;
-
-    aocl_lapack_zlaqhp(uplo, &n_64, ap, s, scond, amax, equed);
-#endif
-}
-
-void aocl_lapack_zlaqhp(char *uplo, aocl_int64_t *n, dcomplex *ap, doublereal *s,
-                        doublereal *scond, doublereal *amax, char *equed)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaqhp inputs: uplo %c, n %" FLA_IS ", scond %lf, amax %lf", *uplo, *n,
-                      *scond, *amax);
+    AOCL_DTL_SNPRINTF("zlaqhp inputs: uplo %c, n %" FLA_IS ", scond %lf, amax %lf",*uplo, *n, *scond, *amax);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3, i__4;
     doublereal d__1;
@@ -176,8 +163,8 @@ void aocl_lapack_zlaqhp(char *uplo, aocl_int64_t *n, dcomplex *ap, doublereal *s
     if(*n <= 0)
     {
         *(unsigned char *)equed = 'N';
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Initialize LARGE and SMALL. */
     small_val = dlamch_("Safe minimum") / dlamch_("Precision");
@@ -251,7 +238,7 @@ void aocl_lapack_zlaqhp(char *uplo, aocl_int64_t *n, dcomplex *ap, doublereal *s
         *(unsigned char *)equed = 'Y';
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLAQHP */
 }
 /* zlaqhp_ */

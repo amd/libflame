@@ -314,7 +314,7 @@ void fla_dlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *
     y_offset = 1 + y_dim1;
     y -= y_offset;
 
-#ifdef FLA_ENABLE_MULTITHREADING
+#ifdef FLA_OPENMP_MULTITHREADING
     /* Get optimum thread number for DLABRD*/
     FLA_Thread_optimum( FLA_LABRD, &actual_num_threads);
 #endif
@@ -342,7 +342,7 @@ void fla_dlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *
     {
         /* Reduce to upper bidiagonal form */
         i__1 = *nb;
-#ifdef FLA_ENABLE_MULTITHREADING
+#ifdef FLA_OPENMP_MULTITHREADING
         #pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
         {
             thread_id = omp_get_thread_num();
@@ -379,7 +379,7 @@ void fla_dlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *
                     /* Compute Y(i+1:n,i) */
                     i__2 = *m - i__ + 1;
                     i__3 = *n - i__;
-#ifdef FLA_ENABLE_MULTITHREADING
+#ifdef FLA_OPENMP_MULTITHREADING
                     /* Determine the sub partition range of current thread */ 
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__3, &i__4, &i__5);
                     #pragma omp barrier
@@ -421,7 +421,7 @@ void fla_dlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *
                     /* Compute X(i+1:m,i) */
                     i__2 = *m - i__;
                     i__3 = *n - i__;
-#ifdef FLA_ENABLE_MULTITHREADING
+#ifdef FLA_OPENMP_MULTITHREADING
                     /* Determine the sub partition range of current thread */
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__2, &i__4, &i__5);
                     #pragma omp barrier
@@ -454,7 +454,7 @@ void fla_dlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *
     {
         /* Reduce to lower bidiagonal form */
         i__1 = *nb;
-#ifdef FLA_ENABLE_MULTITHREADING
+#ifdef FLA_OPENMP_MULTITHREADING
         #pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
         {
             thread_id = omp_get_thread_num();
@@ -491,7 +491,7 @@ void fla_dlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *
                     /* Compute X(i+1:m,i) */
                     i__2 = *m - i__;
                     i__3 = *n - i__ + 1;
-#ifdef FLA_ENABLE_MULTITHREADING
+#ifdef FLA_OPENMP_MULTITHREADING
                     /* Determine the sub partition range of current thread */
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__2, &i__4, &i__5);
                     #pragma omp barrier
@@ -533,7 +533,7 @@ void fla_dlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *
                     /* Compute Y(i+1:n,i) */
                     i__2 = *m - i__;
                     i__3 = *n - i__;
-#ifdef FLA_ENABLE_MULTITHREADING
+#ifdef FLA_OPENMP_MULTITHREADING
                     /* Determine the sub partition range of current thread */
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__3, &i__4, &i__5);
                     #pragma omp barrier

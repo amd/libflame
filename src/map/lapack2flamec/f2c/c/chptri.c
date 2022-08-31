@@ -118,9 +118,9 @@ void chptri_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, scomplex
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chptri inputs: uplo %c, n %lld, ipiv %lld",*uplo, *n, *ipiv);
+    snprintf(buffer, 256,"chptri inputs: uplo %c, n %lld",*uplo, *n);
 #else
-    snprintf(buffer, 256,"chptri inputs: uplo %c, n %d, ipiv %d",*uplo, *n, *ipiv);
+    snprintf(buffer, 256,"chptri inputs: uplo %c, n %d",*uplo, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

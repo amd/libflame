@@ -198,9 +198,9 @@ void csyrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"csyrfs inputs: uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ipiv %lld, ldb %lld, ldx %lld",*uplo, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldx);
+    snprintf(buffer, 256,"csyrfs inputs: uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ldb %lld, ldx %lld",*uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
 #else
-    snprintf(buffer, 256,"csyrfs inputs: uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ipiv %d, ldb %d, ldx %d",*uplo, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldx);
+    snprintf(buffer, 256,"csyrfs inputs: uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d",*uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

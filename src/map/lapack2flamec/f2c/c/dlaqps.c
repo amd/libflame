@@ -183,7 +183,7 @@ void dlaqps_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, aocl_int_t *nb, a
              doublereal *vn2, doublereal *auxv, doublereal *f, aocl_int_t *ldf)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaqps inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", jpvt %" FLA_IS ", ldf %" FLA_IS "",*m, *n, *offset, *nb, *lda, *jpvt, *ldf);
+    AOCL_DTL_SNPRINTF("dlaqps inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldf %" FLA_IS "",*m, *n, *offset, *nb, *lda, *ldf);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, f_dim1, f_offset, i__1, i__2;
     doublereal d__1, d__2;

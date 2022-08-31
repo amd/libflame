@@ -187,7 +187,7 @@ void zsprfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *ap, dcomplex
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"zsprfs inputs: uplo %c, n %d, nrhs %d, ldb %d, ldx %d, ipiv %d",*uplo, *n, *nrhs, *ldb, *ldx, *ipiv);
+    snprintf(buffer, 256,"zsprfs inputs: uplo %c, n %d, nrhs %d, ldb %d, ldx %d",*uplo, *n, *nrhs, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */

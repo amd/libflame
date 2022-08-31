@@ -127,7 +127,7 @@ void dspcon_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, double
              doublereal *rcond, doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dspcon inputs: uplo %c, n %" FLA_IS ", ipiv %" FLA_IS "",*uplo, *n, *ipiv);
+    AOCL_DTL_SNPRINTF("dspcon inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1;
     /* Local variables */

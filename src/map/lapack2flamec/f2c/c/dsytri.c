@@ -121,7 +121,7 @@ void dsytri_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
              doublereal *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsytri inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ipiv %" FLA_IS "",*uplo, *n, *lda, *ipiv);
+    AOCL_DTL_SNPRINTF("dsytri inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
     doublereal d__1;

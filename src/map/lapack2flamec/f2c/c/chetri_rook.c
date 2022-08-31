@@ -137,9 +137,9 @@ void chetri_rook_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chetri_rook inputs: uplo %c, n %lld, lda %lld, ipiv %lld",*uplo, *n, *lda, *ipiv);
+    snprintf(buffer, 256,"chetri_rook inputs: uplo %c, n %lld, lda %lld",*uplo, *n, *lda);
 #else
-    snprintf(buffer, 256,"chetri_rook inputs: uplo %c, n %d, lda %d, ipiv %d",*uplo, *n, *lda, *ipiv);
+    snprintf(buffer, 256,"chetri_rook inputs: uplo %c, n %d, lda %d",*uplo, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

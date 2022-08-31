@@ -131,7 +131,7 @@ void dgetrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_i
              aocl_int_t *ipiv, doublereal *b, aocl_int_t *ldb, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgetrs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ipiv %" FLA_IS ", ldb %" FLA_IS "",*trans, *n, *nrhs, *lda, *ipiv, *ldb);
+    AOCL_DTL_SNPRINTF("dgetrs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*trans, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     aocl_int64_t i, j;

@@ -145,9 +145,9 @@ void cgbtrs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgbtrs inputs: trans %c, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ipiv %lld, ldb %lld",*trans, *n, *kl, *ku, *nrhs, *ldab, *ipiv, *ldb);
+    snprintf(buffer, 256,"cgbtrs inputs: trans %c, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldb %lld",*trans, *n, *kl, *ku, *nrhs, *ldab, *ldb);
 #else
-    snprintf(buffer, 256,"cgbtrs inputs: trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ipiv %d, ldb %d",*trans, *n, *kl, *ku, *nrhs, *ldab, *ipiv, *ldb);
+    snprintf(buffer, 256,"cgbtrs inputs: trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldb %d",*trans, *n, *kl, *ku, *nrhs, *ldab, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

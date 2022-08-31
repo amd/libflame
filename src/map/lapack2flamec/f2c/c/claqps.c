@@ -183,9 +183,9 @@ void claqps_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, aocl_int_t *nb, a
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"claqps inputs: m %lld, n %lld, offset %lld, nb %lld, lda %lld, jpvt %lld, ldf %lld",*m, *n, *offset, *nb, *lda, *jpvt, *ldf);
+    snprintf(buffer, 256,"claqps inputs: m %lld, n %lld, offset %lld, nb %lld, lda %lld, ldf %lld",*m, *n, *offset, *nb, *lda, *ldf);
 #else
-    snprintf(buffer, 256,"claqps inputs: m %d, n %d, offset %d, nb %d, lda %d, jpvt %d, ldf %d",*m, *n, *offset, *nb, *lda, *jpvt, *ldf);
+    snprintf(buffer, 256,"claqps inputs: m %d, n %d, offset %d, nb %d, lda %d, ldf %d",*m, *n, *offset, *nb, *lda, *ldf);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

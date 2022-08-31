@@ -120,7 +120,7 @@ void dsptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *ap, aocl_i
              doublereal *b, aocl_int_t *ldb, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsptrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ipiv %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *ipiv, *ldb);
+    AOCL_DTL_SNPRINTF("dsptrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     doublereal d__1;

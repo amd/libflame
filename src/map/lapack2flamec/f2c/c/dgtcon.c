@@ -151,7 +151,7 @@ void dgtcon_(char *norm, aocl_int_t *n, doublereal *dl, doublereal *d__, doubler
              doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgtcon inputs: norm %c, n %" FLA_IS ", ipiv %" FLA_IS "",*norm, *n, *ipiv);
+    AOCL_DTL_SNPRINTF("dgtcon inputs: norm %c, n %" FLA_IS "",*norm, *n);
     /* System generated locals */
     aocl_int64_t i__1;
     /* Local variables */

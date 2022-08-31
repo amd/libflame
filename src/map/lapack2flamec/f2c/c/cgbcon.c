@@ -154,9 +154,9 @@ void cgbcon_(char *norm, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomplex
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgbcon inputs: norm %c, n %lld, kl %lld, ku %lld, ldab %lld, ipiv %lld",*norm, *n, *kl, *ku, *ldab, *ipiv);
+    snprintf(buffer, 256,"cgbcon inputs: norm %c, n %lld, kl %lld, ku %lld, ldab %lld",*norm, *n, *kl, *ku, *ldab);
 #else
-    snprintf(buffer, 256,"cgbcon inputs: norm %c, n %d, kl %d, ku %d, ldab %d, ipiv %d",*norm, *n, *kl, *ku, *ldab, *ipiv);
+    snprintf(buffer, 256,"cgbcon inputs: norm %c, n %d, kl %d, ku %d, ldab %d",*norm, *n, *kl, *ku, *ldab);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

@@ -193,9 +193,9 @@ void cgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_i
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgelsx inputs: m %lld, n %lld, nrhs %lld, lda %lld, ldb %lld, jpvt %lld",*m, *n, *nrhs, *lda, *ldb, *jpvt);
+    snprintf(buffer, 256,"cgelsx inputs: m %lld, n %lld, nrhs %lld, lda %lld, ldb %lld",*m, *n, *nrhs, *lda, *ldb);
 #else
-    snprintf(buffer, 256,"cgelsx inputs: m %d, n %d, nrhs %d, lda %d, ldb %d, jpvt %d",*m, *n, *nrhs, *lda, *ldb, *jpvt);
+    snprintf(buffer, 256,"cgelsx inputs: m %d, n %d, nrhs %d, lda %d, ldb %d",*m, *n, *nrhs, *lda, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

@@ -129,7 +129,7 @@ void zsycon_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"zsycon inputs: uplo %c, n %d, lda %d, ipiv %d",*uplo, *n, *lda, *ipiv);
+    snprintf(buffer, 256,"zsycon inputs: uplo %c, n %d, lda %d",*uplo, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */

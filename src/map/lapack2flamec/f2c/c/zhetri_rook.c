@@ -136,7 +136,7 @@ void zhetri_rook_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"zhetri_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "%d, ipiv %" FLA_IS "",*uplo, *n, *lda, *ipiv);
+    snprintf(buffer, 256,"zhetri_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "%d",*uplo, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */

@@ -148,9 +148,9 @@ real cla_gercond_c_(char *trans, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sc
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cla_gercond_c inputs: trans %c, n %lld, lda %lld, ldaf %lld, ipiv %lld",*trans, *n, *lda, *ldaf, *ipiv);
+    snprintf(buffer, 256,"cla_gercond_c inputs: trans %c, n %lld, lda %lld, ldaf %lld",*trans, *n, *lda, *ldaf);
 #else
-    snprintf(buffer, 256,"cla_gercond_c inputs: trans %c, n %d, lda %d, ldaf %d, ipiv %d",*trans, *n, *lda, *ldaf, *ipiv);
+    snprintf(buffer, 256,"cla_gercond_c inputs: trans %c, n %d, lda %d, ldaf %d",*trans, *n, *lda, *ldaf);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

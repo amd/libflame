@@ -153,7 +153,7 @@ doublereal dla_gercond_(char *trans, aocl_int_t *n, doublereal *a, aocl_int_t *l
                         aocl_int_t *info, doublereal *work, aocl_int_t *iwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dla_gercond inputs: trans %c, n %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ipiv %" FLA_IS ", cmode %" FLA_IS ", work %" FLA_IS ", iwork %" FLA_IS "",*trans, *n, *lda, *ldaf, *ipiv, *cmode, *work, *iwork);
+    AOCL_DTL_SNPRINTF("dla_gercond inputs: trans %c, n %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", cmode %" FLA_IS ", work %" FLA_IS ", iwork %" FLA_IS "",*trans, *n, *lda, *ldaf, *cmode, *work, *iwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
     doublereal ret_val, d__1;

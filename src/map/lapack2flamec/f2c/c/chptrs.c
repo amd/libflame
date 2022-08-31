@@ -122,9 +122,9 @@ void chptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, aocl_int
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chptrs inputs: uplo %c, n %lld, nrhs %lld, ipiv %lld, ldb %lld",*uplo, *n, *nrhs, *ipiv, *ldb);
+    snprintf(buffer, 256,"chptrs inputs: uplo %c, n %lld, nrhs %lld, ldb %lld",*uplo, *n, *nrhs, *ldb);
 #else
-    snprintf(buffer, 256,"chptrs inputs: uplo %c, n %d, nrhs %d, ipiv %d, ldb %d",*uplo, *n, *nrhs, *ipiv, *ldb);
+    snprintf(buffer, 256,"chptrs inputs: uplo %c, n %d, nrhs %d, ldb %d",*uplo, *n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

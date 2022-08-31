@@ -184,7 +184,7 @@ only the remaining */
 void dgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, aocl_int_t *jpvt, doublereal *rcond, aocl_int_t *rank, doublereal *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgelsx inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", jpvt %" FLA_IS "",*m, *n, *nrhs, *lda, *ldb, *jpvt);
+    AOCL_DTL_SNPRINTF("dgelsx inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*m, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     doublereal d__1;

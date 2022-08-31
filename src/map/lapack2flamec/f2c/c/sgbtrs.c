@@ -144,7 +144,7 @@ void sgbtrs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sgbtrs inputs: trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ipiv %d, ldb %d",*trans, *n, *kl, *ku, *nrhs, *ldab, *ipiv, *ldb);
+    snprintf(buffer, 256,"sgbtrs inputs: trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldb %d",*trans, *n, *kl, *ku, *nrhs, *ldab, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */

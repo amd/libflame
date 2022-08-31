@@ -292,9 +292,9 @@ void csysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"csysvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ipiv %lld, ldb %lld, ldx %lld, lwork %lld",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldx, *lwork);
+    snprintf(buffer, 256,"csysvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ldb %lld, ldx %lld, lwork %lld",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *lwork);
 #else
-    snprintf(buffer, 256,"csysvx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ipiv %d, ldb %d, ldx %d, lwork %d",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ipiv, *ldb, *ldx, *lwork);
+    snprintf(buffer, 256,"csysvx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d, lwork %d",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

@@ -284,9 +284,9 @@ void cspsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cspsvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, ipiv %lld, ldb %lld, ldx %lld",*fact, *uplo, *n, *nrhs, *ipiv, *ldb, *ldx);
+    snprintf(buffer, 256,"cspsvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, ldb %lld, ldx %lld",*fact, *uplo, *n, *nrhs, *ldb, *ldx);
 #else
-    snprintf(buffer, 256,"cspsvx inputs: fact %c, uplo %c, n %d, nrhs %d, ipiv %d, ldb %d, ldx %d",*fact, *uplo, *n, *nrhs, *ipiv, *ldb, *ldx);
+    snprintf(buffer, 256,"cspsvx inputs: fact %c, uplo %c, n %d, nrhs %d, ldb %d, ldx %d",*fact, *uplo, *n, *nrhs, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

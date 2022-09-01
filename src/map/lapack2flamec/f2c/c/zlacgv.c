@@ -75,7 +75,7 @@ void zlacgv_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx)
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"zlacgv inputs: n %" FLA_IS ", incx %%" FLA_IS "",*n, *incx);
+    snprintf(buffer, 256,"zlacgv inputs: n %" FLA_IS ", incx %" FLA_IS "",*n, *incx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */

@@ -106,7 +106,7 @@ void zlacpy_(char *uplo, aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"zlacpy inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %%" FLA_IS ", ldb %" FLA_IS "",*uplo, *m, *n, *lda, *ldb);
+    snprintf(buffer, 256,"zlacpy inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *m, *n, *lda, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */

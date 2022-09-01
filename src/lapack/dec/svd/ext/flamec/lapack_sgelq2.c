@@ -1,22 +1,15 @@
-/* ../netlib/sgelq2.f -- translated by f2c (version 20000121). You must link the resulting object
- * file with the libraries: -lf2c -lm (in that order) */
+/* ../netlib/sgelq2.f -- translated by f2c (version 20000121). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h" /* > \brief \b SGELQ2 computes the LQ factorization of a general rectangular matrix using an unblocked algorit hm. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SGELQ2 + dependencies */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgelq2.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgelq2. f"> */
 /* > [TGZ]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgelq2.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgelq2. f"> */
 /* > [ZIP]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgelq2.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgelq2. f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -40,9 +33,9 @@
 /* > where: */
 /* > */
 /* > Q is a n-by-n orthogonal matrix;
- */
+*/
 /* > L is a lower-triangular m-by-m matrix;
- */
+*/
 /* > 0 is a m-by-(n-m) zero matrix, if m < n. */
 /* > */
 /* > \endverbatim */
@@ -65,7 +58,7 @@
 /* > A is REAL array, dimension (LDA,N) */
 /* > On entry, the m by n matrix A. */
 /* > On exit, the elements on and below the diagonal of the array */
-/* > contain the m by fla_min(m,n) lower trapezoidal matrix L (L is */
+/* > contain the m by min(m,n) lower trapezoidal matrix L (L is */
 /* > lower triangular if m <= n);
 the elements above the diagonal, */
 /* > with the array TAU, represent the orthogonal matrix Q as a */
@@ -75,12 +68,12 @@ the elements above the diagonal, */
 /* > \param[in] LDA */
 /* > \verbatim */
 /* > LDA is INTEGER */
-/* > The leading dimension of the array A. LDA >= fla_max(1,M). */
+/* > The leading dimension of the array A. LDA >= max(1,M). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] TAU */
 /* > \verbatim */
-/* > TAU is REAL array, dimension (fla_min(M,N)) */
+/* > TAU is REAL array, dimension (min(M,N)) */
 /* > The scalar factors of the elementary reflectors (see Further */
 /* > Details). */
 /* > \endverbatim */
@@ -110,7 +103,7 @@ the elements above the diagonal, */
 /* > */
 /* > The matrix Q is represented as a product of elementary reflectors */
 /* > */
-/* > Q = H(k) . . . H(2) H(1), where k = fla_min(m,n). */
+/* > Q = H(k) . . . H(2) H(1), where k = min(m,n). */
 /* > */
 /* > Each H(i) has the form */
 /* > */
@@ -124,13 +117,14 @@ v(i+1:n) is stored on exit in A(i,i+1:n), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int lapack_sgelq2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau,
-                  real *work, aocl_int64_t *info)
+int lapack_sgelq2(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    aocl_int64_t i__, k;
+    integer i__, k;
+    extern /* Subroutine */
+    int slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_( char *, integer *), slarfg_(integer *, real *, real *, integer *, real *);
     real aii;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -158,43 +152,43 @@ int lapack_sgelq2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     --work;
     /* Function Body */
     *info = 0;
-    if(*m < 0)
+    if (*m < 0)
     {
         *info = -1;
     }
-    else if(*n < 0)
+    else if (*n < 0)
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < max(1,*m))
     {
         *info = -4;
     }
-    if(*info != 0)
+    if (*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGELQ2", &i__1, (ftnlen)6);
+        xerbla_("SGELQ2", &i__1);
         return 0;
     }
-    k = fla_min(*m, *n);
+    k = min(*m,*n);
     i__1 = k;
-    for(i__ = 1; i__ <= i__1; ++i__)
+    for (i__ = 1;
+            i__ <= i__1;
+            ++i__)
     {
         /* Generate elementary reflector H(i) to annihilate A(i,i+1:n) */
         i__2 = *n - i__ + 1;
         /* Computing MIN */
         i__3 = i__ + 1;
-        aocl_lapack_slarfg(&i__2, &a[i__ + i__ * a_dim1], &a[i__ + fla_min(i__3, *n) * a_dim1], lda,
-                           &tau[i__]);
-        if(i__ < *m)
+        slarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[i__ + min(i__3,*n) * a_dim1], lda, &tau[i__]);
+        if (i__ < *m)
         {
             /* Apply H(i) to A(i+1:m,i:n) from the right */
             aii = a[i__ + i__ * a_dim1];
             a[i__ + i__ * a_dim1] = 1.f;
             i__2 = *m - i__;
             i__3 = *n - i__ + 1;
-            aocl_lapack_slarf("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &tau[i__],
-                              &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
+            slarf_("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &tau[ i__], &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             a[i__ + i__ * a_dim1] = aii;
         }
         /* L10: */

@@ -1,24 +1,17 @@
-/* ../netlib/sorgbr.f -- translated by f2c (version 20000121). You must link the resulting object
- * file with the libraries: -lf2c -lm (in that order) */
+/* ../netlib/sorgbr.f -- translated by f2c (version 20000121). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c_n1 = -1;
+static integer c_n1 = -1;
 /* > \brief \b SORGBR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SORGBR + dependencies */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgbr.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgbr. f"> */
 /* > [TGZ]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorgbr.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorgbr. f"> */
 /* > [ZIP]</a> */
-/* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgbr.
- * f"> */
+/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgbr. f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -45,7 +38,7 @@ static aocl_int64_t c_n1 = -1;
 /* > is of order M: */
 /* > if m >= k, Q = H(1) H(2) . . . H(k) and SORGBR returns the first n */
 /* > columns of Q, where m >= n >= k;
- */
+*/
 /* > if m < k, Q = H(1) H(2) . . . H(m-1) and SORGBR returns Q as an */
 /* > M-by-M matrix. */
 /* > */
@@ -53,7 +46,7 @@ static aocl_int64_t c_n1 = -1;
 /* > is of order N: */
 /* > if k < n, P**T = G(k) . . . G(2) G(1) and SORGBR returns the first m */
 /* > rows of P**T, where n >= m >= k;
- */
+*/
 /* > if k >= n, P**T = G(n-1) . . . G(2) G(1) and SORGBR returns P**T as */
 /* > an N-by-N matrix. */
 /* > \endverbatim */
@@ -65,7 +58,7 @@ static aocl_int64_t c_n1 = -1;
 /* > Specifies whether the matrix Q or the matrix P**T is */
 /* > required, as defined in the transformation applied by SGEBRD: */
 /* > = 'Q': generate Q;
- */
+*/
 /* > = 'P': generate P**T. */
 /* > \endverbatim */
 /* > */
@@ -81,9 +74,9 @@ static aocl_int64_t c_n1 = -1;
 /* > N is INTEGER */
 /* > The number of columns of the matrix Q or P**T to be returned. */
 /* > N >= 0. */
-/* > If VECT = 'Q', M >= N >= fla_min(M,K);
- */
-/* > if VECT = 'P', N >= M >= fla_min(N,K). */
+/* > If VECT = 'Q', M >= N >= min(M,K);
+*/
+/* > if VECT = 'P', N >= M >= min(N,K). */
 /* > \endverbatim */
 /* > */
 /* > \param[in] K */
@@ -107,14 +100,14 @@ static aocl_int64_t c_n1 = -1;
 /* > \param[in] LDA */
 /* > \verbatim */
 /* > LDA is INTEGER */
-/* > The leading dimension of the array A. LDA >= fla_max(1,M). */
+/* > The leading dimension of the array A. LDA >= max(1,M). */
 /* > \endverbatim */
 /* > */
 /* > \param[in] TAU */
 /* > \verbatim */
 /* > TAU is REAL array, dimension */
-/* > (fla_min(M,K)) if VECT = 'Q' */
-/* > (fla_min(N,K)) if VECT = 'P' */
+/* > (min(M,K)) if VECT = 'Q' */
+/* > (min(N,K)) if VECT = 'P' */
 /* > TAU(i) must contain the scalar factor of the elementary */
 /* > reflector H(i) or G(i), which determines Q or P**T, as */
 /* > returned by SGEBRD in its array argument TAUQ or TAUP. */
@@ -129,8 +122,8 @@ static aocl_int64_t c_n1 = -1;
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
-/* > The dimension of the array WORK. LWORK >= fla_max(1,fla_min(M,N)). */
-/* > For optimum performance LWORK >= fla_min(M,N)*NB, where NB */
+/* > The dimension of the array WORK. LWORK >= max(1,min(M,N)). */
+/* > For optimum performance LWORK >= min(M,N)*NB, where NB */
 /* > is the optimal blocksize. */
 /* > */
 /* > If LWORK = -1, then a workspace query is assumed;
@@ -155,22 +148,19 @@ the routine */
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int lapack_sorgbr(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real *a,
-                  aocl_int64_t *lda, real *tau, real *work, aocl_int64_t *lwork, aocl_int64_t *info)
+int lapack_sorgbr(char *vect, integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    aocl_int64_t i__, j;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    integer i__, j;
+    extern logical lsame_(char *, char *);
+    integer iinfo;
     logical wantq;
-    aocl_int64_t mn;
-    extern int lapack_sorglq(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, real *, aocl_int64_t *,
-                             real *, real *, aocl_int64_t *, aocl_int64_t *),
-        lapack_sorgqr(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, real *, aocl_int64_t *,
-                      real *, real *, aocl_int64_t *, aocl_int64_t *);
-    aocl_int64_t lwkopt;
+    integer mn;
+    extern /* Subroutine */
+    int xerbla_(char *, integer *), lapack_sorglq( integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), lapack_sorgqr(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -200,101 +190,98 @@ int lapack_sorgbr(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
     --work;
     /* Function Body */
     *info = 0;
-    wantq = lsame_(vect, "Q", 1, 1);
-    mn = fla_min(*m, *n);
+    wantq = lsame_(vect, "Q");
+    mn = min(*m,*n);
     lquery = *lwork == -1;
-    if(!wantq && !lsame_(vect, "P", 1, 1))
+    if (! wantq && ! lsame_(vect, "P"))
     {
         *info = -1;
     }
-    else if(*m < 0)
+    else if (*m < 0)
     {
         *info = -2;
     }
-    else if(*n < 0 || wantq && (*n > *m || *n < fla_min(*m, *k))
-            || !wantq && (*m > *n || *m < fla_min(*n, *k)))
+    else if (*n < 0 || wantq && (*n > *m || *n < min(*m,*k)) || ! wantq && ( *m > *n || *m < min(*n,*k)))
     {
         *info = -3;
     }
-    else if(*k < 0)
+    else if (*k < 0)
     {
         *info = -4;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < max(1,*m))
     {
         *info = -6;
     }
-    else if(*lwork < fla_max(1, mn) && !lquery)
+    else if (*lwork < max(1,mn) && ! lquery)
     {
         *info = -9;
     }
-    if(*info == 0)
+    if (*info == 0)
     {
         work[1] = 1.f;
-        if(wantq)
+        if (wantq)
         {
-            if(*m >= *k)
+            if (*m >= *k)
             {
                 lapack_sorgqr(m, n, k, &a[a_offset], lda, &tau[1], &work[1], &c_n1, &iinfo);
             }
             else
             {
-                if(*m > 1)
+                if (*m > 1)
                 {
                     i__1 = *m - 1;
                     i__2 = *m - 1;
                     i__3 = *m - 1;
-                    lapack_sorgqr(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], &c_n1,
-                                  &iinfo);
+                    lapack_sorgqr(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], & work[1], &c_n1, &iinfo);
                 }
             }
         }
         else
         {
-            if(*k < *n)
+            if (*k < *n)
             {
                 lapack_sorglq(m, n, k, &a[a_offset], lda, &tau[1], &work[1], &c_n1, &iinfo);
             }
             else
             {
-                if(*n > 1)
+                if (*n > 1)
                 {
                     i__1 = *n - 1;
                     i__2 = *n - 1;
                     i__3 = *n - 1;
-                    lapack_sorglq(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], &c_n1,
-                                  &iinfo);
+                    lapack_sorglq(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], & work[1], &c_n1, &iinfo);
                 }
             }
         }
-        lwkopt = (aocl_int64_t)work[1];
-        lwkopt = fla_max(lwkopt, mn);
+        lwkopt = work[1];
+        lwkopt = max(lwkopt,mn);
     }
-    if(*info != 0)
+    if (*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SORGBR", &i__1, (ftnlen)6);
+        xerbla_("SORGBR", &i__1);
         return 0;
     }
-    else if(lquery)
+    else if (lquery)
     {
-        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
+        work[1] = (real) lwkopt;
         return 0;
     }
     /* Quick return if possible */
-    if(*m == 0 || *n == 0)
+    if (*m == 0 || *n == 0)
     {
         work[1] = 1.f;
         return 0;
     }
-    if(wantq)
+    if (wantq)
     {
         /* Form Q, determined by a call to SGEBRD to reduce an m-by-k */
         /* matrix */
-        if(*m >= *k)
+        if (*m >= *k)
         {
             /* If m >= k, assume m >= n >= k */
-            lapack_sorgqr(m, n, k, &a[a_offset], lda, &tau[1], &work[1], lwork, &iinfo);
+            lapack_sorgqr(m, n, k, &a[a_offset], lda, &tau[1], &work[1], lwork, & iinfo);
         }
         else
         {
@@ -302,11 +289,15 @@ int lapack_sorgbr(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
             /* Shift the vectors which define the elementary reflectors one */
             /* column to the right, and set the first row and column of Q */
             /* to those of the unit matrix */
-            for(j = *m; j >= 2; --j)
+            for (j = *m;
+                    j >= 2;
+                    --j)
             {
                 a[j * a_dim1 + 1] = 0.f;
                 i__1 = *m;
-                for(i__ = j + 1; i__ <= i__1; ++i__)
+                for (i__ = j + 1;
+                        i__ <= i__1;
+                        ++i__)
                 {
                     a[i__ + j * a_dim1] = a[i__ + (j - 1) * a_dim1];
                     /* L10: */
@@ -315,19 +306,20 @@ int lapack_sorgbr(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
             }
             a[a_dim1 + 1] = 1.f;
             i__1 = *m;
-            for(i__ = 2; i__ <= i__1; ++i__)
+            for (i__ = 2;
+                    i__ <= i__1;
+                    ++i__)
             {
                 a[i__ + a_dim1] = 0.f;
                 /* L30: */
             }
-            if(*m > 1)
+            if (*m > 1)
             {
                 /* Form Q(2:m,2:m) */
                 i__1 = *m - 1;
                 i__2 = *m - 1;
                 i__3 = *m - 1;
-                lapack_sorgqr(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1],
-                              lwork, &iinfo);
+                lapack_sorgqr(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[ 1], &work[1], lwork, &iinfo);
             }
         }
     }
@@ -335,10 +327,10 @@ int lapack_sorgbr(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
     {
         /* Form P**T, determined by a call to SGEBRD to reduce a k-by-n */
         /* matrix */
-        if(*k < *n)
+        if (*k < *n)
         {
             /* If k < n, assume k <= m <= n */
-            lapack_sorglq(m, n, k, &a[a_offset], lda, &tau[1], &work[1], lwork, &iinfo);
+            lapack_sorglq(m, n, k, &a[a_offset], lda, &tau[1], &work[1], lwork, & iinfo);
         }
         else
         {
@@ -348,15 +340,21 @@ int lapack_sorgbr(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
             /* those of the unit matrix */
             a[a_dim1 + 1] = 1.f;
             i__1 = *n;
-            for(i__ = 2; i__ <= i__1; ++i__)
+            for (i__ = 2;
+                    i__ <= i__1;
+                    ++i__)
             {
                 a[i__ + a_dim1] = 0.f;
                 /* L40: */
             }
             i__1 = *n;
-            for(j = 2; j <= i__1; ++j)
+            for (j = 2;
+                    j <= i__1;
+                    ++j)
             {
-                for(i__ = j - 1; i__ >= 2; --i__)
+                for (i__ = j - 1;
+                        i__ >= 2;
+                        --i__)
                 {
                     a[i__ + j * a_dim1] = a[i__ - 1 + j * a_dim1];
                     /* L50: */
@@ -364,18 +362,17 @@ int lapack_sorgbr(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
                 a[j * a_dim1 + 1] = 0.f;
                 /* L60: */
             }
-            if(*n > 1)
+            if (*n > 1)
             {
                 /* Form P**T(2:n,2:n) */
                 i__1 = *n - 1;
                 i__2 = *n - 1;
                 i__3 = *n - 1;
-                lapack_sorglq(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1],
-                              lwork, &iinfo);
+                lapack_sorglq(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[ 1], &work[1], lwork, &iinfo);
             }
         }
     }
-    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
+    work[1] = (real) lwkopt;
     return 0;
     /* End of SORGBR */
 }

@@ -169,11 +169,9 @@ int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
     --work;
     /* Function Body */
     *info = 0;
-    nb = 0;
 #ifdef FLA_ENABLE_AMD_OPT
     /* precomputed workspace size */
-    if(*n == 1)
-    {
+    if(*n == 1){
         work[1] = 32;
     }
     else if(*n <= 6)
@@ -182,14 +180,14 @@ int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
     }
     else
     {
-        nb = aocl_lapack_ilaenv(&c__1, "DORGQR", " ", m, n, k, &c_n1);
-        lwkopt = fla_max(1, *n) * nb;
-        work[1] = (doublereal)lwkopt;
+        nb = ilaenv_(&c__1, "DORGQR", " ", m, n, k, &c_n1);
+        lwkopt = max(1,*n) * nb;
+        work[1] = (doublereal) lwkopt;
     }
 #else
-    nb = aocl_lapack_ilaenv(&c__1, "DORGQR", " ", m, n, k, &c_n1);
-    lwkopt = fla_max(1, *n) * nb;
-    work[1] = (doublereal)lwkopt;
+    nb = ilaenv_(&c__1, "DORGQR", " ", m, n, k, &c_n1);
+    lwkopt = max(1,*n) * nb;
+    work[1] = (doublereal) lwkopt;
 #endif
     lquery = *lwork == -1;
     if(*m < 0)
@@ -230,8 +228,8 @@ int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
     }
     nbmin = 2;
     nx = 0;
-    iws = *n;
-    if(nb > 1 && nb < *k)
+    iws = *n;  
+    if (nb > 1 && nb < *k)
     {
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */

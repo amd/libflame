@@ -11,9 +11,12 @@
 #include "blis.h"
 #endif
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-/* > \brief \b DORG2R generates all or part of the orthogonal matrix Q from a QR factorization
- * determined by s geqrf (unblocked algorithm). */
+#ifdef FLA_ENABLE_AMD_OPT
+#include "immintrin.h"
+#endif
+
+static integer c__1 = 1;
+/* > \brief \b DORG2R generates all or part of the orthogonal matrix Q from a QR factorization determined by s geqrf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -124,6 +127,11 @@ int lapack_dorg2r(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1;
+#ifdef FLA_ENABLE_AMD_OPT
+    integer i;
+    doublereal *dx;
+    __m256d alphav, x0v;
+#endif
     /* Local variables */
     aocl_int64_t i__, j, l;
     /* -- LAPACK computational routine -- */
@@ -192,7 +200,10 @@ int lapack_dorg2r(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
         a[j + j * a_dim1] = 1.;
         /* L20: */
     }
-    for(i__ = *k; i__ >= 1; --i__)
+
+    for (i__ = *k;
+            i__ >= 1;
+            --i__)
     {
         /* Apply H(i) to A(i:m,i:n) from the left */
         if(i__ < *n)
@@ -203,7 +214,78 @@ int lapack_dorg2r(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
             aocl_lapack_dlarf("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
                               &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
         }
-        if(i__ < *m)
+
+#ifdef FLA_ENABLE_AMD_OPT
+        /* Inline DSCAL for small size */
+        if (i__ < *m && *m <= FLA_DSCAL_INLINE_SMALL)
+        {
+            i__1 = *m - i__;
+            d__1 = -tau[i__];
+            dx = &a[i__ + i__ * a_dim1];
+
+            /* Load scaling factor */
+            alphav = _mm256_set1_pd(d__1);
+
+            /* Scaling with 0 */
+            if(d__1 == 0.0)
+            {
+                for (i = 1; i <= (i__1-3); i+=4 )
+                {
+                    dx[i] = 0.0;
+                    dx[i+1] = 0.0;
+                    dx[i+2] = 0.0;
+                    dx[i+3] = 0.0;
+                }
+                for (; i <= i__1; ++i)
+                {
+                    dx[i] = 0.0;
+                }
+            }
+            /* Scaling factor other than 0 */
+            else
+            {
+                for ( i = 1; i <= (i__1 - 3); i += 4)
+                {
+                    /* Load the input values */
+                    x0v = _mm256_loadu_pd((double const *) &dx[i]);
+
+                    /* perform alpha * x  */
+                    x0v = _mm256_mul_pd( alphav, x0v );  
+
+                    /* Store the output */
+                    _mm256_storeu_pd((double *) &dx[i], x0v);
+                }
+
+                /* Remainder iterations */
+                if((i__1-i) >= 2)
+                {
+                    for ( ; i <= (i__1-1); i += 2 )
+                    {
+                        dx[i] *= d__1;
+                        dx[i+1] *= d__1;
+                    }
+                    for ( ; i <= i__1; ++i )
+                    {
+                        dx[i] *= d__1;
+                    }
+                }
+                else
+                {
+                    for ( ; i <= i__1; ++i )
+                    {
+                        dx[i] *= d__1;
+                    }
+                }
+            }
+        }
+        else
+        {
+            i__1 = *m - i__;
+            d__1 = -tau[i__];
+            dscal_(&i__1, &d__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
+        }
+#else
+        if (i__ < *m)
         {
             i__1 = *m - i__;
             d__1 = -tau[i__];
@@ -213,6 +295,7 @@ int lapack_dorg2r(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
             aocl_blas_dscal(&i__1, &d__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
 #endif
         }
+#endif
         a[i__ + i__ * a_dim1] = 1. - tau[i__];
         /* Set A(1:i-1,i) to zero */
         i__1 = i__ - 1;

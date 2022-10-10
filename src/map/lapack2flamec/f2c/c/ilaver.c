@@ -50,7 +50,7 @@ void ilaver_(aocl_int_t *vers_major__, aocl_int_t *vers_minor__, aocl_int_t *ver
     /* ===================================================================== */
     *vers_major__ = 3;
     *vers_minor__ = 10;
-    *vers_patch__ = 0;
+    *vers_patch__ = 1;
     /* ===================================================================== */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return 0;

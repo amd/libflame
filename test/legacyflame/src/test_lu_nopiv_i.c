@@ -77,7 +77,8 @@ void libfla_test_lu_nopiv_i_experiment( test_params_t params,
 					double*       residual )
 {
         double time_min   = 1e9;
-	fla_dim_t i;
+        double time;
+	uinteger i;
 	uinteger m, n, nfact;
 	uinteger lda;
 	integer   m_input    = -1;
@@ -87,9 +88,9 @@ void libfla_test_lu_nopiv_i_experiment( test_params_t params,
 	FLA_Obj      A_test;
 
 	// Determine the dimensions.
-	if ( m_input < 0 ) m = p_cur / -m_input;
+	if ( m_input < 0 ) m = p_cur / abs(m_input);
 	else               m = p_cur;
-	if ( n_input < 0 ) n = p_cur / -n_input;
+	if ( n_input < 0 ) n = p_cur / abs(n_input);
 	else               n = p_cur;
 
         // Create the matrices for the current operation.
@@ -119,7 +120,7 @@ void libfla_test_lu_nopiv_i_experiment( test_params_t params,
         //TODO
 		//for now
 
-        for( int nfact=0; nfact <=(fla_min(m,n)); nfact++ )
+        for( int nfact=0; nfact <=(min(m,n)); nfact++ )
 		{
 
 			 if ( impl == FLA_TEST_FLAT_BLK_EXT )
@@ -138,7 +139,7 @@ void libfla_test_lu_nopiv_i_experiment( test_params_t params,
 */
             if( params.p_nfact == -1 || params.p_nfact == -2 )
 	    {
-            nfact = rand() % fla_min(m,n);
+            nfact = rand() % min(m,n);
         }
             else
 		{
@@ -247,7 +248,7 @@ void FLA_GETRFNPI(  integer m,
 
 			   sgetrfnpi_(&m, &n, &nfact, buff_A, &lda, &info);
 			   time = FLA_Clock() - time;
-			   time_min = fla_min( time_min, time );
+			   time_min = min( time_min, time );
 			}
 			break;
 		}
@@ -262,7 +263,7 @@ void FLA_GETRFNPI(  integer m,
 
 			   dgetrfnpi_(&m, &n, &nfact, buff_A, &lda, &info);
 			   time = FLA_Clock() - time;
-			   time_min = fla_min( time_min, time );
+			   time_min = min( time_min, time );
 			}
 			break;
 		}
@@ -277,7 +278,7 @@ void FLA_GETRFNPI(  integer m,
 
 			   cgetrfnpi_(&m, &n, &nfact,buff_A, &lda, &info);
 			   time = FLA_Clock() - time;
-			   time_min = fla_min( time_min, time );
+			   time_min = min( time_min, time );
 			}
 			break;
 		}
@@ -292,7 +293,7 @@ void FLA_GETRFNPI(  integer m,
 
 			   zgetrfnpi_(&m, &n, &nfact, buff_A, &lda, &info);
 			   time = FLA_Clock() - time;
-			   time_min = fla_min( time_min, time );
+			   time_min = min( time_min, time );
 			}
 			break;
 		}

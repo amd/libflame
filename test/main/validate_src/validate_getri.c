@@ -1,119 +1,106 @@
-/*
-    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
-*/
+/******************************************************************************
+* Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
+*******************************************************************************/
 
 /*! @file validate_getri.c
  *  @brief Defines validate function of GETRI() to use in test suite.
  *  */
 
 #include "test_common.h"
-#include "test_prototype.h"
 
-extern double perf;
-extern double time_min;
-
-void validate_getri(char *tst_api, integer m_A, integer n_A, void *A, void *A_inv, integer lda,
-                    integer *IPIV, integer datatype, double err_thresh, char imatrix, void *params)
+void validate_getri(integer m_A,
+    integer n_A,
+    void* A,
+    void* A_inv,
+    integer* IPIV,
+    integer datatype,
+    double* residual)
 {
-    void *a_temp, *work;
-    char NORM = '1';
-    double residual = 0., resid1 = 0., resid2 = 0.;
-
-    /* Early return conditions */
-    if(m_A == 0 || n_A == 0)
-    {
-        FLA_TEST_PRINT_STATUS_AND_RETURN(m_A, n_A, err_thresh);
-    }
-    /* print overall status if incoming threshold is
-     * an extreme value indicating that API returned
-     * unexpected info value */
-    FLA_TEST_PRINT_INVALID_STATUS(m_A, n_A, err_thresh);
-
+    /* System generated locals */
+    void *I, * work;
+    
     /* Create Identity matrix */
-    create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &a_temp, n_A);
+    create_matrix(datatype, &I, n_A, n_A);
     create_vector(datatype, &work, 2 * m_A);
 
-    switch(datatype)
+    switch (datatype)
     {
         case FLOAT:
         {
-            float norm, norm_I;
+            float res, norm, norm_A, norm_A_I, eps;
 
+            eps = slamch_("Epsilon");
+            norm_A = slange_("1", &m_A, &m_A, A, &m_A, work);
+            norm_A_I = slange_("1", &m_A, &m_A, A_inv, &m_A, work);
+            res = (1 / norm_A) / norm_A_I;
             /* compute I - A' * A */
-            fla_lapack_slaset("full", &m_A, &m_A, &s_zero, &s_one, a_temp, &m_A);
-            norm_I = sqrt(m_A);
+            slaset_("full", &m_A, &m_A, &s_zero, &s_one, I, &m_A);
             /* compute I - A' * A */
-            sgemm_("N", "N", &m_A, &n_A, &m_A, &s_n_one, A_inv, &lda, A, &lda, &s_one, a_temp,
-                   &m_A);
+            sgemm_("N", "N", &m_A, &n_A, &m_A, &s_n_one, A_inv, &m_A, A, &m_A, &s_one, I, &m_A);
 
-            compute_matrix_norm(datatype, NORM, m_A, m_A, a_temp, m_A, &norm, imatrix, work);
+            norm = slange_("1", &m_A, &m_A, I, &m_A, work);
             /* Compute norm(I - A'*A) / (N * norm(A) * norm(AINV) * EPS)*/
-            residual = fla_compute_residual(datatype, 'E', norm, norm_I, n_A, params);
+            *residual = (norm * res) / eps / (double)n_A;
             break;
         }
 
         case DOUBLE:
         {
-            double norm_I, norm;
+            double res, norm, norm_A, norm_A_I, eps;
 
+            eps = dlamch_("Epsilon");
+            norm_A = dlange_("1", &m_A, &m_A, A, &m_A, work);
+            norm_A_I = dlange_("1", &m_A, &m_A, A_inv, &m_A, work);
+            res = (1 / norm_A) / norm_A_I;
             /* compute I - A' * A */
-            fla_lapack_dlaset("full", &m_A, &m_A, &d_zero, &d_one, a_temp, &m_A);
-            norm_I = sqrt(m_A);
+            dlaset_("full", &m_A, &m_A, &d_zero, &d_one, I, &m_A);
             /* compute I - A' * A */
-            dgemm_("N", "N", &m_A, &n_A, &m_A, &d_n_one, A_inv, &lda, A, &lda, &d_one, a_temp,
-                   &m_A);
+            dgemm_("N", "N", &m_A, &n_A, &m_A, &d_n_one, A_inv, &m_A, A, &m_A, &d_one, I, &m_A);
 
-            compute_matrix_norm(datatype, NORM, m_A, m_A, a_temp, m_A, &norm, imatrix, work);
+            norm = dlange_("1", &m_A, &m_A, I, &m_A, work);
             /* Compute norm(I - A'*A) / (N * norm(A) * norm(AINV) * EPS)*/
-            residual = fla_compute_residual(datatype, 'E', norm, norm_I, n_A, params);
+            *residual = (norm * res) / eps / (double)n_A;
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_I;
+            float res, norm, norm_A, norm_A_I, eps;
 
+            eps = slamch_("Epsilon");
+            norm_A = clange_("1", &m_A, &m_A, A, &m_A, work);
+            norm_A_I = clange_("1", &m_A, &m_A, A_inv, &m_A, work);
+            res = (1 / norm_A) / norm_A_I;
             /* compute I - A' * A */
-            fla_lapack_claset("full", &m_A, &m_A, &c_zero, &c_one, a_temp, &m_A);
-            norm_I = sqrt(m_A);
+            claset_("full", &m_A, &m_A, &c_zero, &c_one, I, &m_A);
             /* compute I - A' * A */
-            cgemm_("N", "N", &m_A, &n_A, &m_A, &c_n_one, A_inv, &lda, A, &lda, &c_one, a_temp,
-                   &m_A);
-            compute_matrix_norm(datatype, NORM, m_A, m_A, a_temp, m_A, &norm, imatrix, work);
+            cgemm_("N", "N", &m_A, &n_A, &m_A, &c_n_one, A_inv, &m_A, A, &m_A, &c_one, I, &m_A);
+
+            norm = clange_("1", &m_A, &m_A, I, &m_A, work);
             /* Compute norm(I - A'*A) / (N * norm(A) * norm(AINV) * EPS)*/
-            residual = fla_compute_residual(datatype, 'E', norm, norm_I, n_A, params);
+            *residual = (norm * res) / eps / (double)n_A;
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_I;
+            double res, norm, norm_A, norm_A_I, eps;
 
+            eps = dlamch_("Epsilon");
+            norm_A = zlange_("1", &m_A, &m_A, A, &m_A, work);
+            norm_A_I = zlange_("1", &m_A, &m_A, A_inv, &m_A, work);
+            res = (1 / norm_A) / norm_A_I;
             /* compute I - A' * A */
-            fla_lapack_zlaset("full", &m_A, &m_A, &z_zero, &z_one, a_temp, &m_A);
-            norm_I = sqrt(m_A);
+            zlaset_("full", &m_A, &m_A, &z_zero, &z_one, I, &m_A);
             /* compute I - A' * A */
-            zgemm_("N", "N", &m_A, &n_A, &m_A, &z_n_one, A_inv, &lda, A, &lda, &z_one, a_temp,
-                   &m_A);
+            zgemm_("N", "N", &m_A, &n_A, &m_A, &z_n_one, A_inv, &m_A, A, &m_A, &z_one, I, &m_A);
 
-            compute_matrix_norm(datatype, NORM, m_A, m_A, a_temp, m_A, &norm, imatrix, work);
+            norm = zlange_("1", &m_A, &m_A, I, &m_A, work);
             /* Compute norm(I - A'*A) / (N * norm(A) * norm(AINV) * EPS)*/
-            residual = fla_compute_residual(datatype, 'E', norm, norm_I, n_A, params);
+            *residual = (norm * res) / eps / (double)n_A;
             break;
         }
-        default:
-            residual = err_thresh;
-            break;
     }
 
     // Free up buffers
     free_vector(work);
-    free_vector(a_temp);
-
-    /* Test 2: Check padding rows not modified */
-    resid2 = check_padding(datatype, m_A, n_A, A_inv, lda);
-
-    resid1 = residual;
-    residual = fla_test_max(resid1, resid2);
-    FLA_PRINT_TEST_STATUS(m_A, n_A, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
-    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    free_vector(I);
 }

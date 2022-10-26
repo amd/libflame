@@ -1,6 +1,6 @@
-/*
-    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
-*/
+/******************************************************************************
+* Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
+*******************************************************************************/
 
 /*! @file validate_common.h
  *  @brief Defines function declarations of validate functions of APIs to be
@@ -10,239 +10,204 @@
 #ifndef VALIDATE_COMMON_H
 #define VALIDATE_COMMON_H
 
-#if defined(FLA_ENABLE_ILP64)
-typedef int64_t integer;
-typedef uint64_t uinteger;
-#else
-typedef int integer;
-typedef unsigned long uinteger;
-#endif
+void validate_geqrf(integer m_A,
+    integer n_A,
+    void *A,
+    void *A_test,
+    void *T_test,
+    integer datatype,
+    double* residual);
 
-void validate_geqrf(char *tst_api, integer m_A, integer n_A, void *A, void *A_test, integer lda,
-                    void *T_test, integer datatype, double err_thresh, void *params);
+void validate_gerq2(integer m_A,
+    integer n_A,
+    void *A,
+    void *A_test,
+    void *T_test,
+    integer datatype,
+    double* residual);
 
-void validate_gerq2(char *tst_api, integer m_A, integer n_A, void *A, void *A_test, integer lda,
-                    void *T_test, integer datatype, double err_thresh, void *params);
+void validate_gerqf(integer m_A,
+    integer n_A,
+    void *A,
+    void *A_test,
+    void *T_test,
+    integer datatype,
+    double* residual);
 
-void validate_gerqf(char *tst_api, integer m_A, integer n_A, void *A, void *A_test, integer lda,
-                    void *T_test, integer datatype, double err_thresh, void *params);
+void validate_gesdd(char *jobz,
+    integer m,
+    integer n,
+    void* A,
+    void* A_test,
+    void* s,
+    void* U,
+    void* V,
+    integer datatype,
+    double* residual);
 
-void validate_gelqf(char *tst_api, integer m_A, integer n_A, void *A, void *A_test, integer lda,
-                    void *T_test, integer datatype, double err_thresh, void *params);
+void validate_gesvd(char *jobu, char *jobvt,
+    integer m,
+    integer n,
+    void* A,
+    void* A_test,
+    void* s,
+    void* U,
+    void* V,
+    integer datatype,
+    double* residual);
 
-void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, void *A_test,
-                    integer lda, void *s, void *s_in, void *U, integer ldu, void *V, integer ldvt,
-                    integer datatype, double err_thresh, char imatrix, void *scal, void *params);
+void validate_getrf(integer m_A,
+    integer n_A,
+    void* A,
+    void* A_test,
+    integer lda,
+    integer* IPIV,
+    integer datatype,
+    double* residual);
 
-void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n, void *A,
-                    void *A_test, integer lda, void *s, void *s_test, void *U, integer ldu, void *V,
-                    integer ldvt, integer datatype, double err_thresh, FILE *g_ext_fptr,
-                    char imatrix, void *scal, void *params);
+void validate_getri(integer m_A,
+    integer n_A,
+    void* A,
+    void* A_inv,
+    integer* IPIV,
+    integer datatype,
+    double* residual);
 
-void validate_getrf(char *tst_api, integer m_A, integer n_A, void *A, void *A_test, integer lda,
-                    integer *IPIV, integer datatype, double err_thresh, char imatrix, void *params);
-void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, integer lda,
-                             integer *IPIV, integer datatype, char imatrix, double *resid1,
-                             double *resid2, void *params);
+void validate_getrs(char *trans,
+    integer n,
+    integer nrhs,
+    void* A,
+    void* B,
+    void* X,
+    integer datatype,
+    double* residual);
 
-void validate_getri(char *tst_api, integer m_A, integer n_A, void *A, void *A_inv, integer lda,
-                    integer *IPIV, integer datatype, double err_thresh, char imatrix, void *params);
+void validate_orgqr(integer m,
+    integer n,
+    void *A,
+    void* Q,
+    void *R,
+    void* work,
+    integer datatype,
+    double* residual);
 
-void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A, integer lda,
-                    void *A_fact, void *A_fact_save, integer *IPIV, integer *IPIV_save, void *B,
-                    integer ldb, void *X, integer datatype, double err_thresh, char imatrix,
-                    void *scal, void *params);
-void validate_gbtrs(char *tst_api, char *trans, integer n, integer kl, integer ku, integer nrhs,
-                    void *AB_orig, void *AB, void *AB_save, integer ldab, integer *IPIV,
-                    integer *IPIV_save, void *B, integer ldb, void *X, integer datatype,
-                    double err_thresh, char imatrix, void *params);
+void validate_potrf(char *uplo,
+    integer m,
+    void *A,
+    void *A_test,
+    integer datatype,
+    double* residual);
 
-void validate_orgqr(char *tst_api, integer m, integer n, void *A, integer lda, void *Q, void *R,
-                    integer datatype, double err_thresh, char imatrix, void *params);
+void validate_potrs(integer n,
+    integer nrhs,
+    void *A,
+    void *X,
+    void *B,
+    integer datatype,
+    double* residual);
 
-void validate_potrf(char *tst_api, char *uplo, integer m, void *A, void *A_test, integer lda,
-                    integer datatype, double err_thresh, void *params);
+void validate_syevd(char* jobz,
+    integer n,
+    void* A,
+    void* A_test,
+    void* w,
+    integer datatype,
+    double* residual);
 
-void validate_potrs(char *tst_api, integer n, integer nrhs, void *A, integer lda, void *A_fact,
-                    void *A_save, void *X, void *B, void *B_test, integer ldb, integer datatype,
-                    double err_thresh, char imatrix, void *params);
+void validate_geevx(char* jobvl,
+    char* jobvr,
+    char* sense,
+    char* balanc,
+    integer m,
+    void* A,
+    void* A_test,
+    void* VL,
+    void* VR,
+    void* w,
+    void* wr,
+    void* wi,
+    void* scale,
+    void* abnrm,
+    void* rconde,
+    void* rcondv,
+    integer datatype,
+    double* residual);
 
-void validate_syevd(char *tst_api, char *jobz, integer n, void *A, void *A_test, integer lda,
-                    void *w, integer datatype, double err_thresh, void *params);
+void validate_geev(char* jobvl,
+    char* jobvr,
+    integer m,
+    void* A,
+    void* A_test,
+    void* VL,
+    void* VR,
+    void* w,
+    void* wr,
+    void* wi,
+    integer datatype,
+    double* residual);
 
-void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *balanc, integer m,
-                    void *A, void *A_test, integer lda, void *VL, integer ldvl, void *VR,
-                    integer ldvr, void *w, void *wr, void *wi, void *scale, void *abnrm,
-                    void *rconde, void *rcondv, integer datatype, char imatrix, void *scal,
-                    double err_thresh, void *wr_in, void *wi_in, void *params);
+void validate_geqp3(integer m_A,
+    integer n_A,
+    void *A,
+    void *A_test,
+    integer *jpvt,
+    void *T_test,
+    integer datatype,
+    double* residual);
 
-void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, void *A_test,
-                   integer lda, void *VL, integer ldvt, void *VR, integer ldvr, void *w, void *wr,
-                   void *wi, integer datatype, char imatrix, void *scal, double err_thresh,
-                   void *wr_in, void *wi_in, void *params);
+void validate_gesv(integer n,
+    integer nrhs,
+    void* A,
+    void* B,
+    void* X,
+    integer datatype,
+    double* residual);
 
-void validate_geqp3(char *tst_api, integer m_A, integer n_A, void *A, void *A_test, integer lda,
-                    integer *jpvt, void *T_test, integer datatype, double err_thresh, char imatrix,
-                    void *params);
+void validate_ggev(char* jobvl,
+    char* jobvr, 
+    integer n, 
+    void* A,
+    void* B, 
+    void* alpha, 
+    void* alphar, 
+    void* alphai, 
+    void* beta,
+    void* VL, 
+    integer ldvl, 
+    void* VR, 
+    integer ldvr,
+    integer datatype, 
+    double *residual);
 
-void validate_gesv(char *tst_api, integer n, integer nrhs, void *A, integer lda, void *B,
-                   integer ldb, void *X, integer datatype, double err_thresh, char imatrix,
-                   void *scal, void *params);
-
-void validate_ggev(char *tst_api, char *jobvl, char *jobvr, integer n, void *A, void *A_test,
-                   integer lda, void *B, void *B_test, integer ldb, void *alpha, void *alphar,
-                   void *alphai, void *beta, void *VL, integer ldvl, void *VR, integer ldvr,
-                   integer datatype, double err_thresh, void *params);
-
-void validate_ggevx(char *tst_api, char *balanc, char *jobvl, char *jobvr, char *sense, integer n,
-                    void *A, void *A_test, integer lda, void *B, void *B_test, integer ldb,
-                    void *alpha, void *alphar, void *alphai, void *beta, void *VL, integer ldvl,
-                    void *VR, integer ldvr, integer datatype, double err_thresh, void *params);
+void validate_ggevx(char* balanc,
+    char* jobvl,
+    char* jobvr,
+    char* sense,    
+    integer n, 
+    void* A,
+    integer lda,
+    void* B, 
+    integer ldb,
+    void* alpha, 
+    void* alphar, 
+    void* alphai, 
+    void* beta,
+    void* VL, 
+    integer ldvl, 
+    void* VR, 
+    integer ldvr,
+    integer datatype, 
+    double *residual);
 
 /* This function will validate STEDC() output eigenvectors and orthogonal
-   matrices only if compz != N, as output will not be generated
+   matrices only if compz != N, as output will not be generated 
    if compz = N.*/
-void validate_stedc(char *tst_api, char compz, integer n, void *D_test, void *Z_input, void *Z,
-                    integer ldz, integer datatype, double err_thresh, void *params);
-void validate_eigen_values(char *tst_api, integer datatype, integer n, void *alpha, void *alphar,
-                           void *alphai, void *beta, void *alphae, void *alphaer, void *alphaei,
-                           void *betae, double *resid1, double *resid2, double *resid3,
-                           void *params);
-void validate_hgeqz_comp_n(char *tst_api, integer datatype, integer n, void *H_test, void *H_ntest,
-                           integer ldh, void *T_test, void *T_ntest, integer ldt, void *alpha,
-                           void *alphar, void *alphai, void *beta, void *alphan, void *alphanr,
-                           void *alphani, void *betan, double err_thresh, void *params);
-void validate_hgeqz_eigen_values(char *tst_api, integer datatype, integer n, void *alpha,
-                                 void *alphar, void *alphai, void *beta, void *alphae,
-                                 void *alphaer, void *alphaei, void *betae, double err_thresh,
-                                 void *params);
-void validate_hgeqz(char *tst_api, char *job, char *compq, char *compz, integer n, void *H,
-                    void *H_test, void *A, integer ldh, void *T, void *T_test, void *B, integer ldt,
-                    void *Q, void *Q_test, void *Q_A, integer ldq, void *Z, void *Z_test, void *Z_A,
-                    integer ldz, integer datatype, double err_thresh, char imatrix, void *params);
-
-void validate_hseqr(char *tst_api, char *job, char *compz, integer n, void *H, void *H_test,
-                    integer ldh, void *Z, void *Z_test, integer ldz, void *wr, void *wr_in,
-                    void *wi, void *wi_in, void *w, integer datatype, double err_thresh,
-                    integer *ilo, integer *ihi, char imatrix, void *scal_H, void *params);
-
-void validate_spffrt2(char *tst_api, integer n, integer ncolm, void *A, void *AP, integer datatype,
-                      double err_thresh, void *params);
-
-void validate_spffrtx(char *tst_api, integer n, integer ncolm, void *A, void *AP, integer datatype,
-                      double err_thresh, void *params);
-
-void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void *A, void *A_test,
-                        integer lda, void *B, void *B_test, integer ldb, void *Q, void *Q_test,
-                        integer ldq, void *Z, void *Z_test, integer ldz, integer datatype,
-                        double *resid, void *params);
-void validate_gghrd(char *tst_api, char *compq, char *compz, integer n, void *A, void *A_test,
-                    integer lda, void *B, void *B_test, integer ldb, void *Q, void *Q_test,
-                    integer ldq, void *Z, void *Z_test, integer ldz, integer datatype,
-                    double err_thresh, void *params);
-
-void validate_gehrd(char *tst_api, integer n, integer ilo, integer ihi, void *A, void *A_test,
-                    integer lda, void *tau, integer datatype, double err_thresh, void *params);
-
-void validate_rot(char *tst_api, integer datatype, integer n, void *cx, void *cx_test, integer incx,
-                  void *cy, void *cy_test, integer incy, void *c, void *s, void *c_save,
-                  void *s_save, double err_thresh, void *params);
-
-void validate_lartg(char *tst_api, integer datatype, void *f, void *g, void *f_save, void *g_save,
-                    void *r, void *c, void *s, double err_thresh, void *params);
-
-void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrhs, void *A,
-                   integer lda, void *B, integer ldb, void *x, integer datatype, double err_thresh,
-                   char imatrix, void *params);
-
-void validate_larfg(char *tst_api, integer datatype, integer n, integer incx, integer x_length,
-                    void *x, void *v, void *tau, double err_thresh, void *params);
-void validate_larf(char *tst_api, integer datatype, char side, integer m, integer n, void *v,
-                   integer incv, void *c__, integer ldc__, void *c__out, integer ldc__out,
-                   void *tau, double err_thresh, void *params);
-
-void validate_gtsv(char *tst_api, integer datatype, integer n, integer nrhs, void *B, integer ldb,
-                   void *X, void *Xact, integer ldx, void *dl, void *d, void *du, void *dl_save,
-                   void *d_save, void *du_save, void *scal, char imatrix, double err_thresh,
-                   void *params);
-
-void validate_syev(char *tst_api, char *jobz, char *range, integer n, void *A, void *A_test,
-                   integer lda, integer il, integer iu, void *L, void *lambda, void *ifail,
-                   integer datatype, double err_thresh, char imatrix, void *scal, void *params);
-
-void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer m, integer n,
-                     void *A, void *A_test, integer lda, void *vl, void *vu, integer il, integer iu,
-                     integer ns, void *s, void *s_test, void *U, integer ldu, void *V, integer ldvt,
-                     integer datatype, double err_thresh, FILE *g_ext_fptr, void *scal,
-                     char imatrix, void *params);
-/* This function validates LU factorization output by reconstructing into input band storage
-   matrix.*/
-void validate_gbtrf(char *tst_api, integer m_A, integer n_A, integer kl, integer ku, void *AB,
-                    void *AB_test, integer ldab, integer *IPIV, integer datatype, double err_thresh,
-                    void *params);
-
-void validate_gelsd(char *tst_api, integer m, integer n, integer NRHS, void *A, integer lda,
-                    void *B, integer ldb, void *S, void *X, void *rcond, integer *rank,
-                    integer datatype, double err_thresh, char imatrix, void *params);
-
-void validate_sytrf(char *tst_api, char *uplo, integer n, integer lda, void *A_res,
-                    integer datatype, integer *ipiv, double err_thresh, void *A, void *params);
-
-void validate_hetrf(char *tst_api, char *uplo, integer n, integer lda, void *A_res,
-                    integer datatype, integer *ipiv, double err_thresh, void *A, void *params);
-void validate_hetrf_rook(char *tst_api, char *uplo, integer n, integer lda, void *A_res,
-                         integer datatype, integer *ipiv, double err_thresh, void *A, void *params);
-
-/* GGEV API validate case for JOBVL= JOBVR = N */
-void validate_ggev_EVs(char *tst_api, integer m, void *alpha, void *alphar, void *alphai,
-                       void *beta, void *alpha_copy, void *alphar_copy, void *alphai_copy,
-                       void *beta_copy, integer datatype, double err_thresh, void *params);
-
-void validate_sygvd(char *tst_api, integer itype, char *jobz, char *range, char *uplo, integer n,
-                    void *A, void *A_test, integer lda, void *B, void *B_test, integer ldb,
-                    integer il, integer iu, void *lambda_orig, void *lambda_out, void *ifail,
-                    integer datatype, double err_thresh, char imatrix, void *scal, void *params);
-
-/* Validate function for lange */
-void validate_lange(char *tst_api, integer datatype, char norm_type, integer m, integer n,
-                    integer lda, void *A, void *A_save, void *result, double err_thresh,
-                    void *params);
-
-void validate_gecon(char *tst_api, integer datatype, char norm, integer n, void *A, void *A_save,
-                    integer lda, double err_thresh, char imatrix_char, void *params);
-
-void validate_getrfnpi(char *tst_api, integer m_A, integer n_A, integer nfact, void *A,
-                       void *A_test, integer lda, integer *IPIV, integer datatype,
-                       double err_thresh, char imatrix, void *params);
-void validate_hetri_rook(char *tst_api, char uplo, integer n, void *A, void *A_inv, integer lda,
-                         integer *ipiv, integer datatype, double err_thresh, char imatrix,
-                         void *params);
-void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, integer k, void *A,
-                    void *A_save, integer lda, void *C, void *Tau, void *Tau_save, integer ldc,
-                    void *C_test, integer datatype, double err_thresh, char imatrix, void *params);
-void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, void *A_test,
-                    integer lda, void *d, void *e, void *tauq, void *taup, void *X, integer ldx,
-                    void *Y, integer ldy, integer datatype, double err_thresh, FILE *g_ext_fptr,
-                    char imatrix, void *params);
-void validate_gejsv(char *tst_api, char joba, char jobu, char jobv, char jobr, char jobt, char jobp,
-                    integer m, integer n, void *A, integer lda, void *S, void *S_test, void *U,
-                    integer ldu, void *V, integer ldv, void *stat, integer *istat,
-                    integer test_eliminated_svds, integer datatype, double err_thresh, void *scal,
-                    char imatrix, void *params);
-void validate_sytrd(char *tst_api, integer datatype, char uplo, integer n, void *A_out, void *A_in,
-                    integer lda, void *D, void *E, void *tau, double err_thresh, void *params);
-void validate_gebrd(integer datatype, char *tst_api, integer m, integer n, void *A, integer lda,
-                    void *A_test, integer ldat, void *d, void *e, void *tauq, void *taup,
-                    double err_thresh, void *params);
-void validate_trtri(char *tst_api, char uplo, char diag, integer n, void *A, void *A_inv,
-                    integer lda, integer datatype, double err_thresh, char imatrix, void *params);
-void validate_trtrs(char *tst_api, integer datatype, char *uplo, char *trans, char *diag, integer n,
-                    integer nrhs, void *A, void *A_save, integer lda, void *X, void *B, integer ldb,
-                    double err_thresh, char imatrix, void *params);
-void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_in, void *U_out,
-                    integer ldu, void *VT_out, integer ldvt, void *U_in, void *VT_in, integer ncvt,
-                    integer nru, integer ncc, void *C_out, integer ldc, void *C_in, char uplo,
-                    integer datatype, double residual_in, double err_thresh, FILE *g_ext_fptr,
-                    char imatrix_char, void *params);
+void validate_stedc(char compz,
+    integer n,
+    void* D_test,
+    void* A,
+    void* A_test,
+    integer datatype,
+    double* residual);
 
 #endif // VALIDATE_COMMON_H

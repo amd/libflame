@@ -1,19 +1,13 @@
 ###############################################################################
-# Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 
-target_sources(${PROJECT_NAME}
+target_sources(test_libFLAME_main
      PRIVATE
 ${CMAKE_CURRENT_SOURCE_DIR}/test_common.c
-${CMAKE_CURRENT_SOURCE_DIR}/test_overflow_underflow.c
-${CMAKE_CURRENT_SOURCE_DIR}/test_output_routines.c
-${CMAKE_CURRENT_SOURCE_DIR}/test_bit_reproducibility.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_gbtrf.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_gbtrs.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_geqrf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gerq2.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gerqf.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_gelqf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gesdd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gesvd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_getrf.c
@@ -30,34 +24,5 @@ ${CMAKE_CURRENT_SOURCE_DIR}/validate_gesv.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_ggev.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_ggevx.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_stedc.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_hseqr.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_spffrt2.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_spffrtx.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_gehrd.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_hgeqz.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_gghrd.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_rot.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_lartg.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_gels.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_larfg.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_gtsv.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_syev.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_gesvdx.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_gelsd.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_sytrf.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_hetrf.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_larf.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_sygvd.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_lange.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_gecon.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_getrfnpi.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_hetri_rook.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_ormqr.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_gejsv.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_labrd.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_gebrd.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_sytrd.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_trtri.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_trtrs.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_bdsqr.c
 )
+

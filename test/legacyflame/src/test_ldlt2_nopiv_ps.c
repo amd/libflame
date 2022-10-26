@@ -14,6 +14,18 @@
 // static variables
 static char* op_str                   = "Partial / Incomplete LDLT(2) factorization without Pivoting";
 
+extern float  slansy_( char *, char *, integer *, float  *, integer *, float  * );
+extern double dlansy_( char *, char *, integer *, double *, integer *, double * );
+extern float  clansy_( char *, char *, integer *, scomplex *, integer *, float * );
+extern double zlansy_( char *, char *, integer *, dcomplex *, integer *, double * );
+
+extern int sspffrt2_( float  *ap, integer *n, integer * ncolm, float  *work, float  *work2 );
+extern int dspffrt2_( double *ap, integer *n, integer * ncolm, double *work, double *work2 );
+extern int cspffrt2_( scomplex *ap, integer *n, integer * ncolm, scomplex *work, scomplex *work2 );
+extern int zspffrt2_( dcomplex *ap, integer *n, integer * ncolm, dcomplex *work, dcomplex *work2 );
+
+extern float slamch_(char *cmach);
+extern double dlamch_(char *cmach);
 
 /*************************************************************************/
 /*                     SINGLE PRECISION ROUTINES                         */
@@ -160,7 +172,7 @@ void test_ldlt2_nopiv_ps_s( test_params_t *params )
                time = FLA_Clock();
                sspffrt2_(ad, &n, &ni, NULL, NULL);
                time = FLA_Clock() - time;
-               time_min = fla_min( time_min, time );
+               time_min = min( time_min, time );
 
                /* Calculate error norm */
                snrm = diff_norm_s( ad, fod, n, ni );
@@ -212,7 +224,7 @@ void test_ldlt2_nopiv_ps_s( test_params_t *params )
             time = FLA_Clock();
             sspffrt2_(ad, &n, &ni, NULL, NULL);
             time = FLA_Clock() - time;
-            time_min = fla_min( time_min, time );
+            time_min = min( time_min, time );
 
             /* Calculate error norm */
             snrm = diff_norm_s( ad, fod, n, ni );
@@ -399,7 +411,7 @@ void test_ldlt2_nopiv_ps_d( test_params_t *params )
                time = FLA_Clock();
                dspffrt2_(ad, &n, &ni, work, NULL);
                time = FLA_Clock() - time;
-               time_min = fla_min( time_min, time );
+               time_min = min( time_min, time );
 
                /* Calculate error norm */
                dnrm = diff_norm_d( ad, fod, n, ni );
@@ -451,7 +463,7 @@ void test_ldlt2_nopiv_ps_d( test_params_t *params )
             time = FLA_Clock();
             dspffrt2_(ad, &n, &ni, work, NULL);
             time = FLA_Clock() - time;
-            time_min = fla_min( time_min, time );
+            time_min = min( time_min, time );
 
             /* Calculate error norm */
             dnrm = diff_norm_d( ad, fod, n, ni );
@@ -484,7 +496,7 @@ void test_ldlt2_nopiv_ps_d( test_params_t *params )
 
       free(od);
       free(ad);
-      free(work);
+
       free(fod);
    }
    return;
@@ -649,7 +661,7 @@ void test_ldlt2_nopiv_ps_c( test_params_t *params )
                time = FLA_Clock();
                cspffrt2_(ad, &n, &ni, NULL, NULL);
                time = FLA_Clock() - time;
-               time_min = fla_min( time_min, time );
+               time_min = min( time_min, time );
 
                /* Calculate error norm */
                snrm = diff_norm_c( ad, fod, n, ni );
@@ -702,7 +714,7 @@ void test_ldlt2_nopiv_ps_c( test_params_t *params )
             time = FLA_Clock();
             cspffrt2_(ad, &n, &ni, NULL, NULL);
             time = FLA_Clock() - time;
-            time_min = fla_min( time_min, time );
+            time_min = min( time_min, time );
 
             /* Calculate error norm */
             snrm = diff_norm_c( ad, fod, n, ni );
@@ -902,7 +914,7 @@ void test_ldlt2_nopiv_ps_z( test_params_t *params )
                time = FLA_Clock();
                zspffrt2_(ad, &n, &ni, work, work1);
                time = FLA_Clock() - time;
-               time_min = fla_min( time_min, time );
+               time_min = min( time_min, time );
 
                /* Calculate error norm */
                dnrm = diff_norm_z( ad, fod, n, ni );
@@ -954,7 +966,7 @@ void test_ldlt2_nopiv_ps_z( test_params_t *params )
             time = FLA_Clock();
             zspffrt2_(ad, &n, &ni, work, work1);
             time = FLA_Clock() - time;
-            time_min = fla_min( time_min, time );
+            time_min = min( time_min, time );
 
             /* Calculate error norm */
             dnrm = diff_norm_z( ad, fod, n, ni );

@@ -1,116 +1,110 @@
-/*
-    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
-*/
+/******************************************************************************
+* Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
+*******************************************************************************/
 
 /*! @file validate_orgqr.c
  *  @brief Defines validate function of ORGQR() to use in test suite.
  *  */
 
 #include "test_common.h"
-#include "test_prototype.h"
 
-extern double perf;
-extern double time_min;
-
-void validate_orgqr(char *tst_api, integer m, integer n, void *A, integer lda, void *Q, void *R,
-                    integer datatype, double err_thresh, char imatrix, void *params)
+void validate_orgqr(integer m,
+    integer n,
+    void *A,
+    void* Q,
+    void *R,
+    void* work,
+    integer datatype,
+    double* residual)
 {
     integer k;
-    double residual, resid1 = 0., resid2 = 0., resid3 = 0.;
-    void *work = NULL;
 
-    /* Early return conditions */
-    if(m == 0 || n == 0)
-    {
-        FLA_TEST_PRINT_STATUS_AND_RETURN(m, n, err_thresh);
-    }
-    /* print overall status if incoming threshold is
-     * an extreme value indicating that API returned
-     * unexpected info value */
-    FLA_TEST_PRINT_INVALID_STATUS(m, n, err_thresh);
+    if( m == n)
+        k = m;
+    else
+        k = n;
 
-    k = m;
-    char NORM = '1';
-
-    switch(datatype)
+    switch( datatype )
     {
         case FLOAT:
         {
-            float norm, norm_A;
+            float norm, norm_A, eps, resid1, resid2;
+            eps = slamch_("P");
 
             /* Test 1
                compute norm(R - Q'*A) / (N * norm(A) * EPS)*/
-            compute_matrix_norm(datatype, NORM, n, n, R, n, &norm_A, imatrix, work);
-            sgemm_("T", "N", &n, &n, &k, &s_n_one, Q, &lda, A, &lda, &s_one, R, &n);
+            norm_A = slange_("1", &k, &k, R, &k, work);
+            sgemm_("T", "N", &k, &k, &m, &s_n_one, Q, &m, A, &m, &s_one, R, &k);
 
-            compute_matrix_norm(datatype, NORM, n, n, R, n, &norm, imatrix, work);
-            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, (float)k, params);
+            norm = slange_("1", &k, &k, R, &k, work);
+            resid1 = norm/(eps * norm_A * (float)k);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = (float)check_orthogonality(datatype, Q, m, n, lda, params);
+            resid2 = (float)check_orthogonality(datatype, Q, m, k);
+
+            *residual = (double)max(resid1, resid2);
             break;
         }
         case DOUBLE:
         {
-            double norm, norm_A;
+            double norm, norm_A, eps, resid1, resid2;
+            eps = dlamch_("P");
 
             /* Test 1
                compute norm(R - Q'*A) / (N * norm(A) * EPS)*/
-            compute_matrix_norm(datatype, NORM, n, n, R, n, &norm_A, imatrix, work);
-            dgemm_("T", "N", &n, &n, &k, &d_n_one, Q, &lda, A, &lda, &d_one, R, &n);
+            norm_A = dlange_("1", &k, &k, R, &k, work);
+            dgemm_("T", "N", &k, &k, &m, &d_n_one, Q, &m, A, &m, &d_one, R, &k);
 
-            compute_matrix_norm(datatype, NORM, n, n, R, n, &norm, imatrix, work);
-            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, (float)k, params);
+            norm = dlange_("1", &k, &k, R, &k, work);
+            resid1 = norm/(eps * norm_A * (double)k);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, m, n, lda, params);
+            resid2 = check_orthogonality(datatype, Q, m, k);
+   
+            *residual = (double)max(resid1, resid2);
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_A;
+            float norm, norm_A, eps, resid1, resid2;
+            eps = slamch_("P");
 
             /* Test 1
                compute norm(R - Q'*A) / (N * norm(A) * EPS)*/
-            compute_matrix_norm(datatype, NORM, n, n, R, n, &norm_A, imatrix, work);
-            cgemm_("C", "N", &n, &n, &k, &c_n_one, Q, &lda, A, &lda, &c_one, R, &n);
+            norm_A = clange_("1", &k, &k, R, &k, work);
+            cgemm_("C", "N", &k, &k, &m, &c_n_one, Q, &m, A, &m, &c_one, R, &k);
 
-            compute_matrix_norm(datatype, NORM, n, n, R, n, &norm, imatrix, work);
-            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, (float)k, params);
+            norm = clange_("1", &k, &k, R, &k, work);
+            resid1 = norm/(eps * norm_A * (float)k);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = (float)check_orthogonality(datatype, Q, m, n, lda, params);
+            resid2 = (float)check_orthogonality(datatype, Q, m, k);
+
+            *residual = (double)max(resid1, resid2);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_A;
+            double norm, norm_A, eps, resid1, resid2;
+            eps = dlamch_("P");
 
             /* Test 1
                compute norm(R - Q'*A) / (N * norm(A) * EPS)*/
-            compute_matrix_norm(datatype, NORM, n, n, R, n, &norm_A, imatrix, work);
-            zgemm_("C", "N", &n, &n, &k, &z_n_one, Q, &lda, A, &lda, &z_one, R, &n);
+            norm_A = zlange_("1", &k, &k, R, &k, work);
+            zgemm_("C", "N", &k, &k, &m, &z_n_one, Q, &m, A, &m, &z_one, R, &k);
 
-            compute_matrix_norm(datatype, NORM, n, n, R, n, &norm, imatrix, work);
-            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, (float)k, params);
+            norm = zlange_("1", &k, &k, R, &k, work);
+            resid1 = norm/(eps * norm_A * (double)k);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, m, n, lda, params);
+            resid2 = check_orthogonality(datatype, Q, m, k);
+
+            *residual = (double)max(resid1, resid2);
             break;
         }
     }
-
-    /* Test 3: Check padding rows not modified */
-    resid3 = check_padding(datatype, m, n, Q, lda);
-
-    residual = fla_test_max(resid1, resid2);
-    residual = fla_test_max(resid3, residual);
-    FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
-    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
-    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
 }

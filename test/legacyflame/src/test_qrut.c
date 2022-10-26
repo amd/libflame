@@ -53,7 +53,7 @@ void libfla_test_qrut_impl( int     impl,
                             FLA_Obj A,
                             FLA_Obj T );
 void libfla_test_qrut_cntl_create( unsigned int var,
-                                   fla_dim_t        b_alg_flat );
+                                   dim_t        b_alg_flat );
 void libfla_test_qrut_cntl_free( void );
 void FLA_GEQRF( integer m,
                 integer n,
@@ -154,8 +154,8 @@ void libfla_test_qrut_experiment( test_params_t params,
                                   double*       t,
                                   double*       residual )
 {
-	fla_dim_t        b_flash    = params.b_flash;
-	fla_dim_t        b_alg_flat = params.b_alg_flat;
+	dim_t        b_flash    = params.b_flash;
+	dim_t        b_alg_flat = params.b_alg_flat;
 	double       time_min   = 1e9;
 	double       time;
 	unsigned int i;
@@ -168,13 +168,13 @@ void libfla_test_qrut_experiment( test_params_t params,
 	FLA_Obj      A_test, T_test, x_test, b_test;
 
 	// Determine the dimensions.
-	if ( m_input < 0 ) m = p_cur * -m_input;
+	if ( m_input < 0 ) m = p_cur * abs(m_input);
 	else               m = p_cur;
-	if ( n_input < 0 ) n = p_cur * -n_input;
+	if ( n_input < 0 ) n = p_cur * abs(n_input);
 	else               n = p_cur;
 
 	// Compute the minimum dimension.
-	min_m_n = fla_min( m, n );
+	min_m_n = min( m, n );
 
 	// Create the matrices for the current operation.
 	libfla_test_obj_create( datatype, FLA_NO_TRANSPOSE, sc_str[0], m, n, &A );
@@ -241,7 +241,7 @@ void libfla_test_qrut_experiment( test_params_t params,
 			libfla_test_qrut_impl( impl, A_test, T_test );
 		
 			time = FLA_Clock() - time;
-			time_min = fla_min( time_min, time );
+			time_min = min( time_min, time );
 		}
         
         // Compute the performance of the best experiment repeat.
@@ -306,7 +306,7 @@ void libfla_test_qrut_experiment( test_params_t params,
         integer min_m_n;
         FLA_Obj qbt;
 
-	min_m_n = fla_min( m, n );
+	min_m_n = min( m, n );
 
         switch( datatype )
         {
@@ -510,7 +510,7 @@ extern LIBFLAME_IMPORT TLS_CLASS_SPEC fla_trmm_t*  fla_trmm_cntl_blas;
 extern LIBFLAME_IMPORT TLS_CLASS_SPEC fla_trsm_t*  fla_trsm_cntl_blas;
 
 void libfla_test_qrut_cntl_create( unsigned int var,
-                                   fla_dim_t        b_alg_flat )
+                                   dim_t        b_alg_flat )
 {
 	int var_unb  = FLA_UNB_VAR_OFFSET + var;
 	int var_opt  = FLA_OPT_VAR_OFFSET + var;
@@ -622,7 +622,7 @@ void FLA_GEQRF( integer m,
     double       time_min   = 1e9;
     integer lda;
     integer lwork;
-	integer min_m_n = fla_min(m, n);
+	integer min_m_n = min(m, n);
     integer rs_A, cs_A;
 
     lda     = (integer)FLA_Obj_col_stride( A );
@@ -666,7 +666,7 @@ void FLA_GEQRF( integer m,
                     sgeqrf_(&m, &n, buff_A, &lda, buff_T, work, &lwork, &info);
 
                     time = FLA_Clock() - time;
-                    time_min = fla_min( time_min, time );
+                    time_min = min( time_min, time );
                 }
 
                 // copy tau values to output FLA obj
@@ -726,7 +726,7 @@ void FLA_GEQRF( integer m,
                     dgeqrf_(&m, &n, buff_A, &lda, buff_T, work, &lwork, &info);
 
                     time = FLA_Clock() - time;
-                    time_min = fla_min( time_min, time );
+                    time_min = min( time_min, time );
                 }
 
                 // copy tau values to output FLA obj
@@ -785,7 +785,7 @@ void FLA_GEQRF( integer m,
                            cgeqrf_(&m, &n, buff_A, &lda, buff_T, work, &lwork, &info);
 
                            time = FLA_Clock() - time;
-                           time_min = fla_min( time_min, time );
+                           time_min = min( time_min, time );
                  }
                  // copy tau values to output FLA obj
                  for( i = 0; i < min_m_n; i++ )
@@ -848,7 +848,7 @@ void FLA_GEQRF( integer m,
                      zgeqrf_(&m, &n, buff_A, &lda, buff_T, work, &lwork, &info);
 
                      time = FLA_Clock() - time;
-                     time_min = fla_min( time_min, time );
+                     time_min = min( time_min, time );
                  }
                  // copy tau values to output FLA obj
                  for( i = 0; i < min_m_n; i++ )

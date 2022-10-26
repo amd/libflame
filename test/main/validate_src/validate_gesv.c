@@ -1,118 +1,105 @@
-/*
-    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
-*/
+/******************************************************************************
+* Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
+*******************************************************************************/
 
 /*! @file validate_gesv.c
  *  @brief Defines validate function of GESV() to use in test suite.
  *  */
 
 #include "test_common.h"
-#include "test_prototype.h"
 
-extern double perf;
-extern double time_min;
-
-void validate_gesv(char *tst_api, integer n, integer nrhs, void *A, integer lda, void *B,
-                   integer ldb, void *X, integer datatype, double err_thresh, char imatrix,
-                   void *scal, void *params)
+void validate_gesv(integer n,
+    integer nrhs,
+    void* A,
+    void* B,
+    void* X,
+    integer datatype,
+    double* residual)
 {
-    void *work = NULL;
-    char NORM = '1';
-    integer ldx;
-    ldx = ldb;
-    double residual = 0., resid1 = 0., resid2 = 0.;
+    void* work = NULL;
+    integer ldx, ldb;
 
-    /* Early return conditions */
-    if(n == 0 || nrhs == 0)
-    {
-        FLA_TEST_PRINT_STATUS_AND_RETURN(n, n, err_thresh);
-    }
-    /* print overall status if incoming threshold is
-     * an extreme value indicating that API returned
-     * unexpected info value */
-    FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
+    ldx = n;
+    ldb = n;
 
-    switch(datatype)
+    switch (datatype)
     {
         case FLOAT:
         {
-            float norm_x, norm;
-
+             float norm_a, norm_b, norm_x, norm, eps, resid;
+        
             /* Test 1 */
-            /* Compute AX-B */
-            sgemm_("N", "N", &n, &nrhs, &n, &s_one, A, &lda, X, &ldx, &s_n_one, B, &ldb);
-            if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (scal != NULL))
-            {
-                sscal_(&n, scal, X, &i_one);
-            }
-            compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
-            compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
+             norm_a = slange_("1", &n, &n, A, &n, work);
+             norm_b = slange_("1", &n, &nrhs, B, &ldb, work);
+             norm_x = slange_("1", &n, &nrhs, X, &ldx, work);
+             eps = slamch_("E");
 
-            residual = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
+            /* Compute AX-B */ 
+            sgemm_("N", "N", &n, &nrhs, &n, &s_one, A, &n, X, &ldx, &s_n_one, B, &ldb);
+            norm = slange_("1", &n, &nrhs, B, &ldb, work);
+        
+             resid = norm / (((norm_a * norm_x + norm_b) * (float)n) * eps);
+        
+            *residual = (double)resid;
             break;
         }
         case DOUBLE:
         {
-            double norm_x, norm;
-
+             double norm_a, norm_b, norm_x, norm, eps, resid;
+        
             /* Test 1 */
-            /* Compute AX-B */
-            dgemm_("N", "N", &n, &nrhs, &n, &d_one, A, &lda, X, &ldx, &d_n_one, B, &ldb);
-            if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (scal != NULL))
-            {
-                dscal_(&n, scal, X, &i_one);
-            }
-            compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
-            compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
-
-            residual = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
+             norm_a = dlange_("1", &n, &n, A, &n, work);
+             norm_b = dlange_("1", &n, &nrhs, B, &ldb, work);
+             norm_x = dlange_("1", &n, &nrhs, X, &ldx, work);
+             eps = dlamch_("E");
+        
+            /* Compute AX-B */ 
+            dgemm_("N", "N", &n, &nrhs, &n, &d_one, A, &n, X, &ldx, &d_n_one, B, &ldb);
+            norm = dlange_("1", &n, &nrhs, B, &ldb, work);
+        
+             resid = norm / (((norm_a * norm_x + norm_b) * (double)n) * eps);
+        
+            *residual = (double)resid;
             break;
         }
         case COMPLEX:
         {
-            float norm_x, norm;
-
+             float norm_a, norm_b, norm_x, norm, eps, resid;
+        
             /* Test 1 */
-            /* Compute AX-B */
-            cgemm_("N", "N", &n, &nrhs, &n, &c_one, A, &lda, X, &ldx, &c_n_one, B, &ldb);
-            if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (scal != NULL))
-            {
-                cscal_(&n, scal, X, &i_one);
-            }
-            compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
-            compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
+             norm_a = clange_("1", &n, &n, A, &n, work);
+             norm_b = clange_("1", &n, &nrhs, B, &ldb, work);
+             norm_x = clange_("1", &n, &nrhs, X, &ldx, work);
+             eps = slamch_("E");
 
-            residual = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
+            /* Compute AX-B */ 
+            cgemm_("N", "N", &n, &nrhs, &n, &c_one, A, &n, X, &ldx, &c_n_one, B, &ldb);
+            norm = clange_("1", &n, &nrhs, B, &ldb, work);
+        
+             resid = norm / (((norm_a * norm_x + norm_b) * (float)n) * eps);
+        
+            *residual = (double)resid;
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm_x, norm;
-
+             double norm_a, norm_b, norm_x, norm, eps, resid;
+        
             /* Test 1 */
-            /* Compute AX-B */
-            zgemm_("N", "N", &n, &nrhs, &n, &z_one, A, &lda, X, &ldx, &z_n_one, B, &ldb);
-            if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (scal != NULL))
-            {
-                zscal_(&n, scal, X, &i_one);
-            }
-            compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
-            compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
+             norm_a = zlange_("1", &n, &n, A, &n, work);
+             norm_b = zlange_("1", &n, &nrhs, B, &ldb, work);
+             norm_x = zlange_("1", &n, &nrhs, X, &ldx, work);
+             eps = dlamch_("E");
 
-            residual = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
+            /* Compute AX-B */ 
+            zgemm_("N", "N", &n, &nrhs, &n, &z_one, A, &n, X, &ldx, &z_n_one, B, &ldb);
+            norm = zlange_("1", &n, &nrhs, B, &ldb, work);
+        
+             resid = norm / (((norm_a * norm_x + norm_b) * (double)n) * eps);
+        
+            *residual = (double)resid;
             break;
         }
-        default:
-            residual = err_thresh;
-            break;
     }
-
-    /* Test 2: Check padding rows not modified */
-    resid2 = check_padding(datatype, n, nrhs, X, ldb);
-
-    resid1 = residual;
-    residual = fla_test_max(resid1, resid2);
-    FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
-    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
 }
+

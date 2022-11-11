@@ -234,12 +234,11 @@ void dlarf_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, aocl_int_t 
         if(lastv > 0 && lastc > 0)
         {
             d__1 = -(*tau);
-
 #ifdef FLA_ENABLE_AMD_OPT
-            /* Inline DGER for small size */
-            if(lastc <= FLA_DGER_INLINE_SMALL)
+            /* Inline DGER for small size (<= 128)*/
+            if(lastc <= FLA_DGER_INLINE_SMALL && lastv <= FLA_DGER_INLINE_SMALL)
             {
-                if (*incv == 1)
+                if (*incv == c__1)
                 {
                     for (j = 1; j <= lastc; ++j)
                     {

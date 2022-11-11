@@ -217,7 +217,29 @@ void dlaqp2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, doublereal *a, ao
         i__2 = *n - i__ + 1;
 #ifdef FLA_ENABLE_AMD_OPT
         /* Inline IDAMAX for small sizes (<= 128) */
-        if(i__2 <= FLA_IDAMAX_INLINE_SMALL_THRESH)
+        integer idmax = 1;
+        if(i__2 >= c__1 && i__2 <= FLA_IDAMAX_INLINE_SMALL_THRESH)
+        {
+            doublereal dmax = f2c_abs(vn1[i__]);
+            for(integer i = i__ + 1; i<= i__2; i++ )
+            {
+                temp = f2c_abs(vn1[i]);
+                if(temp > dmax)
+                {
+                    dmax = temp;
+                    idmax = i;
+                }
+            }
+            pvt = i__ - 1 + idmax;
+        }
+        else
+        {
+            pvt = i__ - 1 + idamax_(&i__2, &vn1[i__], &c__1);
+        }
+#else
+        pvt = i__ - 1 + idamax_(&i__2, &vn1[i__], &c__1);
+#endif
+        if (pvt != i__)
         {
             pvt = i__ - 1 + fla_idamax(&i__2, &vn1[i__], &c__1);
         }

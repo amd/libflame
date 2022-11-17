@@ -254,7 +254,7 @@ void zlaqr0_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
              aocl_int_t *lwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaqr0 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS "",*n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz);
+    AOCL_DTL_SNPRINTF("zlaqr0 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "", *n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz, *lwork);
     /* System generated locals */
     aocl_int64_t h_dim1, h_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6, d__7, d__8;

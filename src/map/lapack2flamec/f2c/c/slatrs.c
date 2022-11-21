@@ -321,8 +321,6 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
     /* Test the input parameters. */
     if(!upper && !lsame_(uplo, "L", 1, 1))
     {
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("real inputs:  %" FLA_IS ",  %" FLA_IS ",  %" FLA_IS "",*, *, *);
         *info = -1;
     }
     else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
@@ -349,14 +347,12 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
     {
         i__1 = -(*info);
         xerbla_("SLATRS", &i__1);
-    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     *scale = 1.f;
     if (*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Determine machine dependent parameters to control overflow. */
@@ -487,7 +483,6 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 /* At least one entry of A is not a valid floating-point entry. */
                 /* Rely on TRSV to propagate Inf and NaN. */
                 strsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
-    AOCL_DTL_TRACE_LOG_EXIT
                 return 0;
             }
         }
@@ -971,7 +966,6 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
         r__1 = 1.f / tscal;
         aocl_blas_sscal(n, &r__1, &cnorm[1], &c__1);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of SLATRS */
 }

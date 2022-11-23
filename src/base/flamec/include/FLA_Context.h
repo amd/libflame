@@ -1,5 +1,5 @@
 /* ************************************************************************
- * Copyright (c) 2022-2023 Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (c) 2022 Advanced Micro Devices, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,6 @@
 #ifndef FLA_CONTEXT_H
 #define FLA_CONTEXT_H
 
-#include <ctype.h>
 // -- Type and macro definitions -----------------------------------------------
 
 #if defined(FLA_NO_CONTEXT)
@@ -91,20 +90,6 @@ int fla_pthread_mutex_unlock(fla_pthread_mutex_t *mutex);
 
 void fla_pthread_once(fla_pthread_once_t *once, void (*init)(void));
 
-/* Enumerator for CPU architecture */
-typedef enum
-{
-    // NOTE: The C language standard guarantees that the first enum value
-    // starts at 0.
-
-    FLA_ARCH_GENERIC,
-    FLA_ARCH_SSE2,
-    FLA_ARCH_AVX,
-    FLA_ARCH_AVX2,
-    FLA_ARCH_AVX512
-
-} fla_arch_t;
-
 /******************************************************************************************
  * \brief fla_context is a structure holding the number of threads, ISA information
  * It gets initialised by fla_init_once().
@@ -116,39 +101,9 @@ typedef struct _fla_context
     FLA_Bool    is_fma;
     FLA_Bool    is_avx2;
     FLA_Bool    is_avx512;
-    fla_arch_t  arch_id;
-    FLA_Bool    libflame_mt; // num_threads is set using libFLAME environment variable or using OpenMP.
 } fla_context;
 
-#define FLA_CONTEXT_INITIALIZER \
-    { \
-      .num_threads = -1, \
-      .is_fma      = FALSE, \
-      .is_avx2     = FALSE, \
-      .is_avx512   = FALSE, \
-      .libflame_mt = FALSE, \
-    }
-
-extern fla_context fla_global_context;
-
-// Macros for checking the architecture
-#define FLA_IS_MIN_ARCH_ID(ARCH_ID) (fla_global_context.arch_id >= ARCH_ID)
-#define FLA_IS_ARCH_ID(ARCH_ID) (fla_global_context.arch_id == ARCH_ID)
-
-typedef struct _fla_tl_context
-{
-    // num of threads
-    int num_threads;
-    FLA_Bool    libflame_mt; // num_threads is set using libFLAME environment variable or using OpenMP.
-} fla_tl_context_t;
-
-#define FLA_TL_CONTEXT_INITIALIZER \
-    { \
-      .num_threads = -1, \
-      .libflame_mt = FALSE, \
-    }
-
-extern TLS_CLASS_SPEC fla_tl_context_t fla_tl_context;
+extern fla_context global_context;
 
 /*! \ingroup aux_module
  *  \brief Initialise various framework variables including

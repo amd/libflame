@@ -234,12 +234,11 @@ void dlarf_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, aocl_int_t 
         if(lastv > 0 && lastc > 0)
         {
             d__1 = -(*tau);
-
 #ifdef FLA_ENABLE_AMD_OPT
             /* Inline DGER for small size */
-            if(lastc <= FLA_DGER_INLINE_SMALL)
+            if(lastc <= FLA_DGER_INLINE_SMALL_THRESH0 && lastv <= FLA_DGER_INLINE_SMALL_THRESH1)
             {
-                if (*incv == 1)
+                if (*incv == c__1)
                 {
                     for (j = 1; j <= lastc; ++j)
                     {
@@ -363,88 +362,3 @@ void dlarf_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, aocl_int_t 
     /* End of DLARF */
 }
 /* dlarf_ */
-
-#ifdef FLA_ENABLE_AMD_OPT
-void fla_dlarf_left_tuning_params(aocl_int64_t m, aocl_int64_t n, FLA_Bool *use_blocked_flag,
-                                  aocl_int64_t *nthreads)
-{
-    extern int fla_thread_get_num_threads(void);
-    aocl_int64_t num_elems = m * n;
-    if(num_elems < FLA_DLARF_L_THRESH_UNBLOCKED)
-    {
-        *use_blocked_flag = 0;
-        return;
-    }
-
-    aocl_int64_t max_available_threads = fla_thread_get_num_threads();
-
-    /* Special case for 1 thread */
-    if(max_available_threads == 1)
-    {
-        *nthreads = 1;
-        /* Use blocked code for large sizes as it is more cache friendly */
-        if(m > FLA_DLARF_L_ST_BLOCKED_THRESH_M && n > FLA_DLARF_L_ST_BLOCKED_THRESH_N)
-        {
-            *use_blocked_flag = 1;
-        }
-        else
-        {
-            *use_blocked_flag = 0;
-        }
-        return;
-    }
-
-    /* General case */
-
-    aocl_int64_t opt_n_threads = 1;
-
-    if(num_elems < FLA_DLARF_L_THRESH_THREAD_8)
-    {
-        opt_n_threads = fla_min(8, n / 2);
-    }
-    else if(num_elems < FLA_DLARF_L_THRESH_THREAD_64)
-    {
-        opt_n_threads = fla_min(64, n / 2);
-    }
-    else
-    {
-        opt_n_threads = fla_min(128, n / 2);
-    }
-
-    *use_blocked_flag = 1;
-    *nthreads = fla_min(opt_n_threads, max_available_threads);
-}
-
-void fla_dlarf_right_tuning_params(aocl_int64_t m, aocl_int64_t n, aocl_int64_t *block_size,
-                                   aocl_int64_t *nthreads)
-{
-    extern int fla_thread_get_num_threads(void);
-    aocl_int64_t num_elems = m * n;
-
-    if(num_elems < FLA_DLARF_R_THRESH_UNBLOCKED)
-    {
-        *block_size = 0;
-        return;
-    }
-
-    aocl_int64_t max_available_threads = fla_thread_get_num_threads();
-    aocl_int64_t opt_n_threads = 1;
-
-    if(num_elems < FLA_DLARF_R_THRESH_THREAD_8)
-    {
-        opt_n_threads = fla_min(8, m / 2);
-    }
-    else if(num_elems < FLA_DLARF_R_THRESH_THREAD_64)
-    {
-        opt_n_threads = fla_min(64, m / 2);
-    }
-    else
-    {
-        opt_n_threads = fla_min(128, m / 2);
-    }
-
-    *block_size = FLA_DLARF_R_BLOCK_SIZE;
-    *nthreads = fla_min(opt_n_threads, max_available_threads);
-}
-
-#endif /* FLA_ENABLE_AMD_OPT */

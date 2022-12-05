@@ -1,11 +1,8 @@
 /*
     Copyright (c) 2019-2023 Advanced Micro Devices, Inc.
 */
-/* ../netlib/zlarfb.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlarfb.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
@@ -209,9 +206,8 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
     AOCL_DTL_SNPRINTF("zlarfb inputs: side %c, trans %c, direct %c, storev %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS ", ldc %" FLA_IS ", ldwork %" FLA_IS "",*side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc, *ldwork);
 
     /* System generated locals */
-    aocl_int64_t c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
-        i__2, i__3, i__4, i__5;
-    dcomplex z__1, z__2;
+    integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5;
+    doublecomplex z__1, z__2;
     /* Local variables */
     aocl_int64_t i__, j;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
@@ -319,12 +315,12 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
                     {
                         i__3 = j + i__ * c_dim1;
                         i__4 = j + i__ * c_dim1;
-                        z__2.real = work[i__ + j * work_dim1].real;
-                        z__2.imag = -work[i__ + j * work_dim1].imag;
-                        z__1.real = c__[i__4].real - z__2.real;
-                        z__1.imag = c__[i__4].imag - z__2.imag; // , expr subst
-                        c__[i__3].real = z__1.real;
-                        c__[i__3].imag = z__1.imag; // , expr subst
+                        z__2.r = work[i__ + j * work_dim1].r;
+                        z__2.i = -work[i__ + j * work_dim1].i;
+                        z__1.r = c__[i__4].r - z__2.r;
+                        z__1.i = c__[i__4].i - z__2.i; // , expr subst
+                        c__[i__3].r = z__1.r;
+                        c__[i__3].i = z__1.i; // , expr subst
                         /* L20: */
                     }
                     /* L30: */
@@ -446,12 +442,12 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
                     {
                         i__3 = *m - *k + j + i__ * c_dim1;
                         i__4 = *m - *k + j + i__ * c_dim1;
-                        z__2.real = work[i__ + j * work_dim1].real;
-                        z__2.imag = -work[i__ + j * work_dim1].imag;
-                        z__1.real = c__[i__4].real - z__2.real;
-                        z__1.imag = c__[i__4].imag - z__2.imag; // , expr subst
-                        c__[i__3].real = z__1.real;
-                        c__[i__3].imag = z__1.imag; // , expr subst
+                        z__2.r = work[i__ + j * work_dim1].r;
+                        z__2.i = -work[i__ + j * work_dim1].i;
+                        z__1.r = c__[i__4].r - z__2.r;
+                        z__1.i = c__[i__4].i - z__2.i; // , expr subst
+                        c__[i__3].r = z__1.r;
+                        c__[i__3].i = z__1.i; // , expr subst
                         /* L80: */
                     }
                     /* L90: */
@@ -572,12 +568,12 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
                     {
                         i__3 = j + i__ * c_dim1;
                         i__4 = j + i__ * c_dim1;
-                        z__2.real = work[i__ + j * work_dim1].real;
-                        z__2.imag = -work[i__ + j * work_dim1].imag;
-                        z__1.real = c__[i__4].real - z__2.real;
-                        z__1.imag = c__[i__4].imag - z__2.imag; // , expr subst
-                        c__[i__3].real = z__1.real;
-                        c__[i__3].imag = z__1.imag; // , expr subst
+                        z__2.r = work[i__ + j * work_dim1].r;
+                        z__2.i = -work[i__ + j * work_dim1].i;
+                        z__1.r = c__[i__4].r - z__2.r;
+                        z__1.i = c__[i__4].i - z__2.i; // , expr subst
+                        c__[i__3].r = z__1.r;
+                        c__[i__3].i = z__1.i; // , expr subst
                         /* L140: */
                     }
                     /* L150: */
@@ -696,12 +692,12 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
                     {
                         i__3 = *m - *k + j + i__ * c_dim1;
                         i__4 = *m - *k + j + i__ * c_dim1;
-                        z__2.real = work[i__ + j * work_dim1].real;
-                        z__2.imag = -work[i__ + j * work_dim1].imag;
-                        z__1.real = c__[i__4].real - z__2.real;
-                        z__1.imag = c__[i__4].imag - z__2.imag; // , expr subst
-                        c__[i__3].real = z__1.real;
-                        c__[i__3].imag = z__1.imag; // , expr subst
+                        z__2.r = work[i__ + j * work_dim1].r;
+                        z__2.i = -work[i__ + j * work_dim1].i;
+                        z__1.r = c__[i__4].r - z__2.r;
+                        z__1.i = c__[i__4].i - z__2.i; // , expr subst
+                        c__[i__3].r = z__1.r;
+                        c__[i__3].i = z__1.i; // , expr subst
                         /* L200: */
                     }
                     /* L210: */

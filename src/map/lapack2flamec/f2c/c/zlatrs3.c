@@ -1,14 +1,14 @@
-/* zlatrs3.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* zlatrs3.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {1., 0.};
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
-/* > \brief \b ZLATRS3 solves a triangular system of equations with the scale factors set to prevent
- * overflow. */
+static doublecomplex c_b1 =
+{
+    1.,0.
+}
+;
+static integer c__1 = 1;
+static integer c_n1 = -1;
+/* > \brief \b ZLATRS3 solves a triangular system of equations with the scale factors set to prevent overflow. */
 /* Definition: */
 /* =========== */
 /* SUBROUTINE ZLATRS3( UPLO, TRANS, DIAG, NORMIN, N, NRHS, A, LDA, */
@@ -222,64 +222,45 @@ the routine */
 /* Angelika Schwarz, Umea University, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlatrs3_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, aocl_int_t *nrhs,
-              dcomplex *a, aocl_int_t *lda, dcomplex *x, aocl_int_t *ldx,
-              doublereal *scale, doublereal *cnorm, doublereal *work, aocl_int_t *lwork,
-              aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zlatrs3(uplo, trans, diag, normin, n, nrhs, a, lda, x, ldx, scale, cnorm, work,
-                        lwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zlatrs3(uplo, trans, diag, normin, &n_64, &nrhs_64, a, &lda_64, x, &ldx_64, scale,
-                        cnorm, work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl_int64_t *n,
-                         aocl_int64_t *nrhs, dcomplex *a, aocl_int64_t *lda, dcomplex *x,
-                         aocl_int64_t *ldx, doublereal *scale, doublereal *cnorm, doublereal *work,
-                         aocl_int64_t *lwork, aocl_int64_t *info)
+int zlatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *x, integer *ldx, doublereal *scale, doublereal *cnorm, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlatrs3 inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS
-                      ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldx %" FLA_IS "",
-                      *uplo, *trans, *diag, *normin, *n, *nrhs, *lda, *ldx);
+    AOCL_DTL_SNPRINTF("zlatrs3 inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldx %" FLA_IS "",*uplo, *trans, *diag, *normin, *n, *nrhs, *lda, *ldx);
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
+    integer a_dim1, a_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
     doublereal d__1, d__2;
-    dcomplex z__1;
+    doublecomplex z__1;
     /* Local variables */
-    aocl_int64_t i__, j, k;
+    integer i__, j, k;
     doublereal w[64];
-    aocl_int64_t i1, i2, j1, j2, k1, k2, nb, ii, kk, nba, lds, nbx, rhs, iinc, jinc;
+    integer i1, i2, j1, j2, k1, k2, nb, ii, kk, nba, lds, nbx, rhs, iinc, jinc;
     doublereal scal, anrm, bnrm;
-    aocl_int64_t awrk;
+    integer awrk;
     doublereal tmax, xnrm[32];
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
     doublereal rscal;
-    aocl_int64_t lanrm, ilast, jlast;
+    integer lanrm, ilast, jlast;
+    extern /* Subroutine */
+    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical upper;
     extern doublereal dlamch_(char *);
-    aocl_int64_t lscale;
+    integer lscale;
     doublereal scaloc, scamin;
     extern doublereal dlarmm_(doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */
+    int xerbla_(char *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     doublereal bignum;
-    aocl_int64_t ifirst;
+    extern /* Subroutine */
+    int zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+    integer ifirst;
     logical notran;
-    aocl_int64_t jfirst;
+    integer jfirst;
     doublereal smlnum;
     logical nounit;
+    extern /* Subroutine */
+    int zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *);
     logical lquery;
     /* .. Scalar Arguments .. */
     /* .. */
@@ -311,24 +292,24 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U", 1, 1);
-    notran = lsame_(trans, "N", 1, 1);
-    nounit = lsame_(diag, "N", 1, 1);
+    upper = lsame_(uplo, "U");
+    notran = lsame_(trans, "N");
+    nounit = lsame_(diag, "N");
     lquery = *lwork == -1;
     /* Partition A and X into blocks. */
     /* Computing fla_max */
     i__1 = 8;
-    i__2 = aocl_lapack_ilaenv(&c__1, "ZLATRS", "", n, n, &c_n1, &c_n1); // , expr subst
-    nb = fla_max(i__1, i__2);
-    nb = fla_min(64, nb);
+    i__2 = ilaenv_(&c__1, "ZLATRS", "", n, n, &c_n1, &c_n1); // , expr subst
+    nb = fla_max(i__1,i__2);
+    nb = fla_min(64,nb);
     /* Computing fla_max */
     i__1 = 1;
     i__2 = (*n + nb - 1) / nb; // , expr subst
-    nba = fla_max(i__1, i__2);
+    nba = fla_max(i__1,i__2);
     /* Computing fla_max */
     i__1 = 1;
     i__2 = (*nrhs + 31) / 32; // , expr subst
-    nbx = fla_max(i__1, i__2);
+    nbx = fla_max(i__1,i__2);
     /* Compute the workspace */
     /* The workspace comprises two parts. */
     /* The first part stores the local scale factors. Each simultaneously */
@@ -338,8 +319,8 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
     /* in the block column. */
     /* Computing fla_max */
     i__1 = nba;
-    i__2 = fla_min(*nrhs, 32); // , expr subst
-    lscale = nba * fla_max(i__1, i__2);
+    i__2 = fla_min(*nrhs,32); // , expr subst
+    lscale = nba * fla_max(i__1,i__2);
     lds = nba;
     /* The second part stores upper bounds of the triangular A. There are */
     /* a total of NBA x NBA blocks, of which only the upper triangular */
@@ -347,96 +328,100 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
     /* the block A( I, J ) is stored as WORK( AWRK + I + J * NBA ). */
     lanrm = nba * nba;
     awrk = lscale;
-    work[1] = (doublereal)(lscale + lanrm);
+    work[1] = (doublereal) (lscale + lanrm);
     /* Test the input parameters. */
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L"))
     {
         *info = -1;
     }
-    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    else if (! notran && ! lsame_(trans, "T") && ! lsame_(trans, "C"))
     {
         *info = -2;
     }
-    else if(!nounit && !lsame_(diag, "U", 1, 1))
+    else if (! nounit && ! lsame_(diag, "U"))
     {
         *info = -3;
     }
-    else if(!lsame_(normin, "Y", 1, 1) && !lsame_(normin, "N", 1, 1))
+    else if (! lsame_(normin, "Y") && ! lsame_(normin, "N"))
     {
         *info = -4;
     }
-    else if(*n < 0)
+    else if (*n < 0)
     {
         *info = -5;
     }
-    else if(*nrhs < 0)
+    else if (*nrhs < 0)
     {
         *info = -6;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -8;
     }
-    else if(*ldx < fla_max(1, *n))
+    else if (*ldx < fla_max(1,*n))
     {
         *info = -10;
     }
-    else if(!lquery && (doublereal)(*lwork) < work[1])
+    else if (! lquery && (doublereal) (*lwork) < work[1])
     {
         *info = -14;
     }
-    if(*info != 0)
+    if (*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZLATRS3", &i__1, (ftnlen)7);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("ZLATRS3", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
-    else if(lquery)
+    else if (lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Initialize scaling factors */
     i__1 = *nrhs;
-    for(kk = 1; kk <= i__1; ++kk)
+    for (kk = 1;
+            kk <= i__1;
+            ++kk)
     {
         scale[kk] = 1.;
     }
     /* Quick return if possible */
-    if(fla_min(*n, *nrhs) == 0)
+    if (fla_min(*n,*nrhs) == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Determine machine dependent constant to control overflow. */
     bignum = dlamch_("Overflow");
     smlnum = dlamch_("Safe Minimum");
     /* Use unblocked code for small problems */
-    if(*nrhs < 2)
+    if (*nrhs < 2)
     {
-        aocl_lapack_zlatrs(uplo, trans, diag, normin, n, &a[a_offset], lda, &x[x_dim1 + 1],
-                           &scale[1], &cnorm[1], info);
+        zlatrs_(uplo, trans, diag, normin, n, &a[a_offset], lda, &x[x_dim1 + 1], &scale[1], &cnorm[1], info);
         i__1 = *nrhs;
-        for(k = 2; k <= i__1; ++k)
+        for (k = 2;
+                k <= i__1;
+                ++k)
         {
-            aocl_lapack_zlatrs(uplo, trans, diag, "Y", n, &a[a_offset], lda, &x[k * x_dim1 + 1],
-                               &scale[k], &cnorm[1], info);
+            zlatrs_(uplo, trans, diag, "Y", n, &a[a_offset], lda, &x[k * x_dim1 + 1], &scale[k], &cnorm[1], info);
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Compute norms of blocks of A excluding diagonal blocks and find */
     /* the block with the largest norm TMAX. */
     tmax = 0.;
     i__1 = nba;
-    for(j = 1; j <= i__1; ++j)
+    for (j = 1;
+            j <= i__1;
+            ++j)
     {
         j1 = (j - 1) * nb + 1;
         /* Computing fla_min */
         i__2 = j * nb;
-        j2 = fla_min(i__2, *n) + 1;
-        if(upper)
+        j2 = fla_min(i__2,*n) + 1;
+        if (upper)
         {
             ifirst = 1;
             ilast = j - 1;
@@ -447,31 +432,33 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
             ilast = nba;
         }
         i__2 = ilast;
-        for(i__ = ifirst; i__ <= i__2; ++i__)
+        for (i__ = ifirst;
+                i__ <= i__2;
+                ++i__)
         {
             i1 = (i__ - 1) * nb + 1;
             /* Computing fla_min */
             i__3 = i__ * nb;
-            i2 = fla_min(i__3, *n) + 1;
+            i2 = fla_min(i__3,*n) + 1;
             /* Compute upper bound of A( I1:I2-1, J1:J2-1 ). */
-            if(notran)
+            if (notran)
             {
                 i__3 = i2 - i1;
                 i__4 = j2 - j1;
-                anrm = aocl_lapack_zlange("I", &i__3, &i__4, &a[i1 + j1 * a_dim1], lda, w);
+                anrm = zlange_("I", &i__3, &i__4, &a[i1 + j1 * a_dim1], lda, w);
                 work[awrk + i__ + (j - 1) * nba] = anrm;
             }
             else
             {
                 i__3 = i2 - i1;
                 i__4 = j2 - j1;
-                anrm = aocl_lapack_zlange("1", &i__3, &i__4, &a[i1 + j1 * a_dim1], lda, w);
+                anrm = zlange_("1", &i__3, &i__4, &a[i1 + j1 * a_dim1], lda, w);
                 work[awrk + j + (i__ - 1) * nba] = anrm;
             }
-            tmax = fla_max(tmax, anrm);
+            tmax = fla_max(tmax,anrm);
         }
     }
-    if(!(tmax <= dlamch_("Overflow")))
+    if (! (tmax <= dlamch_("Overflow")))
     {
         /* Some matrix entries have huge absolute value. At least one upper */
         /* bound norm( A(I1:I2-1, J1:J2-1), 'I') is not a valid floating-point */
@@ -480,20 +467,23 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
         /* force computation of TSCAL in LATRS to avoid the likely overflow */
         /* in the computation of the column norms CNORM. */
         i__1 = *nrhs;
-        for(k = 1; k <= i__1; ++k)
+        for (k = 1;
+                k <= i__1;
+                ++k)
         {
-            aocl_lapack_zlatrs(uplo, trans, diag, "N", n, &a[a_offset], lda, &x[k * x_dim1 + 1],
-                               &scale[k], &cnorm[1], info);
+            zlatrs_(uplo, trans, diag, "N", n, &a[a_offset], lda, &x[k * x_dim1 + 1], &scale[k], &cnorm[1], info);
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Every right-hand side requires workspace to store NBA local scale */
     /* factors. To save workspace, X is computed successively in block columns */
     /* of width NBRHS, requiring a total of NBA x NBRHS space. If sufficient */
     /* workspace is available, larger values of NBRHS or NBRHS = NRHS are viable. */
     i__1 = nbx;
-    for(k = 1; k <= i__1; ++k)
+    for (k = 1;
+            k <= i__1;
+            ++k)
     {
         /* Loop over block columns (index = K) of X and, for column-wise scalings, */
         /* over individual columns (index = KK). */
@@ -503,21 +493,25 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
         k1 = (k - 1 << 5) + 1;
         /* Computing fla_min */
         i__2 = k << 5;
-        k2 = fla_min(i__2, *nrhs) + 1;
+        k2 = fla_min(i__2,*nrhs) + 1;
         /* Initialize local scaling factors of current block column X( J, K ) */
         i__2 = k2 - k1;
-        for(kk = 1; kk <= i__2; ++kk)
+        for (kk = 1;
+                kk <= i__2;
+                ++kk)
         {
             i__3 = nba;
-            for(i__ = 1; i__ <= i__3; ++i__)
+            for (i__ = 1;
+                    i__ <= i__3;
+                    ++i__)
             {
                 work[i__ + kk * lds] = 1.;
             }
         }
-        if(notran)
+        if (notran)
         {
             /* Solve A * X(:, K1:K2-1) = B * diag(scale(K1:K2-1)) */
-            if(upper)
+            if (upper)
             {
                 jfirst = nba;
                 jlast = 1;
@@ -534,7 +528,7 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
         {
             /* Solve op(A) * X(:, K1:K2-1) = B * diag(scale(K1:K2-1)) */
             /* where op(A) = A**T or op(A) = A**H */
-            if(upper)
+            if (upper)
             {
                 jfirst = 1;
                 jlast = nba;
@@ -549,7 +543,9 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
         }
         i__2 = jlast;
         i__3 = jinc;
-        for(j = jfirst; i__3 < 0 ? j >= i__2 : j <= i__2; j += i__3)
+        for (j = jfirst;
+                i__3 < 0 ? j >= i__2 : j <= i__2;
+                j += i__3)
         {
             /* J1: row index of the first row in A( J, J ) */
             /* J2: row index of the first row in A( J+1, J+1 ) */
@@ -557,30 +553,30 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
             j1 = (j - 1) * nb + 1;
             /* Computing fla_min */
             i__4 = j * nb;
-            j2 = fla_min(i__4, *n) + 1;
+            j2 = fla_min(i__4,*n) + 1;
             /* Solve op(A( J, J )) * X( J, RHS ) = SCALOC * B( J, RHS ) */
             i__4 = k2 - k1;
-            for(kk = 1; kk <= i__4; ++kk)
+            for (kk = 1;
+                    kk <= i__4;
+                    ++kk)
             {
                 rhs = k1 + kk - 1;
-                if(kk == 1)
+                if (kk == 1)
                 {
                     i__5 = j2 - j1;
-                    aocl_lapack_zlatrs(uplo, trans, diag, "N", &i__5, &a[j1 + j1 * a_dim1], lda,
-                                       &x[j1 + rhs * x_dim1], &scaloc, &cnorm[1], info);
+                    zlatrs_(uplo, trans, diag, "N", &i__5, &a[j1 + j1 * a_dim1], lda, &x[j1 + rhs * x_dim1], &scaloc, & cnorm[1], info);
                 }
                 else
                 {
                     i__5 = j2 - j1;
-                    aocl_lapack_zlatrs(uplo, trans, diag, "Y", &i__5, &a[j1 + j1 * a_dim1], lda,
-                                       &x[j1 + rhs * x_dim1], &scaloc, &cnorm[1], info);
+                    zlatrs_(uplo, trans, diag, "Y", &i__5, &a[j1 + j1 * a_dim1], lda, &x[j1 + rhs * x_dim1], &scaloc, & cnorm[1], info);
                 }
                 /* Find largest absolute value entry in the vector segment */
                 /* X( J1:J2-1, RHS ) as an upper bound for the worst case */
                 /* growth in the linear updates. */
                 i__5 = j2 - j1;
-                xnrm[kk - 1] = aocl_lapack_zlange("I", &i__5, &c__1, &x[j1 + rhs * x_dim1], ldx, w);
-                if(scaloc == 0.)
+                xnrm[kk - 1] = zlange_("I", &i__5, &c__1, &x[j1 + rhs * x_dim1], ldx, w);
+                if (scaloc == 0.)
                 {
                     /* LATRS found that A is singular through A(j,j) = 0. */
                     /* Reset the computation x(1:n) = 0, x(j) = 1, SCALE = 0 */
@@ -588,28 +584,34 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
                     /* set by LATRS. */
                     scale[rhs] = 0.;
                     i__5 = j1 - 1;
-                    for(ii = 1; ii <= i__5; ++ii)
+                    for (ii = 1;
+                            ii <= i__5;
+                            ++ii)
                     {
                         i__6 = ii + kk * x_dim1;
-                        x[i__6].real = 0.;
-                        x[i__6].imag = 0.; // , expr subst
+                        x[i__6].r = 0.;
+                        x[i__6].i = 0.; // , expr subst
                     }
                     i__5 = *n;
-                    for(ii = j2; ii <= i__5; ++ii)
+                    for (ii = j2;
+                            ii <= i__5;
+                            ++ii)
                     {
                         i__6 = ii + kk * x_dim1;
-                        x[i__6].real = 0.;
-                        x[i__6].imag = 0.; // , expr subst
+                        x[i__6].r = 0.;
+                        x[i__6].i = 0.; // , expr subst
                     }
                     /* Discard the local scale factors. */
                     i__5 = nba;
-                    for(ii = 1; ii <= i__5; ++ii)
+                    for (ii = 1;
+                            ii <= i__5;
+                            ++ii)
                     {
                         work[ii + kk * lds] = 1.;
                     }
                     scaloc = 1.;
                 }
-                else if(scaloc * work[j + kk * lds] == 0.)
+                else if (scaloc * work[j + kk * lds] == 0.)
                 {
                     /* LATRS computed a valid scale factor, but combined with */
                     /* the current scaling the solution does not have a */
@@ -623,11 +625,11 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
                     /* rescaled to preserve a valid combined scale */
                     /* factor WORK( J, KK ) > 0. */
                     rscal = 1. / scaloc;
-                    if(xnrm[kk - 1] * rscal <= bignum)
+                    if (xnrm[kk - 1] * rscal <= bignum)
                     {
                         xnrm[kk - 1] *= rscal;
                         i__5 = j2 - j1;
-                        aocl_blas_zdscal(&i__5, &rscal, &x[j1 + rhs * x_dim1], &c__1);
+                        zdscal_(&i__5, &rscal, &x[j1 + rhs * x_dim1], &c__1);
                         scaloc = 1.;
                     }
                     else
@@ -639,15 +641,19 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
                         /* is returned that is not a solution to op(A) * x = b. */
                         scale[rhs] = 0.;
                         i__5 = *n;
-                        for(ii = 1; ii <= i__5; ++ii)
+                        for (ii = 1;
+                                ii <= i__5;
+                                ++ii)
                         {
                             i__6 = ii + kk * x_dim1;
-                            x[i__6].real = 0.;
-                            x[i__6].imag = 0.; // , expr subst
+                            x[i__6].r = 0.;
+                            x[i__6].i = 0.; // , expr subst
                         }
                         /* Discard the local scale factors. */
                         i__5 = nba;
-                        for(ii = 1; ii <= i__5; ++ii)
+                        for (ii = 1;
+                                ii <= i__5;
+                                ++ii)
                         {
                             work[ii + kk * lds] = 1.;
                         }
@@ -658,9 +664,9 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
                 work[j + kk * lds] = scaloc;
             }
             /* Linear block updates */
-            if(notran)
+            if (notran)
             {
-                if(upper)
+                if (upper)
                 {
                     ifirst = j - 1;
                     ilast = 1;
@@ -675,7 +681,7 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
             }
             else
             {
-                if(upper)
+                if (upper)
                 {
                     ifirst = j + 1;
                     ilast = nba;
@@ -690,7 +696,9 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
             }
             i__4 = ilast;
             i__5 = iinc;
-            for(i__ = ifirst; i__5 < 0 ? i__ >= i__4 : i__ <= i__4; i__ += i__5)
+            for (i__ = ifirst;
+                    i__5 < 0 ? i__ >= i__4 : i__ <= i__4;
+                    i__ += i__5)
             {
                 /* I1: row index of the first column in X( I, K ) */
                 /* I2: row index of the first column in X( I+1, K ) */
@@ -698,25 +706,27 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
                 i1 = (i__ - 1) * nb + 1;
                 /* Computing fla_min */
                 i__6 = i__ * nb;
-                i2 = fla_min(i__6, *n) + 1;
+                i2 = fla_min(i__6,*n) + 1;
                 /* Prepare the linear update to be executed with GEMM. */
                 /* For each column, compute a consistent scaling, a */
                 /* scaling factor to survive the linear update, and */
                 /* rescale the column segments, if necesssary. Then */
                 /* the linear update is safely executed. */
                 i__6 = k2 - k1;
-                for(kk = 1; kk <= i__6; ++kk)
+                for (kk = 1;
+                        kk <= i__6;
+                        ++kk)
                 {
                     rhs = k1 + kk - 1;
                     /* Compute consistent scaling */
                     /* Computing fla_min */
                     d__1 = work[i__ + kk * lds];
                     d__2 = work[j + kk * lds]; // , expr subst
-                    scamin = fla_min(d__1, d__2);
+                    scamin = fla_min(d__1,d__2);
                     /* Compute scaling factor to survive the linear update */
                     /* simulating consistent scaling. */
                     i__7 = i2 - i1;
-                    bnrm = aocl_lapack_zlange("I", &i__7, &c__1, &x[i1 + rhs * x_dim1], ldx, w);
+                    bnrm = zlange_("I", &i__7, &c__1, &x[i1 + rhs * x_dim1], ldx, w);
                     bnrm *= scamin / work[i__ + kk * lds];
                     xnrm[kk - 1] *= scamin / work[j + kk * lds];
                     anrm = work[awrk + i__ + (j - 1) * nba];
@@ -724,41 +734,39 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
                     /* Simultaneously apply the robust update factor and the */
                     /* consistency scaling factor to X( I, KK ) and X( J, KK ). */
                     scal = scamin / work[i__ + kk * lds] * scaloc;
-                    if(scal != 1.)
+                    if (scal != 1.)
                     {
                         i__7 = i2 - i1;
-                        aocl_blas_zdscal(&i__7, &scal, &x[i1 + rhs * x_dim1], &c__1);
+                        zdscal_(&i__7, &scal, &x[i1 + rhs * x_dim1], &c__1);
                         work[i__ + kk * lds] = scamin * scaloc;
                     }
                     scal = scamin / work[j + kk * lds] * scaloc;
-                    if(scal != 1.)
+                    if (scal != 1.)
                     {
                         i__7 = j2 - j1;
-                        aocl_blas_zdscal(&i__7, &scal, &x[j1 + rhs * x_dim1], &c__1);
+                        zdscal_(&i__7, &scal, &x[j1 + rhs * x_dim1], &c__1);
                         work[j + kk * lds] = scamin * scaloc;
                     }
                 }
-                if(notran)
+                if (notran)
                 {
                     /* B( I, K ) := B( I, K ) - A( I, J ) * X( J, K ) */
                     i__6 = i2 - i1;
                     i__7 = k2 - k1;
                     i__8 = j2 - j1;
-                    z__1.real = -1.;
-                    z__1.imag = -0.; // , expr subst
-                    aocl_blas_zgemm("N", "N", &i__6, &i__7, &i__8, &z__1, &a[i1 + j1 * a_dim1], lda,
-                                    &x[j1 + k1 * x_dim1], ldx, &c_b1, &x[i1 + k1 * x_dim1], ldx);
+                    z__1.r = -1.;
+                    z__1.i = -0.; // , expr subst
+                    zgemm_("N", "N", &i__6, &i__7, &i__8, &z__1, &a[i1 + j1 * a_dim1], lda, &x[j1 + k1 * x_dim1], ldx, &c_b1, & x[i1 + k1 * x_dim1], ldx);
                 }
-                else if(lsame_(trans, "T", 1, 1))
+                else if (lsame_(trans, "T"))
                 {
                     /* B( I, K ) := B( I, K ) - A( I, J )**T * X( J, K ) */
                     i__6 = i2 - i1;
                     i__7 = k2 - k1;
                     i__8 = j2 - j1;
-                    z__1.real = -1.;
-                    z__1.imag = -0.; // , expr subst
-                    aocl_blas_zgemm("T", "N", &i__6, &i__7, &i__8, &z__1, &a[j1 + i1 * a_dim1], lda,
-                                    &x[j1 + k1 * x_dim1], ldx, &c_b1, &x[i1 + k1 * x_dim1], ldx);
+                    z__1.r = -1.;
+                    z__1.i = -0.; // , expr subst
+                    zgemm_("T", "N", &i__6, &i__7, &i__8, &z__1, &a[j1 + i1 * a_dim1], lda, &x[j1 + k1 * x_dim1], ldx, &c_b1, & x[i1 + k1 * x_dim1], ldx);
                 }
                 else
                 {
@@ -766,53 +774,60 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
                     i__6 = i2 - i1;
                     i__7 = k2 - k1;
                     i__8 = j2 - j1;
-                    z__1.real = -1.;
-                    z__1.imag = -0.; // , expr subst
-                    aocl_blas_zgemm("C", "N", &i__6, &i__7, &i__8, &z__1, &a[j1 + i1 * a_dim1], lda,
-                                    &x[j1 + k1 * x_dim1], ldx, &c_b1, &x[i1 + k1 * x_dim1], ldx);
+                    z__1.r = -1.;
+                    z__1.i = -0.; // , expr subst
+                    zgemm_("C", "N", &i__6, &i__7, &i__8, &z__1, &a[j1 + i1 * a_dim1], lda, &x[j1 + k1 * x_dim1], ldx, &c_b1, & x[i1 + k1 * x_dim1], ldx);
                 }
             }
         }
         /* Reduce local scaling factors */
         i__3 = k2 - k1;
-        for(kk = 1; kk <= i__3; ++kk)
+        for (kk = 1;
+                kk <= i__3;
+                ++kk)
         {
             rhs = k1 + kk - 1;
             i__2 = nba;
-            for(i__ = 1; i__ <= i__2; ++i__)
+            for (i__ = 1;
+                    i__ <= i__2;
+                    ++i__)
             {
                 /* Computing fla_min */
                 d__1 = scale[rhs];
                 d__2 = work[i__ + kk * lds]; // , expr subst
-                scale[rhs] = fla_min(d__1, d__2);
+                scale[rhs] = fla_min(d__1,d__2);
             }
         }
         /* Realize consistent scaling */
         i__3 = k2 - k1;
-        for(kk = 1; kk <= i__3; ++kk)
+        for (kk = 1;
+                kk <= i__3;
+                ++kk)
         {
             rhs = k1 + kk - 1;
-            if(scale[rhs] != 1. && scale[rhs] != 0.)
+            if (scale[rhs] != 1. && scale[rhs] != 0.)
             {
                 i__2 = nba;
-                for(i__ = 1; i__ <= i__2; ++i__)
+                for (i__ = 1;
+                        i__ <= i__2;
+                        ++i__)
                 {
                     i1 = (i__ - 1) * nb + 1;
                     /* Computing fla_min */
                     i__5 = i__ * nb;
-                    i2 = fla_min(i__5, *n) + 1;
+                    i2 = fla_min(i__5,*n) + 1;
                     scal = scale[rhs] / work[i__ + kk * lds];
-                    if(scal != 1.)
+                    if (scal != 1.)
                     {
                         i__5 = i2 - i1;
-                        aocl_blas_zdscal(&i__5, &scal, &x[i1 + rhs * x_dim1], &c__1);
+                        zdscal_(&i__5, &scal, &x[i1 + rhs * x_dim1], &c__1);
                     }
                 }
             }
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of ZLATRS3 */
 }
 /* zlatrs3_ */

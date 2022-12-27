@@ -269,8 +269,7 @@ void dlahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, doublereal *a, aocl_i
         i__2 = *n - *k - i__ + 1;
         /* Computing MIN */
         i__3 = *k + i__ + 1;
-        aocl_lapack_dlarfg(&i__2, &a[*k + i__ + i__ * a_dim1], &a[fla_min(i__3, *n) + i__ * a_dim1],
-                           &c__1, &tau[i__]);
+        dlarfg_(&i__2, &a[*k + i__ + i__ * a_dim1], &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, &tau[i__]);
         ei = a[*k + i__ + i__ * a_dim1];
         a[*k + i__ + i__ * a_dim1] = 1.;
         /* Compute Y(1:n,i) */

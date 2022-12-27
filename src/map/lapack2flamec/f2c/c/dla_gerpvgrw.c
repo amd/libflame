@@ -138,20 +138,20 @@ doublereal dla_gerpvgrw_(aocl_int_t *n, aocl_int_t *ncols, doublereal *a, aocl_i
         {
             /* Computing MAX */
             d__2 = (d__1 = a[i__ + j * a_dim1], f2c_dabs(d__1));
-            amax = max(d__2,amax);
+            amax = fla_max(d__2,amax);
         }
         i__2 = j;
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             d__2 = (d__1 = af[i__ + j * af_dim1], f2c_dabs(d__1));
-            umax = max(d__2,umax);
+            umax = fla_max(d__2,umax);
         }
         if(umax != 0.)
         {
             /* Computing MIN */
             d__1 = amax / umax;
-            rpvgrw = fla_min(d__1, rpvgrw);
+            rpvgrw = fla_min(d__1,rpvgrw);
         }
     }
     ret_val = rpvgrw;

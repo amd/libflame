@@ -224,7 +224,7 @@ int dsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal 
     {
         *info = -2;
     }
-    else if(*ldz < 1 || icompz > 0 && *ldz < fla_max(1, *n))
+    else if (*ldz < 1 || icompz > 0 && *ldz < fla_max(1,*n))
     {
         *info = -6;
     }

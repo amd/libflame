@@ -284,7 +284,7 @@ void zheevd_(char *jobz, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
@@ -317,11 +317,8 @@ void zheevd_(char *jobz, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda
             }
             /* Computing MAX */
             i__1 = lwmin;
-            i__2 = *n
-                   + *n
-                         * aocl_lapack_ilaenv(&c__1, "ZHETRD", uplo, n, &c_n1, &c_n1,
-                                              &c_n1); // , expr subst
-            lopt = fla_max(i__1, i__2);
+            i__2 = *n + ilaenv_(&c__1, "ZHETRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+            lopt = fla_max(i__1,i__2);
             lropt = lrwmin;
             liopt = liwmin;
         }

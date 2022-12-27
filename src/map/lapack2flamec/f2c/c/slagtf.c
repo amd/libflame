@@ -232,7 +232,7 @@ void aocl_lapack_slagtf(aocl_int64_t *n, real *a, real *lambda, real *b, real *c
         return;
     }
     eps = slamch_("Epsilon");
-    tl = max(*tol,eps);
+    tl = fla_max(*tol,eps);
     scale1 = f2c_abs(a[1]) + f2c_abs(b[1]);
     i__1 = *n - 1;
     for(k = 1; k <= i__1; ++k)
@@ -291,7 +291,7 @@ void aocl_lapack_slagtf(aocl_int64_t *n, real *a, real *lambda, real *b, real *c
                 c__[k] = mult;
             }
         }
-        if(fla_max(piv1, piv2) <= tl && in[*n] == 0)
+        if (fla_max(piv1,piv2) <= tl && in[*n] == 0)
         {
             in[*n] = (aocl_int_t)(k);
         }

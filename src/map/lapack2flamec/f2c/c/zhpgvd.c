@@ -389,17 +389,17 @@ void zhpgvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, dcomplex 
     aocl_lapack_zhpevd(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], lwork,
                        &rwork[1], lrwork, &iwork[1], liwork, info);
     /* Computing MAX */
-    d__1 = (doublereal)lwmin;
-    d__2 = work[1].real; // , expr subst
-    lwmin = (integer)fla_max(d__1, d__2);
+    d__1 = (doublereal) lwmin;
+    d__2 = work[1].r; // , expr subst
+    lwmin = (integer) fla_max(d__1,d__2);
     /* Computing MAX */
-    d__1 = (doublereal)lrwmin;
-    lrwmin = (integer)fla_max(d__1, rwork[1]);
+    d__1 = (doublereal) lrwmin;
+    lrwmin = (integer) fla_max(d__1,rwork[1]);
     /* Computing MAX */
-    d__1 = (doublereal)liwmin;
-    d__2 = (doublereal)iwork[1]; // , expr subst
-    liwmin = (integer)fla_max(d__1, d__2);
-    if(wantz)
+    d__1 = (doublereal) liwmin;
+    d__2 = (doublereal) iwork[1]; // , expr subst
+    liwmin = (integer) fla_max(d__1,d__2);
+    if (wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
         neig = *n;

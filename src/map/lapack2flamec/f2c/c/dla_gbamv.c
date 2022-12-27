@@ -339,8 +339,10 @@ void dla_gbamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl,
                     i__2 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__3 = fla_min(i__4, lenx);
-                    for(j = fla_max(i__2, 1); j <= i__3; ++j)
+                    i__3 = fla_min(i__4,lenx);
+                    for (j = fla_max(i__2,1);
+                            j <= i__3;
+                            ++j)
                     {
                         temp = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs( d__1));
                         symb_zero__ = symb_zero__ && (x[j] == 0. || temp == 0.);
@@ -379,8 +381,10 @@ void dla_gbamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl,
                     i__3 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__2 = fla_min(i__4, lenx);
-                    for(j = fla_max(i__3, 1); j <= i__2; ++j)
+                    i__2 = fla_min(i__4,lenx);
+                    for (j = fla_max(i__3,1);
+                            j <= i__2;
+                            ++j)
                     {
                         temp = (d__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_dabs( d__1));
                         symb_zero__ = symb_zero__ && (x[j] == 0. || temp == 0.);
@@ -423,8 +427,10 @@ void dla_gbamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl,
                     i__2 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__3 = fla_min(i__4, lenx);
-                    for(j = fla_max(i__2, 1); j <= i__3; ++j)
+                    i__3 = fla_min(i__4,lenx);
+                    for (j = fla_max(i__2,1);
+                            j <= i__3;
+                            ++j)
                     {
                         temp = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs( d__1));
                         symb_zero__ = symb_zero__ && (x[jx] == 0. || temp == 0.);
@@ -465,8 +471,10 @@ void dla_gbamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl,
                     i__3 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__2 = fla_min(i__4, lenx);
-                    for(j = fla_max(i__3, 1); j <= i__2; ++j)
+                    i__2 = fla_min(i__4,lenx);
+                    for (j = fla_max(i__3,1);
+                            j <= i__2;
+                            ++j)
                     {
                         temp = (d__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_dabs( d__1));
                         symb_zero__ = symb_zero__ && (x[jx] == 0. || temp == 0.);

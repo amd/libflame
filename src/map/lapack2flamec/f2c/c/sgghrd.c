@@ -361,11 +361,11 @@ void aocl_lapack_sgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -7;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -9;
     }

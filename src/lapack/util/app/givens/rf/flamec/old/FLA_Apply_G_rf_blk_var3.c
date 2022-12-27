@@ -118,7 +118,7 @@ FLA_Error FLA_Apply_G_rf_bld_var3( integer       k_G,
 
 	for ( i = 0; i < m_A; i += b )
 	{
-		integer m_ahead = max( 0, m_A - i );
+		integer m_ahead = fla_max( 0, m_A - i );
 
 		b       = fla_min( b_alg, m_ahead );
 
@@ -157,7 +157,7 @@ FLA_Error FLA_Apply_G_rf_blz_var3( integer       k_G,
 
 	for ( i = 0; i < m_A; i += b )
 	{
-		integer m_ahead = max( 0, m_A - i );
+		integer m_ahead = fla_max( 0, m_A - i );
 
 		b       = fla_min( b_alg, m_ahead );
 

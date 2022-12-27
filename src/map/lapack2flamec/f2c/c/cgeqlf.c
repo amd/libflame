@@ -200,15 +200,15 @@ void cgeqlf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -4;
     }
     nb = aocl_lapack_ilaenv(&c__1, "CGEQLF", " ", m, n, &c_n1, &c_n1);
     if(*info == 0)
     {
-        k = fla_min(*m, *n);
-        if(k == 0)
+        k = fla_min(*m,*n);
+        if (k == 0)
         {
             lwkopt = 1;
         }
@@ -216,10 +216,9 @@ void cgeqlf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
         {
             lwkopt = *n * nb;
         }
-        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].real = r__1;
-        work[1].imag = 0.f; // , expr subst
-        if(*lwork < fla_max(1, *n) && !lquery)
+        work[1].r = (real) lwkopt;
+        work[1].i = 0.f; // , expr subst
+        if (*lwork < fla_max(1,*n) && ! lquery)
         {
             *info = -7;
         }
@@ -250,9 +249,9 @@ void cgeqlf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = aocl_lapack_ilaenv(&c__3, "CGEQLF", " ", m, n, &c_n1, &c_n1); // , expr subst
-        nx = fla_max(i__1, i__2);
-        if(nx < k)
+        i__2 = ilaenv_(&c__3, "CGEQLF", " ", m, n, &c_n1, &c_n1); // , expr subst
+        nx = fla_max(i__1,i__2);
+        if (nx < k)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *n;
@@ -264,8 +263,8 @@ void cgeqlf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = aocl_lapack_ilaenv(&c__2, "CGEQLF", " ", m, n, &c_n1, &c_n1); // , expr subst
-                nbmin = fla_max(i__1, i__2);
+                i__2 = ilaenv_(&c__2, "CGEQLF", " ", m, n, &c_n1, & c_n1); // , expr subst
+                nbmin = fla_max(i__1,i__2);
             }
         }
     }
@@ -277,14 +276,14 @@ void cgeqlf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
         /* Computing MIN */
         i__1 = k;
         i__2 = ki + nb; // , expr subst
-        kk = fla_min(i__1, i__2);
+        kk = fla_min(i__1,i__2);
         i__1 = k - kk + 1;
         i__2 = -nb;
         for(i__ = k - kk + ki + 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
         {
             /* Computing MIN */
             i__3 = k - i__ + 1;
-            ib = fla_min(i__3, nb);
+            ib = fla_min(i__3,nb);
             /* Compute the QL factorization of the current block */
             /* A(1:m-k+i+ib-1,n-k+i:n-k+i+ib-1) */
             i__3 = *m - k + i__ + ib - 1;

@@ -188,11 +188,11 @@ void zgebak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *
     {
         *info = -3;
     }
-    else if(*ilo < 1 || *ilo > fla_max(1, *n))
+    else if (*ilo < 1 || *ilo > fla_max(1,*n))
     {
         *info = -4;
     }
-    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
+    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
     {
         *info = -5;
     }
@@ -200,7 +200,7 @@ void zgebak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *
     {
         *info = -7;
     }
-    else if(*ldv < fla_max(1, *n))
+    else if (*ldv < fla_max(1,*n))
     {
         *info = -9;
     }

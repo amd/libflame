@@ -78,7 +78,7 @@
 /* > stored in the first KD+1 rows of the array. The j-th column */
 /* > of A is stored in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
- */
+*/
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > \endverbatim */
 /* > */
@@ -233,11 +233,11 @@ void cpbequ_(char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab, aocl_int_t
         /* Computing MIN */
         r__1 = smin;
         r__2 = s[i__]; // , expr subst
-        smin = fla_min(r__1, r__2);
+        smin = fla_min(r__1,r__2);
         /* Computing MAX */
         r__1 = *amax;
         r__2 = s[i__]; // , expr subst
-        *amax = fla_max(r__1, r__2);
+        *amax = fla_max(r__1,r__2);
         /* L10: */
     }
     if(smin <= 0.f)

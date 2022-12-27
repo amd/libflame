@@ -162,7 +162,7 @@ void aocl_lapack_strttp(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }

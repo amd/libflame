@@ -184,7 +184,7 @@ void checon_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }

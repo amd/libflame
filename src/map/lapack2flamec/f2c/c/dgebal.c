@@ -217,7 +217,7 @@ void dgebal_(char *job, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
@@ -366,10 +366,10 @@ void dgebal_(char *job, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_
         f = 1.;
         s = c__ + r__;
 L160: /* Computing MAX */
-        d__1 = max(f,c__);
+        d__1 = fla_max(f,c__);
         /* Computing MIN */
-        d__2 = min(r__,g);
-        if (c__ >= g || max(d__1,ca) >= sfmax2 || min(d__2,ra) <= sfmin2)
+        d__2 = fla_min(r__,g);
+        if (c__ >= g || fla_max(d__1,ca) >= sfmax2 || fla_min(d__2,ra) <= sfmin2)
         {
             goto L170;
         }
@@ -407,9 +407,9 @@ L160: /* Computing MAX */
 L170:
         g = c__ / 2.;
 L180: /* Computing MIN */
-        d__1 = min(f,c__);
-        d__1 = min(d__1,g); // , expr subst
-        if (g < r__ || max(r__,ra) >= sfmax2 || min(d__1,ca) <= sfmin2)
+        d__1 = fla_min(f,c__);
+        d__1 = fla_min(d__1,g); // , expr subst
+        if (g < r__ || fla_max(r__,ra) >= sfmax2 || fla_min(d__1,ca) <= sfmin2)
         {
             goto L190;
         }

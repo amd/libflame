@@ -110,7 +110,7 @@ static aocl_int64_t c__65 = 65;
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If SIDE = 'L', LDA >= fla_max(1,M);
- */
+*/
 /* > if SIDE = 'R', LDA >= fla_max(1,N). */
 /* > \endverbatim */
 /* > */
@@ -145,7 +145,7 @@ static aocl_int64_t c__65 = 65;
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If SIDE = 'L', LWORK >= fla_max(1,N);
- */
+*/
 /* > if SIDE = 'R', LWORK >= fla_max(1,M). */
 /* > For optimum performance LWORK >= N*NB if SIDE = 'L', and */
 /* > LWORK >= M*NB if SIDE = 'R', where NB is the optimal */
@@ -264,15 +264,15 @@ void zunmqr_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, nq))
+    else if (*lda < fla_max(1,nq))
     {
         *info = -7;
     }
-    else if(*ldc < fla_max(1, *m))
+    else if (*ldc < fla_max(1,*m))
     {
         *info = -10;
     }
-    else if(*lwork < fla_max(1, nw) && !lquery)
+    else if (*lwork < fla_max(1,nw) && ! lquery)
     {
         *info = -12;
     }
@@ -282,11 +282,11 @@ void zunmqr_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
         /* is used to define the local array T. */
         /* Computing MIN */
         i__1 = 64;
-        i__2 = aocl_lapack_ilaenv(&c__1, "ZUNMQR", ch__1, m, n, k, &c_n1); // , expr subst
-        nb = fla_min(i__1, i__2);
-        lwkopt = fla_max(1, nw) * nb;
-        work[1].real = (doublereal)lwkopt;
-        work[1].imag = 0.; // , expr subst
+        i__2 = ilaenv_(&c__1, "ZUNMQR", ch__1, m, n, k, &c_n1); // , expr subst
+        nb = fla_min(i__1,i__2);
+        lwkopt = fla_max(1,nw) * nb;
+        work[1].r = (doublereal) lwkopt;
+        work[1].i = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -315,8 +315,8 @@ void zunmqr_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
             nb = *lwork / ldwork;
             /* Computing MAX */
             i__1 = 2;
-            i__2 = aocl_lapack_ilaenv(&c__2, "ZUNMQR", ch__1, m, n, k, &c_n1); // , expr subst
-            nbmin = fla_max(i__1, i__2);
+            i__2 = ilaenv_(&c__2, "ZUNMQR", ch__1, m, n, k, &c_n1); // , expr subst
+            nbmin = fla_max(i__1,i__2);
         }
     }
     else
@@ -361,7 +361,7 @@ void zunmqr_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
             /* Computing MIN */
             i__4 = nb;
             i__5 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__4, i__5);
+            ib = fla_min(i__4,i__5);
             /* Form the triangular factor of the block reflector */
             /* H = H(i) H(i+1) . . . H(i+ib-1) */
             i__4 = nq - i__ + 1;

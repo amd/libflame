@@ -226,7 +226,7 @@ void claein_(logical *rightv, logical *noinit, aocl_int_t *n, scomplex *h__, aoc
     /* Computing MAX */
     r__1 = 1.f;
     r__2 = *eps3 * rootn; // , expr subst
-    nrmsml = fla_max(r__1, r__2) * *smlnum;
+    nrmsml = fla_max(r__1,r__2) * *smlnum;
     /* Form B = H - W*I (except that the subdiagonal elements are not */
     /* stored). */
     i__1 = *n;
@@ -264,9 +264,9 @@ void claein_(logical *rightv, logical *noinit, aocl_int_t *n, scomplex *h__, aoc
     else
     {
         /* Scale supplied initial vector. */
-        vnorm = aocl_blas_scnrm2(n, &v[1], &c__1);
-        r__1 = *eps3 * rootn / fla_max(vnorm, nrmsml);
-        aocl_blas_csscal(n, &r__1, &v[1], &c__1);
+        vnorm = scnrm2_(n, &v[1], &c__1);
+        r__1 = *eps3 * rootn / fla_max(vnorm,nrmsml);
+        csscal_(n, &r__1, &v[1], &c__1);
     }
     if(*rightv)
     {

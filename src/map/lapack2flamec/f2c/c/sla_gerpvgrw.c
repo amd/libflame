@@ -149,20 +149,20 @@ real aocl_lapack_sla_gerpvgrw(aocl_int64_t *n, aocl_int64_t *ncols, real *a, aoc
         {
             /* Computing MAX */
             r__2 = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
-            amax = max(r__2,amax);
+            amax = fla_max(r__2,amax);
         }
         i__2 = j;
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             r__2 = (r__1 = af[i__ + j * af_dim1], f2c_abs(r__1));
-            umax = max(r__2,umax);
+            umax = fla_max(r__2,umax);
         }
         if(umax != 0.f)
         {
             /* Computing MIN */
             r__1 = amax / umax;
-            rpvgrw = fla_min(r__1, rpvgrw);
+            rpvgrw = fla_min(r__1,rpvgrw);
         }
     }
     ret_val = rpvgrw;

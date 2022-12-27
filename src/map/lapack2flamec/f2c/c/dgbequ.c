@@ -246,13 +246,15 @@ void dgbequ_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doubl
         i__2 = j - *ku;
         /* Computing MIN */
         i__4 = j + *kl;
-        i__3 = fla_min(i__4, *m);
-        for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
+        i__3 = fla_min(i__4,*m);
+        for (i__ = fla_max(i__2,1);
+                i__ <= i__3;
+                ++i__)
         {
             /* Computing MAX */
             d__2 = r__[i__];
             d__3 = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs(d__1)); // , expr subst
-            r__[i__] = max(d__2,d__3);
+            r__[i__] = fla_max(d__2,d__3);
             /* L20: */
         }
         /* L30: */
@@ -266,11 +268,11 @@ void dgbequ_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doubl
         /* Computing MAX */
         d__1 = rcmax;
         d__2 = r__[i__]; // , expr subst
-        rcmax = fla_max(d__1, d__2);
+        rcmax = fla_max(d__1,d__2);
         /* Computing MIN */
         d__1 = rcmin;
         d__2 = r__[i__]; // , expr subst
-        rcmin = fla_min(d__1, d__2);
+        rcmin = fla_min(d__1,d__2);
         /* L40: */
     }
     *amax = rcmax;
@@ -298,12 +300,12 @@ void dgbequ_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doubl
             /* Computing MIN */
             /* Computing MAX */
             d__2 = r__[i__];
-            d__1 = fla_max(d__2, smlnum);
-            r__[i__] = 1. / fla_min(d__1, bignum);
+            d__1 = fla_max(d__2,smlnum);
+            r__[i__] = 1. / fla_min(d__1,bignum);
             /* L60: */
         }
         /* Compute ROWCND = fla_min(R(I)) / fla_max(R(I)) */
-        *rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
+        *rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
     }
     /* Compute column scale factors */
     i__1 = *n;
@@ -322,13 +324,15 @@ void dgbequ_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doubl
         i__3 = j - *ku;
         /* Computing MIN */
         i__4 = j + *kl;
-        i__2 = fla_min(i__4, *m);
-        for(i__ = fla_max(i__3, 1); i__ <= i__2; ++i__)
+        i__2 = fla_min(i__4,*m);
+        for (i__ = fla_max(i__3,1);
+                i__ <= i__2;
+                ++i__)
         {
             /* Computing MAX */
             d__2 = c__[j];
             d__3 = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs( d__1)) * r__[i__]; // , expr subst
-            c__[j] = max(d__2,d__3);
+            c__[j] = fla_max(d__2,d__3);
             /* L80: */
         }
         /* L90: */
@@ -342,11 +346,11 @@ void dgbequ_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doubl
         /* Computing MIN */
         d__1 = rcmin;
         d__2 = c__[j]; // , expr subst
-        rcmin = fla_min(d__1, d__2);
+        rcmin = fla_min(d__1,d__2);
         /* Computing MAX */
         d__1 = rcmax;
         d__2 = c__[j]; // , expr subst
-        rcmax = fla_max(d__1, d__2);
+        rcmax = fla_max(d__1,d__2);
         /* L100: */
     }
     if(rcmin == 0.)
@@ -373,12 +377,12 @@ void dgbequ_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doubl
             /* Computing MIN */
             /* Computing MAX */
             d__2 = c__[j];
-            d__1 = fla_max(d__2, smlnum);
-            c__[j] = 1. / fla_min(d__1, bignum);
+            d__1 = fla_max(d__2,smlnum);
+            c__[j] = 1. / fla_min(d__1,bignum);
             /* L120: */
         }
         /* Compute COLCND = fla_min(C(J)) / fla_max(C(J)) */
-        *colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
+        *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return 0;

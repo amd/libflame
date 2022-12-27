@@ -330,7 +330,7 @@ void dgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, doublereal *a, aocl_int_t
     /* Test the input arguments */
     /* Computing MAX */
     i__1 = *n << 2;
-    lwkmin = fla_max(i__1, 1);
+    lwkmin = fla_max(i__1,1);
     lwkopt = lwkmin;
     work[1] = (doublereal)lwkopt;
     lquery = *lwork == -1;
@@ -347,11 +347,11 @@ void dgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, doublereal *a, aocl_int_t
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -7;
     }
@@ -373,8 +373,8 @@ void dgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, doublereal *a, aocl_int_t
         nb2 = aocl_lapack_ilaenv(&c__1, "DORMQR", " ", n, n, n, &c_n1);
         nb3 = aocl_lapack_ilaenv(&c__1, "DORGQR", " ", n, n, n, &c_n1);
         /* Computing MAX */
-        i__1 = fla_max(nb1, nb2);
-        nb = fla_max(i__1, nb3);
+        i__1 = fla_max(nb1,nb2);
+        nb = fla_max(i__1,nb3);
         lopt = (*n << 1) + *n * (nb + 1);
         work[1] = (doublereal)lopt;
     }
@@ -474,8 +474,8 @@ void dgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, doublereal *a, aocl_int_t
     {
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = (integer)work[iwork] + iwork - 1; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
+        i__2 = (integer) work[iwork] + iwork - 1; // , expr subst
+        lwkopt = fla_max(i__1,i__2);
     }
     if(iinfo != 0)
     {
@@ -489,8 +489,8 @@ void dgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, doublereal *a, aocl_int_t
     {
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = (integer)work[iwork] + iwork - 1; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
+        i__2 = (integer) work[iwork] + iwork - 1; // , expr subst
+        lwkopt = fla_max(i__1,i__2);
     }
     if(iinfo != 0)
     {
@@ -511,8 +511,8 @@ void dgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, doublereal *a, aocl_int_t
         {
             /* Computing MAX */
             i__1 = lwkopt;
-            i__2 = (integer)work[iwork] + iwork - 1; // , expr subst
-            lwkopt = fla_max(i__1, i__2);
+            i__2 = (integer) work[iwork] + iwork - 1; // , expr subst
+            lwkopt = fla_max(i__1,i__2);
         }
         if(iinfo != 0)
         {
@@ -542,8 +542,8 @@ void dgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, doublereal *a, aocl_int_t
     {
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = (integer)work[iwork] + iwork - 1; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
+        i__2 = (integer) work[iwork] + iwork - 1; // , expr subst
+        lwkopt = fla_max(i__1,i__2);
     }
     if(iinfo != 0)
     {

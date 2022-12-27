@@ -218,7 +218,7 @@ void cgeqpf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_in
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -4;
     }
@@ -229,7 +229,7 @@ void cgeqpf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_in
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
-    mn = fla_min(*m, *n);
+    mn = fla_min(*m,*n);
     tol3z = sqrt(slamch_("Epsilon"));
     /* Move initial columns up front */
     itemp = 1;
@@ -260,9 +260,9 @@ void cgeqpf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_in
     /* Compute the QR factorization and update remaining columns */
     if(itemp > 0)
     {
-        ma = fla_min(itemp, *m);
-        aocl_lapack_cgeqr2(m, &ma, &a[a_offset], lda, &tau[1], &work[1], info);
-        if(ma < *n)
+        ma = fla_min(itemp,*m);
+        cgeqr2_(m, &ma, &a[a_offset], lda, &tau[1], &work[1], info);
+        if (ma < *n)
         {
             i__1 = *n - ma;
             cunm2r_("Left", "Conjugate transpose", m, &i__1, &ma, &a[a_offset], lda, &tau[1], &a[(ma + 1) * a_dim1 + 1], lda, &work[1], info);
@@ -303,7 +303,7 @@ void cgeqpf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_in
             i__2 = *m - i__ + 1;
             /* Computing MIN */
             i__3 = i__ + 1;
-            aocl_lapack_clarfg(&i__2, &aii, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tau[i__]);
+            clarfg_(&i__2, &aii, &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &tau[ i__]);
             i__2 = i__ + i__ * a_dim1;
             a[i__2].real = aii.real;
             a[i__2].imag = aii.imag; // , expr subst
@@ -337,7 +337,7 @@ void cgeqpf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_in
                     /* Computing MAX */
                     r__1 = 0.f;
                     r__2 = (temp + 1.f) * (1.f - temp); // , expr subst
-                    temp = fla_max(r__1, r__2);
+                    temp = fla_max(r__1,r__2);
                     /* Computing 2nd power */
                     r__1 = rwork[j] / rwork[*n + j];
                     temp2 = temp * (r__1 * r__1);

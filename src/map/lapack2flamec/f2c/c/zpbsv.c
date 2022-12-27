@@ -89,7 +89,7 @@
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(KD+1+i-j,j) = A(i,j) for fla_max(1,j-KD)<=i<=j;
- */
+*/
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(N,j+KD). */
 /* > See below for further details. */
 /* > */
@@ -218,7 +218,7 @@ void zpbsv_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, dcomple
     {
         *info = -6;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -8;
     }

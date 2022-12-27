@@ -258,7 +258,7 @@ void ssytf2_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ip
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
@@ -299,7 +299,7 @@ void ssytf2_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ip
         {
             colmax = 0.f;
         }
-        if(fla_max(absakk, colmax) == 0.f || sisnan_(&absakk))
+        if (fla_max(absakk,colmax) == 0.f || sisnan_(&absakk))
         {
             /* Column K is zero or underflow, or contains a NaN: */
             /* set INFO and continue */
@@ -330,7 +330,7 @@ void ssytf2_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ip
                     /* Computing MAX */
                     r__2 = rowmax;
                     r__3 = (r__1 = a[jmax + imax * a_dim1], f2c_abs(r__1)); // , expr subst
-                    rowmax = max(r__2,r__3);
+                    rowmax = fla_max(r__2,r__3);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
@@ -462,7 +462,7 @@ void ssytf2_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ip
         {
             colmax = 0.f;
         }
-        if(fla_max(absakk, colmax) == 0.f || sisnan_(&absakk))
+        if (fla_max(absakk,colmax) == 0.f || sisnan_(&absakk))
         {
             /* Column K is zero or underflow, or contains a NaN: */
             /* set INFO and continue */
@@ -493,7 +493,7 @@ void ssytf2_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ip
                     /* Computing MAX */
                     r__2 = rowmax;
                     r__3 = (r__1 = a[jmax + imax * a_dim1], f2c_abs(r__1)); // , expr subst
-                    rowmax = max(r__2,r__3);
+                    rowmax = fla_max(r__2,r__3);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {

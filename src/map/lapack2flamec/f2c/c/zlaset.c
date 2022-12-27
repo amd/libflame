@@ -83,7 +83,7 @@
 /* > A is COMPLEX*16 array, dimension (LDA,N) */
 /* > On entry, the m by n matrix A. */
 /* > On exit, A(i,j) = ALPHA, 1 <= i <= m, 1 <= j <= n, i.ne.j;
- */
+*/
 /* > A(i,i) = BETA , 1 <= i <= fla_min(m,n) */
 /* > \endverbatim */
 /* > */
@@ -144,8 +144,10 @@ void zlaset_(char *uplo, aocl_int_t *m, aocl_int_t *n, dcomplex *alpha, dcomplex
         {
             /* Computing MIN */
             i__3 = j - 1;
-            i__2 = fla_min(i__3, *m);
-            for(i__ = 1; i__ <= i__2; ++i__)
+            i__2 = fla_min(i__3,*m);
+            for (i__ = 1;
+                    i__ <= i__2;
+                    ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 a[i__3].real = alpha->real;
@@ -154,8 +156,10 @@ void zlaset_(char *uplo, aocl_int_t *m, aocl_int_t *n, dcomplex *alpha, dcomplex
             }
             /* L20: */
         }
-        i__1 = fla_min(*n, *m);
-        for(i__ = 1; i__ <= i__1; ++i__)
+        i__1 = fla_min(*n,*m);
+        for (i__ = 1;
+                i__ <= i__1;
+                ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
             a[i__2].real = beta->real;
@@ -167,8 +171,10 @@ void zlaset_(char *uplo, aocl_int_t *m, aocl_int_t *n, dcomplex *alpha, dcomplex
     {
         /* Set the diagonal to BETA and the strictly lower triangular */
         /* part of the array to ALPHA. */
-        i__1 = fla_min(*m, *n);
-        for(j = 1; j <= i__1; ++j)
+        i__1 = fla_min(*m,*n);
+        for (j = 1;
+                j <= i__1;
+                ++j)
         {
             i__2 = *m;
             for(i__ = j + 1; i__ <= i__2; ++i__)
@@ -180,8 +186,10 @@ void zlaset_(char *uplo, aocl_int_t *m, aocl_int_t *n, dcomplex *alpha, dcomplex
             }
             /* L50: */
         }
-        i__1 = fla_min(*n, *m);
-        for(i__ = 1; i__ <= i__1; ++i__)
+        i__1 = fla_min(*n,*m);
+        for (i__ = 1;
+                i__ <= i__1;
+                ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
             a[i__2].real = beta->real;
@@ -206,8 +214,10 @@ void zlaset_(char *uplo, aocl_int_t *m, aocl_int_t *n, dcomplex *alpha, dcomplex
             }
             /* L80: */
         }
-        i__1 = fla_min(*m, *n);
-        for(i__ = 1; i__ <= i__1; ++i__)
+        i__1 = fla_min(*m,*n);
+        for (i__ = 1;
+                i__ <= i__1;
+                ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
             a[i__2].real = beta->real;

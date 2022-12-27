@@ -19,9 +19,9 @@ int dorglq_check(integer *m, integer *n, integer *k, double * a, integer *lda, d
     --work;
     /* Function Body */
     *info = 0;
-    nb = aocl_lapack_ilaenv(&c__1, "DORGLQ", " ", m, n, k, &c_n1);
-    lwkopt = fla_max(1, *m) * nb;
-    work[1] = (double)lwkopt;
+    nb = ilaenv_(&c__1, "DORGLQ", " ", m, n, k, &c_n1);
+    lwkopt = fla_max(1,*m) * nb;
+    work[1] = (double) lwkopt;
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -35,11 +35,11 @@ int dorglq_check(integer *m, integer *n, integer *k, double * a, integer *lda, d
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -5;
     }
-    else if(*lwork < fla_max(1, *m) && !lquery)
+    else if (*lwork < fla_max(1,*m) && ! lquery)
     {
         *info = -8;
     }

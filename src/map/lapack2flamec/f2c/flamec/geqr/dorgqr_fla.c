@@ -181,12 +181,12 @@ int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
     else
     {
         nb = ilaenv_(&c__1, "DORGQR", " ", m, n, k, &c_n1);
-        lwkopt = max(1,*n) * nb;
+        lwkopt = fla_max(1,*n) * nb;
         work[1] = (doublereal) lwkopt;
     }
 #else
     nb = ilaenv_(&c__1, "DORGQR", " ", m, n, k, &c_n1);
-    lwkopt = max(1,*n) * nb;
+    lwkopt = fla_max(1,*n) * nb;
     work[1] = (doublereal) lwkopt;
 #endif
     lquery = *lwork == -1;
@@ -202,11 +202,11 @@ int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -5;
     }
-    else if(*lwork < fla_max(1, *n) && !lquery)
+    else if (*lwork < fla_max(1,*n) && ! lquery)
     {
         *info = -8;
     }
@@ -234,9 +234,9 @@ int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = aocl_lapack_ilaenv(&c__3, "DORGQR", " ", m, n, k, &c_n1); // , expr subst
-        nx = fla_max(i__1, i__2);
-        if(nx < *k)
+        i__2 = ilaenv_(&c__3, "DORGQR", " ", m, n, k, &c_n1); // , expr subst
+        nx = fla_max(i__1,i__2);
+        if (nx < *k)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *n;
@@ -248,8 +248,8 @@ int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = aocl_lapack_ilaenv(&c__2, "DORGQR", " ", m, n, k, &c_n1); // , expr subst
-                nbmin = fla_max(i__1, i__2);
+                i__2 = ilaenv_(&c__2, "DORGQR", " ", m, n, k, &c_n1); // , expr subst
+                nbmin = fla_max(i__1,i__2);
             }
         }
     }
@@ -261,7 +261,7 @@ int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
         /* Computing MIN */
         i__1 = *k;
         i__2 = ki + nb; // , expr subst
-        kk = fla_min(i__1, i__2);
+        kk = fla_min(i__1,i__2);
         /* Set A(1:kk,kk+1:n) to zero. */
         i__1 = *n;
         for(j = kk + 1; j <= i__1; ++j)
@@ -297,8 +297,8 @@ int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
             /* Computing MIN */
             i__2 = nb;
             i__3 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__2, i__3);
-            if(i__ + ib <= *n)
+            ib = fla_min(i__2,i__3);
+            if (i__ + ib <= *n)
             {
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i) H(i+1) . . . H(i+ib-1) */

@@ -183,11 +183,11 @@ void aocl_lapack_sgesv(aocl_int64_t *n, aocl_int64_t *nrhs, real *a, aocl_int64_
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -7;
     }

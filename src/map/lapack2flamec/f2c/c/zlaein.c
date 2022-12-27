@@ -219,7 +219,7 @@ void zlaein_(logical *rightv, logical *noinit, aocl_int_t *n, dcomplex *h__, aoc
     /* Computing MAX */
     d__1 = 1.;
     d__2 = *eps3 * rootn; // , expr subst
-    nrmsml = fla_max(d__1, d__2) * *smlnum;
+    nrmsml = fla_max(d__1,d__2) * *smlnum;
     /* Form B = H - W*I (except that the subdiagonal elements are not */
     /* stored). */
     i__1 = *n;
@@ -257,9 +257,9 @@ void zlaein_(logical *rightv, logical *noinit, aocl_int_t *n, dcomplex *h__, aoc
     else
     {
         /* Scale supplied initial vector. */
-        vnorm = aocl_blas_dznrm2(n, &v[1], &c__1);
-        d__1 = *eps3 * rootn / fla_max(vnorm, nrmsml);
-        aocl_blas_zdscal(n, &d__1, &v[1], &c__1);
+        vnorm = dznrm2_(n, &v[1], &c__1);
+        d__1 = *eps3 * rootn / fla_max(vnorm,nrmsml);
+        zdscal_(n, &d__1, &v[1], &c__1);
     }
     if(*rightv)
     {

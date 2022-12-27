@@ -446,7 +446,7 @@ void dlaebz_(aocl_int_t *ijob, aocl_int_t *nitmax, aocl_int_t *n, aocl_int_t *mm
                     /* Computing MIN */
                     d__1 = work[ji];
                     d__2 = -(*pivmin); // , expr subst
-                    work[ji] = fla_min(d__1, d__2);
+                    work[ji] = fla_min(d__1,d__2);
                 }
                 i__3 = *n;
                 for(j = 2; j <= i__3; ++j)
@@ -458,7 +458,7 @@ void dlaebz_(aocl_int_t *ijob, aocl_int_t *nitmax, aocl_int_t *n, aocl_int_t *mm
                         /* Computing MIN */
                         d__1 = work[ji];
                         d__2 = -(*pivmin); // , expr subst
-                        work[ji] = fla_min(d__1, d__2);
+                        work[ji] = fla_min(d__1,d__2);
                     }
                     /* L50: */
                 }
@@ -477,8 +477,8 @@ void dlaebz_(aocl_int_t *ijob, aocl_int_t *nitmax, aocl_int_t *n, aocl_int_t *mm
                     i__5 = nab[ji + nab_dim1];
                     i__6 = iwork[ji]; // , expr subst
                     i__3 = nab[ji + (nab_dim1 << 1)];
-                    i__4 = fla_max(i__5, i__6); // , expr subst
-                    iwork[ji] = fla_min(i__3, i__4);
+                    i__4 = fla_max(i__5,i__6); // , expr subst
+                    iwork[ji] = fla_min(i__3,i__4);
                     /* Update the Queue -- add intervals if both halves */
                     /* contain eigenvalues. */
                     if(iwork[ji] == nab[ji + (nab_dim1 << 1)])
@@ -560,7 +560,7 @@ void dlaebz_(aocl_int_t *ijob, aocl_int_t *nitmax, aocl_int_t *n, aocl_int_t *mm
                     /* Computing MIN */
                     d__1 = tmp2;
                     d__2 = -(*pivmin); // , expr subst
-                    tmp2 = fla_min(d__1, d__2);
+                    tmp2 = fla_min(d__1,d__2);
                 }
                 i__3 = *n;
                 for(j = 2; j <= i__3; ++j)
@@ -572,7 +572,7 @@ void dlaebz_(aocl_int_t *ijob, aocl_int_t *nitmax, aocl_int_t *n, aocl_int_t *mm
                         /* Computing MIN */
                         d__1 = tmp2;
                         d__2 = -(*pivmin); // , expr subst
-                        tmp2 = fla_min(d__1, d__2);
+                        tmp2 = fla_min(d__1,d__2);
                     }
                     /* L90: */
                 }
@@ -584,8 +584,8 @@ void dlaebz_(aocl_int_t *ijob, aocl_int_t *nitmax, aocl_int_t *n, aocl_int_t *mm
                     /* Computing MAX */
                     i__5 = nab[ji + nab_dim1];
                     i__3 = nab[ji + (nab_dim1 << 1)];
-                    i__4 = fla_max(i__5, itmp1); // , expr subst
-                    itmp1 = fla_min(i__3, i__4);
+                    i__4 = fla_max(i__5,itmp1); // , expr subst
+                    itmp1 = fla_min(i__3,i__4);
                     /* Update the Queue -- add intervals if both halves */
                     /* contain eigenvalues. */
                     if(itmp1 == nab[ji + (nab_dim1 << 1)])
@@ -646,11 +646,11 @@ void dlaebz_(aocl_int_t *ijob, aocl_int_t *nitmax, aocl_int_t *n, aocl_int_t *mm
             /* Computing MAX */
             d__3 = (d__1 = ab[ji + (ab_dim1 << 1)], f2c_dabs(d__1));
             d__4 = (d__2 = ab[ji + ab_dim1], f2c_dabs(d__2)); // , expr subst
-            tmp2 = max(d__3,d__4);
+            tmp2 = fla_max(d__3,d__4);
             /* Computing MAX */
-            d__1 = fla_max(*abstol, *pivmin);
+            d__1 = fla_max(*abstol,*pivmin);
             d__2 = *reltol * tmp2; // , expr subst
-            if(tmp1 < fla_max(d__1, d__2) || nab[ji + nab_dim1] >= nab[ji + (nab_dim1 << 1)])
+            if (tmp1 < fla_max(d__1,d__2) || nab[ji + nab_dim1] >= nab[ji + ( nab_dim1 << 1)])
             {
                 /* Converged -- Swap with position KFNEW, */
                 /* then increment KFNEW */
@@ -697,7 +697,7 @@ void dlaebz_(aocl_int_t *ijob, aocl_int_t *nitmax, aocl_int_t *n, aocl_int_t *mm
     /* Converged */
 L140: /* Computing MAX */
     i__1 = kl + 1 - kf;
-    *info = fla_max(i__1, 0);
+    *info = fla_max(i__1,0);
     *mout = kl;
     AOCL_DTL_TRACE_LOG_EXIT
     return 0;

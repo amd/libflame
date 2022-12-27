@@ -225,11 +225,11 @@ void dorbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, doublereal *x1, aoc
     {
         *info = -7;
     }
-    else if(*ldq1 < fla_max(1, *m1))
+    else if (*ldq1 < fla_max(1,*m1))
     {
         *info = -9;
     }
-    else if(*ldq2 < fla_max(1, *m2))
+    else if (*ldq2 < fla_max(1,*m2))
     {
         *info = -11;
     }

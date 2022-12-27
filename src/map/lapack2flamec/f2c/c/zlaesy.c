@@ -186,7 +186,7 @@ void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
         /* Take the square root carefully to avoid over/under flow. */
         babs = z_abs(b);
         tabs = z_abs(&t);
-        z__ = max(babs,tabs);
+        z__ = fla_max(babs,tabs);
         if (z__ > 0.)
         {
             z__5.real = t.real / z__;

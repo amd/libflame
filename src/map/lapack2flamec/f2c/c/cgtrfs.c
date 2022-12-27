@@ -309,11 +309,11 @@ void cgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomple
     {
         *info = -3;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -13;
     }
-    else if(*ldx < fla_max(1, *n))
+    else if (*ldx < fla_max(1,*n))
     {
         *info = -15;
     }
@@ -437,7 +437,7 @@ void cgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomple
             }
         }
         /* Compute componentwise relative backward error from formula */
-        /* max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A))*f2c_abs(X) + f2c_abs(B) )(i) ) */
+        /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A))*f2c_abs(X) + f2c_abs(B) )(i) ) */
         /* where f2c_abs(Z) is the componentwise absolute value of the matrix */
         /* or vector Z. If the i-th component of the denominator is less */
         /* than SAFE2, then SAFE1 is added to the i-th components of the */
@@ -452,7 +452,7 @@ void cgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomple
                 i__3 = i__;
                 r__3 = s;
                 r__4 = ((r__1 = work[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2))) / rwork[i__]; // , expr subst
-                s = max(r__3,r__4);
+                s = fla_max(r__3,r__4);
             }
             else
             {
@@ -460,7 +460,7 @@ void cgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomple
                 i__3 = i__;
                 r__3 = s;
                 r__4 = ((r__1 = work[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + safe1) / (rwork[i__] + safe1); // , expr subst
-                s = max(r__3,r__4);
+                s = fla_max(r__3,r__4);
             }
             /* L50: */
         }
@@ -564,7 +564,7 @@ void cgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomple
             i__3 = i__ + j * x_dim1;
             r__3 = lstres;
             r__4 = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__2)); // , expr subst
-            lstres = max(r__3,r__4);
+            lstres = fla_max(r__3,r__4);
             /* L100: */
         }
         if(lstres != 0.f)

@@ -242,8 +242,10 @@ void sgbtf2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, real 
 
     /* Gaussian elimination with partial pivoting */
     /* Set fill-in elements in columns KU+2 to KV to zero. */
-    i__1 = fla_min(kv, *n);
-    for(j = *ku + 2; j <= i__1; ++j)
+    i__1 = fla_min(kv,*n);
+    for (j = *ku + 2;
+            j <= i__1;
+            ++j)
     {
         i__2 = *kl;
         for(i__ = kv - j + 2; i__ <= i__2; ++i__)
@@ -256,8 +258,10 @@ void sgbtf2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, real 
     /* JU is the index of the last column affected by the current stage */
     /* of the factorization. */
     ju = 1;
-    i__1 = fla_min(*m, *n);
-    for(j = 1; j <= i__1; ++j)
+    i__1 = fla_min(*m,*n);
+    for (j = 1;
+            j <= i__1;
+            ++j)
     {
 	#if AOCL_FLA_PROGRESS_H
             if(aocl_fla_progress_ptr){
@@ -283,7 +287,7 @@ void sgbtf2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, real 
         /* Computing MIN */
         i__2 = *kl;
         i__3 = *m - j; // , expr subst
-        km = fla_min(i__2, i__3);
+        km = fla_min(i__2,i__3);
         i__2 = km + 1;
         jp = aocl_blas_isamax(&i__2, &ab[kv + 1 + j * ab_dim1], &c__1);
         ipiv[j] = (aocl_int_t)(jp + j - 1);
@@ -293,8 +297,8 @@ void sgbtf2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, real 
             /* Computing MIN */
             i__4 = j + *ku + jp - 1;
             i__2 = ju;
-            i__3 = fla_min(i__4, *n); // , expr subst
-            ju = fla_max(i__2, i__3);
+            i__3 = fla_min(i__4,*n); // , expr subst
+            ju = fla_max(i__2,i__3);
             /* Apply interchange to columns J to JU. */
             if(jp != 1)
             {

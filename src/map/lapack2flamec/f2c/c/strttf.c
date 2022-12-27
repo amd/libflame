@@ -261,7 +261,7 @@ void aocl_lapack_strttf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }

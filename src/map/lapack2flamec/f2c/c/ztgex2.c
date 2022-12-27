@@ -297,10 +297,7 @@ void ztgex2_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
     /* Jim Demmel and Guillaume Revy. See forum post 1783. */
     /* Computing MAX */
     d__1 = eps * 20. * sa;
-    thresha = fla_max(d__1, smlnum);
-    /* Computing MAX */
-    d__1 = eps * 20. * sb;
-    threshb = fla_max(d__1, smlnum);
+    thresh = fla_max(d__1,smlnum);
     /* Compute unitary QL and RQ that swap 1-by-1 and 1-by-1 blocks */
     /* using Givens rotations and perform the swap tentatively. */
     z__2.r = s[3].r * t[0].r - s[3].i * t[0].i;

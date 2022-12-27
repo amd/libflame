@@ -122,7 +122,7 @@ static aocl_int64_t c_n1 = -1;
 /* > \param[in] A */
 /* > \verbatim */
 /* > A is COMPLEX*16 array, dimension */
-/* > (LDA,min(nq,K)) if VECT = 'Q' */
+/* > (LDA,fla_min(nq,K)) if VECT = 'Q' */
 /* > (LDA,nq) if VECT = 'P' */
 /* > The vectors which define the elementary reflectors H(i) and */
 /* > G(i), whose products determine the matrices Q and P, as */
@@ -134,8 +134,8 @@ static aocl_int64_t c_n1 = -1;
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If VECT = 'Q', LDA >= fla_max(1,nq);
- */
-/* > if VECT = 'P', LDA >= fla_max(1,min(nq,K)). */
+*/
+/* > if VECT = 'P', LDA >= fla_max(1,fla_min(nq,K)). */
 /* > \endverbatim */
 /* > */
 /* > \param[in] TAU */
@@ -171,9 +171,9 @@ static aocl_int64_t c_n1 = -1;
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If SIDE = 'L', LWORK >= fla_max(1,N);
- */
+*/
 /* > if SIDE = 'R', LWORK >= fla_max(1,M);
- */
+*/
 /* > if N = 0 or M = 0, LWORK >= 1. */
 /* > For optimum performance LWORK >= fla_max(1,N*NB) if SIDE = 'L', */
 /* > and LWORK >= fla_max(1,M*NB) if SIDE = 'R', where NB is the */
@@ -295,16 +295,16 @@ void zunmbr_(char *vect, char *side, char *trans, aocl_int_t *m, aocl_int_t *n, 
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = fla_min(nq, *k); // , expr subst
-        if(applyq && *lda < fla_max(1, nq) || !applyq && *lda < fla_max(i__1, i__2))
+        i__2 = fla_min(nq,*k); // , expr subst
+        if (applyq && *lda < fla_max(1,nq) || ! applyq && *lda < fla_max(i__1,i__2))
         {
             *info = -8;
         }
-        else if(*ldc < fla_max(1, *m))
+        else if (*ldc < fla_max(1,*m))
         {
             *info = -11;
         }
-        else if(*lwork < nw && !lquery)
+        else if (*lwork < fla_max(1,nw) && ! lquery)
         {
             *info = -13;
         }
@@ -343,7 +343,10 @@ void zunmbr_(char *vect, char *side, char *trans, aocl_int_t *m, aocl_int_t *n, 
                     nb = aocl_lapack_ilaenv(&c__1, "ZUNMLQ", ch__1, m, &i__1, &i__2, &c_n1);
                 }
             }
-            lwkopt = nw * nb;
+            /* Computing MAX */
+            i__1 = 1;
+            i__2 = nw * nb; // , expr subst
+            lwkopt = fla_max(i__1,i__2);
         }
         else
         {

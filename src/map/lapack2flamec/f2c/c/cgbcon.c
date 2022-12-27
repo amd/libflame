@@ -292,7 +292,7 @@ L10:
                     /* Computing MIN */
                     i__2 = *kl;
                     i__3 = *n - j; // , expr subst
-                    lm = fla_min(i__2, i__3);
+                    lm = fla_min(i__2,i__3);
                     jp = ipiv[j];
                     i__2 = jp;
                     t.real = work[i__2].real;
@@ -333,7 +333,7 @@ L10:
                     /* Computing MIN */
                     i__1 = *kl;
                     i__2 = *n - j; // , expr subst
-                    lm = fla_min(i__1, i__2);
+                    lm = fla_min(i__1,i__2);
                     i__1 = j;
                     i__2 = j;
                     aocl_lapack_cdotc_f2c(&q__2, &lm, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1], &c__1);

@@ -84,7 +84,7 @@ static aocl_int64_t c__1 = 1;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
- */
+*/
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > */
 /* > On exit, if INFO = 0, the triangular factor U or L from the */
@@ -227,8 +227,8 @@ void cpbtf2_(char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab, aocl_int_t
     /* Computing MAX */
     i__1 = 1;
     i__2 = *ldab - 1; // , expr subst
-    kld = fla_max(i__1, i__2);
-    if(upper)
+    kld = fla_max(i__1,i__2);
+    if (upper)
     {
         /* Compute the Cholesky factorization A = U**H * U. */
         i__1 = *n;
@@ -253,8 +253,8 @@ void cpbtf2_(char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab, aocl_int_t
             /* Computing MIN */
             i__2 = *kd;
             i__3 = *n - j; // , expr subst
-            kn = fla_min(i__2, i__3);
-            if(kn > 0)
+            kn = fla_min(i__2,i__3);
+            if (kn > 0)
             {
                 r__1 = 1.f / ajj;
                 aocl_blas_csscal(&kn, &r__1, &ab[*kd + (j + 1) * ab_dim1], &kld);
@@ -291,8 +291,8 @@ void cpbtf2_(char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab, aocl_int_t
             /* Computing MIN */
             i__2 = *kd;
             i__3 = *n - j; // , expr subst
-            kn = fla_min(i__2, i__3);
-            if(kn > 0)
+            kn = fla_min(i__2,i__3);
+            if (kn > 0)
             {
                 r__1 = 1.f / ajj;
                 aocl_blas_csscal(&kn, &r__1, &ab[j * ab_dim1 + 2], &c__1);

@@ -292,7 +292,7 @@ void aocl_lapack_sgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     --jpvt;
     --work;
     /* Function Body */
-    mn = fla_min(*m, *n);
+    mn = fla_min(*m,*n);
     ismin = mn + 1;
     ismax = (mn << 1) + 1;
     /* Test the input arguments. */
@@ -310,15 +310,15 @@ void aocl_lapack_sgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -5;
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__1 = fla_max(1, *m);
-        if(*ldb < fla_max(i__1, *n))
+        i__1 = fla_max(1,*m);
+        if (*ldb < fla_max(i__1,*n))
         {
             *info = -7;
         }
@@ -338,19 +338,19 @@ void aocl_lapack_sgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
             nb3 = aocl_lapack_ilaenv(&c__1, "SORMQR", " ", m, n, nrhs, &c_n1);
             nb4 = aocl_lapack_ilaenv(&c__1, "SORMRQ", " ", m, n, nrhs, &c_n1);
             /* Computing MAX */
-            i__1 = fla_max(nb1, nb2);
-            i__1 = fla_max(i__1, nb3); // , expr subst
-            nb = fla_max(i__1, nb4);
+            i__1 = fla_max(nb1,nb2);
+            i__1 = fla_max(i__1,nb3); // , expr subst
+            nb = fla_max(i__1,nb4);
             /* Computing MAX */
             i__1 = mn << 1, i__2 = *n + 1;
-            i__1 = fla_max(i__1, i__2);
+            i__1 = fla_max(i__1,i__2);
             i__2 = mn + *nrhs; // ; expr subst
-            lwkmin = mn + fla_max(i__1, i__2);
+            lwkmin = mn + fla_max(i__1,i__2);
             /* Computing MAX */
             i__1 = lwkmin, i__2 = mn + (*n << 1) + nb * (*n + 1);
-            i__1 = fla_max(i__1, i__2);
+            i__1 = fla_max( i__1,i__2);
             i__2 = (mn << 1) + nb * *nrhs; // ; expr subst
-            lwkopt = fla_max(i__1, i__2);
+            lwkopt = fla_max(i__1,i__2);
         }
         work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
         if(*lwork < lwkmin && !lquery)
@@ -398,8 +398,8 @@ void aocl_lapack_sgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     else if(anrm == 0.f)
     {
         /* Matrix all zero. Return zero solution. */
-        i__1 = fla_max(*m, *n);
-        aocl_lapack_slaset("F", &i__1, nrhs, &c_b31, &c_b31, &b[b_offset], ldb);
+        i__1 = fla_max(*m,*n);
+        slaset_("F", &i__1, nrhs, &c_b31, &c_b31, &b[b_offset], ldb);
         *rank = 0;
         goto L70;
     }
@@ -432,8 +432,8 @@ void aocl_lapack_sgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     if ((r__1 = a[a_dim1 + 1], f2c_abs(r__1)) == 0.f)
     {
         *rank = 0;
-        i__1 = fla_max(*m, *n);
-        aocl_lapack_slaset("F", &i__1, nrhs, &c_b31, &c_b31, &b[b_offset], ldb);
+        i__1 = fla_max(*m,*n);
+        slaset_("F", &i__1, nrhs, &c_b31, &c_b31, &b[b_offset], ldb);
         goto L70;
     }
     else
@@ -485,7 +485,7 @@ L10:
     /* Computing MAX */
     r__1 = wsize;
     r__2 = (mn << 1) + work[(mn << 1) + 1]; // , expr subst
-    wsize = fla_max(r__1, r__2);
+    wsize = fla_max(r__1,r__2);
     /* workspace: 2*MN+NB*NRHS. */
     /* B(1:RANK,1:NRHS) := inv(T11) * B(1:RANK,1:NRHS) */
     aocl_blas_strsm("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b54, &a[a_offset],

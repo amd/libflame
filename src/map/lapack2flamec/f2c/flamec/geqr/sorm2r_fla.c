@@ -111,7 +111,7 @@ static aocl_int64_t c__1 = 1;
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If SIDE = 'L', LDA >= fla_max(1,M);
- */
+*/
 /* > if SIDE = 'R', LDA >= fla_max(1,N). */
 /* > \endverbatim */
 /* > */
@@ -233,11 +233,11 @@ void sorm2r_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, nq))
+    else if (*lda < fla_max(1,nq))
     {
         *info = -7;
     }
-    else if(*ldc < fla_max(1, *m))
+    else if (*ldc < fla_max(1,*m))
     {
         *info = -10;
     }

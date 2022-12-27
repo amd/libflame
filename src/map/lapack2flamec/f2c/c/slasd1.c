@@ -322,7 +322,7 @@ void aocl_lapack_slasd1(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     /* Computing MAX */
     r__1 = f2c_abs(*alpha);
     r__2 = f2c_abs(*beta); // , expr subst
-    orgnrm = max(r__1,r__2);
+    orgnrm = fla_max(r__1,r__2);
     d__[*nl + 1] = 0.f;
     i__1 = n;
     for(i__ = 1; i__ <= i__1; ++i__)

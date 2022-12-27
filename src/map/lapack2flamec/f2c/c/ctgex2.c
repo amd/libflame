@@ -304,10 +304,7 @@ void ctgex2_(logical *wantq, logical *wantz, aocl_int_t *n, scomplex *a, aocl_in
     /* Jim Demmel and Guillaume Revy. See forum post 1783. */
     /* Computing MAX */
     r__1 = eps * 20.f * sa;
-    thresha = fla_max(r__1, smlnum);
-    /* Computing MAX */
-    r__1 = eps * 20.f * sb;
-    threshb = fla_max(r__1, smlnum);
+    thresh = fla_max(r__1,smlnum);
     /* Compute unitary QL and RQ that swap 1-by-1 and 1-by-1 blocks */
     /* using Givens rotations and perform the swap tentatively. */
     q__2.r = s[3].r * t[0].r - s[3].i * t[0].i;

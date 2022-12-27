@@ -200,11 +200,11 @@ void dlaed9_(aocl_int_t *k, aocl_int_t *kstart, aocl_int_t *kstop, aocl_int_t *n
     {
         *info = -1;
     }
-    else if(*kstart < 1 || *kstart > fla_max(1, *k))
+    else if (*kstart < 1 || *kstart > fla_max(1,*k))
     {
         *info = -2;
     }
-    else if(fla_max(1, *kstop) < *kstart || *kstop > fla_max(1, *k))
+    else if (fla_max(1,*kstop) < *kstart || *kstop > fla_max(1,*k))
     {
         *info = -3;
     }
@@ -212,11 +212,11 @@ void dlaed9_(aocl_int_t *k, aocl_int_t *kstart, aocl_int_t *kstop, aocl_int_t *n
     {
         *info = -4;
     }
-    else if(*ldq < fla_max(1, *k))
+    else if (*ldq < fla_max(1,*k))
     {
         *info = -7;
     }
-    else if(*lds < fla_max(1, *k))
+    else if (*lds < fla_max(1,*k))
     {
         *info = -12;
     }

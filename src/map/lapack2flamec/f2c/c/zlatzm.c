@@ -190,7 +190,7 @@ void zlatzm_(char *side, aocl_int_t *m, aocl_int_t *n, dcomplex *v, aocl_int_t *
     c1 -= c1_offset;
     --work;
     /* Function Body */
-    if(fla_min(*m, *n) == 0 || tau->real == 0. && tau->imag == 0.)
+    if (fla_min(*m,*n) == 0 || tau->r == 0. && tau->i == 0.)
     {
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;

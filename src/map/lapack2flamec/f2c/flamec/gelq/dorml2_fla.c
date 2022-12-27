@@ -229,11 +229,11 @@ void dorml2_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, *k))
+    else if (*lda < fla_max(1,*k))
     {
         *info = -7;
     }
-    else if(*ldc < fla_max(1, *m))
+    else if (*ldc < fla_max(1,*m))
     {
         *info = -10;
     }

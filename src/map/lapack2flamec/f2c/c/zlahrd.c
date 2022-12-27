@@ -282,7 +282,7 @@ void zlahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, dcomplex *a, aocl_int
         i__2 = *n - *k - i__ + 1;
         /* Computing MIN */
         i__3 = *k + i__ + 1;
-        aocl_lapack_zlarfg(&i__2, &ei, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &tau[i__]);
+        zlarfg_(&i__2, &ei, &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, &tau[i__]) ;
         i__2 = *k + i__ + i__ * a_dim1;
         a[i__2].real = 1.;
         a[i__2].imag = 0.; // , expr subst

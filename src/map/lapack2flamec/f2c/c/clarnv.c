@@ -147,7 +147,7 @@ void clarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, scomplex *x)
         /* Computing MIN */
         i__2 = 64;
         i__3 = *n - iv + 1; // , expr subst
-        il = fla_min(i__2, i__3);
+        il = fla_min(i__2,i__3);
         /* Call SLARUV to generate 2*IL real numbers from a uniform (0,1) */
         /* distribution (2*IL <= LV) */
         i__2 = il << 1;

@@ -405,11 +405,11 @@ void chegvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -7;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -9;
     }
@@ -424,11 +424,11 @@ void chegvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
         }
         else if(indeig)
         {
-            if(*il < 1 || *il > fla_max(1, *n))
+            if (*il < 1 || *il > fla_max(1,*n))
             {
                 *info = -12;
             }
-            else if(*iu < fla_min(*n, *il) || *iu > *n)
+            else if (*iu < fla_min(*n,*il) || *iu > *n)
             {
                 *info = -13;
             }
@@ -447,14 +447,13 @@ void chegvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
         /* Computing MAX */
         i__1 = 1;
         i__2 = (nb + 1) * *n; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
-        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].real = r__1;
-        work[1].imag = 0.f; // , expr subst
+        lwkopt = fla_max(i__1,i__2);
+        work[1].r = (real) lwkopt;
+        work[1].i = 0.f; // , expr subst
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n << 1; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
+        if (*lwork < fla_max(i__1,i__2) && ! lquery)
         {
             *info = -20;
         }

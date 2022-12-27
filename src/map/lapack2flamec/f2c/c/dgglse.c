@@ -235,7 +235,7 @@ void dgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, doublereal *a, aocl_in
     --work;
     /* Function Body */
     *info = 0;
-    mn = fla_min(*m, *n);
+    mn = fla_min(*m,*n);
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -249,11 +249,11 @@ void dgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, doublereal *a, aocl_in
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -5;
     }
-    else if(*ldb < fla_max(1, *p))
+    else if (*ldb < fla_max(1,*p))
     {
         *info = -7;
     }
@@ -272,11 +272,11 @@ void dgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, doublereal *a, aocl_in
             nb3 = aocl_lapack_ilaenv(&c__1, "DORMQR", " ", m, n, p, &c_n1);
             nb4 = aocl_lapack_ilaenv(&c__1, "DORMRQ", " ", m, n, p, &c_n1);
             /* Computing MAX */
-            i__1 = fla_max(nb1, nb2);
-            i__1 = fla_max(i__1, nb3); // , expr subst
-            nb = fla_max(i__1, nb4);
+            i__1 = fla_max(nb1,nb2);
+            i__1 = fla_max(i__1,nb3); // , expr subst
+            nb = fla_max(i__1,nb4);
             lwkmin = *m + *n + *p;
-            lwkopt = *p + mn + fla_max(*m, *n) * nb;
+            lwkopt = *p + mn + fla_max(*m,*n) * nb;
         }
         work[1] = (doublereal)lwkopt;
         if(*lwork < lwkmin && !lquery)
@@ -314,14 +314,14 @@ void dgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, doublereal *a, aocl_in
     lopt = (integer)work[*p + mn + 1];
     /* Update c = Z**T *c = ( c1 ) N-P */
     /* ( c2 ) M+P-N */
-    i__1 = fla_max(1, *m);
+    i__1 = fla_max(1,*m);
     i__2 = *lwork - *p - mn;
     aocl_lapack_dormqr("Left", "Transpose", m, &c__1, &mn, &a[a_offset], lda, &work[*p + 1],
                        &c__[1], &i__1, &work[*p + mn + 1], &i__2, info);
     /* Computing MAX */
     i__1 = lopt;
-    i__2 = (integer)work[*p + mn + 1]; // , expr subst
-    lopt = fla_max(i__1, i__2);
+    i__2 = (integer) work[*p + mn + 1]; // , expr subst
+    lopt = fla_max(i__1,i__2);
     /* Solve T12*x2 = d for x2 */
     if(*p > 0)
     {
@@ -385,7 +385,7 @@ void dgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, doublereal *a, aocl_in
     /* Computing MAX */
     i__1 = lopt;
     i__2 = (integer) work[*p + mn + 1]; // , expr subst
-    work[1] = (doublereal) (*p + mn + max(i__1,i__2));
+    work[1] = (doublereal) (*p + mn + fla_max(i__1,i__2));
     AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGGLSE */

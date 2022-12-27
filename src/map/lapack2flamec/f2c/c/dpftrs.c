@@ -255,7 +255,7 @@ void dpftrs_(char *transr, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublere
     {
         *info = -4;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -7;
     }

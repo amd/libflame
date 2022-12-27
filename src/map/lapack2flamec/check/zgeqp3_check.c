@@ -31,14 +31,14 @@ int zgeqp3_check(integer *m, integer *n, dcomplex *a, integer *lda, integer *jpv
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -4;
     }
     if(*info == 0)
     {
-        minmn = fla_min(*m, *n);
-        if(minmn == 0)
+        minmn = fla_min(*m,*n);
+        if (minmn == 0)
         {
             iws = 1;
             lwkopt = 1;

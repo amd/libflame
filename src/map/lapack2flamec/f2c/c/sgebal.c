@@ -238,7 +238,7 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
@@ -387,10 +387,10 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
         f = 1.f;
         s = c__ + r__;
 L160: /* Computing MAX */
-        r__1 = max(f,c__);
+        r__1 = fla_max(f,c__);
         /* Computing MIN */
-        r__2 = min(r__,g);
-        if (c__ >= g || max(r__1,ca) >= sfmax2 || min(r__2,ra) <= sfmin2)
+        r__2 = fla_min(r__,g);
+        if (c__ >= g || fla_max(r__1,ca) >= sfmax2 || fla_min(r__2,ra) <= sfmin2)
         {
             goto L170;
         }
@@ -404,9 +404,9 @@ L160: /* Computing MAX */
 L170:
         g = c__ / 2.f;
 L180: /* Computing MIN */
-        r__1 = min(f,c__);
-        r__1 = min(r__1,g); // , expr subst
-        if (g < r__ || max(r__,ra) >= sfmax2 || min(r__1,ca) <= sfmin2)
+        r__1 = fla_min(f,c__);
+        r__1 = fla_min(r__1,g); // , expr subst
+        if (g < r__ || fla_max(r__,ra) >= sfmax2 || fla_min(r__1,ca) <= sfmin2)
         {
             goto L190;
         }

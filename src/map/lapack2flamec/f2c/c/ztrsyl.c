@@ -243,15 +243,15 @@ void ztrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -7;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -9;
     }
-    else if(*ldc < fla_max(1, *m))
+    else if (*ldc < fla_max(1,*m))
     {
         *info = -11;
     }
@@ -276,12 +276,12 @@ void ztrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
     smlnum = smlnum * (doublereal)(*m * *n) / eps;
     bignum = 1. / smlnum;
     /* Computing MAX */
-    d__1 = smlnum, d__2 = eps * aocl_lapack_zlange("M", m, m, &a[a_offset], lda, dum);
-    d__1 = fla_max(d__1, d__2);
-    d__2 = eps * aocl_lapack_zlange("M", n, n, &b[b_offset], ldb, dum); // ; expr subst
-    smin = fla_max(d__1, d__2);
-    sgn = (doublereal)(*isgn);
-    if(notrna && notrnb)
+    d__1 = smlnum, d__2 = eps * zlange_("M", m, m, &a[a_offset], lda, dum);
+    d__1 = fla_max(d__1,d__2);
+    d__2 = eps * zlange_("M", n, n, &b[b_offset], ldb, dum); // ; expr subst
+    smin = fla_max(d__1,d__2);
+    sgn = (doublereal) (*isgn);
+    if (notrna && notrnb)
     {
         /* Solve A*X + ISGN*X*B = scale*C. */
         /* The (K,L)th block of X is determined starting from */
@@ -301,10 +301,9 @@ void ztrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                 i__3 = k + 1;
                 /* Computing MIN */
                 i__4 = k + 1;
-                aocl_lapack_zdotu_f2c(&z__1, &i__2, &a[k + fla_min(i__3, *m) * a_dim1], lda,
-                           &c__[fla_min(i__4, *m) + l * c_dim1], &c__1);
-                suml.real = z__1.real;
-                suml.imag = z__1.imag; // , expr subst
+                zdotu_f2c_(&z__1, &i__2, &a[k + fla_min(i__3,*m) * a_dim1], lda, &c__[ fla_min(i__4,*m) + l * c_dim1], &c__1);
+                suml.r = z__1.r;
+                suml.i = z__1.i; // , expr subst
                 i__2 = l - 1;
                 zdotu_f2c_(&z__1, &i__2, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1], &c__1);
                 sumr.r = z__1.r;
@@ -478,10 +477,9 @@ void ztrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                 i__3 = l + 1;
                 /* Computing MIN */
                 i__4 = l + 1;
-                aocl_lapack_zdotc_f2c(&z__1, &i__2, &c__[k + fla_min(i__3, *n) * c_dim1], ldc,
-                           &b[l + fla_min(i__4, *n) * b_dim1], ldb);
-                sumr.real = z__1.real;
-                sumr.imag = z__1.imag; // , expr subst
+                zdotc_f2c_(&z__1, &i__2, &c__[k + fla_min(i__3,*n) * c_dim1], ldc, &b[ l + fla_min(i__4,*n) * b_dim1], ldb);
+                sumr.r = z__1.r;
+                sumr.i = z__1.i; // , expr subst
                 i__2 = k + l * c_dim1;
                 d_cnjg(&z__4, &sumr);
                 z__3.real = sgn * z__4.real;
@@ -562,19 +560,17 @@ void ztrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                 i__2 = k + 1;
                 /* Computing MIN */
                 i__3 = k + 1;
-                aocl_lapack_zdotu_f2c(&z__1, &i__1, &a[k + fla_min(i__2, *m) * a_dim1], lda,
-                           &c__[fla_min(i__3, *m) + l * c_dim1], &c__1);
-                suml.real = z__1.real;
-                suml.imag = z__1.imag; // , expr subst
+                zdotu_f2c_(&z__1, &i__1, &a[k + fla_min(i__2,*m) * a_dim1], lda, &c__[ fla_min(i__3,*m) + l * c_dim1], &c__1);
+                suml.r = z__1.r;
+                suml.i = z__1.i; // , expr subst
                 i__1 = *n - l;
                 /* Computing MIN */
                 i__2 = l + 1;
                 /* Computing MIN */
                 i__3 = l + 1;
-                aocl_lapack_zdotc_f2c(&z__1, &i__1, &c__[k + fla_min(i__2, *n) * c_dim1], ldc,
-                           &b[l + fla_min(i__3, *n) * b_dim1], ldb);
-                sumr.real = z__1.real;
-                sumr.imag = z__1.imag; // , expr subst
+                zdotc_f2c_(&z__1, &i__1, &c__[k + fla_min(i__2,*n) * c_dim1], ldc, &b[ l + fla_min(i__3,*n) * b_dim1], ldb);
+                sumr.r = z__1.r;
+                sumr.i = z__1.i; // , expr subst
                 i__1 = k + l * c_dim1;
                 d_cnjg(&z__4, &sumr);
                 z__3.real = sgn * z__4.real;

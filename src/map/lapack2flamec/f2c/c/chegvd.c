@@ -348,11 +348,11 @@ void chegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex 
     {
         *info = -4;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -6;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -8;
     }
@@ -406,17 +406,17 @@ void chegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex 
     aocl_lapack_cheevd(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, &rwork[1], lrwork,
                        &iwork[1], liwork, info);
     /* Computing MAX */
-    r__1 = (real)lopt;
-    r__2 = work[1].real; // , expr subst
-    lopt = (integer)fla_max(r__1, r__2);
+    r__1 = (real) lopt;
+    r__2 = work[1].r; // , expr subst
+    lopt = fla_max(r__1,r__2);
     /* Computing MAX */
-    r__1 = (real)lropt;
-    lropt = (integer)fla_max(r__1, rwork[1]);
+    r__1 = (real) lropt;
+    lropt = fla_max(r__1,rwork[1]);
     /* Computing MAX */
-    r__1 = (real)liopt;
-    r__2 = (real)iwork[1]; // , expr subst
-    liopt = (integer)fla_max(r__1, r__2);
-    if(wantz && *info == 0)
+    r__1 = (real) liopt;
+    r__2 = (real) iwork[1]; // , expr subst
+    liopt = fla_max(r__1,r__2);
+    if (wantz && *info == 0)
     {
         /* Backtransform eigenvectors to the original problem. */
         if(*itype == 1 || *itype == 2)

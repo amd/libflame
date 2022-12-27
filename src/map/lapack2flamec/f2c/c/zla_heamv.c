@@ -232,7 +232,7 @@ void zla_heamv_(aocl_int_t *uplo, aocl_int_t *n, doublereal *alpha, dcomplex *a,
     {
         info = 2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         info = 5;
     }

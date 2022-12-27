@@ -213,7 +213,7 @@ void claed0_(aocl_int_t *qsiz, aocl_int_t *n, real *d__, real *e, scomplex *q, a
     /* INFO = -1 */
     /* ELSE IF( ( ICOMPQ .EQ. 1 ) .AND. ( QSIZ .LT. MAX( 0, N ) ) ) */
     /* $ THEN */
-    if(*qsiz < fla_max(0, *n))
+    if (*qsiz < fla_max(0,*n))
     {
         *info = -1;
     }
@@ -221,11 +221,11 @@ void claed0_(aocl_int_t *qsiz, aocl_int_t *n, real *d__, real *e, scomplex *q, a
     {
         *info = -2;
     }
-    else if(*ldq < fla_max(1, *n))
+    else if (*ldq < fla_max(1,*n))
     {
         *info = -6;
     }
-    else if(*ldqs < fla_max(1, *n))
+    else if (*ldqs < fla_max(1,*n))
     {
         *info = -8;
     }

@@ -508,8 +508,8 @@ void sstemr_(char *jobz, char *range, aocl_int_t *n, real *d__, real *e, real *v
     /* Computing MIN */
     r__1 = sqrt(bignum);
     r__2 = 1.f / sqrt(sqrt(safmin)); // , expr subst
-    rmax = fla_min(r__1, r__2);
-    if(*info == 0)
+    rmax = fla_min(r__1,r__2);
+    if (*info == 0)
     {
         work[1] = aocl_lapack_sroundup_lwork(&lwmin);
         iwork[1] = (aocl_int_t)(liwmin);
@@ -780,11 +780,11 @@ void sstemr_(char *jobz, char *range, aocl_int_t *n, real *d__, real *e, real *v
             /* Computing MAX */
             r__1 = sqrt(eps) * .05f;
             r__2 = eps * 4.f; // , expr subst
-            rtol1 = fla_max(r__1, r__2);
+            rtol1 = fla_max(r__1,r__2);
             /* Computing MAX */
             r__1 = sqrt(eps) * .005f;
             r__2 = eps * 4.f; // , expr subst
-            rtol2 = fla_max(r__1, r__2);
+            rtol2 = fla_max(r__1,r__2);
         }
         aocl_lapack_slarre(range, n, &wl, &wu, &iil, &iiu, &d__[1], &e[1], &work[inde2], &rtol1,
                            &rtol2, &thresh, &nsplit, &iwork[iinspl], m, &w[1], &work[inderr],

@@ -169,7 +169,7 @@ void cung2r_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, scomplex *a, aocl_int_
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -5;
     }

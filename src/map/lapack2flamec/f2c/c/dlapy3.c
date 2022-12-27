@@ -89,8 +89,8 @@ doublereal dlapy3_(doublereal *x, doublereal *y, doublereal *z__)
     yabs = f2c_dabs(*y);
     zabs = f2c_dabs(*z__);
     /* Computing MAX */
-    d__1 = max(xabs,yabs);
-    w = max(d__1,zabs);
+    d__1 = fla_max(xabs,yabs);
+    w = fla_max(d__1,zabs);
     if (w == 0. || w > hugeval)
     {
         /* W can be zero for fla_max(0,nan,0) */

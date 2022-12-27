@@ -257,7 +257,7 @@ void aocl_lapack_slaqps(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, 
     /* Computing MIN */
     i__1 = *m;
     i__2 = *n + *offset; // , expr subst
-    lastrk = fla_min(i__1, i__2);
+    lastrk = fla_min(i__1,i__2);
     lsticc = 0;
     k = 0;
     tol3z = sqrt(slamch_("Epsilon"));
@@ -354,7 +354,7 @@ L10:
                     /* Computing MAX */
                     r__1 = 0.f;
                     r__2 = (temp + 1.f) * (1.f - temp); // , expr subst
-                    temp = fla_max(r__1, r__2);
+                    temp = fla_max(r__1,r__2);
                     /* Computing 2nd power */
                     r__1 = vn1[j] / vn2[j];
                     temp2 = temp * (r__1 * r__1);
@@ -383,7 +383,7 @@ L10:
     /* Computing MIN */
     i__1 = *n;
     i__2 = *m - *offset; // , expr subst
-    if(*kb < fla_min(i__1, i__2))
+    if (*kb < fla_min(i__1,i__2))
     {
         i__1 = *m - rk;
         i__2 = *n - *kb;

@@ -196,7 +196,7 @@ void sgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *dl, real *d__, 
     {
         *info = -3;
     }
-    else if(*ldb < fla_max(*n, 1))
+    else if (*ldb < fla_max(*n,1))
     {
         *info = -10;
     }
@@ -231,8 +231,8 @@ void sgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *dl, real *d__, 
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = aocl_lapack_ilaenv(&c__1, "SGTTRS", trans, n, nrhs, &c_n1, &c_n1); // , expr subst
-        nb = fla_max(i__1, i__2);
+        i__2 = ilaenv_(&c__1, "SGTTRS", trans, n, nrhs, &c_n1, & c_n1); // , expr subst
+        nb = fla_max(i__1,i__2);
     }
     if(nb >= *nrhs)
     {
@@ -247,9 +247,8 @@ void sgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *dl, real *d__, 
         {
             /* Computing MIN */
             i__3 = *nrhs - j + 1;
-            jb = fla_min(i__3, nb);
-            aocl_lapack_sgtts2(&itrans, n, &jb, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1],
-                               &b[j * b_dim1 + 1], ldb);
+            jb = fla_min(i__3,nb);
+            sgtts2_(&itrans, n, &jb, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[ 1], &b[j * b_dim1 + 1], ldb);
             /* L10: */
         }
     }

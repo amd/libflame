@@ -178,11 +178,11 @@ void cgetri_(aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv, scom
     {
         *info = -1;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -3;
     }
-    else if(*lwork < fla_max(1, *n) && !lquery)
+    else if (*lwork < fla_max(1,*n) && ! lquery)
     {
         *info = -6;
     }
@@ -218,14 +218,14 @@ void cgetri_(aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv, scom
     {
         /* Computing MAX */
         i__1 = ldwork * nb;
-        iws = fla_max(i__1, 1);
-        if(*lwork < iws)
+        iws = fla_max(i__1,1);
+        if (*lwork < iws)
         {
             nb = *lwork / ldwork;
             /* Computing MAX */
             i__1 = 2;
-            i__2 = aocl_lapack_ilaenv(&c__2, "CGETRI", " ", n, &c_n1, &c_n1, &c_n1); // , expr subst
-            nbmin = fla_max(i__1, i__2);
+            i__2 = ilaenv_(&c__2, "CGETRI", " ", n, &c_n1, &c_n1, & c_n1); // , expr subst
+            nbmin = fla_max(i__1,i__2);
         }
     }
     else
@@ -273,7 +273,7 @@ void cgetri_(aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv, scom
             /* Computing MIN */
             i__2 = nb;
             i__3 = *n - j + 1; // , expr subst
-            jb = fla_min(i__2, i__3);
+            jb = fla_min(i__2,i__3);
             /* Copy current block column of L to WORK and replace with */
             /* zeros. */
             i__2 = j + jb - 1;

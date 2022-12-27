@@ -237,7 +237,7 @@ void zgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_i
     --work;
     --rwork;
     /* Function Body */
-    mn = fla_min(*m, *n);
+    mn = fla_min(*m,*n);
     ismin = mn + 1;
     ismax = (mn << 1) + 1;
     /* Test the input arguments. */
@@ -254,15 +254,15 @@ void zgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_i
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -5;
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__1 = fla_max(1, *m);
-        if(*ldb < fla_max(i__1, *n))
+        i__1 = fla_max(1,*m);
+        if (*ldb < fla_max(i__1,*n))
         {
             *info = -7;
         }
@@ -276,8 +276,8 @@ void zgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_i
     }
     /* Quick return if possible */
     /* Computing MIN */
-    i__1 = fla_min(*m, *n);
-    if(fla_min(i__1, *nrhs) == 0)
+    i__1 = fla_min(*m,*n);
+    if (fla_min(i__1,*nrhs) == 0)
     {
         *rank = 0;
     AOCL_DTL_TRACE_LOG_EXIT
@@ -304,8 +304,8 @@ void zgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_i
     else if(anrm == 0.)
     {
         /* Matrix all zero. Return zero solution. */
-        i__1 = fla_max(*m, *n);
-        aocl_lapack_zlaset("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
+        i__1 = fla_max(*m,*n);
+        zlaset_("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         *rank = 0;
         goto L100;
     }
@@ -340,8 +340,8 @@ void zgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_i
     if (z_abs(&a[a_dim1 + 1]) == 0.)
     {
         *rank = 0;
-        i__1 = fla_max(*m, *n);
-        aocl_lapack_zlaset("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
+        i__1 = fla_max(*m,*n);
+        zlaset_("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         goto L100;
     }
     else

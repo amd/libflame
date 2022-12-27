@@ -327,11 +327,11 @@ void sstevx_(char *jobz, char *range, aocl_int_t *n, real *d__, real *e, real *v
         }
         else if(indeig)
         {
-            if(*il < 1 || *il > fla_max(1, *n))
+            if (*il < 1 || *il > fla_max(1,*n))
             {
                 *info = -8;
             }
-            else if(*iu < fla_min(*n, *il) || *iu > *n)
+            else if (*iu < fla_min(*n,*il) || *iu > *n)
             {
                 *info = -9;
             }
@@ -389,7 +389,7 @@ void sstevx_(char *jobz, char *range, aocl_int_t *n, real *d__, real *e, real *v
     /* Computing MIN */
     r__1 = sqrt(bignum);
     r__2 = 1.f / sqrt(sqrt(safmin)); // , expr subst
-    rmax = fla_min(r__1, r__2);
+    rmax = fla_min(r__1,r__2);
     /* Scale matrix to allowable range, if necessary. */
     iscale = 0;
     if(valeig)

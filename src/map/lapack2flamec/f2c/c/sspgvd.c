@@ -349,13 +349,13 @@ void sspgvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *ap,
     aocl_lapack_sspevd(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], lwork,
                        &iwork[1], liwork, info);
     /* Computing MAX */
-    r__1 = (real)lwmin;
-    lwmin = (integer)fla_max(r__1, work[1]);
+    r__1 = (real) lwmin;
+    lwmin = fla_max(r__1,work[1]);
     /* Computing MAX */
-    r__1 = (real)liwmin;
-    r__2 = (real)iwork[1]; // , expr subst
-    liwmin = (integer)fla_max(r__1, r__2);
-    if(wantz)
+    r__1 = (real) liwmin;
+    r__2 = (real) iwork[1]; // , expr subst
+    liwmin = fla_max(r__1,r__2);
+    if (wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
         neig = *n;

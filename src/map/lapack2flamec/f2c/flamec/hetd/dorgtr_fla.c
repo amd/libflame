@@ -176,7 +176,7 @@ void dorgtr_fla(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, d
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
@@ -185,7 +185,7 @@ void dorgtr_fla(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, d
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
+        if (*lwork < fla_max(i__1,i__2) && ! lquery)
         {
             *info = -7;
         }
@@ -209,8 +209,8 @@ void dorgtr_fla(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, d
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        lwkopt = fla_max(i__1, i__2) * nb;
-        work[1] = (doublereal)lwkopt;
+        lwkopt = fla_max(i__1,i__2) * nb;
+        work[1] = (doublereal) lwkopt;
     }
     if(*info != 0)
     {

@@ -351,11 +351,11 @@ void zggev_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -7;
     }
@@ -379,26 +379,21 @@ void zggev_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n << 1; // , expr subst
-        lwkmin = fla_max(i__1, i__2);
+        lwkmin = fla_max(i__1,i__2);
         /* Computing MAX */
         i__1 = 1;
-        i__2 = *n
-               + *n * aocl_lapack_ilaenv(&c__1, "ZGEQRF", " ", n, &c__1, n, &c__0); // , expr subst
-        lwkopt = fla_max(i__1, i__2);
+        i__2 = *n + *n * ilaenv_(&c__1, "ZGEQRF", " ", n, &c__1, n, &c__0); // , expr subst
+        lwkopt = fla_max(i__1,i__2);
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = *n
-               + *n * aocl_lapack_ilaenv(&c__1, "ZUNMQR", " ", n, &c__1, n, &c__0); // , expr subst
-        lwkopt = fla_max(i__1, i__2);
-        if(ilvl)
+        i__2 = *n + *n * ilaenv_(&c__1, "ZUNMQR", " ", n, & c__1, n, &c__0); // , expr subst
+        lwkopt = fla_max(i__1,i__2);
+        if (ilvl)
         {
             /* Computing MAX */
             i__1 = lwkopt;
-            i__2 = *n
-                   + *n
-                         * aocl_lapack_ilaenv(&c__1, "ZUNGQR", " ", n, &c__1, n,
-                                              &c_n1); // , expr subst
-            lwkopt = fla_max(i__1, i__2);
+            i__2 = *n + *n * ilaenv_(&c__1, "ZUNGQR", " ", n, & c__1, n, &c_n1); // , expr subst
+            lwkopt = fla_max(i__1,i__2);
         }
         work[1].real = (doublereal)lwkopt;
         work[1].imag = 0.; // , expr subst
@@ -605,7 +600,7 @@ void zggev_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
                     i__3 = jr + jc * vl_dim1;
                     d__3 = temp;
                     d__4 = (d__1 = vl[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&vl[jr + jc * vl_dim1]), f2c_dabs(d__2)); // , expr subst
-                    temp = max(d__3,d__4);
+                    temp = fla_max(d__3,d__4);
                     /* L10: */
                 }
                 if(temp < smlnum)
@@ -642,7 +637,7 @@ void zggev_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
                     i__3 = jr + jc * vr_dim1;
                     d__3 = temp;
                     d__4 = (d__1 = vr[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&vr[jr + jc * vr_dim1]), f2c_dabs(d__2)); // , expr subst
-                    temp = max(d__3,d__4);
+                    temp = fla_max(d__3,d__4);
                     /* L40: */
                 }
                 if(temp < smlnum)

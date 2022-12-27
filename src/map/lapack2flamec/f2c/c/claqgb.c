@@ -232,8 +232,10 @@ void claqgb_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomp
                 /* Computing MIN */
                 i__5 = *m;
                 i__6 = j + *kl; // , expr subst
-                i__4 = fla_min(i__5, i__6);
-                for(i__ = fla_max(i__2, i__3); i__ <= i__4; ++i__)
+                i__4 = fla_min(i__5,i__6);
+                for (i__ = fla_max(i__2,i__3);
+                        i__ <= i__4;
+                        ++i__)
                 {
                     i__2 = *ku + 1 + i__ - j + j * ab_dim1;
                     i__3 = *ku + 1 + i__ - j + j * ab_dim1;
@@ -260,8 +262,10 @@ void claqgb_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomp
             /* Computing MIN */
             i__5 = *m;
             i__6 = j + *kl; // , expr subst
-            i__3 = fla_min(i__5, i__6);
-            for(i__ = fla_max(i__4, i__2); i__ <= i__3; ++i__)
+            i__3 = fla_min(i__5,i__6);
+            for (i__ = fla_max(i__4,i__2);
+                    i__ <= i__3;
+                    ++i__)
             {
                 i__4 = *ku + 1 + i__ - j + j * ab_dim1;
                 i__2 = i__;
@@ -289,8 +293,10 @@ void claqgb_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomp
             /* Computing MIN */
             i__5 = *m;
             i__6 = j + *kl; // , expr subst
-            i__2 = fla_min(i__5, i__6);
-            for(i__ = fla_max(i__3, i__4); i__ <= i__2; ++i__)
+            i__2 = fla_min(i__5,i__6);
+            for (i__ = fla_max(i__3,i__4);
+                    i__ <= i__2;
+                    ++i__)
             {
                 i__3 = *ku + 1 + i__ - j + j * ab_dim1;
                 r__1 = cj * r__[i__];

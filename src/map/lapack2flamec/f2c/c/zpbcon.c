@@ -81,7 +81,7 @@ static aocl_int64_t c__1 = 1;
 /* > first KD+1 rows of the array. The j-th column of U or L is */
 /* > stored in the j-th column of the array AB as follows: */
 /* > if UPLO ='U', AB(kd+1+i-j,j) = U(i,j) for fla_max(1,j-kd)<=i<=j;
- */
+*/
 /* > if UPLO ='L', AB(1+i-j,j) = L(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > \endverbatim */
 /* > */

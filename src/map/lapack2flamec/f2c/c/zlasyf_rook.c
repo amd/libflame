@@ -298,7 +298,7 @@ void zlasyf_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dco
         {
             colmax = 0.;
         }
-        if(fla_max(absakk, colmax) == 0.)
+        if (fla_max(absakk,colmax) == 0.)
         {
             /* Column K is zero or underflow: set INFO and continue */
             if(*info == 0)
@@ -571,7 +571,7 @@ void zlasyf_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dco
             /* Computing MIN */
             i__2 = *nb;
             i__3 = k - j + 1; // , expr subst
-            jb = fla_min(i__2, i__3);
+            jb = fla_min(i__2,i__3);
             /* Update the upper triangle of the diagonal block */
             i__2 = j + jb - 1;
             for(jj = j; jj <= i__2; ++jj)
@@ -675,7 +675,7 @@ void zlasyf_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dco
         {
             colmax = 0.;
         }
-        if(fla_max(absakk, colmax) == 0.)
+        if (fla_max(absakk,colmax) == 0.)
         {
             /* Column K is zero or underflow: set INFO and continue */
             if(*info == 0)
@@ -945,7 +945,7 @@ void zlasyf_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dco
             /* Computing MIN */
             i__3 = *nb;
             i__4 = *n - j + 1; // , expr subst
-            jb = fla_min(i__3, i__4);
+            jb = fla_min(i__3,i__4);
             /* Update the lower triangle of the diagonal block */
             i__3 = j + jb - 1;
             for(jj = j; jj <= i__3; ++jj)

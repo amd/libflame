@@ -143,12 +143,11 @@ aocl_int64_t aocl_lapack_ilazlr(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a,
                 for(;;)
                 {
                     /* while(complicated condition) */
-                    i__2 = fla_max(i__, 1) + j * a_dim1;
-                    if(!(a[i__2].real == 0. && a[i__2].imag == 0. && i__ >= 1))
-                        break;
+                    i__2 = fla_max(i__,1) + j * a_dim1;
+                    if (!(a[i__2].r == 0. && a[i__2].i == 0. && i__ >= 1)) break;
                     --i__;
                 }
-                ret_val = fla_max(ret_val, i__);
+                ret_val = fla_max(ret_val,i__);
             }
         }
     }

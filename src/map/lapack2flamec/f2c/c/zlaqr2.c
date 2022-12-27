@@ -353,8 +353,8 @@ void zlaqr2_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
     /* Computing MIN */
     i__1 = *nw;
     i__2 = *kbot - *ktop + 1; // , expr subst
-    jw = fla_min(i__1, i__2);
-    if(jw <= 2)
+    jw = fla_min(i__1,i__2);
+    if (jw <= 2)
     {
         lwkopt = 1;
     }
@@ -370,7 +370,7 @@ void zlaqr2_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
                            &v[v_offset], ldv, &work[1], &c_n1, &info);
         lwk2 = (integer)work[1].real;
         /* ==== Optimal workspace ==== */
-        lwkopt = jw + fla_max(lwk1, lwk2);
+        lwkopt = jw + fla_max(lwk1,lwk2);
     }
     /* ==== Quick return in case of workspace query. ==== */
     if(*lwork == -1)
@@ -408,7 +408,7 @@ void zlaqr2_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
     /* Computing MIN */
     i__1 = *nw;
     i__2 = *kbot - *ktop + 1; // , expr subst
-    jw = fla_min(i__1, i__2);
+    jw = fla_min(i__1,i__2);
     kwtop = *kbot - jw + 1;
     if(kwtop == *ktop)
     {
@@ -434,7 +434,7 @@ void zlaqr2_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
         i__1 = kwtop + kwtop * h_dim1;
         d__5 = smlnum;
         d__6 = ulp * ((d__1 = h__[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&h__[kwtop + kwtop * h_dim1]), f2c_dabs(d__2))); // , expr subst
-        if ((d__3 = s.r, f2c_dabs(d__3)) + (d__4 = d_imag(&s), f2c_dabs(d__4)) <= max( d__5,d__6))
+        if ((d__3 = s.r, f2c_dabs(d__3)) + (d__4 = d_imag(&s), f2c_dabs(d__4)) <= fla_max( d__5,d__6))
         {
             *ns = 0;
             *nd = 1;
@@ -480,7 +480,7 @@ void zlaqr2_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
         /* Computing MAX */
         d__5 = smlnum;
         d__6 = ulp * foo; // , expr subst
-        if (((d__1 = s.r, f2c_dabs(d__1)) + (d__2 = d_imag(&s), f2c_dabs(d__2))) * (( d__3 = v[i__2].r, f2c_dabs(d__3)) + (d__4 = d_imag(&v[*ns * v_dim1 + 1]), f2c_dabs(d__4))) <= max(d__5,d__6))
+        if (((d__1 = s.r, f2c_dabs(d__1)) + (d__2 = d_imag(&s), f2c_dabs(d__2))) * (( d__3 = v[i__2].r, f2c_dabs(d__3)) + (d__4 = d_imag(&v[*ns * v_dim1 + 1]), f2c_dabs(d__4))) <= fla_max(d__5,d__6))
         {
             /* ==== One more converged eigenvalue ==== */
             --(*ns);
@@ -610,11 +610,9 @@ void zlaqr2_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
             /* Computing MIN */
             i__3 = *nv;
             i__4 = kwtop - krow; // , expr subst
-            kln = fla_min(i__3, i__4);
-            aocl_blas_zgemm("N", "N", &kln, &jw, &jw, &c_b2, &h__[krow + kwtop * h_dim1], ldh,
-                            &v[v_offset], ldv, &c_b1, &wv[wv_offset], ldwv);
-            aocl_lapack_zlacpy("A", &kln, &jw, &wv[wv_offset], ldwv, &h__[krow + kwtop * h_dim1],
-                               ldh);
+            kln = fla_min(i__3,i__4);
+            zgemm_("N", "N", &kln, &jw, &jw, &c_b2, &h__[krow + kwtop * h_dim1], ldh, &v[v_offset], ldv, &c_b1, &wv[wv_offset], ldwv);
+            zlacpy_("A", &kln, &jw, &wv[wv_offset], ldwv, &h__[krow + kwtop * h_dim1], ldh);
             /* L60: */
         }
         /* ==== Update horizontal slab in H ==== */
@@ -627,11 +625,9 @@ void zlaqr2_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
                 /* Computing MIN */
                 i__3 = *nh;
                 i__4 = *n - kcol + 1; // , expr subst
-                kln = fla_min(i__3, i__4);
-                aocl_blas_zgemm("C", "N", &jw, &kln, &jw, &c_b2, &v[v_offset], ldv,
-                                &h__[kwtop + kcol * h_dim1], ldh, &c_b1, &t[t_offset], ldt);
-                aocl_lapack_zlacpy("A", &jw, &kln, &t[t_offset], ldt, &h__[kwtop + kcol * h_dim1],
-                                   ldh);
+                kln = fla_min(i__3,i__4);
+                zgemm_("C", "N", &jw, &kln, &jw, &c_b2, &v[v_offset], ldv, & h__[kwtop + kcol * h_dim1], ldh, &c_b1, &t[t_offset], ldt);
+                zlacpy_("A", &jw, &kln, &t[t_offset], ldt, &h__[kwtop + kcol * h_dim1], ldh);
                 /* L70: */
             }
         }
@@ -645,7 +641,7 @@ void zlaqr2_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
                 /* Computing MIN */
                 i__3 = *nv;
                 i__4 = *ihiz - krow + 1; // , expr subst
-                kln = min(i__3,i__4);
+                kln = fla_min(i__3,i__4);
                 zgemm_("N", "N", &kln, &jw, &jw, &c_b2, &z__[krow + kwtop * z_dim1], ldz, &v[v_offset], ldv, &c_b1, &wv[wv_offset], ldwv);
                 zlacpy_("A", &kln, &jw, &wv[wv_offset], ldwv, &z__[krow + kwtop * z_dim1], ldz);
                 /* L80: */

@@ -253,7 +253,7 @@ void aocl_lapack_slaed3(aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *n1, real
     {
         *info = -2;
     }
-    else if(*ldq < fla_max(1, *n))
+    else if (*ldq < fla_max(1,*n))
     {
         *info = -6;
     }

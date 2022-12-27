@@ -239,7 +239,7 @@ void cla_heamv_(aocl_int_t *uplo, aocl_int_t *n, real *alpha, scomplex *a, aocl_
     {
         info = 2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         info = 5;
     }

@@ -390,11 +390,11 @@ void zhegvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -7;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -9;
     }
@@ -409,11 +409,11 @@ void zhegvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
         }
         else if(indeig)
         {
-            if(*il < 1 || *il > fla_max(1, *n))
+            if (*il < 1 || *il > fla_max(1,*n))
             {
                 *info = -12;
             }
-            else if(*iu < fla_min(*n, *il) || *iu > *n)
+            else if (*iu < fla_min(*n,*il) || *iu > *n)
             {
                 *info = -13;
             }
@@ -432,13 +432,13 @@ void zhegvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
         /* Computing MAX */
         i__1 = 1;
         i__2 = (nb + 1) * *n; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
-        work[1].real = (doublereal)lwkopt;
-        work[1].imag = 0.; // , expr subst
+        lwkopt = fla_max(i__1,i__2);
+        work[1].r = (doublereal) lwkopt;
+        work[1].i = 0.; // , expr subst
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n << 1; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
+        if (*lwork < fla_max(i__1,i__2) && ! lquery)
         {
             *info = -20;
         }

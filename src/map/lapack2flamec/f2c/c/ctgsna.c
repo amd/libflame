@@ -419,11 +419,11 @@ void ctgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, scomplex *
     {
         *info = -4;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -6;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -8;
     }

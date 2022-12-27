@@ -270,11 +270,11 @@ void cptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e
     {
         *info = -3;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -9;
     }
-    else if(*ldx < fla_max(1, *n))
+    else if (*ldx < fla_max(1,*n))
     {
         *info = -11;
     }
@@ -531,7 +531,7 @@ void cptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e
             }
         }
         /* Compute componentwise relative backward error from formula */
-        /* max(i) ( f2c_abs(R(i)) / ( f2c_abs(A)*f2c_abs(X) + f2c_abs(B) )(i) ) */
+        /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(A)*f2c_abs(X) + f2c_abs(B) )(i) ) */
         /* where f2c_abs(Z) is the componentwise absolute value of the matrix */
         /* or vector Z. If the i-th component of the denominator is less */
         /* than SAFE2, then SAFE1 is added to the i-th components of the */
@@ -546,7 +546,7 @@ void cptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e
                 i__3 = i__;
                 r__3 = s;
                 r__4 = ((r__1 = work[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2))) / rwork[i__]; // , expr subst
-                s = max(r__3,r__4);
+                s = fla_max(r__3,r__4);
             }
             else
             {
@@ -554,7 +554,7 @@ void cptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e
                 i__3 = i__;
                 r__3 = s;
                 r__4 = ((r__1 = work[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + safe1) / (rwork[i__] + safe1); // , expr subst
-                s = max(r__3,r__4);
+                s = fla_max(r__3,r__4);
             }
             /* L50: */
         }
@@ -624,7 +624,7 @@ void cptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e
             rwork[i__] = rwork[i__] / df[i__] + rwork[i__ + 1] * c_abs(&ef[ i__]);
             /* L80: */
         }
-        /* Compute norm(inv(A)) = max(x(i)), 1<=i<=n. */
+        /* Compute norm(inv(A)) = fla_max(x(i)), 1<=i<=n. */
         ix = isamax_(n, &rwork[1], &c__1);
         ferr[j] *= (r__1 = rwork[ix], f2c_abs(r__1));
         /* Normalize error. */
@@ -635,7 +635,7 @@ void cptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e
             /* Computing MAX */
             r__1 = lstres;
             r__2 = c_abs(&x[i__ + j * x_dim1]); // , expr subst
-            lstres = max(r__1,r__2);
+            lstres = fla_max(r__1,r__2);
             /* L90: */
         }
         if(lstres != 0.f)

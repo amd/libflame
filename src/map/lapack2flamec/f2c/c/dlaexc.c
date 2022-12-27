@@ -252,7 +252,7 @@ void dlaexc_(logical *wantq, aocl_int_t *n, doublereal *t, aocl_int_t *ldt, doub
         smlnum = dlamch_("S") / eps;
         /* Computing MAX */
         d__1 = eps * 10. * dnorm;
-        thresh = fla_max(d__1, smlnum);
+        thresh = fla_max(d__1,smlnum);
         /* Solve T11*X - X*T22 = scale*T12 for X. */
         aocl_lapack_dlasy2(&c_false, &c_false, &c_n1, n1, n2, d__, &c__4,
                            &d__[*n1 + 1 + (*n1 + 1 << 2) - 5], &c__4, &d__[(*n1 + 1 << 2) - 4],
@@ -282,9 +282,9 @@ void dlaexc_(logical *wantq, aocl_int_t *n, doublereal *t, aocl_int_t *ldt, doub
         /* Test whether to reject swap. */
         /* Computing MAX */
         d__2 = f2c_dabs(d__[2]), d__3 = f2c_dabs(d__[6]);
-        d__2 = max(d__2,d__3);
+        d__2 = fla_max(d__2,d__3);
         d__3 = (d__1 = d__[10] - t11, f2c_dabs(d__1)); // ; expr subst
-        if (max(d__2,d__3) > thresh)
+        if (fla_max(d__2,d__3) > thresh)
         {
             goto L50;
         }
@@ -317,9 +317,9 @@ void dlaexc_(logical *wantq, aocl_int_t *n, doublereal *t, aocl_int_t *ldt, doub
         /* Test whether to reject swap. */
         /* Computing MAX */
         d__2 = f2c_dabs(d__[1]), d__3 = f2c_dabs(d__[2]);
-        d__2 = max(d__2,d__3);
+        d__2 = fla_max(d__2,d__3);
         d__3 = (d__1 = d__[0] - t33, f2c_dabs(d__1)); // ; expr subst
-        if (max(d__2,d__3) > thresh)
+        if (fla_max(d__2,d__3) > thresh)
         {
             goto L50;
         }
@@ -360,10 +360,10 @@ void dlaexc_(logical *wantq, aocl_int_t *n, doublereal *t, aocl_int_t *ldt, doub
         aocl_lapack_dlarfx("R", &c__4, &c__3, u2, &tau2, &d__[4], &c__4, &work[1]);
         /* Test whether to reject swap. */
         /* Computing MAX */
-        d__1 = f2c_dabs(d__[2]), d__2 = f2c_dabs(d__[6]), d__1 = max(d__1,d__2), d__2 = f2c_dabs(d__[3]);
-        d__1 = max(d__1,d__2);
+        d__1 = f2c_dabs(d__[2]), d__2 = f2c_dabs(d__[6]), d__1 = fla_max(d__1,d__2), d__2 = f2c_dabs(d__[3]);
+        d__1 = fla_max(d__1,d__2);
         d__2 = f2c_dabs(d__[7]); // ; expr subst
-        if (max(d__1,d__2) > thresh)
+        if (fla_max(d__1,d__2) > thresh)
         {
             goto L50;
         }

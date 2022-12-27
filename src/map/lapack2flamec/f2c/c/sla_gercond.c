@@ -226,11 +226,11 @@ real aocl_lapack_sla_gercond(char *trans, aocl_int64_t *n, real *a, aocl_int64_t
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
-    else if(*ldaf < fla_max(1, *n))
+    else if (*ldaf < fla_max(1,*n))
     {
         *info = -6;
     }

@@ -206,7 +206,7 @@ void dlaed1_(aocl_int_t *n, doublereal *d__, doublereal *q, aocl_int_t *ldq, aoc
     {
         *info = -1;
     }
-    else if(*ldq < fla_max(1, *n))
+    else if (*ldq < fla_max(1,*n))
     {
         *info = -4;
     }
@@ -215,7 +215,7 @@ void dlaed1_(aocl_int_t *n, doublereal *d__, doublereal *q, aocl_int_t *ldq, aoc
         /* Computing MIN */
         i__1 = 1;
         i__2 = *n / 2; // , expr subst
-        if(fla_min(i__1, i__2) > *cutpnt || *n / 2 < *cutpnt)
+        if (fla_min(i__1,i__2) > *cutpnt || *n / 2 < *cutpnt)
         {
             *info = -7;
         }

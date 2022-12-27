@@ -134,8 +134,8 @@ void dlarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, doublereal *x)
         /* Computing MIN */
         i__2 = 64;
         i__3 = *n - iv + 1; // , expr subst
-        il = fla_min(i__2, i__3);
-        if(*idist == 3)
+        il = fla_min(i__2,i__3);
+        if (*idist == 3)
         {
             il2 = il << 1;
         }

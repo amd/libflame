@@ -231,7 +231,7 @@ void sopmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
     {
         *info = -5;
     }
-    else if(*ldc < fla_max(1, *m))
+    else if (*ldc < fla_max(1,*m))
     {
         *info = -9;
     }

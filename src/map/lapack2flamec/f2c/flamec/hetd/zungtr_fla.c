@@ -176,7 +176,7 @@ void zungtr_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
@@ -185,7 +185,7 @@ void zungtr_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
+        if (*lwork < fla_max(i__1,i__2) && ! lquery)
         {
             *info = -7;
         }
@@ -209,9 +209,9 @@ void zungtr_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        lwkopt = fla_max(i__1, i__2) * nb;
-        work[1].real = (doublereal)lwkopt;
-        work[1].imag = 0.; // , expr subst
+        lwkopt = fla_max(i__1,i__2) * nb;
+        work[1].r = (doublereal) lwkopt;
+        work[1].i = 0.; // , expr subst
     }
     if(*info != 0)
     {

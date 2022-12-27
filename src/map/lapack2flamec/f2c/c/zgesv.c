@@ -162,11 +162,11 @@ void zgesv_(aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_t *lda, aocl_
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -7;
     }

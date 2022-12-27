@@ -633,7 +633,7 @@ L10:
 
 	} else if (ngpmin == gpmin && ngnmin == gnmin) {
 	    if ((i__1 = ngpmin - ngnmin, f2c_abs(i__1)) == 1) {
-		lemin = max(ngpmin,ngnmin);
+		lemin = fla_max(ngpmin,ngnmin);
 /*            ( Twos-complement machines, no gradual underflow; */
 /*              e.g., CYBER 205 ) */
 	    } else {

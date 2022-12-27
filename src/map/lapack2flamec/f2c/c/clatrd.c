@@ -425,8 +425,7 @@ void clatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, scomplex *a, aocl_int_t 
                 i__2 = *n - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                aocl_lapack_clarfg(&i__2, &alpha, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1,
-                                   &tau[i__]);
+                clarfg_(&i__2, &alpha, &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, &tau[i__]);
                 i__2 = i__;
                 e[i__2] = alpha.real;
                 i__2 = i__ + 1 + i__ * a_dim1;

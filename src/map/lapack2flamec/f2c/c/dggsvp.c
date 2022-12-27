@@ -343,11 +343,11 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
     {
         *info = -6;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -8;
     }
-    else if(*ldb < fla_max(1, *p))
+    else if (*ldb < fla_max(1,*p))
     {
         *info = -10;
     }
@@ -383,8 +383,10 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
     aocl_lapack_dlapmt(&forwrd, m, n, &a[a_offset], lda, &iwork[1]);
     /* Determine the effective rank of matrix B. */
     *l = 0;
-    i__1 = fla_min(*p, *n);
-    for(i__ = 1; i__ <= i__1; ++i__)
+    i__1 = fla_min(*p,*n);
+    for (i__ = 1;
+            i__ <= i__1;
+            ++i__)
     {
         if ((d__1 = b[i__ + i__ * b_dim1], f2c_dabs(d__1)) > *tolb)
         {
@@ -401,8 +403,8 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
             i__1 = *p - 1;
             aocl_lapack_dlacpy("Lower", &i__1, n, &b[b_dim1 + 2], ldb, &v[v_dim1 + 2], ldv);
         }
-        i__1 = fla_min(*p, *n);
-        aocl_lapack_dorg2r(p, p, &i__1, &v[v_offset], ldv, &tau[1], &work[1], info);
+        i__1 = fla_min(*p,*n);
+        dorg2r_(p, p, &i__1, &v[v_offset], ldv, &tau[1], &work[1], info);
     }
     /* Clean up B */
     i__1 = *l - 1;
@@ -473,8 +475,10 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
     /* Computing MIN */
     i__2 = *m;
     i__3 = *n - *l; // , expr subst
-    i__1 = fla_min(i__2, i__3);
-    for(i__ = 1; i__ <= i__1; ++i__)
+    i__1 = fla_min(i__2,i__3);
+    for (i__ = 1;
+            i__ <= i__1;
+            ++i__)
     {
         if ((d__1 = a[i__ + i__ * a_dim1], f2c_dabs(d__1)) > *tola)
         {
@@ -486,10 +490,9 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
     /* Computing MIN */
     i__2 = *m;
     i__3 = *n - *l; // , expr subst
-    i__1 = fla_min(i__2, i__3);
-    aocl_lapack_dorm2r("Left", "Transpose", m, l, &i__1, &a[a_offset], lda, &tau[1],
-                       &a[(*n - *l + 1) * a_dim1 + 1], lda, &work[1], info);
-    if(wantu)
+    i__1 = fla_min(i__2,i__3);
+    dorm2r_("Left", "Transpose", m, l, &i__1, &a[a_offset], lda, &tau[1], &a[( *n - *l + 1) * a_dim1 + 1], lda, &work[1], info);
+    if (wantu)
     {
         /* Copy the details of U, and form U */
         aocl_lapack_dlaset("Full", m, m, &c_b12, &c_b12, &u[u_offset], ldu);
@@ -502,8 +505,8 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
         /* Computing MIN */
         i__2 = *m;
         i__3 = *n - *l; // , expr subst
-        i__1 = fla_min(i__2, i__3);
-        aocl_lapack_dorg2r(m, m, &i__1, &u[u_offset], ldu, &tau[1], &work[1], info);
+        i__1 = fla_min(i__2,i__3);
+        dorg2r_(m, m, &i__1, &u[u_offset], ldu, &tau[1], &work[1], info);
     }
     if(wantq)
     {
@@ -569,10 +572,8 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
             i__1 = *m - *k;
             /* Computing MIN */
             i__3 = *m - *k;
-            i__2 = fla_min(i__3, *l);
-            aocl_lapack_dorm2r("Right", "No transpose", m, &i__1, &i__2,
-                               &a[*k + 1 + (*n - *l + 1) * a_dim1], lda, &tau[1],
-                               &u[(*k + 1) * u_dim1 + 1], ldu, &work[1], info);
+            i__2 = fla_min(i__3,*l);
+            dorm2r_("Right", "No transpose", m, &i__1, &i__2, &a[*k + 1 + (*n - *l + 1) * a_dim1], lda, &tau[1], &u[(*k + 1) * u_dim1 + 1], ldu, &work[1], info);
         }
         /* Clean up */
         i__1 = *n;

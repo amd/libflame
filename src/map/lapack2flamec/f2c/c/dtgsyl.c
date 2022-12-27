@@ -398,27 +398,27 @@ void dtgsyl_(char *trans, aocl_int_t *ijob, aocl_int_t *m, aocl_int_t *n, double
         {
             *info = -4;
         }
-        else if(*lda < fla_max(1, *m))
+        else if (*lda < fla_max(1,*m))
         {
             *info = -6;
         }
-        else if(*ldb < fla_max(1, *n))
+        else if (*ldb < fla_max(1,*n))
         {
             *info = -8;
         }
-        else if(*ldc < fla_max(1, *m))
+        else if (*ldc < fla_max(1,*m))
         {
             *info = -10;
         }
-        else if(*ldd < fla_max(1, *m))
+        else if (*ldd < fla_max(1,*m))
         {
             *info = -12;
         }
-        else if(*lde < fla_max(1, *n))
+        else if (*lde < fla_max(1,*n))
         {
             *info = -14;
         }
-        else if(*ldf < fla_max(1, *m))
+        else if (*ldf < fla_max(1,*m))
         {
             *info = -16;
         }
@@ -432,7 +432,7 @@ void dtgsyl_(char *trans, aocl_int_t *ijob, aocl_int_t *m, aocl_int_t *n, double
                 /* Computing MAX */
                 i__1 = 1;
                 i__2 = (*m << 1) * *n; // , expr subst
-                lwmin = fla_max(i__1, i__2);
+                lwmin = fla_max(i__1,i__2);
             }
             else
             {

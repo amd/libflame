@@ -373,11 +373,11 @@ void zgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex 
     {
         *info = -4;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -14;
     }
-    else if(*ldx < fla_max(1, *n))
+    else if (*ldx < fla_max(1,*n))
     {
         *info = -16;
     }

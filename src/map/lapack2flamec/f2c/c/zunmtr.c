@@ -146,7 +146,7 @@ LDA >= fla_max(1,N) if SIDE = 'R'. */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If SIDE = 'L', LWORK >= fla_max(1,N);
- */
+*/
 /* > if SIDE = 'R', LWORK >= fla_max(1,M). */
 /* > For optimum performance LWORK >= N*NB if SIDE = 'L', and */
 /* > LWORK >=M*NB if SIDE = 'R', where NB is the optimal */
@@ -260,15 +260,15 @@ void zunmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, nq))
+    else if (*lda < fla_max(1,nq))
     {
         *info = -7;
     }
-    else if(*ldc < fla_max(1, *m))
+    else if (*ldc < fla_max(1,*m))
     {
         *info = -10;
     }
-    else if(*lwork < fla_max(1, nw) && !lquery)
+    else if (*lwork < fla_max(1,nw) && ! lquery)
     {
         *info = -12;
     }
@@ -304,9 +304,9 @@ void zunmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
                 nb = aocl_lapack_ilaenv(&c__1, "ZUNMQR", ch__1, m, &i__2, &i__3, &c_n1);
             }
         }
-        lwkopt = fla_max(1, nw) * nb;
-        work[1].real = (doublereal)lwkopt;
-        work[1].imag = 0.; // , expr subst
+        lwkopt = fla_max(1,nw) * nb;
+        work[1].r = (doublereal) lwkopt;
+        work[1].i = 0.; // , expr subst
     }
     if(*info != 0)
     {

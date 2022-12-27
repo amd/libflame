@@ -364,19 +364,19 @@ void ssysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, a
     {
         *info = -4;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -6;
     }
-    else if(*ldaf < fla_max(1, *n))
+    else if (*ldaf < fla_max(1,*n))
     {
         *info = -8;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -11;
     }
-    else if(*ldx < fla_max(1, *n))
+    else if (*ldx < fla_max(1,*n))
     {
         *info = -13;
     }
@@ -385,7 +385,7 @@ void ssysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, a
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n * 3; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
+        if (*lwork < fla_max(i__1,i__2) && ! lquery)
         {
             *info = -18;
         }
@@ -395,14 +395,14 @@ void ssysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, a
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n * 3; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
-        if(nofact)
+        lwkopt = fla_max(i__1,i__2);
+        if (nofact)
         {
             nb = aocl_lapack_ilaenv(&c__1, "SSYTRF", uplo, n, &c_n1, &c_n1, &c_n1);
             /* Computing MAX */
             i__1 = lwkopt;
             i__2 = *n * nb; // , expr subst
-            lwkopt = fla_max(i__1, i__2);
+            lwkopt = fla_max(i__1,i__2);
         }
         work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     }

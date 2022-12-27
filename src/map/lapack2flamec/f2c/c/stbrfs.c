@@ -105,7 +105,7 @@ static real c_b19 = -1.f;
 /* > first kd+1 rows of the array. The j-th column of A is stored */
 /* > in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
- */
+*/
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > If DIAG = 'U', the diagonal elements of A are not referenced */
 /* > and are assumed to be 1. */
@@ -289,11 +289,11 @@ void stbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
     {
         *info = -8;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -10;
     }
-    else if(*ldx < fla_max(1, *n))
+    else if (*ldx < fla_max(1,*n))
     {
         *info = -12;
     }
@@ -341,7 +341,7 @@ void stbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
         aocl_blas_stbmv(uplo, trans, diag, n, kd, &ab[ab_offset], ldab, &work[*n + 1], &c__1);
         aocl_blas_saxpy(n, &c_b19, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
         /* Compute componentwise relative backward error from formula */
-        /* max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A))*f2c_abs(X) + f2c_abs(B) )(i) ) */
+        /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A))*f2c_abs(X) + f2c_abs(B) )(i) ) */
         /* where f2c_abs(Z) is the componentwise absolute value of the matrix */
         /* or vector Z. If the i-th component of the denominator is less */
         /* than SAFE2, then SAFE1 is added to the i-th components of the */
@@ -367,7 +367,9 @@ void stbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                         i__3 = 1;
                         i__4 = k - *kd; // , expr subst
                         i__5 = k;
-                        for(i__ = fla_max(i__3, i__4); i__ <= i__5; ++i__)
+                        for (i__ = fla_max(i__3,i__4);
+                                i__ <= i__5;
+                                ++i__)
                         {
                             work[i__] += (r__1 = ab[*kd + 1 + i__ - k + k * ab_dim1], f2c_abs(r__1)) * xk;
                             /* L30: */
@@ -385,7 +387,9 @@ void stbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                         i__5 = 1;
                         i__3 = k - *kd; // , expr subst
                         i__4 = k - 1;
-                        for(i__ = fla_max(i__5, i__3); i__ <= i__4; ++i__)
+                        for (i__ = fla_max(i__5,i__3);
+                                i__ <= i__4;
+                                ++i__)
                         {
                             work[i__] += (r__1 = ab[*kd + 1 + i__ - k + k * ab_dim1], f2c_abs(r__1)) * xk;
                             /* L50: */
@@ -406,8 +410,10 @@ void stbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                         /* Computing MIN */
                         i__5 = *n;
                         i__3 = k + *kd; // , expr subst
-                        i__4 = fla_min(i__5, i__3);
-                        for(i__ = k; i__ <= i__4; ++i__)
+                        i__4 = fla_min(i__5,i__3);
+                        for (i__ = k;
+                                i__ <= i__4;
+                                ++i__)
                         {
                             work[i__] += (r__1 = ab[i__ + 1 - k + k * ab_dim1], f2c_abs(r__1)) * xk;
                             /* L70: */
@@ -424,8 +430,10 @@ void stbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                         /* Computing MIN */
                         i__5 = *n;
                         i__3 = k + *kd; // , expr subst
-                        i__4 = fla_min(i__5, i__3);
-                        for(i__ = k + 1; i__ <= i__4; ++i__)
+                        i__4 = fla_min(i__5,i__3);
+                        for (i__ = k + 1;
+                                i__ <= i__4;
+                                ++i__)
                         {
                             work[i__] += (r__1 = ab[i__ + 1 - k + k * ab_dim1], f2c_abs(r__1)) * xk;
                             /* L90: */
@@ -451,7 +459,9 @@ void stbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                         i__4 = 1;
                         i__5 = k - *kd; // , expr subst
                         i__3 = k;
-                        for(i__ = fla_max(i__4, i__5); i__ <= i__3; ++i__)
+                        for (i__ = fla_max(i__4,i__5);
+                                i__ <= i__3;
+                                ++i__)
                         {
                             s += (r__1 = ab[*kd + 1 + i__ - k + k * ab_dim1], f2c_abs(r__1)) * (r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
                             /* L110: */
@@ -470,7 +480,9 @@ void stbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                         i__3 = 1;
                         i__4 = k - *kd; // , expr subst
                         i__5 = k - 1;
-                        for(i__ = fla_max(i__3, i__4); i__ <= i__5; ++i__)
+                        for (i__ = fla_max(i__3,i__4);
+                                i__ <= i__5;
+                                ++i__)
                         {
                             s += (r__1 = ab[*kd + 1 + i__ - k + k * ab_dim1], f2c_abs(r__1)) * (r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
                             /* L130: */
@@ -491,8 +503,10 @@ void stbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                         /* Computing MIN */
                         i__3 = *n;
                         i__4 = k + *kd; // , expr subst
-                        i__5 = fla_min(i__3, i__4);
-                        for(i__ = k; i__ <= i__5; ++i__)
+                        i__5 = fla_min(i__3,i__4);
+                        for (i__ = k;
+                                i__ <= i__5;
+                                ++i__)
                         {
                             s += (r__1 = ab[i__ + 1 - k + k * ab_dim1], f2c_abs( r__1)) * (r__2 = x[i__ + j * x_dim1], f2c_abs( r__2));
                             /* L150: */
@@ -510,8 +524,10 @@ void stbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                         /* Computing MIN */
                         i__3 = *n;
                         i__4 = k + *kd; // , expr subst
-                        i__5 = fla_min(i__3, i__4);
-                        for(i__ = k + 1; i__ <= i__5; ++i__)
+                        i__5 = fla_min(i__3,i__4);
+                        for (i__ = k + 1;
+                                i__ <= i__5;
+                                ++i__)
                         {
                             s += (r__1 = ab[i__ + 1 - k + k * ab_dim1], f2c_abs( r__1)) * (r__2 = x[i__ + j * x_dim1], f2c_abs( r__2));
                             /* L170: */
@@ -531,14 +547,14 @@ void stbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                 /* Computing MAX */
                 r__2 = s;
                 r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[ i__]; // , expr subst
-                s = max(r__2,r__3);
+                s = fla_max(r__2,r__3);
             }
             else
             {
                 /* Computing MAX */
                 r__2 = s;
                 r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = max(r__2,r__3);
+                s = fla_max(r__2,r__3);
             }
             /* L190: */
         }
@@ -613,7 +629,7 @@ void stbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
             /* Computing MAX */
             r__2 = lstres;
             r__3 = (r__1 = x[i__ + j * x_dim1], f2c_abs(r__1)); // , expr subst
-            lstres = max(r__2,r__3);
+            lstres = fla_max(r__2,r__3);
             /* L240: */
         }
         if(lstres != 0.f)

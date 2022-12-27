@@ -317,15 +317,15 @@ void aocl_lapack_sgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     {
         *info = -8;
     }
-    else if(*ldq < 1 || wantq && *ldq < fla_max(1, *m))
+    else if (*ldq < 1 || wantq && *ldq < fla_max(1,*m))
     {
         *info = -12;
     }
-    else if(*ldpt < 1 || wantpt && *ldpt < fla_max(1, *n))
+    else if (*ldpt < 1 || wantpt && *ldpt < fla_max(1,*n))
     {
         *info = -14;
     }
-    else if(*ldc < 1 || wantc && *ldc < fla_max(1, *m))
+    else if (*ldc < 1 || wantc && *ldc < fla_max(1,*m))
     {
         *info = -16;
     }
@@ -351,8 +351,8 @@ void aocl_lapack_sgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    minmn = fla_min(*m, *n);
-    if(*kl + *ku > 1)
+    minmn = fla_min(*m,*n);
+    if (*kl + *ku > 1)
     {
         /* Reduce to upper bidiagonal form if KU > 0;
         if KU = 0, reduce */
@@ -372,13 +372,13 @@ void aocl_lapack_sgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
         /* vector operations of length NR over the index set J1:J2:KLU1. */
         /* The sines of the plane rotations are stored in WORK(1:fla_max(m,n)) */
         /* and the cosines in WORK(fla_max(m,n)+1:2*fla_max(m,n)). */
-        mn = fla_max(*m, *n);
+        mn = fla_max(*m,*n);
         /* Computing MIN */
         i__1 = *m - 1;
-        klm = fla_min(i__1, *kl);
+        klm = fla_min(i__1,*kl);
         /* Computing MIN */
         i__1 = *n - 1;
-        kun = fla_min(i__1, *ku);
+        kun = fla_min(i__1,*ku);
         kb = klm + kun;
         kb1 = kb + 1;
         inca = kb1 * *ldab;
@@ -437,7 +437,7 @@ void aocl_lapack_sgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                             /* Computing MIN */
                             i__4 = *ku + ml - 2;
                             i__5 = *n - i__; // , expr subst
-                            i__3 = fla_min(i__4, i__5);
+                            i__3 = fla_min(i__4,i__5);
                             i__6 = *ldab - 1;
                             i__7 = *ldab - 1;
                             aocl_blas_srot(&i__3, &ab[*ku + ml - 2 + (i__ + 1) * ab_dim1], &i__6,
@@ -527,10 +527,8 @@ void aocl_lapack_sgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                         /* Computing MIN */
                         i__3 = *kl + mu - 2;
                         i__5 = *m - i__; // , expr subst
-                        i__4 = fla_min(i__3, i__5);
-                        aocl_blas_srot(&i__4, &ab[*ku - mu + 4 + (i__ + mu - 2) * ab_dim1], &c__1,
-                                       &ab[*ku - mu + 3 + (i__ + mu - 1) * ab_dim1], &c__1,
-                                       &work[mn + i__ + mu - 1], &work[i__ + mu - 1]);
+                        i__4 = fla_min(i__3,i__5);
+                        srot_(&i__4, &ab[*ku - mu + 4 + (i__ + mu - 2) * ab_dim1], &c__1, &ab[*ku - mu + 3 + (i__ + mu - 1) * ab_dim1], &c__1, &work[mn + i__ + mu - 1], &work[i__ + mu - 1]);
                     }
                     ++nr;
                     j1 -= kb1;
@@ -585,8 +583,10 @@ void aocl_lapack_sgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
         /* and off-diagonal elements in E */
         /* Computing MIN */
         i__2 = *m - 1;
-        i__1 = fla_min(i__2, *n);
-        for(i__ = 1; i__ <= i__1; ++i__)
+        i__1 = fla_min(i__2,*n);
+        for (i__ = 1;
+                i__ <= i__1;
+                ++i__)
         {
             slartg_(&ab[i__ * ab_dim1 + 1], &ab[i__ * ab_dim1 + 2], &rc, &rs, &ra);
             d__[i__] = ra;

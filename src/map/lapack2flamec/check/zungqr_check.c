@@ -21,9 +21,9 @@ int zungqr_check(integer *m, integer *n, integer *k, dcomplex *a, integer *lda, 
     --work;
     /* Function Body */
     *info = 0;
-    nb = aocl_lapack_ilaenv(&c__1, "ZUNGLQ", " ", m, n, k, &c_n1);
-    lwkopt = fla_max(1, *m) * nb;
-    work[1].real = (double)lwkopt;
+    nb = ilaenv_(&c__1, "ZUNGQR", " ", m, n, k, &c_n1);
+    lwkopt = fla_max(1,*n) * nb;
+    work[1].real = (double) lwkopt;
     work[1].imag = 0.; // , expr subst
     lquery = *lwork == -1;
     if(*m < 0)
@@ -38,11 +38,11 @@ int zungqr_check(integer *m, integer *n, integer *k, dcomplex *a, integer *lda, 
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -5;
     }
-    else if(*lwork < fla_max(1, *m) && !lquery)
+    else if (*lwork < fla_max(1,*n) && ! lquery)
     {
         *info = -8;
     }

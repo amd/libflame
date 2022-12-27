@@ -156,7 +156,7 @@ void spttrs_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *b, aocl_
     {
         *info = -2;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -6;
     }
@@ -182,8 +182,8 @@ void spttrs_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *b, aocl_
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = aocl_lapack_ilaenv(&c__1, "SPTTRS", " ", n, nrhs, &c_n1, &c_n1); // , expr subst
-        nb = fla_max(i__1, i__2);
+        i__2 = ilaenv_(&c__1, "SPTTRS", " ", n, nrhs, &c_n1, &c_n1); // , expr subst
+        nb = fla_max(i__1,i__2);
     }
     if(nb >= *nrhs)
     {
@@ -197,8 +197,8 @@ void spttrs_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *b, aocl_
         {
             /* Computing MIN */
             i__3 = *nrhs - j + 1;
-            jb = fla_min(i__3, nb);
-            aocl_lapack_sptts2(n, &jb, &d__[1], &e[1], &b[j * b_dim1 + 1], ldb);
+            jb = fla_min(i__3,nb);
+            sptts2_(n, &jb, &d__[1], &e[1], &b[j * b_dim1 + 1], ldb);
             /* L10: */
         }
     }

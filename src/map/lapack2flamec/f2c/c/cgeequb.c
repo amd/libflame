@@ -206,7 +206,7 @@ void cgeequb_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -4;
     }
@@ -249,7 +249,7 @@ void cgeequb_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *
             i__3 = i__ + j * a_dim1;
             r__3 = r__[i__];
             r__4 = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-            r__[i__] = max(r__3,r__4);
+            r__[i__] = fla_max(r__3,r__4);
             /* L20: */
         }
         /* L30: */
@@ -272,11 +272,11 @@ void cgeequb_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *
         /* Computing MAX */
         r__1 = rcmax;
         r__2 = r__[i__]; // , expr subst
-        rcmax = fla_max(r__1, r__2);
+        rcmax = fla_max(r__1,r__2);
         /* Computing MIN */
         r__1 = rcmin;
         r__2 = r__[i__]; // , expr subst
-        rcmin = fla_min(r__1, r__2);
+        rcmin = fla_min(r__1,r__2);
         /* L40: */
     }
     *amax = rcmax;
@@ -304,12 +304,12 @@ void cgeequb_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *
             /* Computing MIN */
             /* Computing MAX */
             r__2 = r__[i__];
-            r__1 = fla_max(r__2, smlnum);
-            r__[i__] = 1.f / fla_min(r__1, bignum);
+            r__1 = fla_max(r__2,smlnum);
+            r__[i__] = 1.f / fla_min(r__1,bignum);
             /* L60: */
         }
         /* Compute ROWCND = fla_min(R(I)) / fla_max(R(I)). */
-        *rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
+        *rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
     }
     /* Compute column scale factors. */
     i__1 = *n;
@@ -330,7 +330,7 @@ void cgeequb_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *
             i__3 = i__ + j * a_dim1;
             r__3 = c__[j];
             r__4 = ((r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2))) * r__[i__]; // , expr subst
-            c__[j] = max(r__3,r__4);
+            c__[j] = fla_max(r__3,r__4);
             /* L80: */
         }
         if(c__[j] > 0.f)
@@ -349,11 +349,11 @@ void cgeequb_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *
         /* Computing MIN */
         r__1 = rcmin;
         r__2 = c__[j]; // , expr subst
-        rcmin = fla_min(r__1, r__2);
+        rcmin = fla_min(r__1,r__2);
         /* Computing MAX */
         r__1 = rcmax;
         r__2 = c__[j]; // , expr subst
-        rcmax = fla_max(r__1, r__2);
+        rcmax = fla_max(r__1,r__2);
         /* L100: */
     }
     if(rcmin == 0.f)
@@ -380,12 +380,12 @@ void cgeequb_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *
             /* Computing MIN */
             /* Computing MAX */
             r__2 = c__[j];
-            r__1 = fla_max(r__2, smlnum);
-            c__[j] = 1.f / fla_min(r__1, bignum);
+            r__1 = fla_max(r__2,smlnum);
+            c__[j] = 1.f / fla_min(r__1,bignum);
             /* L120: */
         }
         /* Compute COLCND = fla_min(C(J)) / fla_max(C(J)). */
-        *colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
+        *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return 0;

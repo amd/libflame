@@ -184,7 +184,7 @@ void aocl_lapack_sgerq2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -4;
     }
@@ -195,8 +195,10 @@ void aocl_lapack_sgerq2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    k = fla_min(*m, *n);
-    for(i__ = k; i__ >= 1; --i__)
+    k = fla_min(*m,*n);
+    for (i__ = k;
+            i__ >= 1;
+            --i__)
     {
         /* Generate elementary reflector H(i) to annihilate */
         /* A(m-k+i,1:n-k+i-1) */

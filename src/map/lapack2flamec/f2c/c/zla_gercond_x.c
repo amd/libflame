@@ -202,11 +202,11 @@ doublereal zla_gercond_x_(char *trans, aocl_int_t *n, dcomplex *a, aocl_int_t *l
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
-    else if(*ldaf < fla_max(1, *n))
+    else if (*ldaf < fla_max(1,*n))
     {
         *info = -6;
     }
@@ -237,7 +237,7 @@ doublereal zla_gercond_x_(char *trans, aocl_int_t *n, dcomplex *a, aocl_int_t *l
                 tmp += (d__1 = z__1.r, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2));
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm, tmp);
+            anorm = fla_max(anorm,tmp);
         }
     }
     else
@@ -258,7 +258,7 @@ doublereal zla_gercond_x_(char *trans, aocl_int_t *n, dcomplex *a, aocl_int_t *l
                 tmp += (d__1 = z__1.r, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2));
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm, tmp);
+            anorm = fla_max(anorm,tmp);
         }
     }
     /* Quick return if possible. */

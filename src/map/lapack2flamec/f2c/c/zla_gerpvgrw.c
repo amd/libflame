@@ -145,7 +145,7 @@ doublereal zla_gerpvgrw_(aocl_int_t *n, aocl_int_t *ncols, dcomplex *a, aocl_int
             /* Computing MAX */
             i__3 = i__ + j * a_dim1;
             d__3 = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2));
-            amax = max(d__3,amax);
+            amax = fla_max(d__3,amax);
         }
         i__2 = j;
         for(i__ = 1; i__ <= i__2; ++i__)
@@ -153,13 +153,13 @@ doublereal zla_gerpvgrw_(aocl_int_t *n, aocl_int_t *ncols, dcomplex *a, aocl_int
             /* Computing MAX */
             i__3 = i__ + j * af_dim1;
             d__3 = (d__1 = af[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&af[i__ + j * af_dim1]), f2c_dabs(d__2));
-            umax = max(d__3,umax);
+            umax = fla_max(d__3,umax);
         }
         if(umax != 0.)
         {
             /* Computing MIN */
             d__1 = amax / umax;
-            rpvgrw = fla_min(d__1, rpvgrw);
+            rpvgrw = fla_min(d__1,rpvgrw);
         }
     }
     ret_val = rpvgrw;

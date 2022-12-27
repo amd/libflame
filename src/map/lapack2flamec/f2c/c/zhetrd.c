@@ -256,7 +256,7 @@ void zhetrd_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
@@ -300,9 +300,9 @@ void zhetrd_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal
         /* (last block is always handled by unblocked code). */
         /* Computing MAX */
         i__1 = nb;
-        i__2 = aocl_lapack_ilaenv(&c__3, "ZHETRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
-        nx = fla_max(i__1, i__2);
-        if(nx < *n)
+        i__2 = ilaenv_(&c__3, "ZHETRD", uplo, n, &c_n1, &c_n1, & c_n1); // , expr subst
+        nx = fla_max(i__1,i__2);
+        if (nx < *n)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *n;
@@ -314,9 +314,9 @@ void zhetrd_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal
                 /* unblocked code by setting NX = N. */
                 /* Computing MAX */
                 i__1 = *lwork / ldwork;
-                nb = fla_max(i__1, 1);
-                nbmin = aocl_lapack_ilaenv(&c__2, "ZHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
-                if(nb < nbmin)
+                nb = fla_max(i__1,1);
+                nbmin = ilaenv_(&c__2, "ZHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
+                if (nb < nbmin)
                 {
                     nx = *n;
                 }

@@ -336,11 +336,11 @@ void cgghrd_(char *compq, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -7;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -9;
     }

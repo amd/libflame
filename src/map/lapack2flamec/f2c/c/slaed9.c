@@ -224,11 +224,11 @@ void aocl_lapack_slaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kst
     {
         *info = -1;
     }
-    else if(*kstart < 1 || *kstart > fla_max(1, *k))
+    else if (*kstart < 1 || *kstart > fla_max(1,*k))
     {
         *info = -2;
     }
-    else if(fla_max(1, *kstop) < *kstart || *kstop > fla_max(1, *k))
+    else if (fla_max(1,*kstop) < *kstart || *kstop > fla_max(1,*k))
     {
         *info = -3;
     }
@@ -236,11 +236,11 @@ void aocl_lapack_slaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kst
     {
         *info = -4;
     }
-    else if(*ldq < fla_max(1, *k))
+    else if (*ldq < fla_max(1,*k))
     {
         *info = -7;
     }
-    else if(*lds < fla_max(1, *k))
+    else if (*lds < fla_max(1,*k))
     {
         *info = -12;
     }

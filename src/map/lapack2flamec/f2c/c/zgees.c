@@ -282,7 +282,7 @@ void zgees_(char *jobvs, char *sort, L_fpz1 select, aocl_int_t *n, dcomplex *a,
     {
         *info = -4;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -6;
     }
@@ -316,18 +316,15 @@ void zgees_(char *jobvs, char *sort, L_fpz1 select, aocl_int_t *n, dcomplex *a,
             hswork = (integer)work[1].real;
             if(!wantvs)
             {
-                maxwrk = fla_max(maxwrk, hswork);
+                maxwrk = fla_max(maxwrk,hswork);
             }
             else
             {
                 /* Computing MAX */
                 i__1 = maxwrk;
-                i__2 = *n
-                       + (*n - 1)
-                             * aocl_lapack_ilaenv(&c__1, "ZUNGHR", " ", n, &c__1, n,
-                                                  &c_n1); // , expr subst
-                maxwrk = fla_max(i__1, i__2);
-                maxwrk = fla_max(maxwrk, hswork);
+                i__2 = *n + (*n - 1) * ilaenv_(&c__1, "ZUNGHR", " ", n, &c__1, n, &c_n1); // , expr subst
+                maxwrk = fla_max(i__1,i__2);
+                maxwrk = fla_max(maxwrk,hswork);
             }
         }
         work[1].real = (doublereal)maxwrk;

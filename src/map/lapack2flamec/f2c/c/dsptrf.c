@@ -262,7 +262,7 @@ void dsptrf_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, aocl_i
         {
             colmax = 0.;
         }
-        if(fla_max(absakk, colmax) == 0.)
+        if (fla_max(absakk,colmax) == 0.)
         {
             /* Column K is zero: set INFO and continue */
             if(*info == 0)
@@ -302,7 +302,7 @@ void dsptrf_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, aocl_i
                     /* Computing MAX */
                     d__2 = rowmax;
                     d__3 = (d__1 = ap[kpc + jmax - 1], f2c_dabs( d__1)); // , expr subst
-                    rowmax = max(d__2,d__3);
+                    rowmax = fla_max(d__2,d__3);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
@@ -451,7 +451,7 @@ void dsptrf_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, aocl_i
         {
             colmax = 0.;
         }
-        if(fla_max(absakk, colmax) == 0.)
+        if (fla_max(absakk,colmax) == 0.)
         {
             /* Column K is zero: set INFO and continue */
             if(*info == 0)
@@ -492,7 +492,7 @@ void dsptrf_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, aocl_i
                     /* Computing MAX */
                     d__2 = rowmax;
                     d__3 = (d__1 = ap[kpc + jmax - imax], f2c_dabs( d__1)); // , expr subst
-                    rowmax = max(d__2,d__3);
+                    rowmax = fla_max(d__2,d__3);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {

@@ -305,11 +305,11 @@ void dgbrfs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
     {
         *info = -9;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -12;
     }
-    else if(*ldx < fla_max(1, *n))
+    else if (*ldx < fla_max(1,*n))
     {
         *info = -14;
     }
@@ -345,7 +345,7 @@ void dgbrfs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
     /* Computing MIN */
     i__1 = *kl + *ku + 2;
     i__2 = *n + 1; // , expr subst
-    nz = fla_min(i__1, i__2);
+    nz = fla_min(i__1,i__2);
     eps = dlamch_("Epsilon");
     safmin = dlamch_("Safe minimum");
     safe1 = nz * safmin;
@@ -363,7 +363,7 @@ void dgbrfs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
         aocl_blas_dgbmv(trans, n, n, kl, ku, &c_b15, &ab[ab_offset], ldab, &x[j * x_dim1 + 1],
                         &c__1, &c_b17, &work[*n + 1], &c__1);
         /* Compute componentwise relative backward error from formula */
-        /* max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(op(A))*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
+        /* fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(op(A))*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
         /* where f2c_dabs(Z) is the componentwise absolute value of the matrix */
         /* or vector Z. If the i-th component of the denominator is less */
         /* than SAFE2, then SAFE1 is added to the i-th components of the */
@@ -388,8 +388,10 @@ void dgbrfs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
                 /* Computing MIN */
                 i__6 = *n;
                 i__7 = k + *kl; // , expr subst
-                i__5 = fla_min(i__6, i__7);
-                for(i__ = fla_max(i__3, i__4); i__ <= i__5; ++i__)
+                i__5 = fla_min(i__6,i__7);
+                for (i__ = fla_max(i__3,i__4);
+                        i__ <= i__5;
+                        ++i__)
                 {
                     work[i__] += (d__1 = ab[kk + i__ + k * ab_dim1], f2c_dabs(d__1) ) * xk;
                     /* L40: */
@@ -410,8 +412,10 @@ void dgbrfs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
                 /* Computing MIN */
                 i__6 = *n;
                 i__7 = k + *kl; // , expr subst
-                i__4 = fla_min(i__6, i__7);
-                for(i__ = fla_max(i__5, i__3); i__ <= i__4; ++i__)
+                i__4 = fla_min(i__6,i__7);
+                for (i__ = fla_max(i__5,i__3);
+                        i__ <= i__4;
+                        ++i__)
                 {
                     s += (d__1 = ab[kk + i__ + k * ab_dim1], f2c_dabs(d__1)) * ( d__2 = x[i__ + j * x_dim1], f2c_dabs(d__2));
                     /* L60: */
@@ -429,14 +433,14 @@ void dgbrfs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
                 /* Computing MAX */
                 d__2 = s;
                 d__3 = (d__1 = work[*n + i__], f2c_dabs(d__1)) / work[ i__]; // , expr subst
-                s = max(d__2,d__3);
+                s = fla_max(d__2,d__3);
             }
             else
             {
                 /* Computing MAX */
                 d__2 = s;
                 d__3 = ((d__1 = work[*n + i__], f2c_dabs(d__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = max(d__2,d__3);
+                s = fla_max(d__2,d__3);
             }
             /* L80: */
         }
@@ -525,7 +529,7 @@ void dgbrfs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
             /* Computing MAX */
             d__2 = lstres;
             d__3 = (d__1 = x[i__ + j * x_dim1], f2c_dabs(d__1)); // , expr subst
-            lstres = max(d__2,d__3);
+            lstres = fla_max(d__2,d__3);
             /* L130: */
         }
         if(lstres != 0.)

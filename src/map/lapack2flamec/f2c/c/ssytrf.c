@@ -237,7 +237,7 @@ void ssytrf_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ip
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
@@ -276,12 +276,11 @@ void ssytrf_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ip
         {
             /* Computing MAX */
             i__1 = *lwork / ldwork;
-            nb = fla_max(i__1, 1);
+            nb = fla_max(i__1,1);
             /* Computing MAX */
             i__1 = 2;
-            i__2
-                = aocl_lapack_ilaenv(&c__2, "SSYTRF", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
-            nbmin = fla_max(i__1, i__2);
+            i__2 = ilaenv_(&c__2, "SSYTRF", uplo, n, &c_n1, &c_n1, & c_n1); // , expr subst
+            nbmin = fla_max(i__1,i__2);
         }
     }
     else

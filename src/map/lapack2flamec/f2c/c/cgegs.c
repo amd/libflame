@@ -337,7 +337,7 @@ void cgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, scomplex *a, aocl_int_t *
     /* Test the input arguments */
     /* Computing MAX */
     i__1 = *n << 1;
-    lwkmin = fla_max(i__1, 1);
+    lwkmin = fla_max(i__1,1);
     lwkopt = lwkmin;
     work[1].real = (real)lwkopt;
     work[1].imag = 0.f; // , expr subst
@@ -355,11 +355,11 @@ void cgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, scomplex *a, aocl_int_t *
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -7;
     }
@@ -381,8 +381,8 @@ void cgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, scomplex *a, aocl_int_t *
         nb2 = aocl_lapack_ilaenv(&c__1, "CUNMQR", " ", n, n, n, &c_n1);
         nb3 = aocl_lapack_ilaenv(&c__1, "CUNGQR", " ", n, n, n, &c_n1);
         /* Computing MAX */
-        i__1 = fla_max(nb1, nb2);
-        nb = fla_max(i__1, nb3);
+        i__1 = fla_max(nb1,nb2);
+        nb = fla_max(i__1,nb3);
         lopt = *n * (nb + 1);
         work[1].real = (real)lopt;
         work[1].imag = 0.f; // , expr subst
@@ -481,8 +481,8 @@ void cgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, scomplex *a, aocl_int_t *
         /* Computing MAX */
         i__3 = iwork;
         i__1 = lwkopt;
-        i__2 = (integer)work[i__3].real + iwork - 1; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
+        i__2 = (integer) work[i__3].r + iwork - 1; // , expr subst
+        lwkopt = fla_max(i__1,i__2);
     }
     if(iinfo != 0)
     {
@@ -497,8 +497,8 @@ void cgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, scomplex *a, aocl_int_t *
         /* Computing MAX */
         i__3 = iwork;
         i__1 = lwkopt;
-        i__2 = (integer)work[i__3].real + iwork - 1; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
+        i__2 = (integer) work[i__3].r + iwork - 1; // , expr subst
+        lwkopt = fla_max(i__1,i__2);
     }
     if(iinfo != 0)
     {
@@ -520,8 +520,8 @@ void cgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, scomplex *a, aocl_int_t *
             /* Computing MAX */
             i__3 = iwork;
             i__1 = lwkopt;
-            i__2 = (integer)work[i__3].real + iwork - 1; // , expr subst
-            lwkopt = fla_max(i__1, i__2);
+            i__2 = (integer) work[i__3].r + iwork - 1; // , expr subst
+            lwkopt = fla_max(i__1,i__2);
         }
         if(iinfo != 0)
         {
@@ -552,8 +552,8 @@ void cgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, scomplex *a, aocl_int_t *
         /* Computing MAX */
         i__3 = iwork;
         i__1 = lwkopt;
-        i__2 = (integer)work[i__3].real + iwork - 1; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
+        i__2 = (integer) work[i__3].r + iwork - 1; // , expr subst
+        lwkopt = fla_max(i__1,i__2);
     }
     if(iinfo != 0)
     {

@@ -150,7 +150,7 @@ static doublereal c_b34 = 1.;
 /* > \verbatim */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. LWORK >= fla_max(1,N+M+P). */
-/* > For optimum performance, LWORK >= M+min(N,P)+max(N,P)*NB, */
+/* > For optimum performance, LWORK >= M+fla_min(N,P)+fla_max(N,P)*NB, */
 /* > where NB is an upper bound for the optimal blocksizes for */
 /* > DGEQRF, SGERQF, DORMQR and SORMRQ. */
 /* > */
@@ -234,7 +234,7 @@ void dggglm_(aocl_int_t *n, aocl_int_t *m, aocl_int_t *p, doublereal *a, aocl_in
     --work;
     /* Function Body */
     *info = 0;
-    np = fla_min(*n, *p);
+    np = fla_min(*n,*p);
     lquery = *lwork == -1;
     if(*n < 0)
     {
@@ -248,11 +248,11 @@ void dggglm_(aocl_int_t *n, aocl_int_t *m, aocl_int_t *p, doublereal *a, aocl_in
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -7;
     }
@@ -271,11 +271,11 @@ void dggglm_(aocl_int_t *n, aocl_int_t *m, aocl_int_t *p, doublereal *a, aocl_in
             nb3 = aocl_lapack_ilaenv(&c__1, "DORMQR", " ", n, m, p, &c_n1);
             nb4 = aocl_lapack_ilaenv(&c__1, "DORMRQ", " ", n, m, p, &c_n1);
             /* Computing MAX */
-            i__1 = fla_max(nb1, nb2);
-            i__1 = fla_max(i__1, nb3); // , expr subst
-            nb = fla_max(i__1, nb4);
+            i__1 = fla_max(nb1,nb2);
+            i__1 = fla_max(i__1,nb3); // , expr subst
+            nb = fla_max(i__1,nb4);
             lwkmin = *m + *n + *p;
-            lwkopt = *m + np + fla_max(*n, *p) * nb;
+            lwkopt = *m + np + fla_max(*n,*p) * nb;
         }
         work[1] = (doublereal)lwkopt;
         if(*lwork < lwkmin && !lquery)
@@ -313,14 +313,14 @@ void dggglm_(aocl_int_t *n, aocl_int_t *m, aocl_int_t *p, doublereal *a, aocl_in
     lopt = (integer)work[*m + np + 1];
     /* Update left-hand-side vector d = Q**T*d = ( d1 ) M */
     /* ( d2 ) N-M */
-    i__1 = fla_max(1, *n);
+    i__1 = fla_max(1,*n);
     i__2 = *lwork - *m - np;
     aocl_lapack_dormqr("Left", "Transpose", n, &c__1, m, &a[a_offset], lda, &work[1], &d__[1],
                        &i__1, &work[*m + np + 1], &i__2, info);
     /* Computing MAX */
     i__1 = lopt;
-    i__2 = (integer)work[*m + np + 1]; // , expr subst
-    lopt = fla_max(i__1, i__2);
+    i__2 = (integer) work[*m + np + 1]; // , expr subst
+    lopt = fla_max(i__1,i__2);
     /* Solve T22*y2 = d2 for y2 */
     if(*n > *m)
     {
@@ -367,14 +367,13 @@ void dggglm_(aocl_int_t *n, aocl_int_t *m, aocl_int_t *p, doublereal *a, aocl_in
     /* Computing MAX */
     i__1 = 1;
     i__2 = *n - *p + 1; // , expr subst
-    i__3 = fla_max(1, *p);
+    i__3 = fla_max(1,*p);
     i__4 = *lwork - *m - np;
-    aocl_lapack_dormrq("Left", "Transpose", p, &c__1, &np, &b[fla_max(i__1, i__2) + b_dim1], ldb,
-                       &work[*m + 1], &y[1], &i__3, &work[*m + np + 1], &i__4, info);
+    dormrq_("Left", "Transpose", p, &c__1, &np, &b[fla_max(i__1,i__2) + b_dim1], ldb, &work[*m + 1], &y[1], &i__3, &work[*m + np + 1], &i__4, info);
     /* Computing MAX */
     i__1 = lopt;
     i__2 = (integer) work[*m + np + 1]; // , expr subst
-    work[1] = (doublereal) (*m + np + max(i__1,i__2));
+    work[1] = (doublereal) (*m + np + fla_max(i__1,i__2));
     AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGGGLM */

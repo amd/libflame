@@ -170,7 +170,7 @@ void zgeqr2p_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcompl
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -4;
     }
@@ -181,7 +181,7 @@ void zgeqr2p_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcompl
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
-    k = fla_min(*m, *n);
+    k = fla_min(*m,*n);
     i__1 = k;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -189,9 +189,8 @@ void zgeqr2p_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcompl
         i__2 = *m - i__ + 1;
         /* Computing MIN */
         i__3 = i__ + 1;
-        aocl_lapack_zlarfgp(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3, *m) + i__ * a_dim1],
-                            &c__1, &tau[i__]);
-        if(i__ < *n)
+        zlarfgp_(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &tau[i__]);
+        if (i__ < *n)
         {
             /* Apply H(i)**H to A(i:m,i+1:n) from the left */
             i__2 = i__ + i__ * a_dim1;

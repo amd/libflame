@@ -273,8 +273,10 @@ real cla_gbrcond_c_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, 
                 i__2 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__3 = fla_min(i__4, *n);
-                for(j = fla_max(i__2, 1); j <= i__3; ++j)
+                i__3 = fla_min(i__4,*n);
+                for (j = fla_max(i__2,1);
+                        j <= i__3;
+                        ++j)
                 {
                     i__2 = kd + i__ - j + j * ab_dim1;
                     tmp += ((r__1 = ab[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(& ab[kd + i__ - j + j * ab_dim1]), f2c_abs(r__2))) / c__[j];
@@ -286,15 +288,17 @@ real cla_gbrcond_c_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, 
                 i__3 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__2 = fla_min(i__4, *n);
-                for(j = fla_max(i__3, 1); j <= i__2; ++j)
+                i__2 = fla_min(i__4,*n);
+                for (j = fla_max(i__3,1);
+                        j <= i__2;
+                        ++j)
                 {
                     i__3 = kd + i__ - j + j * ab_dim1;
                     tmp += (r__1 = ab[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(& ab[kd + i__ - j + j * ab_dim1]), f2c_abs(r__2));
                 }
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm, tmp);
+            anorm = fla_max(anorm,tmp);
         }
     }
     else
@@ -309,8 +313,10 @@ real cla_gbrcond_c_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, 
                 i__2 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__3 = fla_min(i__4, *n);
-                for(j = fla_max(i__2, 1); j <= i__3; ++j)
+                i__3 = fla_min(i__4,*n);
+                for (j = fla_max(i__2,1);
+                        j <= i__3;
+                        ++j)
                 {
                     i__2 = ke - i__ + j + i__ * ab_dim1;
                     tmp += ((r__1 = ab[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(& ab[ke - i__ + j + i__ * ab_dim1]), f2c_abs(r__2))) / c__[j];
@@ -322,15 +328,17 @@ real cla_gbrcond_c_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, 
                 i__3 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__2 = fla_min(i__4, *n);
-                for(j = fla_max(i__3, 1); j <= i__2; ++j)
+                i__2 = fla_min(i__4,*n);
+                for (j = fla_max(i__3,1);
+                        j <= i__2;
+                        ++j)
                 {
                     i__3 = ke - i__ + j + i__ * ab_dim1;
                     tmp += (r__1 = ab[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(& ab[ke - i__ + j + i__ * ab_dim1]), f2c_abs(r__2));
                 }
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm, tmp);
+            anorm = fla_max(anorm,tmp);
         }
     }
     /* Quick return if possible. */

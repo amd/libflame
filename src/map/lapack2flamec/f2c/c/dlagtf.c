@@ -217,7 +217,7 @@ void dlagtf_(aocl_int_t *n, doublereal *a, doublereal *lambda, doublereal *b, do
         return 0;
     }
     eps = dlamch_("Epsilon");
-    tl = max(*tol,eps);
+    tl = fla_max(*tol,eps);
     scale1 = f2c_dabs(a[1]) + f2c_dabs(b[1]);
     i__1 = *n - 1;
     for(k = 1; k <= i__1; ++k)
@@ -276,7 +276,7 @@ void dlagtf_(aocl_int_t *n, doublereal *a, doublereal *lambda, doublereal *b, do
                 c__[k] = mult;
             }
         }
-        if(fla_max(piv1, piv2) <= tl && in[*n] == 0)
+        if (fla_max(piv1,piv2) <= tl && in[*n] == 0)
         {
             in[*n] = (aocl_int_t)(k);
         }

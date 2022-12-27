@@ -447,7 +447,7 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
     /* Test the input arguments */
     /* Computing MAX */
     i__1 = *n << 3;
-    lwkmin = fla_max(i__1, 1);
+    lwkmin = fla_max(i__1,1);
     lwkopt = lwkmin;
     work[1] = (real)lwkopt;
     lquery = *lwork == -1;
@@ -464,11 +464,11 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -7;
     }
@@ -490,13 +490,13 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
         nb2 = aocl_lapack_ilaenv(&c__1, "SORMQR", " ", n, n, n, &c_n1);
         nb3 = aocl_lapack_ilaenv(&c__1, "SORGQR", " ", n, n, n, &c_n1);
         /* Computing MAX */
-        i__1 = fla_max(nb1, nb2);
-        nb = fla_max(i__1, nb3);
+        i__1 = fla_max(nb1,nb2);
+        nb = fla_max(i__1,nb3);
         /* Computing MAX */
         i__1 = *n * 6;
         i__2 = *n * (nb + 1); // , expr subst
-        lopt = (*n << 1) + fla_max(i__1, i__2);
-        work[1] = (real)lopt;
+        lopt = (*n << 1) + fla_max(i__1,i__2);
+        work[1] = (real) lopt;
     }
     if(*info != 0)
     {
@@ -600,8 +600,8 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
     {
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = (integer)work[iwork] + iwork - 1; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
+        i__2 = (integer) work[iwork] + iwork - 1; // , expr subst
+        lwkopt = fla_max(i__1,i__2);
     }
     if(iinfo != 0)
     {
@@ -615,8 +615,8 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
     {
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = (integer)work[iwork] + iwork - 1; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
+        i__2 = (integer) work[iwork] + iwork - 1; // , expr subst
+        lwkopt = fla_max(i__1,i__2);
     }
     if(iinfo != 0)
     {
@@ -637,8 +637,8 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
         {
             /* Computing MAX */
             i__1 = lwkopt;
-            i__2 = (integer)work[iwork] + iwork - 1; // , expr subst
-            lwkopt = fla_max(i__1, i__2);
+            i__2 = (integer) work[iwork] + iwork - 1; // , expr subst
+            lwkopt = fla_max(i__1,i__2);
         }
         if(iinfo != 0)
         {
@@ -688,8 +688,8 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
     {
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = (integer)work[iwork] + iwork - 1; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
+        i__2 = (integer) work[iwork] + iwork - 1; // , expr subst
+        lwkopt = fla_max(i__1,i__2);
     }
     if(iinfo != 0)
     {
@@ -759,7 +759,7 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
                         /* Computing MAX */
                         r__2 = temp;
                         r__3 = (r__1 = vl[jr + jc * vl_dim1], f2c_abs(r__1)); // , expr subst
-                        temp = max(r__2,r__3);
+                        temp = fla_max(r__2,r__3);
                         /* L10: */
                     }
                 }
@@ -771,7 +771,7 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
                         /* Computing MAX */
                         r__3 = temp;
                         r__4 = (r__1 = vl[jr + jc * vl_dim1], f2c_abs(r__1)) + (r__2 = vl[jr + (jc + 1) * vl_dim1], f2c_abs(r__2)); // , expr subst
-                        temp = max(r__3,r__4);
+                        temp = fla_max(r__3,r__4);
                         /* L20: */
                     }
                 }
@@ -827,7 +827,7 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
                         /* Computing MAX */
                         r__2 = temp;
                         r__3 = (r__1 = vr[jr + jc * vr_dim1], f2c_abs(r__1)); // , expr subst
-                        temp = max(r__2,r__3);
+                        temp = fla_max(r__2,r__3);
                         /* L60: */
                     }
                 }
@@ -839,7 +839,7 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
                         /* Computing MAX */
                         r__3 = temp;
                         r__4 = (r__1 = vr[jr + jc * vr_dim1], f2c_abs(r__1)) + (r__2 = vr[jr + (jc + 1) * vr_dim1], f2c_abs(r__2)); // , expr subst
-                        temp = max(r__3,r__4);
+                        temp = fla_max(r__3,r__4);
                         /* L70: */
                     }
                 }
@@ -891,15 +891,15 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
         /* Check for significant underflow in ALPHAI */
         /* Computing MAX */
         r__1 = safmin, r__2 = eps * absar;
-        r__1 = fla_max(r__1, r__2);
+        r__1 = fla_max(r__1,r__2);
         r__2 = eps * absb; // ; expr subst
-        if (f2c_abs(salfai) < safmin && absai >= max(r__1,r__2))
+        if (f2c_abs(salfai) < safmin && absai >= fla_max(r__1,r__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
             r__1 = onepls * safmin;
             r__2 = anrm2 * absai; // , expr subst
-            scale = onepls * safmin / anrm1 / fla_max(r__1, r__2);
+            scale = onepls * safmin / anrm1 / fla_max(r__1,r__2);
         }
         else if(salfai == 0.f)
         {
@@ -917,9 +917,9 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
         /* Check for significant underflow in ALPHAR */
         /* Computing MAX */
         r__1 = safmin, r__2 = eps * absai;
-        r__1 = fla_max(r__1, r__2);
+        r__1 = fla_max(r__1,r__2);
         r__2 = eps * absb; // ; expr subst
-        if (f2c_abs(salfar) < safmin && absar >= max(r__1,r__2))
+        if (f2c_abs(salfar) < safmin && absar >= fla_max(r__1,r__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
@@ -927,15 +927,15 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
             r__3 = onepls * safmin;
             r__4 = anrm2 * absar; // , expr subst
             r__1 = scale;
-            r__2 = onepls * safmin / anrm1 / fla_max(r__3, r__4); // , expr subst
-            scale = fla_max(r__1, r__2);
+            r__2 = onepls * safmin / anrm1 / fla_max(r__3,r__4); // , expr subst
+            scale = fla_max(r__1,r__2);
         }
         /* Check for significant underflow in BETA */
         /* Computing MAX */
         r__1 = safmin, r__2 = eps * absar;
-        r__1 = fla_max(r__1, r__2);
+        r__1 = fla_max(r__1,r__2);
         r__2 = eps * absai; // ; expr subst
-        if (f2c_abs(sbeta) < safmin && absb >= max(r__1,r__2))
+        if (f2c_abs(sbeta) < safmin && absb >= fla_max(r__1,r__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
@@ -943,17 +943,17 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
             r__3 = onepls * safmin;
             r__4 = bnrm2 * absb; // , expr subst
             r__1 = scale;
-            r__2 = onepls * safmin / bnrm1 / fla_max(r__3, r__4); // , expr subst
-            scale = fla_max(r__1, r__2);
+            r__2 = onepls * safmin / bnrm1 / fla_max(r__3,r__4); // , expr subst
+            scale = fla_max(r__1,r__2);
         }
         /* Check for possible overflow when limiting scaling */
         if(ilimit)
         {
             /* Computing MAX */
             r__1 = f2c_abs(salfar), r__2 = f2c_abs(salfai);
-            r__1 = max(r__1,r__2);
+            r__1 = fla_max(r__1,r__2);
             r__2 = f2c_abs(sbeta); // ; expr subst
-            temp = scale * safmin * max(r__1,r__2);
+            temp = scale * safmin * fla_max(r__1,r__2);
             if (temp > 1.f)
             {
                 scale /= temp;

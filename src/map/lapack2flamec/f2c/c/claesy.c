@@ -186,7 +186,7 @@ void claesy_(scomplex *a, scomplex *b, scomplex *c__, scomplex *rt1, scomplex *r
         /* Take the square root carefully to avoid over/under flow. */
         babs = c_abs(b);
         tabs = c_abs(&t);
-        z__ = max(babs,tabs);
+        z__ = fla_max(babs,tabs);
         if (z__ > 0.f)
         {
             q__5.real = t.real / z__;

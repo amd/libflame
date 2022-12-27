@@ -212,7 +212,7 @@ void dptcon_(aocl_int_t *n, doublereal *d__, doublereal *e, doublereal *anorm, d
         work[i__] = work[i__] / d__[i__] + work[i__ + 1] * (d__1 = e[i__], f2c_dabs(d__1));
         /* L30: */
     }
-    /* Compute AINVNM = max(x(i)), 1<=i<=n. */
+    /* Compute AINVNM = fla_max(x(i)), 1<=i<=n. */
     ix = idamax_(n, &work[1], &c__1);
     ainvnm = (d__1 = work[ix], f2c_dabs(d__1));
     /* Compute the reciprocal condition number. */

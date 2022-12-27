@@ -39,7 +39,7 @@
 /* > */
 /* > CLA_LIN_BERR computes componentwise relative backward error from */
 /* > the formula */
-/* > max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s) )(i) ) */
+/* > fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s) )(i) ) */
 /* > where f2c_abs(Z) is the componentwise absolute value of the matrix */
 /* > or vector Z. */
 /* > \endverbatim */
@@ -175,7 +175,7 @@ void cla_lin_berr_(aocl_int_t *n, aocl_int_t *nz, aocl_int_t *nrhs, scomplex *re
                 tmp = q__1.real;
                 /* Computing MAX */
                 r__1 = berr[j];
-                berr[j] = fla_max(r__1, tmp);
+                berr[j] = fla_max(r__1,tmp);
             }
             /* If AYB is exactly 0.0 (and if computed by CLA_yyAMV), then we know */
             /* the true residual also must be exactly 0.0. */

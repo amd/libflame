@@ -44,7 +44,7 @@
 /* > where x( i ) = X( 1 + ( i - 1 )*INCX ). The value of sumsq is */
 /* > assumed to be non-negative and scl returns the value */
 /* > */
-/* > scl = max( scale, f2c_abs( x( i ) ) ). */
+/* > scl = fla_max( scale, f2c_abs( x( i ) ) ). */
 /* > */
 /* > scale and sumsq must be supplied in SCALE and SUMSQ and */
 /* > scale_out and sumsq_out are overwritten on SCALE and SUMSQ respectively. */

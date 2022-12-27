@@ -62,15 +62,15 @@ int cunmlq_check(char *side, char *trans, integer *m, integer *n, integer *k, sc
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, *k))
+    else if (*lda < fla_max(1,*k))
     {
         *info = -7;
     }
-    else if(*ldc < fla_max(1, *m))
+    else if (*ldc < fla_max(1,*m))
     {
         *info = -10;
     }
-    else if(*lwork < fla_max(1, nw) && !lquery)
+    else if (*lwork < fla_max(1,nw) && ! lquery)
     {
         *info = -12;
     }
@@ -80,10 +80,10 @@ int cunmlq_check(char *side, char *trans, integer *m, integer *n, integer *k, sc
         /* is used to define the local array T. */
         /* Computing MIN */
         i__1 = 64;
-        i__2 = aocl_lapack_ilaenv(&c__1, "CUNMLQ", ch__1, m, n, k, &c_n1); // , expr subst
-        nb = fla_min(i__1, i__2);
-        lwkopt = fla_max(1, nw) * nb;
-        work[1].real = (float)lwkopt;
+        i__2 = ilaenv_(&c__1, "CUNMLQ", ch__1, m, n, k, &c_n1); // , expr subst
+        nb = fla_min(i__1,i__2);
+        lwkopt = fla_max(1,nw) * nb;
+        work[1].real = (float) lwkopt;
         work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)

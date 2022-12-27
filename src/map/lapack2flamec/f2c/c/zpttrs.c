@@ -171,7 +171,7 @@ void zpttrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomp
     {
         *info = -3;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -7;
     }
@@ -197,8 +197,8 @@ void zpttrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomp
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = aocl_lapack_ilaenv(&c__1, "ZPTTRS", uplo, n, nrhs, &c_n1, &c_n1); // , expr subst
-        nb = fla_max(i__1, i__2);
+        i__2 = ilaenv_(&c__1, "ZPTTRS", uplo, n, nrhs, &c_n1, &c_n1); // , expr subst
+        nb = fla_max(i__1,i__2);
     }
     /* Decode UPLO */
     if(upper)
@@ -221,8 +221,8 @@ void zpttrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomp
         {
             /* Computing MIN */
             i__3 = *nrhs - j + 1;
-            jb = fla_min(i__3, nb);
-            aocl_lapack_zptts2(&iuplo, n, &jb, &d__[1], &e[1], &b[j * b_dim1 + 1], ldb);
+            jb = fla_min(i__3,nb);
+            zptts2_(&iuplo, n, &jb, &d__[1], &e[1], &b[j * b_dim1 + 1], ldb);
             /* L10: */
         }
     }

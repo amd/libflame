@@ -98,7 +98,7 @@ static aocl_int64_t c__1 = 1;
 /* > first kd+1 rows of the array. The j-th column of A is stored */
 /* > in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
- */
+*/
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > If DIAG = 'U', the diagonal elements of A are not referenced */
 /* > and are assumed to be 1. */
@@ -240,7 +240,7 @@ void dtbcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, aocl_int_t *kd, 
         return 0;
     }
     *rcond = 0.;
-    smlnum = dlamch_("Safe minimum") * (doublereal)fla_max(1, *n);
+    smlnum = dlamch_("Safe minimum") * (doublereal) fla_max(1,*n);
     /* Compute the norm of the triangular matrix A. */
     anorm = aocl_lapack_dlantb(norm, uplo, diag, n, kd, &ab[ab_offset], ldab, &work[1]);
     /* Continue only if ANORM > 0. */

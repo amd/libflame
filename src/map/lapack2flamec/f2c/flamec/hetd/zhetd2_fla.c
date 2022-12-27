@@ -229,7 +229,7 @@ void zhetd2_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dou
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
@@ -331,7 +331,7 @@ void zhetd2_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dou
             i__2 = *n - i__;
             /* Computing MIN */
             i__3 = i__ + 2;
-            aocl_lapack_zlarfg(&i__2, &alpha, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &taui);
+            zlarfg_(&i__2, &alpha, &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, & taui);
             i__2 = i__;
             e[i__2] = alpha.real;
             if(taui.real != 0. || taui.imag != 0.)

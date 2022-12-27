@@ -521,11 +521,11 @@ void zgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
                 /* Computing MIN */
                 d__1 = rcmin;
                 d__2 = r__[j]; // , expr subst
-                rcmin = fla_min(d__1, d__2);
+                rcmin = fla_min(d__1,d__2);
                 /* Computing MAX */
                 d__1 = rcmax;
                 d__2 = r__[j]; // , expr subst
-                rcmax = fla_max(d__1, d__2);
+                rcmax = fla_max(d__1,d__2);
                 /* L10: */
             }
             if(rcmin <= 0.)
@@ -534,7 +534,7 @@ void zgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
             }
             else if(*n > 0)
             {
-                rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
+                rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
             }
             else
             {
@@ -551,11 +551,11 @@ void zgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
                 /* Computing MIN */
                 d__1 = rcmin;
                 d__2 = c__[j]; // , expr subst
-                rcmin = fla_min(d__1, d__2);
+                rcmin = fla_min(d__1,d__2);
                 /* Computing MAX */
                 d__1 = rcmax;
                 d__2 = c__[j]; // , expr subst
-                rcmax = fla_max(d__1, d__2);
+                rcmax = fla_max(d__1,d__2);
                 /* L20: */
             }
             if(rcmin <= 0.)
@@ -564,7 +564,7 @@ void zgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
             }
             else if(*n > 0)
             {
-                colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
+                colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
             }
             else
             {
@@ -573,11 +573,11 @@ void zgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
         }
         if(*info == 0)
         {
-            if(*ldb < fla_max(1, *n))
+            if (*ldb < fla_max(1,*n))
             {
                 *info = -16;
             }
-            else if(*ldx < fla_max(1, *n))
+            else if (*ldx < fla_max(1,*n))
             {
                 *info = -18;
             }
@@ -656,10 +656,10 @@ void zgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
         {
             /* Computing MAX */
             i__2 = j - *ku;
-            j1 = fla_max(i__2, 1);
+            j1 = fla_max(i__2,1);
             /* Computing MIN */
             i__2 = j + *kl;
-            j2 = fla_min(i__2, *n);
+            j2 = fla_min(i__2,*n);
             i__2 = j2 - j1 + 1;
             aocl_blas_zcopy(&i__2, &ab[*ku + 1 - j + j1 + j * ab_dim1], &c__1,
                             &afb[*kl + *ku + 1 - j + j1 + j * afb_dim1], &c__1);
@@ -680,13 +680,15 @@ void zgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
                 /* Computing MIN */
                 i__4 = *n + *ku + 1 - j;
                 i__5 = *kl + *ku + 1; // , expr subst
-                i__3 = fla_min(i__4, i__5);
-                for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
+                i__3 = fla_min(i__4,i__5);
+                for (i__ = fla_max(i__2,1);
+                        i__ <= i__3;
+                        ++i__)
                 {
                     /* Computing MAX */
                     d__1 = anorm;
                     d__2 = z_abs(&ab[i__ + j * ab_dim1]); // , expr subst
-                    anorm = max(d__1,d__2);
+                    anorm = fla_max(d__1,d__2);
                     /* L80: */
                 }
                 /* L90: */
@@ -694,13 +696,12 @@ void zgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
             /* Computing MIN */
             i__3 = *info - 1;
             i__2 = *kl + *ku; // , expr subst
-            i__1 = fla_min(i__3, i__2);
+            i__1 = fla_min(i__3,i__2);
             /* Computing MAX */
             i__4 = 1;
             i__5 = *kl + *ku + 2 - *info; // , expr subst
-            rpvgrw = aocl_lapack_zlantb("M", "U", "N", info, &i__1,
-                                        &afb[fla_max(i__4, i__5) + afb_dim1], ldafb, &rwork[1]);
-            if(rpvgrw == 0.)
+            rpvgrw = zlantb_("M", "U", "N", info, &i__1, &afb[fla_max(i__4,i__5) + afb_dim1], ldafb, &rwork[1]);
+            if (rpvgrw == 0.)
             {
                 rpvgrw = 1.;
             }

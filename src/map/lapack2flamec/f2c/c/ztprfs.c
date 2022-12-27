@@ -269,11 +269,11 @@ void ztprfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
     {
         *info = -5;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -8;
     }
-    else if(*ldx < fla_max(1, *n))
+    else if (*ldx < fla_max(1,*n))
     {
         *info = -10;
     }
@@ -325,7 +325,7 @@ void ztprfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
         z__1.imag = -0.; // , expr subst
         aocl_blas_zaxpy(n, &z__1, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
         /* Compute componentwise relative backward error from formula */
-        /* max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(op(A))*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
+        /* fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(op(A))*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
         /* where f2c_dabs(Z) is the componentwise absolute value of the matrix */
         /* or vector Z. If the i-th component of the denominator is less */
         /* than SAFE2, then SAFE1 is added to the i-th components of the */
@@ -523,7 +523,7 @@ void ztprfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
                 i__3 = i__;
                 d__3 = s;
                 d__4 = ((d__1 = work[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2))) / rwork[i__]; // , expr subst
-                s = max(d__3,d__4);
+                s = fla_max(d__3,d__4);
             }
             else
             {
@@ -531,7 +531,7 @@ void ztprfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
                 i__3 = i__;
                 d__3 = s;
                 d__4 = ((d__1 = work[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + safe1) / (rwork[i__] + safe1); // , expr subst
-                s = max(d__3,d__4);
+                s = fla_max(d__3,d__4);
             }
             /* L190: */
         }
@@ -618,7 +618,7 @@ void ztprfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
             i__3 = i__ + j * x_dim1;
             d__3 = lstres;
             d__4 = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__2)); // , expr subst
-            lstres = max(d__3,d__4);
+            lstres = fla_max(d__3,d__4);
             /* L240: */
         }
         if(lstres != 0.)

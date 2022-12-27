@@ -209,7 +209,7 @@ void dtrcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, doublereal *a, a
     {
         *info = -4;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -6;
     }
@@ -228,7 +228,7 @@ void dtrcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, doublereal *a, a
         return 0;
     }
     *rcond = 0.;
-    smlnum = dlamch_("Safe minimum") * (doublereal)fla_max(1, *n);
+    smlnum = dlamch_("Safe minimum") * (doublereal) fla_max(1,*n);
     /* Compute the norm of the triangular matrix A. */
     anorm = aocl_lapack_dlantr(norm, uplo, diag, n, n, &a[a_offset], lda, &work[1]);
     /* Continue only if ANORM > 0. */

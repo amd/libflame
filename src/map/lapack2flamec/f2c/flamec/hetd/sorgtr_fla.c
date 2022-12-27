@@ -176,7 +176,7 @@ void sorgtr_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *t
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
@@ -185,7 +185,7 @@ void sorgtr_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *t
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
+        if (*lwork < fla_max(i__1,i__2) && ! lquery)
         {
             *info = -7;
         }
@@ -209,8 +209,8 @@ void sorgtr_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *t
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        lwkopt = fla_max(i__1, i__2) * nb;
-        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
+        lwkopt = fla_max(i__1,i__2) * nb;
+        work[1] = (real) lwkopt;
     }
     if(*info != 0)
     {

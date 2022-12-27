@@ -86,7 +86,7 @@ static doublereal c_b14 = 1.;
 /* > stored in the first KD+1 rows of the array. The j-th column */
 /* > of A is stored in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
- */
+*/
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > \endverbatim */
 /* > */
@@ -281,11 +281,11 @@ void dpbrfs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, double
     {
         *info = -8;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -10;
     }
-    else if(*ldx < fla_max(1, *n))
+    else if (*ldx < fla_max(1,*n))
     {
         *info = -12;
     }
@@ -313,7 +313,7 @@ void dpbrfs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, double
     /* Computing MIN */
     i__1 = *n + 1;
     i__2 = (*kd << 1) + 2; // , expr subst
-    nz = fla_min(i__1, i__2);
+    nz = fla_min(i__1,i__2);
     eps = dlamch_("Epsilon");
     safmin = dlamch_("Safe minimum");
     safe1 = nz * safmin;
@@ -330,7 +330,7 @@ void dpbrfs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, double
         aocl_blas_dsbmv(uplo, n, kd, &c_b12, &ab[ab_offset], ldab, &x[j * x_dim1 + 1], &c__1,
                         &c_b14, &work[*n + 1], &c__1);
         /* Compute componentwise relative backward error from formula */
-        /* max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(A)*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
+        /* fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(A)*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
         /* where f2c_dabs(Z) is the componentwise absolute value of the matrix */
         /* or vector Z. If the i-th component of the denominator is less */
         /* than SAFE2, then SAFE1 is added to the i-th components of the */
@@ -354,7 +354,9 @@ void dpbrfs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, double
                 i__3 = 1;
                 i__4 = k - *kd; // , expr subst
                 i__5 = k - 1;
-                for(i__ = fla_max(i__3, i__4); i__ <= i__5; ++i__)
+                for (i__ = fla_max(i__3,i__4);
+                        i__ <= i__5;
+                        ++i__)
                 {
                     work[i__] += (d__1 = ab[l + i__ + k * ab_dim1], f2c_dabs(d__1)) * xk;
                     s += (d__1 = ab[l + i__ + k * ab_dim1], f2c_dabs(d__1)) * ( d__2 = x[i__ + j * x_dim1], f2c_dabs(d__2));
@@ -376,8 +378,10 @@ void dpbrfs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, double
                 /* Computing MIN */
                 i__3 = *n;
                 i__4 = k + *kd; // , expr subst
-                i__5 = fla_min(i__3, i__4);
-                for(i__ = k + 1; i__ <= i__5; ++i__)
+                i__5 = fla_min(i__3,i__4);
+                for (i__ = k + 1;
+                        i__ <= i__5;
+                        ++i__)
                 {
                     work[i__] += (d__1 = ab[l + i__ + k * ab_dim1], f2c_dabs(d__1)) * xk;
                     s += (d__1 = ab[l + i__ + k * ab_dim1], f2c_dabs(d__1)) * ( d__2 = x[i__ + j * x_dim1], f2c_dabs(d__2));
@@ -396,14 +400,14 @@ void dpbrfs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, double
                 /* Computing MAX */
                 d__2 = s;
                 d__3 = (d__1 = work[*n + i__], f2c_dabs(d__1)) / work[ i__]; // , expr subst
-                s = max(d__2,d__3);
+                s = fla_max(d__2,d__3);
             }
             else
             {
                 /* Computing MAX */
                 d__2 = s;
                 d__3 = ((d__1 = work[*n + i__], f2c_dabs(d__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = max(d__2,d__3);
+                s = fla_max(d__2,d__3);
             }
             /* L80: */
         }
@@ -492,7 +496,7 @@ void dpbrfs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, double
             /* Computing MAX */
             d__2 = lstres;
             d__3 = (d__1 = x[i__ + j * x_dim1], f2c_dabs(d__1)); // , expr subst
-            lstres = max(d__2,d__3);
+            lstres = fla_max(d__2,d__3);
             /* L130: */
         }
         if(lstres != 0.)

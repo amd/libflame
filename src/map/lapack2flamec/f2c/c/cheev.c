@@ -225,7 +225,7 @@ void cheev_(char *jobz, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda,
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
@@ -235,14 +235,13 @@ void cheev_(char *jobz, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda,
         /* Computing MAX */
         i__1 = 1;
         i__2 = (nb + 1) * *n; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
-        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].real = r__1;
-        work[1].imag = 0.f; // , expr subst
+        lwkopt = fla_max(i__1,i__2);
+        work[1].r = (real) lwkopt;
+        work[1].i = 0.f; // , expr subst
         /* Computing MAX */
         i__1 = 1;
         i__2 = (*n << 1) - 1; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
+        if (*lwork < fla_max(i__1,i__2) && ! lquery)
         {
             *info = -8;
         }

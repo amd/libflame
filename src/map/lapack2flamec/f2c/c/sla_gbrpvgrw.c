@@ -171,27 +171,31 @@ real aocl_lapack_sla_gbrpvgrw(aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *k
         i__2 = j - *ku;
         /* Computing MIN */
         i__4 = j + *kl;
-        i__3 = fla_min(i__4, *n);
-        for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
+        i__3 = fla_min(i__4,*n);
+        for (i__ = fla_max(i__2,1);
+                i__ <= i__3;
+                ++i__)
         {
             /* Computing MAX */
             r__2 = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs(r__1));
-            amax = max(r__2,amax);
+            amax = fla_max(r__2,amax);
         }
         /* Computing MAX */
         i__3 = j - *ku;
         i__2 = j;
-        for(i__ = fla_max(i__3, 1); i__ <= i__2; ++i__)
+        for (i__ = fla_max(i__3,1);
+                i__ <= i__2;
+                ++i__)
         {
             /* Computing MAX */
             r__2 = (r__1 = afb[kd + i__ - j + j * afb_dim1], f2c_abs(r__1));
-            umax = max(r__2,umax);
+            umax = fla_max(r__2,umax);
         }
         if(umax != 0.f)
         {
             /* Computing MIN */
             r__1 = amax / umax;
-            rpvgrw = fla_min(r__1, rpvgrw);
+            rpvgrw = fla_min(r__1,rpvgrw);
         }
     }
     ret_val = rpvgrw;

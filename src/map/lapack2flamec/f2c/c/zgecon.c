@@ -199,7 +199,7 @@ void zgecon_(char *norm, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }

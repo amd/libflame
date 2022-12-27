@@ -202,15 +202,15 @@ void cgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, scomplex *a, aocl_
     {
         *info = -1;
     }
-    else if(*ilo < 1 || *ilo > fla_max(1, *n))
+    else if (*ilo < 1 || *ilo > fla_max(1,*n))
     {
         *info = -2;
     }
-    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
+    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
@@ -231,7 +231,7 @@ void cgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, scomplex *a, aocl_
         i__2 = *ihi - i__;
         /* Computing MIN */
         i__3 = i__ + 2;
-        aocl_lapack_clarfg(&i__2, &alpha, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &tau[i__]);
+        clarfg_(&i__2, &alpha, &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, &tau[ i__]);
         i__2 = i__ + 1 + i__ * a_dim1;
         a[i__2].real = 1.f;
         a[i__2].imag = 0.f; // , expr subst

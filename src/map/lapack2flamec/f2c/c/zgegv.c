@@ -404,7 +404,7 @@ void zgegv_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
     /* Test the input arguments */
     /* Computing MAX */
     i__1 = *n << 1;
-    lwkmin = fla_max(i__1, 1);
+    lwkmin = fla_max(i__1,1);
     lwkopt = lwkmin;
     work[1].real = (doublereal)lwkopt;
     work[1].imag = 0.; // , expr subst
@@ -422,11 +422,11 @@ void zgegv_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -7;
     }
@@ -448,14 +448,14 @@ void zgegv_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
         nb2 = aocl_lapack_ilaenv(&c__1, "ZUNMQR", " ", n, n, n, &c_n1);
         nb3 = aocl_lapack_ilaenv(&c__1, "ZUNGQR", " ", n, n, n, &c_n1);
         /* Computing MAX */
-        i__1 = fla_max(nb1, nb2);
-        nb = fla_max(i__1, nb3);
+        i__1 = fla_max(nb1,nb2);
+        nb = fla_max(i__1,nb3);
         /* Computing MAX */
         i__1 = *n << 1;
         i__2 = *n * (nb + 1); // , expr subst
-        lopt = fla_max(i__1, i__2);
-        work[1].real = (doublereal)lopt;
-        work[1].imag = 0.; // , expr subst
+        lopt = fla_max(i__1,i__2);
+        work[1].r = (doublereal) lopt;
+        work[1].i = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -556,8 +556,8 @@ void zgegv_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
         /* Computing MAX */
         i__3 = iwork;
         i__1 = lwkopt;
-        i__2 = (integer)work[i__3].real + iwork - 1; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
+        i__2 = (integer) work[i__3].r + iwork - 1; // , expr subst
+        lwkopt = fla_max(i__1,i__2);
     }
     if(iinfo != 0)
     {
@@ -572,8 +572,8 @@ void zgegv_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
         /* Computing MAX */
         i__3 = iwork;
         i__1 = lwkopt;
-        i__2 = (integer)work[i__3].real + iwork - 1; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
+        i__2 = (integer) work[i__3].r + iwork - 1; // , expr subst
+        lwkopt = fla_max(i__1,i__2);
     }
     if(iinfo != 0)
     {
@@ -595,8 +595,8 @@ void zgegv_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
             /* Computing MAX */
             i__3 = iwork;
             i__1 = lwkopt;
-            i__2 = (integer)work[i__3].real + iwork - 1; // , expr subst
-            lwkopt = fla_max(i__1, i__2);
+            i__2 = (integer) work[i__3].r + iwork - 1; // , expr subst
+            lwkopt = fla_max(i__1,i__2);
         }
         if(iinfo != 0)
         {
@@ -645,8 +645,8 @@ void zgegv_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
         /* Computing MAX */
         i__3 = iwork;
         i__1 = lwkopt;
-        i__2 = (integer)work[i__3].real + iwork - 1; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
+        i__2 = (integer) work[i__3].r + iwork - 1; // , expr subst
+        lwkopt = fla_max(i__1,i__2);
     }
     if(iinfo != 0)
     {
@@ -711,7 +711,7 @@ void zgegv_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
                     i__3 = jr + jc * vl_dim1;
                     d__3 = temp;
                     d__4 = (d__1 = vl[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&vl[jr + jc * vl_dim1]), f2c_dabs(d__2)); // , expr subst
-                    temp = max(d__3,d__4);
+                    temp = fla_max(d__3,d__4);
                     /* L10: */
                 }
                 if(temp < safmin)
@@ -753,7 +753,7 @@ void zgegv_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
                     i__3 = jr + jc * vr_dim1;
                     d__3 = temp;
                     d__4 = (d__1 = vr[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&vr[jr + jc * vr_dim1]), f2c_dabs(d__2)); // , expr subst
-                    temp = max(d__3,d__4);
+                    temp = fla_max(d__3,d__4);
                     /* L40: */
                 }
                 if(temp < safmin)
@@ -800,22 +800,22 @@ void zgegv_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
         /* Check for significant underflow in imaginary part of ALPHA */
         /* Computing MAX */
         d__1 = safmin, d__2 = eps * absar;
-        d__1 = fla_max(d__1, d__2);
+        d__1 = fla_max(d__1,d__2);
         d__2 = eps * absb; // ; expr subst
-        if (f2c_dabs(salfai) < safmin && absai >= max(d__1,d__2))
+        if (f2c_dabs(salfai) < safmin && absai >= fla_max(d__1,d__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
             d__1 = safmin;
             d__2 = anrm2 * absai; // , expr subst
-            scale = safmin / anrm1 / fla_max(d__1, d__2);
+            scale = safmin / anrm1 / fla_max(d__1,d__2);
         }
         /* Check for significant underflow in real part of ALPHA */
         /* Computing MAX */
         d__1 = safmin, d__2 = eps * absai;
-        d__1 = fla_max(d__1, d__2);
+        d__1 = fla_max(d__1,d__2);
         d__2 = eps * absb; // ; expr subst
-        if (f2c_dabs(salfar) < safmin && absar >= max(d__1,d__2))
+        if (f2c_dabs(salfar) < safmin && absar >= fla_max(d__1,d__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
@@ -823,15 +823,15 @@ void zgegv_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
             d__3 = safmin;
             d__4 = anrm2 * absar; // , expr subst
             d__1 = scale;
-            d__2 = safmin / anrm1 / fla_max(d__3, d__4); // , expr subst
-            scale = fla_max(d__1, d__2);
+            d__2 = safmin / anrm1 / fla_max(d__3,d__4); // , expr subst
+            scale = fla_max(d__1,d__2);
         }
         /* Check for significant underflow in BETA */
         /* Computing MAX */
         d__1 = safmin, d__2 = eps * absar;
-        d__1 = fla_max(d__1, d__2);
+        d__1 = fla_max(d__1,d__2);
         d__2 = eps * absai; // ; expr subst
-        if (f2c_dabs(sbeta) < safmin && absb >= max(d__1,d__2))
+        if (f2c_dabs(sbeta) < safmin && absb >= fla_max(d__1,d__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
@@ -839,17 +839,17 @@ void zgegv_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
             d__3 = safmin;
             d__4 = bnrm2 * absb; // , expr subst
             d__1 = scale;
-            d__2 = safmin / bnrm1 / fla_max(d__3, d__4); // , expr subst
-            scale = fla_max(d__1, d__2);
+            d__2 = safmin / bnrm1 / fla_max(d__3,d__4); // , expr subst
+            scale = fla_max(d__1,d__2);
         }
         /* Check for possible overflow when limiting scaling */
         if(ilimit)
         {
             /* Computing MAX */
             d__1 = f2c_dabs(salfar), d__2 = f2c_dabs(salfai);
-            d__1 = max(d__1,d__2);
+            d__1 = fla_max(d__1,d__2);
             d__2 = f2c_dabs(sbeta); // ; expr subst
-            temp = scale * safmin * max(d__1,d__2);
+            temp = scale * safmin * fla_max(d__1,d__2);
             if (temp > 1.)
             {
                 scale /= temp;

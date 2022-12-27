@@ -342,11 +342,11 @@ void zhpevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *ap, d
         }
         else if(indeig)
         {
-            if(*il < 1 || *il > fla_max(1, *n))
+            if (*il < 1 || *il > fla_max(1,*n))
             {
                 *info = -8;
             }
-            else if(*iu < fla_min(*n, *il) || *iu > *n)
+            else if (*iu < fla_min(*n,*il) || *iu > *n)
             {
                 *info = -9;
             }
@@ -406,7 +406,7 @@ void zhpevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *ap, d
     /* Computing MIN */
     d__1 = sqrt(bignum);
     d__2 = 1. / sqrt(sqrt(safmin)); // , expr subst
-    rmax = fla_min(d__1, d__2);
+    rmax = fla_min(d__1,d__2);
     /* Scale matrix to allowable range, if necessary. */
     iscale = 0;
     abstll = *abstol;

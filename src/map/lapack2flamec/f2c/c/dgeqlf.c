@@ -191,14 +191,14 @@ void dgeqlf_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doubl
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -4;
     }
     if(*info == 0)
     {
-        k = fla_min(*m, *n);
-        if(k == 0)
+        k = fla_min(*m,*n);
+        if (k == 0)
         {
             lwkopt = 1;
         }
@@ -207,8 +207,8 @@ void dgeqlf_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doubl
             nb = aocl_lapack_ilaenv(&c__1, "DGEQLF", " ", m, n, &c_n1, &c_n1);
             lwkopt = *n * nb;
         }
-        work[1] = (doublereal)lwkopt;
-        if(*lwork < fla_max(1, *n) && !lquery)
+        work[1] = (doublereal) lwkopt;
+        if (*lwork < fla_max(1,*n) && ! lquery)
         {
             *info = -7;
         }
@@ -239,9 +239,9 @@ void dgeqlf_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doubl
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = aocl_lapack_ilaenv(&c__3, "DGEQLF", " ", m, n, &c_n1, &c_n1); // , expr subst
-        nx = fla_max(i__1, i__2);
-        if(nx < k)
+        i__2 = ilaenv_(&c__3, "DGEQLF", " ", m, n, &c_n1, &c_n1); // , expr subst
+        nx = fla_max(i__1,i__2);
+        if (nx < k)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *n;
@@ -253,8 +253,8 @@ void dgeqlf_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doubl
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = aocl_lapack_ilaenv(&c__2, "DGEQLF", " ", m, n, &c_n1, &c_n1); // , expr subst
-                nbmin = fla_max(i__1, i__2);
+                i__2 = ilaenv_(&c__2, "DGEQLF", " ", m, n, &c_n1, & c_n1); // , expr subst
+                nbmin = fla_max(i__1,i__2);
             }
         }
     }
@@ -266,14 +266,14 @@ void dgeqlf_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doubl
         /* Computing MIN */
         i__1 = k;
         i__2 = ki + nb; // , expr subst
-        kk = fla_min(i__1, i__2);
+        kk = fla_min(i__1,i__2);
         i__1 = k - kk + 1;
         i__2 = -nb;
         for(i__ = k - kk + ki + 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
         {
             /* Computing MIN */
             i__3 = k - i__ + 1;
-            ib = fla_min(i__3, nb);
+            ib = fla_min(i__3,nb);
             /* Compute the QL factorization of the current block */
             /* A(1:m-k+i+ib-1,n-k+i:n-k+i+ib-1) */
             i__3 = *m - k + i__ + ib - 1;

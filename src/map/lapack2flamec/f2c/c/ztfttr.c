@@ -272,7 +272,7 @@ void ztfttr_(char *transr, char *uplo, aocl_int_t *n, dcomplex *arf, dcomplex *a
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -6;
     }

@@ -213,7 +213,7 @@ void ssyev_(char *jobz, char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, rea
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
@@ -223,12 +223,12 @@ void ssyev_(char *jobz, char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, rea
         /* Computing MAX */
         i__1 = 1;
         i__2 = (nb + 2) * *n; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
-        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
+        lwkopt = fla_max(i__1,i__2);
+        work[1] = (real) lwkopt;
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n * 3 - 1; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
+        if (*lwork < fla_max(i__1,i__2) && ! lquery)
         {
             *info = -8;
         }

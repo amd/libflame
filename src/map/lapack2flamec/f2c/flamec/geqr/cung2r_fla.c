@@ -158,7 +158,7 @@ void cung2r_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, 
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -5;
     }

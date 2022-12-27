@@ -32,11 +32,11 @@ int cgelqf_check(integer *m, integer *n, scomplex *a, integer *lda, scomplex *ta
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -4;
     }
-    else if(*lwork < fla_max(1, *m) && !lquery)
+    else if (*lwork < fla_max(1,*m) && ! lquery)
     {
         *info = -7;
     }
@@ -51,8 +51,8 @@ int cgelqf_check(integer *m, integer *n, scomplex *a, integer *lda, scomplex *ta
         return LAPACK_QUERY_RETURN;
     }
     /* Quick return if possible */
-    k = fla_min(*m, *n);
-    if(k == 0)
+    k = fla_min(*m,*n);
+    if (k == 0)
     {
         work[1].real = 1.f;
         work[1].imag = 0.f; // , expr subst

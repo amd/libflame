@@ -362,8 +362,10 @@ void aocl_lapack_sla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
                     i__2 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__3 = fla_min(i__4, lenx);
-                    for(j = fla_max(i__2, 1); j <= i__3; ++j)
+                    i__3 = fla_min(i__4,lenx);
+                    for (j = fla_max(i__2,1);
+                            j <= i__3;
+                            ++j)
                     {
                         temp = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs( r__1));
                         symb_zero__ = symb_zero__ && (x[j] == 0.f || temp == 0.f);
@@ -402,8 +404,10 @@ void aocl_lapack_sla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
                     i__3 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__2 = fla_min(i__4, lenx);
-                    for(j = fla_max(i__3, 1); j <= i__2; ++j)
+                    i__2 = fla_min(i__4,lenx);
+                    for (j = fla_max(i__3,1);
+                            j <= i__2;
+                            ++j)
                     {
                         temp = (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs( r__1));
                         symb_zero__ = symb_zero__ && (x[j] == 0.f || temp == 0.f);
@@ -446,8 +450,10 @@ void aocl_lapack_sla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
                     i__2 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__3 = fla_min(i__4, lenx);
-                    for(j = fla_max(i__2, 1); j <= i__3; ++j)
+                    i__3 = fla_min(i__4,lenx);
+                    for (j = fla_max(i__2,1);
+                            j <= i__3;
+                            ++j)
                     {
                         temp = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs( r__1));
                         symb_zero__ = symb_zero__ && (x[jx] == 0.f || temp == 0.f);
@@ -488,8 +494,10 @@ void aocl_lapack_sla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
                     i__3 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__2 = fla_min(i__4, lenx);
-                    for(j = fla_max(i__3, 1); j <= i__2; ++j)
+                    i__2 = fla_min(i__4,lenx);
+                    for (j = fla_max(i__3,1);
+                            j <= i__2;
+                            ++j)
                     {
                         temp = (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs( r__1));
                         symb_zero__ = symb_zero__ && (x[jx] == 0.f || temp == 0.f);

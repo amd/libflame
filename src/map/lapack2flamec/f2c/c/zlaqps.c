@@ -235,7 +235,7 @@ void zlaqps_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, aocl_int_t *nb, a
     /* Computing MIN */
     i__1 = *m;
     i__2 = *n + *offset; // , expr subst
-    lastrk = fla_min(i__1, i__2);
+    lastrk = fla_min(i__1,i__2);
     lsticc = 0;
     k = 0;
     tol3z = sqrt(dlamch_("Epsilon"));
@@ -362,7 +362,7 @@ L10:
                     /* Computing MAX */
                     d__1 = 0.;
                     d__2 = (temp + 1.) * (1. - temp); // , expr subst
-                    temp = fla_max(d__1, d__2);
+                    temp = fla_max(d__1,d__2);
                     /* Computing 2nd power */
                     d__1 = vn1[j] / vn2[j];
                     temp2 = temp * (d__1 * d__1);
@@ -393,7 +393,7 @@ L10:
     /* Computing MIN */
     i__1 = *n;
     i__2 = *m - *offset; // , expr subst
-    if(*kb < fla_min(i__1, i__2))
+    if (*kb < fla_min(i__1,i__2))
     {
         i__1 = *m - rk;
         i__2 = *n - *kb;

@@ -82,7 +82,7 @@ static aocl_int64_t c__33 = 33;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
- */
+*/
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > */
 /* > On exit, if INFO = 0, the triangular factor U or L from the */
@@ -218,8 +218,8 @@ void dpbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int
     nb = aocl_lapack_ilaenv(&c__1, "DPBTRF", uplo, n, kd, &c_n1, &c_n1);
     /* The block size must not exceed the semi-bandwidth KD, and must not */
     /* exceed the limit set by the size of the local array WORK. */
-    nb = fla_min(nb, 32);
-    if(nb <= 1 || nb > *kd)
+    nb = fla_min(nb,32);
+    if (nb <= 1 || nb > *kd)
     {
         /* Use unblocked code */
         aocl_lapack_dpbtf2(uplo, n, kd, &ab[ab_offset], ldab, info);
@@ -252,7 +252,7 @@ void dpbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int
                 /* Computing MIN */
                 i__3 = nb;
                 i__4 = *n - i__ + 1; // , expr subst
-                ib = fla_min(i__3, i__4);
+                ib = fla_min(i__3,i__4);
                 /* Factorize the diagonal block */
                 i__3 = *ldab - 1;
                 aocl_lapack_dpotf2(uplo, &ib, &ab[*kd + 1 + i__ * ab_dim1], &i__3, &ii);
@@ -277,12 +277,12 @@ void dpbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int
                     /* Computing MIN */
                     i__3 = *kd - ib;
                     i__4 = *n - i__ - ib + 1; // , expr subst
-                    i2 = fla_min(i__3, i__4);
+                    i2 = fla_min(i__3,i__4);
                     /* Computing MIN */
                     i__3 = ib;
                     i__4 = *n - i__ - *kd + 1; // , expr subst
-                    i3 = fla_min(i__3, i__4);
-                    if(i2 > 0)
+                    i3 = fla_min(i__3,i__4);
+                    if (i2 > 0)
                     {
                         /* Update A12 */
                         i__3 = *ldab - 1;
@@ -371,7 +371,7 @@ void dpbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int
                 /* Computing MIN */
                 i__3 = nb;
                 i__4 = *n - i__ + 1; // , expr subst
-                ib = fla_min(i__3, i__4);
+                ib = fla_min(i__3,i__4);
                 /* Factorize the diagonal block */
                 i__3 = *ldab - 1;
                 aocl_lapack_dpotf2(uplo, &ib, &ab[i__ * ab_dim1 + 1], &i__3, &ii);
@@ -396,12 +396,12 @@ void dpbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int
                     /* Computing MIN */
                     i__3 = *kd - ib;
                     i__4 = *n - i__ - ib + 1; // , expr subst
-                    i2 = fla_min(i__3, i__4);
+                    i2 = fla_min(i__3,i__4);
                     /* Computing MIN */
                     i__3 = ib;
                     i__4 = *n - i__ - *kd + 1; // , expr subst
-                    i3 = fla_min(i__3, i__4);
-                    if(i2 > 0)
+                    i3 = fla_min(i__3,i__4);
+                    if (i2 > 0)
                     {
                         /* Update A21 */
                         i__3 = *ldab - 1;
@@ -422,8 +422,10 @@ void dpbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int
                         i__3 = ib;
                         for(jj = 1; jj <= i__3; ++jj)
                         {
-                            i__4 = fla_min(jj, i3);
-                            for(ii = 1; ii <= i__4; ++ii)
+                            i__4 = fla_min(jj,i3);
+                            for (ii = 1;
+                                    ii <= i__4;
+                                    ++ii)
                             {
                                 work[ii + jj * 33 - 34]
                                     = ab[*kd + 1 - jj + ii + (jj + i__ - 1) * ab_dim1];
@@ -453,8 +455,10 @@ void dpbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int
                         i__3 = ib;
                         for(jj = 1; jj <= i__3; ++jj)
                         {
-                            i__4 = fla_min(jj, i3);
-                            for(ii = 1; ii <= i__4; ++ii)
+                            i__4 = fla_min(jj,i3);
+                            for (ii = 1;
+                                    ii <= i__4;
+                                    ++ii)
                             {
                                 ab[*kd + 1 - jj + ii + (jj + i__ - 1) * ab_dim1]
                                     = work[ii + jj * 33 - 34];

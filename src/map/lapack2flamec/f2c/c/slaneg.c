@@ -180,8 +180,10 @@ aocl_int64_t aocl_lapack_slaneg(aocl_int64_t *n, real *d__, real *lld, real *sig
         /* Computing MIN */
         i__3 = bj + 127;
         i__4 = *r__ - 1; // , expr subst
-        i__2 = fla_min(i__3, i__4);
-        for(j = bj; j <= i__2; ++j)
+        i__2 = fla_min(i__3,i__4);
+        for (j = bj;
+                j <= i__2;
+                ++j)
         {
             dplus = d__[j] + t;
             if(dplus < 0.f)
@@ -204,8 +206,10 @@ aocl_int64_t aocl_lapack_slaneg(aocl_int64_t *n, real *d__, real *lld, real *sig
             /* Computing MIN */
             i__3 = bj + 127;
             i__4 = *r__ - 1; // , expr subst
-            i__2 = fla_min(i__3, i__4);
-            for(j = bj; j <= i__2; ++j)
+            i__2 = fla_min(i__3,i__4);
+            for (j = bj;
+                    j <= i__2;
+                    ++j)
             {
                 dplus = d__[j] + t;
                 if(dplus < 0.f)
@@ -233,8 +237,10 @@ aocl_int64_t aocl_lapack_slaneg(aocl_int64_t *n, real *d__, real *lld, real *sig
         bsav = p;
         /* Computing MAX */
         i__3 = bj - 127;
-        i__2 = fla_max(i__3, *r__);
-        for(j = bj; j >= i__2; --j)
+        i__2 = fla_max(i__3,*r__);
+        for (j = bj;
+                j >= i__2;
+                --j)
         {
             dminus = lld[j] + p;
             if(dminus < 0.f)
@@ -253,8 +259,10 @@ aocl_int64_t aocl_lapack_slaneg(aocl_int64_t *n, real *d__, real *lld, real *sig
             p = bsav;
             /* Computing MAX */
             i__3 = bj - 127;
-            i__2 = fla_max(i__3, *r__);
-            for(j = bj; j >= i__2; --j)
+            i__2 = fla_max(i__3,*r__);
+            for (j = bj;
+                    j >= i__2;
+                    --j)
             {
                 dminus = lld[j] + p;
                 if(dminus < 0.f)

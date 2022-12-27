@@ -275,7 +275,7 @@ L10:
                     /* Computing MIN */
                     i__2 = *kl;
                     i__3 = *n - j; // , expr subst
-                    lm = fla_min(i__2, i__3);
+                    lm = fla_min(i__2,i__3);
                     jp = ipiv[j];
                     t = work[jp];
                     if(jp != j)
@@ -308,9 +308,8 @@ L10:
                     /* Computing MIN */
                     i__1 = *kl;
                     i__2 = *n - j; // , expr subst
-                    lm = fla_min(i__1, i__2);
-                    work[j] -= aocl_blas_ddot(&lm, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1],
-                                              &c__1);
+                    lm = fla_min(i__1,i__2);
+                    work[j] -= ddot_(&lm, &ab[kd + 1 + j * ab_dim1], &c__1, & work[j + 1], &c__1);
                     jp = ipiv[j];
                     if(jp != j)
                     {

@@ -520,11 +520,11 @@ void sgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
                 /* Computing MIN */
                 r__1 = rcmin;
                 r__2 = r__[j]; // , expr subst
-                rcmin = fla_min(r__1, r__2);
+                rcmin = fla_min(r__1,r__2);
                 /* Computing MAX */
                 r__1 = rcmax;
                 r__2 = r__[j]; // , expr subst
-                rcmax = fla_max(r__1, r__2);
+                rcmax = fla_max(r__1,r__2);
                 /* L10: */
             }
             if(rcmin <= 0.f)
@@ -533,7 +533,7 @@ void sgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
             }
             else if(*n > 0)
             {
-                rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
+                rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
             }
             else
             {
@@ -550,11 +550,11 @@ void sgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
                 /* Computing MIN */
                 r__1 = rcmin;
                 r__2 = c__[j]; // , expr subst
-                rcmin = fla_min(r__1, r__2);
+                rcmin = fla_min(r__1,r__2);
                 /* Computing MAX */
                 r__1 = rcmax;
                 r__2 = c__[j]; // , expr subst
-                rcmax = fla_max(r__1, r__2);
+                rcmax = fla_max(r__1,r__2);
                 /* L20: */
             }
             if(rcmin <= 0.f)
@@ -563,7 +563,7 @@ void sgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
             }
             else if(*n > 0)
             {
-                colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
+                colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
             }
             else
             {
@@ -572,11 +572,11 @@ void sgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
         }
         if(*info == 0)
         {
-            if(*ldb < fla_max(1, *n))
+            if (*ldb < fla_max(1,*n))
             {
                 *info = -16;
             }
-            else if(*ldx < fla_max(1, *n))
+            else if (*ldx < fla_max(1,*n))
             {
                 *info = -18;
             }
@@ -643,10 +643,10 @@ void sgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
         {
             /* Computing MAX */
             i__2 = j - *ku;
-            j1 = fla_max(i__2, 1);
+            j1 = fla_max(i__2,1);
             /* Computing MIN */
             i__2 = j + *kl;
-            j2 = fla_min(i__2, *n);
+            j2 = fla_min(i__2,*n);
             i__2 = j2 - j1 + 1;
             aocl_blas_scopy(&i__2, &ab[*ku + 1 - j + j1 + j * ab_dim1], &c__1,
                             &afb[*kl + *ku + 1 - j + j1 + j * afb_dim1], &c__1);
@@ -667,13 +667,15 @@ void sgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
                 /* Computing MIN */
                 i__4 = *n + *ku + 1 - j;
                 i__5 = *kl + *ku + 1; // , expr subst
-                i__3 = fla_min(i__4, i__5);
-                for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
+                i__3 = fla_min(i__4,i__5);
+                for (i__ = fla_max(i__2,1);
+                        i__ <= i__3;
+                        ++i__)
                 {
                     /* Computing MAX */
                     r__2 = anorm;
                     r__3 = (r__1 = ab[i__ + j * ab_dim1], f2c_abs( r__1)); // , expr subst
-                    anorm = max(r__2,r__3);
+                    anorm = fla_max(r__2,r__3);
                     /* L80: */
                 }
                 /* L90: */
@@ -681,13 +683,12 @@ void sgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
             /* Computing MIN */
             i__3 = *info - 1;
             i__2 = *kl + *ku; // , expr subst
-            i__1 = fla_min(i__3, i__2);
+            i__1 = fla_min(i__3,i__2);
             /* Computing MAX */
             i__4 = 1;
             i__5 = *kl + *ku + 2 - *info; // , expr subst
-            rpvgrw = aocl_lapack_slantb("M", "U", "N", info, &i__1,
-                                        &afb[fla_max(i__4, i__5) + afb_dim1], ldafb, &work[1]);
-            if(rpvgrw == 0.f)
+            rpvgrw = slantb_("M", "U", "N", info, &i__1, &afb[fla_max(i__4,i__5) + afb_dim1], ldafb, &work[1]);
+            if (rpvgrw == 0.f)
             {
                 rpvgrw = 1.f;
             }

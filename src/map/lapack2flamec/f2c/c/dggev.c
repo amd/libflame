@@ -350,11 +350,11 @@ void dggev_(char *jobvl, char *jobvr, aocl_int_t *n, doublereal *a, aocl_int_t *
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -7;
     }
@@ -378,25 +378,21 @@ void dggev_(char *jobvl, char *jobvr, aocl_int_t *n, doublereal *a, aocl_int_t *
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n << 3; // , expr subst
-        minwrk = fla_max(i__1, i__2);
+        minwrk = fla_max(i__1,i__2);
         /* Computing MAX */
         i__1 = 1;
-        i__2 = *n
-               * (aocl_lapack_ilaenv(&c__1, "DGEQRF", " ", n, &c__1, n, &c__0) + 7); // , expr subst
-        maxwrk = fla_max(i__1, i__2);
+        i__2 = *n * (ilaenv_(&c__1, "DGEQRF", " ", n, &c__1, n, & c__0) + 7); // , expr subst
+        maxwrk = fla_max(i__1,i__2);
         /* Computing MAX */
         i__1 = maxwrk;
-        i__2 = *n
-               * (aocl_lapack_ilaenv(&c__1, "DORMQR", " ", n, &c__1, n, &c__0) + 7); // , expr subst
-        maxwrk = fla_max(i__1, i__2);
-        if(ilvl)
+        i__2 = *n * (ilaenv_(&c__1, "DORMQR", " ", n, &c__1, n, &c__0) + 7); // , expr subst
+        maxwrk = fla_max(i__1,i__2);
+        if (ilvl)
         {
             /* Computing MAX */
             i__1 = maxwrk;
-            i__2 = *n
-                   * (aocl_lapack_ilaenv(&c__1, "DORGQR", " ", n, &c__1, n, &c_n1)
-                      + 7); // , expr subst
-            maxwrk = fla_max(i__1, i__2);
+            i__2 = *n * (ilaenv_(&c__1, "DORGQR", " ", n, & c__1, n, &c_n1) + 7); // , expr subst
+            maxwrk = fla_max(i__1,i__2);
         }
         work[1] = (doublereal)maxwrk;
         if(*lwork < minwrk && !lquery)
@@ -605,7 +601,7 @@ void dggev_(char *jobvl, char *jobvr, aocl_int_t *n, doublereal *a, aocl_int_t *
                         /* Computing MAX */
                         d__2 = temp;
                         d__3 = (d__1 = vl[jr + jc * vl_dim1], f2c_dabs(d__1)); // , expr subst
-                        temp = max(d__2,d__3);
+                        temp = fla_max(d__2,d__3);
                         /* L10: */
                     }
                 }
@@ -617,7 +613,7 @@ void dggev_(char *jobvl, char *jobvr, aocl_int_t *n, doublereal *a, aocl_int_t *
                         /* Computing MAX */
                         d__3 = temp;
                         d__4 = (d__1 = vl[jr + jc * vl_dim1], f2c_dabs(d__1)) + (d__2 = vl[jr + (jc + 1) * vl_dim1], f2c_dabs(d__2)); // , expr subst
-                        temp = max(d__3,d__4);
+                        temp = fla_max(d__3,d__4);
                         /* L20: */
                     }
                 }
@@ -668,7 +664,7 @@ void dggev_(char *jobvl, char *jobvr, aocl_int_t *n, doublereal *a, aocl_int_t *
                         /* Computing MAX */
                         d__2 = temp;
                         d__3 = (d__1 = vr[jr + jc * vr_dim1], f2c_dabs(d__1)); // , expr subst
-                        temp = max(d__2,d__3);
+                        temp = fla_max(d__2,d__3);
                         /* L60: */
                     }
                 }
@@ -680,7 +676,7 @@ void dggev_(char *jobvl, char *jobvr, aocl_int_t *n, doublereal *a, aocl_int_t *
                         /* Computing MAX */
                         d__3 = temp;
                         d__4 = (d__1 = vr[jr + jc * vr_dim1], f2c_dabs(d__1)) + (d__2 = vr[jr + (jc + 1) * vr_dim1], f2c_dabs(d__2)); // , expr subst
-                        temp = max(d__3,d__4);
+                        temp = fla_max(d__3,d__4);
                         /* L70: */
                     }
                 }

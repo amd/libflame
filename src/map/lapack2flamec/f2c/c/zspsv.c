@@ -207,7 +207,7 @@ void zspsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *ap, aocl_int_
     {
         *info = -3;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -7;
     }

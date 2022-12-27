@@ -148,8 +148,10 @@ void clacp2_(char *uplo, aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda,
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
-            i__2 = fla_min(j, *m);
-            for(i__ = 1; i__ <= i__2; ++i__)
+            i__2 = fla_min(j,*m);
+            for (i__ = 1;
+                    i__ <= i__2;
+                    ++i__)
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * a_dim1;

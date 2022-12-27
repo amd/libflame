@@ -287,7 +287,7 @@ void chptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, aocl_int
         {
             colmax = 0.f;
         }
-        if(fla_max(absakk, colmax) == 0.f)
+        if (fla_max(absakk,colmax) == 0.f)
         {
             /* Column K is zero: set INFO and continue */
             if(*info == 0)
@@ -337,7 +337,7 @@ void chptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, aocl_int
                     i__1 = kpc + jmax - 1;
                     r__3 = rowmax;
                     r__4 = (r__1 = ap[i__1].r, f2c_abs(r__1)) + ( r__2 = r_imag(&ap[kpc + jmax - 1]), f2c_abs(r__2)); // , expr subst
-                    rowmax = max(r__3,r__4);
+                    rowmax = fla_max(r__3,r__4);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
@@ -595,7 +595,7 @@ void chptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, aocl_int
         {
             colmax = 0.f;
         }
-        if(fla_max(absakk, colmax) == 0.f)
+        if (fla_max(absakk,colmax) == 0.f)
         {
             /* Column K is zero: set INFO and continue */
             if(*info == 0)
@@ -644,7 +644,7 @@ void chptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, aocl_int
                     i__1 = kpc + jmax - imax;
                     r__3 = rowmax;
                     r__4 = (r__1 = ap[i__1].r, f2c_abs(r__1)) + ( r__2 = r_imag(&ap[kpc + jmax - imax]), f2c_abs(r__2)); // , expr subst
-                    rowmax = max(r__3,r__4);
+                    rowmax = fla_max(r__3,r__4);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {

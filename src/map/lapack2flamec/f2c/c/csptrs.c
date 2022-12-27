@@ -186,7 +186,7 @@ void csptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, aocl_int
     {
         *info = -3;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -7;
     }

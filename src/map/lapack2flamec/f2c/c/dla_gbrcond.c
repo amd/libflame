@@ -272,8 +272,10 @@ doublereal dla_gbrcond_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *
                 i__2 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__3 = fla_min(i__4, *n);
-                for(j = fla_max(i__2, 1); j <= i__3; ++j)
+                i__3 = fla_min(i__4,*n);
+                for (j = fla_max(i__2,1);
+                        j <= i__3;
+                        ++j)
                 {
                     tmp += (d__1 = ab[kd + i__ - j + j * ab_dim1] * c__[j], f2c_dabs(d__1));
                 }
@@ -284,8 +286,10 @@ doublereal dla_gbrcond_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *
                 i__3 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__2 = fla_min(i__4, *n);
-                for(j = fla_max(i__3, 1); j <= i__2; ++j)
+                i__2 = fla_min(i__4,*n);
+                for (j = fla_max(i__3,1);
+                        j <= i__2;
+                        ++j)
                 {
                     tmp += (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs(d__1));
                 }
@@ -296,8 +300,10 @@ doublereal dla_gbrcond_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *
                 i__2 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__3 = fla_min(i__4, *n);
-                for(j = fla_max(i__2, 1); j <= i__3; ++j)
+                i__3 = fla_min(i__4,*n);
+                for (j = fla_max(i__2,1);
+                        j <= i__3;
+                        ++j)
                 {
                     tmp += (d__1 = ab[kd + i__ - j + j * ab_dim1] / c__[j], f2c_dabs(d__1));
                 }
@@ -317,8 +323,10 @@ doublereal dla_gbrcond_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *
                 i__3 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__2 = fla_min(i__4, *n);
-                for(j = fla_max(i__3, 1); j <= i__2; ++j)
+                i__2 = fla_min(i__4,*n);
+                for (j = fla_max(i__3,1);
+                        j <= i__2;
+                        ++j)
                 {
                     tmp += (d__1 = ab[ke - i__ + j + i__ * ab_dim1] * c__[j], f2c_dabs(d__1));
                 }
@@ -329,8 +337,10 @@ doublereal dla_gbrcond_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *
                 i__2 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__3 = fla_min(i__4, *n);
-                for(j = fla_max(i__2, 1); j <= i__3; ++j)
+                i__3 = fla_min(i__4,*n);
+                for (j = fla_max(i__2,1);
+                        j <= i__3;
+                        ++j)
                 {
                     tmp += (d__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_dabs(d__1) );
                 }
@@ -341,8 +351,10 @@ doublereal dla_gbrcond_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *
                 i__3 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__2 = fla_min(i__4, *n);
-                for(j = fla_max(i__3, 1); j <= i__2; ++j)
+                i__2 = fla_min(i__4,*n);
+                for (j = fla_max(i__3,1);
+                        j <= i__2;
+                        ++j)
                 {
                     tmp += (d__1 = ab[ke - i__ + j + i__ * ab_dim1] / c__[j], f2c_dabs(d__1));
                 }

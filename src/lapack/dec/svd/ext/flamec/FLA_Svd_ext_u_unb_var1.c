@@ -30,16 +30,12 @@ FLA_Error FLA_Svd_ext_u_unb_var1(FLA_Svd_type jobu, FLA_Svd_type jobv,
 
     n_GH = k_accum;
 
-    m_A = FLA_Obj_length(A);
-    n_A = FLA_Obj_width(A);
-    min_m_n = fla_min(m_A, n_A);
-    dt = FLA_Obj_datatype(A);
-    dt_real = FLA_Obj_datatype_proj_to_real(A);
-    dt_comp = FLA_Obj_datatype_proj_to_complex(A);
-
-    // Create dummy object for C and nullify it to get rid of warning
-    FLA_Obj_create(dt, 1, 1, 0, 0, &C);
-    FLA_Obj_nullify(&C);
+    m_A     = FLA_Obj_length( A );
+    n_A     = FLA_Obj_width( A );
+    min_m_n = fla_min( m_A, n_A );
+    dt      = FLA_Obj_datatype( A );
+    dt_real = FLA_Obj_datatype_proj_to_real( A );
+    dt_comp = FLA_Obj_datatype_proj_to_complex( A );
 
     // Create matrices to hold block Householder transformations.
     FLA_Bidiag_UT_create_T(A, &T, &S);

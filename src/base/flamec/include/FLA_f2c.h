@@ -439,12 +439,6 @@ typedef struct Namelist Namelist;
 #ifndef f2c_dabs
   #define f2c_dabs(x) (doublereal)f2c_abs(x)
 #endif
-#ifndef f2c_abs
-  #define f2c_abs(x) ((x) >= 0 ? (x) : -(x))
-#endif
-#ifndef f2c_dabs
-  #define f2c_dabs(x) (doublereal)f2c_abs(x)
-#endif
 #ifndef dmin
   #define dmin(a,b) (doublereal)fla_min(a,b)
 #endif

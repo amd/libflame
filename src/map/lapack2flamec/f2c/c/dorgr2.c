@@ -159,7 +159,7 @@ void dorgr2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a, aocl_in
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -5;
     }

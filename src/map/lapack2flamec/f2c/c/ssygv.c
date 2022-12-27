@@ -249,11 +249,11 @@ void ssygv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *a, a
     {
         *info = -4;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -6;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -8;
     }
@@ -262,14 +262,14 @@ void ssygv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *a, a
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n * 3 - 1; // , expr subst
-        lwkmin = fla_max(i__1, i__2);
-        nb = aocl_lapack_ilaenv(&c__1, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
+        lwkmin = fla_max(i__1,i__2);
+        nb = ilaenv_(&c__1, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
         /* Computing MAX */
         i__1 = lwkmin;
         i__2 = (nb + 2) * *n; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
-        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
-        if(*lwork < lwkmin && !lquery)
+        lwkopt = fla_max(i__1,i__2);
+        work[1] = (real) lwkopt;
+        if (*lwork < lwkmin && ! lquery)
         {
             *info = -11;
         }

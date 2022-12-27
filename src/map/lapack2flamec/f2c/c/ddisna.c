@@ -48,7 +48,7 @@
 /* > */
 /* > DLAMCH( 'E' ) * ( ANORM / SEP( I ) ) */
 /* > */
-/* > where ANORM = 2-norm(A) = max( f2c_dabs( D(j) ) ). SEP(I) is not allowed */
+/* > where ANORM = 2-norm(A) = fla_max( f2c_dabs( D(j) ) ). SEP(I) is not allowed */
 /* > to be smaller than DLAMCH( 'E' )*ANORM in order to limit the size of */
 /* > the error bound. */
 /* > */
@@ -169,7 +169,7 @@ void ddisna_(char *job, aocl_int_t *m, aocl_int_t *n, doublereal *d__, doublerea
     }
     else if(sing)
     {
-        k = fla_min(*m, *n);
+        k = fla_min(*m,*n);
     }
     if(!eigen && !sing)
     {
@@ -242,7 +242,7 @@ void ddisna_(char *job, aocl_int_t *m, aocl_int_t *n, doublereal *d__, doublerea
         for(i__ = 2; i__ <= i__1; ++i__)
         {
             newgap = (d__1 = d__[i__ + 1] - d__[i__], f2c_dabs(d__1));
-            sep[i__] = min(oldgap,newgap);
+            sep[i__] = fla_min(oldgap,newgap);
             oldgap = newgap;
             /* L20: */
         }
@@ -254,14 +254,14 @@ void ddisna_(char *job, aocl_int_t *m, aocl_int_t *n, doublereal *d__, doublerea
         {
             if(incr)
             {
-                sep[1] = fla_min(sep[1], d__[1]);
+                sep[1] = fla_min(sep[1],d__[1]);
             }
             if(decr)
             {
                 /* Computing MIN */
                 d__1 = sep[k];
                 d__2 = d__[k]; // , expr subst
-                sep[k] = fla_min(d__1, d__2);
+                sep[k] = fla_min(d__1,d__2);
             }
         }
     }
@@ -272,7 +272,7 @@ void ddisna_(char *job, aocl_int_t *m, aocl_int_t *n, doublereal *d__, doublerea
     /* Computing MAX */
     d__2 = f2c_dabs(d__[1]);
     d__3 = (d__1 = d__[k], f2c_dabs(d__1)); // , expr subst
-    anorm = max(d__2,d__3);
+    anorm = fla_max(d__2,d__3);
     if (anorm == 0.)
     {
         thresh = eps;
@@ -281,14 +281,14 @@ void ddisna_(char *job, aocl_int_t *m, aocl_int_t *n, doublereal *d__, doublerea
     {
         /* Computing MAX */
         d__1 = eps * anorm;
-        thresh = fla_max(d__1, safmin);
+        thresh = fla_max(d__1,safmin);
     }
     i__1 = k;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Computing MAX */
         d__1 = sep[i__];
-        sep[i__] = fla_max(d__1, thresh);
+        sep[i__] = fla_max(d__1,thresh);
         /* L30: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

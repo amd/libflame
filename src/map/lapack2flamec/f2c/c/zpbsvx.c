@@ -149,7 +149,7 @@ static aocl_int64_t c__1 = 1;
 /* > equilibrated matrix diag(S)*A*diag(S). The j-th column of A */
 /* > is stored in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(KD+1+i-j,j) = A(i,j) for fla_max(1,j-KD)<=i<=j;
- */
+*/
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(N,j+KD). */
 /* > See below for further details. */
 /* > */
@@ -474,11 +474,11 @@ void zpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
                 /* Computing MIN */
                 d__1 = smin;
                 d__2 = s[j]; // , expr subst
-                smin = fla_min(d__1, d__2);
+                smin = fla_min(d__1,d__2);
                 /* Computing MAX */
                 d__1 = smax;
                 d__2 = s[j]; // , expr subst
-                smax = fla_max(d__1, d__2);
+                smax = fla_max(d__1,d__2);
                 /* L10: */
             }
             if(smin <= 0.)
@@ -487,7 +487,7 @@ void zpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
             }
             else if(*n > 0)
             {
-                scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
+                scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
             }
             else
             {
@@ -496,11 +496,11 @@ void zpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
         }
         if(*info == 0)
         {
-            if(*ldb < fla_max(1, *n))
+            if (*ldb < fla_max(1,*n))
             {
                 *info = -13;
             }
-            else if(*ldx < fla_max(1, *n))
+            else if (*ldx < fla_max(1,*n))
             {
                 *info = -15;
             }
@@ -555,7 +555,7 @@ void zpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
             {
                 /* Computing MAX */
                 i__2 = j - *kd;
-                j1 = fla_max(i__2, 1);
+                j1 = fla_max(i__2,1);
                 i__2 = j - j1 + 1;
                 aocl_blas_zcopy(&i__2, &ab[*kd + 1 - j + j1 + j * ab_dim1], &c__1,
                                 &afb[*kd + 1 - j + j1 + j * afb_dim1], &c__1);
@@ -569,7 +569,7 @@ void zpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
             {
                 /* Computing MIN */
                 i__2 = j + *kd;
-                j2 = fla_min(i__2, *n);
+                j2 = fla_min(i__2,*n);
                 i__2 = j2 - j + 1;
                 aocl_blas_zcopy(&i__2, &ab[j * ab_dim1 + 1], &c__1, &afb[j * afb_dim1 + 1], &c__1);
                 /* L50: */

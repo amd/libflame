@@ -264,11 +264,11 @@ void cggbal_(char *job, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -6;
     }
@@ -660,15 +660,15 @@ L350:
         /* Computing MAX */
         r__1 = rab;
         r__2 = c_abs(&b[i__ + (irab + *ilo - 1) * b_dim1]); // , expr subst
-        rab = max(r__1,r__2);
+        rab = fla_max(r__1,r__2);
         r__1 = rab + sfmin;
         lrab = (integer)(r_lg10(&r__1) / basl + 1.f);
         ir = (integer)(lscale[i__] + r_sign(&c_b72, &lscale[i__]));
         /* Computing MIN */
-        i__2 = fla_max(ir, lsfmin);
-        i__2 = fla_min(i__2, lsfmax);
+        i__2 = fla_max(ir,lsfmin);
+        i__2 = fla_min(i__2,lsfmax);
         i__3 = lsfmax - lrab; // ; expr subst
-        ir = fla_min(i__2, i__3);
+        ir = fla_min(i__2,i__3);
         lscale[i__] = pow_ri(&c_b36, &ir);
         icab = icamax_(ihi, &a[i__ * a_dim1 + 1], &c__1);
         cab = c_abs(&a[icab + i__ * a_dim1]);
@@ -676,15 +676,15 @@ L350:
         /* Computing MAX */
         r__1 = cab;
         r__2 = c_abs(&b[icab + i__ * b_dim1]); // , expr subst
-        cab = max(r__1,r__2);
+        cab = fla_max(r__1,r__2);
         r__1 = cab + sfmin;
         lcab = (integer)(r_lg10(&r__1) / basl + 1.f);
         jc = (integer)(rscale[i__] + r_sign(&c_b72, &rscale[i__]));
         /* Computing MIN */
-        i__2 = fla_max(jc, lsfmin);
-        i__2 = fla_min(i__2, lsfmax);
+        i__2 = fla_max(jc,lsfmin);
+        i__2 = fla_min(i__2,lsfmax);
         i__3 = lsfmax - lcab; // ; expr subst
-        jc = fla_min(i__2, i__3);
+        jc = fla_min(i__2,i__3);
         rscale[i__] = pow_ri(&c_b36, &jc);
         /* L360: */
     }

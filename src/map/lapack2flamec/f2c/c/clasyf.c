@@ -295,7 +295,7 @@ void clasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, scomplex
         {
             colmax = 0.f;
         }
-        if(fla_max(absakk, colmax) == 0.f)
+        if (fla_max(absakk,colmax) == 0.f)
         {
             /* Column K is zero or underflow: set INFO and continue */
             if(*info == 0)
@@ -342,7 +342,7 @@ void clasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, scomplex
                     i__1 = jmax + (kw - 1) * w_dim1;
                     r__3 = rowmax;
                     r__4 = (r__1 = w[i__1].r, f2c_abs(r__1)) + ( r__2 = r_imag(&w[jmax + (kw - 1) * w_dim1]), f2c_abs( r__2)); // , expr subst
-                    rowmax = max(r__3,r__4);
+                    rowmax = fla_max(r__3,r__4);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
@@ -545,7 +545,7 @@ void clasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, scomplex
             /* Computing MIN */
             i__2 = *nb;
             i__3 = k - j + 1; // , expr subst
-            jb = fla_min(i__2, i__3);
+            jb = fla_min(i__2,i__3);
             /* Update the upper triangle of the diagonal block */
             i__2 = j + jb - 1;
             for(jj = j; jj <= i__2; ++jj)
@@ -637,7 +637,7 @@ void clasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, scomplex
         {
             colmax = 0.f;
         }
-        if(fla_max(absakk, colmax) == 0.f)
+        if (fla_max(absakk,colmax) == 0.f)
         {
             /* Column K is zero or underflow: set INFO and continue */
             if(*info == 0)
@@ -681,7 +681,7 @@ void clasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, scomplex
                     i__1 = jmax + (k + 1) * w_dim1;
                     r__3 = rowmax;
                     r__4 = (r__1 = w[i__1].r, f2c_abs(r__1)) + ( r__2 = r_imag(&w[jmax + (k + 1) * w_dim1]), f2c_abs( r__2)); // , expr subst
-                    rowmax = max(r__3,r__4);
+                    rowmax = fla_max(r__3,r__4);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
@@ -887,7 +887,7 @@ void clasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, scomplex
             /* Computing MIN */
             i__3 = *nb;
             i__4 = *n - j + 1; // , expr subst
-            jb = fla_min(i__3, i__4);
+            jb = fla_min(i__3,i__4);
             /* Update the lower triangle of the diagonal block */
             i__3 = j + jb - 1;
             for(jj = j; jj <= i__3; ++jj)

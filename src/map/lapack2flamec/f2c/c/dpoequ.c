@@ -151,7 +151,7 @@ void dpoequ_(aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *s, doubl
     {
         *info = -1;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -3;
     }
@@ -181,11 +181,11 @@ void dpoequ_(aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *s, doubl
         /* Computing MIN */
         d__1 = smin;
         d__2 = s[i__]; // , expr subst
-        smin = fla_min(d__1, d__2);
+        smin = fla_min(d__1,d__2);
         /* Computing MAX */
         d__1 = *amax;
         d__2 = s[i__]; // , expr subst
-        *amax = fla_max(d__1, d__2);
+        *amax = fla_max(d__1,d__2);
         /* L10: */
     }
     if(smin <= 0.)

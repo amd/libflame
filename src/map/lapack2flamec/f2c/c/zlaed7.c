@@ -307,7 +307,7 @@ void zlaed7_(aocl_int_t *n, aocl_int_t *cutpnt, aocl_int_t *qsiz, aocl_int_t *tl
     {
         *info = -1;
     }
-    else if(fla_min(1, *n) > *cutpnt || *n < *cutpnt)
+    else if (fla_min(1,*n) > *cutpnt || *n < *cutpnt)
     {
         *info = -2;
     }
@@ -315,7 +315,7 @@ void zlaed7_(aocl_int_t *n, aocl_int_t *cutpnt, aocl_int_t *qsiz, aocl_int_t *tl
     {
         *info = -3;
     }
-    else if(*ldq < fla_max(1, *n))
+    else if (*ldq < fla_max(1,*n))
     {
         *info = -9;
     }

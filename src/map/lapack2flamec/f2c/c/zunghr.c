@@ -173,28 +173,28 @@ void zunghr_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, dcomplex *a, aocl_
     {
         *info = -1;
     }
-    else if(*ilo < 1 || *ilo > fla_max(1, *n))
+    else if (*ilo < 1 || *ilo > fla_max(1,*n))
     {
         *info = -2;
     }
-    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
+    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
-    else if(*lwork < fla_max(1, nh) && !lquery)
+    else if (*lwork < fla_max(1,nh) && ! lquery)
     {
         *info = -8;
     }
     if(*info == 0)
     {
-        nb = aocl_lapack_ilaenv(&c__1, "ZUNGQR", " ", &nh, &nh, &nh, &c_n1);
-        lwkopt = fla_max(1, nh) * nb;
-        work[1].real = (doublereal)lwkopt;
-        work[1].imag = 0.; // , expr subst
+        nb = ilaenv_(&c__1, "ZUNGQR", " ", &nh, &nh, &nh, &c_n1);
+        lwkopt = fla_max(1,nh) * nb;
+        work[1].r = (doublereal) lwkopt;
+        work[1].i = 0.; // , expr subst
     }
     if(*info != 0)
     {

@@ -174,7 +174,7 @@ void cgelq2_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -4;
     }
@@ -185,7 +185,7 @@ void cgelq2_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
-    k = fla_min(*m, *n);
+    k = fla_min(*m,*n);
     i__1 = k;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -198,8 +198,8 @@ void cgelq2_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
         i__2 = *n - i__ + 1;
         /* Computing MIN */
         i__3 = i__ + 1;
-        aocl_lapack_clarfg(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &tau[i__]);
-        if(i__ < *m)
+        clarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3,*n) * a_dim1], lda, &tau[i__] );
+        if (i__ < *m)
         {
             /* Apply H(i) to A(i+1:m,i:n) from the right */
             i__2 = i__ + i__ * a_dim1;

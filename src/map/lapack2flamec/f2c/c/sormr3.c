@@ -257,11 +257,11 @@ void sormr3_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     {
         *info = -6;
     }
-    else if(*lda < fla_max(1, *k))
+    else if (*lda < fla_max(1,*k))
     {
         *info = -8;
     }
-    else if(*ldc < fla_max(1, *m))
+    else if (*ldc < fla_max(1,*m))
     {
         *info = -11;
     }

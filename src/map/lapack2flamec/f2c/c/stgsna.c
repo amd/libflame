@@ -493,11 +493,11 @@ void stgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, real *a, a
     {
         *info = -4;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -6;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -8;
     }
@@ -734,7 +734,7 @@ void stgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, real *a, a
                 /* Computing MIN */
                 r__1 = sqrt(root1);
                 r__2 = sqrt(root2); // , expr subst
-                cond = fla_min(r__1, r__2);
+                cond = fla_min(r__1,r__2);
             }
             /* Copy the matrix (A, B) to the array WORK and swap the */
             /* diagonal block beginning at A(k,k) to the (1,1) position. */
@@ -780,8 +780,8 @@ void stgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, real *a, a
                     if(pair)
                     {
                         /* Computing MIN */
-                        r__1 = fla_max(1.f, alprqt) * dif[ks];
-                        dif[ks] = fla_min(r__1, cond);
+                        r__1 = fla_max(1.f,alprqt) * dif[ks];
+                        dif[ks] = fla_min(r__1,cond);
                     }
                 }
             }

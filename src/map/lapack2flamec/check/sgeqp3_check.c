@@ -30,14 +30,14 @@ int sgeqp3_check(integer *m, integer *n, float *a, integer *lda, integer *jpvt, 
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -4;
     }
     if(*info == 0)
     {
-        minmn = fla_min(*m, *n);
-        if(minmn == 0)
+        minmn = fla_min(*m,*n);
+        if (minmn == 0)
         {
             iws = 1;
             lwkopt = 1;

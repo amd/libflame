@@ -49,7 +49,7 @@ static aocl_int64_t c__1 = 1;
 /* > \return CLANHT */
 /* > \verbatim */
 /* > */
-/* > CLANHT = ( max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
+/* > CLANHT = ( fla_max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
 /* > ( */
 /* > ( norm1(A), NORM = '1', 'O' or 'o' */
 /* > ( */
@@ -60,7 +60,7 @@ static aocl_int64_t c__1 = 1;
 /* > where norm1 denotes the one norm of a matrix (maximum column sum), */
 /* > normI denotes the infinity norm of a matrix (maximum row sum) and */
 /* > normF denotes the Frobenius norm of a matrix (square root of sum of */
-/* > squares). Note that max(f2c_abs(A(i,j))) is not a consistent matrix norm. */
+/* > squares). Note that fla_max(f2c_abs(A(i,j))) is not a consistent matrix norm. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -151,7 +151,7 @@ real clanht_(char *norm, aocl_int_t *n, real *d__, scomplex *e)
     }
     else if(lsame_(norm, "M", 1, 1))
     {
-        /* Find max(f2c_abs(A(i,j))). */
+        /* Find fla_max(f2c_abs(A(i,j))). */
         anorm = (r__1 = d__[*n], f2c_abs(r__1));
         i__1 = *n - 1;
         for(i__ = 1; i__ <= i__1; ++i__)

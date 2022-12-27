@@ -276,19 +276,19 @@ void dtgexc_(logical *wantq, logical *wantz, aocl_int_t *n, doublereal *a, aocl_
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -7;
     }
-    else if(*ldq < 1 || *wantq && *ldq < fla_max(1, *n))
+    else if (*ldq < 1 || *wantq && *ldq < fla_max(1,*n))
     {
         *info = -9;
     }
-    else if(*ldz < 1 || *wantz && *ldz < fla_max(1, *n))
+    else if (*ldz < 1 || *wantz && *ldz < fla_max(1,*n))
     {
         *info = -11;
     }

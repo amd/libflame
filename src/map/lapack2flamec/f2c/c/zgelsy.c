@@ -273,7 +273,7 @@ void zgelsy_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_i
     --work;
     --rwork;
     /* Function Body */
-    mn = fla_min(*m, *n);
+    mn = fla_min(*m,*n);
     ismin = mn + 1;
     ismax = (mn << 1) + 1;
     /* Test the input arguments. */
@@ -283,18 +283,18 @@ void zgelsy_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_i
     nb3 = aocl_lapack_ilaenv(&c__1, "ZUNMQR", " ", m, n, nrhs, &c_n1);
     nb4 = aocl_lapack_ilaenv(&c__1, "ZUNMRQ", " ", m, n, nrhs, &c_n1);
     /* Computing MAX */
-    i__1 = fla_max(nb1, nb2);
-    i__1 = fla_max(i__1, nb3); // , expr subst
-    nb = fla_max(i__1, nb4);
+    i__1 = fla_max(nb1,nb2);
+    i__1 = fla_max(i__1,nb3); // , expr subst
+    nb = fla_max(i__1,nb4);
     /* Computing MAX */
     i__1 = 1, i__2 = mn + (*n << 1) + nb * (*n + 1);
-    i__1 = fla_max(i__1, i__2);
+    i__1 = fla_max(i__1,i__2);
     i__2 = (mn << 1) + nb * *nrhs; // ; expr subst
-    lwkopt = fla_max(i__1, i__2);
-    z__1.real = (doublereal)lwkopt;
-    z__1.imag = 0.; // , expr subst
-    work[1].real = z__1.real;
-    work[1].imag = z__1.imag; // , expr subst
+    lwkopt = fla_max(i__1,i__2);
+    z__1.r = (doublereal) lwkopt;
+    z__1.i = 0.; // , expr subst
+    work[1].r = z__1.r;
+    work[1].i = z__1.i; // , expr subst
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -308,15 +308,15 @@ void zgelsy_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_i
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -5;
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__1 = fla_max(1, *m);
-        if(*ldb < fla_max(i__1, *n))
+        i__1 = fla_max(1,*m);
+        if (*ldb < fla_max(i__1,*n))
         {
             *info = -7;
         }
@@ -324,9 +324,9 @@ void zgelsy_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_i
         {
             /* Computing MAX */
             i__1 = mn << 1, i__2 = *n + 1;
-            i__1 = fla_max(i__1, i__2);
+            i__1 = fla_max(i__1,i__2);
             i__2 = mn + *nrhs; // ; expr subst
-            if(*lwork < mn + fla_max(i__1, i__2) && !lquery)
+            if (*lwork < mn + fla_max(i__1,i__2) && ! lquery)
             {
                 *info = -12;
             }
@@ -346,8 +346,8 @@ void zgelsy_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_i
     }
     /* Quick return if possible */
     /* Computing MIN */
-    i__1 = fla_min(*m, *n);
-    if(fla_min(i__1, *nrhs) == 0)
+    i__1 = fla_min(*m,*n);
+    if (fla_min(i__1,*nrhs) == 0)
     {
         *rank = 0;
         AOCL_DTL_TRACE_LOG_EXIT
@@ -374,8 +374,8 @@ void zgelsy_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_i
     else if(anrm == 0.)
     {
         /* Matrix all zero. Return zero solution. */
-        i__1 = fla_max(*m, *n);
-        aocl_lapack_zlaset("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
+        i__1 = fla_max(*m,*n);
+        zlaset_("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         *rank = 0;
         goto L70;
     }
@@ -414,8 +414,8 @@ void zgelsy_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_i
     if (z_abs(&a[a_dim1 + 1]) == 0.)
     {
         *rank = 0;
-        i__1 = fla_max(*m, *n);
-        aocl_lapack_zlaset("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
+        i__1 = fla_max(*m,*n);
+        zlaset_("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         goto L70;
     }
     else
@@ -481,9 +481,9 @@ L10:
     /* Computing MAX */
     i__1 = (mn << 1) + 1;
     d__1 = wsize;
-    d__2 = (mn << 1) + work[i__1].real; // , expr subst
-    wsize = fla_max(d__1, d__2);
-    /* scomplex workspace: 2*MN+NB*NRHS. */
+    d__2 = (mn << 1) + work[i__1].r; // , expr subst
+    wsize = fla_max(d__1,d__2);
+    /* complex workspace: 2*MN+NB*NRHS. */
     /* B(1:RANK,1:NRHS) := inv(T11) * B(1:RANK,1:NRHS) */
     aocl_blas_ztrsm("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b2, &a[a_offset],
                     lda, &b[b_offset], ldb);

@@ -338,7 +338,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -7;
     }
@@ -512,7 +512,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
         i__2 = j;
         r__3 = xmax;
         r__4 = (r__1 = x[i__2].r / 2.f, f2c_abs(r__1)) + (r__2 = x[j].i / 2.f, f2c_abs(r__2)); // , expr subst
-        xmax = max(r__3,r__4);
+        xmax = fla_max(r__3,r__4);
         /* L30: */
     }
     xbnd = xmax;
@@ -541,9 +541,9 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
             /* A is non-unit triangular. */
             /* Compute GROW = 1/G(j) and XBND = 1/M(j). */
             /* Initially, G(0) = max{
-           x(i), i=1,...,n}
-           . */
-            grow = .5f / fla_max(xbnd, smlnum);
+            x(i), i=1,...,n}
+            . */
+            grow = .5f / fla_max(xbnd,smlnum);
             xbnd = grow;
             i__1 = jlast;
             i__2 = jinc;
@@ -563,8 +563,8 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
                     /* M(j) = G(j-1) / f2c_abs(A(j,j)) */
                     /* Computing MIN */
                     r__1 = xbnd;
-                    r__2 = fla_min(1.f, tjj) * grow; // , expr subst
-                    xbnd = fla_min(r__1, r__2);
+                    r__2 = fla_min(1.f,tjj) * grow; // , expr subst
+                    xbnd = fla_min(r__1,r__2);
                 }
                 else
                 {
@@ -593,8 +593,8 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
            . */
             /* Computing MIN */
             r__1 = 1.f;
-            r__2 = .5f / fla_max(xbnd, smlnum); // , expr subst
-            grow = fla_min(r__1, r__2);
+            r__2 = .5f / fla_max(xbnd,smlnum); // , expr subst
+            grow = fla_min(r__1,r__2);
             i__2 = jlast;
             i__1 = jinc;
             for(j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1)
@@ -636,9 +636,9 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
             /* A is non-unit triangular. */
             /* Compute GROW = 1/G(j) and XBND = 1/M(j). */
             /* Initially, M(0) = max{
-           x(i), i=1,...,n}
-           . */
-            grow = .5f / fla_max(xbnd, smlnum);
+            x(i), i=1,...,n}
+            . */
+            grow = .5f / fla_max(xbnd,smlnum);
             xbnd = grow;
             i__1 = jlast;
             i__2 = jinc;
@@ -654,7 +654,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
                 /* Computing MIN */
                 r__1 = grow;
                 r__2 = xbnd / xj; // , expr subst
-                grow = fla_min(r__1, r__2);
+                grow = fla_min(r__1,r__2);
                 i__3 = j + j * a_dim1;
                 tjjs.r = a[i__3].r;
                 tjjs.i = a[i__3].i; // , expr subst
@@ -674,7 +674,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
                 }
                 /* L70: */
             }
-            grow = fla_min(grow, xbnd);
+            grow = fla_min(grow,xbnd);
         }
         else
         {
@@ -684,8 +684,8 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
            . */
             /* Computing MIN */
             r__1 = 1.f;
-            r__2 = .5f / fla_max(xbnd, smlnum); // , expr subst
-            grow = fla_min(r__1, r__2);
+            r__2 = .5f / fla_max(xbnd,smlnum); // , expr subst
+            grow = fla_min(r__1,r__2);
             i__2 = jlast;
             i__1 = jinc;
             for(j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1)
@@ -891,7 +891,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
                 xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = x[j].i, f2c_abs(r__2));
                 uscal.r = tscal;
                 uscal.i = 0.f; // , expr subst
-                rec = 1.f / max(xmax,1.f);
+                rec = 1.f / fla_max(xmax,1.f);
                 if (cnorm[j] > (bignum - xj) * rec)
                 {
                     /* If x(j) could overflow, scale x by 1/(2*XMAX). */
@@ -916,7 +916,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
                         /* Computing MIN */
                         r__1 = 1.f;
                         r__2 = rec * tjj; // , expr subst
-                        rec = min(r__1,r__2);
+                        rec = fla_min(r__1,r__2);
                         cladiv_f2c_(&q__1, &uscal, &tjjs);
                         uscal.r = q__1.r;
                         uscal.i = q__1.i; // , expr subst
@@ -1092,7 +1092,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
                 i__3 = j;
                 r__3 = xmax;
                 r__4 = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = x[j].i, f2c_abs(r__2)); // , expr subst
-                xmax = max(r__3,r__4);
+                xmax = fla_max(r__3,r__4);
                 /* L150: */
             }
         }
@@ -1109,7 +1109,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
                 xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = x[j].i, f2c_abs(r__2));
                 uscal.r = tscal;
                 uscal.i = 0.f; // , expr subst
-                rec = 1.f / max(xmax,1.f);
+                rec = 1.f / fla_max(xmax,1.f);
                 if (cnorm[j] > (bignum - xj) * rec)
                 {
                     /* If x(j) could overflow, scale x by 1/(2*XMAX). */
@@ -1135,7 +1135,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
                         /* Computing MIN */
                         r__1 = 1.f;
                         r__2 = rec * tjj; // , expr subst
-                        rec = min(r__1,r__2);
+                        rec = fla_min(r__1,r__2);
                         cladiv_f2c_(&q__1, &uscal, &tjjs);
                         uscal.r = q__1.r;
                         uscal.i = q__1.i; // , expr subst
@@ -1314,7 +1314,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
                 i__3 = j;
                 r__3 = xmax;
                 r__4 = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = x[j].i, f2c_abs(r__2)); // , expr subst
-                xmax = max(r__3,r__4);
+                xmax = fla_max(r__3,r__4);
                 /* L190: */
             }
         }

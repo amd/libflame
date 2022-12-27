@@ -400,11 +400,11 @@ void dposvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal
     {
         *info = -4;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -6;
     }
-    else if(*ldaf < fla_max(1, *n))
+    else if (*ldaf < fla_max(1,*n))
     {
         *info = -8;
     }
@@ -424,11 +424,11 @@ void dposvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal
                 /* Computing MIN */
                 d__1 = smin;
                 d__2 = s[j]; // , expr subst
-                smin = fla_min(d__1, d__2);
+                smin = fla_min(d__1,d__2);
                 /* Computing MAX */
                 d__1 = smax;
                 d__2 = s[j]; // , expr subst
-                smax = fla_max(d__1, d__2);
+                smax = fla_max(d__1,d__2);
                 /* L10: */
             }
             if(smin <= 0.)
@@ -437,7 +437,7 @@ void dposvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal
             }
             else if(*n > 0)
             {
-                scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
+                scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
             }
             else
             {
@@ -446,11 +446,11 @@ void dposvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal
         }
         if(*info == 0)
         {
-            if(*ldb < fla_max(1, *n))
+            if (*ldb < fla_max(1,*n))
             {
                 *info = -12;
             }
-            else if(*ldx < fla_max(1, *n))
+            else if (*ldx < fla_max(1,*n))
             {
                 *info = -14;
             }

@@ -40,6 +40,9 @@ FLA_Error FLA_Bsvdd_external( FLA_Uplo uplo, FLA_Obj d, FLA_Obj e, FLA_Obj U, FL
 
   min_m_n  = FLA_Obj_vector_dim( d );
 
+  inc_d    = FLA_Obj_vector_inc( d );
+  inc_e    = FLA_Obj_vector_inc( e );
+
   lwork   = fla_max( 1, 3*min_m_n*min_m_n + 4*min_m_n );
   liwork  = 8*min_m_n;
 

@@ -226,7 +226,7 @@ void dgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl
     --jpvt;
     --work;
     /* Function Body */
-    mn = fla_min(*m, *n);
+    mn = fla_min(*m,*n);
     ismin = mn + 1;
     ismax = (mn << 1) + 1;
     /* Test the input arguments. */
@@ -243,15 +243,15 @@ void dgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -5;
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__1 = fla_max(1, *m);
-        if(*ldb < fla_max(i__1, *n))
+        i__1 = fla_max(1,*m);
+        if (*ldb < fla_max(i__1,*n))
         {
             *info = -7;
         }
@@ -265,8 +265,8 @@ void dgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl
     }
     /* Quick return if possible */
     /* Computing MIN */
-    i__1 = fla_min(*m, *n);
-    if(fla_min(i__1, *nrhs) == 0)
+    i__1 = fla_min(*m,*n);
+    if (fla_min(i__1,*nrhs) == 0)
     {
         *rank = 0;
         AOCL_DTL_TRACE_LOG_EXIT
@@ -293,8 +293,8 @@ void dgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl
     else if(anrm == 0.)
     {
         /* Matrix all zero. Return zero solution. */
-        i__1 = fla_max(*m, *n);
-        aocl_lapack_dlaset("F", &i__1, nrhs, &c_b13, &c_b13, &b[b_offset], ldb);
+        i__1 = fla_max(*m,*n);
+        dlaset_("F", &i__1, nrhs, &c_b13, &c_b13, &b[b_offset], ldb);
         *rank = 0;
         goto L100;
     }
@@ -325,8 +325,8 @@ void dgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl
     if ((d__1 = a[a_dim1 + 1], f2c_dabs(d__1)) == 0.)
     {
         *rank = 0;
-        i__1 = fla_max(*m, *n);
-        aocl_lapack_dlaset("F", &i__1, nrhs, &c_b13, &c_b13, &b[b_offset], ldb);
+        i__1 = fla_max(*m,*n);
+        dlaset_("F", &i__1, nrhs, &c_b13, &c_b13, &b[b_offset], ldb);
         goto L100;
     }
     else

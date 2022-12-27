@@ -344,8 +344,7 @@ void dlatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, doublereal *a, aocl_int_
                 i__2 = *n - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                aocl_lapack_dlarfg(&i__2, &a[i__ + 1 + i__ * a_dim1],
-                                   &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &tau[i__]);
+                dlarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, &tau[i__]);
                 e[i__] = a[i__ + 1 + i__ * a_dim1];
                 a[i__ + 1 + i__ * a_dim1] = 1.;
                 /* Compute W(i+1:n,i) */

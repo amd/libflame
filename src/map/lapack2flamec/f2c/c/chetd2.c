@@ -244,7 +244,7 @@ void chetd2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d__,
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
@@ -346,9 +346,10 @@ void chetd2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d__,
             i__2 = *n - i__;
             /* Computing fla_min */
             i__3 = i__ + 2;
-            aocl_lapack_clarfg(&i__2, &alpha, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &taui);
-            e[i__] = alpha.real;
-            if(taui.real != 0.f || taui.imag != 0.f)
+            clarfg_(&i__2, &alpha, &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, & taui);
+            i__2 = i__;
+            e[i__2] = alpha.r;
+            if (taui.r != 0.f || taui.i != 0.f)
             {
                 /* Apply H(i) from both sides to A(i+1:n,i+1:n) */
                 i__2 = i__ + 1 + i__ * a_dim1;

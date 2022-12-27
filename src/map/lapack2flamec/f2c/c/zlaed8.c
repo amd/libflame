@@ -294,15 +294,15 @@ void zlaed8_(aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz, dcomplex *q, aocl_i
     {
         *info = -3;
     }
-    else if(*ldq < fla_max(1, *n))
+    else if (*ldq < fla_max(1,*n))
     {
         *info = -5;
     }
-    else if(*cutpnt < fla_min(1, *n) || *cutpnt > *n)
+    else if (*cutpnt < fla_min(1,*n) || *cutpnt > *n)
     {
         *info = -8;
     }
-    else if(*ldq2 < fla_max(1, *n))
+    else if (*ldq2 < fla_max(1,*n))
     {
         *info = -12;
     }

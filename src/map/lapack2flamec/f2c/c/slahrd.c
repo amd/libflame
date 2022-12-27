@@ -290,8 +290,7 @@ void aocl_lapack_slahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, real
         i__2 = *n - *k - i__ + 1;
         /* Computing MIN */
         i__3 = *k + i__ + 1;
-        aocl_lapack_slarfg(&i__2, &a[*k + i__ + i__ * a_dim1], &a[fla_min(i__3, *n) + i__ * a_dim1],
-                           &c__1, &tau[i__]);
+        slarfg_(&i__2, &a[*k + i__ + i__ * a_dim1], &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, &tau[i__]);
         ei = a[*k + i__ + i__ * a_dim1];
         a[*k + i__ + i__ * a_dim1] = 1.f;
         /* Compute Y(1:n,i) */

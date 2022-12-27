@@ -254,15 +254,15 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -7;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -9;
     }
-    else if(*ldc < fla_max(1, *m))
+    else if (*ldc < fla_max(1,*m))
     {
         *info = -11;
     }
@@ -287,12 +287,12 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
     smlnum = smlnum * (doublereal)(*m * *n) / eps;
     bignum = 1. / smlnum;
     /* Computing MAX */
-    d__1 = smlnum, d__2 = eps * aocl_lapack_dlange("M", m, m, &a[a_offset], lda, dum);
-    d__1 = fla_max(d__1, d__2);
-    d__2 = eps * aocl_lapack_dlange("M", n, n, &b[b_offset], ldb, dum); // ; expr subst
-    smin = fla_max(d__1, d__2);
-    sgn = (doublereal)(*isgn);
-    if(notrna && notrnb)
+    d__1 = smlnum, d__2 = eps * dlange_("M", m, m, &a[a_offset], lda, dum);
+    d__1 = fla_max(d__1,d__2);
+    d__2 = eps * dlange_("M", n, n, &b[b_offset], ldb, dum); // ; expr subst
+    smin = fla_max(d__1,d__2);
+    sgn = (doublereal) (*isgn);
+    if (notrna && notrnb)
     {
         /* Solve A*X + ISGN*X*B = scale*C. */
         /* The (K,L)th block of X is determined starting from */
@@ -368,8 +368,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__3 = k1 + 1;
                     /* Computing MIN */
                     i__4 = k1 + 1;
-                    suml = aocl_blas_ddot(&i__2, &a[k1 + fla_min(i__3, *m) * a_dim1], lda,
-                                          &c__[fla_min(i__4, *m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__2, &a[k1 + fla_min(i__3,*m) * a_dim1], lda, & c__[fla_min(i__4,*m) + l1 * c_dim1], &c__1);
                     i__2 = l1 - 1;
                     sumr
                         = aocl_blas_ddot(&i__2, &c__[k1 + c_dim1], ldc, &b[l1 * b_dim1 + 1], &c__1);
@@ -411,8 +410,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__3 = k2 + 1;
                     /* Computing MIN */
                     i__4 = k2 + 1;
-                    suml = aocl_blas_ddot(&i__2, &a[k1 + fla_min(i__3, *m) * a_dim1], lda,
-                                          &c__[fla_min(i__4, *m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__2, &a[k1 + fla_min(i__3,*m) * a_dim1], lda, & c__[fla_min(i__4,*m) + l1 * c_dim1], &c__1);
                     i__2 = l1 - 1;
                     sumr
                         = aocl_blas_ddot(&i__2, &c__[k1 + c_dim1], ldc, &b[l1 * b_dim1 + 1], &c__1);
@@ -422,8 +420,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__3 = k2 + 1;
                     /* Computing MIN */
                     i__4 = k2 + 1;
-                    suml = aocl_blas_ddot(&i__2, &a[k2 + fla_min(i__3, *m) * a_dim1], lda,
-                                          &c__[fla_min(i__4, *m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__2, &a[k2 + fla_min(i__3,*m) * a_dim1], lda, & c__[fla_min(i__4,*m) + l1 * c_dim1], &c__1);
                     i__2 = l1 - 1;
                     sumr
                         = aocl_blas_ddot(&i__2, &c__[k2 + c_dim1], ldc, &b[l1 * b_dim1 + 1], &c__1);
@@ -456,8 +453,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__3 = k1 + 1;
                     /* Computing MIN */
                     i__4 = k1 + 1;
-                    suml = aocl_blas_ddot(&i__2, &a[k1 + fla_min(i__3, *m) * a_dim1], lda,
-                                          &c__[fla_min(i__4, *m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__2, &a[k1 + fla_min(i__3,*m) * a_dim1], lda, & c__[fla_min(i__4,*m) + l1 * c_dim1], &c__1);
                     i__2 = l1 - 1;
                     sumr
                         = aocl_blas_ddot(&i__2, &c__[k1 + c_dim1], ldc, &b[l1 * b_dim1 + 1], &c__1);
@@ -467,8 +463,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__3 = k1 + 1;
                     /* Computing MIN */
                     i__4 = k1 + 1;
-                    suml = aocl_blas_ddot(&i__2, &a[k1 + fla_min(i__3, *m) * a_dim1], lda,
-                                          &c__[fla_min(i__4, *m) + l2 * c_dim1], &c__1);
+                    suml = ddot_(&i__2, &a[k1 + fla_min(i__3,*m) * a_dim1], lda, & c__[fla_min(i__4,*m) + l2 * c_dim1], &c__1);
                     i__2 = l1 - 1;
                     sumr
                         = aocl_blas_ddot(&i__2, &c__[k1 + c_dim1], ldc, &b[l2 * b_dim1 + 1], &c__1);
@@ -501,8 +496,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__3 = k2 + 1;
                     /* Computing MIN */
                     i__4 = k2 + 1;
-                    suml = aocl_blas_ddot(&i__2, &a[k1 + fla_min(i__3, *m) * a_dim1], lda,
-                                          &c__[fla_min(i__4, *m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__2, &a[k1 + fla_min(i__3,*m) * a_dim1], lda, & c__[fla_min(i__4,*m) + l1 * c_dim1], &c__1);
                     i__2 = l1 - 1;
                     sumr
                         = aocl_blas_ddot(&i__2, &c__[k1 + c_dim1], ldc, &b[l1 * b_dim1 + 1], &c__1);
@@ -512,8 +506,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__3 = k2 + 1;
                     /* Computing MIN */
                     i__4 = k2 + 1;
-                    suml = aocl_blas_ddot(&i__2, &a[k1 + fla_min(i__3, *m) * a_dim1], lda,
-                                          &c__[fla_min(i__4, *m) + l2 * c_dim1], &c__1);
+                    suml = ddot_(&i__2, &a[k1 + fla_min(i__3,*m) * a_dim1], lda, & c__[fla_min(i__4,*m) + l2 * c_dim1], &c__1);
                     i__2 = l1 - 1;
                     sumr
                         = aocl_blas_ddot(&i__2, &c__[k1 + c_dim1], ldc, &b[l2 * b_dim1 + 1], &c__1);
@@ -523,8 +516,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__3 = k2 + 1;
                     /* Computing MIN */
                     i__4 = k2 + 1;
-                    suml = aocl_blas_ddot(&i__2, &a[k2 + fla_min(i__3, *m) * a_dim1], lda,
-                                          &c__[fla_min(i__4, *m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__2, &a[k2 + fla_min(i__3,*m) * a_dim1], lda, & c__[fla_min(i__4,*m) + l1 * c_dim1], &c__1);
                     i__2 = l1 - 1;
                     sumr
                         = aocl_blas_ddot(&i__2, &c__[k2 + c_dim1], ldc, &b[l1 * b_dim1 + 1], &c__1);
@@ -534,8 +526,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__3 = k2 + 1;
                     /* Computing MIN */
                     i__4 = k2 + 1;
-                    suml = aocl_blas_ddot(&i__2, &a[k2 + fla_min(i__3, *m) * a_dim1], lda,
-                                          &c__[fla_min(i__4, *m) + l2 * c_dim1], &c__1);
+                    suml = ddot_(&i__2, &a[k2 + fla_min(i__3,*m) * a_dim1], lda, & c__[fla_min(i__4,*m) + l2 * c_dim1], &c__1);
                     i__2 = l1 - 1;
                     sumr
                         = aocl_blas_ddot(&i__2, &c__[k2 + c_dim1], ldc, &b[l2 * b_dim1 + 1], &c__1);
@@ -886,8 +877,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__3 = l1 + 1;
                     /* Computing MIN */
                     i__4 = l1 + 1;
-                    sumr = aocl_blas_ddot(&i__2, &c__[k1 + fla_min(i__3, *n) * c_dim1], ldc,
-                                          &b[l1 + fla_min(i__4, *n) * b_dim1], ldb);
+                    sumr = ddot_(&i__2, &c__[k1 + fla_min(i__3,*n) * c_dim1], ldc, &b[l1 + fla_min(i__4,*n) * b_dim1], ldb);
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
                     scaloc = 1.;
                     a11 = a[k1 + k1 * a_dim1] + sgn * b[l1 + l1 * b_dim1];
@@ -929,8 +919,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__3 = l2 + 1;
                     /* Computing MIN */
                     i__4 = l2 + 1;
-                    sumr = aocl_blas_ddot(&i__2, &c__[k1 + fla_min(i__3, *n) * c_dim1], ldc,
-                                          &b[l1 + fla_min(i__4, *n) * b_dim1], ldb);
+                    sumr = ddot_(&i__2, &c__[k1 + fla_min(i__3,*n) * c_dim1], ldc, &b[l1 + fla_min(i__4,*n) * b_dim1], ldb);
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
                     i__2 = k1 - 1;
                     suml = aocl_blas_ddot(&i__2, &a[k2 * a_dim1 + 1], &c__1, &c__[l1 * c_dim1 + 1],
@@ -940,8 +929,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__3 = l2 + 1;
                     /* Computing MIN */
                     i__4 = l2 + 1;
-                    sumr = aocl_blas_ddot(&i__2, &c__[k2 + fla_min(i__3, *n) * c_dim1], ldc,
-                                          &b[l1 + fla_min(i__4, *n) * b_dim1], ldb);
+                    sumr = ddot_(&i__2, &c__[k2 + fla_min(i__3,*n) * c_dim1], ldc, &b[l1 + fla_min(i__4,*n) * b_dim1], ldb);
                     vec[1] = c__[k2 + l1 * c_dim1] - (suml + sgn * sumr);
                     d__1 = -sgn * b[l1 + l1 * b_dim1];
                     aocl_lapack_dlaln2(&c_true, &c__2, &c__1, &smin, &c_b26, &a[k1 + k1 * a_dim1],
@@ -974,8 +962,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__3 = l2 + 1;
                     /* Computing MIN */
                     i__4 = l2 + 1;
-                    sumr = aocl_blas_ddot(&i__2, &c__[k1 + fla_min(i__3, *n) * c_dim1], ldc,
-                                          &b[l1 + fla_min(i__4, *n) * b_dim1], ldb);
+                    sumr = ddot_(&i__2, &c__[k1 + fla_min(i__3,*n) * c_dim1], ldc, &b[l1 + fla_min(i__4,*n) * b_dim1], ldb);
                     vec[0] = sgn * (c__[k1 + l1 * c_dim1] - (suml + sgn * sumr));
                     i__2 = k1 - 1;
                     suml = aocl_blas_ddot(&i__2, &a[k1 * a_dim1 + 1], &c__1, &c__[l2 * c_dim1 + 1],
@@ -985,8 +972,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__3 = l2 + 1;
                     /* Computing MIN */
                     i__4 = l2 + 1;
-                    sumr = aocl_blas_ddot(&i__2, &c__[k1 + fla_min(i__3, *n) * c_dim1], ldc,
-                                          &b[l2 + fla_min(i__4, *n) * b_dim1], ldb);
+                    sumr = ddot_(&i__2, &c__[k1 + fla_min(i__3,*n) * c_dim1], ldc, &b[l2 + fla_min(i__4,*n) * b_dim1], ldb);
                     vec[1] = sgn * (c__[k1 + l2 * c_dim1] - (suml + sgn * sumr));
                     d__1 = -sgn * a[k1 + k1 * a_dim1];
                     aocl_lapack_dlaln2(&c_false, &c__2, &c__1, &smin, &c_b26, &b[l1 + l1 * b_dim1],
@@ -1019,8 +1005,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__3 = l2 + 1;
                     /* Computing MIN */
                     i__4 = l2 + 1;
-                    sumr = aocl_blas_ddot(&i__2, &c__[k1 + fla_min(i__3, *n) * c_dim1], ldc,
-                                          &b[l1 + fla_min(i__4, *n) * b_dim1], ldb);
+                    sumr = ddot_(&i__2, &c__[k1 + fla_min(i__3,*n) * c_dim1], ldc, &b[l1 + fla_min(i__4,*n) * b_dim1], ldb);
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
                     i__2 = k1 - 1;
                     suml = aocl_blas_ddot(&i__2, &a[k1 * a_dim1 + 1], &c__1, &c__[l2 * c_dim1 + 1],
@@ -1030,8 +1015,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__3 = l2 + 1;
                     /* Computing MIN */
                     i__4 = l2 + 1;
-                    sumr = aocl_blas_ddot(&i__2, &c__[k1 + fla_min(i__3, *n) * c_dim1], ldc,
-                                          &b[l2 + fla_min(i__4, *n) * b_dim1], ldb);
+                    sumr = ddot_(&i__2, &c__[k1 + fla_min(i__3,*n) * c_dim1], ldc, &b[l2 + fla_min(i__4,*n) * b_dim1], ldb);
                     vec[2] = c__[k1 + l2 * c_dim1] - (suml + sgn * sumr);
                     i__2 = k1 - 1;
                     suml = aocl_blas_ddot(&i__2, &a[k2 * a_dim1 + 1], &c__1, &c__[l1 * c_dim1 + 1],
@@ -1041,8 +1025,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__3 = l2 + 1;
                     /* Computing MIN */
                     i__4 = l2 + 1;
-                    sumr = aocl_blas_ddot(&i__2, &c__[k2 + fla_min(i__3, *n) * c_dim1], ldc,
-                                          &b[l1 + fla_min(i__4, *n) * b_dim1], ldb);
+                    sumr = ddot_(&i__2, &c__[k2 + fla_min(i__3,*n) * c_dim1], ldc, &b[l1 + fla_min(i__4,*n) * b_dim1], ldb);
                     vec[1] = c__[k2 + l1 * c_dim1] - (suml + sgn * sumr);
                     i__2 = k1 - 1;
                     suml = aocl_blas_ddot(&i__2, &a[k2 * a_dim1 + 1], &c__1, &c__[l2 * c_dim1 + 1],
@@ -1052,8 +1035,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__3 = l2 + 1;
                     /* Computing MIN */
                     i__4 = l2 + 1;
-                    sumr = aocl_blas_ddot(&i__2, &c__[k2 + fla_min(i__3, *n) * c_dim1], ldc,
-                                          &b[l2 + fla_min(i__4, *n) * b_dim1], ldb);
+                    sumr = ddot_(&i__2, &c__[k2 + fla_min(i__3,*n) * c_dim1], ldc, &b[l2 + fla_min(i__4,*n) * b_dim1], ldb);
                     vec[3] = c__[k2 + l2 * c_dim1] - (suml + sgn * sumr);
                     aocl_lapack_dlasy2(&c_true, &c_true, isgn, &c__2, &c__2, &a[k1 + k1 * a_dim1],
                                        lda, &b[l1 + l1 * b_dim1], ldb, vec, &c__2, &scaloc, x,
@@ -1157,15 +1139,13 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__2 = k1 + 1;
                     /* Computing MIN */
                     i__3 = k1 + 1;
-                    suml = aocl_blas_ddot(&i__1, &a[k1 + fla_min(i__2, *m) * a_dim1], lda,
-                                          &c__[fla_min(i__3, *m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__1, &a[k1 + fla_min(i__2,*m) * a_dim1], lda, & c__[fla_min(i__3,*m) + l1 * c_dim1], &c__1);
                     i__1 = *n - l1;
                     /* Computing MIN */
                     i__2 = l1 + 1;
                     /* Computing MIN */
                     i__3 = l1 + 1;
-                    sumr = aocl_blas_ddot(&i__1, &c__[k1 + fla_min(i__2, *n) * c_dim1], ldc,
-                                          &b[l1 + fla_min(i__3, *n) * b_dim1], ldb);
+                    sumr = ddot_(&i__1, &c__[k1 + fla_min(i__2,*n) * c_dim1], ldc, &b[l1 + fla_min(i__3,*n) * b_dim1], ldb);
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
                     scaloc = 1.;
                     a11 = a[k1 + k1 * a_dim1] + sgn * b[l1 + l1 * b_dim1];
@@ -1204,30 +1184,26 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__2 = k2 + 1;
                     /* Computing MIN */
                     i__3 = k2 + 1;
-                    suml = aocl_blas_ddot(&i__1, &a[k1 + fla_min(i__2, *m) * a_dim1], lda,
-                                          &c__[fla_min(i__3, *m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__1, &a[k1 + fla_min(i__2,*m) * a_dim1], lda, & c__[fla_min(i__3,*m) + l1 * c_dim1], &c__1);
                     i__1 = *n - l2;
                     /* Computing MIN */
                     i__2 = l2 + 1;
                     /* Computing MIN */
                     i__3 = l2 + 1;
-                    sumr = aocl_blas_ddot(&i__1, &c__[k1 + fla_min(i__2, *n) * c_dim1], ldc,
-                                          &b[l1 + fla_min(i__3, *n) * b_dim1], ldb);
+                    sumr = ddot_(&i__1, &c__[k1 + fla_min(i__2,*n) * c_dim1], ldc, &b[l1 + fla_min(i__3,*n) * b_dim1], ldb);
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
                     i__1 = *m - k2;
                     /* Computing MIN */
                     i__2 = k2 + 1;
                     /* Computing MIN */
                     i__3 = k2 + 1;
-                    suml = aocl_blas_ddot(&i__1, &a[k2 + fla_min(i__2, *m) * a_dim1], lda,
-                                          &c__[fla_min(i__3, *m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__1, &a[k2 + fla_min(i__2,*m) * a_dim1], lda, & c__[fla_min(i__3,*m) + l1 * c_dim1], &c__1);
                     i__1 = *n - l2;
                     /* Computing MIN */
                     i__2 = l2 + 1;
                     /* Computing MIN */
                     i__3 = l2 + 1;
-                    sumr = aocl_blas_ddot(&i__1, &c__[k2 + fla_min(i__2, *n) * c_dim1], ldc,
-                                          &b[l1 + fla_min(i__3, *n) * b_dim1], ldb);
+                    sumr = ddot_(&i__1, &c__[k2 + fla_min(i__2,*n) * c_dim1], ldc, &b[l1 + fla_min(i__3,*n) * b_dim1], ldb);
                     vec[1] = c__[k2 + l1 * c_dim1] - (suml + sgn * sumr);
                     d__1 = -sgn * b[l1 + l1 * b_dim1];
                     aocl_lapack_dlaln2(&c_false, &c__2, &c__1, &smin, &c_b26, &a[k1 + k1 * a_dim1],
@@ -1257,30 +1233,26 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__2 = k1 + 1;
                     /* Computing MIN */
                     i__3 = k1 + 1;
-                    suml = aocl_blas_ddot(&i__1, &a[k1 + fla_min(i__2, *m) * a_dim1], lda,
-                                          &c__[fla_min(i__3, *m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__1, &a[k1 + fla_min(i__2,*m) * a_dim1], lda, & c__[fla_min(i__3,*m) + l1 * c_dim1], &c__1);
                     i__1 = *n - l2;
                     /* Computing MIN */
                     i__2 = l2 + 1;
                     /* Computing MIN */
                     i__3 = l2 + 1;
-                    sumr = aocl_blas_ddot(&i__1, &c__[k1 + fla_min(i__2, *n) * c_dim1], ldc,
-                                          &b[l1 + fla_min(i__3, *n) * b_dim1], ldb);
+                    sumr = ddot_(&i__1, &c__[k1 + fla_min(i__2,*n) * c_dim1], ldc, &b[l1 + fla_min(i__3,*n) * b_dim1], ldb);
                     vec[0] = sgn * (c__[k1 + l1 * c_dim1] - (suml + sgn * sumr));
                     i__1 = *m - k1;
                     /* Computing MIN */
                     i__2 = k1 + 1;
                     /* Computing MIN */
                     i__3 = k1 + 1;
-                    suml = aocl_blas_ddot(&i__1, &a[k1 + fla_min(i__2, *m) * a_dim1], lda,
-                                          &c__[fla_min(i__3, *m) + l2 * c_dim1], &c__1);
+                    suml = ddot_(&i__1, &a[k1 + fla_min(i__2,*m) * a_dim1], lda, & c__[fla_min(i__3,*m) + l2 * c_dim1], &c__1);
                     i__1 = *n - l2;
                     /* Computing MIN */
                     i__2 = l2 + 1;
                     /* Computing MIN */
                     i__3 = l2 + 1;
-                    sumr = aocl_blas_ddot(&i__1, &c__[k1 + fla_min(i__2, *n) * c_dim1], ldc,
-                                          &b[l2 + fla_min(i__3, *n) * b_dim1], ldb);
+                    sumr = ddot_(&i__1, &c__[k1 + fla_min(i__2,*n) * c_dim1], ldc, &b[l2 + fla_min(i__3,*n) * b_dim1], ldb);
                     vec[1] = sgn * (c__[k1 + l2 * c_dim1] - (suml + sgn * sumr));
                     d__1 = -sgn * a[k1 + k1 * a_dim1];
                     aocl_lapack_dlaln2(&c_false, &c__2, &c__1, &smin, &c_b26, &b[l1 + l1 * b_dim1],
@@ -1310,60 +1282,52 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
                     i__2 = k2 + 1;
                     /* Computing MIN */
                     i__3 = k2 + 1;
-                    suml = aocl_blas_ddot(&i__1, &a[k1 + fla_min(i__2, *m) * a_dim1], lda,
-                                          &c__[fla_min(i__3, *m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__1, &a[k1 + fla_min(i__2,*m) * a_dim1], lda, & c__[fla_min(i__3,*m) + l1 * c_dim1], &c__1);
                     i__1 = *n - l2;
                     /* Computing MIN */
                     i__2 = l2 + 1;
                     /* Computing MIN */
                     i__3 = l2 + 1;
-                    sumr = aocl_blas_ddot(&i__1, &c__[k1 + fla_min(i__2, *n) * c_dim1], ldc,
-                                          &b[l1 + fla_min(i__3, *n) * b_dim1], ldb);
+                    sumr = ddot_(&i__1, &c__[k1 + fla_min(i__2,*n) * c_dim1], ldc, &b[l1 + fla_min(i__3,*n) * b_dim1], ldb);
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
                     i__1 = *m - k2;
                     /* Computing MIN */
                     i__2 = k2 + 1;
                     /* Computing MIN */
                     i__3 = k2 + 1;
-                    suml = aocl_blas_ddot(&i__1, &a[k1 + fla_min(i__2, *m) * a_dim1], lda,
-                                          &c__[fla_min(i__3, *m) + l2 * c_dim1], &c__1);
+                    suml = ddot_(&i__1, &a[k1 + fla_min(i__2,*m) * a_dim1], lda, & c__[fla_min(i__3,*m) + l2 * c_dim1], &c__1);
                     i__1 = *n - l2;
                     /* Computing MIN */
                     i__2 = l2 + 1;
                     /* Computing MIN */
                     i__3 = l2 + 1;
-                    sumr = aocl_blas_ddot(&i__1, &c__[k1 + fla_min(i__2, *n) * c_dim1], ldc,
-                                          &b[l2 + fla_min(i__3, *n) * b_dim1], ldb);
+                    sumr = ddot_(&i__1, &c__[k1 + fla_min(i__2,*n) * c_dim1], ldc, &b[l2 + fla_min(i__3,*n) * b_dim1], ldb);
                     vec[2] = c__[k1 + l2 * c_dim1] - (suml + sgn * sumr);
                     i__1 = *m - k2;
                     /* Computing MIN */
                     i__2 = k2 + 1;
                     /* Computing MIN */
                     i__3 = k2 + 1;
-                    suml = aocl_blas_ddot(&i__1, &a[k2 + fla_min(i__2, *m) * a_dim1], lda,
-                                          &c__[fla_min(i__3, *m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__1, &a[k2 + fla_min(i__2,*m) * a_dim1], lda, & c__[fla_min(i__3,*m) + l1 * c_dim1], &c__1);
                     i__1 = *n - l2;
                     /* Computing MIN */
                     i__2 = l2 + 1;
                     /* Computing MIN */
                     i__3 = l2 + 1;
-                    sumr = aocl_blas_ddot(&i__1, &c__[k2 + fla_min(i__2, *n) * c_dim1], ldc,
-                                          &b[l1 + fla_min(i__3, *n) * b_dim1], ldb);
+                    sumr = ddot_(&i__1, &c__[k2 + fla_min(i__2,*n) * c_dim1], ldc, &b[l1 + fla_min(i__3,*n) * b_dim1], ldb);
                     vec[1] = c__[k2 + l1 * c_dim1] - (suml + sgn * sumr);
                     i__1 = *m - k2;
                     /* Computing MIN */
                     i__2 = k2 + 1;
                     /* Computing MIN */
                     i__3 = k2 + 1;
-                    suml = aocl_blas_ddot(&i__1, &a[k2 + fla_min(i__2, *m) * a_dim1], lda,
-                                          &c__[fla_min(i__3, *m) + l2 * c_dim1], &c__1);
+                    suml = ddot_(&i__1, &a[k2 + fla_min(i__2,*m) * a_dim1], lda, & c__[fla_min(i__3,*m) + l2 * c_dim1], &c__1);
                     i__1 = *n - l2;
                     /* Computing MIN */
                     i__2 = l2 + 1;
                     /* Computing MIN */
                     i__3 = l2 + 1;
-                    sumr = aocl_blas_ddot(&i__1, &c__[k2 + fla_min(i__2, *n) * c_dim1], ldc,
-                                          &b[l2 + fla_min(i__3, *n) * b_dim1], ldb);
+                    sumr = ddot_(&i__1, &c__[k2 + fla_min(i__2,*n) * c_dim1], ldc, &b[l2 + fla_min(i__3,*n) * b_dim1], ldb);
                     vec[3] = c__[k2 + l2 * c_dim1] - (suml + sgn * sumr);
                     aocl_lapack_dlasy2(&c_false, &c_true, isgn, &c__2, &c__2, &a[k1 + k1 * a_dim1],
                                        lda, &b[l1 + l1 * b_dim1], ldb, vec, &c__2, &scaloc, x,

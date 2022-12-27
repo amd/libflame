@@ -176,29 +176,28 @@ void cunghr_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, scomplex *a, aocl_
     {
         *info = -1;
     }
-    else if(*ilo < 1 || *ilo > fla_max(1, *n))
+    else if (*ilo < 1 || *ilo > fla_max(1,*n))
     {
         *info = -2;
     }
-    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
+    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
-    else if(*lwork < fla_max(1, nh) && !lquery)
+    else if (*lwork < fla_max(1,nh) && ! lquery)
     {
         *info = -8;
     }
     if(*info == 0)
     {
-        nb = aocl_lapack_ilaenv(&c__1, "CUNGQR", " ", &nh, &nh, &nh, &c_n1);
-        lwkopt = fla_max(1, nh) * nb;
-        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].real = r__1;
-        work[1].imag = 0.f; // , expr subst
+        nb = ilaenv_(&c__1, "CUNGQR", " ", &nh, &nh, &nh, &c_n1);
+        lwkopt = fla_max(1,nh) * nb;
+        work[1].r = (real) lwkopt;
+        work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {

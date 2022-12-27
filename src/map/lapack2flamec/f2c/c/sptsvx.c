@@ -292,11 +292,11 @@ void sptsvx_(char *fact, aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, re
     {
         *info = -3;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -9;
     }
-    else if(*ldx < fla_max(1, *n))
+    else if (*ldx < fla_max(1,*n))
     {
         *info = -11;
     }

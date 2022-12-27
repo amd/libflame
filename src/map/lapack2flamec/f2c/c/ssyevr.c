@@ -434,11 +434,11 @@ void ssyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *a, aocl_i
     /* Computing MAX */
     i__1 = 1;
     i__2 = *n * 26; // , expr subst
-    lwmin = fla_max(i__1, i__2);
+    lwmin = fla_max(i__1,i__2);
     /* Computing MAX */
     i__1 = 1;
     i__2 = *n * 10; // , expr subst
-    liwmin = fla_max(i__1, i__2);
+    liwmin = fla_max(i__1,i__2);
     *info = 0;
     if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
@@ -456,7 +456,7 @@ void ssyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *a, aocl_i
     {
         *info = -4;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -6;
     }
@@ -471,11 +471,11 @@ void ssyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *a, aocl_i
         }
         else if(indeig)
         {
-            if(*il < 1 || *il > fla_max(1, *n))
+            if (*il < 1 || *il > fla_max(1,*n))
             {
                 *info = -9;
             }
-            else if(*iu < fla_min(*n, *il) || *iu > *n)
+            else if (*iu < fla_min(*n,*il) || *iu > *n)
             {
                 *info = -10;
             }
@@ -493,14 +493,14 @@ void ssyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *a, aocl_i
         nb = aocl_lapack_ilaenv(&c__1, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
         /* Computing MAX */
         i__1 = nb;
-        i__2 = aocl_lapack_ilaenv(&c__1, "SORMTR", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
-        nb = fla_max(i__1, i__2);
+        i__2 = ilaenv_(&c__1, "SORMTR", uplo, n, &c_n1, &c_n1, & c_n1); // , expr subst
+        nb = fla_max(i__1,i__2);
         /* Computing MAX */
         i__1 = (nb + 1) * *n;
-        lwkopt = fla_max(i__1, lwmin);
-        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
-        iwork[1] = (aocl_int_t)(liwmin);
-        if(*lwork < lwmin && !lquery)
+        lwkopt = fla_max(i__1,lwmin);
+        work[1] = (real) lwkopt;
+        iwork[1] = liwmin;
+        if (*lwork < lwmin && ! lquery)
         {
             *info = -18;
         }
@@ -563,7 +563,7 @@ void ssyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *a, aocl_i
     /* Computing MIN */
     r__1 = sqrt(bignum);
     r__2 = 1.f / sqrt(sqrt(safmin)); // , expr subst
-    rmax = fla_min(r__1, r__2);
+    rmax = fla_min(r__1,r__2);
     /* Scale matrix to allowable range, if necessary. */
     iscale = 0;
     abstll = *abstol;

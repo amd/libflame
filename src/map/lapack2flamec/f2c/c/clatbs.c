@@ -117,8 +117,8 @@ static real c_b36 = .5f;
 /* > first KD+1 rows of the array. The j-th column of A is stored */
 /* > in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
- */
-/* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=min(n,j+kd). */
+*/
+/* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LDAB */
@@ -395,8 +395,8 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                 /* Computing MIN */
                 i__2 = *kd;
                 i__3 = j - 1; // , expr subst
-                jlen = fla_min(i__2, i__3);
-                cnorm[j] = aocl_blas_scasum(&jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1);
+                jlen = fla_min(i__2,i__3);
+                cnorm[j] = scasum_(&jlen, &ab[*kd + 1 - jlen + j * ab_dim1], & c__1);
                 /* L10: */
             }
         }
@@ -409,8 +409,8 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                 /* Computing MIN */
                 i__2 = *kd;
                 i__3 = *n - j; // , expr subst
-                jlen = fla_min(i__2, i__3);
-                if(jlen > 0)
+                jlen = fla_min(i__2,i__3);
+                if (jlen > 0)
                 {
                     cnorm[j] = aocl_blas_scasum(&jlen, &ab[j * ab_dim1 + 2], &c__1);
                 }
@@ -445,7 +445,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
         i__2 = j;
         r__3 = xmax;
         r__4 = (r__1 = x[i__2].r / 2.f, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]) / 2.f, f2c_abs(r__2)); // , expr subst
-        xmax = max(r__3,r__4);
+        xmax = fla_max(r__3,r__4);
         /* L30: */
     }
     xbnd = xmax;
@@ -478,7 +478,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
             /* Initially, G(0) = max{
             x(i), i=1,...,n}
             . */
-            grow = .5f / fla_max(xbnd, smlnum);
+            grow = .5f / fla_max(xbnd,smlnum);
             xbnd = grow;
             i__1 = jlast;
             i__2 = jinc;
@@ -498,8 +498,8 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                     /* M(j) = G(j-1) / f2c_abs(A(j,j)) */
                     /* Computing MIN */
                     r__1 = xbnd;
-                    r__2 = fla_min(1.f, tjj) * grow; // , expr subst
-                    xbnd = fla_min(r__1, r__2);
+                    r__2 = fla_min(1.f,tjj) * grow; // , expr subst
+                    xbnd = fla_min(r__1,r__2);
                 }
                 else
                 {
@@ -528,8 +528,8 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
             . */
             /* Computing MIN */
             r__1 = 1.f;
-            r__2 = .5f / fla_max(xbnd, smlnum); // , expr subst
-            grow = fla_min(r__1, r__2);
+            r__2 = .5f / fla_max(xbnd,smlnum); // , expr subst
+            grow = fla_min(r__1,r__2);
             i__2 = jlast;
             i__1 = jinc;
             for(j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1)
@@ -575,7 +575,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
             /* Initially, M(0) = max{
             x(i), i=1,...,n}
             . */
-            grow = .5f / fla_max(xbnd, smlnum);
+            grow = .5f / fla_max(xbnd,smlnum);
             xbnd = grow;
             i__1 = jlast;
             i__2 = jinc;
@@ -591,7 +591,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                 /* Computing MIN */
                 r__1 = grow;
                 r__2 = xbnd / xj; // , expr subst
-                grow = fla_min(r__1, r__2);
+                grow = fla_min(r__1,r__2);
                 i__3 = maind + j * ab_dim1;
                 tjjs.r = ab[i__3].r;
                 tjjs.i = ab[i__3].i; // , expr subst
@@ -611,7 +611,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                 }
                 /* L70: */
             }
-            grow = fla_min(grow, xbnd);
+            grow = fla_min(grow,xbnd);
         }
         else
         {
@@ -621,8 +621,8 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
             . */
             /* Computing MIN */
             r__1 = 1.f;
-            r__2 = .5f / fla_max(xbnd, smlnum); // , expr subst
-            grow = fla_min(r__1, r__2);
+            r__2 = .5f / fla_max(xbnd,smlnum); // , expr subst
+            grow = fla_min(r__1,r__2);
             i__2 = jlast;
             i__1 = jinc;
             for(j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1)
@@ -778,12 +778,12 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                     if(j > 1)
                     {
                         /* Compute the update */
-                        /* x (fla_max(1,j-kd):j-1) := x (fla_max(1,j-kd):j-1) - */
-                        /* x(j)* A (fla_max(1,j-kd):j-1,j) */
+                        /* x(fla_max(1,j-kd):j-1) := x(fla_max(1,j-kd):j-1) - */
+                        /* x(j)* A(fla_max(1,j-kd):j-1,j) */
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
-                        jlen = fla_min(i__3, i__4);
+                        jlen = fla_min(i__3,i__4);
                         i__3 = j;
                         q__2.r = -x[i__3].r;
                         q__2.i = -x[i__3].i; // , expr subst
@@ -799,13 +799,13 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                 else if(j < *n)
                 {
                     /* Compute the update */
-                    /* x(j+1:min(j+kd,n)) := x(j+1:min(j+kd,n)) - */
-                    /* x(j) * A(j+1:min(j+kd,n),j) */
+                    /* x(j+1:fla_min(j+kd,n)) := x(j+1:fla_min(j+kd,n)) - */
+                    /* x(j) * A(j+1:fla_min(j+kd,n),j) */
                     /* Computing MIN */
                     i__3 = *kd;
                     i__4 = *n - j; // , expr subst
-                    jlen = fla_min(i__3, i__4);
-                    if(jlen > 0)
+                    jlen = fla_min(i__3,i__4);
+                    if (jlen > 0)
                     {
                         i__3 = j;
                         q__2.real = -x[i__3].real;
@@ -836,7 +836,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                 xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                 uscal.r = tscal;
                 uscal.i = 0.f; // , expr subst
-                rec = 1.f / max(xmax,1.f);
+                rec = 1.f / fla_max(xmax,1.f);
                 if (cnorm[j] > (bignum - xj) * rec)
                 {
                     /* If x(j) could overflow, scale x by 1/(2*XMAX). */
@@ -861,7 +861,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                         /* Computing MIN */
                         r__1 = 1.f;
                         r__2 = rec * tjj; // , expr subst
-                        rec = min(r__1,r__2);
+                        rec = fla_min(r__1,r__2);
                         cladiv_f2c_(&q__1, &uscal, &tjjs);
                         uscal.r = q__1.r;
                         uscal.i = q__1.i; // , expr subst
@@ -884,7 +884,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
-                        jlen = min(i__3,i__4);
+                        jlen = fla_min(i__3,i__4);
                         cdotu_f2c_(&q__1, &jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen], &c__1);
                         csumj.r = q__1.r;
                         csumj.i = q__1.i; // , expr subst
@@ -894,8 +894,8 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = *n - j; // , expr subst
-                        jlen = fla_min(i__3, i__4);
-                        if(jlen > 1)
+                        jlen = fla_min(i__3,i__4);
+                        if (jlen > 1)
                         {
                             aocl_lapack_cdotu_f2c(&q__1, &jlen, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1], &c__1);
                             csumj.real = q__1.real;
@@ -911,7 +911,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
-                        jlen = fla_min(i__3, i__4);
+                        jlen = fla_min(i__3,i__4);
                         i__3 = jlen;
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
@@ -933,7 +933,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = *n - j; // , expr subst
-                        jlen = fla_min(i__3, i__4);
+                        jlen = fla_min(i__3,i__4);
                         i__3 = jlen;
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
@@ -1054,7 +1054,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                 i__3 = j;
                 r__3 = xmax;
                 r__4 = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2)); // , expr subst
-                xmax = max(r__3,r__4);
+                xmax = fla_max(r__3,r__4);
                 /* L150: */
             }
         }
@@ -1071,7 +1071,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                 xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                 uscal.r = tscal;
                 uscal.i = 0.f; // , expr subst
-                rec = 1.f / max(xmax,1.f);
+                rec = 1.f / fla_max(xmax,1.f);
                 if (cnorm[j] > (bignum - xj) * rec)
                 {
                     /* If x(j) could overflow, scale x by 1/(2*XMAX). */
@@ -1096,7 +1096,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                         /* Computing MIN */
                         r__1 = 1.f;
                         r__2 = rec * tjj; // , expr subst
-                        rec = min(r__1,r__2);
+                        rec = fla_min(r__1,r__2);
                         cladiv_f2c_(&q__1, &uscal, &tjjs);
                         uscal.r = q__1.r;
                         uscal.i = q__1.i; // , expr subst
@@ -1119,7 +1119,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
-                        jlen = min(i__3,i__4);
+                        jlen = fla_min(i__3,i__4);
                         cdotc_f2c_(&q__1, &jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen], &c__1);
                         csumj.r = q__1.r;
                         csumj.i = q__1.i; // , expr subst
@@ -1129,8 +1129,8 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = *n - j; // , expr subst
-                        jlen = fla_min(i__3, i__4);
-                        if(jlen > 1)
+                        jlen = fla_min(i__3,i__4);
+                        if (jlen > 1)
                         {
                             aocl_lapack_cdotc_f2c(&q__1, &jlen, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1], &c__1);
                             csumj.real = q__1.real;
@@ -1146,7 +1146,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
-                        jlen = fla_min(i__3, i__4);
+                        jlen = fla_min(i__3,i__4);
                         i__3 = jlen;
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
@@ -1168,7 +1168,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = *n - j; // , expr subst
-                        jlen = fla_min(i__3, i__4);
+                        jlen = fla_min(i__3,i__4);
                         i__3 = jlen;
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
@@ -1289,7 +1289,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                 i__3 = j;
                 r__3 = xmax;
                 r__4 = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2)); // , expr subst
-                xmax = max(r__3,r__4);
+                xmax = fla_max(r__3,r__4);
                 /* L190: */
             }
         }

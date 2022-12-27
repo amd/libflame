@@ -411,11 +411,11 @@ void cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, aocl_int_t *n,
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -7;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -9;
     }
@@ -438,26 +438,21 @@ void cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, aocl_int_t *n,
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n << 1; // , expr subst
-        lwkmin = fla_max(i__1, i__2);
+        lwkmin = fla_max(i__1,i__2);
         /* Computing MAX */
         i__1 = 1;
-        i__2 = *n
-               + *n * aocl_lapack_ilaenv(&c__1, "CGEQRF", " ", n, &c__1, n, &c__0); // , expr subst
-        lwkopt = fla_max(i__1, i__2);
+        i__2 = *n + *n * ilaenv_(&c__1, "CGEQRF", " ", n, &c__1, n, &c__0); // , expr subst
+        lwkopt = fla_max(i__1,i__2);
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = *n
-               + *n * aocl_lapack_ilaenv(&c__1, "CUNMQR", " ", n, &c__1, n, &c_n1); // , expr subst
-        lwkopt = fla_max(i__1, i__2);
-        if(ilvsl)
+        i__2 = *n + *n * ilaenv_(&c__1, "CUNMQR", " ", n, & c__1, n, &c_n1); // , expr subst
+        lwkopt = fla_max(i__1,i__2);
+        if (ilvsl)
         {
             /* Computing MAX */
             i__1 = lwkopt;
-            i__2 = *n
-                   + *n
-                         * aocl_lapack_ilaenv(&c__1, "CUNGQR", " ", n, &c__1, n,
-                                              &c_n1); // , expr subst
-            lwkopt = fla_max(i__1, i__2);
+            i__2 = *n + *n * ilaenv_(&c__1, "CUNGQR", " ", n, & c__1, n, &c_n1); // , expr subst
+            lwkopt = fla_max(i__1,i__2);
         }
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
         work[1].real = r__1;

@@ -262,7 +262,7 @@ void chetrd_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d__,
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
@@ -307,9 +307,9 @@ void chetrd_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d__,
         /* (last block is always handled by unblocked code). */
         /* Computing MAX */
         i__1 = nb;
-        i__2 = aocl_lapack_ilaenv(&c__3, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
-        nx = fla_max(i__1, i__2);
-        if(nx < *n)
+        i__2 = ilaenv_(&c__3, "CHETRD", uplo, n, &c_n1, &c_n1, & c_n1); // , expr subst
+        nx = fla_max(i__1,i__2);
+        if (nx < *n)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *n;
@@ -321,9 +321,9 @@ void chetrd_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d__,
                 /* unblocked code by setting NX = N. */
                 /* Computing MAX */
                 i__1 = *lwork / ldwork;
-                nb = fla_max(i__1, 1);
-                nbmin = aocl_lapack_ilaenv(&c__2, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
-                if(nb < nbmin)
+                nb = fla_max(i__1,1);
+                nbmin = ilaenv_(&c__2, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
+                if (nb < nbmin)
                 {
                     nx = *n;
                 }

@@ -227,7 +227,7 @@ void aocl_lapack_slaed1(aocl_int64_t *n, real *d__, real *q, aocl_int64_t *ldq, 
     {
         *info = -1;
     }
-    else if(*ldq < fla_max(1, *n))
+    else if (*ldq < fla_max(1,*n))
     {
         *info = -4;
     }
@@ -236,7 +236,7 @@ void aocl_lapack_slaed1(aocl_int64_t *n, real *d__, real *q, aocl_int64_t *ldq, 
         /* Computing MIN */
         i__1 = 1;
         i__2 = *n / 2; // , expr subst
-        if(fla_min(i__1, i__2) > *cutpnt || *n / 2 < *cutpnt)
+        if (fla_min(i__1,i__2) > *cutpnt || *n / 2 < *cutpnt)
         {
             *info = -7;
         }

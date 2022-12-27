@@ -88,7 +88,7 @@ static aocl_int64_t c__1 = 1;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
- */
+*/
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > On exit, the diagonal elements of AB are overwritten by the */
 /* > diagonal elements of the tridiagonal matrix T;
@@ -248,7 +248,7 @@ void dsbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *
     {
         *info = -6;
     }
-    else if(*ldq < fla_max(1, *n) && wantq)
+    else if (*ldq < fla_max(1,*n) && wantq)
     {
         *info = -10;
     }
@@ -277,8 +277,8 @@ void dsbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *
     inca = kd1 * *ldab;
     /* Computing MIN */
     i__1 = *n - 1;
-    kdn = fla_min(i__1, *kd);
-    if(upper)
+    kdn = fla_min(i__1,*kd);
+    if (upper)
     {
         if(*kd > 1)
         {
@@ -399,7 +399,7 @@ void dsbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *
                             /* Computing MIN */
                             i__2 = kdm1;
                             i__3 = *n - j2; // , expr subst
-                            lend = fla_min(i__2, i__3);
+                            lend = fla_min(i__2,i__3);
                             last = j1end + kd1;
                             if(lend > 0)
                             {
@@ -416,17 +416,17 @@ void dsbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *
                         {
                             /* take advantage of the fact that Q was */
                             /* initially the Identity matrix */
-                            iqend = fla_max(iqend, j2);
+                            iqend = fla_max(iqend,j2);
                             /* Computing MAX */
                             i__2 = 0;
                             i__3 = k - 3; // , expr subst
-                            i2 = fla_max(i__2, i__3);
+                            i2 = fla_max(i__2,i__3);
                             iqaend = i__ * *kd + 1;
                             if(k == 2)
                             {
                                 iqaend += *kd;
                             }
-                            iqaend = fla_min(iqaend, iqend);
+                            iqaend = fla_min(iqaend,iqend);
                             i__2 = j2;
                             i__3 = kd1;
                             for(j = j1; i__3 < 0 ? j >= i__2 : j <= i__2; j += i__3)
@@ -436,13 +436,12 @@ void dsbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *
                                 /* Computing MAX */
                                 i__4 = 1;
                                 i__5 = j - ibl; // , expr subst
-                                iqb = fla_max(i__4, i__5);
+                                iqb = fla_max(i__4,i__5);
                                 nq = iqaend + 1 - iqb;
                                 /* Computing MIN */
                                 i__4 = iqaend + *kd;
-                                iqaend = fla_min(i__4, iqend);
-                                aocl_blas_drot(&nq, &q[iqb + (j - 1) * q_dim1], &c__1,
-                                               &q[iqb + j * q_dim1], &c__1, &d__[j], &work[j]);
+                                iqaend = fla_min(i__4,iqend);
+                                drot_(&nq, &q[iqb + (j - 1) * q_dim1], &c__1, &q[iqb + j * q_dim1], &c__1, &d__[j], &work[j]);
                                 /* L50: */
                             }
                         }
@@ -630,7 +629,7 @@ void dsbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *
                             /* Computing MIN */
                             i__3 = kdm1;
                             i__2 = *n - j2; // , expr subst
-                            lend = fla_min(i__3, i__2);
+                            lend = fla_min(i__3,i__2);
                             last = j1end + kd1;
                             if(lend > 0)
                             {
@@ -647,17 +646,17 @@ void dsbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *
                         {
                             /* take advantage of the fact that Q was */
                             /* initially the Identity matrix */
-                            iqend = fla_max(iqend, j2);
+                            iqend = fla_max(iqend,j2);
                             /* Computing MAX */
                             i__3 = 0;
                             i__2 = k - 3; // , expr subst
-                            i2 = fla_max(i__3, i__2);
+                            i2 = fla_max(i__3,i__2);
                             iqaend = i__ * *kd + 1;
                             if(k == 2)
                             {
                                 iqaend += *kd;
                             }
-                            iqaend = fla_min(iqaend, iqend);
+                            iqaend = fla_min(iqaend,iqend);
                             i__3 = j2;
                             i__2 = kd1;
                             for(j = j1; i__2 < 0 ? j >= i__3 : j <= i__3; j += i__2)
@@ -667,13 +666,12 @@ void dsbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *
                                 /* Computing MAX */
                                 i__4 = 1;
                                 i__5 = j - ibl; // , expr subst
-                                iqb = fla_max(i__4, i__5);
+                                iqb = fla_max(i__4,i__5);
                                 nq = iqaend + 1 - iqb;
                                 /* Computing MIN */
                                 i__4 = iqaend + *kd;
-                                iqaend = fla_min(i__4, iqend);
-                                aocl_blas_drot(&nq, &q[iqb + (j - 1) * q_dim1], &c__1,
-                                               &q[iqb + j * q_dim1], &c__1, &d__[j], &work[j]);
+                                iqaend = fla_min(i__4,iqend);
+                                drot_(&nq, &q[iqb + (j - 1) * q_dim1], &c__1, &q[iqb + j * q_dim1], &c__1, &d__[j], &work[j]);
                                 /* L170: */
                             }
                         }

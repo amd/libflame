@@ -199,7 +199,7 @@ void ssycon_rook_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }

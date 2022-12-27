@@ -322,11 +322,11 @@ void dstevx_(char *jobz, char *range, aocl_int_t *n, doublereal *d__, doublereal
         }
         else if(indeig)
         {
-            if(*il < 1 || *il > fla_max(1, *n))
+            if (*il < 1 || *il > fla_max(1,*n))
             {
                 *info = -8;
             }
-            else if(*iu < fla_min(*n, *il) || *iu > *n)
+            else if (*iu < fla_min(*n,*il) || *iu > *n)
             {
                 *info = -9;
             }
@@ -384,7 +384,7 @@ void dstevx_(char *jobz, char *range, aocl_int_t *n, doublereal *d__, doublereal
     /* Computing MIN */
     d__1 = sqrt(bignum);
     d__2 = 1. / sqrt(sqrt(safmin)); // , expr subst
-    rmax = fla_min(d__1, d__2);
+    rmax = fla_min(d__1,d__2);
     /* Scale matrix to allowable range, if necessary. */
     iscale = 0;
     if(valeig)

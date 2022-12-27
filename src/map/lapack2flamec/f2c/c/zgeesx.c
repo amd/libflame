@@ -336,7 +336,7 @@ void zgeesx_(char *jobvs, char *sort, L_fpz1 select, char *sense, aocl_int_t *n,
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -7;
     }
@@ -374,18 +374,15 @@ void zgeesx_(char *jobvs, char *sort, L_fpz1 select, char *sense, aocl_int_t *n,
             hswork = (integer)work[1].real;
             if(!wantvs)
             {
-                maxwrk = fla_max(maxwrk, hswork);
+                maxwrk = fla_max(maxwrk,hswork);
             }
             else
             {
                 /* Computing MAX */
                 i__1 = maxwrk;
-                i__2 = *n
-                       + (*n - 1)
-                             * aocl_lapack_ilaenv(&c__1, "ZUNGHR", " ", n, &c__1, n,
-                                                  &c_n1); // , expr subst
-                maxwrk = fla_max(i__1, i__2);
-                maxwrk = fla_max(maxwrk, hswork);
+                i__2 = *n + (*n - 1) * ilaenv_(&c__1, "ZUNGHR", " ", n, &c__1, n, &c_n1); // , expr subst
+                maxwrk = fla_max(i__1,i__2);
+                maxwrk = fla_max(maxwrk,hswork);
             }
             lwrk = maxwrk;
             if(!wantsn)
@@ -393,7 +390,7 @@ void zgeesx_(char *jobvs, char *sort, L_fpz1 select, char *sense, aocl_int_t *n,
                 /* Computing MAX */
                 i__1 = lwrk;
                 i__2 = *n * *n / 2; // , expr subst
-                lwrk = fla_max(i__1, i__2);
+                lwrk = fla_max(i__1,i__2);
             }
         }
         work[1].real = (doublereal)lwrk;
@@ -506,7 +503,7 @@ void zgeesx_(char *jobvs, char *sort, L_fpz1 select, char *sense, aocl_int_t *n,
             /* Computing MAX */
             i__1 = maxwrk;
             i__2 = (*sdim << 1) * (*n - *sdim); // , expr subst
-            maxwrk = fla_max(i__1, i__2);
+            maxwrk = fla_max(i__1,i__2);
         }
         if(icond == -14)
         {

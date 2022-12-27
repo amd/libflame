@@ -214,7 +214,7 @@ void dgbsv_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *nrhs, dou
     {
         *info = -6;
     }
-    else if(*ldb < fla_max(*n, 1))
+    else if (*ldb < fla_max(*n,1))
     {
         *info = -9;
     }

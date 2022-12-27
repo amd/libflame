@@ -216,7 +216,7 @@ void cggbak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *
     {
         *info = -4;
     }
-    else if(*n > 0 && (*ihi < *ilo || *ihi > fla_max(1, *n)))
+    else if (*n > 0 && (*ihi < *ilo || *ihi > fla_max(1,*n)))
     {
         *info = -5;
     }
@@ -228,7 +228,7 @@ void cggbak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *
     {
         *info = -8;
     }
-    else if(*ldv < fla_max(1, *n))
+    else if (*ldv < fla_max(1,*n))
     {
         *info = -10;
     }

@@ -104,7 +104,7 @@ static aocl_int64_t c__1 = 1;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
- */
+*/
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > */
 /* > On exit, AB is overwritten by values generated during the */
@@ -373,7 +373,7 @@ void zhbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
     {
         *info = -7;
     }
-    else if(wantz && *ldq < fla_max(1, *n))
+    else if (wantz && *ldq < fla_max(1,*n))
     {
         *info = -9;
     }
@@ -388,11 +388,11 @@ void zhbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
         }
         else if(indeig)
         {
-            if(*il < 1 || *il > fla_max(1, *n))
+            if (*il < 1 || *il > fla_max(1,*n))
             {
                 *info = -12;
             }
-            else if(*iu < fla_min(*n, *il) || *iu > *n)
+            else if (*iu < fla_min(*n,*il) || *iu > *n)
             {
                 *info = -13;
             }
@@ -464,7 +464,7 @@ void zhbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
     /* Computing MIN */
     d__1 = sqrt(bignum);
     d__2 = 1. / sqrt(sqrt(safmin)); // , expr subst
-    rmax = fla_min(d__1, d__2);
+    rmax = fla_min(d__1,d__2);
     /* Scale matrix to allowable range, if necessary. */
     iscale = 0;
     abstll = *abstol;

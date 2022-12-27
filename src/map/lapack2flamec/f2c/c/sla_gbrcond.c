@@ -291,8 +291,10 @@ real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aoc
                 i__2 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__3 = fla_min(i__4, *n);
-                for(j = fla_max(i__2, 1); j <= i__3; ++j)
+                i__3 = fla_min(i__4,*n);
+                for (j = fla_max(i__2,1);
+                        j <= i__3;
+                        ++j)
                 {
                     tmp += (r__1 = ab[kd + i__ - j + j * ab_dim1] * c__[j], f2c_abs(r__1));
                 }
@@ -303,8 +305,10 @@ real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aoc
                 i__3 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__2 = fla_min(i__4, *n);
-                for(j = fla_max(i__3, 1); j <= i__2; ++j)
+                i__2 = fla_min(i__4,*n);
+                for (j = fla_max(i__3,1);
+                        j <= i__2;
+                        ++j)
                 {
                     tmp += (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs(r__1));
                 }
@@ -315,8 +319,10 @@ real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aoc
                 i__2 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__3 = fla_min(i__4, *n);
-                for(j = fla_max(i__2, 1); j <= i__3; ++j)
+                i__3 = fla_min(i__4,*n);
+                for (j = fla_max(i__2,1);
+                        j <= i__3;
+                        ++j)
                 {
                     tmp += (r__1 = ab[kd + i__ - j + j * ab_dim1] / c__[j], f2c_abs(r__1));
                 }
@@ -336,8 +342,10 @@ real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aoc
                 i__3 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__2 = fla_min(i__4, *n);
-                for(j = fla_max(i__3, 1); j <= i__2; ++j)
+                i__2 = fla_min(i__4,*n);
+                for (j = fla_max(i__3,1);
+                        j <= i__2;
+                        ++j)
                 {
                     tmp += (r__1 = ab[ke - i__ + j + i__ * ab_dim1] * c__[j], f2c_abs(r__1));
                 }
@@ -348,8 +356,10 @@ real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aoc
                 i__2 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__3 = fla_min(i__4, *n);
-                for(j = fla_max(i__2, 1); j <= i__3; ++j)
+                i__3 = fla_min(i__4,*n);
+                for (j = fla_max(i__2,1);
+                        j <= i__3;
+                        ++j)
                 {
                     tmp += (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs(r__1) );
                 }
@@ -360,8 +370,10 @@ real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aoc
                 i__3 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__2 = fla_min(i__4, *n);
-                for(j = fla_max(i__3, 1); j <= i__2; ++j)
+                i__2 = fla_min(i__4,*n);
+                for (j = fla_max(i__3,1);
+                        j <= i__2;
+                        ++j)
                 {
                     tmp += (r__1 = ab[ke - i__ + j + i__ * ab_dim1] / c__[j], f2c_abs(r__1));
                 }

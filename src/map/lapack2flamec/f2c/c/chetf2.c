@@ -270,7 +270,7 @@ void chetf2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
@@ -313,7 +313,7 @@ void chetf2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
         {
             colmax = 0.f;
         }
-        if(fla_max(absakk, colmax) == 0.f || sisnan_(&absakk))
+        if (fla_max(absakk,colmax) == 0.f || sisnan_(&absakk))
         {
             /* Column K is or underflow, or contains a NaN: */
             /* set INFO and continue */
@@ -351,7 +351,7 @@ void chetf2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
                     i__1 = jmax + imax * a_dim1;
                     r__3 = rowmax;
                     r__4 = (r__1 = a[i__1].r, f2c_abs(r__1)) + ( r__2 = r_imag(&a[jmax + imax * a_dim1]), f2c_abs(r__2) ); // , expr subst
-                    rowmax = max(r__3,r__4);
+                    rowmax = fla_max(r__3,r__4);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
@@ -599,7 +599,7 @@ void chetf2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
         {
             colmax = 0.f;
         }
-        if(fla_max(absakk, colmax) == 0.f || sisnan_(&absakk))
+        if (fla_max(absakk,colmax) == 0.f || sisnan_(&absakk))
         {
             /* Column K is zero or underflow, contains a NaN: */
             /* set INFO and continue */
@@ -637,7 +637,7 @@ void chetf2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
                     i__1 = jmax + imax * a_dim1;
                     r__3 = rowmax;
                     r__4 = (r__1 = a[i__1].r, f2c_abs(r__1)) + ( r__2 = r_imag(&a[jmax + imax * a_dim1]), f2c_abs(r__2) ); // , expr subst
-                    rowmax = max(r__3,r__4);
+                    rowmax = fla_max(r__3,r__4);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {

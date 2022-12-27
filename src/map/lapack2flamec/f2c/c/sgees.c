@@ -331,7 +331,7 @@ void aocl_lapack_sgees(char *jobvs, char *sort, L_fps2 select, aocl_int64_t *n, 
     {
         *info = -4;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -6;
     }
@@ -366,21 +366,18 @@ void aocl_lapack_sgees(char *jobvs, char *sort, L_fps2 select, aocl_int64_t *n, 
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n + hswork; // , expr subst
-                maxwrk = fla_max(i__1, i__2);
+                maxwrk = fla_max(i__1,i__2);
             }
             else
             {
                 /* Computing MAX */
                 i__1 = maxwrk;
-                i__2 = (*n << 1)
-                       + (*n - 1)
-                             * aocl_lapack_ilaenv(&c__1, "SORGHR", " ", n, &c__1, n,
-                                                  &c_n1); // , expr subst
-                maxwrk = fla_max(i__1, i__2);
+                i__2 = (*n << 1) + (*n - 1) * ilaenv_(&c__1, "SORGHR", " ", n, &c__1, n, &c_n1); // , expr subst
+                maxwrk = fla_max(i__1,i__2);
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n + hswork; // , expr subst
-                maxwrk = fla_max(i__1, i__2);
+                maxwrk = fla_max(i__1,i__2);
             }
         }
         work[1] = aocl_lapack_sroundup_lwork(&maxwrk);
@@ -510,9 +507,8 @@ void aocl_lapack_sgees(char *jobvs, char *sort, L_fps2 select, aocl_int64_t *n, 
                 i__1 = ilo - 1;
                 /* Computing MAX */
                 i__3 = ilo - 1;
-                i__2 = fla_max(i__3, 1);
-                aocl_lapack_slascl("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wi[1], &i__2,
-                                   &ierr);
+                i__2 = fla_max(i__3,1);
+                slascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wi[ 1], &i__2, &ierr);
             }
             else if(wantst)
             {
@@ -576,9 +572,8 @@ void aocl_lapack_sgees(char *jobvs, char *sort, L_fps2 select, aocl_int64_t *n, 
         i__1 = *n - ieval;
         /* Computing MAX */
         i__3 = *n - ieval;
-        i__2 = fla_max(i__3, 1);
-        aocl_lapack_slascl("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wi[ieval + 1], &i__2,
-                           &ierr);
+        i__2 = fla_max(i__3,1);
+        slascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wi[ieval + 1], &i__2, &ierr);
     }
     if(wantst && *info == 0)
     {

@@ -64,15 +64,15 @@ int cunmtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, sc
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, nq))
+    else if (*lda < fla_max(1,nq))
     {
         *info = -7;
     }
-    else if(*ldc < fla_max(1, *m))
+    else if (*ldc < fla_max(1,*m))
     {
         *info = -10;
     }
-    else if(*lwork < fla_max(1, nw) && !lquery)
+    else if (*lwork < fla_max(1,nw) && ! lquery)
     {
         *info = -12;
     }
@@ -108,8 +108,8 @@ int cunmtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, sc
                 nb = aocl_lapack_ilaenv(&c__1, "CUNMQR", ch__1, m, &i__2, &i__3, &c_n1);
             }
         }
-        lwkopt = fla_max(1, nw) * nb;
-        work[1].real = (float)lwkopt;
+        lwkopt = fla_max(1,nw) * nb;
+        work[1].real = (float) lwkopt;
         work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)

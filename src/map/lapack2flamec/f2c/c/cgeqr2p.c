@@ -180,7 +180,7 @@ void cgeqr2p_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scompl
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -4;
     }
@@ -191,7 +191,7 @@ void cgeqr2p_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scompl
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
-    k = fla_min(*m, *n);
+    k = fla_min(*m,*n);
     i__1 = k;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -199,9 +199,8 @@ void cgeqr2p_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scompl
         i__2 = *m - i__ + 1;
         /* Computing MIN */
         i__3 = i__ + 1;
-        aocl_lapack_clarfgp(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3, *m) + i__ * a_dim1],
-                            &c__1, &tau[i__]);
-        if(i__ < *n)
+        clarfgp_(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &tau[i__]);
+        if (i__ < *n)
         {
             /* Apply H(i)**H to A(i:m,i+1:n) from the left */
             i__2 = i__ + i__ * a_dim1;

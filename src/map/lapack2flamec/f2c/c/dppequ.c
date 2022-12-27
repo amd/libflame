@@ -196,11 +196,11 @@ void dppequ_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *s, doublerea
             /* Computing MIN */
             d__1 = smin;
             d__2 = s[i__]; // , expr subst
-            smin = fla_min(d__1, d__2);
+            smin = fla_min(d__1,d__2);
             /* Computing MAX */
             d__1 = *amax;
             d__2 = s[i__]; // , expr subst
-            *amax = fla_max(d__1, d__2);
+            *amax = fla_max(d__1,d__2);
             /* L10: */
         }
     }
@@ -217,11 +217,11 @@ void dppequ_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *s, doublerea
             /* Computing MIN */
             d__1 = smin;
             d__2 = s[i__]; // , expr subst
-            smin = fla_min(d__1, d__2);
+            smin = fla_min(d__1,d__2);
             /* Computing MAX */
             d__1 = *amax;
             d__2 = s[i__]; // , expr subst
-            *amax = fla_max(d__1, d__2);
+            *amax = fla_max(d__1,d__2);
             /* L20: */
         }
     }

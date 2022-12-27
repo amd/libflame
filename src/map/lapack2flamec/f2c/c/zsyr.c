@@ -185,7 +185,7 @@ void zsyr_(char *uplo, aocl_int_t *n, dcomplex *alpha, dcomplex *x, aocl_int_t *
     {
         info = 5;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         info = 7;
     }

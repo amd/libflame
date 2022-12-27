@@ -198,8 +198,8 @@ void claic1_(aocl_int_t *job, aocl_int_t *j, scomplex *x, real *sest, scomplex *
         /* special cases */
         if(*sest == 0.f)
         {
-            s1 = fla_max(absgam, absalp);
-            if(s1 == 0.f)
+            s1 = fla_max(absgam,absalp);
+            if (s1 == 0.f)
             {
                 s->real = 0.f, s->imag = 0.f;
                 c__->real = 1.f, c__->imag = 0.f;
@@ -236,9 +236,9 @@ void claic1_(aocl_int_t *job, aocl_int_t *j, scomplex *x, real *sest, scomplex *
         }
         else if(absgam <= eps * absest)
         {
-            s->real = 1.f, s->imag = 0.f;
-            c__->real = 0.f, c__->imag = 0.f;
-            tmp = fla_max(absest, absalp);
+            s->r = 1.f, s->i = 0.f;
+            c__->r = 0.f, c__->i = 0.f;
+            tmp = fla_max(absest,absalp);
             s1 = absest / tmp;
             s2 = absalp / tmp;
             *sestpr = tmp * sqrt(s1 * s1 + s2 * s2);
@@ -377,7 +377,7 @@ void claic1_(aocl_int_t *job, aocl_int_t *j, scomplex *x, real *sest, scomplex *
         if(*sest == 0.f)
         {
             *sestpr = 0.f;
-            if(fla_max(absgam, absalp) == 0.f)
+            if (fla_max(absgam,absalp) == 0.f)
             {
                 sine.real = 1.f;
                 sine.imag = 0.f; // , expr subst
@@ -398,7 +398,7 @@ void claic1_(aocl_int_t *job, aocl_int_t *j, scomplex *x, real *sest, scomplex *
             /* Computing MAX */
             r__1 = c_abs(&sine);
             r__2 = c_abs(&cosine); // , expr subst
-            s1 = max(r__1,r__2);
+            s1 = fla_max(r__1,r__2);
             q__1.r = sine.r / s1;
             q__1.i = sine.i / s1; // , expr subst
             s->r = q__1.r, s->i = q__1.i;
@@ -506,7 +506,7 @@ void claic1_(aocl_int_t *job, aocl_int_t *j, scomplex *x, real *sest, scomplex *
             /* Computing MAX */
             r__1 = zeta1 * zeta1 + 1.f + zeta1 * zeta2;
             r__2 = zeta1 * zeta2 + zeta2 * zeta2; // , expr subst
-            norma = fla_max(r__1, r__2);
+            norma = fla_max(r__1,r__2);
             /* See if root is closer to zero or to ONE */
             test = (zeta1 - zeta2) * 2.f * (zeta1 + zeta2) + 1.f;
             if(test >= 0.f)

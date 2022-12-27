@@ -180,7 +180,7 @@ void aocl_lapack_dopgtr(char *uplo, aocl_int64_t *n, doublereal *ap, doublereal 
     {
         *info = -2;
     }
-    else if(*ldq < fla_max(1, *n))
+    else if (*ldq < fla_max(1,*n))
     {
         *info = -6;
     }

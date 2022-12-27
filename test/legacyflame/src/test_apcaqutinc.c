@@ -139,8 +139,17 @@ void libfla_test_apcaqutinc_experiment( test_params_t params,
 	}
 
 	// Determine the dimensions.
-	if ( m_input < 0 ) m = p_cur * -m_input; else m = p_cur;
-	if ( n_input < 0 ) n = p_cur * -n_input; else n = p_cur;
+	if ( m_input < 0 ) m = p_cur * abs(m_input);
+	else               m = p_cur;
+	if ( n_input < 0 ) n = p_cur * abs(n_input);
+	else               n = p_cur;
+
+	// Compute the minimum dimension.
+	min_m_n = fla_min( m, n );
+
+	// Choose the size of B based on the storev parameter.
+	if ( storev == FLA_COLUMNWISE ) k = m;
+	//else                            k = n;
 
 	// Create the matrices for the current operation.
 	libfla_test_obj_create( datatype, FLA_NO_TRANSPOSE, sc_str[0], m, n, &A );

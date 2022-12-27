@@ -300,15 +300,15 @@ void dlasdq_(char *uplo, aocl_int_t *sqre, aocl_int_t *n, aocl_int_t *ncvt, aocl
     {
         *info = -6;
     }
-    else if(*ncvt == 0 && *ldvt < 1 || *ncvt > 0 && *ldvt < fla_max(1, *n))
+    else if (*ncvt == 0 && *ldvt < 1 || *ncvt > 0 && *ldvt < fla_max(1,*n))
     {
         *info = -10;
     }
-    else if(*ldu < fla_max(1, *nru))
+    else if (*ldu < fla_max(1,*nru))
     {
         *info = -12;
     }
-    else if(*ncc == 0 && *ldc < 1 || *ncc > 0 && *ldc < fla_max(1, *n))
+    else if (*ncc == 0 && *ldc < 1 || *ncc > 0 && *ldc < fla_max(1,*n))
     {
         *info = -14;
     }

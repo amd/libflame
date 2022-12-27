@@ -328,7 +328,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
     /* Compute BIGNUM */
     smlnum = 2.f * slamch_("Safe minimum");
     bignum = 1.f / smlnum;
-    smini = fla_max(*smin, smlnum);
+    smini = fla_max(*smin,smlnum);
     /* Don't check for input errors */
     *info = 0;
     /* Standard Initializations */
@@ -430,7 +430,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
                 /* Computing MAX */
                 r__3 = (r__1 = b[b_dim1 + 1], f2c_abs(r__1));
                 r__4 = (r__2 = b[ b_dim1 + 2], f2c_abs(r__2)); // , expr subst
-                bnorm = max(r__3,r__4);
+                bnorm = fla_max(r__3,r__4);
                 if (smini < 1.f && bnorm > 1.f)
                 {
                     if(bnorm > bignum * smini)
@@ -474,7 +474,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             /* Computing MAX */
             r__2 = (r__1 = br1 * (ur22 * ur11r), f2c_abs(r__1));
             r__3 = f2c_abs(br2); // , expr subst
-            bbnd = max(r__2,r__3);
+            bbnd = fla_max(r__2,r__3);
             if (bbnd > 1.f && f2c_abs(ur22) < 1.f)
             {
                 if (bbnd >= bignum * f2c_abs(ur22))
@@ -497,7 +497,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             /* Computing MAX */
             r__1 = f2c_abs(xr1);
             r__2 = f2c_abs(xr2); // , expr subst
-            *xnorm = max(r__1,r__2);
+            *xnorm = fla_max(r__1,r__2);
             /* Further scaling if norm(A) norm(X) > overflow */
             if(*xnorm > 1.f && cmax > 1.f)
             {
@@ -536,7 +536,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
                 /* Computing MAX */
                 r__5 = (r__1 = b[b_dim1 + 1], f2c_abs(r__1)) + (r__2 = b[(b_dim1 << 1) + 1], f2c_abs(r__2));
                 r__6 = (r__3 = b[b_dim1 + 2], f2c_abs(r__3)) + (r__4 = b[(b_dim1 << 1) + 2], f2c_abs(r__4)); // , expr subst
-                bnorm = max(r__5,r__6);
+                bnorm = fla_max(r__5,r__6);
                 if (smini < 1.f && bnorm > 1.f)
                 {
                     if(bnorm > bignum * smini)
@@ -628,7 +628,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             /* Computing MAX */
             r__1 = (f2c_abs(br1) + f2c_abs(bi1)) * (u22abs * (f2c_abs(ur11r) + f2c_abs(ui11r)) );
             r__2 = f2c_abs(br2) + f2c_abs(bi2); // , expr subst
-            bbnd = max(r__1,r__2);
+            bbnd = fla_max(r__1,r__2);
             if (bbnd > 1.f && u22abs < 1.f)
             {
                 if(bbnd >= bignum * u22abs)
@@ -660,7 +660,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             /* Computing MAX */
             r__1 = f2c_abs(xr1) + f2c_abs(xi1);
             r__2 = f2c_abs(xr2) + f2c_abs(xi2); // , expr subst
-            *xnorm = max(r__1,r__2);
+            *xnorm = fla_max(r__1,r__2);
             /* Further scaling if norm(A) norm(X) > overflow */
             if(*xnorm > 1.f && cmax > 1.f)
             {

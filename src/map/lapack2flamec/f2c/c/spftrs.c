@@ -274,7 +274,7 @@ void aocl_lapack_spftrs(char *transr, char *uplo, aocl_int64_t *n, aocl_int64_t 
     {
         *info = -4;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -7;
     }

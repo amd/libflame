@@ -152,7 +152,7 @@ real cla_gerpvgrw_(aocl_int_t *n, aocl_int_t *ncols, scomplex *a, aocl_int_t *ld
             /* Computing MAX */
             i__3 = i__ + j * a_dim1;
             r__3 = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
-            amax = max(r__3,amax);
+            amax = fla_max(r__3,amax);
         }
         i__2 = j;
         for(i__ = 1; i__ <= i__2; ++i__)
@@ -160,13 +160,13 @@ real cla_gerpvgrw_(aocl_int_t *n, aocl_int_t *ncols, scomplex *a, aocl_int_t *ld
             /* Computing MAX */
             i__3 = i__ + j * af_dim1;
             r__3 = (r__1 = af[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&af[i__ + j * af_dim1]), f2c_abs(r__2));
-            umax = max(r__3,umax);
+            umax = fla_max(r__3,umax);
         }
         if(umax != 0.f)
         {
             /* Computing MIN */
             r__1 = amax / umax;
-            rpvgrw = fla_min(r__1, rpvgrw);
+            rpvgrw = fla_min(r__1,rpvgrw);
         }
     }
     ret_val = rpvgrw;

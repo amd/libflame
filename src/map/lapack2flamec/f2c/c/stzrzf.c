@@ -204,7 +204,7 @@ void stzrzf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, 
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -4;
     }
@@ -220,7 +220,7 @@ void stzrzf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, 
         {
             /* Determine the block size. */
             lwkopt = *m * nb;
-            lwkmin = fla_max(1, *m);
+            lwkmin = fla_max(1,*m);
         }
         work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
         if(*lwork < lwkmin && !lquery)
@@ -265,9 +265,9 @@ void stzrzf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, 
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = aocl_lapack_ilaenv(&c__3, "SGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
-        nx = fla_max(i__1, i__2);
-        if(nx < *m)
+        i__2 = ilaenv_(&c__3, "SGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
+        nx = fla_max(i__1,i__2);
+        if (nx < *m)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *m;
@@ -279,8 +279,8 @@ void stzrzf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, 
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = aocl_lapack_ilaenv(&c__2, "SGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
-                nbmin = fla_max(i__1, i__2);
+                i__2 = ilaenv_(&c__2, "SGERQF", " ", m, n, &c_n1, & c_n1); // , expr subst
+                nbmin = fla_max(i__1,i__2);
             }
         }
     }
@@ -290,19 +290,19 @@ void stzrzf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, 
         /* The last kk rows are handled by the block method. */
         /* Computing MIN */
         i__1 = *m + 1;
-        m1 = fla_min(i__1, *n);
+        m1 = fla_min(i__1,*n);
         ki = (*m - nx - 1) / nb * nb;
         /* Computing MIN */
         i__1 = *m;
         i__2 = ki + nb; // , expr subst
-        kk = fla_min(i__1, i__2);
+        kk = fla_min(i__1,i__2);
         i__1 = *m - kk + 1;
         i__2 = -nb;
         for(i__ = *m - kk + ki + 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
         {
             /* Computing MIN */
             i__3 = *m - i__ + 1;
-            ib = fla_min(i__3, nb);
+            ib = fla_min(i__3,nb);
             /* Compute the TZ factorization of the current block */
             /* A(i:i+ib-1,i:n) */
             i__3 = *n - i__ + 1;

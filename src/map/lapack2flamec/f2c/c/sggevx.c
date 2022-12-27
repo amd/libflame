@@ -588,11 +588,11 @@ void aocl_lapack_sggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -7;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -9;
     }
@@ -639,27 +639,18 @@ void aocl_lapack_sggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
             maxwrk = minwrk;
             /* Computing MAX */
             i__1 = maxwrk;
-            i__2 = *n
-                   + *n
-                         * aocl_lapack_ilaenv(&c__1, "SGEQRF", " ", n, &c__1, n,
-                                              &c__0); // , expr subst
-            maxwrk = fla_max(i__1, i__2);
+            i__2 = *n + *n * ilaenv_(&c__1, "SGEQRF", " ", n, & c__1, n, &c__0); // , expr subst
+            maxwrk = fla_max(i__1,i__2);
             /* Computing MAX */
             i__1 = maxwrk;
-            i__2 = *n
-                   + *n
-                         * aocl_lapack_ilaenv(&c__1, "SORMQR", " ", n, &c__1, n,
-                                              &c__0); // , expr subst
-            maxwrk = fla_max(i__1, i__2);
-            if(ilvl)
+            i__2 = *n + *n * ilaenv_(&c__1, "SORMQR", " ", n, & c__1, n, &c__0); // , expr subst
+            maxwrk = fla_max(i__1,i__2);
+            if (ilvl)
             {
                 /* Computing MAX */
                 i__1 = maxwrk;
-                i__2 = *n
-                       + *n
-                             * aocl_lapack_ilaenv(&c__1, "SORGQR", " ", n, &c__1, n,
-                                                  &c__0); // , expr subst
-                maxwrk = fla_max(i__1, i__2);
+                i__2 = *n + *n * ilaenv_(&c__1, "SORGQR", " ", n, &c__1, n, &c__0); // , expr subst
+                maxwrk = fla_max(i__1,i__2);
             }
         }
         work[1] = aocl_lapack_sroundup_lwork(&maxwrk);
@@ -945,7 +936,7 @@ void aocl_lapack_sggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
                     /* Computing MAX */
                     r__2 = temp;
                     r__3 = (r__1 = vl[jr + jc * vl_dim1], f2c_abs( r__1)); // , expr subst
-                    temp = max(r__2,r__3);
+                    temp = fla_max(r__2,r__3);
                     /* L30: */
                 }
             }
@@ -957,7 +948,7 @@ void aocl_lapack_sggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
                     /* Computing MAX */
                     r__3 = temp;
                     r__4 = (r__1 = vl[jr + jc * vl_dim1], f2c_abs( r__1)) + (r__2 = vl[jr + (jc + 1) * vl_dim1], f2c_abs( r__2)); // , expr subst
-                    temp = max(r__3,r__4);
+                    temp = fla_max(r__3,r__4);
                     /* L40: */
                 }
             }
@@ -1008,7 +999,7 @@ void aocl_lapack_sggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
                     /* Computing MAX */
                     r__2 = temp;
                     r__3 = (r__1 = vr[jr + jc * vr_dim1], f2c_abs( r__1)); // , expr subst
-                    temp = max(r__2,r__3);
+                    temp = fla_max(r__2,r__3);
                     /* L80: */
                 }
             }
@@ -1020,7 +1011,7 @@ void aocl_lapack_sggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
                     /* Computing MAX */
                     r__3 = temp;
                     r__4 = (r__1 = vr[jr + jc * vr_dim1], f2c_abs( r__1)) + (r__2 = vr[jr + (jc + 1) * vr_dim1], f2c_abs( r__2)); // , expr subst
-                    temp = max(r__3,r__4);
+                    temp = fla_max(r__3,r__4);
                     /* L90: */
                 }
             }

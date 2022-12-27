@@ -193,7 +193,7 @@ void ztptrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
     {
         *info = -5;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -8;
     }

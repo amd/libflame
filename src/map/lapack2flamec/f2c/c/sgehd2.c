@@ -211,15 +211,15 @@ void aocl_lapack_sgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, r
     {
         *info = -1;
     }
-    else if(*ilo < 1 || *ilo > fla_max(1, *n))
+    else if (*ilo < 1 || *ilo > fla_max(1,*n))
     {
         *info = -2;
     }
-    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
+    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
@@ -237,8 +237,7 @@ void aocl_lapack_sgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, r
         i__2 = *ihi - i__;
         /* Computing MIN */
         i__3 = i__ + 2;
-        aocl_lapack_slarfg(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[fla_min(i__3, *n) + i__ * a_dim1],
-                           &c__1, &tau[i__]);
+        slarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, &tau[i__]);
         aii = a[i__ + 1 + i__ * a_dim1];
         a[i__ + 1 + i__ * a_dim1] = 1.f;
         /* Apply H(i) to A(1:ihi,i+1:ihi) from the right */

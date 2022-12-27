@@ -230,7 +230,7 @@ void aocl_lapack_sggbak(char *job, char *side, aocl_int64_t *n, aocl_int64_t *il
     {
         *info = -4;
     }
-    else if(*n > 0 && (*ihi < *ilo || *ihi > fla_max(1, *n)))
+    else if (*n > 0 && (*ihi < *ilo || *ihi > fla_max(1,*n)))
     {
         *info = -5;
     }
@@ -242,7 +242,7 @@ void aocl_lapack_sggbak(char *job, char *side, aocl_int64_t *n, aocl_int64_t *il
     {
         *info = -8;
     }
-    else if(*ldv < fla_max(1, *n))
+    else if (*ldv < fla_max(1,*n))
     {
         *info = -10;
     }

@@ -216,11 +216,11 @@ real cla_gercond_c_(char *trans, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sc
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
-    else if(*ldaf < fla_max(1, *n))
+    else if (*ldaf < fla_max(1,*n))
     {
         *info = -6;
     }
@@ -258,7 +258,7 @@ real cla_gercond_c_(char *trans, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sc
                 }
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm, tmp);
+            anorm = fla_max(anorm,tmp);
         }
     }
     else
@@ -286,7 +286,7 @@ real cla_gercond_c_(char *trans, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sc
                 }
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm, tmp);
+            anorm = fla_max(anorm,tmp);
         }
     }
     /* Quick return if possible. */

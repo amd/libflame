@@ -422,11 +422,11 @@ void dgges_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, aocl_int_t *n
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -7;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -9;
     }
@@ -451,27 +451,18 @@ void dgges_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, aocl_int_t *n
             /* Computing MAX */
             i__1 = *n << 3;
             i__2 = *n * 6 + 16; // , expr subst
-            minwrk = fla_max(i__1, i__2);
-            maxwrk
-                = minwrk - *n + *n * aocl_lapack_ilaenv(&c__1, "DGEQRF", " ", n, &c__1, n, &c__0);
+            minwrk = fla_max(i__1,i__2);
+            maxwrk = minwrk - *n + *n * ilaenv_(&c__1, "DGEQRF", " ", n, & c__1, n, &c__0);
             /* Computing MAX */
             i__1 = maxwrk;
-            i__2 = minwrk - *n
-                   + *n
-                         * aocl_lapack_ilaenv(&c__1, "DORMQR", " ", n, &c__1, n,
-                                              &c_n1); // , expr subst
-            maxwrk = fla_max(i__1, i__2);
-            if(ilvsl)
+            i__2 = minwrk - *n + *n * ilaenv_(&c__1, "DORMQR", " ", n, &c__1, n, &c_n1); // , expr subst
+            maxwrk = fla_max(i__1,i__2);
+            if (ilvsl)
             {
                 /* Computing MAX */
                 i__1 = maxwrk;
-                i__2 = minwrk - *n
-                       + *n
-                             * aocl_lapack_ilaenv(&c__1,
-                                                  "DOR"
-                                                  "GQR",
-                                                  " ", n, &c__1, n, &c_n1); // , expr subst
-                maxwrk = fla_max(i__1, i__2);
+                i__2 = minwrk - *n + *n * ilaenv_(&c__1, "DOR" "GQR", " ", n, &c__1, n, &c_n1); // , expr subst
+                maxwrk = fla_max(i__1,i__2);
             }
         }
         else

@@ -115,14 +115,7 @@
 /* > \param[in] LDA */
 /* > \verbatim */
 /* > LDA is INTEGER */
-/* > The leading dimension of the array A. */
-/* > If TYPE = 'G', 'L', 'U', 'H', LDA >= fla_max(1,M);
- */
-/* > TYPE = 'B', LDA >= KL+1;
- */
-/* > TYPE = 'Q', LDA >= KU+1;
- */
-/* > TYPE = 'Z', LDA >= 2*KL+KU+1. */
+/* > The leading dimension of the array A. LDA >= fla_max(1,M). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] INFO */
@@ -240,7 +233,7 @@ void zlascl_(char *type__, aocl_int_t *kl, aocl_int_t *ku, doublereal *cfrom, do
     {
         *info = -7;
     }
-    else if(itype <= 3 && *lda < fla_max(1, *m))
+    else if (itype <= 3 && *lda < fla_max(1,*m))
     {
         *info = -9;
     }
@@ -248,7 +241,7 @@ void zlascl_(char *type__, aocl_int_t *kl, aocl_int_t *ku, doublereal *cfrom, do
     {
         /* Computing MAX */
         i__1 = *m - 1;
-        if(*kl < 0 || *kl > fla_max(i__1, 0))
+        if (*kl < 0 || *kl > fla_max(i__1,0))
         {
             *info = -2;
         }
@@ -256,7 +249,7 @@ void zlascl_(char *type__, aocl_int_t *kl, aocl_int_t *ku, doublereal *cfrom, do
         {
             /* Computing MAX */
             i__1 = *n - 1;
-            if(*ku < 0 || *ku > fla_max(i__1, 0) || (itype == 4 || itype == 5) && *kl != *ku)
+            if (*ku < 0 || *ku > fla_max(i__1,0) || (itype == 4 || itype == 5) && *kl != *ku)
             {
                 *info = -3;
             }
@@ -375,8 +368,10 @@ L10:
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
-            i__2 = fla_min(j, *m);
-            for(i__ = 1; i__ <= i__2; ++i__)
+            i__2 = fla_min(j,*m);
+            for (i__ = 1;
+                    i__ <= i__2;
+                    ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
@@ -397,8 +392,10 @@ L10:
         {
             /* Computing MIN */
             i__3 = j + 1;
-            i__2 = fla_min(i__3, *m);
-            for(i__ = 1; i__ <= i__2; ++i__)
+            i__2 = fla_min(i__3,*m);
+            for (i__ = 1;
+                    i__ <= i__2;
+                    ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
@@ -422,8 +419,10 @@ L10:
             /* Computing MIN */
             i__3 = k3;
             i__4 = k4 - j; // , expr subst
-            i__2 = fla_min(i__3, i__4);
-            for(i__ = 1; i__ <= i__2; ++i__)
+            i__2 = fla_min(i__3,i__4);
+            for (i__ = 1;
+                    i__ <= i__2;
+                    ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
@@ -447,7 +446,9 @@ L10:
             /* Computing MAX */
             i__2 = k1 - j;
             i__3 = k3;
-            for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
+            for (i__ = fla_max(i__2,1);
+                    i__ <= i__3;
+                    ++i__)
             {
                 i__2 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
@@ -475,8 +476,10 @@ L10:
             /* Computing MIN */
             i__4 = k3;
             i__5 = k4 - j; // , expr subst
-            i__2 = fla_min(i__4, i__5);
-            for(i__ = fla_max(i__3, k2); i__ <= i__2; ++i__)
+            i__2 = fla_min(i__4,i__5);
+            for (i__ = fla_max(i__3,k2);
+                    i__ <= i__2;
+                    ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;

@@ -505,11 +505,11 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
     {
         *info = -6;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -10;
     }
-    else if(*ldb < fla_max(1, *p))
+    else if (*ldb < fla_max(1,*p))
     {
         *info = -12;
     }
@@ -614,12 +614,10 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
                 /* A and B: A*Q and B*Q */
                 /* Computing MIN */
                 i__4 = *k + *l;
-                i__3 = fla_min(i__4, *m);
-                aocl_lapack_crot(&i__3, &a[(*n - *l + j) * a_dim1 + 1], &c__1,
-                                 &a[(*n - *l + i__) * a_dim1 + 1], &c__1, &csq, &snq);
-                aocl_lapack_crot(l, &b[(*n - *l + j) * b_dim1 + 1], &c__1,
-                                 &b[(*n - *l + i__) * b_dim1 + 1], &c__1, &csq, &snq);
-                if(upper)
+                i__3 = fla_min(i__4,*m);
+                crot_(&i__3, &a[(*n - *l + j) * a_dim1 + 1], &c__1, &a[(*n - * l + i__) * a_dim1 + 1], &c__1, &csq, &snq);
+                crot_(l, &b[(*n - *l + j) * b_dim1 + 1], &c__1, &b[(*n - *l + i__) * b_dim1 + 1], &c__1, &csq, &snq);
+                if (upper)
                 {
                     if(*k + i__ <= *m)
                     {
@@ -700,8 +698,10 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
             /* Computing MIN */
             i__2 = *l;
             i__3 = *m - *k; // , expr subst
-            i__1 = fla_min(i__2, i__3);
-            for(i__ = 1; i__ <= i__1; ++i__)
+            i__1 = fla_min(i__2,i__3);
+            for (i__ = 1;
+                    i__ <= i__1;
+                    ++i__)
             {
                 i__2 = *l - i__ + 1;
                 aocl_blas_ccopy(&i__2, &a[*k + i__ + (*n - *l + i__) * a_dim1], lda, &work[1],
@@ -710,11 +710,11 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
                 aocl_blas_ccopy(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb, &work[*l + 1],
                                 &c__1);
                 i__2 = *l - i__ + 1;
-                aocl_lapack_clapll(&i__2, &work[1], &c__1, &work[*l + 1], &c__1, &ssmin);
-                error = fla_max(error, ssmin);
+                clapll_(&i__2, &work[1], &c__1, &work[*l + 1], &c__1, &ssmin);
+                error = fla_max(error,ssmin);
                 /* L30: */
             }
-            if (f2c_abs(error) <= min(*tola,*tolb))
+            if (f2c_abs(error) <= fla_min(*tola,*tolb))
             {
                 goto L50;
             }
@@ -738,8 +738,10 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
     /* Computing MIN */
     i__2 = *l;
     i__3 = *m - *k; // , expr subst
-    i__1 = fla_min(i__2, i__3);
-    for(i__ = 1; i__ <= i__1; ++i__)
+    i__1 = fla_min(i__2,i__3);
+    for (i__ = 1;
+            i__ <= i__1;
+            ++i__)
     {
         i__2 = *k + i__ + (*n - *l + i__) * a_dim1;
         a1 = a[i__2].real;

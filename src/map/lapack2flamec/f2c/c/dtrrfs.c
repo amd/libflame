@@ -270,15 +270,15 @@ void dtrrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -7;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -9;
     }
-    else if(*ldx < fla_max(1, *n))
+    else if (*ldx < fla_max(1,*n))
     {
         *info = -11;
     }
@@ -326,7 +326,7 @@ void dtrrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
         aocl_blas_dtrmv(uplo, trans, diag, n, &a[a_offset], lda, &work[*n + 1], &c__1);
         aocl_blas_daxpy(n, &c_b19, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
         /* Compute componentwise relative backward error from formula */
-        /* max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(op(A))*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
+        /* fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(op(A))*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
         /* where f2c_dabs(Z) is the componentwise absolute value of the matrix */
         /* or vector Z. If the i-th component of the denominator is less */
         /* than SAFE2, then SAFE1 is added to the i-th components of the */
@@ -492,14 +492,14 @@ void dtrrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
                 /* Computing MAX */
                 d__2 = s;
                 d__3 = (d__1 = work[*n + i__], f2c_dabs(d__1)) / work[ i__]; // , expr subst
-                s = max(d__2,d__3);
+                s = fla_max(d__2,d__3);
             }
             else
             {
                 /* Computing MAX */
                 d__2 = s;
                 d__3 = ((d__1 = work[*n + i__], f2c_dabs(d__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = max(d__2,d__3);
+                s = fla_max(d__2,d__3);
             }
             /* L190: */
         }
@@ -572,7 +572,7 @@ void dtrrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
             /* Computing MAX */
             d__2 = lstres;
             d__3 = (d__1 = x[i__ + j * x_dim1], f2c_dabs(d__1)); // , expr subst
-            lstres = max(d__2,d__3);
+            lstres = fla_max(d__2,d__3);
             /* L240: */
         }
         if(lstres != 0.)

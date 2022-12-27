@@ -162,7 +162,7 @@ void aocl_lapack_stpttr(char *uplo, aocl_int64_t *n, real *ap, real *a, aocl_int
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }

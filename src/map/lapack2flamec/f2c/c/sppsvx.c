@@ -423,11 +423,11 @@ void sppsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *ap, 
                 /* Computing MIN */
                 r__1 = smin;
                 r__2 = s[j]; // , expr subst
-                smin = fla_min(r__1, r__2);
+                smin = fla_min(r__1,r__2);
                 /* Computing MAX */
                 r__1 = smax;
                 r__2 = s[j]; // , expr subst
-                smax = fla_max(r__1, r__2);
+                smax = fla_max(r__1,r__2);
                 /* L10: */
             }
             if(smin <= 0.f)
@@ -436,7 +436,7 @@ void sppsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *ap, 
             }
             else if(*n > 0)
             {
-                scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
+                scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
             }
             else
             {
@@ -445,11 +445,11 @@ void sppsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *ap, 
         }
         if(*info == 0)
         {
-            if(*ldb < fla_max(1, *n))
+            if (*ldb < fla_max(1,*n))
             {
                 *info = -10;
             }
-            else if(*ldx < fla_max(1, *n))
+            else if (*ldx < fla_max(1,*n))
             {
                 *info = -12;
             }

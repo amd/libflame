@@ -266,13 +266,13 @@ void zggqrf_(aocl_int_t *n, aocl_int_t *m, aocl_int_t *p, dcomplex *a, aocl_int_
     nb2 = aocl_lapack_ilaenv(&c__1, "ZGERQF", " ", n, p, &c_n1, &c_n1);
     nb3 = aocl_lapack_ilaenv(&c__1, "ZUNMQR", " ", n, m, p, &c_n1);
     /* Computing MAX */
-    i__1 = fla_max(nb1, nb2);
-    nb = fla_max(i__1, nb3);
+    i__1 = fla_max(nb1,nb2);
+    nb = fla_max(i__1,nb3);
     /* Computing MAX */
-    i__1 = fla_max(*n, *m);
-    lwkopt = fla_max(i__1, *p) * nb;
-    work[1].real = (doublereal)lwkopt;
-    work[1].imag = 0.; // , expr subst
+    i__1 = fla_max(*n,*m);
+    lwkopt = fla_max(i__1,*p) * nb;
+    work[1].r = (doublereal) lwkopt;
+    work[1].i = 0.; // , expr subst
     lquery = *lwork == -1;
     if(*n < 0)
     {
@@ -286,20 +286,20 @@ void zggqrf_(aocl_int_t *n, aocl_int_t *m, aocl_int_t *p, dcomplex *a, aocl_int_
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -8;
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__1 = fla_max(1, *n);
-        i__1 = fla_max(i__1, *m); // , expr subst
-        if(*lwork < fla_max(i__1, *p) && !lquery)
+        i__1 = fla_max(1,*n);
+        i__1 = fla_max(i__1,*m); // , expr subst
+        if (*lwork < fla_max(i__1,*p) && ! lquery)
         {
             *info = -11;
         }
@@ -320,19 +320,18 @@ void zggqrf_(aocl_int_t *n, aocl_int_t *m, aocl_int_t *p, dcomplex *a, aocl_int_
     aocl_lapack_zgeqrf(n, m, &a[a_offset], lda, &taua[1], &work[1], lwork, info);
     lopt = (integer)work[1].real;
     /* Update B := Q**H*B. */
-    i__1 = fla_min(*n, *m);
-    aocl_lapack_zunmqr("Left", "Conjugate Transpose", n, p, &i__1, &a[a_offset], lda, &taua[1],
-                       &b[b_offset], ldb, &work[1], lwork, info);
+    i__1 = fla_min(*n,*m);
+    zunmqr_("Left", "Conjugate Transpose", n, p, &i__1, &a[a_offset], lda, & taua[1], &b[b_offset], ldb, &work[1], lwork, info);
     /* Computing MAX */
     i__1 = lopt;
-    i__2 = (integer)work[1].real; // , expr subst
-    lopt = fla_max(i__1, i__2);
+    i__2 = (integer) work[1].r; // , expr subst
+    lopt = fla_max(i__1,i__2);
     /* RQ factorization of N-by-P matrix B: B = T*Z. */
     aocl_lapack_zgerqf(n, p, &b[b_offset], ldb, &taub[1], &work[1], lwork, info);
     /* Computing MAX */
     i__2 = lopt;
     i__3 = (integer) work[1].r; // , expr subst
-    i__1 = max(i__2,i__3);
+    i__1 = fla_max(i__2,i__3);
     work[1].r = (doublereal) i__1;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT

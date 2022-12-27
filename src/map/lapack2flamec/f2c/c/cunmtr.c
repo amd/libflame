@@ -147,7 +147,7 @@ LDA >= fla_max(1,N) if SIDE = 'R'. */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If SIDE = 'L', LWORK >= fla_max(1,N);
- */
+*/
 /* > if SIDE = 'R', LWORK >= fla_max(1,M). */
 /* > For optimum performance LWORK >= N*NB if SIDE = 'L', and */
 /* > LWORK >=M*NB if SIDE = 'R', where NB is the optimal */
@@ -264,15 +264,15 @@ void cunmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, nq))
+    else if (*lda < fla_max(1,nq))
     {
         *info = -7;
     }
-    else if(*ldc < fla_max(1, *m))
+    else if (*ldc < fla_max(1,*m))
     {
         *info = -10;
     }
-    else if(*lwork < nw && !lquery)
+    else if (*lwork < fla_max(1,nw) && ! lquery)
     {
         *info = -12;
     }
@@ -308,10 +308,9 @@ void cunmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
                 nb = aocl_lapack_ilaenv(&c__1, "CUNMQR", ch__1, m, &i__2, &i__3, &c_n1);
             }
         }
-        lwkopt = nw * nb;
-        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].real = r__1;
-        work[1].imag = 0.f; // , expr subst
+        lwkopt = fla_max(1,nw) * nb;
+        work[1].r = (real) lwkopt;
+        work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {

@@ -347,11 +347,11 @@ void sspsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *ap, 
     {
         *info = -4;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -9;
     }
-    else if(*ldx < fla_max(1, *n))
+    else if (*ldx < fla_max(1,*n))
     {
         *info = -11;
     }

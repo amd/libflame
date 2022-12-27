@@ -212,9 +212,9 @@ void zlargv_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx, dcomplex *y, aocl_int
         /* Computing MAX */
         d__9 = (d__3 = g.r, f2c_dabs(d__3));
         d__10 = (d__4 = d_imag(&g), f2c_dabs(d__4)) ; // , expr subst
-        d__5 = max(d__7,d__8);
-        d__6 = max(d__9,d__10); // , expr subst
-        scale = max(d__5,d__6);
+        d__5 = fla_max(d__7,d__8);
+        d__6 = fla_max(d__9,d__10); // , expr subst
+        scale = fla_max(d__5,d__6);
         fs.r = f.r;
         fs.i = f.i; // , expr subst
         gs.r = g.r;
@@ -275,7 +275,7 @@ void zlargv_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx, dcomplex *y, aocl_int
         /* Computing 2nd power */
         d__2 = d_imag(&gs);
         g2 = d__1 * d__1 + d__2 * d__2;
-        if(f2 <= fla_max(g2, 1.) * safmin)
+        if (f2 <= fla_max(g2,1.) * safmin)
         {
             /* This is a rare case: F is very small. */
             if(f.real == 0. && f.imag == 0.)
@@ -318,7 +318,7 @@ void zlargv_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx, dcomplex *y, aocl_int
             /* Computing MAX */
             d__3 = (d__1 = f.r, f2c_dabs(d__1));
             d__4 = (d__2 = d_imag(&f), f2c_dabs( d__2)); // , expr subst
-            if (max(d__3,d__4) > 1.)
+            if (fla_max(d__3,d__4) > 1.)
             {
                 d__1 = f.real;
                 d__2 = d_imag(&f);

@@ -230,7 +230,7 @@ void ctpcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, scomplex *ap, re
         return 0;
     }
     *rcond = 0.f;
-    smlnum = slamch_("Safe minimum") * (real)fla_max(1, *n);
+    smlnum = slamch_("Safe minimum") * (real) fla_max(1,*n);
     /* Compute the norm of the triangular matrix A. */
     anorm = aocl_lapack_clantp(norm, uplo, diag, n, &ap[1], &rwork[1]);
     /* Continue only if ANORM > 0. */

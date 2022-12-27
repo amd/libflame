@@ -208,11 +208,11 @@ doublereal dla_gercond_(char *trans, aocl_int_t *n, doublereal *a, aocl_int_t *l
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
-    else if(*ldaf < fla_max(1, *n))
+    else if (*ldaf < fla_max(1,*n))
     {
         *info = -6;
     }

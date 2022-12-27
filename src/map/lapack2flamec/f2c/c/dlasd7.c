@@ -440,10 +440,10 @@ void dlasd7_(aocl_int_t *icompq, aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqr
     /* Computing MAX */
     d__1 = f2c_dabs(*alpha);
     d__2 = f2c_dabs(*beta); // , expr subst
-    tol = max(d__1,d__2);
+    tol = fla_max(d__1,d__2);
     /* Computing MAX */
     d__2 = (d__1 = d__[n], f2c_dabs(d__1));
-    tol = eps * 64. * max(d__2,tol);
+    tol = eps * 64. * fla_max(d__2,tol);
     /* There are 2 kinds of deflation -- first a value in the z-vector */
     /* is small, second two (or more) singular values are very close */
     /* together (their difference is (*small_val). */

@@ -195,7 +195,7 @@ void aocl_lapack_dtzrqf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -4;
     }
@@ -223,8 +223,10 @@ void aocl_lapack_dtzrqf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
     {
         /* Computing MIN */
         i__1 = *m + 1;
-        m1 = fla_min(i__1, *n);
-        for(k = *m; k >= 1; --k)
+        m1 = fla_min(i__1,*n);
+        for (k = *m;
+                k >= 1;
+                --k)
         {
             /* Use a Householder reflection to zero the kth row of A. */
             /* First set up the reflection. */

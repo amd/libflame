@@ -192,7 +192,7 @@ void csyr_(char *uplo, aocl_int_t *n, scomplex *alpha, scomplex *x, aocl_int_t *
     {
         info = 5;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         info = 7;
     }

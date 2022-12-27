@@ -196,7 +196,7 @@ void clatzm_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, aocl_int_t *
     c1 -= c1_offset;
     --work;
     /* Function Body */
-    if(fla_min(*m, *n) == 0 || tau->real == 0.f && tau->imag == 0.f)
+    if (fla_min(*m,*n) == 0 || tau->r == 0.f && tau->i == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;

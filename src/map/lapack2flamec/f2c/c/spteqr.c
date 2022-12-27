@@ -226,7 +226,7 @@ void spteqr_(char *compz, aocl_int_t *n, real *d__, real *e, real *z__, aocl_int
     {
         *info = -2;
     }
-    else if(*ldz < 1 || icompz > 0 && *ldz < fla_max(1, *n))
+    else if (*ldz < 1 || icompz > 0 && *ldz < fla_max(1,*n))
     {
         *info = -6;
     }

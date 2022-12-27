@@ -229,7 +229,7 @@ void zgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, dcomplex *a, aocl_int_
     --work;
     /* Function Body */
     *info = 0;
-    mn = fla_min(*m, *n);
+    mn = fla_min(*m,*n);
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -243,11 +243,11 @@ void zgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, dcomplex *a, aocl_int_
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -5;
     }
-    else if(*ldb < fla_max(1, *p))
+    else if (*ldb < fla_max(1,*p))
     {
         *info = -7;
     }
@@ -266,11 +266,11 @@ void zgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, dcomplex *a, aocl_int_
             nb3 = aocl_lapack_ilaenv(&c__1, "ZUNMQR", " ", m, n, p, &c_n1);
             nb4 = aocl_lapack_ilaenv(&c__1, "ZUNMRQ", " ", m, n, p, &c_n1);
             /* Computing MAX */
-            i__1 = fla_max(nb1, nb2);
-            i__1 = fla_max(i__1, nb3); // , expr subst
-            nb = fla_max(i__1, nb4);
+            i__1 = fla_max(nb1,nb2);
+            i__1 = fla_max(i__1,nb3); // , expr subst
+            nb = fla_max(i__1,nb4);
             lwkmin = *m + *n + *p;
-            lwkopt = *p + mn + fla_max(*m, *n) * nb;
+            lwkopt = *p + mn + fla_max(*m,*n) * nb;
         }
         work[1].real = (doublereal)lwkopt;
         work[1].imag = 0.; // , expr subst
@@ -310,15 +310,15 @@ void zgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, dcomplex *a, aocl_int_
     lopt = (integer)work[i__1].real;
     /* Update c = Z**H *c = ( c1 ) N-P */
     /* ( c2 ) M+P-N */
-    i__1 = fla_max(1, *m);
+    i__1 = fla_max(1,*m);
     i__2 = *lwork - *p - mn;
     aocl_lapack_zunmqr("Left", "Conjugate Transpose", m, &c__1, &mn, &a[a_offset], lda,
                        &work[*p + 1], &c__[1], &i__1, &work[*p + mn + 1], &i__2, info);
     /* Computing MAX */
     i__3 = *p + mn + 1;
     i__1 = lopt;
-    i__2 = (integer)work[i__3].real; // , expr subst
-    lopt = fla_max(i__1, i__2);
+    i__2 = (integer) work[i__3].r; // , expr subst
+    lopt = fla_max(i__1,i__2);
     /* Solve T12*x2 = d for x2 */
     if(*p > 0)
     {
@@ -388,7 +388,7 @@ void zgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, dcomplex *a, aocl_int_
     i__4 = *p + mn + 1;
     i__2 = lopt;
     i__3 = (integer) work[i__4].r; // , expr subst
-    i__1 = *p + mn + max(i__2,i__3);
+    i__1 = *p + mn + fla_max(i__2,i__3);
     work[1].r = (doublereal) i__1;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT

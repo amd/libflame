@@ -217,7 +217,7 @@ void cgbtrs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
     {
         *info = -7;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -10;
     }
@@ -252,7 +252,7 @@ void cgbtrs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
                 /* Computing MIN */
                 i__2 = *kl;
                 i__3 = *n - j; // , expr subst
-                lm = fla_min(i__2, i__3);
+                lm = fla_min(i__2,i__3);
                 l = ipiv[j];
                 if(l != j)
                 {
@@ -295,11 +295,10 @@ void cgbtrs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
                 /* Computing MIN */
                 i__1 = *kl;
                 i__2 = *n - j; // , expr subst
-                lm = fla_min(i__1, i__2);
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_cgemv("Transpose", &lm, nrhs, &q__1, &b[j + 1 + b_dim1], ldb,
-                                &ab[kd + 1 + j * ab_dim1], &c__1, &c_b1, &b[j + b_dim1], ldb);
+                lm = fla_min(i__1,i__2);
+                q__1.r = -1.f;
+                q__1.i = -0.f; // , expr subst
+                cgemv_("Transpose", &lm, nrhs, &q__1, &b[j + 1 + b_dim1], ldb, &ab[kd + 1 + j * ab_dim1], &c__1, &c_b1, &b[j + b_dim1], ldb);
                 l = ipiv[j];
                 if(l != j)
                 {
@@ -329,13 +328,12 @@ void cgbtrs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
                 /* Computing MIN */
                 i__1 = *kl;
                 i__2 = *n - j; // , expr subst
-                lm = fla_min(i__1, i__2);
-                aocl_lapack_clacgv(nrhs, &b[j + b_dim1], ldb);
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_cgemv("Conjugate transpose", &lm, nrhs, &q__1, &b[j + 1 + b_dim1], ldb,
-                                &ab[kd + 1 + j * ab_dim1], &c__1, &c_b1, &b[j + b_dim1], ldb);
-                aocl_lapack_clacgv(nrhs, &b[j + b_dim1], ldb);
+                lm = fla_min(i__1,i__2);
+                clacgv_(nrhs, &b[j + b_dim1], ldb);
+                q__1.r = -1.f;
+                q__1.i = -0.f; // , expr subst
+                cgemv_("Conjugate transpose", &lm, nrhs, &q__1, &b[j + 1 + b_dim1], ldb, &ab[kd + 1 + j * ab_dim1], &c__1, &c_b1, &b[j + b_dim1], ldb);
+                clacgv_(nrhs, &b[j + b_dim1], ldb);
                 l = ipiv[j];
                 if(l != j)
                 {

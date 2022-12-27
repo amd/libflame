@@ -255,7 +255,7 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     --jpvt;
     --work;
     /* Function Body */
-    mn = fla_min(*m, *n);
+    mn = fla_min(*m,*n);
     ismin = mn + 1;
     ismax = (mn << 1) + 1;
     /* Test the input arguments. */
@@ -272,15 +272,15 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -5;
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__1 = fla_max(1, *m);
-        if(*ldb < fla_max(i__1, *n))
+        i__1 = fla_max(1,*m);
+        if (*ldb < fla_max(i__1,*n))
         {
             *info = -7;
         }
@@ -294,8 +294,8 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     }
     /* Quick return if possible */
     /* Computing MIN */
-    i__1 = fla_min(*m, *n);
-    if(fla_min(i__1, *nrhs) == 0)
+    i__1 = fla_min(*m,*n);
+    if (fla_min(i__1,*nrhs) == 0)
     {
         *rank = 0;
         AOCL_DTL_TRACE_LOG_EXIT
@@ -322,8 +322,8 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     else if(anrm == 0.f)
     {
         /* Matrix all zero. Return zero solution. */
-        i__1 = fla_max(*m, *n);
-        aocl_lapack_slaset("F", &i__1, nrhs, &c_b13, &c_b13, &b[b_offset], ldb);
+        i__1 = fla_max(*m,*n);
+        slaset_("F", &i__1, nrhs, &c_b13, &c_b13, &b[b_offset], ldb);
         *rank = 0;
         goto L100;
     }
@@ -354,8 +354,8 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     if ((r__1 = a[a_dim1 + 1], f2c_abs(r__1)) == 0.f)
     {
         *rank = 0;
-        i__1 = fla_max(*m, *n);
-        aocl_lapack_slaset("F", &i__1, nrhs, &c_b13, &c_b13, &b[b_offset], ldb);
+        i__1 = fla_max(*m,*n);
+        slaset_("F", &i__1, nrhs, &c_b13, &c_b13, &b[b_offset], ldb);
         goto L100;
     }
     else

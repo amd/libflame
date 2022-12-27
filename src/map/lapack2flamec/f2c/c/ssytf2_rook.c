@@ -260,7 +260,7 @@ void ssytf2_rook_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
@@ -304,7 +304,7 @@ void ssytf2_rook_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_
         {
             colmax = 0.f;
         }
-        if(fla_max(absakk, colmax) == 0.f)
+        if (fla_max(absakk,colmax) == 0.f)
         {
             /* Column K is zero or underflow: set INFO and continue */
             if(*info == 0)
@@ -556,7 +556,7 @@ void ssytf2_rook_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_
         {
             colmax = 0.f;
         }
-        if(fla_max(absakk, colmax) == 0.f)
+        if (fla_max(absakk,colmax) == 0.f)
         {
             /* Column K is zero or underflow: set INFO and continue */
             if(*info == 0)

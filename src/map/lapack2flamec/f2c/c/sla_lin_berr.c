@@ -39,7 +39,7 @@
 /* > */
 /* > SLA_LIN_BERR computes componentwise relative backward error from */
 /* > the formula */
-/* > max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s) )(i) ) */
+/* > fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s) )(i) ) */
 /* > where f2c_abs(Z) is the componentwise absolute value of the matrix */
 /* > or vector Z. */
 /* > \endverbatim */
@@ -166,7 +166,7 @@ void aocl_lapack_sla_lin_berr(aocl_int64_t *n, aocl_int64_t *nz, aocl_int64_t *n
                 tmp = (safe1 + (r__1 = res[i__ + j * res_dim1], f2c_abs(r__1))) / ayb[i__ + j * ayb_dim1];
                 /* Computing MAX */
                 r__1 = berr[j];
-                berr[j] = fla_max(r__1, tmp);
+                berr[j] = fla_max(r__1,tmp);
             }
             /* If AYB is exactly 0.0 (and if computed by SLA_yyAMV), then we know */
             /* the true residual also must be exactly 0.0. */

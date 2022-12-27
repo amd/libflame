@@ -729,11 +729,11 @@ void dgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
                 /* Computing MIN */
                 d__1 = rcmin;
                 d__2 = r__[j]; // , expr subst
-                rcmin = fla_min(d__1, d__2);
+                rcmin = fla_min(d__1,d__2);
                 /* Computing MAX */
                 d__1 = rcmax;
                 d__2 = r__[j]; // , expr subst
-                rcmax = fla_max(d__1, d__2);
+                rcmax = fla_max(d__1,d__2);
                 /* L10: */
             }
             if(rcmin <= 0.)
@@ -742,7 +742,7 @@ void dgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
             }
             else if(*n > 0)
             {
-                rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
+                rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
             }
             else
             {
@@ -759,11 +759,11 @@ void dgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
                 /* Computing MIN */
                 d__1 = rcmin;
                 d__2 = c__[j]; // , expr subst
-                rcmin = fla_min(d__1, d__2);
+                rcmin = fla_min(d__1,d__2);
                 /* Computing MAX */
                 d__1 = rcmax;
                 d__2 = c__[j]; // , expr subst
-                rcmax = fla_max(d__1, d__2);
+                rcmax = fla_max(d__1,d__2);
                 /* L20: */
             }
             if(rcmin <= 0.)
@@ -772,7 +772,7 @@ void dgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
             }
             else if(*n > 0)
             {
-                colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
+                colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
             }
             else
             {
@@ -781,11 +781,11 @@ void dgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
         }
         if(*info == 0)
         {
-            if(*ldb < fla_max(1, *n))
+            if (*ldb < fla_max(1,*n))
             {
                 *info = -15;
             }
-            else if(*ldx < fla_max(1, *n))
+            else if (*ldx < fla_max(1,*n))
             {
                 *info = -16;
             }

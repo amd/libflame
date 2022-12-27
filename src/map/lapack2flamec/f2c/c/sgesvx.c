@@ -484,11 +484,11 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     {
         *info = -4;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -6;
     }
-    else if(*ldaf < fla_max(1, *n))
+    else if (*ldaf < fla_max(1,*n))
     {
         *info = -8;
     }
@@ -508,11 +508,11 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
                 /* Computing MIN */
                 r__1 = rcmin;
                 r__2 = r__[j]; // , expr subst
-                rcmin = fla_min(r__1, r__2);
+                rcmin = fla_min(r__1,r__2);
                 /* Computing MAX */
                 r__1 = rcmax;
                 r__2 = r__[j]; // , expr subst
-                rcmax = fla_max(r__1, r__2);
+                rcmax = fla_max(r__1,r__2);
                 /* L10: */
             }
             if(rcmin <= 0.f)
@@ -521,7 +521,7 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
             }
             else if(*n > 0)
             {
-                rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
+                rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
             }
             else
             {
@@ -538,11 +538,11 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
                 /* Computing MIN */
                 r__1 = rcmin;
                 r__2 = c__[j]; // , expr subst
-                rcmin = fla_min(r__1, r__2);
+                rcmin = fla_min(r__1,r__2);
                 /* Computing MAX */
                 r__1 = rcmax;
                 r__2 = c__[j]; // , expr subst
-                rcmax = fla_max(r__1, r__2);
+                rcmax = fla_max(r__1,r__2);
                 /* L20: */
             }
             if(rcmin <= 0.f)
@@ -551,7 +551,7 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
             }
             else if(*n > 0)
             {
-                colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
+                colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
             }
             else
             {
@@ -560,11 +560,11 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
         }
         if(*info == 0)
         {
-            if(*ldb < fla_max(1, *n))
+            if (*ldb < fla_max(1,*n))
             {
                 *info = -14;
             }
-            else if(*ldx < fla_max(1, *n))
+            else if (*ldx < fla_max(1,*n))
             {
                 *info = -16;
             }

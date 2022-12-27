@@ -320,11 +320,11 @@ void dsygvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, doublerea
     {
         *info = -4;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -6;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -8;
     }
@@ -372,13 +372,13 @@ void dsygvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, doublerea
     aocl_lapack_dsyevd(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, &iwork[1], liwork,
                        info);
     /* Computing MAX */
-    d__1 = (doublereal)lopt;
-    lopt = (integer)fla_max(d__1, work[1]);
+    d__1 = (doublereal) lopt;
+    lopt = (integer) fla_max(d__1,work[1]);
     /* Computing MAX */
-    d__1 = (doublereal)liopt;
-    d__2 = (doublereal)iwork[1]; // , expr subst
-    liopt = (integer)fla_max(d__1, d__2);
-    if(wantz && *info == 0)
+    d__1 = (doublereal) liopt;
+    d__2 = (doublereal) iwork[1]; // , expr subst
+    liopt = (integer) fla_max(d__1,d__2);
+    if (wantz && *info == 0)
     {
         /* Backtransform eigenvectors to the original problem. */
         if(*itype == 1 || *itype == 2)

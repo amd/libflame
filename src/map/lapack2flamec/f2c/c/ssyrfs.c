@@ -274,19 +274,19 @@ void ssyrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *l
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
-    else if(*ldaf < fla_max(1, *n))
+    else if (*ldaf < fla_max(1,*n))
     {
         *info = -7;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -10;
     }
-    else if(*ldx < fla_max(1, *n))
+    else if (*ldx < fla_max(1,*n))
     {
         *info = -12;
     }
@@ -328,7 +328,7 @@ void ssyrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *l
         aocl_blas_ssymv(uplo, n, &c_b12, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b14,
                         &work[*n + 1], &c__1);
         /* Compute componentwise relative backward error from formula */
-        /* max(i) ( f2c_abs(R(i)) / ( f2c_abs(A)*f2c_abs(X) + f2c_abs(B) )(i) ) */
+        /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(A)*f2c_abs(X) + f2c_abs(B) )(i) ) */
         /* where f2c_abs(Z) is the componentwise absolute value of the matrix */
         /* or vector Z. If the i-th component of the denominator is less */
         /* than SAFE2, then SAFE1 is added to the i-th components of the */
@@ -386,14 +386,14 @@ void ssyrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *l
                 /* Computing MAX */
                 r__2 = s;
                 r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[ i__]; // , expr subst
-                s = max(r__2,r__3);
+                s = fla_max(r__2,r__3);
             }
             else
             {
                 /* Computing MAX */
                 r__2 = s;
                 r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = max(r__2,r__3);
+                s = fla_max(r__2,r__3);
             }
             /* L80: */
         }
@@ -483,7 +483,7 @@ void ssyrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *l
             /* Computing MAX */
             r__2 = lstres;
             r__3 = (r__1 = x[i__ + j * x_dim1], f2c_abs(r__1)); // , expr subst
-            lstres = max(r__2,r__3);
+            lstres = fla_max(r__2,r__3);
             /* L130: */
         }
         if(lstres != 0.f)

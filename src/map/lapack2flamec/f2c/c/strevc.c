@@ -325,7 +325,7 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
     {
         *info = -4;
     }
-    else if(*ldt < fla_max(1, *n))
+    else if (*ldt < fla_max(1,*n))
     {
         *info = -6;
     }
@@ -480,7 +480,7 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
             }
             /* Computing MAX */
             r__1 = ulp * (f2c_abs(wr) + f2c_abs(wi));
-            smin = max(r__1,smlnum);
+            smin = fla_max(r__1,smlnum);
             if (ip == 0)
             {
                 /* Real right eigenvector */
@@ -554,8 +554,8 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
                             /* Computing MAX */
                             r__1 = work[j - 1];
                             r__2 = work[j]; // , expr subst
-                            beta = fla_max(r__1, r__2);
-                            if(beta > bignum / xnorm)
+                            beta = fla_max(r__1,r__2);
+                            if (beta > bignum / xnorm)
                             {
                                 x[0] /= xnorm;
                                 x[1] /= xnorm;
@@ -703,8 +703,8 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
                             /* Computing MAX */
                             r__1 = work[j - 1];
                             r__2 = work[j]; // , expr subst
-                            beta = fla_max(r__1, r__2);
-                            if(beta > bignum / xnorm)
+                            beta = fla_max(r__1,r__2);
+                            if (beta > bignum / xnorm)
                             {
                                 rec = 1.f / xnorm;
                                 x[0] *= rec;
@@ -756,7 +756,7 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
                         /* Computing MAX */
                         r__3 = emax;
                         r__4 = (r__1 = vr[k + (is - 1) * vr_dim1], f2c_abs(r__1)) + (r__2 = vr[k + is * vr_dim1], f2c_abs(r__2));  // , expr subst
-                        emax = max(r__3,r__4);
+                        emax = fla_max(r__3,r__4);
                         /* L100: */
                     }
                     remax = 1.f / emax;
@@ -794,7 +794,7 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
                         /* Computing MAX */
                         r__3 = emax;
                         r__4 = (r__1 = vr[k + (ki - 1) * vr_dim1], f2c_abs(r__1)) + (r__2 = vr[k + ki * vr_dim1], f2c_abs(r__2));  // , expr subst
-                        emax = max(r__3,r__4);
+                        emax = fla_max(r__3,r__4);
                         /* L120: */
                     }
                     remax = 1.f / emax;
@@ -857,7 +857,7 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
             }
             /* Computing MAX */
             r__1 = ulp * (f2c_abs(wr) + f2c_abs(wi));
-            smin = max(r__1,smlnum);
+            smin = fla_max(r__1,smlnum);
             if (ip == 0)
             {
                 /* Real left eigenvector. */
@@ -921,7 +921,7 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
                         work[j + *n] = x[0];
                         /* Computing MAX */
                         r__2 = (r__1 = work[j + *n], f2c_abs(r__1));
-                        vmax = max(r__2,vmax);
+                        vmax = fla_max(r__2,vmax);
                         vcrit = bignum / vmax;
                     }
                     else
@@ -932,8 +932,8 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
                         /* Computing MAX */
                         r__1 = work[j];
                         r__2 = work[j + 1]; // , expr subst
-                        beta = fla_max(r__1, r__2);
-                        if(beta > vcrit)
+                        beta = fla_max(r__1,r__2);
+                        if (beta > vcrit)
                         {
                             rec = 1.f / vmax;
                             i__3 = *n - ki + 1;
@@ -964,8 +964,8 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
                         /* Computing MAX */
                         r__3 = (r__1 = work[j + *n], f2c_abs(r__1));
                         r__4 = (r__2 = work[j + 1 + *n], f2c_abs(r__2));
-                        r__3 = max( r__3,r__4); // ; expr subst
-                        vmax = max(r__3,vmax);
+                        r__3 = fla_max( r__3,r__4); // ; expr subst
+                        vmax = fla_max(r__3,vmax);
                         vcrit = bignum / vmax;
                     }
                 L170:;
@@ -1089,8 +1089,8 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
                         /* Computing MAX */
                         r__3 = (r__1 = work[j + *n], f2c_abs(r__1));
                         r__4 = (r__2 = work[j + n2], f2c_abs(r__2));
-                        r__3 = max(r__3, r__4); // ; expr subst
-                        vmax = max(r__3,vmax);
+                        r__3 = fla_max(r__3, r__4); // ; expr subst
+                        vmax = fla_max(r__3,vmax);
                         vcrit = bignum / vmax;
                     }
                     else
@@ -1101,8 +1101,8 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
                         /* Computing MAX */
                         r__1 = work[j];
                         r__2 = work[j + 1]; // , expr subst
-                        beta = fla_max(r__1, r__2);
-                        if(beta > vcrit)
+                        beta = fla_max(r__1,r__2);
+                        if (beta > vcrit)
                         {
                             rec = 1.f / vmax;
                             i__3 = *n - ki + 1;
@@ -1144,10 +1144,10 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
                         work[j + 1 + *n] = x[1];
                         work[j + 1 + n2] = x[3];
                         /* Computing MAX */
-                        r__1 = f2c_abs(x[0]), r__2 = f2c_abs(x[2]), r__1 = max(r__1, r__2), r__2 = f2c_abs(x[1]), r__1 = max(r__1,r__2) ;
+                        r__1 = f2c_abs(x[0]), r__2 = f2c_abs(x[2]), r__1 = fla_max(r__1, r__2), r__2 = f2c_abs(x[1]), r__1 = fla_max(r__1,r__2) ;
                         r__2 = f2c_abs(x[3]);
-                        r__1 = max(r__1,r__2); // ; expr subst
-                        vmax = max(r__1,vmax);
+                        r__1 = fla_max(r__1,r__2); // ; expr subst
+                        vmax = fla_max(r__1,vmax);
                         vcrit = bignum / vmax;
                     }
                 L200:;
@@ -1167,7 +1167,7 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
                         /* Computing MAX */
                         r__3 = emax;
                         r__4 = (r__1 = vl[k + is * vl_dim1], f2c_abs( r__1)) + (r__2 = vl[k + (is + 1) * vl_dim1], f2c_abs(r__2)); // , expr subst
-                        emax = max(r__3,r__4);
+                        emax = fla_max(r__3,r__4);
                         /* L220: */
                     }
                     remax = 1.f / emax;
@@ -1208,7 +1208,7 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
                         /* Computing MAX */
                         r__3 = emax;
                         r__4 = (r__1 = vl[k + ki * vl_dim1], f2c_abs( r__1)) + (r__2 = vl[k + (ki + 1) * vl_dim1], f2c_abs(r__2)); // , expr subst
-                        emax = max(r__3,r__4);
+                        emax = fla_max(r__3,r__4);
                         /* L240: */
                     }
                     remax = 1.f / emax;

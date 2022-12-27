@@ -197,11 +197,11 @@ void aocl_lapack_sgetrs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -8;
     }

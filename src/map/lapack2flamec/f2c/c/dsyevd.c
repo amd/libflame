@@ -261,7 +261,7 @@ void dsyevd_(char *jobz, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *l
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
@@ -290,11 +290,8 @@ void dsyevd_(char *jobz, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *l
             }
             /* Computing MAX */
             i__1 = lwmin;
-            i__2 = (*n << 1)
-                   + *n
-                         * aocl_lapack_ilaenv(&c__1, "DSYTRD", uplo, n, &c_n1, &c_n1,
-                                              &c_n1); // , expr subst
-            lopt = fla_max(i__1, i__2);
+            i__2 = (*n << 1) + ilaenv_(&c__1, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+            lopt = fla_max(i__1,i__2);
             liopt = liwmin;
         }
         work[1] = (doublereal)lopt;

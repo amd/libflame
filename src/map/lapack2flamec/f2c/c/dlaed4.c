@@ -326,11 +326,11 @@ void dlaed4_(aocl_int_t *n, aocl_int_t *i__, doublereal *d__, doublereal *z__, d
         }
         if(w <= 0.)
         {
-            dltlb = fla_max(dltlb, tau);
+            dltlb = fla_max(dltlb,tau);
         }
         else
         {
-            dltub = fla_min(dltub, tau);
+            dltub = fla_min(dltub,tau);
         }
         /* Calculate the new step */
         ++niter;
@@ -417,11 +417,11 @@ void dlaed4_(aocl_int_t *n, aocl_int_t *i__, doublereal *d__, doublereal *z__, d
             }
             if(w <= 0.)
             {
-                dltlb = fla_max(dltlb, tau);
+                dltlb = fla_max(dltlb,tau);
             }
             else
             {
-                dltub = fla_min(dltub, tau);
+                dltub = fla_min(dltub,tau);
             }
             /* Calculate the new step */
             c__ = w - delta[*n - 1] * dpsi - delta[*n] * dphi;
@@ -654,11 +654,11 @@ void dlaed4_(aocl_int_t *n, aocl_int_t *i__, doublereal *d__, doublereal *z__, d
         }
         if(w <= 0.)
         {
-            dltlb = fla_max(dltlb, tau);
+            dltlb = fla_max(dltlb,tau);
         }
         else
         {
-            dltub = fla_min(dltub, tau);
+            dltub = fla_min(dltub,tau);
         }
         /* Calculate the new step */
         ++niter;
@@ -823,11 +823,11 @@ void dlaed4_(aocl_int_t *n, aocl_int_t *i__, doublereal *d__, doublereal *z__, d
             }
             if(w <= 0.)
             {
-                dltlb = fla_max(dltlb, tau);
+                dltlb = fla_max(dltlb,tau);
             }
             else
             {
-                dltub = fla_min(dltub, tau);
+                dltub = fla_min(dltub,tau);
             }
             /* Calculate the new step */
             if(!swtch3)

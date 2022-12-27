@@ -381,7 +381,7 @@ void ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
     {
         info = -7;
     }
-    else if(*ldb < fla_max(1, *m))
+    else if (*ldb < fla_max(1,*m))
     {
         info = -11;
     }

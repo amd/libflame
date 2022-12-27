@@ -346,15 +346,15 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
     {
         *info = -4;
     }
-    else if(*ldq < fla_max(1, *n))
+    else if (*ldq < fla_max(1,*n))
     {
         *info = -7;
     }
-    else if(*cutpnt < fla_min(1, *n) || *cutpnt > *n)
+    else if (*cutpnt < fla_min(1,*n) || *cutpnt > *n)
     {
         *info = -10;
     }
-    else if(*ldq2 < fla_max(1, *n))
+    else if (*ldq2 < fla_max(1,*n))
     {
         *info = -14;
     }

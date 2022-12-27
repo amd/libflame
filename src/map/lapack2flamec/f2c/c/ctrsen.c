@@ -167,9 +167,9 @@ and if COMPQ = 'V', LDQ >= N. */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If JOB = 'N', LWORK >= 1;
- */
+*/
 /* > if JOB = 'E', LWORK = fla_max(1,M*(N-M));
- */
+*/
 /* > if JOB = 'V' or 'B', LWORK >= fla_max(1,2*M*(N-M)). */
 /* > */
 /* > If LWORK = -1, then a workspace query is assumed;
@@ -361,7 +361,7 @@ void ctrsen_(char *job, char *compq, logical *select, aocl_int_t *n, scomplex *t
         /* Computing MAX */
         i__1 = 1;
         i__2 = nn << 1; // , expr subst
-        lwmin = fla_max(i__1, i__2);
+        lwmin = fla_max(i__1,i__2);
     }
     else if(lsame_(job, "N", 1, 1))
     {
@@ -369,7 +369,7 @@ void ctrsen_(char *job, char *compq, logical *select, aocl_int_t *n, scomplex *t
     }
     else if(lsame_(job, "E", 1, 1))
     {
-        lwmin = fla_max(1, nn);
+        lwmin = fla_max(1,nn);
     }
     if(!lsame_(job, "N", 1, 1) && !wants && !wantsp)
     {
@@ -383,7 +383,7 @@ void ctrsen_(char *job, char *compq, logical *select, aocl_int_t *n, scomplex *t
     {
         *info = -4;
     }
-    else if(*ldt < fla_max(1, *n))
+    else if (*ldt < fla_max(1,*n))
     {
         *info = -6;
     }

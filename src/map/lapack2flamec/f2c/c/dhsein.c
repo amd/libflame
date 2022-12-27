@@ -400,7 +400,7 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t 
     {
         *info = -5;
     }
-    else if(*ldh < fla_max(1, *n))
+    else if (*ldh < fla_max(1,*n))
     {
         *info = -7;
     }

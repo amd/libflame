@@ -191,15 +191,15 @@ void dgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, doublereal *a, aoc
     {
         *info = -1;
     }
-    else if(*ilo < 1 || *ilo > fla_max(1, *n))
+    else if (*ilo < 1 || *ilo > fla_max(1,*n))
     {
         *info = -2;
     }
-    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
+    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
@@ -217,8 +217,7 @@ void dgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, doublereal *a, aoc
         i__2 = *ihi - i__;
         /* Computing MIN */
         i__3 = i__ + 2;
-        aocl_lapack_dlarfg(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[fla_min(i__3, *n) + i__ * a_dim1],
-                           &c__1, &tau[i__]);
+        dlarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, &tau[i__]);
         aii = a[i__ + 1 + i__ * a_dim1];
         a[i__ + 1 + i__ * a_dim1] = 1.;
         /* Apply H(i) to A(1:ihi,i+1:ihi) from the right */

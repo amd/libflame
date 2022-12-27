@@ -29,8 +29,14 @@
 #include <float.h>
 #include <signal.h>
 
-// Include f2c definitions.
-#include "FLA_f2c.h"
+  // Include f2c definitions.
+  #include "FLA_f2c.h"
+
+  // Include prototypes for BLAS-like interfaces.
+  #ifndef BLIS1_FROM_LIBFLAME
+    #define BLIS1_FROM_LIBFLAME
+  #endif
+  #include "blis1.h"
 
   // Include CPU architecture related declarations 
   #include "cpu_features.h"
@@ -38,11 +44,8 @@
   //Include context declarations
   #include "FLA_Context.h"
 
-  // Include f2c definitions.
-  #include "FLA_f2c.h"
-
-// Include _PTR macro definitions.
-#include "FLA_macro_ptr_defs.h"
+  // Include _PTR macro definitions.
+  #include "FLA_macro_ptr_defs.h"
 
 // Include "extern" definitions for global FLAME scalar constants.
 #include "FLA_extern_defs.h"

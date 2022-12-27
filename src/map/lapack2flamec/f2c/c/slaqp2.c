@@ -214,7 +214,7 @@ void aocl_lapack_slaqp2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, 
     /* Function Body */
     /* Computing MIN */
     i__1 = *m - *offset;
-    mn = fla_min(i__1, *n);
+    mn = fla_min(i__1,*n);
     tol3z = sqrt(slamch_("Epsilon"));
     /* Compute factorization. */
     i__1 = mn;
@@ -267,7 +267,7 @@ void aocl_lapack_slaqp2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, 
                 /* Computing 2nd power */
                 r__2 = (r__1 = a[offpi + j * a_dim1], f2c_abs(r__1)) / vn1[j];
                 temp = 1.f - r__2 * r__2;
-                temp = fla_max(temp, 0.f);
+                temp = fla_max(temp,0.f);
                 /* Computing 2nd power */
                 r__1 = vn1[j] / vn2[j];
                 temp2 = temp * (r__1 * r__1);

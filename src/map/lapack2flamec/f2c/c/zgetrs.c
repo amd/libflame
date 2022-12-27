@@ -177,11 +177,11 @@ void zgetrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -8;
     }

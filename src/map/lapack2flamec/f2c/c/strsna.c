@@ -371,7 +371,7 @@ void strsna_(char *job, char *howmny, logical *select, aocl_int_t *n, real *t, a
     {
         *info = -4;
     }
-    else if(*ldt < fla_max(1, *n))
+    else if (*ldt < fla_max(1,*n))
     {
         *info = -6;
     }
@@ -681,8 +681,8 @@ void strsna_(char *job, char *howmny, logical *select, aocl_int_t *n, real *t, a
                     goto L50;
                 }
             }
-            sep[ks] = scale / fla_max(est, smlnum);
-            if(pair)
+            sep[ks] = scale / fla_max(est,smlnum);
+            if (pair)
             {
                 sep[ks + 1] = sep[ks];
             }

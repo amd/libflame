@@ -370,7 +370,7 @@ void ctrsna_(char *job, char *howmny, logical *select, aocl_int_t *n, scomplex *
     {
         *info = -4;
     }
-    else if(*ldt < fla_max(1, *n))
+    else if (*ldt < fla_max(1,*n))
     {
         *info = -6;
     }
@@ -515,7 +515,7 @@ void ctrsna_(char *job, char *howmny, logical *select, aocl_int_t *n, scomplex *
                 }
                 goto L30;
             }
-            sep[ks] = 1.f / fla_max(est, smlnum);
+            sep[ks] = 1.f / fla_max(est,smlnum);
         }
     L40:
         ++ks;

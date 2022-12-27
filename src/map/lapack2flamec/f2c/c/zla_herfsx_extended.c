@@ -193,7 +193,7 @@ static doublereal c_b37 = 1.;
 /* > BERR_OUT is DOUBLE PRECISION array, dimension (NRHS) */
 /* > On exit, BERR_OUT(j) contains the componentwise relative backward */
 /* > error for right-hand-side j from the formula */
-/* > max(i) ( f2c_dabs(RES(i)) / ( f2c_dabs(op(A_s))*f2c_dabs(Y) + f2c_dabs(B_s) )(i) ) */
+/* > fla_max(i) ( f2c_dabs(RES(i)) / ( f2c_dabs(op(A_s))*f2c_dabs(Y) + f2c_dabs(B_s) )(i) ) */
 /* > where f2c_dabs(Z) is the componentwise absolute value of the matrix */
 /* > or vector Z. This is computed by ZLA_LIN_BERR. */
 /* > \endverbatim */
@@ -542,19 +542,19 @@ AOCL_DTL_SNPRINTF("zla_herfsx_extended inputs: prec_type__ %" FLA_IS ", uplo %c,
     {
         *info = -4;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -6;
     }
-    else if(*ldaf < fla_max(1, *n))
+    else if (*ldaf < fla_max(1,*n))
     {
         *info = -8;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -13;
     }
-    else if(*ldy < fla_max(1, *n))
+    else if (*ldy < fla_max(1,*n))
     {
         *info = -15;
     }
@@ -648,29 +648,29 @@ AOCL_DTL_SNPRINTF("zla_herfsx_extended inputs: prec_type__ %" FLA_IS ", uplo %c,
                     /* Computing MAX */
                     d__1 = dz_z__;
                     d__2 = dyk / yk; // , expr subst
-                    dz_z__ = fla_max(d__1, d__2);
+                    dz_z__ = fla_max(d__1,d__2);
                 }
                 else if(dyk != 0.)
                 {
                     dz_z__ = hugeval;
                 }
-                ymin = fla_min(ymin, yk);
-                normy = fla_max(normy, yk);
-                if(*colequ)
+                ymin = fla_min(ymin,yk);
+                normy = fla_max(normy,yk);
+                if (*colequ)
                 {
                     /* Computing MAX */
                     d__1 = normx;
                     d__2 = yk * c__[i__]; // , expr subst
-                    normx = fla_max(d__1, d__2);
+                    normx = fla_max(d__1,d__2);
                     /* Computing MAX */
                     d__1 = normdx;
                     d__2 = dyk * c__[i__]; // , expr subst
-                    normdx = fla_max(d__1, d__2);
+                    normdx = fla_max(d__1,d__2);
                 }
                 else
                 {
                     normx = normy;
-                    normdx = fla_max(normdx, dyk);
+                    normdx = fla_max(normdx,dyk);
                 }
             }
             if(normx != 0.)
@@ -816,7 +816,7 @@ AOCL_DTL_SNPRINTF("zla_herfsx_extended inputs: prec_type__ %" FLA_IS ", uplo %c,
             err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] = final_dz_z__ / (1 - dzratmax);
         }
         /* Compute componentwise relative backward error from formula */
-        /* max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(op(A_s))*f2c_dabs(Y) + f2c_dabs(B_s) )(i) ) */
+        /* fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(op(A_s))*f2c_dabs(Y) + f2c_dabs(B_s) )(i) ) */
         /* where f2c_dabs(Z) is the componentwise absolute value of the matrix */
         /* or vector Z. */
         /* Compute residual RES = B_s - op(A_s) * Y, */

@@ -203,7 +203,7 @@ void cgeqrf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
     --tau;
     --work;
     /* Function Body */
-    k = min(*m,*n);
+    k = fla_min(*m,*n);
     *info = 0;
     nb = ilaenv_(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
     lquery = *lwork == -1;
@@ -215,13 +215,13 @@ void cgeqrf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -4;
     }
     else if (! lquery)
     {
-        if (*lwork <= 0 || *m > 0 && *lwork < max(1,*n))
+        if (*lwork <= 0 || *m > 0 && *lwork < fla_max(1,*n))
         {
             *info = -7;
         }
@@ -264,9 +264,9 @@ void cgeqrf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = aocl_lapack_ilaenv(&c__3, "CGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
-        nx = fla_max(i__1, i__2);
-        if(nx < k)
+        i__2 = ilaenv_(&c__3, "CGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
+        nx = fla_max(i__1,i__2);
+        if (nx < k)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *n;
@@ -278,8 +278,8 @@ void cgeqrf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = aocl_lapack_ilaenv(&c__2, "CGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
-                nbmin = fla_max(i__1, i__2);
+                i__2 = ilaenv_(&c__2, "CGEQRF", " ", m, n, &c_n1, & c_n1); // , expr subst
+                nbmin = fla_max(i__1,i__2);
             }
         }
     }
@@ -292,7 +292,7 @@ void cgeqrf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
         {
             /* Computing MIN */
             i__3 = k - i__ + 1;
-            ib = fla_min(i__3, nb);
+            ib = fla_min(i__3,nb);
             /* Compute the QR factorization of the current block */
             /* A(i:m,i:i+ib-1) */
             i__3 = *m - i__ + 1;

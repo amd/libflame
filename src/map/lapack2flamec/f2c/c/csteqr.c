@@ -241,7 +241,7 @@ void csteqr_(char *compz, aocl_int_t *n, real *d__, real *e, scomplex *z__, aocl
     {
         *info = -2;
     }
-    else if(*ldz < 1 || icompz > 0 && *ldz < fla_max(1, *n))
+    else if (*ldz < 1 || icompz > 0 && *ldz < fla_max(1,*n))
     {
         *info = -6;
     }

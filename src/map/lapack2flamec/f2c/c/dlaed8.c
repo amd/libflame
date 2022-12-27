@@ -312,15 +312,15 @@ void dlaed8_(aocl_int_t *icompq, aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz,
     {
         *info = -4;
     }
-    else if(*ldq < fla_max(1, *n))
+    else if (*ldq < fla_max(1,*n))
     {
         *info = -7;
     }
-    else if(*cutpnt < fla_min(1, *n) || *cutpnt > *n)
+    else if (*cutpnt < fla_min(1,*n) || *cutpnt > *n)
     {
         *info = -10;
     }
-    else if(*ldq2 < fla_max(1, *n))
+    else if (*ldq2 < fla_max(1,*n))
     {
         *info = -14;
     }

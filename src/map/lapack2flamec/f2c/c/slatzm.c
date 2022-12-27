@@ -204,7 +204,7 @@ void aocl_lapack_slatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, a
     c1 -= c1_offset;
     --work;
     /* Function Body */
-    if(fla_min(*m, *n) == 0 || *tau == 0.f)
+    if (fla_min(*m,*n) == 0 || *tau == 0.f)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;

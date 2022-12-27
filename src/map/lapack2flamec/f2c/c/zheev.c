@@ -221,7 +221,7 @@ void zheev_(char *jobz, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
@@ -231,13 +231,13 @@ void zheev_(char *jobz, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
         /* Computing MAX */
         i__1 = 1;
         i__2 = (nb + 1) * *n; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
-        work[1].real = (doublereal)lwkopt;
-        work[1].imag = 0.; // , expr subst
+        lwkopt = fla_max(i__1,i__2);
+        work[1].r = (doublereal) lwkopt;
+        work[1].i = 0.; // , expr subst
         /* Computing MAX */
         i__1 = 1;
         i__2 = (*n << 1) - 1; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
+        if (*lwork < fla_max(i__1,i__2) && ! lquery)
         {
             *info = -8;
         }

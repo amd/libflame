@@ -64,7 +64,7 @@ FLA_Error FLA_Bsvd_find_converged_opd( integer       m_A,
 
 // --- FLA_Bsvd_find_max_fla_min() -------------------------------------------------
 
-FLA_Error FLA_Bsvd_find_max_min( FLA_Obj d, FLA_Obj e, FLA_Obj smax, FLA_Obj smin );
+FLA_Error FLA_Bsvd_find_max_fla_min( FLA_Obj d, FLA_Obj e, FLA_Obj smax, FLA_Obj smin );
 FLA_Error FLA_Bsvd_find_max_min_ops( integer       m_A,
                                      float*    buff_d, integer inc_d, 
                                      float*    buff_e, integer inc_e, 

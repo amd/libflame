@@ -182,7 +182,7 @@ void cgtsv_(aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__, scompl
     {
         *info = -2;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -7;
     }

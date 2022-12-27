@@ -343,7 +343,7 @@ void fla_slabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, real *a, aoc
                     i__2 = *m - i__ + 1;
                     /* Computing MIN */
                     i__3 = i__ + 1;
-                    slarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
+                    slarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
                     d__[i__] = a[i__ + i__ * a_dim1];
                 }
                 if (i__ < *n)
@@ -390,7 +390,7 @@ void fla_slabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, real *a, aoc
                         i__2 = *n - i__;
                         /* Computing MIN */
                         i__3 = i__ + 2;
-                        slarfg_(&i__2, &a[i__ + (i__ + 1) * a_dim1], &a[i__ + min( i__3,*n) * a_dim1], lda, &taup[i__]);
+                        slarfg_(&i__2, &a[i__ + (i__ + 1) * a_dim1], &a[i__ + fla_min( i__3,*n) * a_dim1], lda, &taup[i__]);
                         e[i__] = a[i__ + (i__ + 1) * a_dim1];
                         a[i__ + (i__ + 1) * a_dim1] = 1.f;
                     }
@@ -455,7 +455,7 @@ void fla_slabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, real *a, aoc
                     i__2 = *n - i__ + 1;
                     /* Computing MIN */
                     i__3 = i__ + 1;
-                    slarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[i__ + min(i__3,*n) * a_dim1], lda, &taup[i__]);
+                    slarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[i__ + fla_min(i__3,*n) * a_dim1], lda, &taup[i__]);
                     d__[i__] = a[i__ + i__ * a_dim1];
                 }
                 if (i__ < *m)
@@ -502,7 +502,7 @@ void fla_slabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, real *a, aoc
                         i__2 = *m - i__;
                         /* Computing MIN */
                         i__3 = i__ + 2;
-                        slarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
+                        slarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
                         e[i__] = a[i__ + 1 + i__ * a_dim1];
                         a[i__ + 1 + i__ * a_dim1] = 1.f;
                     }

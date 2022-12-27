@@ -85,7 +85,7 @@ static real c_b9 = -1.f;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
- */
+*/
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > */
 /* > On exit, if INFO = 0, the factor S from the split Cholesky */
@@ -234,7 +234,7 @@ void spbstf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ld
     /* Computing MAX */
     i__1 = 1;
     i__2 = *ldab - 1; // , expr subst
-    kld = fla_max(i__1, i__2);
+    kld = fla_max(i__1,i__2);
     /* Set the splitting point m. */
     m = (*n + *kd) / 2;
     if(upper)
@@ -253,7 +253,7 @@ void spbstf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ld
             ab[*kd + 1 + j * ab_dim1] = ajj;
             /* Computing MIN */
             i__2 = j - 1;
-            km = fla_min(i__2, *kd);
+            km = fla_min(i__2,*kd);
             /* Compute elements j-km:j-1 of the j-th column and update the */
             /* the leading submatrix within the band. */
             r__1 = 1.f / ajj;
@@ -277,7 +277,7 @@ void spbstf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ld
             /* Computing MIN */
             i__2 = *kd;
             i__3 = m - j; // , expr subst
-            km = fla_min(i__2, i__3);
+            km = fla_min(i__2,i__3);
             /* Compute elements j+1:j+km of the j-th row and update the */
             /* trailing submatrix within the band. */
             if(km > 0)
@@ -306,7 +306,7 @@ void spbstf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ld
             ab[j * ab_dim1 + 1] = ajj;
             /* Computing MIN */
             i__2 = j - 1;
-            km = fla_min(i__2, *kd);
+            km = fla_min(i__2,*kd);
             /* Compute elements j-km:j-1 of the j-th row and update the */
             /* trailing submatrix within the band. */
             r__1 = 1.f / ajj;
@@ -330,7 +330,7 @@ void spbstf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ld
             /* Computing MIN */
             i__2 = *kd;
             i__3 = m - j; // , expr subst
-            km = fla_min(i__2, i__3);
+            km = fla_min(i__2,i__3);
             /* Compute elements j+1:j+km of the j-th column and update the */
             /* trailing submatrix within the band. */
             if(km > 0)

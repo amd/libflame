@@ -148,8 +148,10 @@ void dlaset_(char *uplo, aocl_int_t *m, aocl_int_t *n, doublereal *alpha, double
         {
             /* Computing MIN */
             i__3 = j - 1;
-            i__2 = fla_min(i__3, *m);
-            for(i__ = 1; i__ <= i__2; ++i__)
+            i__2 = fla_min(i__3,*m);
+            for (i__ = 1;
+                    i__ <= i__2;
+                    ++i__)
             {
                 a[i__ + j * a_dim1] = *alpha;
                 /* L10: */
@@ -161,8 +163,10 @@ void dlaset_(char *uplo, aocl_int_t *m, aocl_int_t *n, doublereal *alpha, double
     {
         /* Set the strictly lower triangular or trapezoidal part of the */
         /* array to ALPHA. */
-        i__1 = fla_min(*m, *n);
-        for(j = 1; j <= i__1; ++j)
+        i__1 = fla_min(*m,*n);
+        for (j = 1;
+                j <= i__1;
+                ++j)
         {
             i__2 = *m;
             for(i__ = j + 1; i__ <= i__2; ++i__)
@@ -189,8 +193,10 @@ void dlaset_(char *uplo, aocl_int_t *m, aocl_int_t *n, doublereal *alpha, double
         }
     }
     /* Set the first fla_min(M,N) diagonal elements to BETA. */
-    i__1 = fla_min(*m, *n);
-    for(i__ = 1; i__ <= i__1; ++i__)
+    i__1 = fla_min(*m,*n);
+    for (i__ = 1;
+            i__ <= i__1;
+            ++i__)
     {
         a[i__ + i__ * a_dim1] = *beta;
         /* L70: */

@@ -151,7 +151,7 @@ void zptsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomplex *e, dcomp
     {
         *info = -2;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -6;
     }

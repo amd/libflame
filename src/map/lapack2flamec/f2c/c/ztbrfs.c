@@ -104,7 +104,7 @@ static aocl_int64_t c__1 = 1;
 /* > first kd+1 rows of the array. The j-th column of A is stored */
 /* > in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
- */
+*/
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > If DIAG = 'U', the diagonal elements of A are not referenced */
 /* > and are assumed to be 1. */
@@ -292,11 +292,11 @@ void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
     {
         *info = -8;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -10;
     }
-    else if(*ldx < fla_max(1, *n))
+    else if (*ldx < fla_max(1,*n))
     {
         *info = -12;
     }
@@ -348,7 +348,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
         z__1.imag = -0.; // , expr subst
         aocl_blas_zaxpy(n, &z__1, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
         /* Compute componentwise relative backward error from formula */
-        /* max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(op(A))*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
+        /* fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(op(A))*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
         /* where f2c_dabs(Z) is the componentwise absolute value of the matrix */
         /* or vector Z. If the i-th component of the denominator is less */
         /* than SAFE2, then SAFE1 is added to the i-th components of the */
@@ -376,7 +376,9 @@ void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                         i__3 = 1;
                         i__4 = k - *kd; // , expr subst
                         i__5 = k;
-                        for(i__ = fla_max(i__3, i__4); i__ <= i__5; ++i__)
+                        for (i__ = fla_max(i__3,i__4);
+                                i__ <= i__5;
+                                ++i__)
                         {
                             i__3 = *kd + 1 + i__ - k + k * ab_dim1;
                             rwork[i__] += ((d__1 = ab[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&ab[*kd + 1 + i__ - k + k * ab_dim1]), f2c_dabs(d__2))) * xk;
@@ -396,7 +398,9 @@ void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                         i__5 = 1;
                         i__3 = k - *kd; // , expr subst
                         i__4 = k - 1;
-                        for(i__ = fla_max(i__5, i__3); i__ <= i__4; ++i__)
+                        for (i__ = fla_max(i__5,i__3);
+                                i__ <= i__4;
+                                ++i__)
                         {
                             i__5 = *kd + 1 + i__ - k + k * ab_dim1;
                             rwork[i__] += ((d__1 = ab[i__5].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&ab[*kd + 1 + i__ - k + k * ab_dim1]), f2c_dabs(d__2))) * xk;
@@ -419,8 +423,10 @@ void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                         /* Computing MIN */
                         i__5 = *n;
                         i__3 = k + *kd; // , expr subst
-                        i__4 = fla_min(i__5, i__3);
-                        for(i__ = k; i__ <= i__4; ++i__)
+                        i__4 = fla_min(i__5,i__3);
+                        for (i__ = k;
+                                i__ <= i__4;
+                                ++i__)
                         {
                             i__5 = i__ + 1 - k + k * ab_dim1;
                             rwork[i__] += ((d__1 = ab[i__5].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&ab[i__ + 1 - k + k * ab_dim1]), f2c_dabs(d__2))) * xk;
@@ -439,8 +445,10 @@ void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                         /* Computing MIN */
                         i__5 = *n;
                         i__3 = k + *kd; // , expr subst
-                        i__4 = fla_min(i__5, i__3);
-                        for(i__ = k + 1; i__ <= i__4; ++i__)
+                        i__4 = fla_min(i__5,i__3);
+                        for (i__ = k + 1;
+                                i__ <= i__4;
+                                ++i__)
                         {
                             i__5 = i__ + 1 - k + k * ab_dim1;
                             rwork[i__] += ((d__1 = ab[i__5].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&ab[i__ + 1 - k + k * ab_dim1]), f2c_dabs(d__2))) * xk;
@@ -467,7 +475,9 @@ void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                         i__4 = 1;
                         i__5 = k - *kd; // , expr subst
                         i__3 = k;
-                        for(i__ = fla_max(i__4, i__5); i__ <= i__3; ++i__)
+                        for (i__ = fla_max(i__4,i__5);
+                                i__ <= i__3;
+                                ++i__)
                         {
                             i__4 = *kd + 1 + i__ - k + k * ab_dim1;
                             i__5 = i__ + j * x_dim1;
@@ -489,7 +499,9 @@ void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                         i__3 = 1;
                         i__4 = k - *kd; // , expr subst
                         i__5 = k - 1;
-                        for(i__ = fla_max(i__3, i__4); i__ <= i__5; ++i__)
+                        for (i__ = fla_max(i__3,i__4);
+                                i__ <= i__5;
+                                ++i__)
                         {
                             i__3 = *kd + 1 + i__ - k + k * ab_dim1;
                             i__4 = i__ + j * x_dim1;
@@ -512,8 +524,10 @@ void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                         /* Computing MIN */
                         i__3 = *n;
                         i__4 = k + *kd; // , expr subst
-                        i__5 = fla_min(i__3, i__4);
-                        for(i__ = k; i__ <= i__5; ++i__)
+                        i__5 = fla_min(i__3,i__4);
+                        for (i__ = k;
+                                i__ <= i__5;
+                                ++i__)
                         {
                             i__3 = i__ + 1 - k + k * ab_dim1;
                             i__4 = i__ + j * x_dim1;
@@ -534,8 +548,10 @@ void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                         /* Computing MIN */
                         i__3 = *n;
                         i__4 = k + *kd; // , expr subst
-                        i__5 = fla_min(i__3, i__4);
-                        for(i__ = k + 1; i__ <= i__5; ++i__)
+                        i__5 = fla_min(i__3,i__4);
+                        for (i__ = k + 1;
+                                i__ <= i__5;
+                                ++i__)
                         {
                             i__3 = i__ + 1 - k + k * ab_dim1;
                             i__4 = i__ + j * x_dim1;
@@ -558,7 +574,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                 i__5 = i__;
                 d__3 = s;
                 d__4 = ((d__1 = work[i__5].r, f2c_dabs(d__1)) + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2))) / rwork[i__]; // , expr subst
-                s = max(d__3,d__4);
+                s = fla_max(d__3,d__4);
             }
             else
             {
@@ -566,7 +582,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
                 i__5 = i__;
                 d__3 = s;
                 d__4 = ((d__1 = work[i__5].r, f2c_dabs(d__1)) + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + safe1) / (rwork[i__] + safe1); // , expr subst
-                s = max(d__3,d__4);
+                s = fla_max(d__3,d__4);
             }
             /* L190: */
         }
@@ -653,7 +669,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
             i__5 = i__ + j * x_dim1;
             d__3 = lstres;
             d__4 = (d__1 = x[i__5].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__2)); // , expr subst
-            lstres = max(d__3,d__4);
+            lstres = fla_max(d__3,d__4);
             /* L240: */
         }
         if(lstres != 0.)

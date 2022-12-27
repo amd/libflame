@@ -216,7 +216,7 @@ void zptcon_(aocl_int_t *n, doublereal *d__, dcomplex *e, doublereal *anorm, dou
         rwork[i__] = rwork[i__] / d__[i__] + rwork[i__ + 1] * z_abs(&e[i__]);
         /* L30: */
     }
-    /* Compute AINVNM = max(x(i)), 1<=i<=n. */
+    /* Compute AINVNM = fla_max(x(i)), 1<=i<=n. */
     ix = idamax_(n, &rwork[1], &c__1);
     ainvnm = (d__1 = rwork[ix], f2c_dabs(d__1));
     /* Compute the reciprocal condition number. */

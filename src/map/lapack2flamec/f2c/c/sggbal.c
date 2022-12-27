@@ -276,11 +276,11 @@ void aocl_lapack_sggbal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -6;
     }
@@ -656,15 +656,15 @@ L350:
         /* Computing MAX */
         r__2 = rab;
         r__3 = (r__1 = b[i__ + (irab + *ilo - 1) * b_dim1], f2c_abs( r__1)); // , expr subst
-        rab = max(r__2,r__3);
+        rab = fla_max(r__2,r__3);
         r__1 = rab + sfmin;
         lrab = (integer)(r_lg10(&r__1) / basl + 1.f);
         ir = (integer)(lscale[i__] + r_sign(&c_b71, &lscale[i__]));
         /* Computing MIN */
-        i__2 = fla_max(ir, lsfmin);
-        i__2 = fla_min(i__2, lsfmax);
+        i__2 = fla_max(ir,lsfmin);
+        i__2 = fla_min(i__2,lsfmax);
         i__3 = lsfmax - lrab; // ; expr subst
-        ir = fla_min(i__2, i__3);
+        ir = fla_min(i__2,i__3);
         lscale[i__] = pow_ri(&c_b35, &ir);
         icab = isamax_(ihi, &a[i__ * a_dim1 + 1], &c__1);
         cab = (r__1 = a[icab + i__ * a_dim1], f2c_abs(r__1));
@@ -672,15 +672,15 @@ L350:
         /* Computing MAX */
         r__2 = cab;
         r__3 = (r__1 = b[icab + i__ * b_dim1], f2c_abs(r__1)); // , expr subst
-        cab = max(r__2,r__3);
+        cab = fla_max(r__2,r__3);
         r__1 = cab + sfmin;
         lcab = (integer)(r_lg10(&r__1) / basl + 1.f);
         jc = (integer)(rscale[i__] + r_sign(&c_b71, &rscale[i__]));
         /* Computing MIN */
-        i__2 = fla_max(jc, lsfmin);
-        i__2 = fla_min(i__2, lsfmax);
+        i__2 = fla_max(jc,lsfmin);
+        i__2 = fla_min(i__2,lsfmax);
         i__3 = lsfmax - lcab; // ; expr subst
-        jc = fla_min(i__2, i__3);
+        jc = fla_min(i__2,i__3);
         rscale[i__] = pow_ri(&c_b35, &jc);
         /* L360: */
     }

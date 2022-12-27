@@ -266,19 +266,19 @@ void dgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_i
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
-    else if(*ldaf < fla_max(1, *n))
+    else if (*ldaf < fla_max(1,*n))
     {
         *info = -7;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -10;
     }
-    else if(*ldx < fla_max(1, *n))
+    else if (*ldx < fla_max(1,*n))
     {
         *info = -12;
     }
@@ -329,7 +329,7 @@ void dgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_i
         aocl_blas_dgemv(trans, n, n, &c_b15, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b17,
                         &work[*n + 1], &c__1);
         /* Compute componentwise relative backward error from formula */
-        /* max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(op(A))*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
+        /* fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(op(A))*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
         /* where f2c_dabs(Z) is the componentwise absolute value of the matrix */
         /* or vector Z. If the i-th component of the denominator is less */
         /* than SAFE2, then SAFE1 is added to the i-th components of the */
@@ -381,14 +381,14 @@ void dgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_i
                 /* Computing MAX */
                 d__2 = s;
                 d__3 = (d__1 = work[*n + i__], f2c_dabs(d__1)) / work[ i__]; // , expr subst
-                s = max(d__2,d__3);
+                s = fla_max(d__2,d__3);
             }
             else
             {
                 /* Computing MAX */
                 d__2 = s;
                 d__3 = ((d__1 = work[*n + i__], f2c_dabs(d__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = max(d__2,d__3);
+                s = fla_max(d__2,d__3);
             }
             /* L80: */
         }
@@ -478,7 +478,7 @@ void dgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_i
             /* Computing MAX */
             d__2 = lstres;
             d__3 = (d__1 = x[i__ + j * x_dim1], f2c_dabs(d__1)); // , expr subst
-            lstres = max(d__2,d__3);
+            lstres = fla_max(d__2,d__3);
             /* L130: */
         }
         if(lstres != 0.)

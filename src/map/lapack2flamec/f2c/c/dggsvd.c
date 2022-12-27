@@ -420,11 +420,11 @@ void dggsvd_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *n, a
     {
         *info = -6;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -10;
     }
-    else if(*ldb < fla_max(1, *p))
+    else if (*ldb < fla_max(1,*p))
     {
         *info = -12;
     }
@@ -454,8 +454,8 @@ void dggsvd_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *n, a
     /* the effective numerical rank of the matrices A and B. */
     ulp = dlamch_("Precision");
     unfl = dlamch_("Safe Minimum");
-    tola = fla_max(*m, *n) * fla_max(anorm, unfl) * ulp;
-    tolb = fla_max(*p, *n) * fla_max(bnorm, unfl) * ulp;
+    tola = fla_max(*m,*n) * fla_max(anorm,unfl) * ulp;
+    tolb = fla_max(*p,*n) * fla_max(bnorm,unfl) * ulp;
     /* Preprocessing */
     aocl_lapack_dggsvp(jobu, jobv, jobq, m, p, n, &a[a_offset], lda, &b[b_offset], ldb, &tola, &tolb, k, l,
             &u[u_offset], ldu, &v[v_offset], ldv, &q[q_offset], ldq, &iwork[1], &work[1],
@@ -470,7 +470,7 @@ void dggsvd_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *n, a
     /* Computing MIN */
     i__1 = *l;
     i__2 = *m - *k; // , expr subst
-    ibnd = fla_min(i__1, i__2);
+    ibnd = fla_min(i__1,i__2);
     i__1 = ibnd;
     for(i__ = 1; i__ <= i__1; ++i__)
     {

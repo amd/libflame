@@ -176,7 +176,8 @@ LDC >=1 if NCC = 0. */
 /* > */
 /* > \param[out] RWORK */
 /* > \verbatim */
-/* > RWORK is REAL array, dimension (4*N) */
+/* > RWORK is REAL array, dimension (2*N) */
+/* > if NCVT = NRU = NCC = 0, (fla_max(1, 4*N-4)) otherwise */
 /* > \endverbatim */
 /* > */
 /* > \param[out] INFO */
@@ -195,7 +196,7 @@ if INFO = i, i */
 /* ========================= */
 /* > */
 /* > \verbatim */
-/* > TOLMUL REAL, default = fla_max(10,min(100,EPS**(-1/8))) */
+/* > TOLMUL REAL, default = fla_max(10,fla_min(100,EPS**(-1/8))) */
 /* > TOLMUL controls the convergence criterion of the QR loop. */
 /* > If it is positive, TOLMUL*EPS is the desired relative */
 /* > precision in the computed singular values. */
@@ -348,15 +349,15 @@ void cbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
     {
         *info = -5;
     }
-    else if(*ncvt == 0 && *ldvt < 1 || *ncvt > 0 && *ldvt < fla_max(1, *n))
+    else if (*ncvt == 0 && *ldvt < 1 || *ncvt > 0 && *ldvt < fla_max(1,*n))
     {
         *info = -9;
     }
-    else if(*ldu < fla_max(1, *nru))
+    else if (*ldu < fla_max(1,*nru))
     {
         *info = -11;
     }
-    else if(*ncc == 0 && *ldc < 1 || *ncc > 0 && *ldc < fla_max(1, *n))
+    else if (*ncc == 0 && *ldc < 1 || *ncc > 0 && *ldc < fla_max(1,*n))
     {
         *info = -13;
     }
@@ -431,8 +432,8 @@ void cbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
     r__3 = 100.f;
     r__4 = pow_dd(&d__1, &c_b15); // , expr subst
     r__1 = 10.f;
-    r__2 = fla_min(r__3, r__4); // , expr subst
-    tolmul = fla_max(r__1, r__2);
+    r__2 = fla_min(r__3,r__4); // , expr subst
+    tolmul = fla_max(r__1,r__2);
     tol = tolmul * eps;
     /* Compute approximate maximum, minimum singular values */
     smax = 0.f;
@@ -442,7 +443,7 @@ void cbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
         /* Computing MAX */
         r__2 = smax;
         r__3 = (r__1 = d__[i__], f2c_abs(r__1)); // , expr subst
-        smax = max(r__2,r__3);
+        smax = fla_max(r__2,r__3);
         /* L20: */
     }
     i__1 = *n - 1;
@@ -451,7 +452,7 @@ void cbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
         /* Computing MAX */
         r__2 = smax;
         r__3 = (r__1 = e[i__], f2c_abs(r__1)); // , expr subst
-        smax = max(r__2,r__3);
+        smax = fla_max(r__2,r__3);
         /* L30: */
     }
     smin = 0.f;
@@ -468,7 +469,7 @@ void cbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
         for(i__ = 2; i__ <= i__1; ++i__)
         {
             mu = (r__2 = d__[i__], f2c_abs(r__2)) * (mu / (mu + (r__1 = e[i__ - 1], f2c_abs(r__1))));
-            sminoa = min(sminoa,mu);
+            sminoa = fla_min(sminoa,mu);
             if (sminoa == 0.f)
             {
                 goto L50;
@@ -479,8 +480,8 @@ void cbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
         sminoa /= sqrt((real)(*n));
         /* Computing MAX */
         r__1 = tol * sminoa;
-        r__2 = *n * (*n * unfl) * 6; // , expr subst
-        thresh = fla_max(r__1, r__2);
+        r__2 = *n * 6 * *n * unfl; // , expr subst
+        thresh = fla_max(r__1,r__2);
     }
     else
     {
@@ -488,7 +489,7 @@ void cbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
         /* Computing MAX */
         r__1 = f2c_abs(tol) * smax;
         r__2 = *n * 6 * *n * unfl; // , expr subst
-        thresh = max(r__1,r__2);
+        thresh = fla_max(r__1,r__2);
     }
     /* Prepare for main iteration loop for the singular values */
     /* (MAXIT is the maximum number of passes through the inner */
@@ -536,9 +537,10 @@ L60: /* Check for convergence or exceeding iteration count */
         {
             goto L80;
         }
+        smin = fla_min(smin,abss);
         /* Computing MAX */
-        r__1 = fla_max(smax, abss);
-        smax = fla_max(r__1, abse);
+        r__1 = fla_max(smax,abss);
+        smax = fla_max(r__1,abse);
         /* L70: */
     }
     ll = 0;
@@ -619,7 +621,7 @@ L90:
                     goto L60;
                 }
                 mu = (r__2 = d__[lll + 1], f2c_abs(r__2)) * (mu / (mu + (r__1 = e[ lll], f2c_abs(r__1))));
-                sminl = min(sminl,mu);
+                sminl = fla_min(sminl,mu);
                 /* L100: */
             }
         }
@@ -648,7 +650,7 @@ L90:
                     goto L60;
                 }
                 mu = (r__2 = d__[lll], f2c_abs(r__2)) * (mu / (mu + (r__1 = e[lll], f2c_abs(r__1))));
-                sminl = min(sminl,mu);
+                sminl = fla_min(sminl,mu);
                 /* L110: */
             }
         }
@@ -660,7 +662,7 @@ L90:
     /* Computing MAX */
     r__1 = eps;
     r__2 = tol * .01f; // , expr subst
-    if(tol >= 0.f && *n * tol * (smin / smax) <= fla_max(r__1, r__2))
+    if (tol >= 0.f && *n * tol * (sminl / smax) <= fla_max(r__1,r__2))
     {
         /* Use a zero shift to avoid loss of relative accuracy */
         shift = 0.f;

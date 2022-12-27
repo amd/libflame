@@ -140,9 +140,9 @@ void slasdt_(aocl_int_t *n, aocl_int_t *lvl, aocl_int_t *nd, aocl_int_t *inode, 
     --ndiml;
     --inode;
     /* Function Body */
-    maxn = fla_max(1, *n);
-    temp = log((real)maxn / (real)(*msub + 1)) / log(2.f);
-    *lvl = (integer)temp + 1;
+    maxn = fla_max(1,*n);
+    temp = log((real) maxn / (real) (*msub + 1)) / log(2.f);
+    *lvl = (integer) temp + 1;
     i__ = *n / 2;
     inode[1] = (aocl_int_t)(i__ + 1);
     ndiml[1] = (aocl_int_t)(i__);

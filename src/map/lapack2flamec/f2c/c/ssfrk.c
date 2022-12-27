@@ -239,7 +239,7 @@ void ssfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k,
     {
         info = -5;
     }
-    else if(*lda < fla_max(1, nrowa))
+    else if (*lda < fla_max(1,nrowa))
     {
         info = -8;
     }

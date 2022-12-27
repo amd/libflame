@@ -184,7 +184,7 @@ void dorgql_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a, aocl_in
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -5;
     }
@@ -199,8 +199,8 @@ void dorgql_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a, aocl_in
             nb = aocl_lapack_ilaenv(&c__1, "DORGQL", " ", m, n, k, &c_n1);
             lwkopt = *n * nb;
         }
-        work[1] = (doublereal)lwkopt;
-        if(*lwork < fla_max(1, *n) && !lquery)
+        work[1] = (doublereal) lwkopt;
+        if (*lwork < fla_max(1,*n) && ! lquery)
         {
             *info = -8;
         }
@@ -231,9 +231,9 @@ void dorgql_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a, aocl_in
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = aocl_lapack_ilaenv(&c__3, "DORGQL", " ", m, n, k, &c_n1); // , expr subst
-        nx = fla_max(i__1, i__2);
-        if(nx < *k)
+        i__2 = ilaenv_(&c__3, "DORGQL", " ", m, n, k, &c_n1); // , expr subst
+        nx = fla_max(i__1,i__2);
+        if (nx < *k)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *n;
@@ -245,8 +245,8 @@ void dorgql_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a, aocl_in
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = aocl_lapack_ilaenv(&c__2, "DORGQL", " ", m, n, k, &c_n1); // , expr subst
-                nbmin = fla_max(i__1, i__2);
+                i__2 = ilaenv_(&c__2, "DORGQL", " ", m, n, k, &c_n1); // , expr subst
+                nbmin = fla_max(i__1,i__2);
             }
         }
     }
@@ -257,7 +257,7 @@ void dorgql_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a, aocl_in
         /* Computing MIN */
         i__1 = *k;
         i__2 = (*k - nx + nb - 1) / nb * nb; // , expr subst
-        kk = fla_min(i__1, i__2);
+        kk = fla_min(i__1,i__2);
         /* Set A(m-kk+1:m,1:n-kk) to zero. */
         i__1 = *n - kk;
         for(j = 1; j <= i__1; ++j)
@@ -290,8 +290,8 @@ void dorgql_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a, aocl_in
             /* Computing MIN */
             i__3 = nb;
             i__4 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__3, i__4);
-            if(*n - *k + i__ > 1)
+            ib = fla_min(i__3,i__4);
+            if (*n - *k + i__ > 1)
             {
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i+ib-1) . . . H(i+1) H(i) */

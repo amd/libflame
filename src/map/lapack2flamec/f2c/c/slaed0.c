@@ -276,7 +276,7 @@ void aocl_lapack_slaed0(aocl_int64_t *icompq, aocl_int64_t *qsiz, aocl_int64_t *
     {
         *info = -1;
     }
-    else if(*icompq == 1 && *qsiz < fla_max(0, *n))
+    else if (*icompq == 1 && *qsiz < fla_max(0,*n))
     {
         *info = -2;
     }
@@ -284,11 +284,11 @@ void aocl_lapack_slaed0(aocl_int64_t *icompq, aocl_int64_t *qsiz, aocl_int64_t *
     {
         *info = -3;
     }
-    else if(*ldq < fla_max(1, *n))
+    else if (*ldq < fla_max(1,*n))
     {
         *info = -7;
     }
-    else if(*ldqs < fla_max(1, *n))
+    else if (*ldqs < fla_max(1,*n))
     {
         *info = -9;
     }

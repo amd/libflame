@@ -232,7 +232,7 @@ void aocl_lapack_dsyev(char *jobz, char *uplo, aocl_int64_t *n, doublereal *a, a
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
@@ -242,12 +242,12 @@ void aocl_lapack_dsyev(char *jobz, char *uplo, aocl_int64_t *n, doublereal *a, a
         /* Computing MAX */
         i__1 = 1;
         i__2 = (nb + 2) * *n; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
-        work[1] = (doublereal)lwkopt;
+        lwkopt = fla_max(i__1,i__2);
+        work[1] = (doublereal) lwkopt;
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n * 3 - 1; // , expr subst
-        if(*lwork < fla_max(i__1, i__2) && !lquery)
+        if (*lwork < fla_max(i__1,i__2) && ! lquery)
         {
             *info = -8;
         }

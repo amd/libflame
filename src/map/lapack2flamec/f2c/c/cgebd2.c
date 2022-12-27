@@ -260,7 +260,7 @@ void cgebd2_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -4;
     }
@@ -284,7 +284,7 @@ void cgebd2_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d
             i__2 = *m - i__ + 1;
             /* Computing MIN */
             i__3 = i__ + 1;
-            clarfg_(&i__2, &alpha, &a[min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
+            clarfg_(&i__2, &alpha, &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
             i__2 = i__;
             d__[i__2] = alpha.r;
             i__2 = i__ + i__ * a_dim1;
@@ -315,8 +315,7 @@ void cgebd2_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d
                 i__2 = *n - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                aocl_lapack_clarfg(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda,
-                                   &taup[i__]);
+                clarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3,*n) * a_dim1], lda, & taup[i__]);
                 i__2 = i__;
                 e[i__2] = alpha.real;
                 i__2 = i__ + (i__ + 1) * a_dim1;
@@ -358,8 +357,7 @@ void cgebd2_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d
             i__2 = *n - i__ + 1;
             /* Computing MIN */
             i__3 = i__ + 1;
-            aocl_lapack_clarfg(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda,
-                               &taup[i__]);
+            clarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3,*n) * a_dim1], lda, & taup[i__]);
             i__2 = i__;
             d__[i__2] = alpha.real;
             i__2 = i__ + i__ * a_dim1;
@@ -389,8 +387,7 @@ void cgebd2_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d
                 i__2 = *m - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                aocl_lapack_clarfg(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1,
-                                   &tauq[i__]);
+                clarfg_(&i__2, &alpha, &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
                 i__2 = i__;
                 e[i__2] = alpha.real;
                 i__2 = i__ + 1 + i__ * a_dim1;

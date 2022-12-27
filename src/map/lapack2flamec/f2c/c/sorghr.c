@@ -199,27 +199,27 @@ void aocl_lapack_sorghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, r
     {
         *info = -1;
     }
-    else if(*ilo < 1 || *ilo > fla_max(1, *n))
+    else if (*ilo < 1 || *ilo > fla_max(1,*n))
     {
         *info = -2;
     }
-    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
+    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -5;
     }
-    else if(*lwork < fla_max(1, nh) && !lquery)
+    else if (*lwork < fla_max(1,nh) && ! lquery)
     {
         *info = -8;
     }
     if(*info == 0)
     {
-        nb = aocl_lapack_ilaenv(&c__1, "SORGQR", " ", &nh, &nh, &nh, &c_n1);
-        lwkopt = fla_max(1, nh) * nb;
-        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
+        nb = ilaenv_(&c__1, "SORGQR", " ", &nh, &nh, &nh, &c_n1);
+        lwkopt = fla_max(1,nh) * nb;
+        work[1] = (real) lwkopt;
     }
     if(*info != 0)
     {

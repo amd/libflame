@@ -260,7 +260,7 @@ void slasr_(char *side, char *pivot, char *direct, aocl_int_t *m, aocl_int_t *n,
     {
         info = 5;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         info = 9;
     }

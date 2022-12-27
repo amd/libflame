@@ -319,7 +319,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, d
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -7;
     }
@@ -491,9 +491,9 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, d
             /* A is non-unit triangular. */
             /* Compute GROW = 1/G(j) and XBND = 1/M(j). */
             /* Initially, G(0) = max{
-           x(i), i=1,...,n}
-           . */
-            grow = 1. / fla_max(xbnd, smlnum);
+            x(i), i=1,...,n}
+            . */
+            grow = 1. / fla_max(xbnd,smlnum);
             xbnd = grow;
             i__1 = jlast;
             i__2 = jinc;
@@ -508,9 +508,9 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, d
                 tjj = (d__1 = a[j + j * a_dim1], f2c_dabs(d__1));
                 /* Computing MIN */
                 d__1 = xbnd;
-                d__2 = fla_min(1., tjj) * grow; // , expr subst
-                xbnd = fla_min(d__1, d__2);
-                if(tjj + cnorm[j] >= smlnum)
+                d__2 = fla_min(1.,tjj) * grow; // , expr subst
+                xbnd = fla_min(d__1,d__2);
+                if (tjj + cnorm[j] >= smlnum)
                 {
                     /* G(j) = G(j-1)*( 1 + CNORM(j) / f2c_dabs(A(j,j)) ) */
                     grow *= tjj / (tjj + cnorm[j]);
@@ -532,8 +532,8 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, d
            . */
             /* Computing MIN */
             d__1 = 1.;
-            d__2 = 1. / fla_max(xbnd, smlnum); // , expr subst
-            grow = fla_min(d__1, d__2);
+            d__2 = 1. / fla_max(xbnd,smlnum); // , expr subst
+            grow = fla_min(d__1,d__2);
             i__2 = jlast;
             i__1 = jinc;
             for(j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1)
@@ -575,9 +575,9 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, d
             /* A is non-unit triangular. */
             /* Compute GROW = 1/G(j) and XBND = 1/M(j). */
             /* Initially, M(0) = max{
-           x(i), i=1,...,n}
-           . */
-            grow = 1. / fla_max(xbnd, smlnum);
+            x(i), i=1,...,n}
+            . */
+            grow = 1. / fla_max(xbnd,smlnum);
             xbnd = grow;
             i__1 = jlast;
             i__2 = jinc;
@@ -593,7 +593,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, d
                 /* Computing MIN */
                 d__1 = grow;
                 d__2 = xbnd / xj; // , expr subst
-                grow = min(d__1,d__2);
+                grow = fla_min(d__1,d__2);
                 /* M(j) = M(j-1)*( 1 + CNORM(j) ) / f2c_dabs(A(j,j)) */
                 tjj = (d__1 = a[j + j * a_dim1], f2c_dabs(d__1));
                 if (xj > tjj)
@@ -602,7 +602,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, d
                 }
                 /* L60: */
             }
-            grow = fla_min(grow, xbnd);
+            grow = fla_min(grow,xbnd);
         }
         else
         {
@@ -612,8 +612,8 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, d
            . */
             /* Computing MIN */
             d__1 = 1.;
-            d__2 = 1. / fla_max(xbnd, smlnum); // , expr subst
-            grow = fla_min(d__1, d__2);
+            d__2 = 1. / fla_max(xbnd,smlnum); // , expr subst
+            grow = fla_min(d__1,d__2);
             i__2 = jlast;
             i__1 = jinc;
             for(j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1)
@@ -785,8 +785,8 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, d
                 /* k<>j */
                 xj = (d__1 = x[j], f2c_dabs(d__1));
                 uscal = tscal;
-                rec = 1. / fla_max(xmax, 1.);
-                if(cnorm[j] > (bignum - xj) * rec)
+                rec = 1. / fla_max(xmax,1.);
+                if (cnorm[j] > (bignum - xj) * rec)
                 {
                     /* If x(j) could overflow, scale x by 1/(2*XMAX). */
                     rec *= .5;
@@ -805,7 +805,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, d
                         /* Computing MIN */
                         d__1 = 1.;
                         d__2 = rec * tjj; // , expr subst
-                        rec = fla_min(d__1, d__2);
+                        rec = fla_min(d__1,d__2);
                         uscal /= tjjs;
                     }
                     if(rec < 1.)
@@ -928,7 +928,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, d
                 /* Computing MAX */
                 d__2 = xmax;
                 d__3 = (d__1 = x[j], f2c_dabs(d__1)); // , expr subst
-                xmax = max(d__2,d__3);
+                xmax = fla_max(d__2,d__3);
                 /* L160: */
             }
         }

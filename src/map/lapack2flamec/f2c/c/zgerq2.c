@@ -168,7 +168,7 @@ void zgerq2_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomple
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -4;
     }
@@ -179,8 +179,10 @@ void zgerq2_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomple
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
-    k = fla_min(*m, *n);
-    for(i__ = k; i__ >= 1; --i__)
+    k = fla_min(*m,*n);
+    for (i__ = k;
+            i__ >= 1;
+            --i__)
     {
         /* Generate elementary reflector H(i) to annihilate */
         /* A(m-k+i,1:n-k+i-1) */

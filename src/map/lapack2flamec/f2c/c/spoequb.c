@@ -171,7 +171,7 @@ void aocl_lapack_spoequb(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *s, r
     {
         *info = -1;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -3;
     }
@@ -203,11 +203,11 @@ void aocl_lapack_spoequb(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *s, r
         /* Computing MIN */
         r__1 = smin;
         r__2 = s[i__]; // , expr subst
-        smin = fla_min(r__1, r__2);
+        smin = fla_min(r__1,r__2);
         /* Computing MAX */
         r__1 = *amax;
         r__2 = s[i__]; // , expr subst
-        *amax = fla_max(r__1, r__2);
+        *amax = fla_max(r__1,r__2);
         /* L10: */
     }
     if(smin <= 0.f)

@@ -235,7 +235,7 @@ void zla_geamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, doublereal *alp
     {
         info = 3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         info = 6;
     }

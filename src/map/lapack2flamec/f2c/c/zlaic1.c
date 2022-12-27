@@ -191,8 +191,8 @@ void zlaic1_(aocl_int_t *job, aocl_int_t *j, dcomplex *x, doublereal *sest, dcom
         /* special cases */
         if(*sest == 0.)
         {
-            s1 = fla_max(absgam, absalp);
-            if(s1 == 0.)
+            s1 = fla_max(absgam,absalp);
+            if (s1 == 0.)
             {
                 s->real = 0., s->imag = 0.;
                 c__->real = 1., c__->imag = 0.;
@@ -229,9 +229,9 @@ void zlaic1_(aocl_int_t *job, aocl_int_t *j, dcomplex *x, doublereal *sest, dcom
         }
         else if(absgam <= eps * absest)
         {
-            s->real = 1., s->imag = 0.;
-            c__->real = 0., c__->imag = 0.;
-            tmp = fla_max(absest, absalp);
+            s->r = 1., s->i = 0.;
+            c__->r = 0., c__->i = 0.;
+            tmp = fla_max(absest,absalp);
             s1 = absest / tmp;
             s2 = absalp / tmp;
             *sestpr = tmp * sqrt(s1 * s1 + s2 * s2);
@@ -370,7 +370,7 @@ void zlaic1_(aocl_int_t *job, aocl_int_t *j, dcomplex *x, doublereal *sest, dcom
         if(*sest == 0.)
         {
             *sestpr = 0.;
-            if(fla_max(absgam, absalp) == 0.)
+            if (fla_max(absgam,absalp) == 0.)
             {
                 sine.real = 1.;
                 sine.imag = 0.; // , expr subst
@@ -391,7 +391,7 @@ void zlaic1_(aocl_int_t *job, aocl_int_t *j, dcomplex *x, doublereal *sest, dcom
             /* Computing MAX */
             d__1 = z_abs(&sine);
             d__2 = z_abs(&cosine); // , expr subst
-            s1 = max(d__1,d__2);
+            s1 = fla_max(d__1,d__2);
             z__1.r = sine.r / s1;
             z__1.i = sine.i / s1; // , expr subst
             s->r = z__1.r, s->i = z__1.i;
@@ -499,7 +499,7 @@ void zlaic1_(aocl_int_t *job, aocl_int_t *j, dcomplex *x, doublereal *sest, dcom
             /* Computing MAX */
             d__1 = zeta1 * zeta1 + 1. + zeta1 * zeta2;
             d__2 = zeta1 * zeta2 + zeta2 * zeta2; // , expr subst
-            norma = fla_max(d__1, d__2);
+            norma = fla_max(d__1,d__2);
             /* See if root is closer to zero or to ONE */
             test = (zeta1 - zeta2) * 2. * (zeta1 + zeta2) + 1.;
             if(test >= 0.)

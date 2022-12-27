@@ -367,7 +367,7 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
     {
         info = -7;
     }
-    else if(*ldb < fla_max(1, *m))
+    else if (*ldb < fla_max(1,*m))
     {
         info = -11;
     }

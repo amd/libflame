@@ -190,7 +190,7 @@ void sorgql_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *a, aocl_int_t *l
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -5;
     }
@@ -205,8 +205,8 @@ void sorgql_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *a, aocl_int_t *l
         {
             lwkopt = *n * nb;
         }
-        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
-        if(*lwork < fla_max(1, *n) && !lquery)
+        work[1] = (real) lwkopt;
+        if (*lwork < fla_max(1,*n) && ! lquery)
         {
             *info = -8;
         }
@@ -237,9 +237,9 @@ void sorgql_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *a, aocl_int_t *l
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = aocl_lapack_ilaenv(&c__3, "SORGQL", " ", m, n, k, &c_n1); // , expr subst
-        nx = fla_max(i__1, i__2);
-        if(nx < *k)
+        i__2 = ilaenv_(&c__3, "SORGQL", " ", m, n, k, &c_n1); // , expr subst
+        nx = fla_max(i__1,i__2);
+        if (nx < *k)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *n;
@@ -251,8 +251,8 @@ void sorgql_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *a, aocl_int_t *l
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = aocl_lapack_ilaenv(&c__2, "SORGQL", " ", m, n, k, &c_n1); // , expr subst
-                nbmin = fla_max(i__1, i__2);
+                i__2 = ilaenv_(&c__2, "SORGQL", " ", m, n, k, &c_n1); // , expr subst
+                nbmin = fla_max(i__1,i__2);
             }
         }
     }
@@ -263,7 +263,7 @@ void sorgql_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *a, aocl_int_t *l
         /* Computing MIN */
         i__1 = *k;
         i__2 = (*k - nx + nb - 1) / nb * nb; // , expr subst
-        kk = fla_min(i__1, i__2);
+        kk = fla_min(i__1,i__2);
         /* Set A(m-kk+1:m,1:n-kk) to zero. */
         i__1 = *n - kk;
         for(j = 1; j <= i__1; ++j)
@@ -296,8 +296,8 @@ void sorgql_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *a, aocl_int_t *l
             /* Computing MIN */
             i__3 = nb;
             i__4 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__3, i__4);
-            if(*n - *k + i__ > 1)
+            ib = fla_min(i__3,i__4);
+            if (*n - *k + i__ > 1)
             {
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i+ib-1) . . . H(i+1) H(i) */

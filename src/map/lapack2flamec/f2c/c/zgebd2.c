@@ -251,7 +251,7 @@ void zgebd2_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doubler
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -4;
     }
@@ -275,8 +275,7 @@ void zgebd2_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doubler
             i__2 = *m - i__ + 1;
             /* Computing MIN */
             i__3 = i__ + 1;
-            aocl_lapack_zlarfg(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1,
-                               &tauq[i__]);
+            zlarfg_(&i__2, &alpha, &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, & tauq[i__]);
             i__2 = i__;
             d__[i__2] = alpha.real;
             i__2 = i__ + i__ * a_dim1;
@@ -307,8 +306,7 @@ void zgebd2_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doubler
                 i__2 = *n - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                aocl_lapack_zlarfg(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda,
-                                   &taup[i__]);
+                zlarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3,*n) * a_dim1], lda, & taup[i__]);
                 i__2 = i__;
                 e[i__2] = alpha.real;
                 i__2 = i__ + (i__ + 1) * a_dim1;
@@ -350,8 +348,7 @@ void zgebd2_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doubler
             i__2 = *n - i__ + 1;
             /* Computing MIN */
             i__3 = i__ + 1;
-            aocl_lapack_zlarfg(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda,
-                               &taup[i__]);
+            zlarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3,*n) * a_dim1], lda, & taup[i__]);
             i__2 = i__;
             d__[i__2] = alpha.real;
             i__2 = i__ + i__ * a_dim1;
@@ -381,8 +378,7 @@ void zgebd2_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doubler
                 i__2 = *m - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                aocl_lapack_zlarfg(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1,
-                                   &tauq[i__]);
+                zlarfg_(&i__2, &alpha, &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
                 i__2 = i__;
                 e[i__2] = alpha.real;
                 i__2 = i__ + 1 + i__ * a_dim1;

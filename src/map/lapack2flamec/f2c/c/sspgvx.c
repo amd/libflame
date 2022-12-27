@@ -358,7 +358,7 @@ void sspgvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
             {
                 *info = -10;
             }
-            else if(*iu < fla_min(*n, *il) || *iu > *n)
+            else if (*iu < fla_min(*n,*il) || *iu > *n)
             {
                 *info = -11;
             }

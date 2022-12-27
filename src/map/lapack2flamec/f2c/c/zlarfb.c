@@ -116,9 +116,9 @@ static aocl_int64_t c__1 = 1;
 /* > LDV is INTEGER */
 /* > The leading dimension of the array V. */
 /* > If STOREV = 'C' and SIDE = 'L', LDV >= fla_max(1,M);
- */
+*/
 /* > if STOREV = 'C' and SIDE = 'R', LDV >= fla_max(1,N);
- */
+*/
 /* > if STOREV = 'R', LDV >= K. */
 /* > \endverbatim */
 /* > */
@@ -158,7 +158,7 @@ static aocl_int64_t c__1 = 1;
 /* > LDWORK is INTEGER */
 /* > The leading dimension of the array WORK. */
 /* > If SIDE = 'L', LDWORK >= fla_max(1,N);
- */
+*/
 /* > if SIDE = 'R', LDWORK >= fla_max(1,M). */
 /* > \endverbatim */
 /* Authors: */

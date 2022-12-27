@@ -184,7 +184,7 @@ void dorgrq_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a, aocl_in
     {
         *info = -3;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -5;
     }
@@ -199,8 +199,8 @@ void dorgrq_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a, aocl_in
             nb = aocl_lapack_ilaenv(&c__1, "DORGRQ", " ", m, n, k, &c_n1);
             lwkopt = *m * nb;
         }
-        work[1] = (doublereal)lwkopt;
-        if(*lwork < fla_max(1, *m) && !lquery)
+        work[1] = (doublereal) lwkopt;
+        if (*lwork < fla_max(1,*m) && ! lquery)
         {
             *info = -8;
         }
@@ -231,9 +231,9 @@ void dorgrq_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a, aocl_in
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = aocl_lapack_ilaenv(&c__3, "DORGRQ", " ", m, n, k, &c_n1); // , expr subst
-        nx = fla_max(i__1, i__2);
-        if(nx < *k)
+        i__2 = ilaenv_(&c__3, "DORGRQ", " ", m, n, k, &c_n1); // , expr subst
+        nx = fla_max(i__1,i__2);
+        if (nx < *k)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *m;
@@ -245,8 +245,8 @@ void dorgrq_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a, aocl_in
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = aocl_lapack_ilaenv(&c__2, "DORGRQ", " ", m, n, k, &c_n1); // , expr subst
-                nbmin = fla_max(i__1, i__2);
+                i__2 = ilaenv_(&c__2, "DORGRQ", " ", m, n, k, &c_n1); // , expr subst
+                nbmin = fla_max(i__1,i__2);
             }
         }
     }
@@ -257,7 +257,7 @@ void dorgrq_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a, aocl_in
         /* Computing MIN */
         i__1 = *k;
         i__2 = (*k - nx + nb - 1) / nb * nb; // , expr subst
-        kk = fla_min(i__1, i__2);
+        kk = fla_min(i__1,i__2);
         /* Set A(1:m-kk,n-kk+1:n) to zero. */
         i__1 = *n;
         for(j = *n - kk + 1; j <= i__1; ++j)
@@ -290,7 +290,7 @@ void dorgrq_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a, aocl_in
             /* Computing MIN */
             i__3 = nb;
             i__4 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__3, i__4);
+            ib = fla_min(i__3,i__4);
             ii = *m - *k + i__;
             if(ii > 1)
             {

@@ -155,27 +155,31 @@ doublereal dla_gbrpvgrw_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int
         i__2 = j - *ku;
         /* Computing MIN */
         i__4 = j + *kl;
-        i__3 = fla_min(i__4, *n);
-        for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
+        i__3 = fla_min(i__4,*n);
+        for (i__ = fla_max(i__2,1);
+                i__ <= i__3;
+                ++i__)
         {
             /* Computing MAX */
             d__2 = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs(d__1));
-            amax = max(d__2,amax);
+            amax = fla_max(d__2,amax);
         }
         /* Computing MAX */
         i__3 = j - *ku;
         i__2 = j;
-        for(i__ = fla_max(i__3, 1); i__ <= i__2; ++i__)
+        for (i__ = fla_max(i__3,1);
+                i__ <= i__2;
+                ++i__)
         {
             /* Computing MAX */
             d__2 = (d__1 = afb[kd + i__ - j + j * afb_dim1], f2c_dabs(d__1));
-            umax = max(d__2,umax);
+            umax = fla_max(d__2,umax);
         }
         if(umax != 0.)
         {
             /* Computing MIN */
             d__1 = amax / umax;
-            rpvgrw = fla_min(d__1, rpvgrw);
+            rpvgrw = fla_min(d__1,rpvgrw);
         }
     }
     ret_val = rpvgrw;

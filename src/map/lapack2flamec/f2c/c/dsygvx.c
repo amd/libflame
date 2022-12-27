@@ -375,11 +375,11 @@ void dsygvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     {
         *info = -5;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -7;
     }
-    else if(*ldb < fla_max(1, *n))
+    else if (*ldb < fla_max(1,*n))
     {
         *info = -9;
     }
@@ -394,11 +394,11 @@ void dsygvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
         }
         else if(indeig)
         {
-            if(*il < 1 || *il > fla_max(1, *n))
+            if (*il < 1 || *il > fla_max(1,*n))
             {
                 *info = -12;
             }
-            else if(*iu < fla_min(*n, *il) || *iu > *n)
+            else if (*iu < fla_min(*n,*il) || *iu > *n)
             {
                 *info = -13;
             }
@@ -416,14 +416,14 @@ void dsygvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n << 3; // , expr subst
-        lwkmin = fla_max(i__1, i__2);
-        nb = aocl_lapack_ilaenv(&c__1, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
+        lwkmin = fla_max(i__1,i__2);
+        nb = ilaenv_(&c__1, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
         /* Computing MAX */
         i__1 = lwkmin;
         i__2 = (nb + 3) * *n; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
-        work[1] = (doublereal)lwkopt;
-        if(*lwork < lwkmin && !lquery)
+        lwkopt = fla_max(i__1,i__2);
+        work[1] = (doublereal) lwkopt;
+        if (*lwork < lwkmin && ! lquery)
         {
             *info = -20;
         }

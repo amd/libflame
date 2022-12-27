@@ -191,13 +191,13 @@ void sgerqf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, 
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *m))
+    else if (*lda < fla_max(1,*m))
     {
         *info = -4;
     }
     if (*info == 0)
     {
-        k = min(*m,*n);
+        k = fla_min(*m,*n);
         if (k == 0)
         {
             lwkopt = 1;
@@ -209,7 +209,7 @@ void sgerqf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, 
         work[1] = (real) lwkopt;
         if (! lquery)
         {
-            if (*lwork <= 0 || *n > 0 && *lwork < max(1,*m))
+            if (*lwork <= 0 || *n > 0 && *lwork < fla_max(1,*m))
             {
                 *info = -7;
             }
@@ -241,9 +241,9 @@ void sgerqf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, 
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = aocl_lapack_ilaenv(&c__3, "SGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
-        nx = fla_max(i__1, i__2);
-        if(nx < k)
+        i__2 = ilaenv_(&c__3, "SGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
+        nx = fla_max(i__1,i__2);
+        if (nx < k)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *m;
@@ -255,8 +255,8 @@ void sgerqf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, 
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = aocl_lapack_ilaenv(&c__2, "SGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
-                nbmin = fla_max(i__1, i__2);
+                i__2 = ilaenv_(&c__2, "SGERQF", " ", m, n, &c_n1, & c_n1); // , expr subst
+                nbmin = fla_max(i__1,i__2);
             }
         }
     }
@@ -268,14 +268,14 @@ void sgerqf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, 
         /* Computing MIN */
         i__1 = k;
         i__2 = ki + nb; // , expr subst
-        kk = fla_min(i__1, i__2);
+        kk = fla_min(i__1,i__2);
         i__1 = k - kk + 1;
         i__2 = -nb;
         for(i__ = k - kk + ki + 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
         {
             /* Computing MIN */
             i__3 = k - i__ + 1;
-            ib = fla_min(i__3, nb);
+            ib = fla_min(i__3,nb);
             /* Compute the RQ factorization of the current block */
             /* A(m-k+i:m-k+i+ib-1,1:n-k+i+ib-1) */
             i__3 = *n - k + i__ + ib - 1;

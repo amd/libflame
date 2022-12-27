@@ -166,7 +166,7 @@ void cupgtr_(char *uplo, aocl_int_t *n, scomplex *ap, scomplex *tau, scomplex *q
     {
         *info = -2;
     }
-    else if(*ldq < fla_max(1, *n))
+    else if (*ldq < fla_max(1,*n))
     {
         *info = -6;
     }

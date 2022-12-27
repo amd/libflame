@@ -242,7 +242,7 @@ void dlaed0_(aocl_int_t *icompq, aocl_int_t *qsiz, aocl_int_t *n, doublereal *d_
     {
         *info = -1;
     }
-    else if(*icompq == 1 && *qsiz < fla_max(0, *n))
+    else if (*icompq == 1 && *qsiz < fla_max(0,*n))
     {
         *info = -2;
     }
@@ -250,11 +250,11 @@ void dlaed0_(aocl_int_t *icompq, aocl_int_t *qsiz, aocl_int_t *n, doublereal *d_
     {
         *info = -3;
     }
-    else if(*ldq < fla_max(1, *n))
+    else if (*ldq < fla_max(1,*n))
     {
         *info = -7;
     }
-    else if(*ldqs < fla_max(1, *n))
+    else if (*ldqs < fla_max(1,*n))
     {
         *info = -9;
     }

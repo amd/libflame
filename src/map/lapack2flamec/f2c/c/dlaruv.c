@@ -139,12 +139,10 @@ void dlaruv_(aocl_int_t *iseed, aocl_int_t *n, doublereal *x)
     i2 = iseed[2];
     i3 = iseed[3];
     i4 = iseed[4];
-    i__1 = fla_min(*n, 128);
-    it1 = 0;
-    it2 = 0;
-    it3 = 0;
-    it4 = 0;
-    for(i__ = 1; i__ <= i__1; ++i__)
+    i__1 = fla_min(*n,128);
+    for (i__ = 1;
+            i__ <= i__1;
+            ++i__)
     {
     L20: /* Multiply the seed by i-th power of the multiplier modulo 2**48 */
         it4 = i4 * mm[i__ + 383];

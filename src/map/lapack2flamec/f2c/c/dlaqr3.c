@@ -355,8 +355,8 @@ void dlaqr3_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
     /* Computing MIN */
     i__1 = *nw;
     i__2 = *kbot - *ktop + 1; // , expr subst
-    jw = fla_min(i__1, i__2);
-    if(jw <= 2)
+    jw = fla_min(i__1,i__2);
+    if (jw <= 2)
     {
         lwkopt = 1;
     }
@@ -377,8 +377,8 @@ void dlaqr3_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
         lwk3 = (integer)work[1];
         /* ==== Optimal workspace ==== */
         /* Computing MAX */
-        i__1 = jw + fla_max(lwk1, lwk2);
-        lwkopt = fla_max(i__1, lwk3);
+        i__1 = jw + fla_max(lwk1,lwk2);
+        lwkopt = fla_max(i__1,lwk3);
     }
     /* ==== Quick return in case of workspace query. ==== */
     if(*lwork == -1)
@@ -411,7 +411,7 @@ void dlaqr3_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
     /* Computing MIN */
     i__1 = *nw;
     i__2 = *kbot - *ktop + 1; // , expr subst
-    jw = fla_min(i__1, i__2);
+    jw = fla_min(i__1,i__2);
     kwtop = *kbot - jw + 1;
     if(kwtop == *ktop)
     {
@@ -431,7 +431,7 @@ void dlaqr3_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
         /* Computing MAX */
         d__2 = smlnum;
         d__3 = ulp * (d__1 = h__[kwtop + kwtop * h_dim1], f2c_dabs( d__1)); // , expr subst
-        if (f2c_dabs(s) <= max(d__2,d__3))
+        if (f2c_dabs(s) <= fla_max(d__2,d__3))
         {
             *ns = 0;
             *nd = 1;
@@ -504,7 +504,7 @@ L20:
             /* Computing MAX */
             d__2 = smlnum;
             d__3 = ulp * foo; // , expr subst
-            if ((d__1 = s * v[*ns * v_dim1 + 1], f2c_dabs(d__1)) <= max(d__2,d__3))
+            if ((d__1 = s * v[*ns * v_dim1 + 1], f2c_dabs(d__1)) <= fla_max(d__2,d__3))
             {
                 /* ==== Deflatable ==== */
                 --(*ns);
@@ -533,7 +533,7 @@ L20:
             /* Computing MAX */
             d__5 = smlnum;
             d__6 = ulp * foo; // , expr subst
-            if(fla_max(d__3, d__4) <= fla_max(d__5, d__6))
+            if (fla_max(d__3,d__4) <= fla_max(d__5,d__6))
             {
                 /* ==== Deflatable ==== */
                 *ns += -2;
@@ -727,11 +727,9 @@ L60:
             /* Computing MIN */
             i__3 = *nv;
             i__4 = kwtop - krow; // , expr subst
-            kln = fla_min(i__3, i__4);
-            aocl_blas_dgemm("N", "N", &kln, &jw, &jw, &c_b18, &h__[krow + kwtop * h_dim1], ldh,
-                            &v[v_offset], ldv, &c_b17, &wv[wv_offset], ldwv);
-            aocl_lapack_dlacpy("A", &kln, &jw, &wv[wv_offset], ldwv, &h__[krow + kwtop * h_dim1],
-                               ldh);
+            kln = fla_min(i__3,i__4);
+            dgemm_("N", "N", &kln, &jw, &jw, &c_b18, &h__[krow + kwtop * h_dim1], ldh, &v[v_offset], ldv, &c_b17, &wv[wv_offset], ldwv);
+            dlacpy_("A", &kln, &jw, &wv[wv_offset], ldwv, &h__[krow + kwtop * h_dim1], ldh);
             /* L70: */
         }
         /* ==== Update horizontal slab in H ==== */
@@ -744,11 +742,9 @@ L60:
                 /* Computing MIN */
                 i__3 = *nh;
                 i__4 = *n - kcol + 1; // , expr subst
-                kln = fla_min(i__3, i__4);
-                aocl_blas_dgemm("C", "N", &jw, &kln, &jw, &c_b18, &v[v_offset], ldv,
-                                &h__[kwtop + kcol * h_dim1], ldh, &c_b17, &t[t_offset], ldt);
-                aocl_lapack_dlacpy("A", &jw, &kln, &t[t_offset], ldt, &h__[kwtop + kcol * h_dim1],
-                                   ldh);
+                kln = fla_min(i__3,i__4);
+                dgemm_("C", "N", &jw, &kln, &jw, &c_b18, &v[v_offset], ldv, & h__[kwtop + kcol * h_dim1], ldh, &c_b17, &t[t_offset], ldt);
+                dlacpy_("A", &jw, &kln, &t[t_offset], ldt, &h__[kwtop + kcol * h_dim1], ldh);
                 /* L80: */
             }
         }
@@ -762,11 +758,9 @@ L60:
                 /* Computing MIN */
                 i__3 = *nv;
                 i__4 = *ihiz - krow + 1; // , expr subst
-                kln = fla_min(i__3, i__4);
-                aocl_blas_dgemm("N", "N", &kln, &jw, &jw, &c_b18, &z__[krow + kwtop * z_dim1], ldz,
-                                &v[v_offset], ldv, &c_b17, &wv[wv_offset], ldwv);
-                aocl_lapack_dlacpy("A", &kln, &jw, &wv[wv_offset], ldwv,
-                                   &z__[krow + kwtop * z_dim1], ldz);
+                kln = fla_min(i__3,i__4);
+                dgemm_("N", "N", &kln, &jw, &jw, &c_b18, &z__[krow + kwtop * z_dim1], ldz, &v[v_offset], ldv, &c_b17, &wv[ wv_offset], ldwv);
+                dlacpy_("A", &kln, &jw, &wv[wv_offset], ldwv, &z__[krow + kwtop * z_dim1], ldz);
                 /* L90: */
             }
         }

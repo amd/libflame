@@ -206,11 +206,11 @@ doublereal zla_syrcond_c_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
     {
         *info = -2;
     }
-    else if(*lda < fla_max(1, *n))
+    else if (*lda < fla_max(1,*n))
     {
         *info = -4;
     }
-    else if(*ldaf < fla_max(1, *n))
+    else if (*ldaf < fla_max(1,*n))
     {
         *info = -6;
     }
@@ -265,7 +265,7 @@ doublereal zla_syrcond_c_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
                 }
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm, tmp);
+            anorm = fla_max(anorm,tmp);
         }
     }
     else
@@ -305,7 +305,7 @@ doublereal zla_syrcond_c_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
                 }
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm, tmp);
+            anorm = fla_max(anorm,tmp);
         }
     }
     /* Quick return if possible. */

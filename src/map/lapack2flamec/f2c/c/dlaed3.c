@@ -231,7 +231,7 @@ void dlaed3_(aocl_int_t *k, aocl_int_t *n, aocl_int_t *n1, doublereal *d__, doub
     {
         *info = -2;
     }
-    else if(*ldq < fla_max(1, *n))
+    else if (*ldq < fla_max(1,*n))
     {
         *info = -6;
     }

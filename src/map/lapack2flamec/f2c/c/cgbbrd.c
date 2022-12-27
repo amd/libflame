@@ -308,15 +308,15 @@ void cgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
     {
         *info = -8;
     }
-    else if(*ldq < 1 || wantq && *ldq < fla_max(1, *m))
+    else if (*ldq < 1 || wantq && *ldq < fla_max(1,*m))
     {
         *info = -12;
     }
-    else if(*ldpt < 1 || wantpt && *ldpt < fla_max(1, *n))
+    else if (*ldpt < 1 || wantpt && *ldpt < fla_max(1,*n))
     {
         *info = -14;
     }
-    else if(*ldc < 1 || wantc && *ldc < fla_max(1, *m))
+    else if (*ldc < 1 || wantc && *ldc < fla_max(1,*m))
     {
         *info = -16;
     }
@@ -342,8 +342,8 @@ void cgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
-    minmn = fla_min(*m, *n);
-    if(*kl + *ku > 1)
+    minmn = fla_min(*m,*n);
+    if (*kl + *ku > 1)
     {
         /* Reduce to upper bidiagonal form if KU > 0;
         if KU = 0, reduce */
@@ -365,10 +365,10 @@ void cgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
         /* and the real cosines in RWORK. */
         /* Computing MIN */
         i__1 = *m - 1;
-        klm = fla_min(i__1, *kl);
+        klm = fla_min(i__1,*kl);
         /* Computing MIN */
         i__1 = *n - 1;
-        kun = fla_min(i__1, *ku);
+        kun = fla_min(i__1,*ku);
         kb = klm + kun;
         kb1 = kb + 1;
         inca = kb1 * *ldab;
@@ -429,7 +429,7 @@ void cgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
                             /* Computing MIN */
                             i__4 = *ku + ml - 2;
                             i__5 = *n - i__; // , expr subst
-                            i__3 = fla_min(i__4, i__5);
+                            i__3 = fla_min(i__4,i__5);
                             i__6 = *ldab - 1;
                             i__7 = *ldab - 1;
                             aocl_lapack_crot(&i__3, &ab[*ku + ml - 2 + (i__ + 1) * ab_dim1], &i__6,
@@ -534,10 +534,8 @@ void cgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
                         /* Computing MIN */
                         i__3 = *kl + mu - 2;
                         i__5 = *m - i__; // , expr subst
-                        i__4 = fla_min(i__3, i__5);
-                        aocl_lapack_crot(&i__4, &ab[*ku - mu + 4 + (i__ + mu - 2) * ab_dim1], &c__1,
-                                         &ab[*ku - mu + 3 + (i__ + mu - 1) * ab_dim1], &c__1,
-                                         &rwork[i__ + mu - 1], &work[i__ + mu - 1]);
+                        i__4 = fla_min(i__3,i__5);
+                        crot_(&i__4, &ab[*ku - mu + 4 + (i__ + mu - 2) * ab_dim1], &c__1, &ab[*ku - mu + 3 + (i__ + mu - 1) * ab_dim1], &c__1, &rwork[i__ + mu - 1], &work[i__ + mu - 1]);
                     }
                     ++nr;
                     j1 -= kb1;
@@ -604,8 +602,10 @@ void cgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
         /* elements on subdiagonal elements */
         /* Computing MIN */
         i__2 = *m - 1;
-        i__1 = fla_min(i__2, *n);
-        for(i__ = 1; i__ <= i__1; ++i__)
+        i__1 = fla_min(i__2,*n);
+        for (i__ = 1;
+                i__ <= i__1;
+                ++i__)
         {
             clartg_(&ab[i__ * ab_dim1 + 1], &ab[i__ * ab_dim1 + 2], &rc, &rs, &ra);
             i__2 = i__ * ab_dim1 + 1;

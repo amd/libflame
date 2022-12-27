@@ -198,7 +198,7 @@ void zlaqp2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, dcomplex *a, aocl
     /* Function Body */
     /* Computing MIN */
     i__1 = *m - *offset;
-    mn = fla_min(i__1, *n);
+    mn = fla_min(i__1,*n);
     tol3z = sqrt(dlamch_("Epsilon"));
     /* Compute factorization. */
     i__1 = mn;
@@ -258,7 +258,7 @@ void zlaqp2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, dcomplex *a, aocl
                 /* Computing 2nd power */
                 d__1 = z_abs(&a[offpi + j * a_dim1]) / vn1[j];
                 temp = 1. - d__1 * d__1;
-                temp = fla_max(temp, 0.);
+                temp = fla_max(temp,0.);
                 /* Computing 2nd power */
                 d__1 = vn1[j] / vn2[j];
                 temp2 = temp * (d__1 * d__1);

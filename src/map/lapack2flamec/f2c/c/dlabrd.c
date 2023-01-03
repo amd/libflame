@@ -1,10 +1,7 @@
-/* ../netlib/dlabrd.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlabrd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 /*
- *  Copyright (c) 2021-2025 Advanced Micro Devices, Inc.  All rights reserved.
+ *  Copyright (c) 2021-2023 Advanced Micro Devices, Inc.  All rights reserved.
  */
 #include "FLA_f2c.h" /* Table of constant values */
 
@@ -269,6 +266,14 @@ void fla_dlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlabrd inputs: m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldx %" FLA_IS ", ldy %" FLA_IS "",*m, *n, *nb, *lda, *ldx, *ldy);
+  
+    extern int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda, doublereal *d__, doublereal *e, doublereal *tauq, doublereal *taup, doublereal *x, integer *ldx, doublereal *y, integer *ldy);
+
+    return fla_dlabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy); 
+}
+
+int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda, doublereal *d__, doublereal *e, doublereal *tauq, doublereal *taup, doublereal *x, integer *ldx, doublereal *y, integer *ldy)
+{
     /* System generated locals */
     integer a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */

@@ -122,7 +122,7 @@ void zgetri_(aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
              dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgetri inputs: n %" FLA_IS ", lda %" FLA_IS "",*n, *lda);
+    AOCL_DTL_SNPRINTF("zgetri inputs: n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "", *n, *lda, *lwork);
 
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;

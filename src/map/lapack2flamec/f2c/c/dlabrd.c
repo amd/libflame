@@ -268,8 +268,11 @@ void fla_dlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *
     AOCL_DTL_SNPRINTF("dlabrd inputs: m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldx %" FLA_IS ", ldy %" FLA_IS "",*m, *n, *nb, *lda, *ldx, *ldy);
   
     extern int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda, doublereal *d__, doublereal *e, doublereal *tauq, doublereal *taup, doublereal *x, integer *ldx, doublereal *y, integer *ldy);
+    
+    int ret_val = fla_dlabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
+    AOCL_DTL_TRACE_LOG_EXIT
+    return ret_val;
 
-    return fla_dlabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy); 
 }
 
 int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda, doublereal *d__, doublereal *e, doublereal *tauq, doublereal *taup, doublereal *x, integer *ldx, doublereal *y, integer *ldy)
@@ -327,7 +330,6 @@ int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda
     /* Function Body */
     if(*m <= 0 || *n <= 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
 
@@ -567,7 +569,6 @@ int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DLABRD */
 }

@@ -1,267 +1,123 @@
-/*
-    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
-*/
+/******************************************************************************
+* Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+*******************************************************************************/
 
 /*! @file validate_hseqr.c
  *  @brief Defines validate function of HSEQR() to use in test suite.
  *  */
 
 #include "test_common.h"
-#include "test_prototype.h"
 
-extern double perf;
-extern double time_min;
-
-void validate_hseqr(char *tst_api, char *job, char *compz, integer n, void *H, void *H_test,
-                    integer ldh, void *Z, void *Z_test, integer ldz, void *wr, void *wr_in,
-                    void *wi, void *wi_in, void *w, integer datatype, double err_thresh,
-                    integer *ilo, integer *ihi, char imatrix, void *scal_H, void *params)
+void validate_hseqr(char* job, char* compz,
+    integer n,
+    void* H,
+    void* H_test,
+    integer ldh,
+    void* Z,
+    void* Z_test,
+    integer ldz,
+    integer datatype,
+    double* residual,
+    integer *info)
 {
-    char NORM = '1';
-    void *Y = NULL;
-    double residual, resid1 = 0., resid2 = 0.;
-    double resid3 = 0., resid4 = 0., resid5 = 0., resid6 = 0.;
-
-    /* Early return conditions */
-    if(n == 0)
-    {
-        FLA_TEST_PRINT_STATUS_AND_RETURN(n, n, err_thresh);
-    }
-    /* print overall status if incoming threshold is
-     * an extreme value indicating that API returned
-     * unexpected info value */
-    FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
-
-    if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (scal_H != NULL))
-    {
-        create_realtype_vector(datatype, &Y, 1);
-        get_reciprocal_real_vector(get_realtype(datatype), scal_H, 1, Y, 1);
-
-        if(datatype == FLOAT || datatype == DOUBLE)
-        {
-            scal_matrix(datatype, Y, wr, n, i_one, i_one, i_one);
-            scal_matrix(datatype, Y, wi, n, i_one, i_one, i_one);
-        }
-        else
-        {
-            scal_matrix(datatype, Y, w, n, i_one, i_one, i_one);
-        }
-        free_vector(Y);
-    }
-
-    if(datatype == FLOAT || datatype == DOUBLE)
-    {
-        /* Find negative value of every 2nd element (starting from ilo-1 till ihi-2) and store in
-         * next location. Used to store imaginary parts of scomplex conjuate pair of eigen
-         * values */
-        add_negative_values_ilo_ihi(datatype, wi_in, *ilo, *ihi);
-
-        sort_vector(datatype, "A", n, wi_in, 1);
-        sort_vector(datatype, "A", n, wr_in, 1);
-        sort_vector(datatype, "A", n, wr, 1);
-        sort_vector(datatype, "A", n, wi, 1);
-    }
-    else
-    {
-        sort_vector(datatype, "A", n, w, 1);
-        sort_vector(datatype, "A", n, wr_in, 1);
-    }
-
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            /* Validate the eigen values returned by the api */
-            void *work = NULL;
-            float norm, norm1, norm2;
-            compute_matrix_norm(datatype, NORM, n, i_one, wr_in, i_one, &norm1, imatrix, work);
-            saxpy_(&n, &s_n_one, wr, &i_one, wr_in, &i_one);
-            compute_matrix_norm(datatype, NORM, n, i_one, wr_in, i_one, &norm, imatrix, work);
-            resid1 = fla_compute_residual(datatype, 'P', norm, norm1, n, params);
-
-            if(*ilo != *ihi)
-            {
-                compute_matrix_norm(datatype, NORM, n, i_one, wi_in, i_one, &norm2, imatrix, work);
-                saxpy_(&n, &s_n_one, wi, &i_one, wi_in, &i_one);
-                compute_matrix_norm(datatype, NORM, n, i_one, wi_in, i_one, &norm, imatrix, work);
-                resid2 = fla_compute_residual(datatype, 'P', norm, norm2, n, params);
-            }
-            break;
-        }
-
-        case DOUBLE:
-        {
-            /* Validate the eigen values returned by the api */
-            void *work = NULL;
-            double norm, norm1, norm2;
-            compute_matrix_norm(datatype, NORM, n, i_one, wr_in, i_one, &norm1, imatrix, work);
-            daxpy_(&n, &d_n_one, wr, &i_one, wr_in, &i_one);
-            compute_matrix_norm(datatype, NORM, n, i_one, wr_in, i_one, &norm, imatrix, work);
-            resid1 = fla_compute_residual(datatype, 'P', norm, norm1, n, params);
-
-            if(*ilo != *ihi)
-            {
-                compute_matrix_norm(datatype, NORM, n, i_one, wi_in, i_one, &norm2, imatrix, work);
-                daxpy_(&n, &d_n_one, wi, &i_one, wi_in, &i_one);
-                compute_matrix_norm(datatype, NORM, n, i_one, wi_in, i_one, &norm, imatrix, work);
-                resid2 = fla_compute_residual(datatype, 'P', norm, norm2, n, params);
-            }
-
-            break;
-        }
-        case COMPLEX:
-        {
-            /* Validate the eigen values returned by the api */
-            void *work = NULL;
-            float norm, norm1;
-
-            compute_matrix_norm(datatype, NORM, n, i_one, wr_in, i_one, &norm1, imatrix, work);
-            caxpy_(&n, &c_n_one, w, &i_one, wr_in, &i_one);
-            compute_matrix_norm(datatype, NORM, n, i_one, wr_in, i_one, &norm, imatrix, work);
-            norm = fla_lapack_clange("1", &n, &i_one, wr_in, &i_one, work);
-            resid1 = fla_compute_residual(datatype, 'P', norm, norm1, n, params);
-            break;
-        }
-        case DOUBLE_COMPLEX:
-        {
-            /* Validate the eigen values returned by the api */
-            void *work = NULL;
-            double norm, norm1;
-
-            compute_matrix_norm(datatype, NORM, n, i_one, wr_in, i_one, &norm1, imatrix, work);
-            zaxpy_(&n, &z_n_one, w, &i_one, wr_in, &i_one);
-            compute_matrix_norm(datatype, NORM, n, i_one, wr_in, i_one, &norm, imatrix, work);
-            resid1 = fla_compute_residual(datatype, 'P', norm, norm1, n, params);
-            break;
-        }
-    }
-    residual = fla_test_max(resid1, resid2);
-
-    if(same_char(*job, 'E') || same_char(*compz, 'N'))
-    {
-        /* When job='E' (eigenvalues only) or compz='N' (no Schur vectors),
-           Z_test is not computed, so the following subtests do not apply
-           and are intentionally omitted from this code path:
-             - Test 03: Schur decomposition reconstruction residual
-                        (needs Z and Z_test)
-             - Test 04: orthogonality of Z  (needs Z_test)
-             - Test 06: padding rows of Z  (Z_test is not modified)
-           Subtest numbering is kept consistent with the full path below so
-           that 01, 02, and 05 always map to the same checks. */
-
-        /* Test 5: Check padding rows of H not modified */
-        resid5 = check_padding(datatype, n, n, H_test, ldh);
-        residual = fla_test_max(resid5, residual);
-        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-        FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
-        FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
-        FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
+    if (*job == 'E' || *compz == 'N')
         return;
-    }
 
     void *zlambda = NULL, *work = NULL, *lambda = NULL;
+    *info = 0;
 
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &zlambda, n);
+    create_matrix(datatype, &zlambda, n, n);
     reset_matrix(datatype, n, n, zlambda, n);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &lambda, n);
+    create_matrix(datatype, &lambda, n, n);
     reset_matrix(datatype, n, n, lambda, n);
 
     switch(datatype)
     {
         case FLOAT:
         {
-            float norm, norm_H;
+            float norm, norm_H, eps, resid1, resid2;
+            eps = fla_lapack_slamch("P");
 
             /* Test 1
                 lambda = Z' * ZU
                 compute norm(H - (lambda * T * lambda')) / (V * norm(H) * eps)*/
-            compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm_H, imatrix, work);
+            norm_H = fla_lapack_slange("1", &n, &n, H, &ldh, work);
             sgemm_("T", "N", &n, &n, &n, &s_one, Z, &ldz, Z_test, &ldz, &s_zero, lambda, &n);
             sgemm_("N", "N", &n, &n, &n, &s_one, lambda, &n, H_test, &ldh, &s_zero, zlambda, &n);
             sgemm_("N", "T", &n, &n, &n, &s_one, zlambda, &n, lambda, &n, &s_n_one, H, &ldh);
-            compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm, imatrix, work);
-            resid3 = fla_compute_residual(datatype, 'P', norm, norm_H, n, params);
+            norm = fla_lapack_slange("1", &n, &n, H, &ldh, work);
+            resid1 = norm /( eps * norm_H * (float)n);
+
             /* Test 2
                 compute norm(I - Z'*Z) / (N * EPS)*/
-            resid4 = (float)check_orthogonality(datatype, lambda, n, n, n, params);
+            resid2 = (float)check_orthogonality(datatype, lambda, n, n, n);
+            *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case DOUBLE:
         {
-            double norm, norm_H;
+            double norm, norm_H, eps, resid1, resid2;
+            eps = fla_lapack_dlamch("P");
 
             /* Test 1
                 lambda = Z' * ZU
                 compute norm(H - (lambda * T * lambda')) / (V * norm(H) * eps)*/
-            compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm_H, imatrix, work);
+            norm_H = fla_lapack_dlange("1", &n, &n, H, &ldh, work);
             dgemm_("T", "N", &n, &n, &n, &d_one, Z, &ldz, Z_test, &ldz, &d_zero, lambda, &n);
             dgemm_("N", "N", &n, &n, &n, &d_one, lambda, &n, H_test, &ldh, &d_zero, zlambda, &n);
             dgemm_("N", "T", &n, &n, &n, &d_one, zlambda, &n, lambda, &n, &d_n_one, H, &ldh);
-            compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm, imatrix, work);
-            resid3 = fla_compute_residual(datatype, 'P', norm, norm_H, n, params);
+            norm = fla_lapack_dlange("1", &n, &n, H, &ldh, work);
+            resid1 = norm/ ( norm_H * (float)n * eps);
 
             /* Test 2
                 compute norm(I - Z'*Z) / (N * EPS)*/
-            resid4 = check_orthogonality(datatype, lambda, n, n, n, params);
+            resid2 = check_orthogonality(datatype, lambda, n, n, n);
+            *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_H;
+            float norm, norm_H, eps, resid1, resid2;
+            eps = fla_lapack_slamch("P");
 
             /* Test 1
                 lambda = Z' * ZU
                 compute norm(H - (lambda * T * lambda')) / (V * norm(H) * eps)*/
-            compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm_H, imatrix, work);
+            norm_H = fla_lapack_clange("1", &n, &n, H, &ldh, work);
             cgemm_("C", "N", &n, &n, &n, &c_one, Z, &ldz, Z_test, &ldz, &c_zero, lambda, &n);
             cgemm_("N", "N", &n, &n, &n, &c_one, lambda, &n, H_test, &ldh, &c_zero, zlambda, &n);
             cgemm_("N", "C", &n, &n, &n, &c_one, zlambda, &n, lambda, &n, &c_n_one, H, &ldh);
-            compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm, imatrix, work);
-            resid3 = fla_compute_residual(datatype, 'P', norm, norm_H, n, params);
+            norm = fla_lapack_clange("1", &n, &n, H, &ldh, work);
+            resid1 = norm/( norm_H * (float)n * eps);
 
             /* Test 2
                 compute norm(I - Z'*Z) / (N * EPS)*/
-            resid4 = (float)check_orthogonality(datatype, lambda, n, n, n, params);
-
+            resid2 = (float)check_orthogonality(datatype, lambda, n, n, n);
+            *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_H;
+            double norm, norm_H, eps, resid1, resid2;
+            eps = fla_lapack_dlamch("P");
 
             /* Test 1
                 lambda = Z' * ZU
                 compute norm(H - (lambda * T * lambda')) / (V * norm(H) * eps)*/
-            compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm_H, imatrix, work);
+            norm_H = fla_lapack_zlange("1", &n, &n, H, &ldh, work);
             zgemm_("C", "N", &n, &n, &n, &z_one, Z, &ldz, Z_test, &ldz, &z_zero, lambda, &n);
             zgemm_("N", "N", &n, &n, &n, &z_one, lambda, &n, H_test, &ldh, &z_zero, zlambda, &n);
             zgemm_("N", "C", &n, &n, &n, &z_one, zlambda, &n, lambda, &n, &z_n_one, H, &ldh);
-            compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm, imatrix, work);
-            resid3 = fla_compute_residual(datatype, 'P', norm, norm_H, n, params);
+            norm = fla_lapack_zlange("1", &n, &n, H, &ldh, work);
+            resid1 = norm/( norm_H * (float)n * eps);
 
             /* Test 2
                 compute norm(I - Z'*Z) / (N * EPS)*/
-            resid4 = check_orthogonality(datatype, lambda, n, n, n, params);
+            resid2 = check_orthogonality(datatype, lambda, n, n, n);
+            *residual = (double)fla_max(resid1, resid2);
             break;
         }
     }
     free_matrix(zlambda);
     free_matrix(lambda);
-
-    /* Test 5: Check padding rows of H not modified */
-    resid5 = check_padding(datatype, n, n, H_test, ldh);
-    /* Test 6: Check padding rows of Z not modified */
-    resid6 = check_padding(datatype, n, n, Z_test, ldz);
-    residual = fla_test_max(resid3, residual);
-    residual = fla_test_max(resid4, residual);
-    residual = fla_test_max(resid5, residual);
-    residual = fla_test_max(resid6, residual);
-
-    FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
-    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
-    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
-    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
-    FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
-    FLA_PRINT_SUBTEST_STATUS(resid6, err_thresh, "06");
 }

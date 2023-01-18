@@ -133,9 +133,12 @@ void dorgtr_fla(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, d
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     logical upper;
-    int lapack_dorgqr(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, doublereal *, aocl_int64_t *,
-                    doublereal *, doublereal *, aocl_int64_t *, aocl_int64_t *);
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    int xerbla_(char *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int dorgql_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), lapack_dorgqr(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -290,8 +293,7 @@ void dorgtr_fla(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, d
             i__1 = *n - 1;
             i__2 = *n - 1;
             i__3 = *n - 1;
-            lapack_dorgqr(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1], lwork,
-                          &iinfo);
+            lapack_dorgqr(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1], lwork, &iinfo);
         }
     }
     work[1] = (doublereal)lwkopt;

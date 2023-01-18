@@ -159,10 +159,11 @@ void aocl_lapack_dorghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
     /* Local variables */
     aocl_int64_t i__, j, nb, nh, iinfo;
     extern /* Subroutine */
-        int
-        lapack_dorgqr(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, doublereal *, aocl_int64_t *,
-                      doublereal *, doublereal *, aocl_int64_t *, aocl_int64_t *);
-    aocl_int64_t lwkopt;
+    int xerbla_(char *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int lapack_dorgqr(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -290,8 +291,7 @@ void aocl_lapack_dorghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
     if(nh > 0)
     {
         /* Generate Q(ilo+1:ihi,ilo+1:ihi) */
-        lapack_dorgqr(&nh, &nh, &nh, &a[*ilo + 1 + (*ilo + 1) * a_dim1], lda, &tau[*ilo], &work[1],
-                      lwork, &iinfo);
+        lapack_dorgqr(&nh, &nh, &nh, &a[*ilo + 1 + (*ilo + 1) * a_dim1], lda, &tau[* ilo], &work[1], lwork, &iinfo);
     }
     work[1] = (doublereal)lwkopt;
     return;

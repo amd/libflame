@@ -318,7 +318,11 @@ typedef short ftnlen;
 typedef short ftnint;
 #else
 typedef long int flag;
-typedef integer ftnlen;
+ #ifndef BLIS1_FROM_LIBFLAME
+   #define ftnlen integer
+ #else
+   typedef long int ftnlen;
+ #endif
 typedef long int ftnint;
 #endif
 
@@ -2161,7 +2165,7 @@ typedef struct Namelist Namelist;
 #define strttp_                  STRTTP 
 #define stzrqf_                  STZRQF 
 #define stzrzf_                  STZRZF 
-#define xerbla_array_            XERBLA_ARRAY  
+#define xerbla_array_            XERBLA_ARRAY
 #define zbbcsd_                  ZBBCSD 
 #define zbdsqr_                  ZBDSQR 
 #define zcgesv_                  ZCGESV 
@@ -4350,7 +4354,7 @@ typedef struct Namelist Namelist;
 #define strttp_                  strttp 
 #define stzrqf_                  stzrqf 
 #define stzrzf_                  stzrzf 
-#define xerbla_array_            xerbla_array  
+#define xerbla_array_            xerbla_array
 #define zbbcsd_                  zbbcsd 
 #define zbdsqr_                  zbdsqr 
 #define zcgesv_                  zcgesv 

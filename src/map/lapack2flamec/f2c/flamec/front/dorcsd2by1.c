@@ -286,11 +286,18 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t itaup1, itaup2, itauq1;
     logical wantu1, wantu2;
-    aocl_int64_t ibbcsd, lbbcsd, iorbdb, lorbdb;
-    extern void dorglq_fla(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, doublereal *, aocl_int64_t *,
-                 doublereal *, doublereal *, aocl_int64_t *, aocl_int64_t *);
-    aocl_int64_t iorglq;
-    aocl_int64_t lorglq, iorgqr, lorgqr;
+    extern /* Subroutine */
+    int dbbcsd_();
+    integer ibbcsd, lbbcsd, iorbdb, lorbdb;
+    extern /* Subroutine */
+    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(char *, integer *), dlapmr_(logical *, integer *, integer *, doublereal *, integer *, integer *), dlapmt_(logical *, integer *, integer *, doublereal *, integer *, integer *);
+    integer iorglq;
+    extern int /* Subroutine */
+      dorglq_fla(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *),
+      lapack_dorgqr(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+    integer lorglq, iorgqr, lorgqr;
+    extern /* Subroutine */
+    int dorbdb1_(), dorbdb2_(), dorbdb3_(), dorbdb4_() ;
     logical lquery, wantv1t;
     /* -- LAPACK computational routine (3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -466,7 +473,7 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
             lorbdb = (integer)work[1];
             if(wantu1 && *p > 0)
             {
-                dorgqr_fla(p, p, q, &u1[u1_offset], ldu1, (doublereal*)&c__0, &work[1], &c_n1, &childinfo);
+                lapack_dorgqr(p, p, q, &u1[u1_offset], ldu1, (doublereal*)&c__0, &work[1], &c_n1, &childinfo);
                 lorgqrmin = fla_max(1,*p);
                 lorgqropt = (integer) work[1];
             }
@@ -474,8 +481,7 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
             {
                 i__1 = *m - *p;
                 i__2 = *m - *p;
-                lapack_dorgqr(&i__1, &i__2, q, &u2[u2_offset], ldu2, dum1, &work[1], &c_n1,
-                              &childinfo);
+                lapack_dorgqr(&i__1, &i__2, q, &u2[u2_offset], ldu2, (doublereal*)&c__0, &work[1] , &c_n1, &childinfo);
                 /* Computing MAX */
                 i__1 = lorgqrmin;
                 i__2 = *m - *p; // , expr subst
@@ -513,8 +519,7 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
                 i__1 = *p - 1;
                 i__2 = *p - 1;
                 i__3 = *p - 1;
-                lapack_dorgqr(&i__1, &i__2, &i__3, &u1[(u1_dim1 << 1) + 2], ldu1, dum1, &work[1],
-                              &c_n1, &childinfo);
+                lapack_dorgqr(&i__1, &i__2, &i__3, &u1[(u1_dim1 << 1) + 2], ldu1, (doublereal*)&c__0, &work[1], &c_n1, &childinfo);
                 /* Computing MAX */
                 i__1 = lorgqrmin;
                 i__2 = *p - 1; // , expr subst
@@ -525,8 +530,7 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
             {
                 i__1 = *m - *p;
                 i__2 = *m - *p;
-                lapack_dorgqr(&i__1, &i__2, q, &u2[u2_offset], ldu2, dum1, &work[1], &c_n1,
-                              &childinfo);
+                lapack_dorgqr(&i__1, &i__2, q, &u2[u2_offset], ldu2, (doublereal*)&c__0, &work[1] , &c_n1, &childinfo);
                 /* Computing MAX */
                 i__1 = lorgqrmin;
                 i__2 = *m - *p; // , expr subst
@@ -545,7 +549,7 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
             lorbdb = (integer) work[1];
             if (*p >= *m - *p - 1)
             {
-                dorgqr_fla(p, p, q, &u1[u1_offset], ldu1, (doublereal*)&c__0, &work[1], &c_n1, &childinfo);
+                lapack_dorgqr(p, p, q, &u1[u1_offset], ldu1, (doublereal*)&c__0, &work[1], &c_n1, &childinfo);
                 lorgqrmin = fla_max(1,*p);
                 lorgqropt = (integer) work[1];
             }
@@ -574,8 +578,7 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
                 i__1 = *m - *p - 1;
                 i__2 = *m - *p - 1;
                 i__3 = *m - *p - 1;
-                lapack_dorgqr(&i__1, &i__2, &i__3, &u2[(u2_dim1 << 1) + 2], ldu2, dum1, &work[1],
-                              &c_n1, &childinfo);
+                lapack_dorgqr(&i__1, &i__2, &i__3, &u2[(u2_dim1 << 1) + 2], ldu2, (doublereal*)&c__0, &work[1], &c_n1, &childinfo);
                 /* Computing MAX */
                 i__1 = lorgqrmin;
                 i__2 = *m - *p - 1; // , expr subst
@@ -602,7 +605,7 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
             if(wantu1 && *p > 0)
             {
                 i__1 = *m - *q;
-                dorgqr_fla(p, p, &i__1, &u1[u1_offset], ldu1, (doublereal*)&c__0, &work[1], & c_n1, &childinfo);
+                lapack_dorgqr(p, p, &i__1, &u1[u1_offset], ldu1, (doublereal*)&c__0, &work[1], & c_n1, &childinfo);
                 lorgqrmin = fla_max(1,*p);
                 lorgqropt = (integer) work[1];
             }
@@ -611,8 +614,7 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
                 i__1 = *m - *p;
                 i__2 = *m - *p;
                 i__3 = *m - *q;
-                lapack_dorgqr(&i__1, &i__2, &i__3, &u2[u2_offset], ldu2, dum1, &work[1], &c_n1,
-                              &childinfo);
+                lapack_dorgqr(&i__1, &i__2, &i__3, &u2[u2_offset], ldu2, (doublereal*)&c__0, & work[1], &c_n1, &childinfo);
                 /* Computing MAX */
                 i__1 = lorgqrmin;
                 i__2 = *m - *p; // , expr subst
@@ -672,9 +674,8 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
         /* Accumulate Householder reflectors */
         if(wantu1 && *p > 0)
         {
-            aocl_lapack_dlacpy("L", p, q, &x11[x11_offset], ldx11, &u1[u1_offset], ldu1);
-            lapack_dorgqr(p, p, q, &u1[u1_offset], ldu1, &work[itaup1], &work[iorgqr], &lorgqr,
-                          &childinfo);
+            dlacpy_("L", p, q, &x11[x11_offset], ldx11, &u1[u1_offset], ldu1);
+            lapack_dorgqr(p, p, q, &u1[u1_offset], ldu1, &work[itaup1], &work[ iorgqr], &lorgqr, &childinfo);
         }
         if(wantu2 && *m - *p > 0)
         {
@@ -682,8 +683,7 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
             aocl_lapack_dlacpy("L", &i__1, q, &x21[x21_offset], ldx21, &u2[u2_offset], ldu2);
             i__1 = *m - *p;
             i__2 = *m - *p;
-            lapack_dorgqr(&i__1, &i__2, q, &u2[u2_offset], ldu2, &work[itaup2], &work[iorgqr],
-                          &lorgqr, &childinfo);
+            lapack_dorgqr(&i__1, &i__2, q, &u2[u2_offset], ldu2, &work[itaup2], & work[iorgqr], &lorgqr, &childinfo);
         }
         if(wantv1t && *q > 0)
         {
@@ -753,8 +753,7 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
             i__1 = *p - 1;
             i__2 = *p - 1;
             i__3 = *p - 1;
-            lapack_dorgqr(&i__1, &i__2, &i__3, &u1[(u1_dim1 << 1) + 2], ldu1, &work[itaup1],
-                          &work[iorgqr], &lorgqr, &childinfo);
+            lapack_dorgqr(&i__1, &i__2, &i__3, &u1[(u1_dim1 << 1) + 2], ldu1, &work[ itaup1], &work[iorgqr], &lorgqr, &childinfo);
         }
         if(wantu2 && *m - *p > 0)
         {
@@ -762,8 +761,7 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
             aocl_lapack_dlacpy("L", &i__1, q, &x21[x21_offset], ldx21, &u2[u2_offset], ldu2);
             i__1 = *m - *p;
             i__2 = *m - *p;
-            lapack_dorgqr(&i__1, &i__2, q, &u2[u2_offset], ldu2, &work[itaup2], &work[iorgqr],
-                          &lorgqr, &childinfo);
+            lapack_dorgqr(&i__1, &i__2, q, &u2[u2_offset], ldu2, &work[itaup2], & work[iorgqr], &lorgqr, &childinfo);
         }
         if(wantv1t && *q > 0)
         {
@@ -806,9 +804,8 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
         /* Accumulate Householder reflectors */
         if(wantu1 && *p > 0)
         {
-            aocl_lapack_dlacpy("L", p, q, &x11[x11_offset], ldx11, &u1[u1_offset], ldu1);
-            lapack_dorgqr(p, p, q, &u1[u1_offset], ldu1, &work[itaup1], &work[iorgqr], &lorgqr,
-                          &childinfo);
+            dlacpy_("L", p, q, &x11[x11_offset], ldx11, &u1[u1_offset], ldu1);
+            lapack_dorgqr(p, p, q, &u1[u1_offset], ldu1, &work[itaup1], &work[ iorgqr], &lorgqr, &childinfo);
         }
         if(wantu2 && *m - *p > 0)
         {
@@ -826,8 +823,7 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
             i__1 = *m - *p - 1;
             i__2 = *m - *p - 1;
             i__3 = *m - *p - 1;
-            lapack_dorgqr(&i__1, &i__2, &i__3, &u2[(u2_dim1 << 1) + 2], ldu2, &work[itaup2],
-                          &work[iorgqr], &lorgqr, &childinfo);
+            lapack_dorgqr(&i__1, &i__2, &i__3, &u2[(u2_dim1 << 1) + 2], ldu2, &work[ itaup2], &work[iorgqr], &lorgqr, &childinfo);
         }
         if(wantv1t && *q > 0)
         {
@@ -895,8 +891,7 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
             aocl_lapack_dlacpy("L", &i__1, &i__2, &x11[x11_dim1 + 2], ldx11,
                                &u1[(u1_dim1 << 1) + 2], ldu1);
             i__1 = *m - *q;
-            lapack_dorgqr(p, p, &i__1, &u1[u1_offset], ldu1, &work[itaup1], &work[iorgqr], &lorgqr,
-                          &childinfo);
+            lapack_dorgqr(p, p, &i__1, &u1[u1_offset], ldu1, &work[itaup1], &work[ iorgqr], &lorgqr, &childinfo);
         }
         if(wantu2 && *m - *p > 0)
         {
@@ -912,8 +907,7 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
             i__1 = *m - *p;
             i__2 = *m - *p;
             i__3 = *m - *q;
-            lapack_dorgqr(&i__1, &i__2, &i__3, &u2[u2_offset], ldu2, &work[itaup2], &work[iorgqr],
-                          &lorgqr, &childinfo);
+            lapack_dorgqr(&i__1, &i__2, &i__3, &u2[u2_offset], ldu2, &work[itaup2], &work[iorgqr], &lorgqr, &childinfo);
         }
         if(wantv1t && *q > 0)
         {

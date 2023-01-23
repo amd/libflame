@@ -1,11 +1,9 @@
-/* ./cunmbr.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* cunmbr.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c_n1 = -1;
+static integer c__2 = 2;
 /* > \brief \b CUNMBR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -123,7 +121,7 @@ static aocl_int64_t c_n1 = -1;
 /* > \param[in] A */
 /* > \verbatim */
 /* > A is COMPLEX array, dimension */
-/* > (LDA,fla_min(nq,K)) if VECT = 'Q' */
+/* > (LDA,min(nq,K)) if VECT = 'Q' */
 /* > (LDA,nq) if VECT = 'P' */
 /* > The vectors which define the elementary reflectors H(i) and */
 /* > G(i), whose products determine the matrices Q and P, as */
@@ -136,7 +134,7 @@ static aocl_int64_t c_n1 = -1;
 /* > The leading dimension of the array A. */
 /* > If VECT = 'Q', LDA >= fla_max(1,nq);
 */
-/* > if VECT = 'P', LDA >= fla_max(1,fla_min(nq,K)). */
+/* > if VECT = 'P', LDA >= fla_max(1,min(nq,K)). */
 /* > \endverbatim */
 /* > */
 /* > \param[in] TAU */
@@ -199,7 +197,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup unmbr */
+/* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
 /** Generated wrapper function */
@@ -207,15 +205,11 @@ void cunmbr_(char *vect, char *side, char *trans, aocl_int_t *m, aocl_int_t *n, 
              scomplex *a, aocl_int_t *lda, scomplex *tau, scomplex *c__, aocl_int_t *ldc,
              scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"cunmbr inputs: vect %c, side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "",*vect, *side, *trans, *m, *n, *k, *lda, *ldc, *lwork);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("cunmbr inputs: vect %c, side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*vect, *side, *trans, *m, *n, *k, *lda, *ldc);
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
-    real r__1;
+    address a__1[2];
+    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3[2];
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
@@ -267,14 +261,14 @@ void cunmbr_(char *vect, char *side, char *trans, aocl_int_t *m, aocl_int_t *n, 
     if(left)
     {
         nq = *m;
-        nw = fla_max(1, *n);
+        nw = fla_max(1,*n);
     }
     else
     {
         nq = *n;
-        nw = fla_max(1, *m);
+        nw = fla_max(1,*m);
     }
-    if(!applyq && !lsame_(vect, "P", 1, 1))
+    if (! applyq && ! lsame_(vect, "P"))
     {
         *info = -1;
     }
@@ -311,14 +305,14 @@ void cunmbr_(char *vect, char *side, char *trans, aocl_int_t *m, aocl_int_t *n, 
         {
             *info = -11;
         }
-        else if (*lwork < fla_max(1,nw) && ! lquery)
+        else if (*lwork < nw && ! lquery)
         {
             *info = -13;
         }
     }
     if(*info == 0)
     {
-        if(*m > 0 && *n > 0)
+        if (*m > 0 && *n > 0)
         {
             if(applyq)
             {
@@ -350,10 +344,7 @@ void cunmbr_(char *vect, char *side, char *trans, aocl_int_t *m, aocl_int_t *n, 
                     nb = aocl_lapack_ilaenv(&c__1, "CUNMLQ", ch__1, m, &i__1, &i__2, &c_n1);
                 }
             }
-            /* Computing MAX */
-            i__1 = 1;
-            i__2 = nw * nb; // , expr subst
-            lwkopt = fla_max(i__1,i__2);
+            lwkopt = nw * nb;
         }
         else
         {
@@ -367,18 +358,18 @@ void cunmbr_(char *vect, char *side, char *trans, aocl_int_t *m, aocl_int_t *n, 
     {
         i__1 = -(*info);
         xerbla_("CUNMBR", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(applyq)
@@ -452,7 +443,7 @@ void cunmbr_(char *vect, char *side, char *trans, aocl_int_t *m, aocl_int_t *n, 
     }
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of CUNMBR */
 }

@@ -1,10 +1,11 @@
-/* ./chegvd.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* chegvd.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {1.f, 0.f};
+static complex c_b1 =
+{
+    1.f,0.f
+}
+;
 /* > \brief \b CHEGVD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -228,7 +229,7 @@ i off-diagonal elements of an */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup hegvd */
+/* > \ingroup complexHEeigen */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -251,16 +252,8 @@ void chegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex 
              scomplex *b, aocl_int_t *ldb, real *w, scomplex *work, aocl_int_t *lwork, real *rwork,
              aocl_int_t *lrwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chegvd inputs: itype %lld, jobz %c, uplo %c, n %lld, lda %lld, ldb %lld, lwork %lld, lrwork %lld, liwork %lld",*itype, *jobz, *uplo, *n, *lda, *ldb, *lwork, *lrwork, *liwork);
-#else
-    snprintf(buffer, 256,"chegvd inputs: itype %d, jobz %c, uplo %c, n %d, lda %d, ldb %d, lwork %d, lrwork %d, liwork %d",*itype, *jobz, *uplo, *n, *lda, *ldb, *lwork, *lrwork, *liwork);
-#endif
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("chegvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*itype, *jobz, *uplo, *n, *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     real r__1, r__2;
@@ -379,18 +372,18 @@ void chegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex 
     {
         i__1 = -(*info);
         xerbla_("CHEGVD", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Form a Cholesky factorization of B. */
@@ -398,7 +391,7 @@ void chegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex 
     if(*info != 0)
     {
         *info = *n + *info;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
@@ -408,14 +401,14 @@ void chegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex 
     /* Computing MAX */
     r__1 = (real) lopt;
     r__2 = work[1].r; // , expr subst
-    lopt = fla_max(r__1,r__2);
+    lopt = (integer) fla_max(r__1,r__2);
     /* Computing MAX */
     r__1 = (real) lropt;
-    lropt = fla_max(r__1,rwork[1]);
+    lropt = (integer) fla_max(r__1,rwork[1]);
     /* Computing MAX */
     r__1 = (real) liopt;
     r__2 = (real) iwork[1]; // , expr subst
-    liopt = fla_max(r__1,r__2);
+    liopt = (integer) fla_max(r__1,r__2);
     if (wantz && *info == 0)
     {
         /* Backtransform eigenvectors to the original problem. */
@@ -456,7 +449,7 @@ void chegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex 
     work[1].i = 0.f; // , expr subst
     rwork[1] = (real) lropt;
     iwork[1] = liopt;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of CHEGVD */
 }

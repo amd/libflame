@@ -1,13 +1,5 @@
-/* clatbs.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-
-/*
- *     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
- */
-
+/* clatbs.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static real c_b36 = .5f;
@@ -118,7 +110,7 @@ static real c_b36 = .5f;
 /* > in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
 */
-/* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
+/* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=min(n,j+kd). */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LDAB */
@@ -291,9 +283,9 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
     extern /* Subroutine */
     int ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
+    extern integer icamax_(integer *, complex *, integer *);
     extern /* Complex */
-        void
-        cladiv_f2c_(scomplex *, scomplex *, scomplex *);
+    VOID cladiv_f2c_(complex *, complex *, complex *);
     extern real slamch_(char *);
     real bignum;
     logical notran;
@@ -375,15 +367,15 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
     }
     /* Quick return if possible */
     *scale = 1.f;
-    if(*n == 0)
+    if (*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }
     /* Determine machine dependent parameters to control overflow. */
     smlnum = slamch_("Safe minimum") / slamch_("Precision");
     bignum = 1.f / smlnum;
-    if(lsame_(normin, "N", 1, 1))
+    if (lsame_(normin, "N"))
     {
         /* Compute the 1-norm of each column, not including the diagonal. */
         if(upper)
@@ -715,7 +707,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                     /* 0 < f2c_abs(A(j,j)) <= SMLNUM: */
                     if (xj > tjj * bignum)
                     {
-                        /* Scale x by (1/f2c_abs(x(j)))*f2c_abs(A(j,j))*BIGNUM */
+                        /* Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM */
                         /* to avoid overflow when dividing by A(j,j). */
                         rec = tjj * bignum / xj;
                         if(cnorm[j] > 1.f)
@@ -761,7 +753,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                     rec = 1.f / xj;
                     if(cnorm[j] > (bignum - xmax) * rec)
                     {
-                        /* Scale x by 1/(2*f2c_abs(x(j))). */
+                        /* Scale x by 1/(2*abs(x(j))). */
                         rec *= .5f;
                         aocl_blas_csscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
@@ -778,8 +770,8 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                     if(j > 1)
                     {
                         /* Compute the update */
-                        /* x(fla_max(1,j-kd):j-1) := x(fla_max(1,j-kd):j-1) - */
-                        /* x(j)* A(fla_max(1,j-kd):j-1,j) */
+                        /* x (fla_max(1,j-kd):j-1) := x (fla_max(1,j-kd):j-1) - */
+                        /* x(j)* A (fla_max(1,j-kd):j-1,j) */
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
@@ -799,8 +791,8 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                 else if(j < *n)
                 {
                     /* Compute the update */
-                    /* x(j+1:fla_min(j+kd,n)) := x(j+1:fla_min(j+kd,n)) - */
-                    /* x(j) * A(j+1:fla_min(j+kd,n),j) */
+                    /* x(j+1:min(j+kd,n)) := x(j+1:min(j+kd,n)) - */
+                    /* x(j) * A(j+1:min(j+kd,n),j) */
                     /* Computing MIN */
                     i__3 = *kd;
                     i__4 = *n - j; // , expr subst
@@ -991,7 +983,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                         {
                             if(xj > tjj * bignum)
                             {
-                                /* Scale X by 1/f2c_abs(x(j)). */
+                                /* Scale X by 1/abs(x(j)). */
                                 rec = 1.f / xj;
                                 aocl_blas_csscal(n, &rec, &x[1], &c__1);
                                 *scale *= rec;
@@ -1008,7 +1000,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                         /* 0 < f2c_abs(A(j,j)) <= SMLNUM: */
                         if (xj > tjj * bignum)
                         {
-                            /* Scale x by (1/f2c_abs(x(j)))*f2c_abs(A(j,j))*BIGNUM. */
+                            /* Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
                             aocl_blas_csscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
@@ -1226,7 +1218,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                         {
                             if(xj > tjj * bignum)
                             {
-                                /* Scale X by 1/f2c_abs(x(j)). */
+                                /* Scale X by 1/abs(x(j)). */
                                 rec = 1.f / xj;
                                 aocl_blas_csscal(n, &rec, &x[1], &c__1);
                                 *scale *= rec;
@@ -1243,7 +1235,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
                         /* 0 < f2c_abs(A(j,j)) <= SMLNUM: */
                         if (xj > tjj * bignum)
                         {
-                            /* Scale x by (1/f2c_abs(x(j)))*f2c_abs(A(j,j))*BIGNUM. */
+                            /* Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
                             aocl_blas_csscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;

@@ -1,8 +1,5 @@
-/* cbbcsd.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* cbbcsd.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 =
 {
@@ -350,16 +347,8 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
              aocl_int_t *ldv2t, real *b11d, real *b11e, real *b12d, real *b12e, real *b21d,
              real *b21e, real *b22d, real *b22e, real *rwork, aocl_int_t *lrwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %lld, p %lld, q %lld, ldu1 %lld, ldu2 %lld, ldv1t %lld, ldv2t %lld, lrwork %lld",*jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t, *lrwork);
-#else
-    snprintf(buffer, 256,"cbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %d, p %d, q %d, ldu1 %d, ldu2 %d, ldv1t %d, ldv2t %d, lrwork %d",*jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t, *lrwork);
-#endif
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("cbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS ", ldv2t %" FLA_IS "",*jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t);
     /* System generated locals */
     aocl_int64_t u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset,
         i__1, i__2;
@@ -397,9 +386,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     logical wantv1t, wantv2t;
     real b21bulge, b22bulge;
     extern /* Subroutine */
-        void
-        slartgp_(real *, real *, real *, real *, real *),
-        slartgs_(real *, real *, real *, real *, real *);
+    int slartgp_(real *, real *, real *, real *, real *), slartgs_(real *, real *, real *, real *, real *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -443,7 +430,6 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     --b22d;
     --b22e;
     --rwork;
-
     /* Function Body */
     *info = 0;
     lquery = *lrwork == -1;
@@ -489,7 +475,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     {
         lrworkmin = 1;
         rwork[1] = (real) lrworkmin;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Compute workspace */
@@ -515,12 +501,12 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     {
         i__1 = -(*info);
         xerbla_("CBBCSD", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Get machine constants */
@@ -547,7 +533,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         {
             theta[i__] = 0.f;
         }
-        else if(theta[i__] > 1.5707963267948966192313216916397514421f - thresh)
+        else if (theta[i__] > 1.5707963267948966192313216916397514421f - thresh)
         {
             theta[i__] = 1.5707963267948966192313216916397514421f;
         }
@@ -559,7 +545,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         {
             phi[i__] = 0.f;
         }
-        else if(phi[i__] > 1.5707963267948966192313216916397514421f - thresh)
+        else if (phi[i__] > 1.5707963267948966192313216916397514421f - thresh)
         {
             phi[i__] = 1.5707963267948966192313216916397514421f;
         }
@@ -622,7 +608,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
                     ++(*info);
                 }
             }
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return 0;
         }
         iter = iter + imax - imin;
@@ -641,7 +627,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
                 thetamin = theta[i__];
             }
         }
-        if(thetamax > 1.5707963267948966192313216916397514421f - thresh)
+        if (thetamax > 1.5707963267948966192313216916397514421f - thresh)
         {
             /* Zero on diagonals of B11 and B22;
             induce deflation with a */
@@ -1241,7 +1227,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             {
                 theta[i__] = 0.f;
             }
-            else if(theta[i__] > 1.5707963267948966192313216916397514421f - thresh)
+            else if (theta[i__] > 1.5707963267948966192313216916397514421f - thresh)
             {
                 theta[i__] = 1.5707963267948966192313216916397514421f;
             }
@@ -1253,7 +1239,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             {
                 phi[i__] = 0.f;
             }
-            else if(phi[i__] > 1.5707963267948966192313216916397514421f - thresh)
+            else if (phi[i__] > 1.5707963267948966192313216916397514421f - thresh)
             {
                 phi[i__] = 1.5707963267948966192313216916397514421f;
             }
@@ -1355,7 +1341,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             }
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of CBBCSD */
 }

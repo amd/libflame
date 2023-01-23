@@ -1,14 +1,20 @@
-/* ./chseqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* chseqr.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {0.f, 0.f};
-static scomplex c_b2 = {1.f, 0.f};
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c__12 = 12;
-static aocl_int64_t c__49 = 49;
+static complex c_b1 =
+{
+    0.f,0.f
+}
+;
+static complex c_b2 =
+{
+    1.f,0.f
+}
+;
+static integer c__1 = 1;
+static integer c__12 = 12;
+static integer c__2 = 2;
+static integer c__49 = 49;
 /* > \brief \b CHSEQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -118,7 +124,7 @@ static aocl_int64_t c__49 = 49;
 /* > \param[in] LDH */
 /* > \verbatim */
 /* > LDH is INTEGER */
-/* > The leading dimension of the array H. LDH .GE. fla_max(1,N). */
+/* > The leading dimension of the array H. LDH >= fla_max(1,N). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] W */
@@ -162,7 +168,7 @@ static aocl_int64_t c__49 = 49;
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
-/* > The dimension of the array WORK. LWORK .GE. fla_max(1,N) */
+/* > The dimension of the array WORK. LWORK >= fla_max(1,N) */
 /* > is sufficient and delivers very good and sometimes */
 /* > optimal performance. However, LWORK as large as 11*N */
 /* > may be required for optimal performance. A workspace */
@@ -223,7 +229,7 @@ static aocl_int64_t c__49 = 49;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup hseqr */
+/* > \ingroup complexOTHERcomputational */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -303,18 +309,11 @@ void chseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
              aocl_int_t *ldh, scomplex *w, scomplex *z__, aocl_int_t *ldz, scomplex *work,
              aocl_int_t *lwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chseqr inputs: job %c, compz %c, n %lld, ilo %lld, ihi %lld, ldh %lld, ldz %lld, lwork %lld",*job, *compz, *n, *ilo, *ihi, *ldh, *ldz, *lwork);
-#else
-    snprintf(buffer, 256,"chseqr inputs: job %c, compz %c, n %d, ilo %d, ihi %d, ldh %d, ldz %d, lwork %d",*job, *compz, *n, *ilo, *ihi, *ldh, *ldz, *lwork);
-#endif
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("chseqr inputs: job %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldz %" FLA_IS "",*job, *compz, *n, *ilo, *ihi, *ldh, *ldz);
     /* System generated locals */
-    aocl_int64_t h_dim1, h_offset, z_dim1, z_offset, i__1, i__2;
+    address a__1[2];
+    integer h_dim1, h_offset, z_dim1, z_offset, i__1, i__2, i__3[2];
     real r__1, r__2, r__3;
     scomplex q__1;
     char ch__1[2];
@@ -418,14 +417,14 @@ void chseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
         /* ==== Quick return in case of invalid argument. ==== */
         i__1 = -(*info);
         xerbla_("CHSEQR", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(*n == 0)
     {
         /* ==== Quick return in case N = 0;
         nothing to do. ==== */
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(lquery)
@@ -443,7 +442,7 @@ void chseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
         q__1.i = 0.f; // , expr subst
         work[1].r = q__1.r;
         work[1].i = q__1.i; // , expr subst
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else
@@ -474,12 +473,12 @@ void chseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
             i__2 = *ilo + *ilo * h_dim1;
             w[i__1].r = h__[i__2].r;
             w[i__1].i = h__[i__2].i; // , expr subst
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
             return 0;
         }
         /* ==== CLAHQR/CLAQR0 crossover point ==== */
         nmin = ilaenv_(&c__12, "CHSEQR", ch__1, n, ilo, ihi, lwork);
-        nmin = fla_max(11,nmin);
+        nmin = fla_max(15,nmin);
         /* ==== CLAQR0 for big matrices;
         CLAHQR for small ones ==== */
         if(*n > nmin)
@@ -545,7 +544,7 @@ void chseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
         work[1].i = q__1.i; // , expr subst
     }
     /* ==== End of CHSEQR ==== */
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
 }
 /* chseqr_ */

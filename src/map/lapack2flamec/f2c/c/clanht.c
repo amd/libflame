@@ -1,8 +1,5 @@
-/* clanht.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* clanht.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CLANHT returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
@@ -100,16 +97,8 @@ static aocl_int64_t c__1 = 1;
 /** Generated wrapper function */
 real clanht_(char *norm, aocl_int_t *n, real *d__, scomplex *e)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clanht inputs: norm %c, n %lld",*norm, *n);
-#else
-    snprintf(buffer, 256,"clanht inputs: norm %c, n %d",*norm, *n);
-#endif
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("clanht inputs: norm %c, n %" FLA_IS "",*norm, *n);
     /* System generated locals */
     aocl_int64_t i__1;
     real ret_val, r__1;
@@ -121,6 +110,8 @@ real clanht_(char *norm, aocl_int_t *n, real *d__, scomplex *e)
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real anorm;
     extern logical sisnan_(real *);
+    extern /* Subroutine */
+    int slassq_(integer *, real *, integer *, real *, real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -174,11 +165,11 @@ real clanht_(char *norm, aocl_int_t *n, real *d__, scomplex *e)
         /* Find norm1(A). */
         if(*n == 1)
         {
-            anorm = f2c_dabs(d__[1]);
+            anorm = f2c_abs(d__[1]);
         }
         else
         {
-            anorm = f2c_dabs(d__[1]) + c_abs(&e[1]);
+            anorm = f2c_abs(d__[1]) + c_abs(&e[1]);
             sum = c_abs(&e[*n - 1]) + (r__1 = d__[*n], f2c_abs(r__1));
             if (anorm < sum || sisnan_(&sum))
             {
@@ -211,7 +202,7 @@ real clanht_(char *norm, aocl_int_t *n, real *d__, scomplex *e)
         anorm = scale * sqrt(sum);
     }
     ret_val = anorm;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return ret_val;
     /* End of CLANHT */
 }

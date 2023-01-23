@@ -1,8 +1,5 @@
-/* chptrd.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* chptrd.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static scomplex c_b2 = {0.f, 0.f};
 static aocl_int64_t c__1 = 1;
@@ -157,16 +154,8 @@ v(i+2:n) is stored on exit in AP, */
 void chptrd_(char *uplo, aocl_int_t *n, scomplex *ap, real *d__, real *e, scomplex *tau,
              aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chptrd inputs: uplo %c, n %lld",*uplo, *n);
-#else
-    snprintf(buffer, 256,"chptrd inputs: uplo %c, n %d",*uplo, *n);
-#endif
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("chptrd inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
     real r__1;
@@ -183,6 +172,8 @@ void chptrd_(char *uplo, aocl_int_t *n, scomplex *ap, real *d__, real *e, scompl
     extern /* Subroutine */
     int chpmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
+    extern /* Subroutine */
+    int clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(char *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -223,13 +214,13 @@ void chptrd_(char *uplo, aocl_int_t *n, scomplex *ap, real *d__, real *e, scompl
     {
         i__1 = -(*info);
         xerbla_("CHPTRD", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n <= 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(upper)
@@ -247,11 +238,11 @@ void chptrd_(char *uplo, aocl_int_t *n, scomplex *ap, real *d__, real *e, scompl
             /* Generate elementary reflector H(i) = I - tau * v * v**H */
             /* to annihilate A(1:i-1,i+1) */
             i__1 = i1 + i__ - 1;
-            alpha.real = ap[i__1].real;
-            alpha.imag = ap[i__1].imag; // , expr subst
-            aocl_lapack_clarfg(&i__, &alpha, &ap[i1], &c__1, &taui);
-            e[i__] = alpha.real;
-            if(taui.real != 0.f || taui.imag != 0.f)
+            alpha.r = ap[i__1].r;
+            alpha.i = ap[i__1].i; // , expr subst
+            clarfg_(&i__, &alpha, &ap[i1], &c__1, &taui);
+            e[i__] = alpha.r;
+            if (taui.r != 0.f || taui.i != 0.f)
             {
                 /* Apply H(i) from both sides to A(1:i,1:i) */
                 i__1 = i1 + i__ - 1;
@@ -278,10 +269,10 @@ void chptrd_(char *uplo, aocl_int_t *n, scomplex *ap, real *d__, real *e, scompl
             }
             i__1 = i1 + i__ - 1;
             i__2 = i__;
-            ap[i__1].real = e[i__2];
-            ap[i__1].imag = 0.f; // , expr subst
+            ap[i__1].r = e[i__2];
+            ap[i__1].i = 0.f; // , expr subst
             i__1 = i1 + i__;
-            d__[i__ + 1] = ap[i__1].real;
+            d__[i__ + 1] = ap[i__1].r;
             i__1 = i__;
             tau[i__1].real = taui.real;
             tau[i__1].imag = taui.imag; // , expr subst
@@ -308,9 +299,9 @@ void chptrd_(char *uplo, aocl_int_t *n, scomplex *ap, real *d__, real *e, scompl
             alpha.real = ap[i__2].real;
             alpha.imag = ap[i__2].imag; // , expr subst
             i__2 = *n - i__;
-            aocl_lapack_clarfg(&i__2, &alpha, &ap[ii + 2], &c__1, &taui);
-            e[i__] = alpha.real;
-            if(taui.real != 0.f || taui.imag != 0.f)
+            clarfg_(&i__2, &alpha, &ap[ii + 2], &c__1, &taui);
+            e[i__] = alpha.r;
+            if (taui.r != 0.f || taui.i != 0.f)
             {
                 /* Apply H(i) from both sides to A(i+1:n,i+1:n) */
                 i__2 = ii + 1;
@@ -343,20 +334,20 @@ void chptrd_(char *uplo, aocl_int_t *n, scomplex *ap, real *d__, real *e, scompl
             }
             i__2 = ii + 1;
             i__3 = i__;
-            ap[i__2].real = e[i__3];
-            ap[i__2].imag = 0.f; // , expr subst
+            ap[i__2].r = e[i__3];
+            ap[i__2].i = 0.f; // , expr subst
             i__2 = ii;
-            d__[i__] = ap[i__2].real;
+            d__[i__] = ap[i__2].r;
             i__2 = i__;
-            tau[i__2].real = taui.real;
-            tau[i__2].imag = taui.imag; // , expr subst
+            tau[i__2].r = taui.r;
+            tau[i__2].i = taui.i; // , expr subst
             ii = i1i1;
             /* L20: */
         }
         i__1 = ii;
-        d__[*n] = ap[i__1].real;
+        d__[*n] = ap[i__1].r;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of CHPTRD */
 }

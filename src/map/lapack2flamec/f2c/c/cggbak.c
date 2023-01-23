@@ -1,8 +1,5 @@
-/* cggbak.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* cggbak.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CGGBAK */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -150,16 +147,8 @@ ILO=1 and IHI=0, if N=0. */
 void cggbak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, real *lscale,
              real *rscale, aocl_int_t *m, scomplex *v, aocl_int_t *ldv, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cggbak inputs: job %c, side %c, n %lld, ilo %lld, ihi %lld, m %lld, ldv %lld",*job, *side, *n, *ilo, *ihi, *m, *ldv);
-#else
-    snprintf(buffer, 256,"cggbak inputs: job %c, side %c, n %d, ilo %d, ihi %d, m %d, ldv %d",*job, *side, *n, *ilo, *ihi, *m, *ldv);
-#endif
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("cggbak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", m %" FLA_IS ", ldv %" FLA_IS "",*job, *side, *n, *ilo, *ihi, *m, *ldv);
     /* System generated locals */
     aocl_int64_t v_dim1, v_offset, i__1;
     /* Local variables */
@@ -236,23 +225,23 @@ void cggbak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *
     {
         i__1 = -(*info);
         xerbla_("CGGBAK", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(*m == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(lsame_(job, "N", 1, 1))
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(*ilo == *ihi)
@@ -296,8 +285,8 @@ L30:
             }
             for(i__ = *ilo - 1; i__ >= 1; --i__)
             {
-                k = (integer)rscale[i__];
-                if(k == i__)
+                k = (integer) rscale[i__];
+                if (k == i__)
                 {
                     goto L40;
                 }
@@ -312,8 +301,8 @@ L30:
             i__1 = *n;
             for(i__ = *ihi + 1; i__ <= i__1; ++i__)
             {
-                k = (integer)rscale[i__];
-                if(k == i__)
+                k = (integer) rscale[i__];
+                if (k == i__)
                 {
                     goto L60;
                 }
@@ -331,8 +320,8 @@ L30:
             }
             for(i__ = *ilo - 1; i__ >= 1; --i__)
             {
-                k = (integer)lscale[i__];
-                if(k == i__)
+                k = (integer) lscale[i__];
+                if (k == i__)
                 {
                     goto L80;
                 }
@@ -347,8 +336,8 @@ L30:
             i__1 = *n;
             for(i__ = *ihi + 1; i__ <= i__1; ++i__)
             {
-                k = (integer)lscale[i__];
-                if(k == i__)
+                k = (integer) lscale[i__];
+                if (k == i__)
                 {
                     goto L100;
                 }
@@ -358,7 +347,7 @@ L30:
         }
     }
 L110:
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of CGGBAK */
 }

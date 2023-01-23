@@ -1,8 +1,5 @@
-/* ./cunbdb6.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* cunbdb6.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 =
 {
@@ -61,8 +58,9 @@ static integer c__1 = 1;
 /* > with respect to the columns of */
 /* > Q = [ Q1 ] . */
 /* > [ Q2 ] */
-/* > The columns of Q must be orthonormal. The orthogonalized vector will */
-/* > be zero if and only if it lies entirely in the range of Q. */
+/* > The Euclidean norm of X must be one and the columns of Q must be */
+/* > orthonormal. The orthogonalized vector will be zero if and only if it */
+/* > lies entirely in the range of Q. */
 /* > */
 /* > The projection is computed with at most two iterations of the */
 /* > classical Gram-Schmidt algorithm, see */
@@ -166,7 +164,7 @@ static integer c__1 = 1;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup unbdb6 */
+/* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
 /** Generated wrapper function */
@@ -174,27 +172,22 @@ void cunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
               scomplex *x2, aocl_int_t *incx2, scomplex *q1, aocl_int_t *ldq1, scomplex *q2,
               aocl_int_t *ldq2, scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cunbdb6 inputs: m1 %lld, m2 %lld, n %lld, incx1 %lld, incx2 %lld, ldq1 %lld, ldq2 %lld, lwork %lld",*m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2, *lwork);
-#else
-    snprintf(buffer, 256,"cunbdb6 inputs: m1 %d, m2 %d, n %d, incx1 %d, incx2 %d, ldq1 %d, ldq2 %d, lwork %d",*m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2, *lwork);
-#endif
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("cunbdb6 inputs: m1 %" FLA_IS ", m2 %" FLA_IS ", n %" FLA_IS ", incx1 %" FLA_IS ", incx2 %" FLA_IS ", ldq1 %" FLA_IS ", ldq2 %" FLA_IS "",*m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2);
     /* System generated locals */
-    aocl_int64_t q1_dim1, q1_offset, q2_dim1, q2_offset, i__1, i__2, i__3;
+    integer q1_dim1, q1_offset, q2_dim1, q2_offset, i__1, i__2, i__3;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__;
-    real scl1, scl2, ssq1, ssq2;
+    real norm_new__;
+    integer i__, ix;
+    real scl, eps, ssq, norm;
     extern /* Subroutine */
-    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), xerbla_(char *, integer *), classq_( integer *, complex *, integer *, real *, real *);
-    real normsq1, normsq2;
-    /* -- LAPACK computational routine (version 3.5.0) -- */
+    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    extern real slamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(char *, integer *), classq_( integer *, complex *, integer *, real *, real *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -262,19 +255,18 @@ void cunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
     {
         i__1 = -(*info);
         xerbla_("CUNBDB6", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     eps = slamch_("Precision");
-    /* Compute the Euclidean norm of X */
-    scl = 0.f;
-    ssq = 0.f;
-    aocl_lapack_classq(m1, &x1[1], incx1, &scl, &ssq);
-    aocl_lapack_classq(m2, &x2[1], incx2, &scl, &ssq);
-    norm = scl * sqrt(ssq);
     /* First, project X onto the orthogonal complement of Q's column */
     /* space */
-    if(*m1 == 0)
+    /* Christoph Conrads: In debugging mode the norm should be computed */
+    /* and an assertion added comparing the norm with one. Alas, Fortran */
+    /* never made it into 1989 when assert() was introduced into the C */
+    /* programming language. */
+    norm = 1.f;
+    if (*m1 == 0)
     {
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
@@ -289,25 +281,45 @@ void cunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
         aocl_blas_cgemv("C", m1, n, &c_b2, &q1[q1_offset], ldq1, &x1[1], incx1, &c_b3, &work[1],
                         &c__1);
     }
-    aocl_blas_cgemv("C", m2, n, &c_b2, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b2, &work[1], &c__1);
-    aocl_blas_cgemv("N", m1, n, &c_b1, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b2, &x1[1], incx1);
-    aocl_blas_cgemv("N", m2, n, &c_b1, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b2, &x2[1], incx2);
+    cgemv_("C", m2, n, &c_b2, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b2, & work[1], &c__1);
+    cgemv_("N", m1, n, &c_b1, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b2, & x1[1], incx1);
+    cgemv_("N", m2, n, &c_b1, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b2, & x2[1], incx2);
     scl = 0.f;
     ssq = 0.f;
-    aocl_lapack_classq(m1, &x1[1], incx1, &scl, &ssq);
-    aocl_lapack_classq(m2, &x2[1], incx2, &scl, &ssq);
+    classq_(m1, &x1[1], incx1, &scl, &ssq);
+    classq_(m2, &x2[1], incx2, &scl, &ssq);
     norm_new__ = scl * sqrt(ssq);
     /* If projection is sufficiently large in norm, then stop. */
     /* If projection is zero, then stop. */
     /* Otherwise, project again. */
-    if(norm_new__ >= norm * .83f)
+    if (norm_new__ >= norm * .01f)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
-    if(norm_new__ <= *n * eps * norm)
+    if (norm_new__ <= *n * eps * norm)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        i__1 = (*m1 - 1) * *incx1 + 1;
+        i__2 = *incx1;
+        for (ix = 1;
+                i__2 < 0 ? ix >= i__1 : ix <= i__1;
+                ix += i__2)
+        {
+            i__3 = ix;
+            x1[i__3].r = 0.f;
+            x1[i__3].i = 0.f; // , expr subst
+        }
+        i__2 = (*m2 - 1) * *incx2 + 1;
+        i__1 = *incx2;
+        for (ix = 1;
+                i__1 < 0 ? ix >= i__2 : ix <= i__2;
+                ix += i__1)
+        {
+            i__3 = ix;
+            x2[i__3].r = 0.f;
+            x2[i__3].i = 0.f; // , expr subst
+        }
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     norm = norm_new__;
@@ -333,37 +345,41 @@ void cunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
         aocl_blas_cgemv("C", m1, n, &c_b2, &q1[q1_offset], ldq1, &x1[1], incx1, &c_b3, &work[1],
                         &c__1);
     }
-    aocl_blas_cgemv("C", m2, n, &c_b2, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b2, &work[1], &c__1);
-    aocl_blas_cgemv("N", m1, n, &c_b1, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b2, &x1[1], incx1);
-    aocl_blas_cgemv("N", m2, n, &c_b1, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b2, &x2[1], incx2);
+    cgemv_("C", m2, n, &c_b2, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b2, & work[1], &c__1);
+    cgemv_("N", m1, n, &c_b1, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b2, & x1[1], incx1);
+    cgemv_("N", m2, n, &c_b1, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b2, & x2[1], incx2);
     scl = 0.f;
     ssq = 0.f;
-    aocl_lapack_classq(m1, &x1[1], incx1, &scl, &ssq);
-    aocl_lapack_classq(m2, &x2[1], incx2, &scl, &ssq);
+    classq_(m1, &x1[1], incx1, &scl, &ssq);
+    classq_(m2, &x2[1], incx2, &scl, &ssq);
     norm_new__ = scl * sqrt(ssq);
     /* If second projection is sufficiently large in norm, then do */
     /* nothing more. Alternatively, if it shrunk significantly, then */
     /* truncate it to zero. */
-    if(norm_new__ < norm * .83f)
+    if (norm_new__ < norm * .01f)
     {
         i__1 = (*m1 - 1) * *incx1 + 1;
         i__2 = *incx1;
-        for(ix = 1; i__2 < 0 ? ix >= i__1 : ix <= i__1; ix += i__2)
+        for (ix = 1;
+                i__2 < 0 ? ix >= i__1 : ix <= i__1;
+                ix += i__2)
         {
             i__3 = ix;
-            x1[i__3].real = 0.f;
-            x1[i__3].imag = 0.f; // , expr subst
+            x1[i__3].r = 0.f;
+            x1[i__3].i = 0.f; // , expr subst
         }
         i__2 = (*m2 - 1) * *incx2 + 1;
         i__1 = *incx2;
-        for(ix = 1; i__1 < 0 ? ix >= i__2 : ix <= i__2; ix += i__1)
+        for (ix = 1;
+                i__1 < 0 ? ix >= i__2 : ix <= i__2;
+                ix += i__1)
         {
             i__3 = ix;
-            x2[i__3].real = 0.f;
-            x2[i__3].imag = 0.f; // , expr subst
+            x2[i__3].r = 0.f;
+            x2[i__3].i = 0.f; // , expr subst
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of CUNBDB6 */
 }

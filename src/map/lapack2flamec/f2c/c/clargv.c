@@ -1,9 +1,6 @@
-/* clargv.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CLARGV generates a vector of plane rotations with real cosines and scomplex sines. */
+/* clargv.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+#include "FLA_f2c.h" /* > \brief \b CLARGV generates a vector of plane rotations with real cosines and complex sines. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -120,16 +117,8 @@
 void clargv_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, scomplex *y, aocl_int_t *incy, real *c__,
              aocl_int_t *incc)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clargv inputs: n %lld, incx %lld, incy %lld, incc %lld",*n, *incx, *incy, *incc);
-#else
-    snprintf(buffer, 256,"clargv inputs: n %d, incx %d, incy %d, incc %d",*n, *incx, *incy, *incc);
-#endif
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("clargv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incy, *incc);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     real r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8, r__9, r__10;
@@ -238,7 +227,7 @@ void clargv_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, scomplex *y, aocl_int
             gs.real = q__1.real;
             gs.imag = q__1.imag; // , expr subst
             scale *= safmn2;
-            if(scale >= safmx2 && count < 20)
+            if (scale >= safmx2 && count < 20)
             {
                 goto L10;
             }
@@ -433,7 +422,7 @@ void clargv_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, scomplex *y, aocl_int
         ix += *incx;
         /* L60: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of CLARGV */
 }

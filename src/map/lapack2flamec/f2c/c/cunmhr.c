@@ -1,11 +1,9 @@
-/* ./cunmhr.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* cunmhr.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c_n1 = -1;
+static integer c__2 = 2;
 /* > \brief \b CUNMHR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -177,7 +175,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup unmhr */
+/* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
 /** Generated wrapper function */
@@ -185,15 +183,11 @@ void cunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
              aocl_int_t *ihi, scomplex *a, aocl_int_t *lda, scomplex *tau, scomplex *c__,
              aocl_int_t *ldc, scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"cunmhr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "",*side, *trans, *m, *n, *ilo, *ihi, *lda, *ldc, *lwork);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("cunmhr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *ilo, *ihi, *lda, *ldc);
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2;
-    real r__1;
+    address a__1[2];
+    integer a_dim1, a_offset, c_dim1, c_offset, i__1[2], i__2;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
@@ -241,12 +235,12 @@ void cunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     if(left)
     {
         nq = *m;
-        nw = fla_max(1, *n);
+        nw = fla_max(1,*n);
     }
     else
     {
         nq = *n;
-        nw = fla_max(1, *m);
+        nw = fla_max(1,*m);
     }
     if(!left && !lsame_(side, "R", 1, 1))
     {
@@ -280,7 +274,7 @@ void cunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     {
         *info = -11;
     }
-    else if (*lwork < fla_max(1,nw) && ! lquery)
+    else if (*lwork < nw && ! lquery)
     {
         *info = -13;
     }
@@ -294,7 +288,7 @@ void cunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
         {
             nb = aocl_lapack_ilaenv(&c__1, "CUNMQR", ch__1, m, &nh, &nh, &c_n1);
         }
-        lwkopt = fla_max(1,nw) * nb;
+        lwkopt = nw * nb;
         work[1].r = (real) lwkopt;
         work[1].i = 0.f; // , expr subst
     }
@@ -302,12 +296,12 @@ void cunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     {
         i__2 = -(*info);
         xerbla_("CUNMHR", &i__2);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
@@ -315,7 +309,7 @@ void cunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     {
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     if(left)
@@ -335,7 +329,7 @@ void cunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     cunmqr_(side, trans, &mi, &ni, &nh, &a[*ilo + 1 + *ilo * a_dim1], lda, & tau[*ilo], &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of CUNMHR */
 }

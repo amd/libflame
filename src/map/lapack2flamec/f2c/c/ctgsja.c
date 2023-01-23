@@ -1,8 +1,5 @@
-/* ctgsja.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ctgsja.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static scomplex c_b1 = {0.f, 0.f};
 static scomplex c_b2 = {1.f, 0.f};
@@ -400,16 +397,8 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
              scomplex *v, aocl_int_t *ldv, scomplex *q, aocl_int_t *ldq, scomplex *work,
              aocl_int_t *ncycle, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctgsja inputs: jobu %c, jobv %c, jobq %c, m %lld, p %lld, n %lld, k %lld, l %lld, lda %lld, ldb %lld, ldu %lld, ldv %lld, ldq %lld",*jobu, *jobv, *jobq, *m, *p, *n, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq);
-#else
-    snprintf(buffer, 256,"ctgsja inputs: jobu %c, jobv %c, jobq %c, m %d, p %d, n %d, k %d, l %d, lda %d, ldb %d, ldu %d, ldv %d, ldq %d",*jobu, *jobv, *jobq, *m, *p, *n, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq);
-#endif
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("ctgsja inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS ", ncycle %" FLA_IS "",*jobu, *jobv, *jobq, *m, *p, *n, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq, *ncycle);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
         v_offset, i__1, i__2, i__3, i__4;
@@ -430,8 +419,11 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
     logical initq, initu, initv, wantq, upper;
     real error, ssmin;
     logical wantu, wantv;
-    aocl_int64_t kcycle;
-    extern void slartg_(real *, real *, real *, real *, real *);
+    extern /* Subroutine */
+    int clags2_(logical *, real *, complex *, real *, real *, complex *, real *, real *, complex *, real *, complex *, real *, complex *), clapll_(integer *, complex *, integer *, complex *, integer *, real *), csscal_(integer *, real *, complex *, integer *);
+    integer kcycle;
+    extern /* Subroutine */
+    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(char *, integer *), slartg_(real *, real *, real *, real *, real * );
     real hugenum;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -474,12 +466,12 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
     --work;
     /* Function Body */
     hugenum = 3.40282347e38f;
-    initu = lsame_(jobu, "I", 1, 1);
-    wantu = initu || lsame_(jobu, "U", 1, 1);
-    initv = lsame_(jobv, "I", 1, 1);
-    wantv = initv || lsame_(jobv, "V", 1, 1);
-    initq = lsame_(jobq, "I", 1, 1);
-    wantq = initq || lsame_(jobq, "Q", 1, 1);
+    initu = lsame_(jobu, "I");
+    wantu = initu || lsame_(jobu, "U");
+    initv = lsame_(jobv, "I");
+    wantv = initv || lsame_(jobv, "V");
+    initq = lsame_(jobq, "I");
+    wantq = initq || lsame_(jobq, "Q");
     *info = 0;
     if(!(initu || wantu || lsame_(jobu, "N", 1, 1)))
     {
@@ -529,7 +521,7 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
     {
         i__1 = -(*info);
         xerbla_("CTGSJA", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Initialize U, V and Q, if necessary */
@@ -746,11 +738,11 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
         i__2 = *k + i__ + (*n - *l + i__) * a_dim1;
         a1 = a[i__2].real;
         i__2 = i__ + (*n - *l + i__) * b_dim1;
-        b1 = b[i__2].real;
+        b1 = b[i__2].r;
         gamma = b1 / a1;
-        if(gamma <= hugenum && gamma >= -hugenum)
+        if (gamma <= hugenum && gamma >= -hugenum)
         {
-            if(gamma < 0.f)
+            if (gamma < 0.f)
             {
                 i__2 = *l - i__ + 1;
                 aocl_blas_csscal(&i__2, &c_b39, &b[i__ + (*n - *l + i__) * b_dim1], ldb);
@@ -807,7 +799,7 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
     }
 L100:
     *ncycle = kcycle;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of CTGSJA */
 }

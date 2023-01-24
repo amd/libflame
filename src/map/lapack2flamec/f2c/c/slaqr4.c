@@ -1,8 +1,5 @@
-/* ./slaqr4.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slaqr4.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__13 = 13;
 static aocl_int64_t c__15 = 15;
@@ -131,7 +128,7 @@ static aocl_int64_t c__3 = 3;
 /* > \param[in] LDH */
 /* > \verbatim */
 /* > LDH is INTEGER */
-/* > The leading dimension of the array H. LDH .GE. fla_max(1,N). */
+/* > The leading dimension of the array H. LDH >= fla_max(1,N). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WR */
@@ -197,7 +194,7 @@ IHI <= IHIZ <= N. */
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
-/* > The dimension of the array WORK. LWORK .GE. fla_max(1,N) */
+/* > The dimension of the array WORK. LWORK >= fla_max(1,N) */
 /* > is sufficient, but LWORK typically as large as 6*N may */
 /* > be required for optimal performance. A workspace query */
 /* > to determine the optimal workspace size is recommended. */
@@ -252,7 +249,7 @@ IHI <= IHIZ <= N. */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup laqr4 */
+/* > \ingroup realOTHERauxiliary */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -277,36 +274,8 @@ void slaqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
              real *h__, aocl_int_t *ldh, real *wr, real *wi, aocl_int_t *iloz, aocl_int_t *ihiz,
              real *z__, aocl_int_t *ldz, real *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slaqr4(wantt, wantz, n, ilo, ihi, h__, ldh, wr, wi, iloz, ihiz, z__, ldz, work,
-                       lwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t ldh_64 = *ldh;
-    aocl_int64_t iloz_64 = *iloz;
-    aocl_int64_t ihiz_64 = *ihiz;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slaqr4(wantt, wantz, &n_64, &ilo_64, &ihi_64, h__, &ldh_64, wr, wi, &iloz_64,
-                       &ihiz_64, z__, &ldz_64, work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slaqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_int64_t *ilo,
-                        aocl_int64_t *ihi, real *h__, aocl_int64_t *ldh, real *wr, real *wi,
-                        aocl_int64_t *iloz, aocl_int64_t *ihiz, real *z__, aocl_int64_t *ldz,
-                        real *work, aocl_int64_t *lwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slaqr4 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS
-                      ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS "",
-                      *n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz);
+    AOCL_DTL_SNPRINTF("slaqr4 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS "",*n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz);
     /* System generated locals */
     aocl_int64_t h_dim1, h_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1, r__2, r__3, r__4;
@@ -334,7 +303,7 @@ void aocl_lapack_slaqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     int slahqr_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer nwupbd;
     logical sorted;
-    aocl_int64_t lwkopt;
+    integer lwkopt;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -384,10 +353,10 @@ void aocl_lapack_slaqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     if(*n == 0)
     {
         work[1] = 1.f;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
-    if(*n <= 15)
+    if (*n <= 15)
     {
         /* ==== Tiny matrices must use SLAHQR. ==== */
         lwkopt = 1;
@@ -424,7 +393,7 @@ void aocl_lapack_slaqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
         /* . point, N .GT. NTINY = 15, so there is enough */
         /* . subdiagonal workspace for NWR.GE.2 as required. */
         /* . (In fact, there is enough subdiagonal space for */
-        /* . NWR.GE.3.) ==== */
+        /* . NWR.GE.4.) ==== */
         nwr = ilaenv_(&c__13, "SLAQR4", jbcmpz, n, ilo, ihi, lwork);
         nwr = fla_max(2,nwr);
         /* Computing MIN */
@@ -438,7 +407,7 @@ void aocl_lapack_slaqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
         /* . and greater than or equal to two as required. ==== */
         nsr = aocl_lapack_ilaenv(&c__15, "SLAQR4", jbcmpz, n, ilo, ihi, lwork);
         /* Computing MIN */
-        i__1 = nsr, i__2 = (*n + 6) / 9;
+        i__1 = nsr, i__2 = (*n - 3) / 6;
         i__1 = fla_min(i__1,i__2);
         i__2 = *ihi - *ilo; // ; expr subst
         nsr = fla_min(i__1,i__2);
@@ -460,13 +429,13 @@ void aocl_lapack_slaqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
         /* ==== Quick return in case of workspace query. ==== */
         if(*lwork == -1)
         {
-            work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            work[1] = (real) lwkopt;
+    AOCL_DTL_TRACE_LOG_EXIT
+            return 0;
         }
         /* ==== SLAHQR/SLAQR0 crossover point ==== */
         nmin = ilaenv_(&c__12, "SLAQR4", jbcmpz, n, ilo, ihi, lwork);
-        nmin = fla_max(11,nmin);
+        nmin = fla_max(15,nmin);
         /* ==== Nibble crossover point ==== */
         nibble = ilaenv_(&c__14, "SLAQR4", jbcmpz, n, ilo, ihi, lwork);
         nibble = fla_max(0,nibble);
@@ -805,6 +774,6 @@ void aocl_lapack_slaqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     /* ==== End of SLAQR4 ==== */
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
 }
 /* slaqr4_ */

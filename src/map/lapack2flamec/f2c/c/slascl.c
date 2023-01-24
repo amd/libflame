@@ -1,8 +1,5 @@
-/* slascl.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slascl.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLASCL multiplies a general rectangular matrix by a real scalar defined as cto/cfrom. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -115,7 +112,14 @@
 /* > \param[in] LDA */
 /* > \verbatim */
 /* > LDA is INTEGER */
-/* > The leading dimension of the array A. LDA >= fla_max(1,M). */
+/* > The leading dimension of the array A. */
+/* > If TYPE = 'G', 'L', 'U', 'H', LDA >= fla_max(1,M);
+*/
+/* > TYPE = 'B', LDA >= KL+1;
+*/
+/* > TYPE = 'Q', LDA >= KU+1;
+*/
+/* > TYPE = 'Z', LDA >= 2*KL+KU+1. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] INFO */
@@ -137,12 +141,8 @@
 void slascl_(char *type__, aocl_int_t *kl, aocl_int_t *ku, real *cfrom, real *cto, aocl_int_t *m,
              aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"slascl inputs: type__ %c, kl %d, ku %d, m %d, n %d, lda %d",*type__, *kl, *ku, *m, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slascl inputs: type__ %c, kl %" FLA_IS ", ku %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*type__, *kl, *ku, *m, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
@@ -267,13 +267,13 @@ void slascl_(char *type__, aocl_int_t *kl, aocl_int_t *ku, real *cfrom, real *ct
     {
         i__1 = -(*info);
         xerbla_("SLASCL", &i__1);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     if(*n == 0 || *m == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Get machine parameters */
@@ -318,10 +318,10 @@ L10:
         {
             mul = ctoc / cfromc;
             done = TRUE_;
-            if(mul == 1.f)
+            if (mul == 1.f)
             {
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+    AOCL_DTL_TRACE_LOG_EXIT
+                return 0;
             }
         }
     }
@@ -464,7 +464,7 @@ L10:
     {
         goto L10;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of SLASCL */
 }

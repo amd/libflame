@@ -1,8 +1,5 @@
-/* ssyswapr.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ssyswapr.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b SSYSWAPR applies an elementary permutation on the rows and columns of a symmetric
@@ -102,18 +99,16 @@ if UPLO = 'L', the interchanges are applied to */
 /** Generated wrapper function */
 void ssyswapr_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *i1, aocl_int_t *i2)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"ssyswapr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", i1 %" FLA_IS ", i2 %" FLA_IS "",*uplo, *n, *lda, *i1, *i2);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("ssyswapr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", i1 %" FLA_IS ", i2 %" FLA_IS "",*uplo, *n, *lda, *i1, *i2);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
     real tmp;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
+    extern /* Subroutine */
+    int sswap_(integer *, real *, integer *, real *, integer *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -148,15 +143,13 @@ void ssyswapr_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *
         a[*i1 + *i1 * a_dim1] = a[*i2 + *i2 * a_dim1];
         a[*i2 + *i2 * a_dim1] = tmp;
         i__1 = *i2 - *i1 - 1;
-        aocl_blas_sswap(&i__1, &a[*i1 + (*i1 + 1) * a_dim1], lda, &a[*i1 + 1 + *i2 * a_dim1],
-                        &c__1);
+        sswap_(&i__1, &a[*i1 + (*i1 + 1) * a_dim1], lda, &a[*i1 + 1 + *i2 * a_dim1], &c__1);
         /* third swap */
         /* - swap row I1 and I2 from I2+1 to N */
-        if(*i2 < *n)
+        if (*i2 < *n)
         {
             i__1 = *n - *i2;
-            aocl_blas_sswap(&i__1, &a[*i1 + (*i2 + 1) * a_dim1], lda, &a[*i2 + (*i2 + 1) * a_dim1],
-                            lda);
+            sswap_(&i__1, &a[*i1 + (*i2 + 1) * a_dim1], lda, &a[*i2 + (*i2 + 1) * a_dim1], lda);
         }
     }
     else
@@ -173,18 +166,16 @@ void ssyswapr_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *
         a[*i1 + *i1 * a_dim1] = a[*i2 + *i2 * a_dim1];
         a[*i2 + *i2 * a_dim1] = tmp;
         i__1 = *i2 - *i1 - 1;
-        aocl_blas_sswap(&i__1, &a[*i1 + 1 + *i1 * a_dim1], &c__1, &a[*i2 + (*i1 + 1) * a_dim1],
-                        lda);
+        sswap_(&i__1, &a[*i1 + 1 + *i1 * a_dim1], &c__1, &a[*i2 + (*i1 + 1) * a_dim1], lda);
         /* third swap */
         /* - swap col I1 and I2 from I2+1 to N */
-        if(*i2 < *n)
+        if (*i2 < *n)
         {
             i__1 = *n - *i2;
-            aocl_blas_sswap(&i__1, &a[*i2 + 1 + *i1 * a_dim1], &c__1, &a[*i2 + 1 + *i2 * a_dim1],
-                            &c__1);
+            sswap_(&i__1, &a[*i2 + 1 + *i1 * a_dim1], &c__1, &a[*i2 + 1 + *i2 * a_dim1], &c__1);
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
 }
 /* ssyswapr_ */

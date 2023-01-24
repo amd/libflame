@@ -1,12 +1,8 @@
-/* slacn2.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slacn2.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-/* > \brief \b SLACN2 estimates the 1-norm of a square matrix, using reverse communication for
- * evaluating matr ix-vector products. */
+static integer c__1 = 1;
+/* > \brief \b SLACN2 estimates the 1-norm of a square matrix, using reverse communication for evaluating matr ix-vector products. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -135,20 +131,21 @@ static aocl_int64_t c__1 = 1;
 void slacn2_(aocl_int_t *n, real *v, real *x, aocl_int_t *isgn, real *est, aocl_int_t *kase,
              aocl_int_t *isave)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"slacn2 inputs: n %d, isgn %d, kase %d, isave %d",*n, *isgn, *kase, *isave);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slacn2 inputs: n %" FLA_IS ", isgn %" FLA_IS ", kase %" FLA_IS ", isave %" FLA_IS "",*n, *isgn, *kase, *isave);
     /* System generated locals */
     aocl_int64_t i__1;
     real r__1;
     /* Builtin functions */
+    integer i_nint(real *);
     /* Local variables */
-    aocl_int64_t i__;
+    integer i__;
     real xs, temp;
-    aocl_int64_t jlast;
+    integer jlast;
+    extern real sasum_(integer *, real *, integer *);
+    extern /* Subroutine */
+    int scopy_(integer *, real *, integer *, real *, integer *);
+    extern integer isamax_(integer *, real *, integer *);
     real altsgn, estold;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -185,7 +182,7 @@ void slacn2_(aocl_int_t *n, real *v, real *x, aocl_int_t *isgn, real *est, aocl_
         }
         *kase = 1;
         isave[1] = 1;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     switch(isave[1])
@@ -215,7 +212,7 @@ L20:
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if(x[i__] >= 0.f)
+        if (x[i__] >= 0.f)
         {
             x[i__] = 1.f;
         }
@@ -223,12 +220,12 @@ L20:
         {
             x[i__] = -1.f;
         }
-        isgn[i__] = fla_i_nint(&x[i__]);
+        isgn[i__] = i_nint(&x[i__]);
         /* L30: */
     }
     *kase = 2;
     isave[1] = 2;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* ................ ENTRY (ISAVE( 1 ) = 2) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
@@ -246,7 +243,7 @@ L50:
     x[isave[2]] = 1.f;
     *kase = 1;
     isave[1] = 3;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* ................ ENTRY (ISAVE( 1 ) = 3) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
@@ -257,7 +254,7 @@ L70:
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if(x[i__] >= 0.f)
+        if (x[i__] >= 0.f)
         {
             xs = 1.f;
         }
@@ -265,7 +262,7 @@ L70:
         {
             xs = -1.f;
         }
-        if(fla_i_nint(&xs) != isgn[i__])
+        if (i_nint(&xs) != isgn[i__])
         {
             goto L90;
         }
@@ -281,7 +278,7 @@ L90: /* TEST FOR CYCLING. */
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if(x[i__] >= 0.f)
+        if (x[i__] >= 0.f)
         {
             x[i__] = 1.f;
         }
@@ -289,12 +286,12 @@ L90: /* TEST FOR CYCLING. */
         {
             x[i__] = -1.f;
         }
-        isgn[i__] = fla_i_nint(&x[i__]);
+        isgn[i__] = i_nint(&x[i__]);
         /* L100: */
     }
     *kase = 2;
     isave[1] = 4;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* ................ ENTRY (ISAVE( 1 ) = 4) */
     /* X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
@@ -318,7 +315,7 @@ L120:
     }
     *kase = 1;
     isave[1] = 5;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* ................ ENTRY (ISAVE( 1 ) = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
@@ -331,7 +328,7 @@ L140:
     }
 L150:
     *kase = 0;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of SLACN2 */
 }

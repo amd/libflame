@@ -1,8 +1,5 @@
-/* ./sgees.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* sgees.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c__0 = 0;
@@ -220,7 +217,7 @@ if */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup gees */
+/* > \ingroup realGEeigen */
 /* ===================================================================== */
 /* Subroutine */
 /** Generated wrapper function */
@@ -228,34 +225,8 @@ void sgees_(char *jobvs, char *sort, L_fps2 select, aocl_int_t *n, real *a, aocl
             aocl_int_t *sdim, real *wr, real *wi, real *vs, aocl_int_t *ldvs, real *work,
             aocl_int_t *lwork, logical *bwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgees(jobvs, sort, select, n, a, lda, sdim, wr, wi, vs, ldvs, work, lwork, bwork,
-                      info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t sdim_64 = *sdim;
-    aocl_int64_t ldvs_64 = *ldvs;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgees(jobvs, sort, select, &n_64, a, &lda_64, &sdim_64, wr, wi, vs, &ldvs_64, work,
-                      &lwork_64, bwork, &info_64);
-
-    *sdim = (aocl_int_t)sdim_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sgees(char *jobvs, char *sort, L_fps2 select, aocl_int64_t *n, real *a,
-                       aocl_int64_t *lda, aocl_int64_t *sdim, real *wr, real *wi, real *vs,
-                       aocl_int64_t *ldvs, real *work, aocl_int64_t *lwork, logical *bwork,
-                       aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgees inputs: jobvs %c, sort %c, n %" FLA_IS ", lda %" FLA_IS
-                      ", sdim %" FLA_IS ", ldvs %" FLA_IS "",
-                      *jobvs, *sort, *n, *lda, *sdim, *ldvs);
+    AOCL_DTL_SNPRINTF("sgees inputs: jobvs %c, sort %c, n %" FLA_IS ", lda %" FLA_IS ", sdim %" FLA_IS ", ldvs %" FLA_IS "",*jobvs, *sort, *n, *lda, *sdim, *ldvs);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, vs_dim1, vs_offset, i__1, i__2, i__3;
     /* Builtin functions */
@@ -360,7 +331,7 @@ void aocl_lapack_sgees(char *jobvs, char *sort, L_fps2 select, aocl_int64_t *n, 
             maxwrk = (*n << 1) + *n * aocl_lapack_ilaenv(&c__1, "SGEHRD", " ", n, &c__1, n, &c__0);
             minwrk = *n * 3;
             shseqr_("S", jobvs, n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1], &vs[vs_offset], ldvs, &work[1], &c_n1, &ieval);
-            hswork = work[1];
+            hswork = (integer) work[1];
             if (! wantvs)
             {
                 /* Computing MAX */
@@ -389,21 +360,21 @@ void aocl_lapack_sgees(char *jobvs, char *sort, L_fps2 select, aocl_int64_t *n, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGEES ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SGEES ", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *sdim = 0;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Get machine constants */
     eps = slamch_("P");
@@ -626,9 +597,9 @@ void aocl_lapack_sgees(char *jobvs, char *sort, L_fps2 select, aocl_int64_t *n, 
             /* L30: */
         }
     }
-    work[1] = aocl_lapack_sroundup_lwork(&maxwrk);
+    work[1] = (real) maxwrk;
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of SGEES */
 }
 /* sgees_ */

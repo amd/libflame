@@ -1,8 +1,5 @@
-/* sggbal.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* sggbal.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static real c_b35 = 10.f;
@@ -182,33 +179,8 @@ void sggbal_(char *job, aocl_int_t *n, real *a, aocl_int_t *lda, real *b, aocl_i
              aocl_int_t *ilo, aocl_int_t *ihi, real *lscale, real *rscale, real *work,
              aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sggbal(job, n, a, lda, b, ldb, ilo, ihi, lscale, rscale, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sggbal(job, &n_64, a, &lda_64, b, &ldb_64, &ilo_64, &ihi_64, lscale, rscale, work,
-                       &info_64);
-
-    *ilo = (aocl_int_t)ilo_64;
-    *ihi = (aocl_int_t)ihi_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sggbal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *b,
-                        aocl_int64_t *ldb, aocl_int64_t *ilo, aocl_int64_t *ihi, real *lscale,
-                        real *rscale, real *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sggbal inputs: job %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
-                      ", ilo %" FLA_IS ", ihi %" FLA_IS "",
-                      *job, *n, *lda, *ldb, *ilo, *ihi);
+    AOCL_DTL_SNPRINTF("sggbal inputs: job %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS "",*job, *n, *lda, *ldb, *ilo, *ihi);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
     real r__1, r__2, r__3;
@@ -234,7 +206,10 @@ void aocl_lapack_sggbal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     aocl_int64_t kount;
     real pgamma;
     extern real slamch_(char *);
-    aocl_int64_t lsfmin, lsfmax;
+    extern /* Subroutine */
+    int xerbla_(char *, integer *);
+    extern integer isamax_(integer *, real *, integer *);
+    integer lsfmin, lsfmax;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -287,17 +262,17 @@ void aocl_lapack_sggbal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGGBAL", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SGGBAL", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *ilo = 1;
         *ihi = *n;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(*n == 1)
     {
@@ -305,8 +280,8 @@ void aocl_lapack_sggbal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
         *ihi = *n;
         lscale[1] = 1.f;
         rscale[1] = 1.f;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(lsame_(job, "N", 1, 1))
     {
@@ -319,8 +294,8 @@ void aocl_lapack_sggbal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
             rscale[i__] = 1.f;
             /* L10: */
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     k = 1;
     l = *n;
@@ -451,13 +426,13 @@ L190:
             rscale[i__] = 1.f;
             /* L195: */
         }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     if(*ilo == *ihi)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Balance the submatrix in rows ILO to IHI. */
     nr = *ihi - *ilo + 1;
@@ -658,8 +633,8 @@ L350:
         r__3 = (r__1 = b[i__ + (irab + *ilo - 1) * b_dim1], f2c_abs( r__1)); // , expr subst
         rab = fla_max(r__2,r__3);
         r__1 = rab + sfmin;
-        lrab = (integer)(r_lg10(&r__1) / basl + 1.f);
-        ir = (integer)(lscale[i__] + r_sign(&c_b71, &lscale[i__]));
+        lrab = (integer) (r_lg10(&r__1) / basl + 1.f);
+        ir = (integer) (lscale[i__] + r_sign(&c_b71, &lscale[i__]));
         /* Computing MIN */
         i__2 = fla_max(ir,lsfmin);
         i__2 = fla_min(i__2,lsfmax);
@@ -674,8 +649,8 @@ L350:
         r__3 = (r__1 = b[icab + i__ * b_dim1], f2c_abs(r__1)); // , expr subst
         cab = fla_max(r__2,r__3);
         r__1 = cab + sfmin;
-        lcab = (integer)(r_lg10(&r__1) / basl + 1.f);
-        jc = (integer)(rscale[i__] + r_sign(&c_b71, &rscale[i__]));
+        lcab = (integer) (r_lg10(&r__1) / basl + 1.f);
+        jc = (integer) (rscale[i__] + r_sign(&c_b71, &rscale[i__]));
         /* Computing MIN */
         i__2 = fla_max(jc,lsfmin);
         i__2 = fla_min(i__2,lsfmax);
@@ -703,7 +678,7 @@ L350:
         /* L380: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of SGGBAL */
 }
 /* sggbal_ */

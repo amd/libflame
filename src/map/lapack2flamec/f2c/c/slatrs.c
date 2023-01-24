@@ -1,13 +1,9 @@
-/* ./slatrs.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slatrs.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 static real c_b46 = .5f;
-/* > \brief \b SLATRS solves a triangular system of equations with the scale factor set to prevent
- * overflow. */
+/* > \brief \b SLATRS solves a triangular system of equations with the scale factor set to prevent overflow. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -160,7 +156,7 @@ static real c_b46 = .5f;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup latrs */
+/* > \ingroup realOTHERauxiliary */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -279,6 +275,11 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
     real tscal, uscal;
     aocl_int64_t jlast;
     logical upper;
+    extern /* Subroutine */
+    int saxpy_(integer *, real *, real *, integer *, real *, integer *), strsv_(char *, char *, char *, integer *, real *, integer *, real *, integer *);
+    extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
+    extern /* Subroutine */
+    int xerbla_(char *, integer *);
     real bignum;
     logical notran;
     aocl_int64_t jfirst;
@@ -320,6 +321,8 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
     /* Test the input parameters. */
     if(!upper && !lsame_(uplo, "L", 1, 1))
     {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("real inputs:  %" FLA_IS ",  %" FLA_IS ",  %" FLA_IS "",*, *, *);
         *info = -1;
     }
     else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
@@ -345,21 +348,21 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SLATRS", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SLATRS", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Quick return if possible */
     *scale = 1.f;
-    if(*n == 0)
+    if (*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Determine machine dependent parameters to control overflow. */
     smlnum = slamch_("Safe minimum") / slamch_("Precision");
     bignum = 1.f / smlnum;
-    if(lsame_(normin, "N", 1, 1))
+    if (lsame_(normin, "N"))
     {
         /* Compute the 1-norm of each column, not including the diagonal. */
         if(upper)
@@ -398,11 +401,11 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
     {
         /* Avoid NaN generation if entries in CNORM exceed the */
         /* overflow threshold */
-        if(tmax <= slamch_("Overflow"))
+        if (tmax <= slamch_("Overflow"))
         {
             /* Case 1: All entries in CNORM are valid floating-point numbers */
             tscal = 1.f / (smlnum * tmax);
-            aocl_blas_sscal(n, &tscal, &cnorm[1], &c__1);
+            sscal_(n, &tscal, &cnorm[1], &c__1);
         }
         else
         {
@@ -411,38 +414,43 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
             /* with the largest absolute value. If this entry is not +/- Infinity, */
             /* use this value as TSCAL. */
             tmax = 0.f;
-            if(upper)
+            if (upper)
             {
                 /* A is upper triangular. */
                 i__1 = *n;
-                for(j = 2; j <= i__1; ++j)
+                for (j = 2;
+                        j <= i__1;
+                        ++j)
                 {
                     /* Computing MAX */
                     i__2 = j - 1;
-                    r__1 = aocl_lapack_slange("M", &i__2, &c__1, &a[j * a_dim1 + 1], &c__1, work);
-                    tmax = fla_max(r__1, tmax);
+                    r__1 = slange_("M", &i__2, &c__1, &a[j * a_dim1 + 1], & c__1, &sumj);
+                    tmax = fla_max(r__1,tmax);
                 }
             }
             else
             {
                 /* A is lower triangular. */
                 i__1 = *n - 1;
-                for(j = 1; j <= i__1; ++j)
+                for (j = 1;
+                        j <= i__1;
+                        ++j)
                 {
                     /* Computing MAX */
                     i__2 = *n - j;
-                    r__1 = aocl_lapack_slange("M", &i__2, &c__1, &a[j + 1 + j * a_dim1], &c__1,
-                                              work);
-                    tmax = fla_max(r__1, tmax);
+                    r__1 = slange_("M", &i__2, &c__1, &a[j + 1 + j * a_dim1], &c__1, &sumj);
+                    tmax = fla_max(r__1,tmax);
                 }
             }
-            if(tmax <= slamch_("Overflow"))
+            if (tmax <= slamch_("Overflow"))
             {
                 tscal = 1.f / (smlnum * tmax);
                 i__1 = *n;
-                for(j = 1; j <= i__1; ++j)
+                for (j = 1;
+                        j <= i__1;
+                        ++j)
                 {
-                    if(cnorm[j] <= slamch_("Overflow"))
+                    if (cnorm[j] <= slamch_("Overflow"))
                     {
                         cnorm[j] *= tscal;
                     }
@@ -451,10 +459,12 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         /* Recompute the 1-norm without introducing Infinity */
                         /* in the summation */
                         cnorm[j] = 0.f;
-                        if(upper)
+                        if (upper)
                         {
                             i__2 = j - 1;
-                            for(i__ = 1; i__ <= i__2; ++i__)
+                            for (i__ = 1;
+                                    i__ <= i__2;
+                                    ++i__)
                             {
                                 cnorm[j] += tscal * (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
                             }
@@ -462,7 +472,9 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         else
                         {
                             i__2 = *n;
-                            for(i__ = j + 1; i__ <= i__2; ++i__)
+                            for (i__ = j + 1;
+                                    i__ <= i__2;
+                                    ++i__)
                             {
                                 cnorm[j] += tscal * (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
                             }
@@ -474,9 +486,9 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
             {
                 /* At least one entry of A is not a valid floating-point entry. */
                 /* Rely on TRSV to propagate Inf and NaN. */
-                aocl_blas_strsv(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
-                AOCL_DTL_TRACE_LOG_EXIT
-                return;
+                strsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+                return 0;
             }
         }
     }
@@ -711,7 +723,7 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     /* 0 < f2c_abs(A(j,j)) <= SMLNUM: */
                     if (xj > tjj * bignum)
                     {
-                        /* Scale x by (1/f2c_abs(x(j)))*f2c_abs(A(j,j))*BIGNUM */
+                        /* Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM */
                         /* to avoid overflow when dividing by A(j,j). */
                         rec = tjj * bignum / xj;
                         if(cnorm[j] > 1.f)
@@ -749,7 +761,7 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     rec = 1.f / xj;
                     if(cnorm[j] > (bignum - xmax) * rec)
                     {
-                        /* Scale x by 1/(2*f2c_abs(x(j))). */
+                        /* Scale x by 1/(2*abs(x(j))). */
                         rec *= .5f;
                         aocl_blas_sscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
@@ -758,7 +770,7 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 else if(xj * cnorm[j] > bignum - xmax)
                 {
                     /* Scale x by 1/2. */
-                    aocl_blas_sscal(n, &c_b46, &x[1], &c__1);
+                    sscal_(n, &c_b46, &x[1], &c__1);
                     *scale *= .5f;
                 }
                 if(upper)
@@ -900,7 +912,7 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         {
                             if(xj > tjj * bignum)
                             {
-                                /* Scale X by 1/f2c_abs(x(j)). */
+                                /* Scale X by 1/abs(x(j)). */
                                 rec = 1.f / xj;
                                 aocl_blas_sscal(n, &rec, &x[1], &c__1);
                                 *scale *= rec;
@@ -914,7 +926,7 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         /* 0 < f2c_abs(A(j,j)) <= SMLNUM: */
                         if (xj > tjj * bignum)
                         {
-                            /* Scale x by (1/f2c_abs(x(j)))*f2c_abs(A(j,j))*BIGNUM. */
+                            /* Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
                             aocl_blas_sscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
@@ -960,7 +972,7 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
         aocl_blas_sscal(n, &r__1, &cnorm[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of SLATRS */
 }
 /* slatrs_ */

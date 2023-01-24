@@ -267,7 +267,7 @@ void dlarf_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, aocl_int_t 
                             }
                         }
                     }
-                }            
+                }
             }
             else
             {
@@ -278,7 +278,7 @@ void dlarf_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, aocl_int_t 
 #endif
         }
     }
-    else    
+    else
     {
         /* Form C * H */
         if(lastv > 0)

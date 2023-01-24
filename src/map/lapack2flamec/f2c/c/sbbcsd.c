@@ -1,8 +1,5 @@
-/* sbbcsd.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* sbbcsd.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b10 = -.125;
 static real c_b35 = -1.f;
@@ -346,42 +343,8 @@ void sbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
              real *b11d, real *b11e, real *b12d, real *b12e, real *b21d, real *b21e, real *b22d,
              real *b22e, real *work, aocl_int_t *lwork, aocl_int_t *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sbbcsd(jobu1, jobu2, jobv1t, jobv2t, trans, m, p, q, theta, phi, u1, ldu1, u2, ldu2,
-                       v1t, ldv1t, v2t, ldv2t, b11d, b11e, b12d, b12e, b21d, b21e, b22d, b22e, work,
-                       lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t p_64 = *p;
-    aocl_int64_t q_64 = *q;
-    aocl_int64_t ldu1_64 = *ldu1;
-    aocl_int64_t ldu2_64 = *ldu2;
-    aocl_int64_t ldv1t_64 = *ldv1t;
-    aocl_int64_t ldv2t_64 = *ldv2t;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sbbcsd(jobu1, jobu2, jobv1t, jobv2t, trans, &m_64, &p_64, &q_64, theta, phi, u1,
-                       &ldu1_64, u2, &ldu2_64, v1t, &ldv1t_64, v2t, &ldv2t_64, b11d, b11e, b12d,
-                       b12e, b21d, b21e, b22d, b22e, work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans,
-                        aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, real *theta, real *phi,
-                        real *u1, aocl_int64_t *ldu1, real *u2, aocl_int64_t *ldu2, real *v1t,
-                        aocl_int64_t *ldv1t, real *v2t, aocl_int64_t *ldv2t, real *b11d, real *b11e,
-                        real *b12d, real *b12e, real *b21d, real *b21e, real *b22d, real *b22e,
-                        real *work, aocl_int64_t *lwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-        "sbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %" FLA_IS
-        ", p %" FLA_IS ", q %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS
-        ", ldv2t %" FLA_IS "",
-        *jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t);
+    AOCL_DTL_SNPRINTF("sbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS ", ldv2t %" FLA_IS "",*jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t);
     /* System generated locals */
     aocl_int64_t u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset,
         i__1, i__2;
@@ -417,9 +380,7 @@ void aocl_lapack_sbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
     logical wantv1t, wantv2t;
     real b21bulge, b22bulge;
     extern /* Subroutine */
-        void
-        slartgp_(real *, real *, real *, real *, real *),
-        slartgs_(real *, real *, real *, real *, real *);
+    int slartgp_(real *, real *, real *, real *, real *), slartgs_(real *, real *, real *, real *, real *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -507,9 +468,9 @@ void aocl_lapack_sbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
     if(*info == 0 && *q == 0)
     {
         lworkmin = 1;
-        work[1] = (real)lworkmin;
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        work[1] = (real) lworkmin;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Compute workspace */
     if(*info == 0)
@@ -533,14 +494,14 @@ void aocl_lapack_sbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SBBCSD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SBBCSD", &i__1);
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+    AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
     }
     /* Get machine constants */
     eps = slamch_("Epsilon");
@@ -566,7 +527,7 @@ void aocl_lapack_sbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
         {
             theta[i__] = 0.f;
         }
-        else if(theta[i__] > 1.5707963267948966192313216916397514421f - thresh)
+        else if (theta[i__] > 1.5707963267948966192313216916397514421f - thresh)
         {
             theta[i__] = 1.5707963267948966192313216916397514421f;
         }
@@ -578,7 +539,7 @@ void aocl_lapack_sbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
         {
             phi[i__] = 0.f;
         }
-        else if(phi[i__] > 1.5707963267948966192313216916397514421f - thresh)
+        else if (phi[i__] > 1.5707963267948966192313216916397514421f - thresh)
         {
             phi[i__] = 1.5707963267948966192313216916397514421f;
         }
@@ -641,8 +602,8 @@ void aocl_lapack_sbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
                     ++(*info);
                 }
             }
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+    AOCL_DTL_TRACE_LOG_EXIT
+            return 0;
         }
         iter = iter + imax - imin;
         /* Compute shifts */
@@ -660,7 +621,7 @@ void aocl_lapack_sbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
                 thetamin = theta[i__];
             }
         }
-        if(thetamax > 1.5707963267948966192313216916397514421f - thresh)
+        if (thetamax > 1.5707963267948966192313216916397514421f - thresh)
         {
             /* Zero on diagonals of B11 and B22;
             induce deflation with a */
@@ -1260,7 +1221,7 @@ void aocl_lapack_sbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
             {
                 theta[i__] = 0.f;
             }
-            else if(theta[i__] > 1.5707963267948966192313216916397514421f - thresh)
+            else if (theta[i__] > 1.5707963267948966192313216916397514421f - thresh)
             {
                 theta[i__] = 1.5707963267948966192313216916397514421f;
             }
@@ -1272,7 +1233,7 @@ void aocl_lapack_sbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
             {
                 phi[i__] = 0.f;
             }
-            else if(phi[i__] > 1.5707963267948966192313216916397514421f - thresh)
+            else if (phi[i__] > 1.5707963267948966192313216916397514421f - thresh)
             {
                 phi[i__] = 1.5707963267948966192313216916397514421f;
             }
@@ -1375,7 +1336,7 @@ void aocl_lapack_sbbcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of SBBCSD */
 }
 /* sbbcsd_ */

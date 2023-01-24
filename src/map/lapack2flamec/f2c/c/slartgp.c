@@ -1,8 +1,5 @@
-/* slartgp.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slartgp.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b6 = 1.f;
 /* > \brief \b SLARTGP generates a plane rotation so that the diagonal is nonnegative. */
@@ -101,7 +98,7 @@ void slartgp_(real *f, real *g, real *cs, real *sn, real *r__)
     /* Local variables */
     aocl_int64_t i__;
     real f1, g1, eps, scale;
-    aocl_int64_t count, i__1;
+    integer count, i__1;
     real safmn2, safmx2;
     extern real slamch_(char *);
     real safmin;
@@ -167,7 +164,7 @@ void slartgp_(real *f, real *g, real *cs, real *sn, real *r__)
             r__1 = f2c_abs(f1);
             r__2 = f2c_abs(g1); // , expr subst
             scale = fla_max(r__1,r__2);
-            if (scale >= safmx2)
+            if (scale >= safmx2 && count < 20)
             {
                 goto L10;
             }
@@ -232,7 +229,7 @@ void slartgp_(real *f, real *g, real *cs, real *sn, real *r__)
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
+    return 0;
     /* End of SLARTGP */
 }
 /* slartgp_ */

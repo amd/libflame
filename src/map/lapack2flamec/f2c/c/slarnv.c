@@ -1,8 +1,5 @@
-/* slarnv.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slarnv.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLARNV returns a vector of random numbers from a uniform or normal distribution. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -95,12 +92,8 @@ the array */
 /** Generated wrapper function */
 void slarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, real *x)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,"slarnv inputs: idist %d, iseed %d, n %d",*idist, *iseed, *n);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarnv inputs: idist %" FLA_IS ", iseed %" FLA_IS ", n %" FLA_IS "",*idist, *iseed, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
     /* Builtin functions */
@@ -108,7 +101,9 @@ void slarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, real *x)
     /* Local variables */
     aocl_int64_t i__;
     real u[128];
-    aocl_int64_t il, iv, il2;
+    integer il, iv, il2;
+    extern /* Subroutine */
+    int slaruv_(integer *, integer *, real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -176,15 +171,13 @@ void slarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, real *x)
             i__2 = il;
             for(i__ = 1; i__ <= i__2; ++i__)
             {
-                x[iv + i__ - 1]
-                    = sqrt(log(u[(i__ << 1) - 2]) * -2.f)
-                      * cos(u[(i__ << 1) - 1] * 6.28318530717958647692528676655900576839f);
+                x[iv + i__ - 1] = sqrt(log(u[(i__ << 1) - 2]) * -2.f) * cos(u[ (i__ << 1) - 1] * 6.28318530717958647692528676655900576839f);
                 /* L30: */
             }
         }
         /* L40: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of SLARNV */
 }

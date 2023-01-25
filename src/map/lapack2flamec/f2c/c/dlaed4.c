@@ -1,8 +1,5 @@
-/* dlaed4.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlaed4.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLAED4 used by DSTEDC. Finds a single root of the secular equation. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -167,9 +164,6 @@ void dlaed4_(aocl_int_t *n, aocl_int_t *i__, doublereal *d__, doublereal *z__, d
     extern doublereal dlamch_(char *);
     logical orgati;
     doublereal erretm, rhoinv;
-    static TLS_CLASS_SPEC doublereal eps;
-    static TLS_CLASS_SPEC aocl_int64_t r_once = 1;
-
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

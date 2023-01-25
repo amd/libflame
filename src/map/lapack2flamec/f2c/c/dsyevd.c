@@ -1,8 +1,5 @@
-/* dsyevd.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dsyevd.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
@@ -195,8 +192,8 @@ void dsyevd_(char *jobz, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *l
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsyevd inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*jobz, *uplo, *n, *lda, *lwork, *liwork);
-    /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2;
+     /* System generated locals */
+    integer a_dim1, a_offset, i__1, i__2;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
@@ -215,8 +212,6 @@ void dsyevd_(char *jobz, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *l
     aocl_int64_t indwrk, liwmin;
     aocl_int64_t llwork;
     logical lquery;
-    static TLS_CLASS_SPEC aocl_int64_t r_once = 1;
-    static TLS_CLASS_SPEC doublereal safmin, eps, smlnum, bignum, rmin, rmax;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -290,7 +285,7 @@ void dsyevd_(char *jobz, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *l
             }
             /* Computing MAX */
             i__1 = lwmin;
-            i__2 = (*n << 1) + ilaenv_(&c__1, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+            i__2 = (*n << 1) + *n * ilaenv_(&c__1, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
             lopt = fla_max(i__1,i__2);
             liopt = liwmin;
         }

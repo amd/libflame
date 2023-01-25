@@ -1,8 +1,5 @@
-/* zlarnv.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* zlarnv.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZLARNV returns a vector of random numbers from a uniform or normal distribution. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -99,9 +96,8 @@ void zlarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, dcomplex *x)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarnv inputs: idist %" FLA_IS ", n %" FLA_IS "",*idist, *n);
-
-    /* System generated locals */
-    aocl_int64_t i__1, i__2, i__3, i__4, i__5;
+/* System generated locals */
+    integer i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2;
     dcomplex z__1, z__2, z__3;
     /* Builtin functions */
@@ -110,7 +106,9 @@ void zlarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, dcomplex *x)
     /* Local variables */
     aocl_int64_t i__;
     doublereal u[128];
-    aocl_int64_t il, iv;
+    integer il, iv;
+    extern /* Subroutine */
+    int dlaruv_(integer *, integer *, doublereal *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -186,8 +184,8 @@ void zlarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, dcomplex *x)
                 i__3 = iv + i__ - 1;
                 d__1 = sqrt(log(u[(i__ << 1) - 2]) * -2.);
                 d__2 = u[(i__ << 1) - 1] * 6.28318530717958647692528676655900576839;
-                z__3.real = 0.;
-                z__3.imag = d__2; // , expr subst
+                z__3.r = 0.;
+                z__3.i = d__2; // , expr subst
                 z_exp(&z__2, &z__3);
                 z__1.real = d__1 * z__2.real;
                 z__1.imag = d__1 * z__2.imag; // , expr subst
@@ -206,8 +204,8 @@ void zlarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, dcomplex *x)
                 i__3 = iv + i__ - 1;
                 d__1 = sqrt(u[(i__ << 1) - 2]);
                 d__2 = u[(i__ << 1) - 1] * 6.28318530717958647692528676655900576839;
-                z__3.real = 0.;
-                z__3.imag = d__2; // , expr subst
+                z__3.r = 0.;
+                z__3.i = d__2; // , expr subst
                 z_exp(&z__2, &z__3);
                 z__1.real = d__1 * z__2.real;
                 z__1.imag = d__1 * z__2.imag; // , expr subst
@@ -225,8 +223,8 @@ void zlarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, dcomplex *x)
             {
                 i__3 = iv + i__ - 1;
                 d__1 = u[(i__ << 1) - 1] * 6.28318530717958647692528676655900576839;
-                z__2.real = 0.;
-                z__2.imag = d__1; // , expr subst
+                z__2.r = 0.;
+                z__2.i = d__1; // , expr subst
                 z_exp(&z__1, &z__2);
                 x[i__3].real = z__1.real;
                 x[i__3].imag = z__1.imag; // , expr subst

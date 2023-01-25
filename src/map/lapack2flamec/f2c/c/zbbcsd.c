@@ -1,8 +1,5 @@
-/* zbbcsd.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* zbbcsd.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublecomplex c_b1 =
 {
@@ -389,9 +386,7 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     logical wantv1t, wantv2t;
     doublereal b21bulge, b22bulge;
     extern /* Subroutine */
-        void
-        dlartgp_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
-        dlartgs_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    int dlartgp_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlartgs_( doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -479,7 +474,7 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     {
         lrworkmin = 1;
         rwork[1] = (doublereal) lrworkmin;
-        AOCL_DTL_TRACE_LOG_EXIT
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Compute workspace */
@@ -505,12 +500,12 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     {
         i__1 = -(*info);
         xerbla_("ZBBCSD", &i__1);
-        AOCL_DTL_TRACE_LOG_EXIT
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
+    AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Get machine constants */
@@ -536,7 +531,7 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         {
             theta[i__] = 0.;
         }
-        else if(theta[i__] > 1.5707963267948966192313216916397514421 - thresh)
+        else if (theta[i__] > 1.5707963267948966192313216916397514421 - thresh)
         {
             theta[i__] = 1.5707963267948966192313216916397514421;
         }
@@ -548,7 +543,7 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         {
             phi[i__] = 0.;
         }
-        else if(phi[i__] > 1.5707963267948966192313216916397514421 - thresh)
+        else if (phi[i__] > 1.5707963267948966192313216916397514421 - thresh)
         {
             phi[i__] = 1.5707963267948966192313216916397514421;
         }
@@ -611,7 +606,7 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
                     ++(*info);
                 }
             }
-            AOCL_DTL_TRACE_LOG_EXIT
+    AOCL_DTL_TRACE_LOG_EXIT
             return 0;
         }
         iter = iter + imax - imin;
@@ -630,7 +625,7 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
                 thetamin = theta[i__];
             }
         }
-        if(thetamax > 1.5707963267948966192313216916397514421 - thresh)
+        if (thetamax > 1.5707963267948966192313216916397514421 - thresh)
         {
             /* Zero on diagonals of B11 and B22;
             induce deflation with a */
@@ -1230,7 +1225,7 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             {
                 theta[i__] = 0.;
             }
-            else if(theta[i__] > 1.5707963267948966192313216916397514421 - thresh)
+            else if (theta[i__] > 1.5707963267948966192313216916397514421 - thresh)
             {
                 theta[i__] = 1.5707963267948966192313216916397514421;
             }
@@ -1242,7 +1237,7 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             {
                 phi[i__] = 0.;
             }
-            else if(phi[i__] > 1.5707963267948966192313216916397514421 - thresh)
+            else if (phi[i__] > 1.5707963267948966192313216916397514421 - thresh)
             {
                 phi[i__] = 1.5707963267948966192313216916397514421;
             }

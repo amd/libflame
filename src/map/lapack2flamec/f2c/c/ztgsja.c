@@ -1,8 +1,5 @@
-/* ztgsja.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ztgsja.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static dcomplex c_b1 = {0., 0.};
 static dcomplex c_b2 = {1., 0.};
@@ -403,7 +400,6 @@ void ztgsja_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztgsja inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS "",*jobu, *jobv, *jobq, *m, *p, *n, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq);
-    /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4;
     doublereal d__1;
     dcomplex z__1;
@@ -422,10 +418,11 @@ void ztgsja_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
     logical initq, initu, initv, wantq, upper;
     doublereal error, ssmin;
     logical wantu, wantv;
-    extern void zlags2_(logical *, doublereal *, dcomplex *, doublereal *, doublereal *, dcomplex *,
-              doublereal *, doublereal *, dcomplex *, doublereal *, dcomplex *,
-              doublereal *, dcomplex *);
-    aocl_int64_t kcycle;
+    extern /* Subroutine */
+    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlags2_(logical *, doublereal *, doublecomplex *, doublereal *, doublereal *, doublecomplex *, doublereal *, doublereal *, doublecomplex *, doublereal *, doublecomplex *, doublereal *, doublecomplex *);
+    integer kcycle;
+    extern /* Subroutine */
+    int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(char *, integer *), zdscal_(integer *, doublereal *, doublecomplex *, integer *), zlapll_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *), zlaset_( char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
     doublereal hugenum;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -468,12 +465,12 @@ void ztgsja_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
     --work;
     /* Function Body */
     hugenum = 1.7976931348623157e308;
-    initu = lsame_(jobu, "I", 1, 1);
-    wantu = initu || lsame_(jobu, "U", 1, 1);
-    initv = lsame_(jobv, "I", 1, 1);
-    wantv = initv || lsame_(jobv, "V", 1, 1);
-    initq = lsame_(jobq, "I", 1, 1);
-    wantq = initq || lsame_(jobq, "Q", 1, 1);
+    initu = lsame_(jobu, "I");
+    wantu = initu || lsame_(jobu, "U");
+    initv = lsame_(jobv, "I");
+    wantv = initv || lsame_(jobv, "V");
+    initq = lsame_(jobq, "I");
+    wantq = initq || lsame_(jobq, "Q");
     *info = 0;
     if(!(initu || wantu || lsame_(jobu, "N", 1, 1)))
     {
@@ -740,11 +737,11 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
         i__2 = *k + i__ + (*n - *l + i__) * a_dim1;
         a1 = a[i__2].real;
         i__2 = i__ + (*n - *l + i__) * b_dim1;
-        b1 = b[i__2].real;
+        b1 = b[i__2].r;
         gamma = b1 / a1;
-        if(gamma <= hugenum && gamma >= -hugenum)
+        if (gamma <= hugenum && gamma >= -hugenum)
         {
-            if(gamma < 0.)
+            if (gamma < 0.)
             {
                 i__2 = *l - i__ + 1;
                 aocl_blas_zdscal(&i__2, &c_b39, &b[i__ + (*n - *l + i__) * b_dim1], ldb);

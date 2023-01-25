@@ -1,8 +1,5 @@
-/* zlaqr4.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* zlaqr4.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__13 = 13;
 static aocl_int64_t c__15 = 15;
@@ -126,7 +123,7 @@ static aocl_int64_t c__3 = 3;
 /* > \param[in] LDH */
 /* > \verbatim */
 /* > LDH is INTEGER */
-/* > The leading dimension of the array H. LDH .GE. fla_max(1,N). */
+/* > The leading dimension of the array H. LDH >= fla_max(1,N). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] W */
@@ -180,7 +177,7 @@ IHI <= IHIZ <= N. */
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
-/* > The dimension of the array WORK. LWORK .GE. fla_max(1,N) */
+/* > The dimension of the array WORK. LWORK >= fla_max(1,N) */
 /* > is sufficient, but LWORK typically as large as 6*N may */
 /* > be required for optimal performance. A workspace query */
 /* > to determine the optimal workspace size is recommended. */
@@ -288,7 +285,9 @@ void zlaqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
     dcomplex rtdisc;
     aocl_int64_t nwupbd;
     logical sorted;
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    int zlahqr_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    integer lwkopt;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -345,7 +344,7 @@ void zlaqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
-    if(*n <= 15)
+    if (*n <= 15)
     {
         /* ==== Tiny matrices must use ZLAHQR. ==== */
         lwkopt = 1;
@@ -382,7 +381,7 @@ void zlaqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
         /* . point, N .GT. NTINY = 15, so there is enough */
         /* . subdiagonal workspace for NWR.GE.2 as required. */
         /* . (In fact, there is enough subdiagonal space for */
-        /* . NWR.GE.3.) ==== */
+        /* . NWR.GE.4.) ==== */
         nwr = ilaenv_(&c__13, "ZLAQR4", jbcmpz, n, ilo, ihi, lwork);
         nwr = fla_max(2,nwr);
         /* Computing MIN */
@@ -396,7 +395,7 @@ void zlaqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
         /* . and greater than or equal to two as required. ==== */
         nsr = aocl_lapack_ilaenv(&c__15, "ZLAQR4", jbcmpz, n, ilo, ihi, lwork);
         /* Computing MIN */
-        i__1 = nsr, i__2 = (*n + 6) / 9;
+        i__1 = nsr, i__2 = (*n - 3) / 6;
         i__1 = fla_min(i__1,i__2);
         i__2 = *ihi - *ilo; // ; expr subst
         nsr = fla_min(i__1,i__2);
@@ -428,7 +427,7 @@ void zlaqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
         }
         /* ==== ZLAHQR/ZLAQR0 crossover point ==== */
         nmin = ilaenv_(&c__12, "ZLAQR4", jbcmpz, n, ilo, ihi, lwork);
-        nmin = fla_max(11,nmin);
+        nmin = fla_max(15,nmin);
         /* ==== Nibble crossover point ==== */
         nibble = ilaenv_(&c__14, "ZLAQR4", jbcmpz, n, ilo, ihi, lwork);
         nibble = fla_max(0,nibble);

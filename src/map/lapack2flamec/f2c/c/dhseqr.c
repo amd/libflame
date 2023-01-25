@@ -1,13 +1,11 @@
-/* dhseqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dhseqr.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b11 = 0.;
 static doublereal c_b12 = 1.;
-static aocl_int64_t c__12 = 12;
-static aocl_int64_t c__49 = 49;
+static integer c__12 = 12;
+static integer c__2 = 2;
+static integer c__49 = 49;
 /* > \brief \b DHSEQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -123,7 +121,7 @@ static aocl_int64_t c__49 = 49;
 /* > \param[in] LDH */
 /* > \verbatim */
 /* > LDH is INTEGER */
-/* > The leading dimension of the array H. LDH .GE. fla_max(1,N). */
+/* > The leading dimension of the array H. LDH >= fla_max(1,N). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WR */
@@ -179,7 +177,7 @@ static aocl_int64_t c__49 = 49;
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
-/* > The dimension of the array WORK. LWORK .GE. fla_max(1,N) */
+/* > The dimension of the array WORK. LWORK >= fla_max(1,N) */
 /* > is sufficient and delivers very good and sometimes */
 /* > optimal performance. However, LWORK as large as 11*N */
 /* > may be required for optimal performance. A workspace */
@@ -323,7 +321,8 @@ void dhseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dhseqr inputs: job %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",*job, *compz, *n, *ilo, *ihi, *ldh, *ldz, *lwork);
     /* System generated locals */
-    aocl_int64_t h_dim1, h_offset, z_dim1, z_offset, i__1, i__3;
+    address a__1[2];
+    integer h_dim1, h_offset, z_dim1, z_offset, i__1, i__2[2], i__3;
     doublereal d__1;
     char ch__1[2];
     /* Builtin functions */
@@ -479,7 +478,7 @@ void dhseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
         }
         /* ==== DLAHQR/DLAQR0 crossover point ==== */
         nmin = ilaenv_(&c__12, "DHSEQR", ch__1, n, ilo, ihi, lwork);
-        nmin = fla_max(11,nmin);
+        nmin = fla_max(15,nmin);
         /* ==== DLAQR0 for big matrices;
         DLAHQR for small ones ==== */
         if(*n > nmin)

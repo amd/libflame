@@ -1,8 +1,5 @@
-/* ztgex2.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ztgex2.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__2 = 2;
 static aocl_int64_t c__1 = 1;
@@ -215,15 +212,18 @@ void ztgex2_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
         t[4] /* was [2][2] */
         ;
     doublereal cq, sa, sb, cz;
-    dcomplex sq, sz;
+    doublecomplex sq, sz;
     doublereal eps, sum;
     logical weak;
     dcomplex cdum, work[8];
     doublereal scale;
     extern doublereal dlamch_(char *);
-    extern void zlartg_(dcomplex *, dcomplex *, doublereal *, dcomplex *, dcomplex *);
+    extern /* Subroutine */
+    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
     doublereal smlnum;
     logical strong;
+    extern /* Subroutine */
+    int zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     doublereal thresha, threshb;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -278,15 +278,15 @@ void ztgex2_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
     smlnum = dlamch_("S") / eps;
     scale = 0.;
     sum = 1.;
-    aocl_lapack_zlacpy("Full", &m, &m, s, &c__2, work, &m);
-    aocl_lapack_zlacpy("Full", &m, &m, t, &c__2, &work[m * m], &m);
+    zlacpy_("Full", &m, &m, s, &c__2, work, &m);
+    zlacpy_("Full", &m, &m, t, &c__2, &work[m * m], &m);
     i__1 = m * m;
-    aocl_lapack_zlassq(&i__1, work, &c__1, &scale, &sum);
+    zlassq_(&i__1, work, &c__1, &scale, &sum);
     sa = scale * sqrt(sum);
     scale = 0.;
     sum = 1.;
     i__1 = m * m;
-    aocl_lapack_zlassq(&i__1, &work[m * m], &c__1, &scale, &sum);
+    zlassq_(&i__1, &work[m * m], &c__1, &scale, &sum);
     sb = scale * sqrt(sum);
     /* THRES has been changed from */
     /* THRESH = MAX( TEN*EPS*SA, SMLNUM ) */
@@ -297,7 +297,10 @@ void ztgex2_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
     /* Jim Demmel and Guillaume Revy. See forum post 1783. */
     /* Computing MAX */
     d__1 = eps * 20. * sa;
-    thresh = fla_max(d__1,smlnum);
+    thresha = fla_max(d__1,smlnum);
+    /* Computing MAX */
+    d__1 = eps * 20. * sb;
+    threshb = fla_max(d__1,smlnum);
     /* Compute unitary QL and RQ that swap 1-by-1 and 1-by-1 blocks */
     /* using Givens rotations and perform the swap tentatively. */
     z__2.r = s[3].r * t[0].r - s[3].i * t[0].i;
@@ -316,8 +319,8 @@ void ztgex2_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
     z__1.i = z__2.i - z__3.i; // , expr subst
     g.r = z__1.r;
     g.i = z__1.i; // , expr subst
-    sa = z_abs(&s[3]);
-    sb = z_abs(&t[3]);
+    sa = z_abs(&s[3]) * z_abs(t);
+    sb = z_abs(s) * z_abs(&t[3]);
     zlartg_(&g, &f, &cz, &sz, &cdum);
     z__1.real = -sz.real;
     z__1.imag = -sz.imag; // , expr subst
@@ -337,9 +340,9 @@ void ztgex2_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
     }
     zrot_(&c__2, s, &c__2, &s[1], &c__2, &cq, &sq);
     zrot_(&c__2, t, &c__2, &t[1], &c__2, &cq, &sq);
-    /* Weak stability test: |S21| + |T21| <= O(EPS F-norm((S, T))) */
-    ws = z_abs(&s[1]) + z_abs(&t[1]);
-    weak = ws <= thresh;
+    /* Weak stability test: |S21| <= O(EPS F-norm((A))) */
+    /* and |T21| <= O(EPS F-norm((B))) */
+    weak = z_abs(&s[1]) <= thresha && z_abs(&t[1]) <= threshb;
     if (! weak)
     {
         goto L20;
@@ -350,8 +353,8 @@ void ztgex2_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
         /* F-norm((A-QL**H*S*QR)) <= O(EPS*F-norm((A))) */
         /* and */
         /* F-norm((B-QL**H*T*QR)) <= O(EPS*F-norm((B))) */
-        aocl_lapack_zlacpy("Full", &m, &m, s, &c__2, work, &m);
-        aocl_lapack_zlacpy("Full", &m, &m, t, &c__2, &work[m * m], &m);
+        zlacpy_("Full", &m, &m, s, &c__2, work, &m);
+        zlacpy_("Full", &m, &m, t, &c__2, &work[m * m], &m);
         d_cnjg(&z__2, &sz);
         z__1.real = -z__2.real;
         z__1.imag = -z__2.imag; // , expr subst
@@ -401,15 +404,15 @@ void ztgex2_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
         scale = 0.;
         sum = 1.;
         i__1 = m * m;
-        aocl_lapack_zlassq(&i__1, work, &c__1, &scale, &sum);
+        zlassq_(&i__1, work, &c__1, &scale, &sum);
         sa = scale * sqrt(sum);
         scale = 0.;
         sum = 1.;
         i__1 = m * m;
-        aocl_lapack_zlassq(&i__1, &work[m * m], &c__1, &scale, &sum);
+        zlassq_(&i__1, &work[m * m], &c__1, &scale, &sum);
         sb = scale * sqrt(sum);
         strong = sa <= thresha && sb <= threshb;
-        if(!strong)
+        if (! strong)
         {
             goto L20;
         }

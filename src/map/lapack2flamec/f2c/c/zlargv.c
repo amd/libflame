@@ -1,9 +1,6 @@
-/* zlargv.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b ZLARGV generates a vector of plane rotations with real cosines and scomplex sines. */
+/* zlargv.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+#include "FLA_f2c.h" /* > \brief \b ZLARGV generates a vector of plane rotations with real cosines and complex sines. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -233,7 +230,7 @@ void zlargv_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx, dcomplex *y, aocl_int
             gs.real = z__1.real;
             gs.imag = z__1.imag; // , expr subst
             scale *= safmn2;
-            if(scale >= safmx2 && count < 20)
+            if (scale >= safmx2 && count < 20)
             {
                 goto L10;
             }

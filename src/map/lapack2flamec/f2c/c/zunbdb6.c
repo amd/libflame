@@ -1,8 +1,5 @@
-/* ./zunbdb6.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* zunbdb6.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublecomplex c_b1 =
 {
@@ -61,8 +58,9 @@ static integer c__1 = 1;
 /* > with respect to the columns of */
 /* > Q = [ Q1 ] . */
 /* > [ Q2 ] */
-/* > The columns of Q must be orthonormal. The orthogonalized vector will */
-/* > be zero if and only if it lies entirely in the range of Q. */
+/* > The Euclidean norm of X must be one and the columns of Q must be */
+/* > orthonormal. The orthogonalized vector will be zero if and only if it */
+/* > lies entirely in the range of Q. */
 /* > */
 /* > The projection is computed with at most two iterations of the */
 /* > classical Gram-Schmidt algorithm, see */
@@ -166,7 +164,7 @@ static integer c__1 = 1;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup unbdb6 */
+/* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
 /** Generated wrapper function */
@@ -178,14 +176,18 @@ void zunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, dcomplex *x1, aocl_
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zunbdb6 inputs: m1 %" FLA_IS ", m2 %" FLA_IS ", n %" FLA_IS ", incx1 %" FLA_IS ", incx2 %" FLA_IS ", ldq1 %" FLA_IS ", ldq2 %" FLA_IS ", lwork %" FLA_IS "", *m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2, *lwork);
     /* System generated locals */
-    aocl_int64_t q1_dim1, q1_offset, q2_dim1, q2_offset, i__1, i__2, i__3;
+    integer q1_dim1, q1_offset, q2_dim1, q2_offset, i__1, i__2, i__3;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     doublereal norm_new__;
-    aocl_int64_t i__, ix;
+    integer i__, ix;
     doublereal scl, eps, ssq, norm;
+    extern /* Subroutine */
+    int zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(char *, integer *), zlassq_( integer *, doublecomplex *, integer *, doublereal *, doublereal *) ;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -258,15 +260,14 @@ void zunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, dcomplex *x1, aocl_
         return 0;
     }
     eps = dlamch_("Precision");
-    /* Compute the Euclidean norm of X */
-    scl = 0.;
-    ssq = 0.;
-    aocl_lapack_zlassq(m1, &x1[1], incx1, &scl, &ssq);
-    aocl_lapack_zlassq(m2, &x2[1], incx2, &scl, &ssq);
-    norm = scl * sqrt(ssq);
     /* First, project X onto the orthogonal complement of Q's column */
     /* space */
-    if(*m1 == 0)
+    /* Christoph Conrads: In debugging mode the norm should be computed */
+    /* and an assertion added comparing the norm with one. Alas, Fortran */
+    /* never made it into 1989 when assert() was introduced into the C */
+    /* programming language. */
+    norm = 1.;
+    if (*m1 == 0)
     {
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
@@ -281,24 +282,44 @@ void zunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, dcomplex *x1, aocl_
         aocl_blas_zgemv("C", m1, n, &c_b2, &q1[q1_offset], ldq1, &x1[1], incx1, &c_b3, &work[1],
                         &c__1);
     }
-    aocl_blas_zgemv("C", m2, n, &c_b2, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b2, &work[1], &c__1);
-    aocl_blas_zgemv("N", m1, n, &c_b1, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b2, &x1[1], incx1);
-    aocl_blas_zgemv("N", m2, n, &c_b1, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b2, &x2[1], incx2);
+    zgemv_("C", m2, n, &c_b2, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b2, & work[1], &c__1);
+    zgemv_("N", m1, n, &c_b1, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b2, & x1[1], incx1);
+    zgemv_("N", m2, n, &c_b1, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b2, & x2[1], incx2);
     scl = 0.;
     ssq = 0.;
-    aocl_lapack_zlassq(m1, &x1[1], incx1, &scl, &ssq);
-    aocl_lapack_zlassq(m2, &x2[1], incx2, &scl, &ssq);
+    zlassq_(m1, &x1[1], incx1, &scl, &ssq);
+    zlassq_(m2, &x2[1], incx2, &scl, &ssq);
     norm_new__ = scl * sqrt(ssq);
     /* If projection is sufficiently large in norm, then stop. */
     /* If projection is zero, then stop. */
     /* Otherwise, project again. */
-    if(norm_new__ >= norm * .83)
+    if (norm_new__ >= norm * .01)
     {
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
-    if(norm_new__ <= *n * eps * norm)
+    if (norm_new__ <= *n * eps * norm)
     {
+        i__1 = (*m1 - 1) * *incx1 + 1;
+        i__2 = *incx1;
+        for (ix = 1;
+                i__2 < 0 ? ix >= i__1 : ix <= i__1;
+                ix += i__2)
+        {
+            i__3 = ix;
+            x1[i__3].r = 0.;
+            x1[i__3].i = 0.; // , expr subst
+        }
+        i__2 = (*m2 - 1) * *incx2 + 1;
+        i__1 = *incx2;
+        for (ix = 1;
+                i__1 < 0 ? ix >= i__2 : ix <= i__2;
+                ix += i__1)
+        {
+            i__3 = ix;
+            x2[i__3].r = 0.;
+            x2[i__3].i = 0.; // , expr subst
+        }
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
@@ -325,34 +346,38 @@ void zunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, dcomplex *x1, aocl_
         aocl_blas_zgemv("C", m1, n, &c_b2, &q1[q1_offset], ldq1, &x1[1], incx1, &c_b3, &work[1],
                         &c__1);
     }
-    aocl_blas_zgemv("C", m2, n, &c_b2, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b2, &work[1], &c__1);
-    aocl_blas_zgemv("N", m1, n, &c_b1, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b2, &x1[1], incx1);
-    aocl_blas_zgemv("N", m2, n, &c_b1, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b2, &x2[1], incx2);
+    zgemv_("C", m2, n, &c_b2, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b2, & work[1], &c__1);
+    zgemv_("N", m1, n, &c_b1, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b2, & x1[1], incx1);
+    zgemv_("N", m2, n, &c_b1, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b2, & x2[1], incx2);
     scl = 0.;
     ssq = 0.;
-    aocl_lapack_zlassq(m1, &x1[1], incx1, &scl, &ssq);
-    aocl_lapack_zlassq(m2, &x2[1], incx2, &scl, &ssq);
+    zlassq_(m1, &x1[1], incx1, &scl, &ssq);
+    zlassq_(m2, &x2[1], incx2, &scl, &ssq);
     norm_new__ = scl * sqrt(ssq);
     /* If second projection is sufficiently large in norm, then do */
     /* nothing more. Alternatively, if it shrunk significantly, then */
     /* truncate it to zero. */
-    if(norm_new__ < norm * .83)
+    if (norm_new__ < norm * .01)
     {
         i__1 = (*m1 - 1) * *incx1 + 1;
         i__2 = *incx1;
-        for(ix = 1; i__2 < 0 ? ix >= i__1 : ix <= i__1; ix += i__2)
+        for (ix = 1;
+                i__2 < 0 ? ix >= i__1 : ix <= i__1;
+                ix += i__2)
         {
             i__3 = ix;
-            x1[i__3].real = 0.;
-            x1[i__3].imag = 0.; // , expr subst
+            x1[i__3].r = 0.;
+            x1[i__3].i = 0.; // , expr subst
         }
         i__2 = (*m2 - 1) * *incx2 + 1;
         i__1 = *incx2;
-        for(ix = 1; i__1 < 0 ? ix >= i__2 : ix <= i__2; ix += i__1)
+        for (ix = 1;
+                i__1 < 0 ? ix >= i__2 : ix <= i__2;
+                ix += i__1)
         {
             i__3 = ix;
-            x2[i__3].real = 0.;
-            x2[i__3].imag = 0.; // , expr subst
+            x2[i__3].r = 0.;
+            x2[i__3].i = 0.; // , expr subst
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

@@ -100,7 +100,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, ZGEES, ZGEESX, ZGEEV, ZGEEVX, ZGESVJ,
-     $                   ZGESDD, ZGESVD, ZGESVDX, ZGESVDQ
+     $                   ZGESDD, ZGESVD, ZGESVDX, ZGESVQ
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAMEN, ZSLECT

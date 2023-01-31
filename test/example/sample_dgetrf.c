@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2023 - 2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*
@@ -7,32 +7,34 @@
     using partial pivoting with row interchanges.
 */
 
-#include "FLAME.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef int integer;
 /* Generate Random Value */
-#define DRAND() ((double)rand() / ((double)RAND_MAX / 2.0F)) - 1.0F;
+#define DRAND()  ( ( double ) rand() / ( ( double ) RAND_MAX / 2.0F ) ) - 1.0F;
+
+/* External calls to LAPACK API's */
+extern int dgetrf_(integer* m, integer* n, void* a, integer* lda, integer* ipiv, integer* info);
 
 /* Local Function Declaration */
 void rand_matrix(void *A, integer M, integer N, integer LDA);
 
-int main(int argc, char **argv)
+int main( int argc, char** argv )
 {
-    /* Initialize input matrix sizes */
+    /* Intialize input matrix sizes */
     integer M = 10, N = 10, LDA = 10;
     double *A;
     integer *ipiv;
-    integer info;
+    integer i, info;
 
     /* Allocation of memory to matrix*/
-    A = (double *)malloc(LDA * N * sizeof(double));
-    ipiv = (integer *)malloc(N * sizeof(double));
+    A = (double  *) malloc(LDA * N * sizeof(double));
+    ipiv  = (integer *) malloc(N * sizeof(double));
 
-    /* Initialize matrix with random values */
+    /* Intialize matrix with random values */
     rand_matrix(A, M, N, LDA);
-
+    
     printf("Started execution of DGETRF API \n");
 
     /* Call to the DGETRF API */
@@ -45,13 +47,13 @@ int main(int argc, char **argv)
     return 0;
 }
 
-/* Initialize the matrix with random values */
+/* Intialize the matrix with random values */
 void rand_matrix(void *A, integer M, integer N, integer LDA)
 {
     integer i, j;
-    for(i = 0; i < N; i++)
+    for( i = 0; i < N; i++ )
     {
-        for(j = 0; j < M; j++)
+        for( j = 0; j < M; j++ )
         {
             ((double *)A)[i * LDA + j] = DRAND();
         }

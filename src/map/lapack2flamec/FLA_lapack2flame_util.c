@@ -48,7 +48,23 @@ void F77_fla_obj_show( char* prefix, integer* m, integer* n, void* buffer, integ
     FLA_Datatype datatype;
     FLA_Obj A;
 
-    datatype = FLA_INT;
+     datatype = FLA_INT; 
+
+     switch( *prefix ) {
+     case 'i':
+     case 'I': datatype = FLA_INT;            break;
+     case 's':
+     case 'S': datatype = FLA_FLOAT;          break;
+     case 'd':
+     case 'D': datatype = FLA_DOUBLE;         break;
+     case 'c':
+     case 'C': datatype = FLA_COMPLEX;        break;
+     case 'z':
+     case 'Z': datatype = FLA_DOUBLE_COMPLEX; break;
+     default:
+       fprintf(stderr, "Invalid prefix %c, where i,s,d,c,z are allowed.\n", *prefix);
+       FLA_Abort();
+     }
 
     switch(*prefix)
     {

@@ -1,7 +1,7 @@
 ###############################################################################
-# Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
-cmake_minimum_required(VERSION 3.26.0)
+cmake_minimum_required(VERSION 3.0)
 
 project(test_dgetrf)
 
@@ -19,19 +19,12 @@ set(TEST_BLAS_LIBRARY_PATH "${EXT_BLAS_LIBRARY_DEPENDENCY_PATH}" CACHE STRING "B
 set(TEST_LAPACK_LIBRARY_PATH "${EXT_LAPACK_LIBRARY_PATH}" CACHE STRING "LAPACK library path name")
 set(TEST_BLAS_LIBNAME "${EXT_BLAS_LIBNAME}" CACHE STRING "BLAS library name")
 set(TEST_LAPACK_LIBNAME "${EXT_LAPACK_LIBNAME}" CACHE STRING "lapack library name")
-set(TEST_FLAME_HEADER_PATH "${EXT_FLAME_HEADER_PATH}" CACHE STRING "Flame header path")
 
-include_directories("${EXT_FLAME_HEADER_PATH}")
-link_directories("${EXT_BLAS_LIBRARY_DEPENDENCY_PATH}" "${EXT_LAPACK_LIBRARY_PATH}" "${AOCLUTILS_LIBRARY_PATH}")
+link_directories("${EXT_BLAS_LIBRARY_DEPENDENCY_PATH}" "${EXT_LAPACK_LIBRARY_PATH}")
 
 add_executable(${PROJECT_NAME} "")
 
-if(WIN32)
-    target_link_libraries(${PROJECT_NAME} debug "${TEST_FLAGS}" "${EXT_LAPACK_LIBNAME}" "${EXT_BLAS_LIBNAME}" "libaoclutils.lib")
-    target_link_libraries(${PROJECT_NAME} optimized "${TEST_FLAGS}" "${EXT_LAPACK_LIBNAME}" "${EXT_BLAS_LIBNAME}" "libaoclutils.lib")
-elseif(UNIX)
-    target_link_libraries(${PROJECT_NAME} debug "${TEST_FLAGS}" "${EXT_LAPACK_LIBNAME}" "-lstdc++ -laoclutils" "${EXT_BLAS_LIBNAME}")
-    target_link_libraries(${PROJECT_NAME} optimized "${TEST_FLAGS}" "${EXT_LAPACK_LIBNAME}" "-lstdc++ -laoclutils" "${EXT_BLAS_LIBNAME}")
-endif()
+target_link_libraries(${PROJECT_NAME} debug "${TEST_FLAGS}" "${EXT_BLAS_LIBNAME}" "${EXT_LAPACK_LIBNAME}")
+target_link_libraries(${PROJECT_NAME} optimized "${TEST_FLAGS}" "${EXT_BLAS_LIBNAME}" "${EXT_LAPACK_LIBNAME}")
 
 target_sources(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/sample_dgetrf.c)

@@ -1,27 +1,21 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
 */
-
-#if ENABLE_AOCL_EXTENSION_APIS
 
 #include "test_lapack.h"
 
-extern double perf;
-extern double time_min;
 /* Local prototypes */
-void fla_test_spffrt2_experiment(char *tst_api, test_params_t *params, integer datatype,
-                                 integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                                 integer einfo);
-void prepare_spffrt2_run(integer n_A, integer ncolm, integer pn, void *A, integer datatype,
-                         test_params_t *params);
-void invoke_spffrt2(integer datatype, void *a, integer *n, integer *ncolm, void *work, void *work2);
+void fla_test_spffrt2_experiment(test_params_t *params, integer  datatype, integer  p_cur, integer  q_cur, integer pci,
+                                    integer n_repeats, double* perf, double* t, double* residual);
+void prepare_spffrt2_run(integer n_A, integer ncolm, integer pn, void *A, integer datatype, integer n_repeats, double* time_min_);
+void invoke_spffrt2(integer datatype, void *a, integer* n, integer * ncolm, void *work, void *work2);
+static FILE* g_ext_fptr = NULL;
 
-void fla_test_spffrt2(integer argc, char **argv, test_params_t *params)
+void fla_test_spffrt2(integer argc, char ** argv, test_params_t *params)
 {
-    char *op_str = "Computes LDLT partial factorization";
-    char *front_str = "SPFFRT2";
-    integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
-    params->imatrix_char = '\0';
+    char* op_str = "Computes LDLT partial factorization";
+    char* front_str = "SPFFRT2";
+    integer tests_not_run = 1, invalid_dtype = 0;
 
     if(argc == 1)
     {
@@ -30,15 +24,22 @@ void fla_test_spffrt2(integer argc, char **argv, test_params_t *params)
         fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_spffrt2_experiment);
         tests_not_run = 0;
     }
-    if(argc == 7)
+    if (argc == 7)
     {
-        FLA_TEST_PARSE_LAST_ARG(argv[6]);
+        /* Read matrix input data from a file */
+        g_ext_fptr = fopen(argv[6], "r");
+        if (g_ext_fptr == NULL)
+        {
+            printf("\n Invalid input file argument \n");
+            return;
+        }
     }
-    if(argc >= 6 && argc <= 7)
+    if (argc >= 6 && argc <= 7)
     {
         /* Test with parameters from commandline */
         integer i, num_types, N;
         integer datatype, n_repeats;
+        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -48,7 +49,6 @@ void fla_test_spffrt2(integer argc, char **argv, test_params_t *params)
         params->lin_solver_paramslist[0].ncolm = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -72,7 +72,18 @@ void fla_test_spffrt2(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_spffrt2_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
+                fla_test_spffrt2_experiment(params, datatype,
+                                          N, N,
+                                          0,
+                                          n_repeats,
+                                          &perf, &time_min, &residual);
+                /* Print the results */
+                fla_test_print_status(front_str,
+                                      stype,
+                                      SQUARE_INPUT,
+                                      N, N,
+                                      residual, params->lin_solver_paramslist[0].solver_threshold,
+                                      time_min, perf);
                 tests_not_run = 0;
             }
         }
@@ -88,104 +99,96 @@ void fla_test_spffrt2(integer argc, char **argv, test_params_t *params)
     {
         printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
     }
-    if(g_ext_fptr != NULL)
+    if (g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
-        g_ext_fptr = NULL;
     }
 
     return;
 }
 
-void fla_test_spffrt2_experiment(char *tst_api, test_params_t *params, integer datatype,
-                                 integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                                 integer einfo)
+
+void fla_test_spffrt2_experiment(test_params_t *params,
+    integer  datatype,
+    integer  p_cur,
+    integer  q_cur,
+    integer pci,
+    integer n_repeats,
+    double* perf,
+    double* t,
+    double* residual)
 {
     integer n, ncolm, pn;
-    void *A, *AP, *AP_save;
-    double err_thresh;
-    void *filename = NULL;
+    void *A, *AP;
+    double time_min = 1e9;
 
-    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
+    *residual = params->lin_solver_paramslist[pci].solver_threshold;
     ncolm = params->lin_solver_paramslist[pci].ncolm;
 
-    /* Determine the dimensions*/
+    /* Determine the dimensions*/    
     n = p_cur;
     pn = n * (n + 1) / 2;
     /* Create the matrices for the current operation*/
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, n);
+    create_matrix(datatype, &A, n, n);
     create_vector(datatype, &AP, pn);
-
-    /* Initialize input matrix only when not in BRT verification run mode */
-    if(!FLA_BRT_VERIFICATION_RUN)
+    if (g_ext_fptr != NULL)
     {
-        if(g_ext_fptr != NULL)
-        {
-            init_matrix(datatype, A, n, n, n, g_ext_fptr, params->imatrix_char);
-        }
-        else
-        {
-            /* Initialize input matrix with random numbers */
-            rand_sym_matrix(datatype, A, n, n, n);
-        }
-        /* Pack a symmetric matrix in column first order */
-        pack_matrix_lt(datatype, A, AP, n, n);
+        /* Initialize input matrix with custom data */
+        init_matrix_from_file(datatype, A, n, n, n, g_ext_fptr);
     }
-
-    /* BRT macro for processing single packed matrix AP */
-    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, pn, 1, AP, 1, "dd", n, ncolm)
-    create_vector(datatype, &AP_save, pn);
-    copy_vector(datatype, pn, AP, i_one, AP_save, i_one);
+    else
+    {
+        /* Initialize input matrix with random numbers */
+        rand_sym_matrix(datatype, A, n, n, n);
+    }
+    /* Pack a symmetric matrix in column first order */
+    pack_matrix_lt(datatype, A, AP, n, n);
 
     /* call to API */
-    prepare_spffrt2_run(n, ncolm, pn, AP, datatype, params);
+    prepare_spffrt2_run(n, ncolm, pn, AP, datatype, n_repeats, &time_min);
+
+    /* execution time */
+    *t = time_min;
 
     /* performance computation */
-    if(datatype == FLOAT || datatype == DOUBLE)
-        perf = (double)ncolm / 6.0f
-               * (2.0 * ncolm * ncolm - 6.0 * ncolm * n + 3.0 * ncolm + 6.0 * n * n - 6.0 * n + 7)
-               / time_min / FLOPS_PER_UNIT_PERF;
-    else if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        perf
-            = (double)ncolm / 3.0f
-              * (4.0 * ncolm * ncolm - 12.0 * ncolm * n + 9.0 * ncolm + 12.0 * n * n - 18.0 * n + 8)
-              / time_min / FLOPS_PER_UNIT_PERF;
+    if (datatype == FLOAT || datatype == DOUBLE)
+        *perf = (double)ncolm / 6.0f * (2.0 * ncolm * ncolm - 6.0 * ncolm * n + 3.0 * ncolm + 6.0 * n * n - 6.0 * n + 7) / time_min / FLOPS_PER_UNIT_PERF;
+    else if (datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+        *perf = (double)ncolm / 3.0f * (4.0 * ncolm * ncolm - 12.0 * ncolm * n + 9.0 * ncolm + 12.0 * n * n - 18.0 * n + 8) / time_min / FLOPS_PER_UNIT_PERF;
 
     /* output validation */
-    double residual = 0;
-    IF_FLA_BRT_VALIDATION(
-        pn, 1, store_outputs_base(filename, params, 1, 0, datatype, pn, 1, AP, 1),
-        validate_spffrt2(tst_api, n, ncolm, A, AP, datatype, err_thresh, params),
-        check_reproducibility_base(filename, params, 1, 0, datatype, pn, 1, AP, 1))
-    else if(FLA_SKIP_VALIDATION_MODE)
+    if(ncolm <= n && n > 0 && ncolm > 0)
     {
-        /* Skip validation for performance modes */
-        FLA_PRINT_TEST_STATUS(n, n, err_thresh, err_thresh);
+        validate_spffrt2(n, ncolm, A, AP, datatype, residual);
     }
-    else if((ncolm <= n && n > 0 && ncolm > 0))
-    {
-        validate_spffrt2(tst_api, n, ncolm, A, AP, datatype, err_thresh, params);
+    else
+    {   /* Assigning bigger value to residual as execution fails */
+        *residual = DBL_MAX;
     }
 
     /* Free up the buffers */
-    free_vector(AP_save);
-free_buffers:
-    FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_vector(AP);
 }
 
-void prepare_spffrt2_run(integer n_A, integer ncolm, integer pn, void *AP, integer datatype,
-                         test_params_t *params)
+
+void prepare_spffrt2_run(integer n_A,
+    integer ncolm,
+    integer pn,
+    void* AP,
+    integer datatype,
+    integer n_repeats,
+    double* time_min_)
 {
+    integer i;
     void *AP_save, *work = NULL, *work2 = NULL;
-    double exe_time;
+    double time_min = 1e9, exe_time;
 
     create_vector(datatype, &AP_save, pn);
-    create_vector(datatype, &work, 2 * n_A);
-    create_vector(datatype, &work2, 2 * n_A);
+    create_vector(datatype, &work, 2*n_A);
+    create_vector(datatype, &work2, 2*n_A);
 
-    FLA_EXEC_LOOP_BEGIN
+    for (i = 0; i < n_repeats; ++i)
     {
         /* Copy original input data */
         copy_vector(datatype, pn, AP, i_one, AP_save, i_one);
@@ -196,9 +199,12 @@ void prepare_spffrt2_run(integer n_A, integer ncolm, integer pn, void *AP, integ
         invoke_spffrt2(datatype, AP_save, &n_A, &ncolm, work, work2);
 
         exe_time = fla_test_clock() - exe_time;
-        FLA_EXEC_LOOP_UPDATE_NO_INFO
+
+        /* Get the best execution time */
+        time_min = fla_min(time_min, exe_time);
     }
 
+    *time_min_ = time_min;
     /*  Save the final result to A matrix*/
     copy_vector(datatype, pn, AP_save, i_one, AP, i_one);
     free_vector(AP_save);
@@ -206,10 +212,11 @@ void prepare_spffrt2_run(integer n_A, integer ncolm, integer pn, void *AP, integ
     free_vector(work2);
 }
 
+
 /*
  *  spffrt2_API calls LAPACK interface
  *  */
-void invoke_spffrt2(integer datatype, void *ap, integer *n, integer *ncolm, void *work, void *work2)
+void invoke_spffrt2(integer datatype, void *ap, integer *n, integer *ncolm, void* work, void* work2)
 {
     switch(datatype)
     {
@@ -218,7 +225,7 @@ void invoke_spffrt2(integer datatype, void *ap, integer *n, integer *ncolm, void
             fla_lapack_sspffrt2(ap, n, ncolm, work, work2);
             break;
         }
-
+        
         case DOUBLE:
         {
             fla_lapack_dspffrt2(ap, n, ncolm, work, work2);
@@ -239,4 +246,3 @@ void invoke_spffrt2(integer datatype, void *ap, integer *n, integer *ncolm, void
     }
 }
 
-#endif /* ENABLE_AOCL_EXTENSION_APIS */

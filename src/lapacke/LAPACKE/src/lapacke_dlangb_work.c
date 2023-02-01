@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-double API_SUFFIX(LAPACKE_dlangb_work)( int matrix_layout, char norm, lapack_int n,
+double LAPACKE_dlangb_work( int matrix_layout, char norm, lapack_int n,
                             lapack_int kl, lapack_int ku, const double* ab,
                             lapack_int ldab, double* work )
 {
@@ -47,18 +47,18 @@ double API_SUFFIX(LAPACKE_dlangb_work)( int matrix_layout, char norm, lapack_int
         /* Check leading dimension(s) */
         if( ldab < kl+ku+1 ) {
             info = -7;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlangb_work", info );
+            LAPACKE_xerbla( "LAPACKE_dlangb_work", info );
             return info;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( norm, '1' ) || API_SUFFIX(LAPACKE_lsame)( norm, 'o' ) ) {
+        if( LAPACKE_lsame( norm, '1' ) || LAPACKE_lsame( norm, 'o' ) ) {
             norm_lapack = 'i';
-        } else if( API_SUFFIX(LAPACKE_lsame)( norm, 'i' ) ) {
+        } else if( LAPACKE_lsame( norm, 'i' ) ) {
             norm_lapack = '1';
         } else {
             norm_lapack = norm;
         }
         /* Allocate memory for work array(s) */
-        if( API_SUFFIX(LAPACKE_lsame)( norm_lapack, 'i' ) ) {
+        if( LAPACKE_lsame( norm_lapack, 'i' ) ) {
             work_lapack = (double*)LAPACKE_malloc( sizeof(double) * MAX(1,n) );
             if( work_lapack == NULL ) {
                 info = LAPACK_WORK_MEMORY_ERROR;
@@ -73,11 +73,11 @@ double API_SUFFIX(LAPACKE_dlangb_work)( int matrix_layout, char norm, lapack_int
         }
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlangb_work", info );
+            LAPACKE_xerbla( "LAPACKE_dlangb_work", info );
         }
     } else {
         info = -1;
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlangb_work", info );
+        LAPACKE_xerbla( "LAPACKE_dlangb_work", info );
     }
     return res;
 }

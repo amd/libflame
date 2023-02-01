@@ -81,7 +81,7 @@
 
 *****************************************************************************/
 
-void API_SUFFIX(LAPACKE_dtz_trans)( int matrix_layout, char direct, char uplo,
+void LAPACKE_dtz_trans( int matrix_layout, char direct, char uplo,
                         char diag, lapack_int m, lapack_int n,
                         const double *in, lapack_int ldin,
                         double *out, lapack_int ldout )
@@ -91,14 +91,14 @@ void API_SUFFIX(LAPACKE_dtz_trans)( int matrix_layout, char direct, char uplo,
     if( in == NULL || out == NULL ) return ;
 
     colmaj = ( matrix_layout == LAPACK_COL_MAJOR );
-    front  = API_SUFFIX(LAPACKE_lsame)( direct, 'f' );
-    lower  = API_SUFFIX(LAPACKE_lsame)( uplo, 'l' );
-    unit   = API_SUFFIX(LAPACKE_lsame)( diag, 'u' );
+    front  = LAPACKE_lsame( direct, 'f' );
+    lower  = LAPACKE_lsame( uplo, 'l' );
+    unit   = LAPACKE_lsame( diag, 'u' );
 
     if( ( !colmaj && ( matrix_layout != LAPACK_ROW_MAJOR ) ) ||
-        ( !front  && !API_SUFFIX(LAPACKE_lsame)( direct, 'b' ) ) ||
-        ( !lower  && !API_SUFFIX(LAPACKE_lsame)( uplo, 'u' ) ) ||
-        ( !unit   && !API_SUFFIX(LAPACKE_lsame)( diag, 'n' ) ) ) {
+        ( !front  && !LAPACKE_lsame( direct, 'b' ) ) ||
+        ( !lower  && !LAPACKE_lsame( uplo, 'u' ) ) ||
+        ( !unit   && !LAPACKE_lsame( diag, 'n' ) ) ) {
         /* Just exit if any of input parameters are wrong */
         return;
     }
@@ -141,13 +141,13 @@ void API_SUFFIX(LAPACKE_dtz_trans)( int matrix_layout, char direct, char uplo,
 
     /* Copy & transpose rectangular part */
     if( rect_in_offset >= 0 && rect_out_offset >= 0 ) {
-        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, rect_m, rect_n,
+        LAPACKE_dge_trans( matrix_layout, rect_m, rect_n,
                            &in[rect_in_offset], ldin,
                            &out[rect_out_offset], ldout );
     }
 
     /* Copy & transpose triangular part */
-    API_SUFFIX(LAPACKE_dtr_trans)( matrix_layout, uplo, diag, tri_n,
-                       &in[tri_in_offset], ldin,
-                       &out[tri_out_offset], ldout );
+    return LAPACKE_dtr_trans( matrix_layout, uplo, diag, tri_n,
+                              &in[tri_in_offset], ldin,
+                              &out[tri_out_offset], ldout );
 }

@@ -465,6 +465,7 @@ void chpevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, scomplex *ap, r
     /* If all eigenvalues are desired and ABSTOL is less than or equal */
     /* to zero, then call SSTERF or CUPGTR and CSTEQR. If this fails */
     /* for some eigenvalue, then try SSTEBZ. */
+    indibl = 1;
     test = FALSE_;
     if(indeig)
     {
@@ -517,7 +518,7 @@ void chpevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, scomplex *ap, r
     {
         *(unsigned char *)order = 'E';
     }
-    indisp = *n + 1;
+    indisp = indibl + *n;
     indiwk = indisp + *n;
     aocl_lapack_sstebz(range, order, n, &vll, &vuu, il, iu, &abstll, &rwork[indd], &rwork[inde], m,
                        &nsplit, &w[1], &iwork[1], &iwork[indisp], &rwork[indrwk], &iwork[indiwk],

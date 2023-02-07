@@ -422,6 +422,7 @@ void dstevx_(char *jobz, char *range, aocl_int_t *n, doublereal *d__, doublereal
     /* If all eigenvalues are desired and ABSTOL is less than zero, then */
     /* call DSTERF or SSTEQR. If this fails for some eigenvalue, then */
     /* try DSTEBZ. */
+    indibl = 1;
     test = FALSE_;
     if(indeig)
     {
@@ -470,7 +471,7 @@ void dstevx_(char *jobz, char *range, aocl_int_t *n, doublereal *d__, doublereal
         *(unsigned char *)order = 'E';
     }
     indwrk = 1;
-    indisp = *n + 1;
+    indisp = indibl + *n;
     indiwo = indisp + *n;
     aocl_lapack_dstebz(range, order, n, &vll, &vuu, il, iu, abstol, &d__[1], &e[1], m, &nsplit,
                        &w[1], &iwork[1], &iwork[indisp], &work[indwrk], &iwork[indiwo], info);

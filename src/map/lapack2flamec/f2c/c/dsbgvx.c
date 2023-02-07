@@ -457,6 +457,7 @@ void dsbgvx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *ka,
     aocl_lapack_dsbgst(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb,
                        &q[q_offset], ldq, &work[1], &iinfo);
     /* Reduce symmetric band matrix to tridiagonal form. */
+    indibl = 1;
     indd = 1;
     inde = indd + *n;
     indwrk = inde + *n;
@@ -523,7 +524,7 @@ void dsbgvx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *ka,
     {
         *(unsigned char *)order = 'E';
     }
-    indisp = *n + 1;
+    indisp = indibl + *n;
     indiwo = indisp + *n;
     aocl_lapack_dstebz(range, order, n, vl, vu, il, iu, abstol, &work[indd], &work[inde], m,
                        &nsplit, &w[1], &iwork[1], &iwork[indisp], &work[indwrk], &iwork[indiwo],

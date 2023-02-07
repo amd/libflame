@@ -467,6 +467,7 @@ void zhbgvx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *ka,
                        &q[q_offset], ldq, &work[1], &rwork[1], &iinfo);
     /* Solve the standard eigenvalue problem. */
     /* Reduce Hermitian band matrix to tridiagonal form. */
+    indibl = 1;
     indd = 1;
     inde = indd + *n;
     indrwk = inde + *n;
@@ -534,7 +535,7 @@ void zhbgvx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *ka,
     {
         *(unsigned char *)order = 'E';
     }
-    indisp = *n + 1;
+    indisp = indibl + *n;
     indiwk = indisp + *n;
     aocl_lapack_dstebz(range, order, n, vl, vu, il, iu, abstol, &rwork[indd], &rwork[inde], m,
                        &nsplit, &w[1], &iwork[1], &iwork[indisp], &rwork[indrwk], &iwork[indiwk],

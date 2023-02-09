@@ -1,463 +1,201 @@
-/*
-    Copyright (C) 2023-2026, Advanced Micro Devices, Inc. All rights reserved.
-*/
+/******************************************************************************
+* Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+*******************************************************************************/
 
 /*! @file validate_gghrd.c
  *  @brief Defines validate function of GGHRD() to use in test suite.
  *  */
 
 #include "test_common.h"
-#include "test_prototype.h"
 
-extern double perf;
-extern double time_min;
-
-void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void *A, void *A_test,
-                        integer lda, void *B, void *B_test, integer ldb, void *Q, void *Q_test,
-                        integer ldq, void *Z, void *Z_test, integer ldz, integer datatype,
-                        double *resid, void *params)
+void validate_gghrd(char* compq,
+    char* compz,
+    integer n,
+    void* A,
+    void* A_test,
+    integer lda,
+    void* B,
+    void* B_test,
+    integer ldb,
+    void* Q,
+    void* Q_test,
+    integer ldq,
+    void* Z,
+    void* Z_test,
+    integer ldz,
+    integer datatype,
+    double* residual,
+    integer *info)
 {
-    void *work = NULL, *lambda = NULL, *alambda = NULL, *Q_tmp = NULL, *Z_tmp = NULL;
-
-    /* If compq=N or/and compz=N, just compare A/A_test and B/B_test matrices and return */
-    if(same_char(*compq, 'N') || same_char(*compz, 'N'))
-    {
-        switch(datatype)
-        {
-            case FLOAT:
-            {
-                /* Compare A and A_test matrices */
-                float norm_H, norm, norm_T;
-                create_vector(datatype, &work, n);
-                norm_H = fla_lapack_slange("1", &n, &n, A, &lda, work);
-                matrix_difference(datatype, n, n, A, lda, A_test, lda);
-                norm = fla_lapack_slange("1", &n, &n, A, &lda, work);
-                resid[0] = fla_compute_residual(datatype, 'P', norm, norm_H, n, params);
-
-                /* Compare B and B_test matrices */
-                norm_T = fla_lapack_slange("1", &n, &n, B, &ldb, work);
-                matrix_difference(datatype, n, n, B, lda, B_test, lda);
-                norm = fla_lapack_slange("1", &n, &n, B, &ldb, work);
-                resid[1] = fla_compute_residual(datatype, 'P', norm, norm_T, n, params);
-
-                break;
-            }
-            case DOUBLE:
-            {
-                /* Compare A and A_test matrices */
-                double norm_H, norm, norm_T;
-                create_vector(datatype, &work, n);
-                norm_H = fla_lapack_dlange("1", &n, &n, A, &lda, work);
-                matrix_difference(datatype, n, n, A, lda, A_test, lda);
-                norm = fla_lapack_dlange("1", &n, &n, A, &lda, work);
-                resid[0] = fla_compute_residual(datatype, 'P', norm, norm_H, n, params);
-
-                /* Compare B and B_test matrices */
-                norm_T = fla_lapack_dlange("1", &n, &n, B, &ldb, work);
-                matrix_difference(datatype, n, n, B, lda, B_test, lda);
-                norm = fla_lapack_dlange("1", &n, &n, B, &ldb, work);
-                resid[1] = fla_compute_residual(datatype, 'P', norm, norm_T, n, params);
-
-                break;
-            }
-            case COMPLEX:
-            {
-                /* Compare A and A_test matrices */
-                float norm_H, norm, norm_T;
-                create_vector(datatype, &work, n);
-                norm_H = fla_lapack_clange("1", &n, &n, A, &lda, work);
-                matrix_difference(datatype, n, n, A, lda, A_test, lda);
-                norm = fla_lapack_clange("1", &n, &n, A, &lda, work);
-                resid[0] = fla_compute_residual(datatype, 'P', norm, norm_H, n, params);
-
-                /* Compare B and B_test matrices */
-                norm_T = fla_lapack_clange("1", &n, &n, B, &ldb, work);
-                matrix_difference(datatype, n, n, B, lda, B_test, lda);
-                norm = fla_lapack_clange("1", &n, &n, B, &ldb, work);
-                resid[1] = fla_compute_residual(datatype, 'P', norm, norm_T, n, params);
-
-                break;
-            }
-            case DOUBLE_COMPLEX:
-            {
-                /* Compare A and A_test matrices */
-                double norm_H, norm, norm_T;
-                create_vector(datatype, &work, n);
-                norm_H = fla_lapack_zlange("1", &n, &n, A, &lda, work);
-                matrix_difference(datatype, n, n, A, lda, A_test, lda);
-                norm = fla_lapack_zlange("1", &n, &n, A, &lda, work);
-                resid[0] = fla_compute_residual(datatype, 'P', norm, norm_H, n, params);
-
-                /* Compare B and B_test matrices */
-                norm_T = fla_lapack_zlange("1", &n, &n, B, &ldb, work);
-                matrix_difference(datatype, n, n, B, lda, B_test, lda);
-                norm = fla_lapack_zlange("1", &n, &n, B, &ldb, work);
-                resid[1] = fla_compute_residual(datatype, 'P', norm, norm_T, n, params);
-
-                break;
-            }
-        }
-
-        free_vector(work);
+    if (*compz == 'N' || *compq == 'N')
         return;
-    }
 
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &lambda, n);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &alambda, n);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_tmp, n);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_tmp, n);
+    void *work = NULL, *lambda = NULL, *alambda = NULL;
+    *info = 0;
+
+    create_matrix(datatype, &lambda, n, n);
+    create_matrix(datatype, &alambda, n, n);
 
     switch(datatype)
     {
         case FLOAT:
         {
-            float norm, norm_A, norm_T;
+            float norm, norm_A, norm_T, eps, resid1, resid2, resid3, resid4;
+            double res_max, res_max1;
+            eps = fla_lapack_slamch("P");
 
             /* Test 1
-                | A - Q**T * Q_test * H  * Z_test**T * Z  | / ( |A| n ulp ) */
+                | A - Q H Z**T  | / ( |A| n ulp ) */
             norm_A = fla_lapack_slange("1", &n, &n, A, &lda, work);
-
-            if(same_char(*compq, 'V'))
-            {
-                /* Compute Q_tmp = Q**T * Q_test
-                   Compute lambda = Q**T * Q_test * H */
-                sgemm_("T", "N", &n, &n, &n, &s_one, Q, &ldq, Q_test, &ldq, &s_zero, Q_tmp, &n);
-                sgemm_("N", "N", &n, &n, &n, &s_one, Q_tmp, &n, A_test, &lda, &s_zero, lambda, &n);
-            }
-            else
-            {
-                /* Compute lambda = Q_test * H */
-                sgemm_("N", "N", &n, &n, &n, &s_one, Q_test, &ldq, A_test, &lda, &s_zero, lambda,
-                       &n);
-            }
-            if(same_char(*compz, 'V'))
-            {
-                /* Compute Z_tmp = Z_test**T * Z
-                   Compute A = A - lambda * Z_test**T * Z */
-                sgemm_("T", "N", &n, &n, &n, &s_one, Z_test, &ldz, Z, &ldz, &s_zero, Z_tmp, &n);
-                sgemm_("N", "N", &n, &n, &n, &s_one, lambda, &n, Z_tmp, &n, &s_n_one, A, &lda);
-            }
-            else
-            {
-                /* Compute A = A - lambda * Z_test**T */
-                sgemm_("N", "T", &n, &n, &n, &s_one, lambda, &n, Z_test, &ldz, &s_n_one, A, &lda);
-            }
+            sgemm_("N", "N", &n, &n, &n, &s_one, Q_test, &ldq, A_test, &lda, &s_zero, lambda, &n);
+            sgemm_("N", "T", &n, &n, &n, &s_one, lambda, &n, Z_test, &ldz, &s_zero, alambda, &n);
+            sgemm_("T", "N", &n, &n, &n, &s_one, Q, &ldq, alambda, &n, &s_zero, lambda, &n);
+            sgemm_("N", "N", &n, &n, &n, &s_one, lambda, &n, Z, &ldz, &s_n_one, A, &lda);
             norm = fla_lapack_slange("1", &n, &n, A, &lda, work);
-            resid[2] = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
+            resid1 = norm /( eps * norm_A * (float)n);
 
             /* Test 2
-                | B - Q**T * Q_test *  T * Z_test**T * Z  | / ( |B| n ulp ) */
+                | B - Q T Z**T  | / ( |B| n ulp ) */
             norm_T = fla_lapack_slange("1", &n, &n, B, &ldb, work);
-            if(same_char(*compq, 'V'))
-            {
-                /* Compute lambda = Q_tmp * T */
-                sgemm_("N", "N", &n, &n, &n, &s_one, Q_tmp, &n, B_test, &ldb, &s_zero, lambda, &n);
-            }
-            else
-            {
-                /* Compute lambda = Q_test * T */
-                sgemm_("N", "N", &n, &n, &n, &s_one, Q_test, &ldq, B_test, &ldb, &s_zero, lambda,
-                       &n);
-            }
-            if(same_char(*compz, 'V'))
-            {
-                /* Compute B = B - lambda * Z_tmp */
-                sgemm_("N", "N", &n, &n, &n, &s_one, lambda, &n, Z_tmp, &n, &s_n_one, B, &ldb);
-            }
-            else
-            {
-                /* Compute B = B - lambda * Z_test**T */
-                sgemm_("N", "T", &n, &n, &n, &s_one, lambda, &n, Z_test, &ldz, &s_n_one, B, &ldb);
-            }
+            sgemm_("N", "N", &n, &n, &n, &s_one, Q_test, &ldq, B_test, &ldb, &s_zero, lambda, &n);
+            sgemm_("N", "T", &n, &n, &n, &s_one, lambda, &n, Z_test, &ldz, &s_zero, alambda, &n);
+            sgemm_("T", "N", &n, &n, &n, &s_one, Q, &ldq, alambda, &n, &s_zero, lambda, &n);
+            sgemm_("N", "N", &n, &n, &n, &s_one, lambda, &n, Z, &ldz, &s_n_one, B, &ldb);
             norm = fla_lapack_slange("1", &n, &n, B, &ldb, work);
-            resid[3] = fla_compute_residual(datatype, 'P', norm, norm_T, n, params);
+            resid2 = norm /( eps * norm_T * (float)n);
 
             /* Test 3
-                compute norm(I - Z_test'*Z_test) / (N * EPS)*/
-            resid[4] = (float)check_orthogonality(datatype, Z_test, n, n, ldz, params);
+                compute norm(I - Z'*Z) / (N * EPS)*/
+            resid3 = (float)check_orthogonality(datatype, Z, n, n, ldz);
 
             /* Test 4
-                compute norm(I - Q_test'*Q_test) / (N * EPS)*/
-            resid[5] = (float)check_orthogonality(datatype, Q_test, n, n, ldq, params);
+                compute norm(I - Q'*Q) / (N * EPS)*/
+            resid4 = (float)check_orthogonality(datatype, Q, n, n, ldq);
 
+            res_max = (double)fla_max(resid1, resid2);
+            res_max1 = (double)fla_max(resid3, resid4);
+            *residual = (double)fla_max(res_max, res_max1);
             break;
         }
         case DOUBLE:
         {
-            double norm, norm_A, norm_B;
+            double norm, norm_A, norm_B, eps, resid1, resid2, resid3, resid4;
+            double res_max, res_max1;
+            eps = fla_lapack_dlamch("P");
 
             /* Test 1
-                | A - Q**T * Q_test * H  * Z_test**T * Z  | / ( |A| n ulp ) */
+                | A - Q H Z**T  | / ( |A| n ulp ) */
             norm_A = fla_lapack_dlange("1", &n, &n, A, &lda, work);
-
-            if(same_char(*compq, 'V'))
-            {
-                /* Compute Q_tmp = Q**T * Q_test
-                   Compute lambda = Q**T * Q_test * H */
-                dgemm_("T", "N", &n, &n, &n, &d_one, Q, &ldq, Q_test, &ldq, &d_zero, Q_tmp, &n);
-                dgemm_("N", "N", &n, &n, &n, &d_one, Q_tmp, &n, A_test, &lda, &d_zero, lambda, &n);
-            }
-            else
-            {
-                /* Compute lambda = Q_test * H */
-                dgemm_("N", "N", &n, &n, &n, &d_one, Q_test, &ldq, A_test, &lda, &d_zero, lambda,
-                       &n);
-            }
-            if(same_char(*compz, 'V'))
-            {
-                /* Compute Z_tmp = Z_test**T * Z
-                   Compute A = A - lambda * Z_test**T * Z */
-                dgemm_("T", "N", &n, &n, &n, &d_one, Z_test, &ldz, Z, &ldz, &d_zero, Z_tmp, &n);
-                dgemm_("N", "N", &n, &n, &n, &d_one, lambda, &n, Z_tmp, &n, &d_n_one, A, &lda);
-            }
-            else
-            {
-                /* Compute A = A - lambda * Z_test**T */
-                dgemm_("N", "T", &n, &n, &n, &d_one, lambda, &n, Z_test, &ldz, &d_n_one, A, &lda);
-            }
+            dgemm_("N", "N", &n, &n, &n, &d_one, Q_test, &ldq, A_test, &lda, &d_zero, lambda, &n);
+            dgemm_("N", "T", &n, &n, &n, &d_one, lambda, &n, Z_test, &ldz, &d_zero, alambda, &n);
+            dgemm_("T", "N", &n, &n, &n, &d_one, Q, &ldq, alambda, &n, &d_zero, lambda, &n);
+            dgemm_("N", "N", &n, &n, &n, &d_one, lambda, &n, Z, &ldz, &d_n_one, A, &lda);
             norm = fla_lapack_dlange("1", &n, &n, A, &lda, work);
-            resid[2] = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
+            resid1 = norm /( eps * norm_A * (float)n);
 
             /* Test 2
-                | B - Q**H * Q_test *  T * Z_test**H * Z  | / ( |B| n ulp ) */
+                | B - Q T Z**T  | / ( |B| n ulp ) */
             norm_B = fla_lapack_dlange("1", &n, &n, B, &ldb, work);
-            if(same_char(*compq, 'V'))
-            {
-                /* Compute lambda = Q_tmp * T */
-                dgemm_("N", "N", &n, &n, &n, &d_one, Q_tmp, &n, B_test, &ldb, &d_zero, lambda, &n);
-            }
-            else
-            {
-                /* Compute lambda = Q_test * T */
-                dgemm_("N", "N", &n, &n, &n, &d_one, Q_test, &ldq, B_test, &ldb, &d_zero, lambda,
-                       &n);
-            }
-            if(same_char(*compz, 'V'))
-            {
-                /* Compute B = B - lambda * Z_tmp */
-                dgemm_("N", "N", &n, &n, &n, &d_one, lambda, &n, Z_tmp, &n, &d_n_one, B, &ldb);
-            }
-            else
-            {
-                /* Compute B = B - lambda * Z_test**T */
-                dgemm_("N", "T", &n, &n, &n, &d_one, lambda, &n, Z_test, &ldz, &d_n_one, B, &ldb);
-            }
+            dgemm_("N", "N", &n, &n, &n, &d_one, Q_test, &ldq, B_test, &ldb, &d_zero, lambda, &n);
+            dgemm_("N", "T", &n, &n, &n, &d_one, lambda, &n, Z_test, &ldz, &d_zero, alambda, &n);
+            dgemm_("T", "N", &n, &n, &n, &d_one, Q, &ldq, alambda, &n, &d_zero, lambda, &n);
+            dgemm_("N", "N", &n, &n, &n, &d_one, lambda, &n, Z, &ldz, &d_n_one, B, &ldb);
             norm = fla_lapack_dlange("1", &n, &n, B, &ldb, work);
-            resid[3] = fla_compute_residual(datatype, 'P', norm, norm_B, n, params);
+            resid2 = norm /( eps * norm_B * (float)n);
 
             /* Test 3
-                compute norm(I - Z_test'*Z_test) / (N * EPS)*/
-            resid[4] = check_orthogonality(datatype, Z_test, n, n, ldz, params);
+                compute norm(I - Z'*Z) / (N * EPS)*/
+            resid3 = check_orthogonality(datatype, Z, n, n, ldz);
 
             /* Test 4
-                compute norm(I - Q_test'*Q_test) / (N * EPS)*/
-            resid[5] = check_orthogonality(datatype, Q_test, n, n, ldq, params);
+                compute norm(I - Q'*Q) / (N * EPS)*/
+            resid4 = check_orthogonality(datatype, Q, n, n, ldq);
 
+            res_max = (double)fla_max(resid1, resid2);
+            res_max1 = (double)fla_max(resid3, resid4);
+            *residual = (double)fla_max(res_max, res_max1);
             break;
-        }
+        }        
         case COMPLEX:
         {
-            float norm, norm_A, norm_B;
+            float norm, norm_A, norm_B, eps, resid1, resid2, resid3, resid4;
+            double res_max, res_max1;
+            eps = fla_lapack_slamch("P");
 
             /* Test 1
-                | A - Q**H * Q_test * H  * Z_test**H * Z  | / ( |A| n ulp ) */
+                | A - Q H Z**T  | / ( |A| n ulp ) */
             norm_A = fla_lapack_clange("1", &n, &n, A, &lda, work);
-            if(same_char(*compq, 'V'))
-            {
-                /* Compute Q_tmp = Q**H * Q_test
-                   Compute lambda = Q**H * Q_test * H */
-                cgemm_("C", "N", &n, &n, &n, &c_one, Q, &ldq, Q_test, &ldq, &c_zero, Q_tmp, &n);
-                cgemm_("N", "N", &n, &n, &n, &c_one, Q_tmp, &n, A_test, &lda, &c_zero, lambda, &n);
-            }
-            else
-            {
-                /* Compute lambda = Q_test * H */
-                cgemm_("N", "N", &n, &n, &n, &c_one, Q_test, &ldq, A_test, &lda, &c_zero, lambda,
-                       &n);
-            }
-            if(same_char(*compz, 'V'))
-            {
-                /* Compute Z_tmp = Z_test**H * Z
-                   Compute A = A - lambda * Z_test**H * Z */
-                cgemm_("C", "N", &n, &n, &n, &c_one, Z_test, &ldz, Z, &ldz, &c_zero, Z_tmp, &n);
-                cgemm_("N", "N", &n, &n, &n, &c_one, lambda, &n, Z_tmp, &n, &c_n_one, A, &lda);
-            }
-            else
-            {
-                /* Compute A = A - lambda * Z_test**H */
-                cgemm_("N", "C", &n, &n, &n, &c_one, lambda, &n, Z_test, &ldz, &c_n_one, A, &lda);
-            }
+            cgemm_("N", "N", &n, &n, &n, &c_one, Q_test, &ldq, A_test, &lda, &c_zero, lambda, &n);
+            cgemm_("N", "C", &n, &n, &n, &c_one, lambda, &n, Z_test, &ldz, &c_zero, alambda, &n);
+            cgemm_("C", "N", &n, &n, &n, &c_one, Q, &ldq, alambda, &n, &c_zero, lambda, &n);
+            cgemm_("N", "N", &n, &n, &n, &c_one, lambda, &n, Z, &ldz, &c_n_one, A, &lda);
             norm = fla_lapack_clange("1", &n, &n, A, &lda, work);
-            resid[2] = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
+            resid1 = norm /( eps * norm_A * (float)n);
+            
 
             /* Test 2
-                | B - Q**H * Q_test *  T * Z_test**H * Z  | / ( |B| n ulp ) */
+                | B - Q T Z**T  | / ( |B| n ulp ) */
             norm_B = fla_lapack_clange("1", &n, &n, B, &ldb, work);
-            if(same_char(*compq, 'V'))
-            {
-                /* Compute lambda = Q_tmp * T */
-                cgemm_("N", "N", &n, &n, &n, &c_one, Q_tmp, &n, B_test, &ldb, &c_zero, lambda, &n);
-            }
-            else
-            {
-                /* Compute lambda = Q_test * T */
-                cgemm_("N", "N", &n, &n, &n, &c_one, Q_test, &ldq, B_test, &ldb, &c_zero, lambda,
-                       &n);
-            }
-            if(same_char(*compz, 'V'))
-            {
-                /* Compute B = B - lambda * Z_tmp */
-                cgemm_("N", "N", &n, &n, &n, &c_one, lambda, &n, Z_tmp, &n, &c_n_one, B, &ldb);
-            }
-            else
-            {
-                /* Compute B = B - lambda * Z_test**H */
-                cgemm_("N", "C", &n, &n, &n, &c_one, lambda, &n, Z_test, &ldz, &c_n_one, B, &ldb);
-            }
+            cgemm_("N", "N", &n, &n, &n, &c_one, Q_test, &ldq, B_test, &ldb, &c_zero, lambda, &n);
+            cgemm_("N", "C", &n, &n, &n, &c_one, lambda, &n, Z_test, &ldz, &c_zero, alambda, &n);
+            cgemm_("C", "N", &n, &n, &n, &c_one, Q, &ldq, alambda, &n, &c_zero, lambda, &n);
+            cgemm_("N", "N", &n, &n, &n, &c_one, lambda, &n, Z, &ldz, &c_n_one, B, &ldb);
             norm = fla_lapack_clange("1", &n, &n, B, &ldb, work);
-            resid[3] = fla_compute_residual(datatype, 'P', norm, norm_B, n, params);
+            resid2 = norm /( eps * norm_B * (float)n);
 
             /* Test 3
-                compute norm(I - Z_test'*Z_test) / (N * EPS)*/
-            resid[4] = (float)check_orthogonality(datatype, Z_test, n, n, ldz, params);
+                compute norm(I - Z'*Z) / (N * EPS)*/
+            resid3 = (float)check_orthogonality(datatype, Z, n, n, ldz);
 
             /* Test 4
-                compute norm(I - Q_test'*Q_test) / (N * EPS)*/
-            resid[5] = (float)check_orthogonality(datatype, Q_test, n, n, ldq, params);
+                compute norm(I - Q'*Q) / (N * EPS)*/
+            resid4 = (float)check_orthogonality(datatype, Q, n, n, ldq);
 
-            break;
+            res_max = (double)fla_max(resid1, resid2);
+            res_max1 = (double)fla_max(resid3, resid4);
+            *residual = (double)fla_max(res_max, res_max1);
+            break;   
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_A, norm_B;
+            double norm, norm_A, norm_B, eps, resid1, resid2, resid3, resid4;
+            double res_max, res_max1;
+            eps = fla_lapack_dlamch("P");
 
             /* Test 1
-                | A - Q**H * Q_test * H  * Z_test**H * Z  | / ( |A| n ulp ) */
+                | A - Q H Z**T  | / ( |A| n ulp ) */
             norm_A = fla_lapack_zlange("1", &n, &n, A, &lda, work);
-            if(same_char(*compq, 'V'))
-            {
-                /* Compute Q_tmp = Q**H * Q_test
-                   Compute lambda = Q**H * Q_test * H */
-                zgemm_("C", "N", &n, &n, &n, &z_one, Q, &ldq, Q_test, &ldq, &z_zero, Q_tmp, &n);
-                zgemm_("N", "N", &n, &n, &n, &z_one, Q_tmp, &n, A_test, &lda, &z_zero, lambda, &n);
-            }
-            else
-            {
-                /* Compute lambda = Q_test * H */
-                zgemm_("N", "N", &n, &n, &n, &z_one, Q_test, &ldq, A_test, &lda, &z_zero, lambda,
-                       &n);
-            }
-            if(same_char(*compz, 'V'))
-            {
-                /* Compute Z_tmp = Z_test**H * Z
-                   Compute A = A - lambda * Z_test**H * Z */
-                zgemm_("C", "N", &n, &n, &n, &z_one, Z_test, &ldz, Z, &ldz, &z_zero, Z_tmp, &n);
-                zgemm_("N", "N", &n, &n, &n, &z_one, lambda, &n, Z_tmp, &n, &z_n_one, A, &lda);
-            }
-            else
-            {
-                /* Compute A = A - lambda * Z_test**H */
-                zgemm_("N", "C", &n, &n, &n, &z_one, lambda, &n, Z_test, &ldz, &z_n_one, A, &lda);
-            }
+            zgemm_("N", "N", &n, &n, &n, &z_one, Q_test, &ldq, A_test, &lda, &z_zero, lambda, &n);
+            zgemm_("N", "C", &n, &n, &n, &z_one, lambda, &n, Z_test, &ldz, &z_zero, alambda, &n);
+            zgemm_("C", "N", &n, &n, &n, &z_one, Q, &ldq, alambda, &n, &z_zero, lambda, &n);
+            zgemm_("N", "N", &n, &n, &n, &z_one, lambda, &n, Z, &ldz, &z_n_one, A, &lda);
             norm = fla_lapack_zlange("1", &n, &n, A, &lda, work);
-            resid[2] = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
+            resid1 = norm /( eps * norm_A * (float)n);
 
             /* Test 2
-                | B - Q**H * Q_test *  T * Z_test**H * Z  | / ( |B| n ulp ) */
+                | B - Q T Z**T  | / ( |B| n ulp ) */
             norm_B = fla_lapack_zlange("1", &n, &n, B, &ldb, work);
-            if(same_char(*compq, 'V'))
-            {
-                /* Compute lambda = Q_tmp * T */
-                zgemm_("N", "N", &n, &n, &n, &z_one, Q_tmp, &n, B_test, &ldb, &z_zero, lambda, &n);
-            }
-            else
-            {
-                /* Compute lambda = Q_test * T */
-                zgemm_("N", "N", &n, &n, &n, &z_one, Q_test, &ldq, B_test, &ldb, &z_zero, lambda,
-                       &n);
-            }
-            if(same_char(*compz, 'V'))
-            {
-                /* Compute B = B - lambda * Z_tmp */
-                zgemm_("N", "N", &n, &n, &n, &z_one, lambda, &n, Z_tmp, &n, &z_n_one, B, &ldb);
-            }
-            else
-            {
-                /* Compute B = B - lambda * Z_test**H */
-                zgemm_("N", "C", &n, &n, &n, &z_one, lambda, &n, Z_test, &ldz, &z_n_one, B, &ldb);
-            }
+            zgemm_("N", "N", &n, &n, &n, &z_one, Q_test, &ldq, B_test, &ldb, &z_zero, lambda, &n);
+            zgemm_("N", "C", &n, &n, &n, &z_one, lambda, &n, Z_test, &ldz, &z_zero, alambda, &n);
+            zgemm_("C", "N", &n, &n, &n, &z_one, Q, &ldq, alambda, &n, &z_zero, lambda, &n);
+            zgemm_("N", "N", &n, &n, &n, &z_one, lambda, &n, Z, &ldz, &z_n_one, B, &ldb);
             norm = fla_lapack_zlange("1", &n, &n, B, &ldb, work);
-            resid[3] = fla_compute_residual(datatype, 'P', norm, norm_B, n, params);
+            resid2 = norm /( eps * norm_B * (float)n);
 
             /* Test 3
-                compute norm(I - Z_test'*Z_test) / (N * EPS)*/
-            resid[4] = check_orthogonality(datatype, Z_test, n, n, ldz, params);
+                compute norm(I - Z'*Z) / (N * EPS)*/
+            resid3 = check_orthogonality(datatype, Z, n, n, ldz);
 
             /* Test 4
-                compute norm(I - Q_test'*Q_test) / (N * EPS)*/
-            resid[5] = check_orthogonality(datatype, Q_test, n, n, ldq, params);
+                compute norm(I - Q'*Q) / (N * EPS)*/
+            resid4 = check_orthogonality(datatype, Q, n, n, ldq);
 
+            res_max = (double)fla_max(resid1, resid2);
+            res_max1 = (double)fla_max(resid3, resid4);
+            *residual = (double)fla_max(res_max, res_max1);
             break;
         }
     }
-
     free_matrix(lambda);
     free_matrix(alambda);
-    free_matrix(Q_tmp);
-    free_matrix(Z_tmp);
-}
-
-void validate_gghrd(char *tst_api, char *compq, char *compz, integer n, void *A, void *A_test,
-                    integer lda, void *B, void *B_test, integer ldb, void *Q, void *Q_test,
-                    integer ldq, void *Z, void *Z_test, integer ldz, integer datatype,
-                    double err_thresh, void *params)
-{
-    double residual, resid[10];
-
-    /* Early return conditions */
-    if(n == 0)
-    {
-        FLA_TEST_PRINT_STATUS_AND_RETURN(n, n, err_thresh);
-    }
-    /* print overall status if incoming threshold is
-     * an extreme value indicating that API returned
-     * unexpected info value */
-    FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
-
-    resid[0] = resid[1] = resid[2] = 0.;
-    resid[3] = resid[4] = resid[5] = resid[6] = 0.;
-    resid[7] = resid[8] = resid[9] = 0.;
-    validate_gghrd_int(tst_api, compq, compz, n, A, A_test, lda, B, B_test, ldb, Q, Q_test, ldq, Z,
-                       Z_test, ldz, datatype, resid, params);
-
-    /* Test 7: Check padding rows of A not modified */
-    resid[6] = check_padding(datatype, n, n, A_test, lda);
-    /* Test 8: Check padding rows of B not modified */
-    resid[7] = check_padding(datatype, n, n, B_test, ldb);
-    /* Test 9: Check padding rows of Q not modified */
-    resid[8] = check_padding(datatype, n, n, Q_test, ldq);
-    /* Test 10: Check padding rows of Z not modified */
-    resid[9] = check_padding(datatype, n, n, Z_test, ldz);
-
-    residual = fla_test_max(resid[0], resid[1]);
-    residual = fla_test_max(residual, resid[2]);
-    residual = fla_test_max(residual, resid[3]);
-    residual = fla_test_max(residual, resid[4]);
-    residual = fla_test_max(residual, resid[5]);
-    residual = fla_test_max(residual, resid[6]);
-    residual = fla_test_max(residual, resid[7]);
-    residual = fla_test_max(residual, resid[8]);
-    residual = fla_test_max(residual, resid[9]);
-
-    FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(resid[0], err_thresh, "01");
-    FLA_PRINT_SUBTEST_STATUS(resid[1], err_thresh, "02");
-    FLA_PRINT_SUBTEST_STATUS(resid[2], err_thresh, "03");
-    FLA_PRINT_SUBTEST_STATUS(resid[3], err_thresh, "04");
-    FLA_PRINT_SUBTEST_STATUS(resid[4], err_thresh, "05");
-    FLA_PRINT_SUBTEST_STATUS(resid[5], err_thresh, "06");
-    FLA_PRINT_SUBTEST_STATUS(resid[6], err_thresh, "07");
-    FLA_PRINT_SUBTEST_STATUS(resid[7], err_thresh, "08");
-    FLA_PRINT_SUBTEST_STATUS(resid[8], err_thresh, "09");
-    FLA_PRINT_SUBTEST_STATUS(resid[9], err_thresh, "10");
 }

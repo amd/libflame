@@ -304,7 +304,7 @@ void chseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
              aocl_int_t *lwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"chseqr inputs: job %c, compz %c, n %lld, ilo %lld, ihi %lld, ldh %lld, ldz %lld, lwork %lld",*job, *compz, *n, *ilo, *ihi, *ldh, *ldz, *lwork);

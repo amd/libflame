@@ -155,7 +155,7 @@ void cupmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
              scomplex *tau, scomplex *c__, aocl_int_t *ldc, scomplex *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
     snprintf(buffer, 256,"cupmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *uplo, *trans, *m, *n, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

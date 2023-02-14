@@ -232,7 +232,7 @@ the routine */
 void cgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, scomplex *alpha, scomplex *beta, scomplex *vsl, aocl_int_t *ldvsl, scomplex *vsr, aocl_int_t *ldvsr, scomplex *work, aocl_int_t *lwork, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgegs inputs: jobvsl %c, jobvsr %c, n %lld, lda %lld, ldb %lld, ldvsl %lld, ldvsr %lld, lwork %lld",*jobvsl, *jobvsr, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork);

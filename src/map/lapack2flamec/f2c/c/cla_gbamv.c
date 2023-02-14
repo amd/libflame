@@ -186,7 +186,7 @@ void cla_gbamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl,
                 real *beta, real *y, aocl_int_t *incy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cla_gbamv inputs: trans %lld, m %lld, n %lld, kl %lld, ku %lld, ldab %lld, incx %lld, incy %lld",*trans, *m, *n, *kl, *ku, *ldab, *incx, *incy);

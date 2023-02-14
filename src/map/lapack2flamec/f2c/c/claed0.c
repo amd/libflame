@@ -150,7 +150,7 @@ void claed0_(aocl_int_t *qsiz, aocl_int_t *n, real *d__, real *e, scomplex *q, a
              scomplex *qstore, aocl_int_t *ldqs, real *rwork, aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"claed0 inputs: qsiz %lld, n %lld, ldq %lld, ldqs %lld",*qsiz, *n, *ldq, *ldqs);

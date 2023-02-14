@@ -191,7 +191,7 @@ void slarzt_(char *direct, char *storev, aocl_int_t *n, aocl_int_t *k, real *v, 
              real *tau, real *t, aocl_int_t *ldt)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
     snprintf(buffer, 256,"slarzt inputs: direct %c, storev %c, n %d, k %d, ldv %d, ldt %d",*direct, *storev, *n, *k, *ldv, *ldt);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

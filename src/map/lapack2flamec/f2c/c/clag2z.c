@@ -108,7 +108,7 @@ void clag2z_(aocl_int_t *m, aocl_int_t *n, scomplex *sa, aocl_int_t *ldsa, dcomp
              aocl_int_t *lda, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clag2z inputs: m %lld, n %lld, ldsa %lld, lda %lld",*m, *n, *ldsa, *lda);

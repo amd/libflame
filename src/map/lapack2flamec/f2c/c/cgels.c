@@ -197,7 +197,7 @@ void cgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, scomple
             aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgels inputs: trans %c, m %lld, n %lld, nrhs %lld, lda %lld, ldb %lld, lwork %lld",*trans, *m, *n, *nrhs, *lda, *ldb, *lwork);

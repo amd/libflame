@@ -187,7 +187,7 @@ void strrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
              real *berr, real *work, aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
     snprintf(buffer, 256,"strrfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *trans, *diag, *n, *nrhs, *lda, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

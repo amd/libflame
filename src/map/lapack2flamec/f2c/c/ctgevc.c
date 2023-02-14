@@ -230,7 +230,7 @@ void ctgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, scomplex 
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctgevc inputs: side %c, howmny %c, n %lld, lds %lld, ldp %lld, ldvl %lld, ldvr %lld, mm %lld",*side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm);

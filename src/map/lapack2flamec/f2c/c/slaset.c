@@ -112,7 +112,7 @@ void slaset_(char *uplo, aocl_int_t *m, aocl_int_t *n, real *alpha, real *beta, 
              aocl_int_t *lda)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
     snprintf(buffer, 256,"slaset inputs: uplo %c, m %d, n %d, lda %d",*uplo, *m, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

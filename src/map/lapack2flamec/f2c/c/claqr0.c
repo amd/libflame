@@ -249,7 +249,7 @@ void claqr0_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
              scomplex *z__, aocl_int_t *ldz, scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"claqr0 inputs: n %lld, ilo %lld, ihi %lld, ldh %lld, iloz %lld, ihiz %lld, ldz %lld, lwork %lld",*n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz, *lwork);

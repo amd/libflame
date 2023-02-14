@@ -552,7 +552,7 @@ void cgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, scomplex *a, i
               integer *nparams, real *params, scomplex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgesvxx inputs: fact %c, trans %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, equed %c, ldb %lld, ldx %lld, n_err_bnds__ %lld, nparams %lld",*fact, *trans, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx, *n_err_bnds__, *nparams);

@@ -168,7 +168,7 @@ void chfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k,
             scomplex *a, aocl_int_t *lda, real *beta, scomplex *c__)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"chfrk inputs: transr %c, uplo %c, trans %c, n %lld, k %lld, lda %lld",*transr, *uplo, *trans, *n, *k, *lda);

@@ -148,7 +148,7 @@ void ctbcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, aocl_int_t *kd, 
              aocl_int_t *ldab, real *rcond, scomplex *work, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctbcon inputs: norm %c, uplo %c, diag %c, n %lld, kd %lld, ldab %lld",*norm, *uplo, *diag, *n, *kd, *ldab);

@@ -176,7 +176,7 @@ void ssbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, ao
              real *d__, real *e, real *q, aocl_int_t *ldq, real *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
     snprintf(buffer, 256,"ssbtrd inputs: vect %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", ldq %" FLA_IS "",*vect, *uplo, *n, *kd, *ldab, *ldq);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

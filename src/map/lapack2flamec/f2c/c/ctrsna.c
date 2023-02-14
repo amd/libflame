@@ -257,7 +257,7 @@ void ctrsna_(char *job, char *howmny, logical *select, aocl_int_t *n, scomplex *
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctrsna inputs: job %c, howmny %c, n %lld, ldt %lld, ldvl %lld, ldvr %lld, mm %lld, ldwork %lld",*job, *howmny, *n, *ldt, *ldvl, *ldvr, *mm, *ldwork);

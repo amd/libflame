@@ -90,7 +90,7 @@
 void clascl2_(aocl_int_t *m, aocl_int_t *n, real *d__, scomplex *x, aocl_int_t *ldx)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clascl2 inputs: m %lld, n %lld, ldx %lld",*m, *n, *ldx);

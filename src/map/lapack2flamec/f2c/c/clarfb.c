@@ -203,7 +203,7 @@ void clarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
              aocl_int_t *ldc, scomplex *work, aocl_int_t *ldwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"clarfb inputs: side %c, trans %c, direct %c, storev %c, m %lld, n %lld, k %lld, ldv %lld, ldt %lld, ldc %lld, ldwork %lld",*side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc, *ldwork);

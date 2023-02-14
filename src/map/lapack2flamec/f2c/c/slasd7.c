@@ -286,7 +286,7 @@ void slasd7_(aocl_int_t *icompq, aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqr
              real *givnum, aocl_int_t *ldgnum, real *c__, real *s, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
     snprintf(buffer, 256,"slasd7 inputs: icompq %d, nl %d, nr %d, sqre %d, idxq %d, ldgcol %d, ldgnum %d",*icompq, *nl, *nr, *sqre,  *idxq,  *ldgcol, *ldgnum);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

@@ -341,7 +341,7 @@ LDQ >= 1 otherwise. */
 void cggsvd_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, aocl_int_t *k, aocl_int_t *l, scomplex *a, aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, real *alpha, real *beta, scomplex *u, aocl_int_t *ldu, scomplex *v, aocl_int_t *ldv, scomplex *q, aocl_int_t *ldq, scomplex *work, real *rwork, aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cggsvd inputs: jobu %c, jobv %c, jobq %c, m %lld, n %lld, p %lld, lda %lld, ldb %lld, ldu %lld, ldv %lld, ldq %lld",*jobu, *jobv, *jobq, *m, *n, *p, *lda, *ldb, *ldu, *ldv, *ldq);

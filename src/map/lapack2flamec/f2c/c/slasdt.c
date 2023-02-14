@@ -105,7 +105,7 @@ void slasdt_(aocl_int_t *n, aocl_int_t *lvl, aocl_int_t *nd, aocl_int_t *inode, 
              aocl_int_t *ndimr, aocl_int_t *msub)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
     snprintf(buffer, 256,"slasdt inputs: n %d, ndiml %d, ndimr %d, msub %d",*n,  *ndiml, *ndimr, *msub);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

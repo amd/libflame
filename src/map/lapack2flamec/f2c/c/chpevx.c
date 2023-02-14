@@ -250,7 +250,7 @@ void chpevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, scomplex *ap, r
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"chpevx inputs: jobz %c, range %c, uplo %c, n %lld, il %lld, iu %lld, m %lld, ldz %lld",*jobz, *range, *uplo, *n, *il, *iu, *m, *ldz);

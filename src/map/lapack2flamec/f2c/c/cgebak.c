@@ -134,7 +134,7 @@ void cgebak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *
              aocl_int_t *m, scomplex *v, aocl_int_t *ldv, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgebak inputs: job %c, side %c, n %lld, ilo %lld, ihi %lld, m %lld, ldv %lld",*job, *side, *n, *ilo, *ihi, *m, *ldv);

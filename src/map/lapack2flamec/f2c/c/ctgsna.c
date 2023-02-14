@@ -324,7 +324,7 @@ void ctgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, scomplex *
              aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctgsna inputs: job %c, howmny %c, n %lld, lda %lld, ldb %lld, ldvl %lld, ldvr %lld, mm %lld, m %lld, lwork %lld",*job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *m, *lwork);

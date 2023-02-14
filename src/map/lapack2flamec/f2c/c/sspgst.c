@@ -119,7 +119,7 @@ static real c_b11 = 1.f;
 void sspgst_(aocl_int_t *itype, char *uplo, aocl_int_t *n, real *ap, real *bp, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
     snprintf(buffer, 256,"sspgst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS "",*itype, *uplo, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

@@ -390,7 +390,7 @@ void cggevx_(char *balanc, char *jobvl, char *jobvr, char *sense, aocl_int_t *n,
              logical *bwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cggevx inputs: balanc %c, jobvl %c, jobvr %c, sense %c, n %lld, lda %lld, ldb %lld, ldvl %lld, ldvr %lld, lwork %lld",*balanc, *jobvl, *jobvr, *sense, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);

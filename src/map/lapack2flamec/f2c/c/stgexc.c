@@ -227,7 +227,7 @@ void stgexc_(logical *wantq, logical *wantz, aocl_int_t *n, real *a, aocl_int_t 
              aocl_int_t *ifst, aocl_int_t *ilst, real *work, aocl_int_t *lwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
     snprintf(buffer, 256,"stgexc inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS "",*n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

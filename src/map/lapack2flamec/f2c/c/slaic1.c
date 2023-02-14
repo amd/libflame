@@ -137,7 +137,7 @@ void slaic1_(aocl_int_t *job, aocl_int_t *j, real *x, real *sest, real *w, real 
              real *sestpr, real *s, real *c__)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
     snprintf(buffer, 256,"slaic1_ inputs: *job %d, *j %d",*job, *j);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

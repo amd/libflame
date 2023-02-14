@@ -373,7 +373,7 @@ void cheevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, scomplex *a, ao
              aocl_int_t *liwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cheevr inputs: jobz %c, range %c, uplo %c, n %lld, lda %lld, il %lld, iu %lld, ldz %lld, lwork %lld, lrwork %lld, liwrok %lld",*jobz, *range, *uplo, *n, *lda, *il, *iu, *ldz, *lwork, *lrwork, *liwork);

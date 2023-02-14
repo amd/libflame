@@ -271,7 +271,7 @@ void sstebz_(char *range, char *order, aocl_int_t *n, real *vl, real *vu, aocl_i
              aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
     snprintf(buffer, 256,"sstebz inputs: range %c, order %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS "",*range, *order, *n, *il, *iu);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

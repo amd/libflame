@@ -259,7 +259,7 @@ void sstegr_(char *jobz, char *range, aocl_int_t *n, real *d__, real *e, real *v
              aocl_int_t *liwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
     snprintf(buffer, 256,"sstegr inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", m %" FLA_IS ", ldz %" FLA_IS ", isuppz %" FLA_IS "",*jobz, *range, *n, *il, *iu, *m, *ldz, *isuppz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

@@ -111,7 +111,7 @@ aocl_int64_t aocl_lapack_iladlc(aocl_int64_t *m, aocl_int64_t *n, doublereal *a,
     /* .. Executable Statements .. */
     /* Logging and tracing code */
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
     sprintf(buffer, "iladlc inputs: m %d, n %d lda %d\n", *m, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

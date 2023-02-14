@@ -260,7 +260,7 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t 
              aocl_int_t *ifaill, aocl_int_t *ifailr, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"chsein inputs: side %c, eigsrc %c, initv %c, n %lld, ldh %lld, ldvl %lld, ldvr %lld, mm %lld",*side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);

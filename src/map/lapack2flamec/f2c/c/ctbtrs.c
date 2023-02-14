@@ -150,7 +150,7 @@ void ctbtrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
              scomplex *ab, aocl_int_t *ldab, scomplex *b, aocl_int_t *ldb, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"ctbtrs inputs: uplo %c, trans %c, diag %c, n %lld, kd %lld, nrhs %lld, ldab %lld, ldb %lld",*uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb);

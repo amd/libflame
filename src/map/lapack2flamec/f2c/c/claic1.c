@@ -137,7 +137,7 @@ void claic1_(aocl_int_t *job, aocl_int_t *j, scomplex *x, real *sest, scomplex *
              real *sestpr, scomplex *s, scomplex *c__)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"claic1 inputs: job %lld, j %lld",*job, *j);

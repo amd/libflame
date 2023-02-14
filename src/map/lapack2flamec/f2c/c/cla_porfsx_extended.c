@@ -409,7 +409,7 @@ void cla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
                           integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cla_porfsx_extended inputs: prec_type__ %lld, uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ldb %lld, ldy %lld, n_norms__ %lld, ithresh %lld",*prec_type__, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldy, *n_norms__, *ithresh);

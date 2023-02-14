@@ -115,7 +115,7 @@ real cla_gbrpvgrw_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *nc
                    aocl_int_t *ldab, scomplex *afb, aocl_int_t *ldafb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cla_gbrpvgrw inputs: n %lld, kl %lld, ku %lld, ncols %lld, ldab %lld, ldafb %lld",*n, *kl, *ku, *ncols, *ldab, *ldafb);

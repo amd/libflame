@@ -126,7 +126,7 @@ void cgeqr2p_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scompl
               scomplex *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgeqr2p inputs: m %lld, n %lld, lda %lld",*m, *n, *lda);

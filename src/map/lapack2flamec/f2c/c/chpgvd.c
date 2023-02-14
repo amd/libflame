@@ -235,7 +235,7 @@ void chpgvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex 
              aocl_int_t *lrwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"chpgvd inputs: itype %lld, jobz %c, uplo %c, n %lld, ldz %lld, lwork %lld, lrwork %lld, liwork %lld",*itype, *jobz, *uplo, *n, *ldz, *lwork, *lrwork, *liwork);

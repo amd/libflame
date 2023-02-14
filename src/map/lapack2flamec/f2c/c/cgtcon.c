@@ -145,7 +145,7 @@ void cgtcon_(char *norm, aocl_int_t *n, scomplex *dl, scomplex *d__, scomplex *d
              aocl_int_t *ipiv, real *anorm, real *rcond, scomplex *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cgtcon inputs: norm %c, n %lld",*norm, *n);

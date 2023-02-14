@@ -149,7 +149,7 @@ void claqp2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, scomplex *a, aocl
              aocl_int_t *jpvt, scomplex *tau, real *vn1, real *vn2, scomplex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"claqp2 inputs: m %lld, n %lld, offset %lld, lda %lld",*m, *n, *offset, *lda);

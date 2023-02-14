@@ -103,7 +103,7 @@ void csyswapr_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int
                aocl_int_t *i2)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"csyswapr inputs: uplo %c, n %lld, lda %lld, i1 %lld, i2 %lld",*uplo, *n, *lda, *i1, *i2);

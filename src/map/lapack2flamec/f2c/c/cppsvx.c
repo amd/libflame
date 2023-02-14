@@ -319,7 +319,7 @@ void cppsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *
              real *rcond, real *ferr, real *berr, scomplex *work, real *rwork, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cppsvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, equed %c, ldb %lld, ldx %lld",*fact, *uplo, *n, *nrhs, *equed, *ldb, *ldx);

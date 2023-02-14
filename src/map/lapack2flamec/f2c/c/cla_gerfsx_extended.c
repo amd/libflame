@@ -414,7 +414,7 @@ void cla_gerfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
                           logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"cla_gerfsx_extended inputs: prec_type__ %lld, trans_type__ %lld, n %lld, nrhs %lld, lda %lld, ldaf %lld, ldb %lld, ldy %lld, n_norms__ %lld, ithresh %lld",*prec_type__, *trans_type__, *n, *nrhs, *lda, *ldaf, *ldb, *ldy, *n_norms__, *ithresh);

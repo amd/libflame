@@ -276,7 +276,7 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
                 scomplex *y, aocl_int64_t *ldy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256, "clabrd inputs: m %lld, n %lld, nb %lld, lda %lld, ldx %lld, ldy %lld", *m, *n, *nb, *lda, *ldx, *ldy);

@@ -155,7 +155,7 @@ void sopmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
              real *c__, aocl_int_t *ldc, real *work, aocl_int_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
     snprintf(buffer, 256,"sopmtr inputs: side %c, uplo %c, trans %c, m %d, n %d, ldc %d",*side, *uplo, *trans, *m, *n, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);

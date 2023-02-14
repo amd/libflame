@@ -267,7 +267,7 @@ void claqr5_(logical *wantt, logical *wantz, aocl_int_t *kacc22, aocl_int_t *n, 
              aocl_int_t *ldwv, aocl_int_t *nh, scomplex *wh, aocl_int_t *ldwh)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if AOCL_DTL_LOG_ENABLE
+#if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
     snprintf(buffer, 256,"claqr5 inputs: kacc22 %lld, n %lld, ktop %lld, kbot %lld, nshfts %lld, ldh %lld, iloz %lld, ihiz %lld, ldz %lld, ldv %lld, ldu %lld, nv %lld, ldwv %lld, nh %lld, ldwh %lld",*kacc22, *n, *ktop, *kbot, *nshfts, *ldh, *iloz, *ihiz, *ldz, *ldv, *ldu, *nv, *ldwv, *nh, *ldwh);

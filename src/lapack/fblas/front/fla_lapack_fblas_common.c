@@ -12,7 +12,7 @@
 #ifdef FLA_ENABLE_AMD_OPT
 
 /* IDAMAX for small sizes (<= 128)*/
-fla_dim_t fla_idamax(fla_dim_t *n, doublereal *dx, fla_dim_t *incx)
+integer fla_idamax(integer *n, doublereal *dx, integer *incx)
 {
     return fla_idamax_small(n, dx, incx);
 }

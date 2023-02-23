@@ -35,80 +35,8 @@
   FLA_QR_UT_piv uses level 3 BLAS.
 */
 
-/** Generated wrapper function */
-void sgeqpf_(aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, real *buff_t, real *buff_w, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgeqpf(m, n, buff_A, ldim_A, buff_p, buff_t, buff_w, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgeqpf(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, buff_t, buff_w, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void dgeqpf_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, doublereal *buff_t, doublereal *buff_w, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgeqpf(m, n, buff_A, ldim_A, buff_p, buff_t, buff_w, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dgeqpf(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, buff_t, buff_w, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void sgeqp3_(aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, real *buff_t, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgeqp3(m, n, buff_A, ldim_A, buff_p, buff_t, buff_w, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgeqp3(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, buff_t, buff_w, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void dgeqp3_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, doublereal *buff_t, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgeqp3(m, n, buff_A, ldim_A, buff_p, buff_t, buff_w, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dgeqp3(&m_64, &n_64, buff_A, &ldim_A_64, buff_p, buff_t, buff_w, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-extern void sgeqpf_fla(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t *jpvt, real *tau,
-                       real *work, aocl_int64_t *info);
-extern void dgeqpf_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_int_t *jpvt,
-                       doublereal *tau, doublereal *work, aocl_int64_t *info);
+extern int sgeqpf_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, real *tau, real *work, integer *info);
+extern int dgeqpf_fla(integer *m, integer *n, doublereal *a, integer * lda, integer *jpvt, doublereal *tau, doublereal *work, integer *info);
 
 // GEQPF
 #define LAPACK_geqpf(prefix)                                            \
@@ -183,11 +111,11 @@ LAPACK_geqpf(s)
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
+#if !FLA_AMD_OPT
     {
         for(aocl_int64_t i = 0; i < *n; ++i)
             buff_p[i] = (i + 1);
     }
-#if !FLA_AMD_OPT
     {
         LAPACK_RETURN_CHECK_VAR1( sgeqpf_check( m, n,
                                            buff_A, ldim_A,
@@ -199,7 +127,7 @@ LAPACK_geqpf(s)
     if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_geqpf_body(s)
-            fla_error = 0;
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return fla_error;
@@ -222,11 +150,11 @@ LAPACK_geqpf(d)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
+    AOCL_DTL_SNPRINTF("dgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);    
+#if !FLA_AMD_OPT
     {
         for ( int i=0; i<*n; ++i) buff_p[i] = (i+1);
     }
-#if !FLA_AMD_OPT
     {
         LAPACK_RETURN_CHECK_VAR1( dgeqpf_check( m, n,
                                            buff_A, ldim_A,
@@ -238,7 +166,7 @@ LAPACK_geqpf(d)
     if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_geqpf_body(d)
-            fla_error = 0;
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return fla_error;

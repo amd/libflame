@@ -37,11 +37,6 @@
 #define cdotc_f2c_ cdotc_
 #define zdotc_f2c_ zdotc_
 
-/* Call F2C convention for Complex DOTC and DOTU unctions */
-#ifdef FLA_ENABLE_F2C_DOTC
-#define cdotc_f2c_ cdotc_
-#define zdotc_f2c_ zdotc_
-
 #define cdotu_f2c_ cdotu_
 #define zdotu_f2c_ zdotu_
 #endif

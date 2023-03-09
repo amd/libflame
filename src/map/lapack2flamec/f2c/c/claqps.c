@@ -197,7 +197,7 @@ void claqps_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, aocl_int_t *nb, a
     double sqrt(doublereal);
     void r_cnjg(complex *, complex *);
     double c_abs(complex *);
-    integer i_nint(real *);
+    integer fla_i_nint(real *);
     /* Local variables */
     aocl_int64_t j, k, rk;
     scomplex akk;

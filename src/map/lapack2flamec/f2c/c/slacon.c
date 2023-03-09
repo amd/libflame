@@ -137,6 +137,7 @@ void aocl_lapack_slacon(aocl_int64_t *n, real *v, real *x, aocl_int_t *isgn, rea
     real r__1;
     /* Builtin functions */
     double r_sign(real *, real *);
+    integer fla_i_nint(real *);
     /* Local variables */
     integer i__, j, iter;
     real temp;
@@ -251,7 +252,7 @@ L70:
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         r__1 = r_sign(&c_b11, &x[i__]);
-        if(fla_i_nint(&r__1) != isgn[i__])
+        if (fla_i_nint(&r__1) != isgn[i__])
         {
             goto L90;
         }

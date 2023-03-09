@@ -211,6 +211,7 @@ void aocl_lapack_slaqps(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, 
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal);
+    integer fla_i_nint(real *);
     /* Local variables */
     aocl_int64_t j, k, rk;
     real akk;

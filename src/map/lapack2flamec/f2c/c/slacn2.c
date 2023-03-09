@@ -137,7 +137,7 @@ void slacn2_(aocl_int_t *n, real *v, real *x, aocl_int_t *isgn, real *est, aocl_
     aocl_int64_t i__1;
     real r__1;
     /* Builtin functions */
-    integer i_nint(real *);
+    integer fla_i_nint(real *);
     /* Local variables */
     integer i__;
     real xs, temp;
@@ -220,7 +220,7 @@ L20:
         {
             x[i__] = -1.f;
         }
-        isgn[i__] = i_nint(&x[i__]);
+        isgn[i__] = fla_i_nint(&x[i__]);
         /* L30: */
     }
     *kase = 2;
@@ -262,7 +262,7 @@ L70:
         {
             xs = -1.f;
         }
-        if (i_nint(&xs) != isgn[i__])
+        if (fla_i_nint(&xs) != isgn[i__])
         {
             goto L90;
         }
@@ -286,7 +286,7 @@ L90: /* TEST FOR CYCLING. */
         {
             x[i__] = -1.f;
         }
-        isgn[i__] = i_nint(&x[i__]);
+        isgn[i__] = fla_i_nint(&x[i__]);
         /* L100: */
     }
     *kase = 2;

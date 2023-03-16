@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static const integer c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b ZLACON estimates the 1-norm of a square matrix, using reverse communication for evaluating matr ix-vector products. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -121,9 +121,11 @@ void zlacon_(aocl_int_t *n, dcomplex *v, dcomplex *x, doublereal *est, aocl_int_
     /* Builtin functions */
     double z_abs(doublecomplex *), d_imag(doublecomplex *);
     /* Local variables */
-    integer i__, j, iter;
+    integer i__;
     doublereal temp;
-    integer jump;
+    static integer jump = 0;
+    static integer j = 0;
+    static integer iter = 0;
     doublereal absxi;
     integer jlast;
     extern /* Subroutine */
@@ -178,18 +180,18 @@ void zlacon_(aocl_int_t *n, dcomplex *v, dcomplex *x, doublereal *est, aocl_int_
     }
     switch(jump)
     {
-        case 1:
-            goto L20;
-        case 2:
-            goto L40;
-        case 3:
-            goto L70;
-        case 4:
-            goto L90;
-        case 5:
-            goto L120;
-        default:
-            goto L130;
+    case 1:
+        goto L20;
+    case 2:
+        goto L40;
+    case 3:
+        goto L70;
+    case 4:
+        goto L90;
+    case 5:
+        goto L120;
+    default:
+        goto L130;
     }
     /* ................ ENTRY (JUMP = 1) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY A*X. */

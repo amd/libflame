@@ -126,9 +126,11 @@ void dlacon_(aocl_int_t *n, doublereal *v, doublereal *x, aocl_int_t *isgn, doub
     double d_sign(doublereal *, doublereal *);
     integer i_dnnt(doublereal *);
     /* Local variables */
-    integer i__, j, iter;
+    integer i__;
     doublereal temp;
-    integer jump;
+    static integer jump = 0;
+    static integer j = 0;
+    static integer iter = 0;
     extern doublereal dasum_(integer *, doublereal *, integer *);
     integer jlast;
     extern /* Subroutine */
@@ -177,18 +179,18 @@ void dlacon_(aocl_int_t *n, doublereal *v, doublereal *x, aocl_int_t *isgn, doub
     }
     switch(jump)
     {
-        case 1:
-            goto L20;
-        case 2:
-            goto L40;
-        case 3:
-            goto L70;
-        case 4:
-            goto L110;
-        case 5:
-            goto L140;
-        default:
-            goto L150;
+    case 1:
+        goto L20;
+    case 2:
+        goto L40;
+    case 3:
+        goto L70;
+    case 4:
+        goto L110;
+    case 5:
+        goto L140;
+    default:
+        goto L150;
     }
     /* ................ ENTRY (JUMP = 1) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY A*X. */

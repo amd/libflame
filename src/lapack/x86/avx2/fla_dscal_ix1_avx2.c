@@ -1,79 +1,62 @@
 /******************************************************************************
- * Copyright (C) 2023-24, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+* Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+*******************************************************************************/
 
 /*! @file fla_dscal_ix1_avx2.c
  *  @brief scales a vector by a constant
  *  */
 
 #include "FLAME.h"
-#include "fla_lapack_avx2_kernels.h"
 
-#if FLA_ENABLE_AMD_OPT
+#ifdef FLA_ENABLE_AMD_OPT
 
-int fla_dscal_ix1_avx2(aocl_int64_t *n, doublereal *da, doublereal *dx, aocl_int64_t *incx)
-{
-    aocl_int64_t i, i__1;
-    __m256d alpha256, xv256[2], pv256[2];
-    __m128d alpha128, xv128, pv128;
-
-    i__1 = *n;
-
+int fla_dscal_ix1_avx2(integer *n, doublereal *da, doublereal *dx, integer *incx)
+{    
+    /* Parameter adjustments */
+    --dx;
     /* Function Body */
-    if(i__1 <= 0)
+    if (*n <= 0)
     {
         return 0;
     }
 
+    integer i, i__1;
+    doublereal d__1;
+    i__1 = *n;
+    d__1 = *da;
+
     /* Load scaling factor alpha*/
-    alpha128 = _mm_set_pd1(*da);
-    alpha256 = _mm256_broadcastsd_pd(alpha128);
+    __m256d alphav = _mm256_set1_pd(d__1);
 
-    /* Process 8 elements at a time */
-    for(i = 0; i < (i__1 - 7); i += 8)
+    for (i = 1; i <= (i__1 - 3); i += 4)
     {
         /* Load the input values */
-        xv256[0] = _mm256_loadu_pd((double const *)&dx[i]);
-        xv256[1] = _mm256_loadu_pd((double const *)&dx[i + 4]);
-
+        __m256d x0v = _mm256_loadu_pd((double const *) &dx[i]);
         /* perform alpha * x  */
-        pv256[0] = _mm256_mul_pd(alpha256, xv256[0]);
-        pv256[1] = _mm256_mul_pd(alpha256, xv256[1]);
-
+        x0v = _mm256_mul_pd( alphav, x0v );
         /* Store the output */
-        _mm256_storeu_pd((double *)&dx[i], pv256[0]);
-        _mm256_storeu_pd((double *)&dx[i + 4], pv256[1]);
+        _mm256_storeu_pd((double *) &dx[i], x0v);
     }
-
-    /* Process 4 elements at a time */
-    for(; i < (i__1 - 3); i += 4)
+    /* Remainder iterations */
+    if((i__1-i) >= 2)
     {
-        /* Load the input values */
-        xv256[0] = _mm256_loadu_pd((double const *)&dx[i]);
-
-        /* perform alpha * x  */
-        pv256[0] = _mm256_mul_pd(alpha256, xv256[0]);
-
-        /* Store the output */
-        _mm256_storeu_pd((double *)&dx[i], pv256[0]);
+        for ( ; i <= (i__1-1); i += 2 )
+        {
+            dx[i] *= d__1;
+            dx[i+1] *= d__1;
+        }
+        for ( ; i <= i__1; ++i )
+        {
+            dx[i] *= d__1;
+        }
     }
-
-    /* Process 2 elements at a time */
-    for(; i < (i__1 - 1); i += 2)
+    else
     {
-        xv128 = _mm_loadu_pd((double const *)&dx[i]);
-        pv128 = _mm_mul_pd(alpha128, xv128);
-        _mm_storeu_pd((double *)&dx[i], pv128);
-    }
-
-    /* last iteration */
-    if(i < i__1)
-    {
-        xv128 = _mm_load1_pd((double const *)&dx[i]);
-        pv128 = _mm_mul_pd(alpha128, xv128);
-        _mm_storel_pd((double *)&dx[i], pv128);
+        for ( ; i <= i__1; ++i )
+        {
+            dx[i] *= d__1;
+        }
     }
     return 0;
 }
-
 #endif

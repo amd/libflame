@@ -35,22 +35,11 @@
   // Include prototypes for BLAS-like interfaces
   #include "blis1.h"
 
-  // Include CPU architecture related declarations 
-  #include "cpu_features.h"
-  
-  //Include context declarations
-  #include "FLA_Context.h"
-
   // Include _PTR macro definitions.
   #include "FLA_macro_ptr_defs.h"
 
-// Include "extern" definitions for global FLAME scalar constants.
-#include "FLA_extern_defs.h"
-
-// Include control tree structure definitions, utility prototypes, and
-// initialization prototypes.
-#include "FLA_Cntl.h"
-#include "FLA_Cntl_init.h"
+  // Include "extern" definitions for global FLAME scalar constants.
+  #include "FLA_extern_defs.h"
 
 // Include prototypes for base FLAME routines.
 #include "FLA_main_prototypes.h"
@@ -83,13 +72,8 @@
   // Include other api formats from wrapper code
 #include "libflame_api_wrapper.h"
 
-  // Include prototypes for LAPACK routines.
-  //#include "FLA_lapack_f77_macro_defs.h"
-
   #include "aocldtl.h"
 
-  // Include prototypes for FLA thread functions.
-  #include "FLA_Threads.h"
 
 // End extern "C" construct block.
 #ifdef __cplusplus

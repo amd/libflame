@@ -268,7 +268,7 @@ void ctgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, scomplex 
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
     int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
-    real small;
+    real small_val;
     logical compl;
     real anorm, bnorm;
     logical compr, ilbbad;
@@ -566,18 +566,18 @@ void ctgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, scomplex 
                 bcoeff.real = q__1.real;
                 bcoeff.imag = q__1.imag; // , expr subst
                 /* Scale to avoid underflow */
-                lsa = f2c_abs(sbeta) >= safmin && f2c_abs(acoeff) < small;
-                lsb = (r__1 = salpha.r, f2c_abs(r__1)) + (r__2 = r_imag(&salpha), f2c_abs(r__2)) >= safmin && (r__3 = bcoeff.r, f2c_abs(r__3)) + (r__4 = r_imag(&bcoeff), f2c_abs(r__4)) < small;
+                lsa = f2c_abs(sbeta) >= safmin && f2c_abs(acoeff) < small_val;
+                lsb = (r__1 = salpha.r, f2c_abs(r__1)) + (r__2 = r_imag(&salpha), f2c_abs(r__2)) >= safmin && (r__3 = bcoeff.r, f2c_abs(r__3)) + (r__4 = r_imag(&bcoeff), f2c_abs(r__4)) < small_val;
                 scale = 1.f;
                 if(lsa)
                 {
-                    scale = small / f2c_abs(sbeta) * fla_min(anorm,big);
+                    scale = small_val / f2c_abs(sbeta) * fla_min(anorm,big);
                 }
                 if(lsb)
                 {
                     /* Computing MAX */
                     r__3 = scale;
-                    r__4 = small / ((r__1 = salpha.r, f2c_abs(r__1)) + (r__2 = r_imag(&salpha), f2c_abs(r__2))) * fla_min( bnorm,big); // , expr subst
+                    r__4 = small_val / ((r__1 = salpha.r, f2c_abs(r__1)) + (r__2 = r_imag(&salpha), f2c_abs(r__2))) * fla_min( bnorm,big); // , expr subst
                     scale = fla_max(r__3,r__4);
                 }
                 if(lsa || lsb)
@@ -870,18 +870,18 @@ void ctgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, scomplex 
                 bcoeff.real = q__1.real;
                 bcoeff.imag = q__1.imag; // , expr subst
                 /* Scale to avoid underflow */
-                lsa = f2c_abs(sbeta) >= safmin && f2c_abs(acoeff) < small;
-                lsb = (r__1 = salpha.r, f2c_abs(r__1)) + (r__2 = r_imag(&salpha), f2c_abs(r__2)) >= safmin && (r__3 = bcoeff.r, f2c_abs(r__3)) + (r__4 = r_imag(&bcoeff), f2c_abs(r__4)) < small;
+                lsa = f2c_abs(sbeta) >= safmin && f2c_abs(acoeff) < small_val;
+                lsb = (r__1 = salpha.r, f2c_abs(r__1)) + (r__2 = r_imag(&salpha), f2c_abs(r__2)) >= safmin && (r__3 = bcoeff.r, f2c_abs(r__3)) + (r__4 = r_imag(&bcoeff), f2c_abs(r__4)) < small_val;
                 scale = 1.f;
                 if(lsa)
                 {
-                    scale = small / f2c_abs(sbeta) * fla_min(anorm,big);
+                    scale = small_val / f2c_abs(sbeta) * fla_min(anorm,big);
                 }
                 if(lsb)
                 {
                     /* Computing MAX */
                     r__3 = scale;
-                    r__4 = small / ((r__1 = salpha.r, f2c_abs(r__1)) + (r__2 = r_imag(&salpha), f2c_abs(r__2))) * fla_min( bnorm,big); // , expr subst
+                    r__4 = small_val / ((r__1 = salpha.r, f2c_abs(r__1)) + (r__2 = r_imag(&salpha), f2c_abs(r__2))) * fla_min( bnorm,big); // , expr subst
                     scale = fla_max(r__3,r__4);
                 }
                 if(lsa || lsb)

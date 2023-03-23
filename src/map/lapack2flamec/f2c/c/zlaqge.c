@@ -147,7 +147,7 @@ void zlaqge_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doubler
     doublereal d__1;
     dcomplex z__1;
     /* Local variables */
-    aocl_int64_t i__, j;
+    integer i__, j;
     doublereal cj, large, small_val;
     extern doublereal dlamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -183,7 +183,7 @@ void zlaqge_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doubler
     /* Initialize LARGE and SMALL. */
     small_val = dlamch_("Safe minimum") / dlamch_("Precision");
     large = 1. / small_val;
-    if(*rowcnd >= .1 && *amax >= small_val && *amax <= large)
+    if (*rowcnd >= .1 && *amax >= small_val && *amax <= large)
     {
         /* No row scaling */
         if(*colcnd >= .1)

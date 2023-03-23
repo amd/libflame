@@ -43,7 +43,8 @@
 /* > \verbatim */
 /* > SMALL_VAL is REAL */
 /* > On entry, the underflow threshold as computed by SLAMCH. */
-/* > On exit, the unchanged value SMALL_VAL. */
+/* > On exit, if LOG10(LARGE) is sufficiently large, the square */
+/* > root of SMALL_VAL, otherwise unchanged. */
 /* > \endverbatim */
 /* > */
 /* > \param[in,out] LARGE */
@@ -61,7 +62,7 @@
 /* > \ingroup labad */
 /* ===================================================================== */
 /* Subroutine */
-void slabad_(real *small_val, real *large)
+int slabad_(real *small_val, real *large)
 {
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -74,11 +75,12 @@ void slabad_(real *small_val, real *large)
     /* .. Executable Statements .. */
     /* If it looks like we're on a Cray, take the square root of */
     /* SMALL_VAL and LARGE to avoid overflow and underflow problems. */
-    /* IF( LOG10( LARGE ).GT.2000. ) THEN */
-    /* SMALL_VAL = SQRT( SMALL_VAL ) */
-    /* LARGE = SQRT( LARGE ) */
-    /* END IF */
-    return;
+    if (r_lg10(large) > 2e3f)
+    {
+        *small_val = sqrt(*small_val);
+        *large = sqrt(*large);
+    }
+    return 0;
     /* End of SLABAD */
 }
 /* slabad_ */

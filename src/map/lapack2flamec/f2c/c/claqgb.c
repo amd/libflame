@@ -173,7 +173,7 @@ void claqgb_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomp
     real r__1;
     scomplex q__1;
     /* Local variables */
-    aocl_int64_t i__, j;
+    integer i__, j;
     real cj, large, small_val;
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -211,7 +211,7 @@ void claqgb_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomp
     /* Initialize LARGE and SMALL. */
     small_val = slamch_("Safe minimum") / slamch_("Precision");
     large = 1.f / small_val;
-    if(*rowcnd >= .1f && *amax >= small_val && *amax <= large)
+    if (*rowcnd >= .1f && *amax >= small_val && *amax <= large)
     {
         /* No row scaling */
         if(*colcnd >= .1f)

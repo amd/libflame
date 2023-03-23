@@ -331,9 +331,9 @@ void dtgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, doublerea
     doublereal sbeta;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical il2by2;
-    aocl_int64_t iinfo;
+    integer iinfo;
     doublereal small_val;
-    logical compl ;
+    logical compl;
     doublereal anorm, bnorm;
     logical compr;
     extern /* Subroutine */
@@ -706,17 +706,17 @@ void dtgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, doublerea
                 bcoefi = 0.;
                 /* Scale to avoid underflow */
                 scale = 1.;
-                lsa = f2c_dabs(sbeta) >= safmin && f2c_dabs(acoef) < small;
-                lsb = f2c_dabs(salfar) >= safmin && f2c_dabs(bcoefr) < small;
+                lsa = f2c_dabs(sbeta) >= safmin && f2c_dabs(acoef) < small_val;
+                lsb = f2c_dabs(salfar) >= safmin && f2c_dabs(bcoefr) < small_val;
                 if (lsa)
                 {
-                    scale = small / f2c_dabs(sbeta) * fla_min(anorm,big);
+                    scale = small_val / f2c_dabs(sbeta) * fla_min(anorm,big);
                 }
                 if(lsb)
                 {
                     /* Computing MAX */
                     d__1 = scale;
-                    d__2 = small / f2c_dabs(salfar) * fla_min(bnorm,big); // , expr subst
+                    d__2 = small_val / f2c_dabs(salfar) * fla_min(bnorm,big); // , expr subst
                     scale = fla_max(d__1,d__2);
                 }
                 if(lsa || lsb)
@@ -1116,17 +1116,17 @@ L160:
                 bcoefi = 0.;
                 /* Scale to avoid underflow */
                 scale = 1.;
-                lsa = f2c_dabs(sbeta) >= safmin && f2c_dabs(acoef) < small;
-                lsb = f2c_dabs(salfar) >= safmin && f2c_dabs(bcoefr) < small;
+                lsa = f2c_dabs(sbeta) >= safmin && f2c_dabs(acoef) < small_val;
+                lsb = f2c_dabs(salfar) >= safmin && f2c_dabs(bcoefr) < small_val;
                 if (lsa)
                 {
-                    scale = small / f2c_dabs(sbeta) * fla_min(anorm,big);
+                    scale = small_val / f2c_dabs(sbeta) * fla_min(anorm,big);
                 }
                 if(lsb)
                 {
                     /* Computing MAX */
                     d__1 = scale;
-                    d__2 = small / f2c_dabs(salfar) * fla_min(bnorm,big); // , expr subst
+                    d__2 = small_val / f2c_dabs(salfar) * fla_min(bnorm,big); // , expr subst
                     scale = fla_max(d__1,d__2);
                 }
                 if(lsa || lsb)

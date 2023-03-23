@@ -141,7 +141,7 @@ void zlaqsy_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal
     /* Local variables */
     aocl_int64_t i__, j;
     doublereal cj, large;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
     doublereal small_val;
     extern doublereal dlamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -176,7 +176,7 @@ void zlaqsy_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal
     /* Initialize LARGE and SMALL. */
     small_val = dlamch_("Safe minimum") / dlamch_("Precision");
     large = 1. / small_val;
-    if(*scond >= .1 && *amax >= small_val && *amax <= large)
+    if (*scond >= .1 && *amax >= small_val && *amax <= large)
     {
         /* No equilibration */
         *(unsigned char *)equed = 'N';

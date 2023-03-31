@@ -1,39 +1,31 @@
 /*
-    Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
-#if ENABLE_CPP_TEST
-#include <invoke_common.hh>
-#endif
-#include <invoke_lapacke.h>
 
-extern double perf;
-extern double time_min;
-integer row_major_gelqf_lda;
+// Local prototypes.
+void fla_test_gelqf_experiment(test_params_t *params, integer datatype, integer  p_cur, integer  q_cur, integer  pci, integer  n_repeats,
+                                    double* perf, double* t,double* residual);
+void prepare_gelqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype, integer n_repeats, double* time_min_, integer *info);
+void invoke_gelqf(integer datatype, integer* m, integer* n, void* a, integer* lda, void* tau, void* work, integer* lwork, integer* info);
 
-/* Local prototypes */
-void fla_test_gelqf_experiment(char *tst_api, test_params_t *params, integer datatype,
-                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                               integer einfo);
-void prepare_gelqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype,
-                       integer *info, integer interfacetype, int matrix_layout,
-                       test_params_t *params);
-void invoke_gelqf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
-                  void *work, integer *lwork, integer *info);
-double prepare_lapacke_gelqf_run(integer datatype, int matrix_layout, integer m_A, integer n_A,
-                                 void *A, integer lda, void *T, integer *info);
+/* Flag to indicate lwork availability status
+ * <= 0 - To be calculated
+ * > 0  - Use the value
+ * */
+static integer g_lwork;
+static FILE* g_ext_fptr = NULL;
 
-void fla_test_gelqf(integer argc, char **argv, test_params_t *params)
+void fla_test_gelqf(integer argc, char ** argv, test_params_t *params)
 {
-    char *op_str = "LQ factorization";
-    char *front_str = "GELQF";
-    integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
-    params->imatrix_char = '\0';
+    char* op_str = "LQ factorization";
+    char* front_str = "GEQLF";
+    integer tests_not_run = 1, invalid_dtype = 0;
+
     if(argc == 1)
     {
         g_lwork = -1;
-        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_gelqf_experiment);
@@ -41,12 +33,19 @@ void fla_test_gelqf(integer argc, char **argv, test_params_t *params)
     }
     if(argc == 9)
     {
-        FLA_TEST_PARSE_LAST_ARG(argv[8]);
+        /* Read matrix input data from a file */
+        g_ext_fptr = fopen(argv[8], "r");
+        if (g_ext_fptr == NULL)
+        {
+            printf("\n Invalid input file argument \n");
+            return;
+        }
     }
     if(argc >= 8 && argc <= 9)
     {
-        integer i, num_types, M, N;
+        integer i, num_types, M,N;
         integer datatype, n_repeats;
+        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -54,20 +53,10 @@ void fla_test_gelqf(integer argc, char **argv, test_params_t *params)
         num_types = strlen(argv[2]);
         M = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
-        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
-        {
-            row_major_gelqf_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-            params->lin_solver_paramslist[0].lda = N;
-        }
-        else
-        {
-            params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-        }
+        params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -91,7 +80,18 @@ void fla_test_gelqf(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_gelqf_experiment(front_str, params, datatype, M, N, 0, n_repeats, einfo);
+                fla_test_gelqf_experiment(params, datatype,
+                                          M, N,
+                                          0,
+                                          n_repeats,
+                                          &perf, &time_min, &residual);
+                /* Print the results */
+                fla_test_print_status(front_str,
+                                      stype,
+                                      RECT_INPUT,
+                                      M, N,
+                                      residual, params->lin_solver_paramslist[0].solver_threshold,
+                                      time_min, perf);
                 tests_not_run = 0;
             }
         }
@@ -107,166 +107,131 @@ void fla_test_gelqf(integer argc, char **argv, test_params_t *params)
     {
         printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
     }
-    if(g_ext_fptr != NULL)
+    if (g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
-        g_ext_fptr = NULL;
     }
 
     return;
 }
 
-void fla_test_gelqf_experiment(char *tst_api, test_params_t *params, integer datatype,
-                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                               integer einfo)
+void fla_test_gelqf_experiment(test_params_t *params,
+    integer  datatype,
+    integer  p_cur,
+    integer  q_cur,
+    integer  pci,
+    integer  n_repeats,
+    double* perf,
+    double* t,
+    double* residual)
 {
     integer m, n, lda;
-    integer info = 0;
+    integer info = 0, vinfo = 0;
     void *A = NULL, *A_test = NULL, *T = NULL;
-    double residual, err_thresh;
-    void *filename = NULL;
-
-    integer interfacetype = params->interfacetype;
-    int layout = params->matrix_major;
+    double time_min = 1e9;
 
     /* Get input matrix dimensions. */
     m = p_cur;
     n = q_cur;
     lda = params->lin_solver_paramslist[pci].lda;
-    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
 
-    /* If leading dimensions = -1, set them to default value
-       when inputs are from config files */
-    if(g_config_data)
+    if(lda < m)
     {
-        if(lda == -1)
-        {
-            lda = fla_max(1, m);
-        }
+        *residual = DBL_MIN;
+        return;
     }
 
     /* Create input matrix parameters */
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
+    create_matrix(datatype, &A, lda, n);
+    create_vector(datatype, &T, fla_min(m,n));
 
-    /* Create output vector */
-    create_vector(datatype, &T, fla_min(m, n));
-
-    if(!FLA_BRT_VERIFICATION_RUN)
+    if (g_ext_fptr != NULL)
     {
-        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+        /* Initialize input matrix with custom data */
+        init_matrix_from_file(datatype, A, m, n, lda, g_ext_fptr);
+    }
+    else
+    {
+        /* Initialize input matrix with random numbers */
+        rand_matrix(datatype, A, m, n, lda);
     }
 
-    /* This macro is used in the BRT test cases for the following purposes:
-     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
-     * reference
-     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
-     * passed as input to the API
-     * */
-    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, A, lda, "dddd", m, n, lda, g_lwork)
-
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        scale_matrix_underflow_overflow_gelqf(datatype, m, n, A, lda, params->imatrix_char);
-    }
     /* Make a copy of input matrix A. This is required to validate the API functionality. */
+    create_matrix(datatype, &A_test, lda, n);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
-    prepare_gelqf_run(m, n, A_test, lda, T, datatype, &info, interfacetype, layout, params);
+    prepare_gelqf_run(m, n, A_test, lda, T, datatype, n_repeats, &time_min, &info);
+
+    /* execution time */
+    *t = time_min;
 
     /* performance computation
      * 2mn^2 - (2/3)n^3 flops
      */
     if(m >= n)
-        perf = (double)((2.0 * m * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min
-               / FLOPS_PER_UNIT_PERF;
+        *perf = (double)((2.0 * m * n * n) - (( 2.0 / 3.0 ) * n * n * n )) / time_min / FLOPS_PER_UNIT_PERF;
     else
-        perf = (double)((2.0 * n * m * m) - ((2.0 / 3.0) * m * m * m)) / time_min
-               / FLOPS_PER_UNIT_PERF;
+        *perf = (double)((2.0 * n * m * m) - (( 2.0 / 3.0 ) * m * m * m )) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        perf *= 4.0;
+        *perf *= 4.0;
 
     /* output validation */
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    IF_FLA_BRT_VALIDATION(
-        m, n,
-        store_outputs_base(filename, params, 1, 1, datatype, m, n, A_test, lda, datatype,
-                           fla_min(m, n), T),
-        validate_gelqf(tst_api, m, n, A, A_test, lda, T, datatype, residual, params),
-        check_reproducibility_base(filename, params, 1, 1, datatype, m, n, A_test, lda, datatype,
-                                   fla_min(m, n), T))
-    else if(FLA_SKIP_VALIDATION_MODE)
-    {
-        /* Skip validation for performance modes */
-        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
-    }
-    else if(!FLA_EXTREME_CASE_TEST)
-    {
-        validate_gelqf(tst_api, m, n, A, A_test, lda, T, datatype, residual, params);
-    }
-    else
-    {
-        if((!check_extreme_value(datatype, m, n, A_test, lda, params->imatrix_char)))
-        {
-            residual = DBL_MAX;
-        }
-        else
-        {
-            residual = err_thresh;
-        }
-        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
-    }
+    if (info == 0) 
+        validate_gelqf(m, n, A, A_test, lda, T, datatype, residual, &vinfo);
+
+    /* Assigning bigger value to residual as execution fails */
+    if (info < 0 || vinfo < 0)
+        *residual = DBL_MAX;
 
     /* Free up the buffers */
-free_buffers:
-    FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_matrix(A_test);
     free_vector(T);
 }
 
-void prepare_gelqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype,
-                       integer *info, integer interfacetype, int layout, test_params_t *params)
+
+void prepare_gelqf_run(integer m_A, integer n_A,
+    void *A,
+    integer lda,
+    void *T,
+    integer datatype,
+    integer n_repeats,
+    double* time_min_,
+    integer* info)
 {
-    integer min_A;
+    integer min_A, i;
     void *A_save = NULL, *T_test = NULL, *work = NULL;
     integer lwork = -1;
-    double exe_time;
+    double time_min = 1e9, exe_time;
 
     min_A = fla_min(m_A, n_A);
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &A_save, lda);
+    create_matrix(datatype, &A_save, lda, n_A);
     copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
 
     /* Make a workspace query the first time. This will provide us with
-       and ideal workspace size based on internal block size.
-       NOTE: LAPACKE interface handles workspace query internally */
-    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST)
-       && (g_lwork <= 0))
+       and ideal workspace size based on internal block size.*/
+    if(g_lwork <= 0)
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
+
         /* call to  gelqf API */
-#if ENABLE_CPP_TEST
-        if(interfacetype == LAPACK_CPP_TEST)
+        invoke_gelqf(datatype, &m_A, &n_A, NULL, &lda, NULL, work, &lwork, info);
+        if(*info < 0)
         {
-            invoke_cpp_gelqf(datatype, &m_A, &n_A, NULL, &lda, NULL, work, &lwork, info);
-        }
-        else
-#endif
-        {
-            invoke_gelqf(datatype, &m_A, &n_A, NULL, &lda, NULL, work, &lwork, info);
-        }
-        if(*info == 0)
-        {
-            /* Get work size */
-            lwork = get_work_value(datatype, work);
+            free_matrix(A_save);
+            free_vector(work);
+            return;
         }
 
-        /* Output buffers will be freshly allocated for each iterations, free up
-       the current output buffers.*/
+        /* Get work size */
+        lwork = get_work_value( datatype, work );
+
+        /* Output buffers will be freshly allocated for each iterations, free up 
+       the current output buffers.*/ 
         free_vector(work);
     }
     else
@@ -274,8 +239,7 @@ void prepare_gelqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
         lwork = g_lwork;
     }
 
-    *info = 0;
-    FLA_EXEC_LOOP_BEGIN
+    for (i = 0; i < n_repeats && *info == 0; ++i)
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration */
@@ -285,35 +249,19 @@ void prepare_gelqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
         create_vector(datatype, &T_test, min_A);
 
         /* Create work buffer */
-        create_vector(datatype, &work, lwork);
+        create_matrix(datatype, &work, lwork, 1);
 
-        /* Check if LAPACKE interface is enabled */
-        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
-        {
-            exe_time = prepare_lapacke_gelqf_run(datatype, layout, m_A, n_A, A, lda, T_test, info);
-        }
-#if ENABLE_CPP_TEST
-        else if(interfacetype == LAPACK_CPP_TEST)
-        {
-            exe_time = fla_test_clock();
-            /* Call CPP gelqf API */
-            invoke_cpp_gelqf(datatype, &m_A, &n_A, A, &lda, T_test, work, &lwork, info);
-            exe_time = fla_test_clock() - exe_time;
-        }
-#endif
-        else
-        {
-            exe_time = fla_test_clock();
-            /* Call LAPACK gelqf API */
-            invoke_gelqf(datatype, &m_A, &n_A, A, &lda, T_test, work, &lwork, info);
-            exe_time = fla_test_clock() - exe_time;
-        }
+        exe_time = fla_test_clock();
 
-        /* Update ctx and loop conditions */
-        FLA_EXEC_LOOP_UPDATE_WITH_INFO
+        /* Call to  gerqf API */
+        invoke_gelqf(datatype, &m_A, &n_A, A, &lda, T_test, work, &lwork, info);
 
-        /* Make a copy of the output buffers.
-        This is required to validate the API functionality. */
+        exe_time = fla_test_clock() - exe_time;
+
+        /* Get the best execution time */
+        time_min = fla_min(time_min, exe_time);
+
+        /* Make a copy of the output buffers. This is required to validate the API functionality. */
         copy_vector(datatype, min_A, T_test, 1, T, 1);
 
         // Free up the output buffers
@@ -321,49 +269,13 @@ void prepare_gelqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
         free_vector(T_test);
     }
 
+    *time_min_ = time_min;
+
     free_matrix(A_save);
 }
 
-double prepare_lapacke_gelqf_run(integer datatype, int layout, integer m_A, integer n_A, void *A,
-                                 integer lda, void *T, integer *info)
-{
-    double exe_time;
-    integer lda_t = lda;
-    void *A_t = NULL;
 
-    /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_gelqf_lda, lda_t);
-
-    A_t = A;
-
-    if(layout == LAPACK_ROW_MAJOR)
-    {
-        /* Create temporary buffers for converting matrix layout */
-        create_matrix(datatype, layout, m_A, n_A, &A_t, fla_max(n_A, lda_t));
-        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m_A, n_A, A, lda, A_t, lda_t);
-    }
-
-    exe_time = fla_test_clock();
-
-    /* Call to  gelqf API */
-    *info = invoke_lapacke_gelqf(datatype, layout, m_A, n_A, A_t, lda_t, T);
-
-    exe_time = fla_test_clock() - exe_time;
-
-    if(layout == LAPACK_ROW_MAJOR)
-    {
-        /* In case of row_major matrix layout, convert output matrices
-           to column_major layout */
-        convert_matrix_layout(layout, datatype, m_A, n_A, A_t, lda_t, A, lda);
-        /* free temporary buffers */
-        free_matrix(A_t);
-    }
-
-    return exe_time;
-}
-
-void invoke_gelqf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
-                  void *work, integer *lwork, integer *info)
+void invoke_gelqf(integer datatype, integer* m, integer* n, void* a, integer* lda, void* tau, void* work, integer* lwork, integer* info)
 {
     switch(datatype)
     {

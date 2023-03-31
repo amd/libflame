@@ -1,42 +1,33 @@
-/*
-    Copyright (C) 2023-2026, Advanced Micro Devices, Inc. All rights reserved.
-*/
+/******************************************************************************
+* Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+*******************************************************************************/
 
 /*! @file validate_gelqf.c
  *  @brief Defines validate function of GELQF() to use in test suite.
  *  */
 
 #include "test_common.h"
-#include "test_prototype.h"
 
-extern double perf;
-extern double time_min;
-
-void validate_gelqf(char *tst_api, integer m_A, integer n_A, void *A, void *A_test, integer lda,
-                    void *T_test, integer datatype, double err_thresh, void *params)
+void validate_gelqf(integer m_A,
+    integer n_A,
+    void *A,
+    void *A_test,
+    integer lda,
+    void *T_test,
+    integer datatype,
+    double* residual,
+    integer* info)
 {
     void *Q = NULL, *L = NULL, *work = NULL;
     integer min_A;
     integer lwork = -1;
-    integer info = 0;
-    double residual, resid1 = 0., resid2 = 0., resid3 = 0.;
-
-    /* Early return conditions */
-    if(m_A == 0 || n_A == 0)
-    {
-        FLA_TEST_PRINT_STATUS_AND_RETURN(m_A, n_A, err_thresh);
-    }
-    /* print overall status if incoming threshold is
-     * an extreme value indicating that API returned
-     * unexpected info value */
-    FLA_TEST_PRINT_INVALID_STATUS(m_A, n_A, err_thresh);
+    *info = 0;
 
     min_A = fla_min(m_A, n_A);
 
     /* Create Q and L matrices. */
-    create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &Q, n_A);
-    create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &L, m_A);
-
+    create_matrix(datatype, &Q, n_A, n_A);
+    create_matrix(datatype, &L, m_A, n_A);
     reset_matrix(datatype, n_A, n_A, Q, n_A);
     reset_matrix(datatype, m_A, n_A, L, m_A);
 
@@ -44,25 +35,25 @@ void validate_gelqf(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
     copy_matrix(datatype, "full", min_A, n_A, A_test, lda, Q, n_A);
     copy_matrix(datatype, "Lower", m_A, min_A, A_test, lda, L, m_A);
 
-    switch(datatype)
+    switch( datatype )
     {
         case FLOAT:
         {
             float twork;
-            float norm, norm_A;
+            float norm, norm_A, eps, resid1, resid2;
 
             /* sorglq api generates the Q martrix using the elementary reflectors and scalar
                factor values */
-            fla_lapack_sorglq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, &info);
-            if(info < 0)
-                break;
+            fla_lapack_sorglq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, info);
+            if (*info < 0)
+               break;
 
             lwork = twork;
-            create_vector(datatype, &work, lwork);
+            create_vector(datatype,  &work, lwork);
 
-            fla_lapack_sorglq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, &info);
-            if(info < 0)
-                break;
+            fla_lapack_sorglq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, info);
+            if(*info < 0)
+               break;
 
             /* Test 1
                compute norm(L - A*Q') / (V * norm(A) * EPS) */
@@ -71,30 +62,34 @@ void validate_gelqf(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
             norm_A = fla_lapack_slange("1", &m_A, &n_A, A, &lda, work);
             norm = fla_lapack_slange("1", &m_A, &n_A, L, &m_A, work);
 
-            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n_A, params);
+            eps = fla_lapack_slamch("P");
+
+            resid1 = norm/(eps * norm_A * (float)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS) */
-            resid2 = (float)check_orthogonality(datatype, Q, n_A, n_A, n_A, params);
+            resid2 = (float)check_orthogonality(datatype, Q, n_A, n_A, n_A);
+
+            *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case DOUBLE:
         {
             double twork;
-            double norm, norm_A;
+            double norm, norm_A, eps, resid1, resid2;
 
             /* dorglq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
-            fla_lapack_dorglq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, &info);
-            if(info < 0)
-                break;
+            fla_lapack_dorglq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, info);
+            if(*info < 0)
+               break;
 
             lwork = twork;
-            create_vector(datatype, &work, lwork);
+            create_vector(datatype,  &work, lwork);
 
-            fla_lapack_dorglq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, &info);
-            if(info < 0)
-                break;
+            fla_lapack_dorglq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, info);
+            if(*info < 0)
+               break;
 
             /* Test 1
                compute norm(L - A*Q') / (V * norm(A) * EPS)*/
@@ -103,30 +98,34 @@ void validate_gelqf(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
             norm_A = fla_lapack_dlange("1", &m_A, &n_A, A, &lda, work);
             norm = fla_lapack_dlange("1", &m_A, &n_A, L, &m_A, work);
 
-            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n_A, params);
+            eps = fla_lapack_dlamch("P");
+
+            resid1 = norm/(eps * norm_A * (double)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, n_A, n_A, n_A, params);
+            resid2 = check_orthogonality(datatype, Q, n_A, n_A, n_A);
+
+            *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case COMPLEX:
         {
             scomplex twork;
-            float norm, norm_A;
+            float norm, norm_A, eps, resid1, resid2;
 
             /* corglq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
-            fla_lapack_cunglq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, &info);
-            if(info < 0)
-                break;
+            fla_lapack_cunglq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, info);
+            if(*info < 0)
+               break;
 
             lwork = twork.real;
-            create_vector(datatype, &work, lwork);
+            create_vector(datatype,  &work, lwork);
 
-            fla_lapack_cunglq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, &info);
-            if(info < 0)
-                break;
+            fla_lapack_cunglq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, info);
+            if(*info < 0)
+               break;
 
             /* Test 1
                compute norm(L - A*Q') / (V * norm(A) * EPS)*/
@@ -135,30 +134,34 @@ void validate_gelqf(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
             norm_A = fla_lapack_clange("1", &m_A, &n_A, A, &lda, work);
             norm = fla_lapack_clange("1", &m_A, &n_A, L, &m_A, work);
 
-            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n_A, params);
+            eps = fla_lapack_slamch("P");
+
+            resid1 = norm/(eps * norm_A * (float)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = (float)check_orthogonality(datatype, Q, n_A, n_A, n_A, params);
+            resid2 = (float)check_orthogonality(datatype, Q, n_A, n_A, n_A);
+
+            *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case DOUBLE_COMPLEX:
         {
             dcomplex twork;
-            double norm, norm_A;
+            double norm, norm_A, eps, resid1, resid2;
 
             /* zorglq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
-            fla_lapack_zunglq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, &info);
-            if(info < 0)
-                break;
+            fla_lapack_zunglq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, info);
+            if(*info < 0)
+               break;
 
             lwork = twork.real;
             create_vector(datatype, &work, lwork);
 
-            fla_lapack_zunglq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, &info);
-            if(info < 0)
-                break;
+            fla_lapack_zunglq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, info);
+            if(*info < 0)
+               break;
 
             /* Test 1
                compute norm(L - Q'*A) / (V * norm(A) * EPS)*/
@@ -167,27 +170,22 @@ void validate_gelqf(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
             norm_A = fla_lapack_zlange("1", &m_A, &n_A, A, &lda, work);
             norm = fla_lapack_zlange("1", &m_A, &n_A, L, &m_A, work);
 
-            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n_A, params);
+            eps = fla_lapack_dlamch("P");
+
+            resid1 = norm/(eps * norm_A * (double)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, n_A, n_A, n_A, params);
+            resid2 = check_orthogonality(datatype, Q, n_A, n_A, n_A);
+
+            *residual = (double)fla_max(resid1, resid2);
             break;
         }
     }
 
-    /* Test 3: Check padding rows not modified */
-    resid3 = check_padding(datatype, m_A, n_A, A_test, lda);
-
     // Free up buffers
-    free_matrix(L);
-    free_matrix(Q);
-    free_vector(work);
-
-    residual = fla_test_max(resid1, resid2);
-    residual = fla_test_max(resid3, residual);
-    FLA_PRINT_TEST_STATUS(m_A, n_A, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
-    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
-    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    free_matrix( L );
+    free_matrix( Q );
+    free_vector( work );
 }
+

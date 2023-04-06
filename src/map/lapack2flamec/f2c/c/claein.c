@@ -180,8 +180,10 @@ void claein_(logical *rightv, logical *noinit, aocl_int_t *n, scomplex *h__, aoc
     char trans[1];
     real rtemp, rootn, vnorm;
     extern /* Complex */
-        void
-        cladiv_f2c_(scomplex *, scomplex *, scomplex *);
+    void cladiv_f2c_(complex *, complex *, complex *);
+    extern /* Subroutine */
+    int csscal_(integer *, real *, complex *, integer *), clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *, real *, integer *);
+    extern real scasum_(integer *, complex *, integer *);
     char normin[1];
     real nrmsml, growto;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */

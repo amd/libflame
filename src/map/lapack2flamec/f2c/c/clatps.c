@@ -271,8 +271,7 @@ void clatps_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
     scomplex csumj;
     logical upper;
     extern /* Complex */
-        void
-        cladiv_f2c_(scomplex *, scomplex *, scomplex *);
+    void cladiv_f2c_(complex *, complex *, complex *);
     extern real slamch_(char *);
     real bignum;
     logical notran;

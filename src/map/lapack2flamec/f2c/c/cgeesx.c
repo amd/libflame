@@ -320,7 +320,7 @@ void cgeesx_(char *jobvs, char *sort, L_fp1 select, char *sense, aocl_int_t *n, 
     wantsb = lsame_(sense, "B", 1, 1);
     lquery = *lwork == -1;
     maxwrk = 0;
-    if(!wantvs && !lsame_(jobvs, "N", 1, 1))
+    if (! wantvs && ! lsame_(jobvs, "N"))
     {
         *info = -1;
     }

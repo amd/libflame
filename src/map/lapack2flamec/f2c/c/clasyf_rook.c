@@ -260,7 +260,6 @@ void clasyf_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, sco
     /* Function Body */
     *info = 0;
     jmax = 0;
-    imax = 0;
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.f) + 1.f) / 8.f;
     /* Compute machine safe minimum */

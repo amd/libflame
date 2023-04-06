@@ -390,7 +390,7 @@ void ctgsyl_(char *trans, aocl_int_t *ijob, aocl_int_t *m, aocl_int_t *n, scompl
     /* Function Body */
     *info = 0;
     scale2 = 0.f;
-    notran = lsame_(trans, "N", 1, 1);
+    notran = lsame_(trans, "N");
     lquery = *lwork == -1;
     if(!notran && !lsame_(trans, "C", 1, 1))
     {

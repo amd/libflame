@@ -277,8 +277,7 @@ void ctgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, scomplex 
     logical ilback;
     real ascale, bscale;
     extern /* Complex */
-        void
-        cladiv_f2c_(scomplex *, scomplex *, scomplex *);
+    void cladiv_f2c_(complex *, complex *, complex *);
     extern real slamch_(char *);
     scomplex salpha;
     real safmin;
@@ -328,7 +327,7 @@ void ctgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, scomplex 
     /* Function Body */
     ilall = FALSE_;
     ilback = FALSE_;
-    if(lsame_(howmny, "A", 1, 1))
+    if (lsame_(howmny, "A"))
     {
         ihwmny = 1;
         ilall = TRUE_;

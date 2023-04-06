@@ -269,8 +269,8 @@ void chetf2_rook_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_
     *info = 0;
     imax = 0;
     jmax = 0;
-    upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    upper = lsame_(uplo, "U");
+    if (! upper && ! lsame_(uplo, "L"))
     {
         *info = -1;
     }

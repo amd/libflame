@@ -136,7 +136,7 @@ real clanht_(char *norm, aocl_int_t *n, real *d__, scomplex *e)
     --d__;
     /* Function Body */
     anorm = 0.f;
-    if(*n <= 0)
+    if (*n <= 0)
     {
         anorm = 0.f;
     }

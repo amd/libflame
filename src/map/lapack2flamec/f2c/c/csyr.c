@@ -179,8 +179,8 @@ void csyr_(char *uplo, aocl_int_t *n, scomplex *alpha, scomplex *x, aocl_int_t *
     a -= a_offset;
     /* Function Body */
     info = 0;
-    kx = 0;
-    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
+    kx= 0;
+    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
     {
         info = 1;
     }

@@ -418,12 +418,12 @@ void cpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
     --rwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N", 1, 1);
-    equil = lsame_(fact, "E", 1, 1);
-    upper = lsame_(uplo, "U", 1, 1);
+    nofact = lsame_(fact, "N");
+    equil = lsame_(fact, "E");
+    upper = lsame_(uplo, "U");
     smlnum = 0.f;
     bignum = 0.f;
-    if(nofact || equil)
+    if (nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rcequ = FALSE_;

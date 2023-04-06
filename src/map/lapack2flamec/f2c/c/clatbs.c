@@ -285,7 +285,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
     logical upper;
     extern integer icamax_(integer *, complex *, integer *);
     extern /* Complex */
-    VOID cladiv_f2c_(complex *, complex *, complex *);
+    void cladiv_f2c_(complex *, complex *, complex *);
     extern real slamch_(char *);
     real bignum;
     logical notran;

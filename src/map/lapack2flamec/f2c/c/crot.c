@@ -113,8 +113,8 @@ void crot_(aocl_int_t *n, scomplex *cx, aocl_int_t *incx, scomplex *cy, aocl_int
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4;
-    complex q__1, q__2, q__3, q__4;
+    integer i__1;
+    complex q__1, q__2, q__3;
     /* Local variables */
     aocl_int64_t i__, ix, iy;
     scomplex stemp;

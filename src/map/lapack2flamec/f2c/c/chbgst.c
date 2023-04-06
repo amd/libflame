@@ -242,7 +242,7 @@ void chbgst_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *
     kb1 = *kb + 1;
     *info = 0;
     j2 = 0;
-    if(!wantx && !lsame_(vect, "N", 1, 1))
+    if (! wantx && ! lsame_(vect, "N"))
     {
         *info = -1;
     }

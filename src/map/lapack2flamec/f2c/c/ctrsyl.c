@@ -188,8 +188,15 @@ void ctrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
     scomplex suml, sumr;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     extern /* Complex */
-        void
-        cladiv_f2c_(scomplex *, scomplex *, scomplex *);
+    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Complex */
+    VOID cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+    extern /* Subroutine */
+    int slabad_(real *, real *);
+    extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
+    extern /* Complex */
+    void cladiv_f2c_(complex *, complex *, complex *);
     real scaloc;
     extern real slamch_(char *);
     real bignum;

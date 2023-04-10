@@ -212,10 +212,9 @@ void dsptrf_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, aocl_i
     --ap;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U", 1, 1);
+    upper = lsame_(uplo, "U");
     imax = 0;
-    kpc = 0;
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L"))
     {
         *info = -1;
     }

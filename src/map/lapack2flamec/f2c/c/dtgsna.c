@@ -476,7 +476,7 @@ void dtgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, doublereal
     *info = 0;
     lquery = *lwork == -1;
     cond = 0.;
-    if(!wants && !wantdf)
+    if (! wants && ! wantdf)
     {
         *info = -1;
     }

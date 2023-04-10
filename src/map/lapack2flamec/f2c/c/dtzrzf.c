@@ -211,7 +211,7 @@ void aocl_lapack_dtzrzf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
     *info = 0;
     lquery = *lwork == -1;
     nb = 0;
-    if(*m < 0)
+    if (*m < 0)
     {
         *info = -1;
     }

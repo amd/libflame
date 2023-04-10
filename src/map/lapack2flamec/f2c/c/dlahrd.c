@@ -216,7 +216,7 @@ void dlahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, doublereal *a, aocl_i
     y -= y_offset;
     /* Function Body */
     ei = 0.;
-    if(*n <= 1)
+    if (*n <= 1)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;

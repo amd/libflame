@@ -300,7 +300,7 @@ void dlaed8_(aocl_int_t *icompq, aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz,
     /* Function Body */
     *info = 0;
     jlam = 0;
-    if(*icompq < 0 || *icompq > 1)
+    if (*icompq < 0 || *icompq > 1)
     {
         *info = -1;
     }

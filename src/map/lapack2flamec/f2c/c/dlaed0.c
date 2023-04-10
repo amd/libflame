@@ -238,7 +238,7 @@ void dlaed0_(aocl_int_t *icompq, aocl_int_t *qsiz, aocl_int_t *n, doublereal *d_
     iwrem = 0;
     iperm = 0;
     iq = 0;
-    if(*icompq < 0 || *icompq > 2)
+    if (*icompq < 0 || *icompq > 2)
     {
         *info = -1;
     }

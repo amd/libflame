@@ -285,9 +285,9 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, d
     --ap;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U", 1, 1);
-    notran = lsame_(trans, "N", 1, 1);
-    nounit = lsame_(diag, "N", 1, 1);
+    upper = lsame_(uplo, "U");
+    notran = lsame_(trans, "N");
+    nounit = lsame_(diag, "N");
     tjjs = 0.;
     /* Test the input parameters. */
     if(!upper && !lsame_(uplo, "L", 1, 1))

@@ -160,11 +160,13 @@ int dsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal 
     doublereal safmin;
     doublereal safmax;
     extern /* Subroutine */
-        void
-        dsteqr_helper_(char *jobz, char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
-                       doublereal *w, doublereal *work, aocl_int64_t *lwork, aocl_int_t *iwork,
-                       aocl_int64_t *liwork, aocl_int64_t *info);
-    aocl_int64_t lendsv;
+    int xerbla_(char *, integer *);
+    extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
+    extern /* Subroutine */
+    int dlasrt_(char *, integer *, doublereal *, integer *);
+    extern /* Subroutine */
+    int dsteqr_helper_(char *jobz, char *uplo, integer *n, doublereal * a, integer *lda, doublereal *w, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info);
+    integer lendsv;
     doublereal ssfmin;
     aocl_int64_t nmaxit, icompz;
     doublereal ssfmax;
@@ -280,12 +282,12 @@ int dsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal 
             z__[i * LDZ + i + 1] = e[i];
         }
 
-        dsteqr_helper_("V", "L", &N, &z__[z_offset], &LDZ, &d__[1],  &wkopt,  &lwork, &iwkopt, &liwork, &info);
+        dsteqr_helper_("V", "L", &N, &z__[z_offset], &LDZ, &d__[1],  &wkopt,  &lwork, &iwkopt, &liwork, info);
         lwork = (integer)wkopt;
         worker = (doublereal*)malloc( lwork*sizeof(doublereal) );
         liwork = iwkopt;
         iwork =  (integer*)malloc( liwork*sizeof(integer) );
-        dsteqr_helper_("V", "L", &N, &z__[z_offset], &LDZ, &d__[1],  worker,&lwork, iwork, &liwork, &info);
+        dsteqr_helper_("V", "L", &N, &z__[z_offset], &LDZ, &d__[1],  worker,&lwork, iwork, &liwork, info);
         free(worker);
         free(iwork);
         AOCL_DTL_TRACE_LOG_EXIT

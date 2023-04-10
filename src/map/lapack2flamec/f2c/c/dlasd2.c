@@ -345,9 +345,7 @@ void dlasd2_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, do
     /* Function Body */
     *info = 0;
     jprev = 0;
-    c__ = 1.;
-    s = 0.;
-    if(*nl < 1)
+    if (*nl < 1)
     {
         *info = -1;
     }

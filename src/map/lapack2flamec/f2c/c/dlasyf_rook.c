@@ -248,7 +248,6 @@ void dlasyf_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dou
     /* Function Body */
     *info = 0;
     jmax = 0;
-    imax = 0;
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.) + 1.) / 8.;
     /* Compute machine safe minimum */

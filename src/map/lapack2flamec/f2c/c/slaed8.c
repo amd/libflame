@@ -334,7 +334,7 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
     /* Function Body */
     *info = 0;
     jlam = 0;
-    if(*icompq < 0 || *icompq > 1)
+    if (*icompq < 0 || *icompq > 1)
     {
         *info = -1;
     }

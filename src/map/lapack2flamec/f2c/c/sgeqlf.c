@@ -217,8 +217,8 @@ void aocl_lapack_sgeqlf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     {
         *info = -4;
     }
-    nb = aocl_lapack_ilaenv(&c__1, "SGEQLF", " ", m, n, &c_n1, &c_n1);
-    if(*info == 0)
+    nb = ilaenv_(&c__1, "SGEQLF", " ", m, n, &c_n1, &c_n1);
+    if (*info == 0)
     {
         k = fla_min(*m,*n);
         if (k == 0)

@@ -380,9 +380,7 @@ void aocl_lapack_slasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     /* Function Body */
     *info = 0;
     jprev = 0;
-    s = 0.f;
-    c__ = 0.f;
-    if(*nl < 1)
+    if (*nl < 1)
     {
         *info = -1;
     }

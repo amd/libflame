@@ -208,8 +208,8 @@ void stzrzf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, 
     {
         *info = -4;
     }
-    nb = aocl_lapack_ilaenv(&c__1, "SGERQF", " ", m, n, &c_n1, &c_n1);
-    if(*info == 0)
+    nb = ilaenv_(&c__1, "SGERQF", " ", m, n, &c_n1, &c_n1);
+    if (*info == 0)
     {
         if(*m == 0 || *m == *n)
         {

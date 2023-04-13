@@ -207,7 +207,7 @@ void aocl_lapack_stpttf(char *transr, char *uplo, aocl_int64_t *n, real *ap, rea
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
     /* Local variables */
-    aocl_int64_t i__, j, k, n1, n2, ij, jp, js, lda, ijp;
+    integer i__, j, k, n1, n2, ij, jp, js, lda, ijp;
     logical normaltransr;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;

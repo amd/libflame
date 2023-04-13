@@ -449,12 +449,12 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     --iwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N", 1, 1);
-    equil = lsame_(fact, "E", 1, 1);
-    notran = lsame_(trans, "N", 1, 1);
+    nofact = lsame_(fact, "N");
+    equil = lsame_(fact, "E");
+    notran = lsame_(trans, "N");
     smlnum = 0.f;
     bignum = 0.f;
-    if(nofact || equil)
+    if (nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rowequ = FALSE_;

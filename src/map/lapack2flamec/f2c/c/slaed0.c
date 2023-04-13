@@ -272,7 +272,7 @@ void aocl_lapack_slaed0(aocl_int64_t *icompq, aocl_int64_t *qsiz, aocl_int64_t *
     iwrem = 0;
     iperm = 0;
     iq = 0;
-    if(*icompq < 0 || *icompq > 2)
+    if (*icompq < 0 || *icompq > 2)
     {
         *info = -1;
     }

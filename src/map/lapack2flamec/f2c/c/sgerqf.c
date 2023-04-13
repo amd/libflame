@@ -195,6 +195,7 @@ void sgerqf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, 
     {
         *info = -4;
     }
+    nb = ilaenv_(&c__1, "SGERQF", " ", m, n, &c_n1, &c_n1);
     if (*info == 0)
     {
         k = fla_min(*m,*n);

@@ -401,7 +401,7 @@ void strsen_(char *job, char *compq, logical *select, aocl_int_t *n, real *t, ao
     lquery = *lwork == -1;
     liwmin = 0;
     lwmin = 0;
-    if(!lsame_(job, "N", 1, 1) && !wants && !wantsp)
+    if (! lsame_(job, "N") && ! wants && ! wantsp)
     {
         *info = -1;
     }

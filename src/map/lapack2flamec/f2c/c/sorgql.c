@@ -194,8 +194,8 @@ void sorgql_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *a, aocl_int_t *l
     {
         *info = -5;
     }
-    nb = aocl_lapack_ilaenv(&c__1, "SORGQL", " ", m, n, k, &c_n1);
-    if(*info == 0)
+    nb = ilaenv_(&c__1, "SORGQL", " ", m, n, k, &c_n1);
+    if (*info == 0)
     {
         if(*n == 0)
         {

@@ -275,7 +275,7 @@ void aocl_lapack_slasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
     /* Compute machine safe minimum */
     sfmin = slamch_("S");
     jmax = 0;
-    if(lsame_(uplo, "U", 1, 1))
+    if (lsame_(uplo, "U"))
     {
         /* Factorize the trailing columns of A using the upper triangle */
         /* of A and working backwards, and compute the matrix W = U12*D */

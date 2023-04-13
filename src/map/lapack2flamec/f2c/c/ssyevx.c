@@ -343,7 +343,7 @@ void ssyevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *a, aocl_i
     lquery = *lwork == -1;
     *info = 0;
     lwkopt = 0;
-    if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    if (! (wantz || lsame_(jobz, "N")))
     {
         *info = -1;
     }

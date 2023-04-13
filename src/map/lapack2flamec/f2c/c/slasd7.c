@@ -348,7 +348,7 @@ void slasd7_(aocl_int_t *icompq, aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqr
     n = *nl + *nr + 1;
     m = n + *sqre;
     jprev = 0;
-    if(*icompq < 0 || *icompq > 1)
+    if (*icompq < 0 || *icompq > 1)
     {
         *info = -1;
     }

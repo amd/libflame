@@ -380,7 +380,7 @@ void stgsyl_(char *trans, aocl_int_t *ijob, aocl_int_t *m, aocl_int_t *n, real *
     notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
     scale2 = 0.f;
-    if(!notran && !lsame_(trans, "T", 1, 1))
+    if (! notran && ! lsame_(trans, "T"))
     {
         *info = -1;
     }

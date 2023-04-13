@@ -237,7 +237,7 @@ void aocl_lapack_slahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, real
     y -= y_offset;
     /* Function Body */
     ei = 0.f;
-    if(*n <= 1)
+    if (*n <= 1)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;

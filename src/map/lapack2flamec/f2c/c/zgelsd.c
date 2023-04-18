@@ -287,7 +287,7 @@ void zgelsd_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_i
     maxmn = fla_max(*m,*n);
     lquery = *lwork == -1;
     mnthr = 0;
-    if(*m < 0)
+    if (*m < 0)
     {
         *info = -1;
     }

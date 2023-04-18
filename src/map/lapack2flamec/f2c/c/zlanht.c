@@ -140,7 +140,7 @@ doublereal zlanht_(char *norm, aocl_int_t *n, doublereal *d__, dcomplex *e)
     --d__;
     /* Function Body */
     anorm = 0.;
-    if(*n <= 0)
+    if (*n <= 0)
     {
         anorm = 0.;
     }

@@ -273,10 +273,9 @@ void ztgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, dcomplex 
     doublereal bignum;
     logical ilcomp;
     extern /* Double Complex */
-        void
-        zladiv_f2c_(dcomplex *, dcomplex *, dcomplex *);
-    aocl_int64_t ihwmny;
-    /* -- LAPACK computational routine -- */
+    void zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
+    integer ihwmny;
+    /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */

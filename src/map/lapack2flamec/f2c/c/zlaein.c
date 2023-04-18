@@ -172,8 +172,7 @@ void zlaein_(logical *rightv, logical *noinit, aocl_int_t *n, dcomplex *h__, aoc
     char trans[1];
     doublereal rtemp, rootn, vnorm;
     extern /* Double Complex */
-        void
-        zladiv_f2c_(dcomplex *, dcomplex *, dcomplex *);
+    void zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
     char normin[1];
     doublereal nrmsml;
     doublereal growto;

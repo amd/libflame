@@ -286,7 +286,7 @@ void zlaed8_(aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz, dcomplex *q, aocl_i
     /* Function Body */
     *info = 0;
     jlam = 0;
-    if(*n < 0)
+    if (*n < 0)
     {
         *info = -2;
     }

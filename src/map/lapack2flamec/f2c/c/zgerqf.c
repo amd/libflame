@@ -192,8 +192,8 @@ void zgerqf_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomple
     {
         *info = -4;
     }
-    nb = aocl_lapack_ilaenv(&c__1, "ZGERQF", " ", m, n, &c_n1, &c_n1);
-    if(*info == 0)
+    nb = ilaenv_(&c__1, "ZGERQF", " ", m, n, &c_n1, &c_n1);
+    if (*info == 0)
     {
         k = fla_min(*m,*n);
         if (k == 0)

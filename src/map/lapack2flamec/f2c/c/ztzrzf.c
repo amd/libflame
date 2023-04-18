@@ -195,7 +195,7 @@ void ztzrzf_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomple
     *info = 0;
     lquery = *lwork == -1;
     nb = 0;
-    if(*m < 0)
+    if (*m < 0)
     {
         *info = -1;
     }

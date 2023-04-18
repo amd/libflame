@@ -173,7 +173,7 @@ void zsyr_(char *uplo, aocl_int_t *n, dcomplex *alpha, dcomplex *x, aocl_int_t *
     /* Function Body */
     info = 0;
     kx = 0;
-    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
+    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
     {
         info = 1;
     }

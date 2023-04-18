@@ -173,7 +173,7 @@ void zungql_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, dcomplex *a, aocl_int_
     *info = 0;
     lquery = *lwork == -1;
     nb = 0;
-    if(*m < 0)
+    if (*m < 0)
     {
         *info = -1;
     }

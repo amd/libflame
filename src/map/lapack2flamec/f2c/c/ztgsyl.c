@@ -384,7 +384,7 @@ void ztgsyl_(char *trans, aocl_int_t *ijob, aocl_int_t *m, aocl_int_t *n, dcompl
     notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
     scale2 = 0.;
-    if(!notran && !lsame_(trans, "C", 1, 1))
+    if (! notran && ! lsame_(trans, "C"))
     {
         *info = -1;
     }

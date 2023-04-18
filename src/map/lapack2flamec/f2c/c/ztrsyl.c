@@ -183,8 +183,7 @@ void ztrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
     doublereal scaloc;
     doublereal bignum;
     extern /* Double Complex */
-        void
-        zladiv_f2c_(dcomplex *, dcomplex *, dcomplex *);
+    void zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
     logical notrna, notrnb;
     doublereal smlnum;
     /* -- LAPACK computational routine -- */

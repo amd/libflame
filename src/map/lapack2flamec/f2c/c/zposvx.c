@@ -369,11 +369,11 @@ void zposvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *
     --rwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N", 1, 1);
-    equil = lsame_(fact, "E", 1, 1);
+    nofact = lsame_(fact, "N");
+    equil = lsame_(fact, "E");
     smlnum = 0.;
     bignum = 0.;
-    if(nofact || equil)
+    if (nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rcequ = FALSE_;

@@ -328,10 +328,10 @@ void ztrsen_(char *job, char *compq, logical *select, aocl_int_t *n, dcomplex *t
     --w;
     --work;
     /* Function Body */
-    wantbh = lsame_(job, "B", 1, 1);
-    wants = lsame_(job, "E", 1, 1) || wantbh;
-    wantsp = lsame_(job, "V", 1, 1) || wantbh;
-    wantq = lsame_(compq, "V", 1, 1);
+    wantbh = lsame_(job, "B");
+    wants = lsame_(job, "E") || wantbh;
+    wantsp = lsame_(job, "V") || wantbh;
+    wantq = lsame_(compq, "V");
     lwmin = 0;
     /* Set M to the number of selected eigenvalues. */
     *m = 0;

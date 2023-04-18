@@ -358,7 +358,7 @@ void zgeesx_(char *jobvs, char *sort, L_fpz1 select, char *sense, aocl_int_t *n,
     /* depends on SDIM, which is computed by the routine ZTRSEN later */
     /* in the code.) */
     maxwrk = 0;
-    if(*info == 0)
+    if (*info == 0)
     {
         if(*n == 0)
         {

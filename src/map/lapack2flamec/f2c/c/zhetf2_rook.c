@@ -258,10 +258,10 @@ void zhetf2_rook_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_
     --ipiv;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U", 1, 1);
+    upper = lsame_(uplo, "U");
     imax = 0;
     jmax = 0;
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L"))
     {
         *info = -1;
     }

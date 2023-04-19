@@ -11,9 +11,6 @@
 #include "blis.h"
 #endif
 #include "FLA_f2c.h" /* Table of constant values */
-#ifdef FLA_ENABLE_AMD_OPT
-#include "immintrin.h"
-#endif
 
 static integer c__1 = 1;
 /* > \brief \b DORG2R generates all or part of the orthogonal matrix Q from a QR factorization determined by s geqrf (unblocked algorithm). */
@@ -155,7 +152,6 @@ int dorg2r_fla_opt(integer *m, integer *n, integer *k, doublereal * a, integer *
     doublereal d__1;
     integer i;
     doublereal *dx;
-    __m256d alphav, x0v;
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */

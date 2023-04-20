@@ -359,8 +359,8 @@ void aocl_lapack_dorcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
     aocl_int64_t lworkmin, lworkopt, i__, j, childinfo, lbbcsdwork, lorbdbwork, lorglqwork,
         lorgqrwork, ib11d, ib11e, ib12d, ib12e, ib21d, ib21e, ib22d, ib22e, iphi;
     logical defaultsigns;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t lbbcsdworkmin, itaup1, itaup2, itauq1, itauq2, lbbcsdworkopt;
+    extern logical lsame_(char *, char *);
+    integer lbbcsdworkmin, itaup1, itaup2, itauq1, itauq2, lbbcsdworkopt;
     logical wantu1, wantu2;
     aocl_int64_t ibbcsd, lorbdbworkopt;
     aocl_int64_t iorbdb, lorglqworkmin, lorgqrworkmin;
@@ -459,7 +459,7 @@ void aocl_lapack_dorcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
     ib12d = 0;
     ib11e = 0;
     ib11d = 0;
-    if(*m < 0)
+    if (*m < 0)
     {
         *info = -7;
     }
@@ -652,7 +652,6 @@ void aocl_lapack_dorcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
         iorbdb = itauq2 + fla_max(i__1,i__2);
         dorbdb_(trans, signs, m, p, q, &x11[x11_offset], ldx11, &x12[ x12_offset], ldx12, &x21[x21_offset], ldx21, &x22[x22_offset], ldx22, &theta[1], &v1t[v1t_offset], &u1[u1_offset], &u2[ u2_offset], &v1t[v1t_offset], &v2t[v2t_offset], &work[1], & c_n1, &childinfo);
         lorbdbworkopt = (integer) work[1];
-        lorbdbworkmin = lorbdbworkopt;
         /* Computing MAX */
         i__1 = 1;
         i__2 = *m - *q; // , expr subst

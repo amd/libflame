@@ -17,7 +17,6 @@ FLA_Error FLA_Bidiag_form_U_external( FLA_Obj A, FLA_Obj t )
   FLA_Datatype datatype;
   integer          m_A, n_A, k_A;
   integer          cs_A;
-  integer          min_m_n;
   integer          lwork;
   FLA_Obj      work;
   char         blas_vect = 'Q';

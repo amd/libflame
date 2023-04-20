@@ -15,7 +15,6 @@ FLA_Error FLA_Hevdd_external( FLA_Evd_type jobz, FLA_Uplo uplo, FLA_Obj A, FLA_O
   fla_dim_t      info = 0;
 #ifdef FLA_ENABLE_EXTERNAL_LAPACK_INTERFACES
   FLA_Datatype datatype;
-  FLA_Datatype dt_real;
   integer          n_A, cs_A;
   integer          lwork, lrwork, liwork;
   FLA_Obj      work, rwork, iwork;

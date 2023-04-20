@@ -359,7 +359,7 @@ void aocl_lapack_sorcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
     logical defaultsigns;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real dummy[1];
-    aocl_int64_t lbbcsdworkmin, itaup1, itaup2, itauq1, itauq2, lbbcsdworkopt;
+    integer lbbcsdworkmin, itaup1, itaup2, itauq1, itauq2, lbbcsdworkopt;
     logical wantu1, wantu2;
     aocl_int64_t ibbcsd, lorbdbworkopt;
     aocl_int64_t iorbdb, lorglqworkmin, lorgqrworkmin;
@@ -454,7 +454,7 @@ void aocl_lapack_sorcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
     ib12d = 0;
     ib11e = 0;
     ib11d = 0;
-    if(*m < 0)
+    if (*m < 0)
     {
         *info = -7;
     }
@@ -647,7 +647,6 @@ void aocl_lapack_sorcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
         iorbdb = itauq2 + fla_max(i__1,i__2);
         sorbdb_(trans, signs, m, p, q, &x11[x11_offset], ldx11, &x12[ x12_offset], ldx12, &x21[x21_offset], ldx21, &x22[x22_offset], ldx22, dummy, dummy, dummy, dummy, dummy, dummy, &work[1], & c_n1, &childinfo);
         lorbdbworkopt = (integer) work[1];
-        lorbdbworkmin = lorbdbworkopt;
         /* Computing MAX */
         i__1 = 1;
         i__2 = *m - *q; // , expr subst

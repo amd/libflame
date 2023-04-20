@@ -159,7 +159,7 @@ FLA_Error FLA_Bidiag_UT_l_realify_unb( FLA_Obj A, FLA_Obj d, FLA_Obj e )
 FLA_Error FLA_Bidiag_UT_l_realify_opt( FLA_Obj A, FLA_Obj d, FLA_Obj e )
 {
   FLA_Datatype datatype;
-  integer          m_A, n_A;
+  integer          m_A;
   integer          min_m_n;
   integer          rs_A, cs_A;
   integer          inc_d;
@@ -481,7 +481,7 @@ FLA_Error FLA_Bidiag_UT_u_realify_unb( FLA_Obj A, FLA_Obj d, FLA_Obj e )
 FLA_Error FLA_Bidiag_UT_u_realify_opt( FLA_Obj A, FLA_Obj d, FLA_Obj e )
 {
   FLA_Datatype datatype;
-  integer          m_A, n_A;
+  integer          n_A;
   integer          min_m_n;
   integer          rs_A, cs_A;
   integer          inc_d;

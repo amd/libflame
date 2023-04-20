@@ -169,8 +169,7 @@ FLA_Error FLA_Househ2_UT_l_ops( integer       m_x2,
   float    norm_x_2;
   float    norm_x;
   float    abs_chi_1_minus_alpha;
-  float    norm_x_2_div_abs_chi_1_minus_alpha;
-  float    safmin, rsafmn, sclf, lchi1;
+  float    safmin, rsafmn, lchi1;
   int      i_one = 1;
   int      i_two = 2;
   int      kn;
@@ -320,8 +319,7 @@ FLA_Error FLA_Househ2_UT_l_opd( integer       m_x2,
   double   norm_x_2;
   double   norm_x;
   double   abs_chi_1_minus_alpha;
-  double   norm_x_2_div_abs_chi_1_minus_alpha;
-  double   safmin, rsafmn, sclf, lchi1;
+  double   safmin, rsafmn, lchi1;
   int      i_one = 1;
   int      i_two = 2;
   int      kn;

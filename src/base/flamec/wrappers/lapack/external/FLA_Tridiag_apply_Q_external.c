@@ -19,7 +19,6 @@ FLA_Error FLA_Tridiag_apply_Q_external( FLA_Side side, FLA_Uplo uplo, FLA_Trans 
   integer          m_B, n_B;
   integer          cs_A;
   integer          cs_B;
-  integer          k_t;
   integer          lwork;
   char         blas_side;
   char         blas_uplo;

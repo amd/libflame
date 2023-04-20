@@ -17,7 +17,6 @@ FLA_Error FLA_Tevd_external( FLA_Evd_type jobz, FLA_Obj d, FLA_Obj e, FLA_Obj A 
   FLA_Datatype datatype;
   FLA_Datatype dt_real;
   integer          n_A, cs_A;
-  integer          inc_d, inc_e;
   integer          lwork;
   FLA_Obj      work, d_use, e_use;
   char         blas_jobz;

@@ -96,7 +96,9 @@ FLA_Error FLA_Tevdr_external( FLA_Evd_type jobz, FLA_Obj d, FLA_Obj e, FLA_Obj l
       integer*      buff_isuppz = ( integer*      ) FLA_INT_PTR( isuppz );
       float*    buff_work   = ( float*    ) FLA_FLOAT_PTR( work );
       integer*      buff_iwork  = ( integer*      ) FLA_INT_PTR( iwork );
- 
+      float vlf = (float) vl;
+      float vuf = (float) vu;
+
       F77_sstemr( &blas_jobz,
                   &blas_range,
                   &n_A,
@@ -126,6 +128,8 @@ FLA_Error FLA_Tevdr_external( FLA_Evd_type jobz, FLA_Obj d, FLA_Obj e, FLA_Obj l
       integer*      buff_isuppz = ( integer*      ) FLA_INT_PTR( isuppz );
       double*   buff_work   = ( double*   ) FLA_DOUBLE_PTR( work );
       integer*      buff_iwork  = ( integer*      ) FLA_INT_PTR( iwork );
+      double vlf = (double) vl;
+      double vuf = (double) vu;
 
       F77_dstemr( &blas_jobz,
                   &blas_range,
@@ -156,6 +160,8 @@ FLA_Error FLA_Tevdr_external( FLA_Evd_type jobz, FLA_Obj d, FLA_Obj e, FLA_Obj l
       integer*      buff_isuppz = ( integer*      ) FLA_INT_PTR( isuppz );
       float*    buff_work   = ( float*    ) FLA_FLOAT_PTR( work );
       integer*      buff_iwork  = ( integer*      ) FLA_INT_PTR( iwork );
+      float vlf = (float) vl;
+      float vuf = (float) vu;
 
       F77_cstemr( &blas_jobz,
                   &blas_range,
@@ -186,6 +192,8 @@ FLA_Error FLA_Tevdr_external( FLA_Evd_type jobz, FLA_Obj d, FLA_Obj e, FLA_Obj l
       integer*      buff_isuppz = ( integer*      ) FLA_INT_PTR( isuppz );
       double*   buff_work   = ( double*   ) FLA_DOUBLE_PTR( work );
       integer*      buff_iwork  = ( integer*      ) FLA_INT_PTR( iwork );
+      double vlf = (double) vl;
+      double vuf = (double) vu;
 
       F77_zstemr( &blas_jobz,
                   &blas_range,

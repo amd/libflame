@@ -11,7 +11,6 @@
 #include "blis.h"
 #endif
 #include "FLA_f2c.h" /* Table of constant values */
-
 static integer c__1 = 1;
 /* > \brief \b DORG2R generates all or part of the orthogonal matrix Q from a QR factorization determined by s geqrf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -150,12 +149,10 @@ int dorg2r_fla_opt(integer *m, integer *n, integer *k, doublereal * a, integer *
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1;
-    integer i;
-    doublereal *dx;
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(char *, integer *);
+    int fla_dscal(integer *, doublereal *, doublereal *, integer *), dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(char *, integer *);
     /* Test the input arguments */
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -229,7 +226,7 @@ int dorg2r_fla_opt(integer *m, integer *n, integer *k, doublereal * a, integer *
         
 	if (i__ < *m)
         {
-	    fla_dscal(&i__1, &d__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
+	        fla_dscal(&i__1, &d__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
         }
         else
         {

@@ -152,26 +152,7 @@ FLA_Error FLA_Tevd_n_opz_var1( integer       m_A,
                                double*   buff_e, integer inc_e,
                                dcomplex* buff_G, integer rs_G, integer cs_G )
 {
-	dcomplex one = bl1_z1();
-	double *d1;
-	double *e1;
-	fla_dim_t r_val;
-	fla_dim_t done;
-	fla_dim_t m_G_sweep_max;
-	fla_dim_t ij_begin;
-	fla_dim_t ijTL, ijBR;
-	fla_dim_t m_A11;
-	fla_dim_t n_iter_perf;
-	fla_dim_t n_iter_prev;
-	fla_dim_t n_iter_perf_sweep_max;
-
-#ifdef PRINTF
-	fla_dim_t n_deflations;
-	fla_dim_t total_deflations;
-	total_deflations = 0
-#endif
-
-	dcomplex* G;
+	dcomplex  one  = bl1_z1();
 	double*   d1;
 	double*   e1;
 	integer       r_val;
@@ -185,14 +166,6 @@ FLA_Error FLA_Tevd_n_opz_var1( integer       m_A,
 	integer       n_deflations;
 	integer       n_iter_prev;
 	integer       n_iter_perf_sweep_max;
-
-	// Initialize some numerical constants.
-	eps    = FLA_Mach_params_opd( FLA_MACH_EPS );
-	eps2   = FLA_Mach_params_opd( FLA_MACH_EPS2 );
-	safmin = FLA_Mach_params_opd( FLA_MACH_SFMIN );
-	safmax = rone / safmin;
-	ssfmax = sqrt( safmax ) / 3.0;
-	ssfmin = sqrt( safmin ) / eps2;
 
 	// Initialize our completion flag.
 	done = FALSE;

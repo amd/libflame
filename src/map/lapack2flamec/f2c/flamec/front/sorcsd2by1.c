@@ -354,7 +354,7 @@ void aocl_lapack_sorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
     ib12d = 0;
     ib11e = 0;
     ib11d = 0;
-    if(*m < 0)
+    if (*m < 0)
     {
         *info = -4;
     }

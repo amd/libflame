@@ -389,7 +389,7 @@ void stgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *s, 
     --work;
     /* Function Body */
     ilback = FALSE_;
-    if(lsame_(howmny, "A", 1, 1))
+    if (lsame_(howmny, "A"))
     {
         ihwmny = 1;
         ilall = TRUE_;

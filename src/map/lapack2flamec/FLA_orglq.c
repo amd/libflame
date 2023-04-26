@@ -16,10 +16,8 @@
 #include "FLA_lapack2flame_return_defs.h"
 #include "FLA_lapack2flame_util_defs.h"
 
-extern void sorglq_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real *a, aocl_int64_t *lda, real *tau,
-                       real *work, aocl_int64_t *lwork, aocl_int64_t *info);
-extern void dorglq_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a, aocl_int64_t *lda,
-                       doublereal *tau, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
+extern int sorglq_fla(integer* m, integer* n, integer* k, real* a, integer* lda, real* tau, real* work, integer* lwork, integer* info);
+extern int dorglq_fla(integer* m, integer* n, integer* k, doublereal* a, integer* lda, doublereal* tau, doublereal* work, integer* lwork, integer* info);
 /*
   SORGLQ generates an M-by-N real matrix Q with orthonormal rows,
   which is defined as the first M rows of a product of K elementary
@@ -181,10 +179,11 @@ void dorgl2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *buff_A, ao
 
 LAPACK_orglq(s, org)
 {
-    int fla_error = LAPACK_SUCCESS;
+
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sorglq inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "", *m, *n, *k, *ldim_A);
-
+#if !FLA_AMD_OPT
+    int fla_error = LAPACK_SUCCESS;
     {
         LAPACK_RETURN_CHECK_VAR1( sorglq_check( m, n, k,
                                            buff_A, ldim_A,
@@ -200,12 +199,24 @@ LAPACK_orglq(s, org)
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return fla_error;
+#else
+    {
+        sorglq_fla(m, n, k,
+            buff_A, ldim_A,
+            buff_t,
+            buff_w, lwork,
+            info);
+        AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
+    }
+#endif
 }
 LAPACK_orglq(d, org)
 {
-    int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dorglq inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "", *m, *n, *k, *ldim_A);
+#if !FLA_AMD_OPT
+    int fla_error = LAPACK_SUCCESS;
     {
         LAPACK_RETURN_CHECK_VAR1( dorglq_check( m, n, k,
                                            buff_A, ldim_A,
@@ -221,6 +232,17 @@ LAPACK_orglq(d, org)
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return fla_error;
+#else
+    {
+        dorglq_fla(m, n, k,
+            buff_A, ldim_A,
+            buff_t,
+            buff_w, lwork,
+            info);
+        AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
+    }
+#endif
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX

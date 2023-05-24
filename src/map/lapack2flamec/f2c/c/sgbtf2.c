@@ -233,7 +233,7 @@ void sgbtf2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, real 
         return 0;
     }
     #if AOCL_FLA_PROGRESS_H
-        step_count =0;
+        progress_step_count =0;
     	 #ifndef FLA_ENABLE_WINDOWS_BUILD
         	if(!aocl_fla_progress_ptr)
               	    aocl_fla_progress_ptr=aocl_fla_progress;
@@ -264,13 +264,13 @@ void sgbtf2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, real 
             ++j)
     {
 	#if AOCL_FLA_PROGRESS_H
-            if(aocl_fla_progress_ptr){
-		if(j%32==0 || j==i__1){
-			step_count=j;
-                        AOCL_FLA_PROGRESS_FUNC_PTR("SGBTF2",6,&step_count,&thread_id,&total_threads);
-                }
-            }  
-        #endif
+        if(aocl_fla_progress_ptr){
+		    if(j%32==0 || j==i__1){
+			    progress_step_count=j;
+                AOCL_FLA_PROGRESS_FUNC_PTR("SGBTF2",6,&progress_step_count,&progress_thread_id,&progress_total_threads);
+            }
+        }  
+    #endif
 
         /* Set fill-in elements in column J+KV to zero. */
         if(j + kv <= *n)

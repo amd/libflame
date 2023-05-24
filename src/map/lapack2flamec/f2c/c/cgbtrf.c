@@ -252,7 +252,7 @@ void cgbtrf_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomp
         return 0;
     }
     #if AOCL_FLA_PROGRESS_H
-        step_count =0;
+        progress_step_count =0;
       #ifndef FLA_ENABLE_WINDOWS_BUILD
         if(!aocl_fla_progress_ptr)
               aocl_fla_progress_ptr=aocl_fla_progress;
@@ -330,11 +330,11 @@ void cgbtrf_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomp
             jb = fla_min(i__3,i__4);
 	    #if AOCL_FLA_PROGRESS_H
                 if(aocl_fla_progress_ptr){
-                        step_count+=jb;
-                        AOCL_FLA_PROGRESS_FUNC_PTR("CGBTRF",6,&step_count,&thread_id,&total_threads);
+                        progress_step_count+=jb;
+                        AOCL_FLA_PROGRESS_FUNC_PTR("CGBTRF",6,&progress_step_count,&progress_thread_id,&progress_total_threads);
                 }
 
-            #endif
+        #endif
 
             /* The active part of the matrix is partitioned */
             /* A11 A12 A13 */

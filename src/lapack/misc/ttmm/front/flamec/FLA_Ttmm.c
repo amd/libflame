@@ -48,11 +48,11 @@ FLA_Error FLA_Ttmm( FLA_Uplo uplo, FLA_Obj A )
     case FLA_COMPLEX:
     {
       scomplex *buff_A = ( scomplex * ) FLA_COMPLEX_PTR( A );
-      fla_dim_t ldim_A = FLA_Obj_col_stride( A );
+      integer ldim_A = FLA_Obj_col_stride( A );
 
       /* Force diagonal elements 1..N-1 to be real to match
          netlib LAPACK clauu2.f */                        
-      for (fla_dim_t i=0; i<m_A-1; i++)                          
+      for (integer i=0; i<m_A-1; i++)                          
       {                                                       
         buff_A[ldim_A *i + i].imag = 0.0F;                    
       }                                                       
@@ -63,11 +63,11 @@ FLA_Error FLA_Ttmm( FLA_Uplo uplo, FLA_Obj A )
     case FLA_DOUBLE_COMPLEX:
     {
       dcomplex *buff_A = ( dcomplex * ) FLA_DOUBLE_COMPLEX_PTR( A );
-      fla_dim_t ldim_A = FLA_Obj_col_stride( A );
+      integer ldim_A = FLA_Obj_col_stride( A );
 
       /* Force diagonal elements 1..N-1 to be real to match
          netlib LAPACK zlauu2.f */                        
-      for (fla_dim_t i=0; i<m_A-1; i++)                          
+      for (integer i=0; i<m_A-1; i++)                          
       {                                                       
         buff_A[ldim_A *i + i].imag = 0.0;                    
       }                                                       

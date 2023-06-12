@@ -1,11 +1,10 @@
 /******************************************************************************
- * Copyright (C) 2023-2026, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+* Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+*******************************************************************************/
 
 #include "FLAME.h"
-#include "fla_lapack_avx2_kernels.h"
 
-#if FLA_ENABLE_AMD_OPT
+#ifdef FLA_ENABLE_AMD_OPT
 
 /*
  * LU with partial pivoting for tiny matrices
@@ -13,37 +12,36 @@
  * All the computations are done inline without using
  * corresponding BLAS APIs to reduce function overheads.
  */
-aocl_int64_t fla_dgetrf_small_avx2(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_int_t *ipiv,
-                              aocl_int64_t *info)
+integer fla_dgetrf_small_avx2( integer *m, integer *n,
+                                   doublereal *a, integer *lda,
+                                   integer *ipiv,
+                                   integer *info)
 {
-    aocl_int64_t mi = *m, ni = *n, n_t = *n;
-    aocl_int64_t i, i_1, lda_t;
+    integer mi, ni;
+    integer i, j, i_1, lda_t, b_off, y_off;
 
-    doublereal max_val, t_val;
+    doublereal p_val, max_val, t_val;
     doublereal *acur, *apiv, *asrc;
-    aocl_int64_t p_idx;
-    aocl_int64_t min_m_n = fla_min(mi, ni);
-    static TLS_CLASS_SPEC aocl_int_t safemin_init = 1;
-    static TLS_CLASS_SPEC doublereal safemin;
-
-    if(safemin_init)
-    {
-        safemin = dlamch_("S");
-        safemin_init = 0;
-    }
+    integer p_idx;
+    __m256d result[4], tempY[4], tempb[4], tempx, p_val4;
+    integer min_m_n = fla_min(*m, *n);
     lda_t = *lda;
-    for(i = 0; i < min_m_n; i++, mi--, ni--)
+
+    for( i = 0; i < min_m_n; i++ )
     {
+        mi = *m - i;
+        ni = *n - i;
+
         acur = &a[i + lda_t * i];
 
         /* Find the pivot element */
-        max_val = 0.0;
+        max_val = 0;
         p_idx = i;
-        for(i_1 = 0; i_1 < mi; i_1++)
+        for( i_1 = 0; i_1 < mi; i_1++ )
         {
             t_val = acur[i_1];
-            t_val = (t_val < 0.0) ? -t_val : t_val;
-            if(t_val > max_val)
+            t_val = ( t_val < 0.0 ) ? -t_val : t_val;
+            if( t_val > max_val )
             {
                 max_val = t_val;
                 p_idx = i + i_1;
@@ -52,33 +50,31 @@ aocl_int64_t fla_dgetrf_small_avx2(aocl_int64_t *m, aocl_int64_t *n, doublereal 
 
         apiv = a + p_idx;
         asrc = a + i;
-        ipiv[i] = (aocl_int_t)(p_idx + 1);
+        ipiv[i] = p_idx + 1;
 
         /* Swap rows and calculate a column of L */
-        if(max_val != 0.0)
+        if( max_val != 0.0 )
         {
             /* Swap entire rows */
-            if(p_idx != i)
+            if( p_idx != i)
             {
-                for(i_1 = 0; i_1 < n_t; i_1++)
+                for( i_1 = 0; i_1 < *n; i_1++ )
                 {
                     t_val = apiv[i_1 * lda_t];
-                    apiv[i_1 * lda_t] = asrc[i_1 * lda_t];
-                    asrc[i_1 * lda_t] = t_val;
+                    apiv[i_1 * *lda] = asrc[i_1 * lda_t];
+                    asrc[i_1 * *lda] = t_val;
                 }
             }
 
             /* Calculate scalefactors (L)  & update trailing matrix */
-            if(mi > 1)
-            {
-                fla_lu_piv_small_d_update_tr_matrix_avx2(1, mi, ni, acur, lda_t, safemin);
-            }
+			fla_lu_piv_small_d_update_tr_matrix_avx2(1, mi, ni, acur, *lda);
         }
         else
         {
-            *info = (*info == 0) ? p_idx + 1 : *info;
+            *info = ( *info == 0 ) ? p_idx + 1 : *info;
         }
     }
+    
 
     return *info;
 }

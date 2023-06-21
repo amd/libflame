@@ -218,10 +218,7 @@
 /* causing few netlib tests to fail */
 #pragma STDC FP_CONTRACT OFF
 
-/** Generated wrapper function */
-void slaln2_(logical *ltrans, aocl_int_t *na, aocl_int_t *nw, real *smin, real *ca, real *a,
-             aocl_int_t *lda, real *d1, real *d2, real *b, aocl_int_t *ldb, real *wr, real *wi,
-             real *x, aocl_int_t *ldx, real *scale, real *xnorm, aocl_int_t *info)
+int slaln2_(logical *ltrans, integer *na, integer *nw, real * smin, real *ca, real *a, integer *lda, real *d1, real *d2, real *b, integer *ldb, real *wr, real *wi, real *x, integer *ldx, real *scale, real *xnorm, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slaln2(ltrans, na, nw, smin, ca, a, lda, d1, d2, b, ldb, wr, wi, x, ldx, scale,

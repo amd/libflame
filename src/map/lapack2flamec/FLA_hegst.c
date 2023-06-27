@@ -169,6 +169,11 @@ extern void chegs2_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomple
 extern void zhegs2_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
                        dcomplex *b, aocl_int64_t *ldb, aocl_int64_t *info);
 
+extern int zhegst_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, integer *info);
+extern int chegst_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda, complex *b, integer *ldb, integer *info);
+extern int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda, complex *b, integer *ldb, integer *info);
+extern int zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, integer *info);
+
 /*
   ZHEGST reduces a scomplex Hermitian-definite generalized
   eigenproblem to standard form.
@@ -255,9 +260,10 @@ LAPACK_hegst(d, sy)
 }
 LAPACK_hegst(c, he)
 {
-    int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("chegst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "", *itype, *uplo, *m, *ldim_A, *ldim_B);
+#if !FLA_AMD_OPT 
+    int fla_error = LAPACK_SUCCESS;   
     {
         LAPACK_RETURN_CHECK_VAR1( chegst_check( itype, uplo,
                                            m,
@@ -268,17 +274,29 @@ LAPACK_hegst(c, he)
     if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_hegst_body(c)
-         /** fla_error set to 0 on LAPACK_SUCCESS */
+        /** fla_error set to 0 on LAPACK_SUCCESS */
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return fla_error;
+#else
+    {
+        chegst_fla( itype, uplo,
+                    m,
+                    buff_A, ldim_A,
+                    buff_B, ldim_B,
+                    info );
+        AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
+    }
+#endif
 }
 LAPACK_hegst(z,he)
 {
-    int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhegst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "", *itype, *uplo, *m, *ldim_A, *ldim_B);
+#if !FLA_AMD_OPT  
+    int fla_error = LAPACK_SUCCESS;
     {
         LAPACK_RETURN_CHECK_VAR1( zhegst_check( itype, uplo,
                                            m,
@@ -289,11 +307,22 @@ LAPACK_hegst(z,he)
     if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_hegst_body(z)
-         /** fla_error set to 0 on LAPACK_SUCCESS */
+        /** fla_error set to 0 on LAPACK_SUCCESS */
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return fla_error;
+#else
+    {
+        zhegst_fla( itype, uplo,
+                    m,
+                    buff_A, ldim_A,
+                    buff_B, ldim_B,
+                    info );
+        AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
+    }
+#endif
 }
 
 #define LAPACK_hegs2(prefix, name)                                                         \
@@ -354,9 +383,10 @@ LAPACK_hegs2(d, sy)
 }
 LAPACK_hegs2(c, he)
 {
-    int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("chegs2 inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "", *itype, *uplo, *m, *ldim_A, *ldim_B);
+#if !FLA_AMD_OPT
+    int fla_error = LAPACK_SUCCESS; 
     {
         LAPACK_RETURN_CHECK_VAR1( chegs2_check( itype, uplo,
                                            m,
@@ -366,18 +396,30 @@ LAPACK_hegs2(c, he)
     }
     if (fla_error == LAPACK_SUCCESS)
     {
-        LAPACK_hegst_body(c)
+        LAPACK_hegst_body(c)        
          /** fla_error set to 0 on LAPACK_SUCCESS */
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return fla_error;
+#else
+    {
+        chegs2_fla( itype, uplo,
+                    m,
+                    buff_A, ldim_A,
+                    buff_B, ldim_B,
+                    info );
+        AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
+    }
+#endif
 }
 LAPACK_hegs2(z,he)
 { 
-    int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhegs2 inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "", *itype, *uplo, *m, *ldim_A, *ldim_B);
+#if !FLA_AMD_OPT    
+    int fla_error = LAPACK_SUCCESS;
     {
         LAPACK_RETURN_CHECK_VAR1( zhegs2_check( itype, uplo,
                                            m,
@@ -387,12 +429,23 @@ LAPACK_hegs2(z,he)
     }
     if (fla_error == LAPACK_SUCCESS)
     {
-        LAPACK_hegst_body(z)
+        LAPACK_hegst_body(z)        
          /** fla_error set to 0 on LAPACK_SUCCESS */
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return fla_error;
+#else
+    {
+        zhegs2_fla( itype, uplo,
+                    m,
+                    buff_A, ldim_A,
+                    buff_B, ldim_B,
+                    info );
+        AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
+    }
+#endif
 }
 
 #endif

@@ -9,7 +9,7 @@
 #include "blis.h"
 #endif
 
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 static doublereal c_b12 = 1.;
 static aocl_int64_t c_n1 = -1;
 /* > \brief \b DGETRS */
@@ -141,11 +141,10 @@ void dgetrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_i
                           aocl_int64_t *lda, double *b, aocl_int64_t *ldb);
     /* Local variables */
 #ifndef FLA_ENABLE_AOCL_BLAS
-    extern logical lsame_(char *, char *, aocl_int64_t a, aocl_int64_t b);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_( char *, integer *), dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
 #endif
-    extern int fla_dgetrs_small_notrans(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs,
-                                        doublereal *a, aocl_int64_t *lda, aocl_int_t *ipiv,
-                                        doublereal *b, aocl_int64_t *ldb, aocl_int64_t *info);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -210,8 +209,18 @@ void dgetrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_i
     b_dim1 = *ldb;
     b_offset = 1 + b_dim1;
     b -= b_offset;
+    /* Function Body */
+    *info = 0;
 
-    if(notran)
+#if FLA_ENABLE_AOCL_BLAS
+    notran = lsame_(trans, "N", 1, 1);
+
+    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_( trans, "C", 1, 1))
+#else
+    notran = lsame_(trans, "N");
+
+    if (! notran && ! lsame_(trans, "T") && ! lsame_( trans, "C"))
+#endif
     {
         *info = -1;
     }
@@ -234,7 +243,11 @@ void dgetrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_i
     if (*info != 0)
     {
         i__1 = -(*info);
+#if FLA_ENABLE_AOCL_BLAS
+        xerbla_("DGETRS", &i__1, 6);
+#else
         xerbla_("DGETRS", &i__1);
+#endif
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
@@ -244,6 +257,7 @@ void dgetrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_i
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
+
     if (notran)
     {
         /* Solve A * X = B. */

@@ -12,17 +12,17 @@
 
 // Note that this operation is designed for tall rectangular matrix A.
 // If m_A < n_A then, U and V should be swapped before entering this function.
-FLA_Error FLA_Bsvd_v_opt_var1(fla_dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj H, FLA_Obj U, FLA_Obj V, fla_dim_t b_alg)
+FLA_Error FLA_Bsvd_v_opt_var1(dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj H, FLA_Obj U, FLA_Obj V, dim_t b_alg)
 {
     FLA_Error r_val = FLA_SUCCESS;
     FLA_Datatype datatype;
-    integer          m_U, m_V, n_GH;
-    integer          inc_d;
-    integer          inc_e;
-    integer          rs_G, cs_G;
-    integer          rs_H, cs_H;
-    integer          rs_U, cs_U;
-    integer          rs_V, cs_V;
+    integer m_U, m_V, n_GH;
+    integer inc_d;
+    integer inc_e;
+    integer rs_G, cs_G;
+    integer rs_H, cs_H;
+    integer rs_U, cs_U;
+    integer rs_V, cs_V;
 
     datatype = FLA_Obj_datatype(U);
 
@@ -56,18 +56,18 @@ FLA_Error FLA_Bsvd_v_opt_var1(fla_dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Ob
         float *buff_U = FLA_FLOAT_PTR(U);
         float *buff_V = FLA_FLOAT_PTR(V);
 
-        r_val = FLA_Bsvd_v_ops_var1( fla_min( m_U, m_V ),
-                                     m_U,
-                                     m_V,
-                                     n_GH,
-                                     n_iter_max,
-                                     buff_d, inc_d,
-                                     buff_e, inc_e,
-                                     buff_G, rs_G, cs_G,
-                                     buff_H, rs_H, cs_H,
-                                     buff_U, rs_U, cs_U,
-                                     buff_V, rs_V, cs_V,
-                                     b_alg );
+        r_val = FLA_Bsvd_v_ops_var1(fla_min(m_U, m_V),
+                                    m_U,
+                                    m_V,
+                                    n_GH,
+                                    n_iter_max,
+                                    buff_d, inc_d,
+                                    buff_e, inc_e,
+                                    buff_G, rs_G, cs_G,
+                                    buff_H, rs_H, cs_H,
+                                    buff_U, rs_U, cs_U,
+                                    buff_V, rs_V, cs_V,
+                                    b_alg);
 
         break;
     }
@@ -81,18 +81,18 @@ FLA_Error FLA_Bsvd_v_opt_var1(fla_dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Ob
         double *buff_U = FLA_DOUBLE_PTR(U);
         double *buff_V = FLA_DOUBLE_PTR(V);
 
-        r_val = FLA_Bsvd_v_opd_var1( fla_min( m_U, m_V ),
-                                     m_U,
-                                     m_V,
-                                     n_GH,
-                                     n_iter_max,
-                                     buff_d, inc_d,
-                                     buff_e, inc_e,
-                                     buff_G, rs_G, cs_G,
-                                     buff_H, rs_H, cs_H,
-                                     buff_U, rs_U, cs_U,
-                                     buff_V, rs_V, cs_V,
-                                     b_alg );
+        r_val = FLA_Bsvd_v_opd_var1(fla_min(m_U, m_V),
+                                    m_U,
+                                    m_V,
+                                    n_GH,
+                                    n_iter_max,
+                                    buff_d, inc_d,
+                                    buff_e, inc_e,
+                                    buff_G, rs_G, cs_G,
+                                    buff_H, rs_H, cs_H,
+                                    buff_U, rs_U, cs_U,
+                                    buff_V, rs_V, cs_V,
+                                    b_alg);
 
         break;
     }
@@ -106,18 +106,18 @@ FLA_Error FLA_Bsvd_v_opt_var1(fla_dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Ob
         scomplex *buff_U = FLA_COMPLEX_PTR(U);
         scomplex *buff_V = FLA_COMPLEX_PTR(V);
 
-        r_val = FLA_Bsvd_v_opc_var1( fla_min( m_U, m_V ),
-                                     m_U,
-                                     m_V,
-                                     n_GH,
-                                     n_iter_max,
-                                     buff_d, inc_d,
-                                     buff_e, inc_e,
-                                     buff_G, rs_G, cs_G,
-                                     buff_H, rs_H, cs_H,
-                                     buff_U, rs_U, cs_U,
-                                     buff_V, rs_V, cs_V,
-                                     b_alg );
+        r_val = FLA_Bsvd_v_opc_var1(fla_min(m_U, m_V),
+                                    m_U,
+                                    m_V,
+                                    n_GH,
+                                    n_iter_max,
+                                    buff_d, inc_d,
+                                    buff_e, inc_e,
+                                    buff_G, rs_G, cs_G,
+                                    buff_H, rs_H, cs_H,
+                                    buff_U, rs_U, cs_U,
+                                    buff_V, rs_V, cs_V,
+                                    b_alg);
 
         break;
     }
@@ -131,18 +131,18 @@ FLA_Error FLA_Bsvd_v_opt_var1(fla_dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Ob
         dcomplex *buff_U = FLA_DOUBLE_COMPLEX_PTR(U);
         dcomplex *buff_V = FLA_DOUBLE_COMPLEX_PTR(V);
 
-        r_val = FLA_Bsvd_v_opz_var1( fla_min( m_U, m_V ),
-                                     m_U,
-                                     m_V,
-                                     n_GH,
-                                     n_iter_max,
-                                     buff_d, inc_d,
-                                     buff_e, inc_e,
-                                     buff_G, rs_G, cs_G,
-                                     buff_H, rs_H, cs_H,
-                                     buff_U, rs_U, cs_U,
-                                     buff_V, rs_V, cs_V,
-                                     b_alg );
+        r_val = FLA_Bsvd_v_opz_var1(fla_min(m_U, m_V),
+                                    m_U,
+                                    m_V,
+                                    n_GH,
+                                    n_iter_max,
+                                    buff_d, inc_d,
+                                    buff_e, inc_e,
+                                    buff_G, rs_G, cs_G,
+                                    buff_H, rs_H, cs_H,
+                                    buff_U, rs_U, cs_U,
+                                    buff_V, rs_V, cs_V,
+                                    b_alg);
 
         break;
     }
@@ -151,58 +151,54 @@ FLA_Error FLA_Bsvd_v_opt_var1(fla_dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Ob
     return r_val;
 }
 
-
-
-FLA_Error FLA_Bsvd_v_ops_var1( integer       min_m_n,
-                               integer       m_U,
-                               integer       m_V,
-                               integer       n_GH,
-                               integer       n_iter_max,
-                               float*    buff_d, integer inc_d,
-                               float*    buff_e, integer inc_e,
-                               scomplex* buff_G, integer rs_G, integer cs_G,
-                               scomplex* buff_H, integer rs_H, integer cs_H,
-                               float*    buff_U, integer rs_U, integer cs_U,
-                               float*    buff_V, integer rs_V, integer cs_V,
-                               integer       b_alg )
+FLA_Error FLA_Bsvd_v_ops_var1(integer min_m_n,
+                              integer m_U,
+                              integer m_V,
+                              integer n_GH,
+                              integer n_iter_max,
+                              float *buff_d, integer inc_d,
+                              float *buff_e, integer inc_e,
+                              scomplex *buff_G, integer rs_G, integer cs_G,
+                              scomplex *buff_H, integer rs_H, integer cs_H,
+                              float *buff_U, integer rs_U, integer cs_U,
+                              float *buff_V, integer rs_V, integer cs_V,
+                              integer b_alg)
 {
     scomplex one = bl1_c1();
     float rzero = bl1_s0();
 
-    integer       maxitr     = 6;
+    integer maxitr = 6;
 
     float eps;
     float tolmul;
     float tol;
     float thresh;
 
-    scomplex* G;
-    scomplex* H;
-    float*    d1;
-    float*    e1;
-    integer       r_val;
-    integer       done;
-    integer       m_GH_sweep_max;
-    integer       ij_begin;
-    integer       ijTL, ijBR;
-    integer       m_A11;
-    integer       n_iter_perf;
-    integer       n_UV_apply;
-    integer       total_deflations;
-    integer       n_deflations;
-    integer       n_iter_prev;
-    integer       n_iter_perf_sweep_max;
+    scomplex *G;
+    scomplex *H;
+    float *d1;
+    float *e1;
+    integer r_val;
+    integer done;
+    integer m_GH_sweep_max;
+    integer ij_begin;
+    integer ijTL, ijBR;
+    integer m_A11;
+    integer n_iter_perf;
+    integer n_UV_apply;
+    integer n_iter_prev;
+    integer n_iter_perf_sweep_max;
 
     // Compute some convergence constants.
-    eps    = FLA_Mach_params_ops( FLA_MACH_EPS );
-    tolmul = fla_max( 10.0F, fla_min( 100.0F, powf( eps, -0.125F ) ) );
-    FLA_Bsvd_compute_tol_thresh_ops( min_m_n,
-                                     tolmul,
-                                     maxitr,
-                                     buff_d, inc_d,
-                                     buff_e, inc_e,
-                                     &tol,
-                                     &thresh );
+    eps = FLA_Mach_params_ops(FLA_MACH_EPS);
+    tolmul = fla_max(10.0F, fla_min(100.0F, powf(eps, -0.125F)));
+    FLA_Bsvd_compute_tol_thresh_ops(min_m_n,
+                                    tolmul,
+                                    maxitr,
+                                    buff_d, inc_d,
+                                    buff_e, inc_e,
+                                    &tol,
+                                    &thresh);
 
     // Initialize our completion flag.
     done = FALSE;
@@ -313,7 +309,7 @@ FLA_Error FLA_Bsvd_v_ops_var1( integer       min_m_n,
 
             // Update the maximum number of iterations performed in the
             // current sweep.
-            n_iter_perf_sweep_max = fla_max( n_iter_perf_sweep_max, n_iter_perf );
+            n_iter_perf_sweep_max = fla_max(n_iter_perf_sweep_max, n_iter_perf);
 
             // Store the most recent value of ijBR in m_G_sweep_max.
             // When the sweep is done, this value will contain the minimum
@@ -366,8 +362,8 @@ FLA_Error FLA_Bsvd_v_ops_var1( integer       min_m_n,
 
     // Make all the singular values positive.
     {
-        integer    i;
-        float  minus_one = bl1_sm1();
+        integer i;
+        float minus_one = bl1_sm1();
 
         for (i = 0; i < min_m_n; ++i)
         {
@@ -387,61 +383,57 @@ FLA_Error FLA_Bsvd_v_ops_var1( integer       min_m_n,
     return n_iter_prev;
 }
 
-
-
-FLA_Error FLA_Bsvd_v_opd_var1( integer       min_m_n,
-                               integer       m_U,
-                               integer       m_V,
-                               integer       n_GH,
-                               integer       n_iter_max,
-                               double*   buff_d, integer inc_d,
-                               double*   buff_e, integer inc_e,
-                               dcomplex* buff_G, integer rs_G, integer cs_G,
-                               dcomplex* buff_H, integer rs_H, integer cs_H,
-                               double*   buff_U, integer rs_U, integer cs_U,
-                               double*   buff_V, integer rs_V, integer cs_V,
-                               integer       b_alg )
+FLA_Error FLA_Bsvd_v_opd_var1(integer min_m_n,
+                              integer m_U,
+                              integer m_V,
+                              integer n_GH,
+                              integer n_iter_max,
+                              double *buff_d, integer inc_d,
+                              double *buff_e, integer inc_e,
+                              dcomplex *buff_G, integer rs_G, integer cs_G,
+                              dcomplex *buff_H, integer rs_H, integer cs_H,
+                              double *buff_U, integer rs_U, integer cs_U,
+                              double *buff_V, integer rs_V, integer cs_V,
+                              integer b_alg)
 {
     dcomplex one = bl1_z1();
     double rzero = bl1_d0();
 
-    integer       maxitr     = 6;
+    integer maxitr = 6;
 
     double eps;
     double tolmul;
     double tol;
     double thresh;
 
-    dcomplex* G;
-    dcomplex* H;
-    double*   d1;
-    double*   e1;
-    integer       r_val;
-    integer       done;
-    integer       m_GH_sweep_max;
-    integer       ij_begin;
-    integer       ijTL, ijBR;
-    integer       m_A11;
-    integer       n_iter_perf;
-    integer       n_UV_apply;
-    integer       total_deflations;
-    integer       n_deflations;
-    integer       n_iter_prev;
-    integer       n_iter_perf_sweep_max;
+    dcomplex *G;
+    dcomplex *H;
+    double *d1;
+    double *e1;
+    integer r_val;
+    integer done;
+    integer m_GH_sweep_max;
+    integer ij_begin;
+    integer ijTL, ijBR;
+    integer m_A11;
+    integer n_iter_perf;
+    integer n_UV_apply;
+    integer n_iter_prev;
+    integer n_iter_perf_sweep_max;
 
     // Compute some convergence constants.
-    eps    = FLA_Mach_params_opd( FLA_MACH_EPS );
-    tolmul = fla_max( 10.0, fla_min( 100.0, pow( eps, -0.125 ) ) );
-    FLA_Bsvd_compute_tol_thresh_opd( min_m_n,
-                                     tolmul,
-                                     maxitr,
-                                     buff_d, inc_d,
-                                     buff_e, inc_e,
-                                     &tol,
-                                     &thresh );
+    eps = FLA_Mach_params_opd(FLA_MACH_EPS);
+    tolmul = fla_max(10.0, fla_min(100.0, pow(eps, -0.125)));
+    FLA_Bsvd_compute_tol_thresh_opd(min_m_n,
+                                    tolmul,
+                                    maxitr,
+                                    buff_d, inc_d,
+                                    buff_e, inc_e,
+                                    &tol,
+                                    &thresh);
 #ifdef PRINTF
-    fla_dim_t n_deflations;
-    fla_dim_t total_deflations;
+    integer n_deflations;
+    integer total_deflations;
     total_deflations = 0;
     printf("FLA_Bsvd_v_opd_var1: tolmul = %12.6e\n", tolmul);
     printf("FLA_Bsvd_v_opd_var1: tol    = %12.6e\n", tol);
@@ -588,7 +580,7 @@ FLA_Error FLA_Bsvd_v_opd_var1( integer       min_m_n,
 
             // Update the maximum number of iterations performed in the
             // current sweep.
-            n_iter_perf_sweep_max = fla_max( n_iter_perf_sweep_max, n_iter_perf );
+            n_iter_perf_sweep_max = fla_max(n_iter_perf_sweep_max, n_iter_perf);
 
 #ifdef PRINTF
             printf("FLA_Bsvd_v_opd_var1: deflations observed       = %d\n", n_deflations);
@@ -660,7 +652,7 @@ FLA_Error FLA_Bsvd_v_opd_var1( integer       min_m_n,
 
     // Make all the singular values positive.
     {
-        integer    i;
+        integer i;
         double minus_one = bl1_dm1();
 
         for (i = 0; i < min_m_n; ++i)
@@ -681,56 +673,54 @@ FLA_Error FLA_Bsvd_v_opd_var1( integer       min_m_n,
     return n_iter_prev;
 }
 
-FLA_Error FLA_Bsvd_v_opc_var1( integer       min_m_n,
-                               integer       m_U,
-                               integer       m_V,
-                               integer       n_GH,
-                               integer       n_iter_max,
-                               float*    buff_d, integer inc_d,
-                               float*    buff_e, integer inc_e,
-                               scomplex* buff_G, integer rs_G, integer cs_G,
-                               scomplex* buff_H, integer rs_H, integer cs_H,
-                               scomplex* buff_U, integer rs_U, integer cs_U,
-                               scomplex* buff_V, integer rs_V, integer cs_V,
-                               integer       b_alg )
+FLA_Error FLA_Bsvd_v_opc_var1(integer min_m_n,
+                              integer m_U,
+                              integer m_V,
+                              integer n_GH,
+                              integer n_iter_max,
+                              float *buff_d, integer inc_d,
+                              float *buff_e, integer inc_e,
+                              scomplex *buff_G, integer rs_G, integer cs_G,
+                              scomplex *buff_H, integer rs_H, integer cs_H,
+                              scomplex *buff_U, integer rs_U, integer cs_U,
+                              scomplex *buff_V, integer rs_V, integer cs_V,
+                              integer b_alg)
 {
     scomplex one = bl1_c1();
     float rzero = bl1_s0();
 
-    integer       maxitr     = 6;
+    integer maxitr = 6;
 
     float eps;
     float tolmul;
     float tol;
     float thresh;
 
-    scomplex* G;
-    scomplex* H;
-    float*    d1;
-    float*    e1;
-    integer       r_val;
-    integer       done;
-    integer       m_GH_sweep_max;
-    integer       ij_begin;
-    integer       ijTL, ijBR;
-    integer       m_A11;
-    integer       n_iter_perf;
-    integer       n_UV_apply;
-    integer       total_deflations;
-    integer       n_deflations;
-    integer       n_iter_prev;
-    integer       n_iter_perf_sweep_max;
+    scomplex *G;
+    scomplex *H;
+    float *d1;
+    float *e1;
+    integer r_val;
+    integer done;
+    integer m_GH_sweep_max;
+    integer ij_begin;
+    integer ijTL, ijBR;
+    integer m_A11;
+    integer n_iter_perf;
+    integer n_UV_apply;
+    integer n_iter_prev;
+    integer n_iter_perf_sweep_max;
 
     // Compute some convergence constants.
-    eps    = FLA_Mach_params_ops( FLA_MACH_EPS );
-    tolmul = fla_max( 10.0F, fla_min( 100.0F, powf( eps, -0.125F ) ) );
-    FLA_Bsvd_compute_tol_thresh_ops( min_m_n,
-                                     tolmul,
-                                     maxitr,
-                                     buff_d, inc_d,
-                                     buff_e, inc_e,
-                                     &tol,
-                                     &thresh );
+    eps = FLA_Mach_params_ops(FLA_MACH_EPS);
+    tolmul = fla_max(10.0F, fla_min(100.0F, powf(eps, -0.125F)));
+    FLA_Bsvd_compute_tol_thresh_ops(min_m_n,
+                                    tolmul,
+                                    maxitr,
+                                    buff_d, inc_d,
+                                    buff_e, inc_e,
+                                    &tol,
+                                    &thresh);
 
     // Initialize our completion flag.
     done = FALSE;
@@ -840,7 +830,7 @@ FLA_Error FLA_Bsvd_v_opc_var1( integer       min_m_n,
 
             // Update the maximum number of iterations performed in the
             // current sweep.
-            n_iter_perf_sweep_max = fla_max( n_iter_perf_sweep_max, n_iter_perf );
+            n_iter_perf_sweep_max = fla_max(n_iter_perf_sweep_max, n_iter_perf);
 
             // Store the most recent value of ijBR in m_G_sweep_max.
             // When the sweep is done, this value will contain the minimum
@@ -893,8 +883,8 @@ FLA_Error FLA_Bsvd_v_opc_var1( integer       min_m_n,
 
     // Make all the singular values positive.
     {
-        integer    i;
-        float  minus_one = bl1_sm1();
+        integer i;
+        float minus_one = bl1_sm1();
 
         for (i = 0; i < min_m_n; ++i)
         {
@@ -916,59 +906,57 @@ FLA_Error FLA_Bsvd_v_opc_var1( integer       min_m_n,
 
 // #define PRINTF
 
-FLA_Error FLA_Bsvd_v_opz_var1( integer       min_m_n,
-                               integer       m_U,
-                               integer       m_V,
-                               integer       n_GH,
-                               integer       n_iter_max,
-                               double*   buff_d, integer inc_d,
-                               double*   buff_e, integer inc_e,
-                               dcomplex* buff_G, integer rs_G, integer cs_G,
-                               dcomplex* buff_H, integer rs_H, integer cs_H,
-                               dcomplex* buff_U, integer rs_U, integer cs_U,
-                               dcomplex* buff_V, integer rs_V, integer cs_V,
-                               integer       b_alg )
+FLA_Error FLA_Bsvd_v_opz_var1(integer min_m_n,
+                              integer m_U,
+                              integer m_V,
+                              integer n_GH,
+                              integer n_iter_max,
+                              double *buff_d, integer inc_d,
+                              double *buff_e, integer inc_e,
+                              dcomplex *buff_G, integer rs_G, integer cs_G,
+                              dcomplex *buff_H, integer rs_H, integer cs_H,
+                              dcomplex *buff_U, integer rs_U, integer cs_U,
+                              dcomplex *buff_V, integer rs_V, integer cs_V,
+                              integer b_alg)
 {
     dcomplex one = bl1_z1();
     double rzero = bl1_d0();
 
-    integer       maxitr     = 6;
+    integer maxitr = 6;
 
     double eps;
     double tolmul;
     double tol;
     double thresh;
 
-    dcomplex* G;
-    dcomplex* H;
-    double*   d1;
-    double*   e1;
-    integer       r_val;
-    integer       done;
-    integer       m_GH_sweep_max;
-    integer       ij_begin;
-    integer       ijTL, ijBR;
-    integer       m_A11;
-    integer       n_iter_perf;
-    integer       n_UV_apply;
-    integer       total_deflations;
-    integer       n_deflations;
-    integer       n_iter_prev;
-    integer       n_iter_perf_sweep_max;
+    dcomplex *G;
+    dcomplex *H;
+    double *d1;
+    double *e1;
+    integer r_val;
+    integer done;
+    integer m_GH_sweep_max;
+    integer ij_begin;
+    integer ijTL, ijBR;
+    integer m_A11;
+    integer n_iter_perf;
+    integer n_UV_apply;
+    integer n_iter_prev;
+    integer n_iter_perf_sweep_max;
 
     // Compute some convergence constants.
-    eps    = FLA_Mach_params_opd( FLA_MACH_EPS );
-    tolmul = fla_max( 10.0, fla_min( 100.0, pow( eps, -0.125 ) ) );
-    FLA_Bsvd_compute_tol_thresh_opd( min_m_n,
-                                     tolmul,
-                                     maxitr,
-                                     buff_d, inc_d,
-                                     buff_e, inc_e,
-                                     &tol,
-                                     &thresh );
+    eps = FLA_Mach_params_opd(FLA_MACH_EPS);
+    tolmul = fla_max(10.0, fla_min(100.0, pow(eps, -0.125)));
+    FLA_Bsvd_compute_tol_thresh_opd(min_m_n,
+                                    tolmul,
+                                    maxitr,
+                                    buff_d, inc_d,
+                                    buff_e, inc_e,
+                                    &tol,
+                                    &thresh);
 #ifdef PRINTF
-    fla_dim_t n_deflations;
-    fla_dim_t total_deflations;
+    integer n_deflations;
+    integer total_deflations;
     total_deflations = 0;
     printf("FLA_Bsvd_v_opz_var1: tolmul = %12.6e\n", tolmul);
     printf("FLA_Bsvd_v_opz_var1: tol    = %12.6e\n", tol);
@@ -1114,7 +1102,7 @@ FLA_Error FLA_Bsvd_v_opz_var1( integer       min_m_n,
 #endif
             // Update the maximum number of iterations performed in the
             // current sweep.
-            n_iter_perf_sweep_max = fla_max( n_iter_perf_sweep_max, n_iter_perf );
+            n_iter_perf_sweep_max = fla_max(n_iter_perf_sweep_max, n_iter_perf);
 
 #ifdef PRINTF
             printf("FLA_Bsvd_v_opz_var1: deflations observed       = %d\n", n_deflations);
@@ -1186,7 +1174,7 @@ FLA_Error FLA_Bsvd_v_opz_var1( integer       min_m_n,
 
     // Make all the singular values positive.
     {
-        integer    i;
+        integer i;
         double minus_one = bl1_dm1();
 
         for (i = 0; i < min_m_n; ++i)

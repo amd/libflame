@@ -10,15 +10,15 @@
 
 #include "FLAME.h"
 
-FLA_Error FLA_Tevd_v_opt_var1(fla_dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj U, fla_dim_t b_alg)
+FLA_Error FLA_Tevd_v_opt_var1(dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj U, dim_t b_alg)
 {
 	FLA_Error r_val = FLA_SUCCESS;
 	FLA_Datatype datatype;
-	integer          m_A, m_U, n_G;
-	integer          inc_d;
-	integer          inc_e;
-	integer          rs_G, cs_G;
-	integer          rs_U, cs_U;
+	integer m_A, m_U, n_G;
+	integer inc_d;
+	integer inc_e;
+	integer rs_G, cs_G;
+	integer rs_U, cs_U;
 
 	datatype = FLA_Obj_datatype(U);
 
@@ -121,17 +121,15 @@ FLA_Error FLA_Tevd_v_opt_var1(fla_dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Ob
 	return r_val;
 }
 
-
-
-FLA_Error FLA_Tevd_v_ops_var1( integer       m_A,
-                               integer       m_U,
-                               integer       n_G,
-                               integer       n_iter_max,
-                               float*    buff_d, integer inc_d, 
-                               float*    buff_e, integer inc_e,
-                               scomplex* buff_G, integer rs_G, integer cs_G,
-                               float*    buff_U, integer rs_U, integer cs_U,
-                               integer       b_alg )
+FLA_Error FLA_Tevd_v_ops_var1(integer m_A,
+							  integer m_U,
+							  integer n_G,
+							  integer n_iter_max,
+							  float *buff_d, integer inc_d,
+							  float *buff_e, integer inc_e,
+							  scomplex *buff_G, integer rs_G, integer cs_G,
+							  float *buff_U, integer rs_U, integer cs_U,
+							  integer b_alg)
 {
 	FLA_Check_error_code(FLA_NOT_YET_IMPLEMENTED);
 
@@ -140,37 +138,35 @@ FLA_Error FLA_Tevd_v_ops_var1( integer       m_A,
 
 // #define PRINTF
 
-FLA_Error FLA_Tevd_v_opd_var1( integer       m_A,
-                               integer       m_U,
-                               integer       n_G,
-                               integer       n_iter_max,
-                               double*   buff_d, integer inc_d, 
-                               double*   buff_e, integer inc_e,
-                               dcomplex* buff_G, integer rs_G, integer cs_G,
-                               double*   buff_U, integer rs_U, integer cs_U,
-                               integer       b_alg )
+FLA_Error FLA_Tevd_v_opd_var1(integer m_A,
+							  integer m_U,
+							  integer n_G,
+							  integer n_iter_max,
+							  double *buff_d, integer inc_d,
+							  double *buff_e, integer inc_e,
+							  dcomplex *buff_G, integer rs_G, integer cs_G,
+							  double *buff_U, integer rs_U, integer cs_U,
+							  integer b_alg)
 {
 	dcomplex one = bl1_z1();
 
-	dcomplex* G;
-	double*   d1;
-	double*   e1;
-	integer       r_val;
-	integer       done;
-	integer       m_G_sweep_max;
-	integer       ij_begin;
-	integer       ijTL, ijBR;
-	integer       m_A11;
-	integer       n_iter_perf;
-	integer       n_U_apply;
-	integer       total_deflations;
-	integer       n_deflations;
-	integer       n_iter_prev;
-	integer       n_iter_perf_sweep_max;
+	dcomplex *G;
+	double *d1;
+	double *e1;
+	integer r_val;
+	integer done;
+	integer m_G_sweep_max;
+	integer ij_begin;
+	integer ijTL, ijBR;
+	integer m_A11;
+	integer n_iter_perf;
+	integer n_U_apply;
+	integer n_iter_prev;
+	integer n_iter_perf_sweep_max;
 
 #ifdef PRINTF
-	fla_dim_t n_deflations;
-	fla_dim_t total_deflations;
+	integer n_deflations;
+	integer total_deflations;
 	total_deflations = 0
 #endif
 		// Initialize our completion flag.
@@ -300,7 +296,7 @@ FLA_Error FLA_Tevd_v_opd_var1( integer       m_A,
 #endif
 			// Update the maximum number of iterations performed in the
 			// current sweep.
-			n_iter_perf_sweep_max = fla_max( n_iter_perf_sweep_max, n_iter_perf );
+			n_iter_perf_sweep_max = fla_max(n_iter_perf_sweep_max, n_iter_perf);
 
 #ifdef PRINTF
 			printf("FLA_Tevd_v_opd_var1: deflations observed       = %d\n", n_deflations);
@@ -372,52 +368,50 @@ FLA_Error FLA_Tevd_v_opd_var1( integer       m_A,
 	return n_iter_prev;
 }
 
-FLA_Error FLA_Tevd_v_opc_var1( integer       m_A,
-                               integer       m_U,
-                               integer       n_G,
-                               integer       n_iter_max,
-                               float*    buff_d, integer inc_d, 
-                               float*    buff_e, integer inc_e,
-                               scomplex* buff_G, integer rs_G, integer cs_G,
-                               scomplex* buff_U, integer rs_U, integer cs_U,
-                               integer       b_alg )
+FLA_Error FLA_Tevd_v_opc_var1(integer m_A,
+							  integer m_U,
+							  integer n_G,
+							  integer n_iter_max,
+							  float *buff_d, integer inc_d,
+							  float *buff_e, integer inc_e,
+							  scomplex *buff_G, integer rs_G, integer cs_G,
+							  scomplex *buff_U, integer rs_U, integer cs_U,
+							  integer b_alg)
 {
 	FLA_Check_error_code(FLA_NOT_YET_IMPLEMENTED);
 
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Tevd_v_opz_var1( integer       m_A,
-                               integer       m_U,
-                               integer       n_G,
-                               integer       n_iter_max,
-                               double*   buff_d, integer inc_d, 
-                               double*   buff_e, integer inc_e,
-                               dcomplex* buff_G, integer rs_G, integer cs_G,
-                               dcomplex* buff_U, integer rs_U, integer cs_U,
-                               integer       b_alg )
+FLA_Error FLA_Tevd_v_opz_var1(integer m_A,
+							  integer m_U,
+							  integer n_G,
+							  integer n_iter_max,
+							  double *buff_d, integer inc_d,
+							  double *buff_e, integer inc_e,
+							  dcomplex *buff_G, integer rs_G, integer cs_G,
+							  dcomplex *buff_U, integer rs_U, integer cs_U,
+							  integer b_alg)
 {
 	dcomplex one = bl1_z1();
 
-	dcomplex* G;
-	double*   d1;
-	double*   e1;
-	integer       r_val;
-	integer       done;
-	integer       m_G_sweep_max;
-	integer       ij_begin;
-	integer       ijTL, ijBR;
-	integer       m_A11;
-	integer       n_iter_perf;
-	integer       n_U_apply;
-	integer       total_deflations;
-	integer       n_deflations;
-	integer       n_iter_prev;
-	integer       n_iter_perf_sweep_max;
+	dcomplex *G;
+	double *d1;
+	double *e1;
+	integer r_val;
+	integer done;
+	integer m_G_sweep_max;
+	integer ij_begin;
+	integer ijTL, ijBR;
+	integer m_A11;
+	integer n_iter_perf;
+	integer n_U_apply;
+	integer n_iter_prev;
+	integer n_iter_perf_sweep_max;
 
 #ifdef PRINTF
-	fla_dim_t n_deflations;
-	fla_dim_t total_deflations;
+	integer n_deflations;
+	integer total_deflations;
 	total_deflations = 0;
 #endif
 	// Initialize our completion flag.
@@ -548,7 +542,7 @@ FLA_Error FLA_Tevd_v_opz_var1( integer       m_A,
 #endif
 			// Update the maximum number of iterations performed in the
 			// current sweep.
-			n_iter_perf_sweep_max = fla_max( n_iter_perf_sweep_max, n_iter_perf );
+			n_iter_perf_sweep_max = fla_max(n_iter_perf_sweep_max, n_iter_perf);
 
 #ifdef PRINTF
 			printf("FLA_Tevd_v_opz_var1: deflations observed       = %d\n", n_deflations);

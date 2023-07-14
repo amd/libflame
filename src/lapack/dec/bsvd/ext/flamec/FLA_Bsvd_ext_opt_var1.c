@@ -266,8 +266,6 @@ FLA_Error FLA_Bsvd_ext_ops_var1( integer       m_d,
     integer       m_A11;
     integer       n_iter_perf;
     integer       n_UV_apply;
-    integer       total_deflations;
-    integer       n_deflations;
     integer       n_iter_prev;
     integer       n_iter_perf_sweep_max;
 
@@ -518,8 +516,6 @@ FLA_Error FLA_Bsvd_ext_opd_var1( integer       m_d,
     integer       m_A11;
     integer       n_iter_perf;
     integer       n_UV_apply;
-    integer       total_deflations;
-    integer       n_deflations;
     integer       n_iter_prev;
     integer       n_iter_perf_sweep_max;
 
@@ -767,8 +763,6 @@ FLA_Error FLA_Bsvd_ext_opc_var1( integer       m_d,
     integer       m_A11;
     integer       n_iter_perf;
     integer       n_UV_apply;
-    integer       total_deflations;
-    integer       n_deflations;
     integer       n_iter_prev;
     integer       n_iter_perf_sweep_max;
 
@@ -1015,8 +1009,6 @@ FLA_Error FLA_Bsvd_ext_opz_var1( integer       m_d,
     integer       m_A11;
     integer       n_iter_perf;
     integer       n_UV_apply;
-    integer       total_deflations;
-    integer       n_deflations;
     integer       n_iter_prev;
     integer       n_iter_perf_sweep_max;
 

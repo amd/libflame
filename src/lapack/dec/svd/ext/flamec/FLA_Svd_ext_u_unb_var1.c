@@ -11,31 +11,35 @@
 #include "FLAME.h"
 
 FLA_Error FLA_Svd_ext_u_unb_var1(FLA_Svd_type jobu, FLA_Svd_type jobv,
-                                 fla_dim_t n_iter_max,
+                                 dim_t n_iter_max,
                                  FLA_Obj A, FLA_Obj s, FLA_Obj U, FLA_Obj V,
-                                 fla_dim_t k_accum,
-                                 fla_dim_t b_alg)
+                                 dim_t k_accum,
+                                 dim_t b_alg)
 {
     FLA_Error r_val = FLA_SUCCESS;
     FLA_Datatype dt;
     FLA_Datatype dt_real;
     FLA_Datatype dt_comp;
-    FLA_Obj      scale, T, S, rL, rR, d, e, G, H, C; // C is dummy.
-    dim_t        m_A, n_A, min_m_n;
-    dim_t        n_GH;
-    double       crossover_ratio = 17.0 / 9.0;
-    FLA_Bool     u_is_formed = FALSE, 
-                 v_is_formed = FALSE;
-    integer          apply_scale;
+    FLA_Obj scale, T, S, rL, rR, d, e, G, H, C; // C is dummy.
+    dim_t m_A, n_A, min_m_n;
+    dim_t n_GH;
+    double crossover_ratio = 17.0 / 9.0;
+    FLA_Bool u_is_formed = FALSE,
+             v_is_formed = FALSE;
+    integer apply_scale;
 
     n_GH = k_accum;
 
-    m_A     = FLA_Obj_length( A );
-    n_A     = FLA_Obj_width( A );
-    min_m_n = fla_min( m_A, n_A );
-    dt      = FLA_Obj_datatype( A );
-    dt_real = FLA_Obj_datatype_proj_to_real( A );
-    dt_comp = FLA_Obj_datatype_proj_to_complex( A );
+    m_A = FLA_Obj_length(A);
+    n_A = FLA_Obj_width(A);
+    min_m_n = fla_min(m_A, n_A);
+    dt = FLA_Obj_datatype(A);
+    dt_real = FLA_Obj_datatype_proj_to_real(A);
+    dt_comp = FLA_Obj_datatype_proj_to_complex(A);
+
+    // Create dummy object for C and nullify it to get rid of warning
+    FLA_Obj_create(dt, 1, 1, 0, 0, &C);
+    FLA_Obj_nullify(&C);
 
     // Create matrices to hold block Householder transformations.
     FLA_Bidiag_UT_create_T(A, &T, &S);
@@ -118,7 +122,7 @@ FLA_Error FLA_Svd_ext_u_unb_var1(FLA_Svd_type jobu, FLA_Svd_type jobv,
             }
         }
 
-        // For scomplex matrices, apply realification transformation.
+        // For complex matrices, apply realification transformation.
         if (FLA_Obj_is_complex(A) && jobu != FLA_SVD_VECTORS_NONE)
         {
             FLA_Obj UL, UR;

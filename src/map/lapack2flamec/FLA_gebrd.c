@@ -26,196 +26,30 @@
   be fixed to use scomplex datatypes for those diagonals.
 */
 
-extern TLS_CLASS_SPEC fla_bidiagut_t* fla_bidiagut_cntl_plain;
+extern TLS_CLASS_SPEC fla_bidiagut_t *fla_bidiagut_cntl_plain;
 
-#define LAPACK_gebrd(prefix)                                            \
-  int F77_ ## prefix ## gebrd( integer* m,                                  \
-                               integer* n,                                  \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
-                               PREFIX2LAPACK_REALDEF(prefix)* buff_d,   \
-                               PREFIX2LAPACK_REALDEF(prefix)* buff_e,   \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_tu,  \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_tv,  \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_w, integer* lwork, \
-                               integer* info)
-
-#define LAPACK_gebrd_body(prefix)                                       \
-  FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                \
-  FLA_Datatype dtype_re = PREFIX2FLAME_REALTYPE(prefix);                \
-  dim_t        min_m_n  = fla_min( *m, *n );                                \
-  dim_t        m_d      = min_m_n;                                      \
-  dim_t        m_e      = min_m_n - 1;                                  \
-  dim_t        m_t      = min_m_n;                                      \
-  FLA_Obj      A, d, e, tu, tv, TU, TV, alpha;                          \
-  FLA_Error    init_result;                                             \
-  FLA_Uplo     uplo;                                                    \
-  integer          apply_scale;                                             \
-                                                                        \
-  FLA_Init_safe( &init_result );                                        \
-                                                                        \
-  FLA_Obj_create_without_buffer( datatype, *m, *n, &A );                \
-  FLA_Obj_attach_buffer( buff_A, 1, *ldim_A, &A );                      \
-                                                                        \
-  uplo = ( *m >= *n ? FLA_UPPER_TRIANGULAR : FLA_LOWER_TRIANGULAR );    \
-                                                                        \
-  FLA_Obj_create_without_buffer( dtype_re, m_d, 1, &d );                \
-  FLA_Obj_attach_buffer( buff_d, 1, m_d, &d );                          \
-                                                                        \
-  FLA_Obj_create_without_buffer( dtype_re, m_e, 1, &e );                \
-  if ( m_e > 0 ) FLA_Obj_attach_buffer( buff_e, 1, m_e, &e );           \
-                                                                        \
-  /* m_t is assumed to be same although it is different */              \
-  FLA_Obj_create_without_buffer( datatype, m_t, 1, &tu );               \
-  FLA_Obj_attach_buffer( buff_tu, 1, m_t, &tu );                        \
-                                                                        \
-  FLA_Obj_create_without_buffer( datatype, m_t, 1, &tv );               \
-  FLA_Obj_attach_buffer( buff_tv, 1, m_t, &tv );                        \
-                                                                        \
-  FLA_Obj_create( dtype_re, 1, 1, 0, 0, &alpha );                       \
-  FLA_Max_abs_value( A, alpha );                                        \
-                                                                        \
-  apply_scale =                                                         \
-    ( FLA_Obj_gt( alpha, FLA_OVERFLOW_SQUARE_THRES  ) == TRUE ) -       \
-    ( FLA_Obj_lt( alpha, FLA_UNDERFLOW_SQUARE_THRES ) == TRUE );        \
-                                                                        \
-  if ( apply_scale )                                                    \
-    FLA_Scal( apply_scale > 0 ? FLA_SAFE_MIN : FLA_SAFE_INV_MIN, A );   \
-                                                                        \
-  FLA_Bidiag_UT_create_T( A, &TU, &TV );                                \
-  FLA_Set( FLA_ZERO, TU );FLA_Set( FLA_ZERO, TV );                      \
-                                                                        \
-  FLA_Bidiag_UT_internal( A, TU, TV, fla_bidiagut_cntl_plain );         \
-                                                                        \
-  if ( apply_scale )                                                    \
-    FLA_Bidiag_UT_scale_diagonals( apply_scale < 0 ? FLA_SAFE_MIN : FLA_SAFE_INV_MIN, A ); \
-                                                                        \
-  if ( FLA_Obj_is_complex( A ) == TRUE ) {                              \
-    FLA_Obj d2, e2, rL, rR;                                             \
-                                                                        \
-    /* Temporary vectors to store diagonal and subdiagonal */           \
-    FLA_Obj_create( datatype, m_d, 1, 0, 0, &d2 );                      \
-    if ( m_e > 0 ) FLA_Obj_create( datatype, m_e, 1, 0, 0, &e2 );       \
-                                                                        \
-    /* Temporary vectors to store realifying transformation */          \
-    FLA_Obj_create( datatype, m_d, 1, 0, 0, &rL );                      \
-    FLA_Obj_create( datatype, m_d, 1, 0, 0, &rR );                      \
-                                                                        \
-    /* Do not touch factors in A */                                     \
-    FLA_Bidiag_UT_extract_diagonals( A, d2, e2 );                       \
-    FLA_Bidiag_UT_realify_diagonals( uplo, d2, e2, rL, rR );            \
-                                                                        \
-    FLA_Obj_extract_real_part( d2, d );                                 \
-    if ( m_e > 0 ) FLA_Obj_extract_real_part( e2, e );                  \
-                                                                        \
-    /* Clean up */                                                      \
-    FLA_Obj_free( &rL );                                                \
-    FLA_Obj_free( &rR );                                                \
-    FLA_Obj_free( &d2 );                                                \
-    if ( m_e > 0 ) FLA_Obj_free( &e2 );                                 \
-  } else {                                                              \
-    FLA_Bidiag_UT_extract_real_diagonals( A, d, e );                    \
-  }                                                                     \
-  FLA_Bidiag_UT_recover_tau( TU, TV, tu, tv );                          \
-                                                                        \
-  PREFIX2FLAME_INVERT_TAU(prefix,tu);                                   \
-  PREFIX2FLAME_INVERT_TAU(prefix,tv);                                   \
-                                                                        \
-  FLA_Obj_free( &alpha );                                               \
-  FLA_Obj_free( &TU );                                                  \
-  FLA_Obj_free( &TV );                                                  \
-                                                                        \
-  FLA_Obj_free_without_buffer( &A );                                    \
-  FLA_Obj_free_without_buffer( &d );                                    \
-  FLA_Obj_free_without_buffer( &e );                                    \
-  FLA_Obj_free_without_buffer( &tu );                                   \
-  FLA_Obj_free_without_buffer( &tv );                                   \
-                                                                        \
-  FLA_Finalize_safe( init_result );                                     \
-                                                                        \
-  *info = 0;                                                            \
-
-
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void dgebrd_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_d, doublereal *buff_e, doublereal *buff_tu, doublereal *buff_tv, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgebrd(m, n, buff_A, ldim_A, buff_d, buff_e, buff_tu, buff_tv, buff_w, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dgebrd(&m_64, &n_64, buff_A, &ldim_A_64, buff_d, buff_e, buff_tu, buff_tv, buff_w, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void sgebd2_(aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A,
-             real *buff_d, real *buff_e, real *buff_tu,
-             real *buff_tv, real *buff_w, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgebd2(m, n, buff_A, ldim_A, buff_d, buff_e, buff_tu, buff_tv, buff_w, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgebd2(&m_64, &n_64, buff_A, &ldim_A_64, buff_d, buff_e, buff_tu, buff_tv, buff_w,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void dgebd2_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A,
-             doublereal *buff_d, doublereal *buff_e, doublereal *buff_tu,
-             doublereal *buff_tv, doublereal *buff_w, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgebd2(m, n, buff_A, ldim_A, buff_d, buff_e, buff_tu, buff_tv, buff_w, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dgebd2(&m_64, &n_64, buff_A, &ldim_A_64, buff_d, buff_e, buff_tu, buff_tv, buff_w,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-#define LAPACK_gebrd(prefix)                                                              \
-    void aocl_lapack_##prefix##gebrd(                                                      \
-        aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A, \
-        PREFIX2LAPACK_REALDEF(prefix) * buff_d, PREFIX2LAPACK_REALDEF(prefix) * buff_e,   \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_tu, PREFIX2LAPACK_TYPEDEF(prefix) * buff_tv, \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork, aocl_int64_t * info)
+#define LAPACK_gebrd(prefix)                                                          \
+    int F77_##prefix##gebrd(integer *m,                                               \
+                            integer *n,                                               \
+                            PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A, \
+                            PREFIX2LAPACK_REALDEF(prefix) * buff_d,                   \
+                            PREFIX2LAPACK_REALDEF(prefix) * buff_e,                   \
+                            PREFIX2LAPACK_TYPEDEF(prefix) * buff_tu,                  \
+                            PREFIX2LAPACK_TYPEDEF(prefix) * buff_tv,                  \
+                            PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork,  \
+                            integer * info)
 
 #define LAPACK_gebrd_body(prefix)                                                            \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                                   \
     FLA_Datatype dtype_re = PREFIX2FLAME_REALTYPE(prefix);                                   \
-    fla_dim_t min_m_n = fla_min(*m, *n);                                                     \
-    fla_dim_t m_d = min_m_n;                                                                 \
-    fla_dim_t m_e = min_m_n - 1;                                                             \
-    fla_dim_t m_t = min_m_n;                                                                 \
+    dim_t min_m_n = fla_min(*m, *n);                                                         \
+    dim_t m_d = min_m_n;                                                                     \
+    dim_t m_e = min_m_n - 1;                                                                 \
+    dim_t m_t = min_m_n;                                                                     \
     FLA_Obj A, d, e, tu, tv, TU, TV, alpha;                                                  \
     FLA_Error init_result;                                                                   \
     FLA_Uplo uplo;                                                                           \
-    fla_dim_t apply_scale;                                                                     \
+    integer apply_scale;                                                                     \
                                                                                              \
     FLA_Init_safe(&init_result);                                                             \
                                                                                              \
@@ -228,7 +62,7 @@ void dgebd2_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_
     FLA_Obj_attach_buffer(buff_d, 1, m_d, &d);                                               \
                                                                                              \
     FLA_Obj_create_without_buffer(dtype_re, m_e, 1, &e);                                     \
-    if(m_e > 0)                                                                              \
+    if (m_e > 0)                                                                             \
         FLA_Obj_attach_buffer(buff_e, 1, m_e, &e);                                           \
                                                                                              \
     /* m_t is assumed to be same although it is different */                                 \
@@ -241,10 +75,11 @@ void dgebd2_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_
     FLA_Obj_create(dtype_re, 1, 1, 0, 0, &alpha);                                            \
     FLA_Max_abs_value(A, alpha);                                                             \
                                                                                              \
-    apply_scale = (FLA_Obj_gt(alpha, FLA_OVERFLOW_SQUARE_THRES) == TRUE)                     \
-                  - (FLA_Obj_lt(alpha, FLA_UNDERFLOW_SQUARE_THRES) == TRUE);                 \
+    apply_scale =                                                                            \
+        (FLA_Obj_gt(alpha, FLA_OVERFLOW_SQUARE_THRES) == TRUE) -                             \
+        (FLA_Obj_lt(alpha, FLA_UNDERFLOW_SQUARE_THRES) == TRUE);                             \
                                                                                              \
-    if(apply_scale)                                                                          \
+    if (apply_scale)                                                                         \
         FLA_Scal(apply_scale > 0 ? FLA_SAFE_MIN : FLA_SAFE_INV_MIN, A);                      \
                                                                                              \
     FLA_Bidiag_UT_create_T(A, &TU, &TV);                                                     \
@@ -253,16 +88,16 @@ void dgebd2_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_
                                                                                              \
     FLA_Bidiag_UT_internal(A, TU, TV, fla_bidiagut_cntl_plain);                              \
                                                                                              \
-    if(apply_scale)                                                                          \
+    if (apply_scale)                                                                         \
         FLA_Bidiag_UT_scale_diagonals(apply_scale < 0 ? FLA_SAFE_MIN : FLA_SAFE_INV_MIN, A); \
                                                                                              \
-    if(FLA_Obj_is_complex(A) == TRUE)                                                        \
+    if (FLA_Obj_is_complex(A) == TRUE)                                                       \
     {                                                                                        \
         FLA_Obj d2, e2, rL, rR;                                                              \
                                                                                              \
         /* Temporary vectors to store diagonal and subdiagonal */                            \
         FLA_Obj_create(datatype, m_d, 1, 0, 0, &d2);                                         \
-        if(m_e > 0)                                                                          \
+        if (m_e > 0)                                                                         \
             FLA_Obj_create(datatype, m_e, 1, 0, 0, &e2);                                     \
         else                                                                                 \
         {                                                                                    \
@@ -280,14 +115,14 @@ void dgebd2_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_
         FLA_Bidiag_UT_realify_diagonals(uplo, d2, e2, rL, rR);                               \
                                                                                              \
         FLA_Obj_extract_real_part(d2, d);                                                    \
-        if(m_e > 0)                                                                          \
+        if (m_e > 0)                                                                         \
             FLA_Obj_extract_real_part(e2, e);                                                \
                                                                                              \
         /* Clean up */                                                                       \
         FLA_Obj_free(&rL);                                                                   \
         FLA_Obj_free(&rR);                                                                   \
         FLA_Obj_free(&d2);                                                                   \
-        if(m_e > 0)                                                                          \
+        if (m_e > 0)                                                                         \
             FLA_Obj_free(&e2);                                                               \
     }                                                                                        \
     else                                                                                     \
@@ -319,18 +154,19 @@ LAPACK_gebrd(s)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgebrd inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1( sgebrd_check( m, n,
-                                           buff_A, ldim_A,
-                                           buff_d, buff_e,
-                                           buff_tu, buff_tv,
-                                           buff_w, lwork,
-                                           info ), fla_error )
+        LAPACK_RETURN_CHECK_VAR1(sgebrd_check(m, n,
+                                              buff_A, ldim_A,
+                                              buff_d, buff_e,
+                                              buff_tu, buff_tv,
+                                              buff_w, lwork,
+                                              info),
+                                 fla_error)
     }
-    if(fla_error==LAPACK_SUCCESS)
+    if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gebrd_body(s)
-        /** fla_error set to 0 on LAPACK_SUCCESS */
-        fla_error = 0;
+            /** fla_error set to 0 on LAPACK_SUCCESS */
+            fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return fla_error;
@@ -341,18 +177,19 @@ LAPACK_gebrd(d)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgebrd inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1( dgebrd_check( m, n,
-                                           buff_A, ldim_A,
-                                           buff_d, buff_e,
-                                           buff_tu, buff_tv,
-                                           buff_w, lwork,
-                                           info ), fla_error )
+        LAPACK_RETURN_CHECK_VAR1(dgebrd_check(m, n,
+                                              buff_A, ldim_A,
+                                              buff_d, buff_e,
+                                              buff_tu, buff_tv,
+                                              buff_w, lwork,
+                                              info),
+                                 fla_error)
     }
     if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gebrd_body(d)
-         /** fla_error set to 0 on LAPACK_SUCCESS */
-        fla_error = 0;
+            /** fla_error set to 0 on LAPACK_SUCCESS */
+            fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return fla_error;
@@ -365,18 +202,19 @@ LAPACK_gebrd(c)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cgebrd inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1( cgebrd_check( m, n,
-                                           buff_A, ldim_A,
-                                           buff_d, buff_e,
-                                           buff_tu, buff_tv,
-                                           buff_w, lwork,
-                                           info ), fla_error )
+        LAPACK_RETURN_CHECK_VAR1(cgebrd_check(m, n,
+                                              buff_A, ldim_A,
+                                              buff_d, buff_e,
+                                              buff_tu, buff_tv,
+                                              buff_w, lwork,
+                                              info),
+                                 fla_error)
     }
     if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gebrd_body(c)
-             /** fla_error set to 0 on LAPACK_SUCCESS */
-        fla_error = 0;
+            /** fla_error set to 0 on LAPACK_SUCCESS */
+            fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return fla_error;
@@ -387,34 +225,35 @@ LAPACK_gebrd(z)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgebrd inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1( zgebrd_check( m, n,
-                                           buff_A, ldim_A,
-                                           buff_d, buff_e,
-                                           buff_tu, buff_tv,
-                                           buff_w, lwork,
-                                           info ),fla_error )
+        LAPACK_RETURN_CHECK_VAR1(zgebrd_check(m, n,
+                                              buff_A, ldim_A,
+                                              buff_d, buff_e,
+                                              buff_tu, buff_tv,
+                                              buff_w, lwork,
+                                              info),
+                                 fla_error)
     }
     if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gebrd_body(z)
-             /** fla_error set to 0 on LAPACK_SUCCESS */
-        fla_error = 0;
+            /** fla_error set to 0 on LAPACK_SUCCESS */
+            fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return fla_error;
 }
 #endif
 
-#define LAPACK_gebd2(prefix)                                            \
-  int F77_ ## prefix ## gebd2( integer* m,                                  \
-                               integer* n,                                  \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
-                               PREFIX2LAPACK_REALDEF(prefix)* buff_d,   \
-                               PREFIX2LAPACK_REALDEF(prefix)* buff_e,   \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_tu,  \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_tv,  \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_w,   \
-                               integer* info )
+#define LAPACK_gebd2(prefix)                                                          \
+    int F77_##prefix##gebd2(integer *m,                                               \
+                            integer *n,                                               \
+                            PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A, \
+                            PREFIX2LAPACK_REALDEF(prefix) * buff_d,                   \
+                            PREFIX2LAPACK_REALDEF(prefix) * buff_e,                   \
+                            PREFIX2LAPACK_TYPEDEF(prefix) * buff_tu,                  \
+                            PREFIX2LAPACK_TYPEDEF(prefix) * buff_tv,                  \
+                            PREFIX2LAPACK_TYPEDEF(prefix) * buff_w,                   \
+                            integer * info)
 
 LAPACK_gebd2(s)
 {
@@ -422,18 +261,19 @@ LAPACK_gebd2(s)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgebd2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1( sgebd2_check( m, n,
-                                           buff_A, ldim_A,
-                                           buff_d, buff_e,
-                                           buff_tu, buff_tv,
-                                           buff_w,
-                                           info ), fla_error)
+        LAPACK_RETURN_CHECK_VAR1(sgebd2_check(m, n,
+                                              buff_A, ldim_A,
+                                              buff_d, buff_e,
+                                              buff_tu, buff_tv,
+                                              buff_w,
+                                              info),
+                                 fla_error)
     }
     if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gebrd_body(s)
-         /** fla_error set to 0 on LAPACK_SUCCESS */
-        fla_error = 0;
+            /** fla_error set to 0 on LAPACK_SUCCESS */
+            fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return fla_error;
@@ -444,17 +284,18 @@ LAPACK_gebd2(d)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgebd2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1( dgebd2_check( m, n,
-                                           buff_A, ldim_A,
-                                           buff_d, buff_e,
-                                           buff_tu, buff_tv,
-                                           buff_w,
-                                           info ), fla_error)
+        LAPACK_RETURN_CHECK_VAR1(dgebd2_check(m, n,
+                                              buff_A, ldim_A,
+                                              buff_d, buff_e,
+                                              buff_tu, buff_tv,
+                                              buff_w,
+                                              info),
+                                 fla_error)
     }
     if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gebrd_body(d)
-        fla_error=0;
+            fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return fla_error;
@@ -467,18 +308,19 @@ LAPACK_gebd2(c)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cgebd2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1( cgebd2_check( m, n,
-                                           buff_A, ldim_A,
-                                           buff_d, buff_e,
-                                           buff_tu, buff_tv,
-                                           buff_w,
-                                           info ),fla_error )
+        LAPACK_RETURN_CHECK_VAR1(cgebd2_check(m, n,
+                                              buff_A, ldim_A,
+                                              buff_d, buff_e,
+                                              buff_tu, buff_tv,
+                                              buff_w,
+                                              info),
+                                 fla_error)
     }
     if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gebrd_body(c)
-         /** fla_error set to 0 on LAPACK_SUCCESS */
-        fla_error = 0;
+            /** fla_error set to 0 on LAPACK_SUCCESS */
+            fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return fla_error;
@@ -489,18 +331,19 @@ LAPACK_gebd2(z)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgebd2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
     {
-        LAPACK_RETURN_CHECK_VAR1( zgebd2_check( m, n,
-                                           buff_A, ldim_A,
-                                           buff_d, buff_e,
-                                           buff_tu, buff_tv,
-                                           buff_w,
-                                           info ), fla_error )
+        LAPACK_RETURN_CHECK_VAR1(zgebd2_check(m, n,
+                                              buff_A, ldim_A,
+                                              buff_d, buff_e,
+                                              buff_tu, buff_tv,
+                                              buff_w,
+                                              info),
+                                 fla_error)
     }
     if (fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gebrd_body(z)
-         /** fla_error set to 0 on LAPACK_SUCCESS */
-        fla_error = 0;
+            /** fla_error set to 0 on LAPACK_SUCCESS */
+            fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return fla_error;

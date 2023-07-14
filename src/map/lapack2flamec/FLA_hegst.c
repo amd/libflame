@@ -196,7 +196,7 @@ extern int zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, 
                                                                 \
   FLA_Init_safe( &init_result );                                \
                                                                 \
-  FLA_Param_map_netlib_to_flame_inv( itype, &inv_fla );         \
+  FLA_Param_map_netlib_to_flame_inv( (int *) itype, &inv_fla );         \
   FLA_Param_map_netlib_to_flame_uplo( uplo, &uplo_fla );        \
                                                                 \
   FLA_Obj_create_without_buffer( datatype, *m, *m, &A );        \
@@ -283,8 +283,8 @@ LAPACK_hegst(c, he)
     {
         chegst_fla( itype, uplo,
                     m,
-                    buff_A, ldim_A,
-                    buff_B, ldim_B,
+                    (complex *) buff_A, ldim_A,
+                    (complex *) buff_B, ldim_B,
                     info );
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
@@ -316,8 +316,8 @@ LAPACK_hegst(z,he)
     {
         zhegst_fla( itype, uplo,
                     m,
-                    buff_A, ldim_A,
-                    buff_B, ldim_B,
+                    (doublecomplex *) buff_A, ldim_A,
+                    (doublecomplex *) buff_B, ldim_B,
                     info );
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
@@ -406,8 +406,8 @@ LAPACK_hegs2(c, he)
     {
         chegs2_fla( itype, uplo,
                     m,
-                    buff_A, ldim_A,
-                    buff_B, ldim_B,
+                    (complex *) buff_A, ldim_A,
+                    (complex *) buff_B, ldim_B,
                     info );
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
@@ -439,8 +439,8 @@ LAPACK_hegs2(z,he)
     {
         zhegs2_fla( itype, uplo,
                     m,
-                    buff_A, ldim_A,
-                    buff_B, ldim_B,
+                    (doublecomplex *) buff_A, ldim_A,
+                    (doublecomplex *) buff_B, ldim_B,
                     info );
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;

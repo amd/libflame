@@ -232,8 +232,8 @@ FLA_Error FLA_Fused_UZhu_ZUhu_opd_var1( integer m_U,
 
   for ( i = 0; i < n_run; ++i )
   {
-    double    rho_z1u = 0.;
-    double    rho_z2u = 0.;
+    double    rho_z1u;
+    double    rho_z2u;
     double    rho_u1u;
     double    rho_u2u;
 
@@ -387,8 +387,6 @@ FLA_Error FLA_Fused_UZhu_ZUhu_opz_var1( integer m_U,
                                         dcomplex* buff_u, integer inc_u, 
                                         dcomplex* buff_w, integer inc_w ) 
 {
-  //dcomplex  zero  = bl1_z0();
-
   integer       n_run    = n_U / 1;
   integer       n_left   = n_U % 1;
   integer       step_u   = 1*cs_U;

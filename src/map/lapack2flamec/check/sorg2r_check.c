@@ -33,7 +33,7 @@ int sorg2r_check(integer *m, integer *n, integer *k, float *a, integer *lda, flo
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CUNG2R", &i__1, (ftnlen)6);
+        xerbla_("SORG2R", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

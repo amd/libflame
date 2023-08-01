@@ -161,8 +161,10 @@ void zgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, dcomplex *a, aocl_
     /* Builtin functions */
     void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    aocl_int64_t i__;
-    dcomplex alpha;
+    integer i__;
+    doublecomplex alpha;
+    extern /* Subroutine */
+    int zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -209,7 +211,7 @@ void zgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, dcomplex *a, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGEHD2", &i__1);
+        xerbla_("ZGEHD2", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

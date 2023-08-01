@@ -152,6 +152,8 @@ void zpbcon_(char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab, aocl_int_t
     logical upper;
     extern doublereal dlamch_(char *);
     doublereal scalel, scaleu;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     char normin[1];
     doublereal smlnum;
@@ -214,7 +216,7 @@ void zpbcon_(char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab, aocl_int_t
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZPBCON", &i__1);
+        xerbla_("ZPBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

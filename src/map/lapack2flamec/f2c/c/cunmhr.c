@@ -193,9 +193,14 @@ void cunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     /* Local variables */
     aocl_int64_t i1, i2, nb, mi, nh, ni, nq, nw;
     logical left;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
-    aocl_int64_t lwkopt;
+    extern logical lsame_(char *, char *);
+    integer iinfo;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -293,7 +298,7 @@ void cunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     if(*info != 0)
     {
         i__2 = -(*info);
-        xerbla_("CUNMHR", &i__2);
+        xerbla_("CUNMHR", &i__2, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

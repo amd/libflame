@@ -303,6 +303,9 @@ void cheevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, scomplex *a, ao
     logical valeig;
     extern real slamch_(char *);
     real safmin;
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real abstll, bignum;
     aocl_int64_t indiwk, indisp, indtau;
     aocl_int64_t indrwk, indwrk, lwkmin;
@@ -430,7 +433,7 @@ void cheevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, scomplex *a, ao
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHEEVX", &i__1);
+        xerbla_("CHEEVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

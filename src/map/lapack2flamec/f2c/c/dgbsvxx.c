@@ -596,9 +596,7 @@ void dgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
                 integer *);
     logical nofact;
     extern /* Subroutine */
-        void
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern /* Subroutine */
         void
@@ -794,7 +792,7 @@ void dgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGBSVXX", &i__1);
+        xerbla_("DGBSVXX", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

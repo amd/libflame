@@ -133,7 +133,9 @@ void ssptri_(char *uplo, aocl_int_t *n, real *ap, aocl_int_t *ipiv, real *work, 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t kstep;
     logical upper;
-    aocl_int64_t kcnext;
+    extern /* Subroutine */
+    int scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), sspmv_(char *, integer *, real *, real *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    integer kcnext;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -173,7 +175,7 @@ void ssptri_(char *uplo, aocl_int_t *n, real *ap, aocl_int_t *ipiv, real *work, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSPTRI", &i__1);
+        xerbla_("SSPTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

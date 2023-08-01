@@ -199,7 +199,12 @@ void ssytrf_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ip
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t nbmin, iinfo;
     logical upper;
-    aocl_int64_t ldwork, lwkopt;
+    extern /* Subroutine */
+    int ssytf2_(char *, integer *, real *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int slasyf_(char *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -258,7 +263,7 @@ void ssytrf_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ip
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYTRF", &i__1);
+        xerbla_("SSYTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

@@ -154,8 +154,13 @@ void dpbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int
     /* Local variables */
     aocl_int64_t i__, j, i2, i3, ib, nb, ii, jj;
     doublereal work[1056] /* was [33][32] */
-        ;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    ;
+    extern /* Subroutine */
+    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsyrk_( char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), dpbtf2_(char *, integer *, integer *, doublereal *, integer *, integer *), dpotf2_(char *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -204,7 +209,7 @@ void dpbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPBTRF", &i__1);
+        xerbla_("DPBTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

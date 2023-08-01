@@ -208,7 +208,7 @@ void cggbal_(char *job, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b
     real pgamma;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *), xerbla_(char *, integer *);
+    int csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lsfmin, lsfmax;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -266,7 +266,7 @@ void cggbal_(char *job, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGGBAL", &i__1);
+        xerbla_("CGGBAL", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

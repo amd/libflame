@@ -182,9 +182,14 @@ void zhesv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_t
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    aocl_int64_t nb;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t lwkopt;
+    integer nb;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int zhetrf_(char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zhetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -258,7 +263,7 @@ void zhesv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_t
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHESV ", &i__1);
+        xerbla_("ZHESV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

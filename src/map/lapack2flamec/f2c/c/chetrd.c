@@ -209,7 +209,10 @@ void chetrd_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d__,
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t nbmin, iinfo;
     logical upper;
-    aocl_int64_t ldwork, lwkopt;
+    extern /* Subroutine */
+    int chetd2_(char *, integer *, complex *, integer *, real *, real *, complex *, integer *), cher2k_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, real *, complex *, integer *), clatrd_(char *, integer *, integer *, complex *, integer *, real *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -271,7 +274,7 @@ void chetrd_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d__,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHETRD", &i__1);
+        xerbla_("CHETRD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

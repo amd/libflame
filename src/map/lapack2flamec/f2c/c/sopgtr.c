@@ -141,6 +141,8 @@ void aocl_lapack_sopgtr(char *uplo, aocl_int64_t *n, real *ap, real *tau, real *
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     logical upper;
+    extern /* Subroutine */
+    int sorg2l_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *), sorg2r_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -187,8 +189,8 @@ void aocl_lapack_sopgtr(char *uplo, aocl_int64_t *n, real *ap, real *tau, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SOPGTR", &i__1, (ftnlen)6);
-        return;
+        xerbla_("SOPGTR", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)

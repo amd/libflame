@@ -193,6 +193,8 @@ void zhetd2_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal
     dcomplex alpha;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
+    extern /* Subroutine */
+    int zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -239,7 +241,7 @@ void zhetd2_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHETD2", &i__1);
+        xerbla_("ZHETD2", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

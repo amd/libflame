@@ -229,7 +229,7 @@ void dlasdq_(char *uplo, aocl_int_t *sqre, aocl_int_t *n, aocl_int_t *ncvt, aocl
     int dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer iuplo;
     extern /* Subroutine */
-    int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(char *, integer *), dbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     logical rotate;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -315,7 +315,7 @@ void dlasdq_(char *uplo, aocl_int_t *sqre, aocl_int_t *n, aocl_int_t *ncvt, aocl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLASDQ", &i__1);
+        xerbla_("DLASDQ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -175,6 +175,9 @@ void cheev_(char *jobz, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda,
     aocl_int64_t iscale;
     extern real slamch_(char *);
     real safmin;
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     aocl_int64_t indtau, indwrk;
     aocl_int64_t llwork;
@@ -249,7 +252,7 @@ void cheev_(char *jobz, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHEEV ", &i__1);
+        xerbla_("CHEEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

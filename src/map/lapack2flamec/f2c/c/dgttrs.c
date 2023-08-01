@@ -147,8 +147,11 @@ void dgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doubl
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2, i__3;
     /* Local variables */
-    aocl_int64_t j, jb, nb;
-    aocl_int64_t itrans;
+    integer j, jb, nb;
+    extern /* Subroutine */
+    int dgtts2_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer itrans;
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -200,7 +203,7 @@ void dgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doubl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGTTRS", &i__1);
+        xerbla_("DGTTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

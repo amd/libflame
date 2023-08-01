@@ -174,7 +174,9 @@ void spbsv_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, real *a
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), spbtrf_( char *, integer *, integer *, real *, integer *, integer *), spbtrs_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -228,7 +230,7 @@ void spbsv_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, real *a
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SPBSV ", &i__1);
+        xerbla_("SPBSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

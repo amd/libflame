@@ -132,7 +132,13 @@ void zsptri_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, dcomplex
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t kstep;
     logical upper;
-    aocl_int64_t kcnext;
+    extern /* Subroutine */
+    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    extern /* Double Complex */
+    VOID zdotu_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    extern /* Subroutine */
+    int zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zspmv_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    integer kcnext;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -172,7 +178,7 @@ void zsptri_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, dcomplex
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSPTRI", &i__1);
+        xerbla_("ZSPTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

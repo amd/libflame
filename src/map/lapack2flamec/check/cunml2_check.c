@@ -62,7 +62,7 @@ int cunml2_check(char *side, char *trans, integer *m, integer *n, integer *k, sc
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CUNM2R", &i__1, (ftnlen)6);
+        xerbla_("CUNML2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

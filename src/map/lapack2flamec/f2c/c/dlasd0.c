@@ -169,7 +169,9 @@ void dlasd0_(aocl_int_t *n, aocl_int_t *sqre, doublereal *d__, doublereal *e, do
     doublereal beta;
     aocl_int64_t idxq, nlvl;
     doublereal alpha;
-    aocl_int64_t inode, ndiml, idxqc, ndimr, itemp, sqrei;
+    integer inode, ndiml, idxqc, ndimr, itemp, sqrei;
+    extern /* Subroutine */
+    int dlasd1_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *), dlasdq_(char *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -222,7 +224,7 @@ void dlasd0_(aocl_int_t *n, aocl_int_t *sqre, doublereal *d__, doublereal *e, do
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLASD0", &i__1);
+        xerbla_("DLASD0", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

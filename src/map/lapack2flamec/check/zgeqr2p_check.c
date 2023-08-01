@@ -29,7 +29,7 @@ int zgeqr2p_check(integer *m, integer *n, dcomplex *a, integer *lda, dcomplex *t
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGEQR2P", &i__1, (ftnlen)7);
+        xerbla_("ZGEQR2P", &i__1, (ftnlen)7);
         return LAPACK_FAILURE;
     }
     return LAPACK_SUCCESS;

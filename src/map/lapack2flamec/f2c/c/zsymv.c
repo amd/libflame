@@ -164,9 +164,11 @@ void zsymv_(char *uplo, aocl_int_t *n, dcomplex *alpha, dcomplex *a, aocl_int_t 
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     dcomplex z__1, z__2, z__3, z__4;
     /* Local variables */
-    aocl_int64_t i__, j, ix, iy, jx, jy, kx, ky, info;
-    dcomplex temp1, temp2;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j, ix, iy, jx, jy, kx, ky, info;
+    doublecomplex temp1, temp2;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -218,7 +220,7 @@ void zsymv_(char *uplo, aocl_int_t *n, dcomplex *alpha, dcomplex *a, aocl_int_t 
     }
     if(info != 0)
     {
-        xerbla_("ZSYMV ", &info);
+        xerbla_("ZSYMV ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

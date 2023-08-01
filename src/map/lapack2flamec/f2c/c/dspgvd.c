@@ -231,7 +231,11 @@ void dspgvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, doublerea
     char trans[1];
     logical upper;
     logical wantz;
-    aocl_int64_t liwmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dspevd_( char *, char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *);
+    integer liwmin;
+    extern /* Subroutine */
+    int dpptrf_(char *, integer *, doublereal *, integer *), dspgst_(integer *, char *, integer *, doublereal *, doublereal *, integer *);
     logical lquery;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -322,7 +326,7 @@ void dspgvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, doublerea
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSPGVD", &i__1);
+        xerbla_("DSPGVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

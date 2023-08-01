@@ -135,10 +135,19 @@ void cgetri_(aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv, scom
     real r__1;
     scomplex q__1;
     /* Local variables */
-    aocl_int64_t i__, j, jb, nb, jj, jp, nn, iws;
-    aocl_int64_t nbmin;
-    aocl_int64_t ldwork;
-    aocl_int64_t lwkopt;
+    integer i__, j, jb, nb, jj, jp, nn, iws;
+    extern /* Subroutine */
+    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    integer nbmin;
+    extern /* Subroutine */
+    int cswap_(integer *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    integer ldwork;
+    extern /* Subroutine */
+    int ctrtri_(char *, char *, integer *, complex *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -189,7 +198,7 @@ void cgetri_(aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv, scom
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGETRI", &i__1);
+        xerbla_("CGETRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

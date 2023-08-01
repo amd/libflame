@@ -58,7 +58,7 @@ int cgeqp3_check(integer *m, integer *n, scomplex *a, integer *lda, integer *jpv
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGEQP3", &i__1, (ftnlen)6);
+        xerbla_("CGEQP3", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

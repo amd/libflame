@@ -227,11 +227,16 @@ void zgghrd_(char *compq, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_
     doublereal c__;
     dcomplex s;
     logical ilq, ilz;
-    aocl_int64_t jcol, jrow;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    dcomplex ctemp;
-    aocl_int64_t icompq, icompz;
-    extern void zlartg_(dcomplex *, dcomplex *, doublereal *, dcomplex *, dcomplex *);
+    integer jcol, jrow;
+    extern /* Subroutine */
+    int zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
+    extern logical lsame_(char *, char *);
+    doublecomplex ctemp;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    integer icompq, icompz;
+    extern /* Subroutine */
+    int zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -347,7 +352,7 @@ void zgghrd_(char *compq, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGGHRD", &i__1);
+        xerbla_("ZGGHRD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

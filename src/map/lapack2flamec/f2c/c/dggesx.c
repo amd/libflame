@@ -407,6 +407,8 @@ void dggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, char *sense,
     logical ilascl, ilbscl;
     doublereal safmin;
     doublereal safmax;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     aocl_int64_t ijobvl, iright;
     aocl_int64_t ijobvr;
@@ -617,7 +619,7 @@ void dggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, char *sense,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGGESX", &i__1);
+        xerbla_("DGGESX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

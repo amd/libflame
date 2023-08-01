@@ -177,6 +177,9 @@ void aocl_lapack_dsyev(char *jobz, char *uplo, aocl_int64_t *n, doublereal *a, a
     extern doublereal dlamch_(char *);
     aocl_int64_t iscale;
     doublereal safmin;
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     aocl_int64_t indtau;
     aocl_int64_t indwrk;
@@ -255,7 +258,7 @@ void aocl_lapack_dsyev(char *jobz, char *uplo, aocl_int64_t *n, doublereal *a, a
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYEV ", &i__1);
+        xerbla_("DSYEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

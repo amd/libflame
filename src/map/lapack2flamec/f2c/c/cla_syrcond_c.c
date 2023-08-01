@@ -165,6 +165,8 @@ real cla_syrcond_c_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sco
     integer isave[3];
     real anorm;
     logical upper;
+    extern /* Subroutine */
+    int clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -224,7 +226,7 @@ real cla_syrcond_c_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sco
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLA_SYRCOND_C", &i__1);
+        xerbla_("CLA_SYRCOND_C", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return ret_val;
     }

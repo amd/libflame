@@ -36,7 +36,7 @@ int zgeqpf_check(integer *m, integer *n, dcomplex *a, integer *lda, integer *jpv
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGEQPF", &i__1, (ftnlen)6);
+        xerbla_("ZGEQPF", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

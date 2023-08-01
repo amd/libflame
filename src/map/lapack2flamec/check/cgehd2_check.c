@@ -33,7 +33,7 @@ int cgehd2_check(integer *n, integer *ilo, integer *ihi, scomplex * a, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DGEHD2", &i__1, (ftnlen)6);
+        xerbla_("CGEHD2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     return LAPACK_SUCCESS;

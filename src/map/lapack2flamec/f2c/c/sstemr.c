@@ -372,6 +372,8 @@ void sstemr_(char *jobz, char *range, aocl_int_t *n, real *d__, real *e, real *v
     extern real slamch_(char *);
     aocl_int64_t wbegin;
     real safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer inderr, iindwk, indgrs, offset;
     extern /* Subroutine */
@@ -543,7 +545,7 @@ void sstemr_(char *jobz, char *range, aocl_int_t *n, real *d__, real *e, real *v
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSTEMR", &i__1);
+        xerbla_("SSTEMR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

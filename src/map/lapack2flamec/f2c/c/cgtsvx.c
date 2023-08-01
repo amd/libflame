@@ -315,6 +315,8 @@ void cgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real anorm;
     logical nofact;
+    extern /* Subroutine */
+    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), cgtcon_(char *, integer *, complex *, complex *, complex *, complex *, integer *, real *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgtrfs_(char *, integer *, integer *, complex *, complex *, complex *, complex *, complex *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), cgttrf_(integer *, complex *, complex *, complex *, complex *, integer *, integer *);
     logical notran;
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -386,7 +388,7 @@ void cgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGTSVX", &i__1);
+        xerbla_("CGTSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

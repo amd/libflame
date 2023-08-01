@@ -311,6 +311,11 @@ void sgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *dl,
     real anorm;
     extern real slamch_(char *);
     logical nofact;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern real slangt_(char *, integer *, real *, real *, real *);
+    extern /* Subroutine */
+    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), sgtcon_(char *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *, integer *);
     logical notran;
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -382,7 +387,7 @@ void sgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *dl,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGTSVX", &i__1);
+        xerbla_("SGTSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

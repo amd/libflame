@@ -179,6 +179,8 @@ void csteqr_(char *compz, aocl_int_t *n, real *d__, real *e, scomplex *z__, aocl
     aocl_int64_t iscale;
     extern real slamch_(char *);
     real safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real safmax;
     aocl_int64_t lendsv;
     extern /* Subroutine */
@@ -248,7 +250,7 @@ void csteqr_(char *compz, aocl_int_t *n, real *d__, real *e, scomplex *z__, aocl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSTEQR", &i__1);
+        xerbla_("CSTEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

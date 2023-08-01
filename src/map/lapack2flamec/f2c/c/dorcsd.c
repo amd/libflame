@@ -374,7 +374,7 @@ void aocl_lapack_dorcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
     int dorbdb_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     integer iorbdb, lorglqworkmin, lorgqrworkmin;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlapmr_(logical *, integer *, integer *, doublereal *, integer *, integer *), xerbla_(char *, integer *), dlapmt_(logical *, integer *, integer *, doublereal *, integer *, integer *);
+    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlapmr_(logical *, integer *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlapmt_(logical *, integer *, integer *, doublereal *, integer *, integer *);
     integer lorglqworkopt;
     extern /* Subroutine */
     int dorglq_fla(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
@@ -706,8 +706,8 @@ void aocl_lapack_dorcsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DORCSD", &i__1, (ftnlen)6);
-        return;
+        xerbla_("DORCSD", &i__1, (ftnlen)6);
+        return 0;
     }
     else if(lquery)
     {

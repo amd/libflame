@@ -32,7 +32,7 @@ int zgebd2_check(integer *m, integer *n, dcomplex *a, integer *lda, doublereal *
     if(*info < 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGEBD2", &i__1, (ftnlen)6);
+        xerbla_("ZGEBD2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     return LAPACK_SUCCESS;

@@ -571,10 +571,7 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, integ
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-        void
-        slaqge_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *,
-                char *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    int slaqge_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, char *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer infequ;
     logical colequ;
@@ -773,8 +770,7 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, integ
     {
         i__1 = -(*info);
         xerbla_("SGESVXX", &i__1, (ftnlen)7);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     if(equil)
     {

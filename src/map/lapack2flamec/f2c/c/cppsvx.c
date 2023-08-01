@@ -340,6 +340,8 @@ void cppsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *
     logical equil, rcequ;
     extern real slamch_(char *);
     logical nofact;
+    extern /* Subroutine */
+    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     aocl_int64_t infequ;
     real smlnum;
@@ -462,7 +464,7 @@ void cppsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPPSVX", &i__1);
+        xerbla_("CPPSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

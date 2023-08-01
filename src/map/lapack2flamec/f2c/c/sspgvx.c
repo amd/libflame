@@ -286,7 +286,7 @@ void sspgvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     logical upper, wantz;
     logical alleig, indeig, valeig;
     extern /* Subroutine */
-    int xerbla_(char *, integer *), spptrf_( char *, integer *, real *, integer *), sspgst_(integer *, char *, integer *, real *, real *, integer *), sspevx_( char *, char *, char *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *) ;
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), spptrf_( char *, integer *, real *, integer *), sspgst_(integer *, char *, integer *, real *, real *, integer *), sspevx_( char *, char *, char *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *) ;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -374,7 +374,7 @@ void sspgvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSPGVX", &i__1);
+        xerbla_("SSPGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

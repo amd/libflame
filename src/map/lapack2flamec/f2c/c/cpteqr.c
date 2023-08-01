@@ -166,14 +166,18 @@ void cpteqr_(char *compz, aocl_int_t *n, real *d__, real *e, scomplex *z__, aocl
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    scomplex c__[1] /* was [1][1] */
-        ;
-    aocl_int64_t i__;
-    scomplex vt[1] /* was [1][1] */
-        ;
-    aocl_int64_t nru;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t icompz;
+    complex c__[1] /* was [1][1] */
+    ;
+    integer i__;
+    complex vt[1] /* was [1][1] */
+    ;
+    integer nru;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *);
+    integer icompz;
+    extern /* Subroutine */
+    int spttrf_(integer *, real *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -237,7 +241,7 @@ void cpteqr_(char *compz, aocl_int_t *n, real *d__, real *e, scomplex *z__, aocl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPTEQR", &i__1);
+        xerbla_("CPTEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

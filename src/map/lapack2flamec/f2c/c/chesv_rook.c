@@ -222,9 +222,14 @@ void chesv_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     real r__1;
     /* Local variables */
-    aocl_int64_t nb;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t lwkopt;
+    integer nb;
+    extern /* Subroutine */
+    int chetrf_rook_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), chetrs_rook_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -298,7 +303,7 @@ void chesv_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHESV_ROOK ", &i__1);
+        xerbla_("CHESV_ROOK ", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

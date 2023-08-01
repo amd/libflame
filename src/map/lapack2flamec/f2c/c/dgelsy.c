@@ -226,6 +226,12 @@ void dgelsy_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl
     aocl_int64_t iascl, ibscl;
     aocl_int64_t ismin, ismax;
     doublereal wsize;
+    extern /* Subroutine */
+    int dgeqp3_(integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *, integer *), dlabad_(doublereal *, doublereal *);
+    extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */
+    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     doublereal bignum;
     aocl_int64_t lwkmin;
     doublereal sminpr, smaxpr, smlnum;
@@ -329,7 +335,7 @@ void dgelsy_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGELSY", &i__1);
+        xerbla_("DGELSY", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

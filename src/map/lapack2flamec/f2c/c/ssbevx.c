@@ -299,6 +299,8 @@ void ssbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
     logical valeig;
     extern real slamch_(char *);
     real safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real abstll, bignum;
     extern real slansb_(char *, char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
@@ -412,7 +414,7 @@ void ssbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSBEVX", &i__1);
+        xerbla_("SSBEVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

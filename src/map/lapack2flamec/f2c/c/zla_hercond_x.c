@@ -152,6 +152,8 @@ doublereal zla_hercond_x_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
     integer isave[3];
     doublereal anorm;
     logical upper;
+    extern /* Subroutine */
+    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -211,7 +213,7 @@ doublereal zla_hercond_x_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZLA_HERCOND_X", &i__1);
+        xerbla_("ZLA_HERCOND_X", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_LOG_EXIT
         return ret_val;
     }

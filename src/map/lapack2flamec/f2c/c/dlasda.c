@@ -297,11 +297,16 @@ void dlasda_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
     doublereal beta;
     aocl_int64_t idxq, nlvl;
     doublereal alpha;
-    aocl_int64_t inode, ndiml, ndimr, idxqi, itemp;
-    aocl_int64_t sqrei;
-    aocl_int64_t nwork1, nwork2;
-    aocl_int64_t smlszp;
-    aocl_int64_t givptr_sca, k_sca;
+    integer inode, ndiml, ndimr, idxqi, itemp;
+    extern /* Subroutine */
+    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    integer sqrei;
+    extern /* Subroutine */
+    int dlasd6_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+    integer nwork1, nwork2;
+    extern /* Subroutine */
+    int dlasdq_(char *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *), dlaset_( char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    integer smlszp;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -384,7 +389,7 @@ void dlasda_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLASDA", &i__1);
+        xerbla_("DLASDA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -228,7 +228,7 @@ void sspgvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *ap,
     char trans[1];
     logical upper, wantz;
     extern /* Subroutine */
-    int stpmv_(char *, char *, char *, integer *, real *, real *, integer *), stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(char *, integer *);
+    int stpmv_(char *, char *, char *, integer *, real *, real *, integer *), stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer liwmin;
     extern /* Subroutine */
     int sspevd_(char *, char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *), spptrf_(char *, integer *, real *, integer *);
@@ -321,7 +321,7 @@ void sspgvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *ap,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSPGVD", &i__1);
+        xerbla_("SSPGVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

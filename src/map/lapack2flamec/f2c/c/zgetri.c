@@ -128,8 +128,11 @@ void zgetri_(aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     dcomplex z__1;
     /* Local variables */
-    aocl_int64_t i__, j, jb, nb, jj, jp, nn, iws, nbmin;
-    aocl_int64_t ldwork, lwkopt;
+    integer i__, j, jb, nb, jj, jp, nn, iws, nbmin;
+    extern /* Subroutine */
+    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -180,7 +183,7 @@ void zgetri_(aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGETRI", &i__1);
+        xerbla_("ZGETRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

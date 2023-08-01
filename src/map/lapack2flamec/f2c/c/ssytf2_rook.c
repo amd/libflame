@@ -220,6 +220,9 @@ void ssytf2_rook_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_
     logical upper;
     real absakk;
     extern real slamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer isamax_(integer *, real *, integer *);
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -267,7 +270,7 @@ void ssytf2_rook_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYTF2_ROOK", &i__1);
+        xerbla_("SSYTF2_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

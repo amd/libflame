@@ -176,9 +176,16 @@ void aocl_lapack_dtzrzf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
-    aocl_int64_t i__, m1, ib, nb, ki, kk, mu, nx, iws, nbmin;
-    aocl_int64_t lwkmin, ldwork;
-    aocl_int64_t lwkopt;
+    integer i__, m1, ib, nb, ki, kk, mu, nx, iws, nbmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlarzb_( char *, char *, char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int dlarzt_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    integer lwkmin, ldwork;
+    extern /* Subroutine */
+    int dlatrz_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -246,8 +253,8 @@ void aocl_lapack_dtzrzf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DTZRZF", &i__1, (ftnlen)6);
-        return;
+        xerbla_("DTZRZF", &i__1, (ftnlen)6);
+        return 0;
     }
     else if(lquery)
     {

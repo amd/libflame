@@ -70,7 +70,7 @@ int cungtr_check(char *uplo, integer *n, scomplex *a, integer *lda, scomplex *ta
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CUNGTR", &i__1, (ftnlen)6);
+        xerbla_("CUNGTR", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

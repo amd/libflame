@@ -195,6 +195,8 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
     int dlaln2_(logical *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlasy2_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     doublereal scaloc;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical notrna, notrnb;
     doublereal smlnum;
@@ -269,7 +271,7 @@ void dtrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DTRSYL", &i__1);
+        xerbla_("DTRSYL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

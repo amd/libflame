@@ -250,6 +250,9 @@ void dgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, doublereal *a, aocl_int_t
     aocl_int64_t irows;
     logical ilascl, ilbscl;
     doublereal safmin;
+    extern /* Subroutine */
+    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     doublereal bignum;
     aocl_int64_t ijobvl, iright, ijobvr;
     doublereal anrmto;
@@ -381,7 +384,7 @@ void dgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, doublereal *a, aocl_int_t
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGEGS ", &i__1);
+        xerbla_("DGEGS ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

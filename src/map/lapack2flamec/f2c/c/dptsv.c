@@ -118,6 +118,8 @@ void dptsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, dou
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dpttrf_( integer *, doublereal *, doublereal *, integer *), dpttrs_( integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -156,7 +158,7 @@ void dptsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, dou
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPTSV ", &i__1);
+        xerbla_("DPTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

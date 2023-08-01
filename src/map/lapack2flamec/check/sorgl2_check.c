@@ -33,7 +33,7 @@ int sorgl2_check(integer *m, integer *n, integer *k, float *a, integer *lda, flo
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SORGL2", &i__1, (ftnlen)6);
+        xerbla_("SORGL2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

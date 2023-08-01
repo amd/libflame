@@ -42,7 +42,7 @@ int sgeqrfp_check(integer *m, integer *n, float *a, integer *lda, float *tau, fl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGEQRF", &i__1, (ftnlen)6);
+        xerbla_("SGEQRFP", &i__1, (ftnlen)7);
         return LAPACK_FAILURE;
     }
     else if(lquery)

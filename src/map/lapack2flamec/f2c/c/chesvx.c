@@ -308,7 +308,12 @@ void chesvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *
     real anorm;
     extern real slamch_(char *);
     logical nofact;
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    int cherfs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), chetrf_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), clacpy_( char *, integer *, integer *, complex *, integer *, complex *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), chetrs_( char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -415,7 +420,7 @@ void chesvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHESVX", &i__1);
+        xerbla_("CHESVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

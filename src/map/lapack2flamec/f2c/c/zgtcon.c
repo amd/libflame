@@ -154,6 +154,8 @@ void zgtcon_(char *norm, aocl_int_t *n, dcomplex *dl, dcomplex *d__, dcomplex *d
     aocl_int64_t i__, kase, kase1;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
+    extern /* Subroutine */
+    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
     extern /* Subroutine */
@@ -206,7 +208,7 @@ void zgtcon_(char *norm, aocl_int_t *n, dcomplex *dl, dcomplex *d__, dcomplex *d
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGTCON", &i__1);
+        xerbla_("ZGTCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

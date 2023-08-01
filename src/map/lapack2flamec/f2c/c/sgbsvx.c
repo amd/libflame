@@ -399,7 +399,7 @@ void sgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int sgbcon_(char *, integer *, integer *, integer *, real *, integer *, integer *, real *, real *, real *, integer *, integer *), xerbla_(char *, integer *);
+    int sgbcon_(char *, integer *, integer *, integer *, real *, integer *, integer *, real *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     aocl_int64_t infequ;
     logical colequ;
@@ -585,7 +585,7 @@ void sgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGBSVX", &i__1);
+        xerbla_("SGBSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

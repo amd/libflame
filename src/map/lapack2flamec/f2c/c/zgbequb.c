@@ -171,6 +171,8 @@ void zgbequb_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, dcom
     aocl_int64_t i__, j, kd;
     doublereal radix, rcmin, rcmax;
     extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, logrdx, smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -228,7 +230,7 @@ void zgbequb_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, dcom
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGBEQUB", &i__1);
+        xerbla_("ZGBEQUB", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

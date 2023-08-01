@@ -291,6 +291,9 @@ void ztrsen_(char *job, char *compq, logical *select, aocl_int_t *n, dcomplex *t
     aocl_int64_t lwmin;
     logical wantq, wants;
     doublereal rnorm, rwork[1];
+    extern /* Subroutine */
+    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     logical wantbh;
     logical wantsp;
     logical lquery;
@@ -396,7 +399,7 @@ void ztrsen_(char *job, char *compq, logical *select, aocl_int_t *n, dcomplex *t
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTRSEN", &i__1);
+        xerbla_("ZTRSEN", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

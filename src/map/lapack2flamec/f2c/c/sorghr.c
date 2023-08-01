@@ -159,10 +159,11 @@ void aocl_lapack_sorghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, r
     /* Local variables */
     aocl_int64_t i__, j, nb, nh, iinfo;
     extern /* Subroutine */
-        void
-        sorgqr_fla(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, real *, aocl_int64_t *, real *,
-                   real *, aocl_int64_t *, aocl_int64_t *);
-    aocl_int64_t lwkopt;
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int sorgqr_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -224,8 +225,8 @@ void aocl_lapack_sorghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, r
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SORGHR", &i__1, (ftnlen)6);
-        return;
+        xerbla_("SORGHR", &i__1, (ftnlen)6);
+        return 0;
     }
     else if(lquery)
     {

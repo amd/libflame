@@ -127,6 +127,8 @@ void cptsv_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e, scomplex *b
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpttrf_( integer *, real *, complex *, integer *), cpttrs_(char *, integer *, integer *, real *, complex *, complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -165,7 +167,7 @@ void cptsv_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e, scomplex *b
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPTSV ", &i__1);
+        xerbla_("CPTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

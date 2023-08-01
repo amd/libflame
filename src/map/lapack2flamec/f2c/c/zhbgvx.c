@@ -327,11 +327,23 @@ void zhbgvx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *ka,
     aocl_int64_t iinfo;
     char order[1];
     logical upper, wantz;
-    logical alleig, indeig, valeig;
-    aocl_int64_t indiwk, indisp;
-    aocl_int64_t indrwk, indwrk;
-    aocl_int64_t nsplit;
-    /* -- LAPACK driver routine -- */
+    extern /* Subroutine */
+    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    logical alleig, indeig;
+    integer indibl;
+    logical valeig;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    integer indiwk, indisp;
+    extern /* Subroutine */
+    int dsterf_(integer *, doublereal *, doublereal *, integer *), dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), zhbtrd_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *);
+    integer indrwk, indwrk;
+    extern /* Subroutine */
+    int zhbgst_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    integer nsplit;
+    extern /* Subroutine */
+    int zpbstf_(char *, integer *, integer *, doublecomplex *, integer *, integer *), zstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *), zsteqr_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublereal *, integer *);
+    /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -443,7 +455,7 @@ void zhbgvx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *ka,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHBGVX", &i__1);
+        xerbla_("ZHBGVX", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

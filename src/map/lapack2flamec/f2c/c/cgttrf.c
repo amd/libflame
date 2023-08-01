@@ -143,8 +143,10 @@ void cgttrf_(aocl_int_t *n, scomplex *dl, scomplex *d__, scomplex *du, scomplex 
     double r_imag(scomplex *);
     void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    aocl_int64_t i__;
-    scomplex fact, temp;
+    integer i__;
+    complex fact, temp;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -179,7 +181,7 @@ void cgttrf_(aocl_int_t *n, scomplex *dl, scomplex *d__, scomplex *du, scomplex 
     {
         *info = -1;
         i__1 = -(*info);
-        xerbla_("CGTTRF", &i__1);
+        xerbla_("CGTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

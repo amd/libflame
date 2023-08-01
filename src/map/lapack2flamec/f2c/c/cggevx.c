@@ -427,7 +427,7 @@ void cggevx_(char *balanc, char *jobvl, char *jobvr, char *sense, aocl_int_t *n,
     int chgeqz_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *), ctgsna_(char *, char *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *, integer *);
     integer ijobvl;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), xerbla_(char *, integer *);
+    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern real slamch_(char *);
     aocl_int64_t ijobvr;
@@ -617,7 +617,7 @@ void cggevx_(char *balanc, char *jobvl, char *jobvr, char *sense, aocl_int_t *n,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGGEVX", &i__1);
+        xerbla_("CGGEVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

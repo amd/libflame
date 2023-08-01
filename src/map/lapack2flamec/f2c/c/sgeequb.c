@@ -172,6 +172,8 @@ void aocl_lapack_sgeequb(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t
     aocl_int64_t i__, j;
     real radix, rcmin, rcmax;
     extern real slamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum, logrdx, smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -217,9 +219,8 @@ void aocl_lapack_sgeequb(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGEEQUB", &i__1, (ftnlen)7);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SGEEQUB", &i__1, (ftnlen)7);
+        return 0;
     }
     /* Quick return if possible. */
     if(*m == 0 || *n == 0)

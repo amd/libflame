@@ -41,7 +41,7 @@ int chegst_check(integer *itype, char *uplo, integer *n, scomplex * a, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SSYGST", &i__1, (ftnlen)6);
+        xerbla_("CHEGST", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

@@ -253,7 +253,12 @@ void claed8_(aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz, scomplex *q, aocl_i
     real eps, tau, tol;
     aocl_int64_t jlam, imax, jmax;
     extern real slapy2_(real *, real *), slamch_(char *);
-    /* -- LAPACK computational routine -- */
+    extern /* Subroutine */
+    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer isamax_(integer *, real *, integer *);
+    extern /* Subroutine */
+    int slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
+    /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -316,7 +321,7 @@ void claed8_(aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz, scomplex *q, aocl_i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLAED8", &i__1);
+        xerbla_("CLAED8", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

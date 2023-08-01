@@ -36,7 +36,7 @@ int dtrti2_check(char *uplo, char *diag, integer *n, double * a, integer *lda, i
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZTRTI2", &i__1, (ftnlen)6);
+        xerbla_("DTRTI2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     return LAPACK_SUCCESS;

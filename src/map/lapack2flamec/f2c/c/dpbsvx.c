@@ -364,6 +364,8 @@ void dpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
     doublereal scond, anorm;
     logical equil, rcequ, upper;
     logical nofact;
+    extern /* Subroutine */
+    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dpbequ_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal bignum;
     aocl_int64_t infequ;
     doublereal smlnum;
@@ -503,7 +505,7 @@ void dpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPBSVX", &i__1);
+        xerbla_("DPBSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

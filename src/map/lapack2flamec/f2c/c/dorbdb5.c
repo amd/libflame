@@ -162,10 +162,11 @@ void dorbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, doublereal *x1, aoc
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    aocl_int64_t i__, j, childinfo;
-    doublereal scl, eps, ssq, norm;
-    extern doublereal dlamch_(char *);
-    /* -- LAPACK computational routine -- */
+    integer i__, j, childinfo;
+    extern doublereal dnrm2_(integer *, doublereal *, integer *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dorbdb6_( integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -232,7 +233,7 @@ void dorbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, doublereal *x1, aoc
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DORBDB5", &i__1);
+        xerbla_("DORBDB5", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

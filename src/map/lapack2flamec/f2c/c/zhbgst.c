@@ -195,6 +195,8 @@ void zhbgst_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
     logical wantx;
+    extern /* Subroutine */
+    int zlar2v_(integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     logical update;
     extern /* Subroutine */
     int zlacgv_(integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), zlartg_( doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *), zlargv_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *), zlartv_( integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
@@ -273,7 +275,7 @@ void zhbgst_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHBGST", &i__1);
+        xerbla_("ZHBGST", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

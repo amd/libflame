@@ -155,7 +155,9 @@ void ctrtrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -219,7 +221,7 @@ void ctrtrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTRTRS", &i__1);
+        xerbla_("CTRTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

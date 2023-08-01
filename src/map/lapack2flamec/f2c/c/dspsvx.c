@@ -290,6 +290,11 @@ void dspsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal
     doublereal anorm;
     extern doublereal dlamch_(char *);
     logical nofact;
+    extern /* Subroutine */
+    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern doublereal dlansp_(char *, char *, integer *, doublereal *, doublereal *);
+    extern /* Subroutine */
+    int dspcon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dsprfs_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dsptrf_(char *, integer *, doublereal *, integer *, integer *), dsptrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -355,7 +360,7 @@ void dspsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSPSVX", &i__1);
+        xerbla_("DSPSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

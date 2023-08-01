@@ -197,6 +197,9 @@ void strsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
     aocl_int64_t knext, lnext;
     real xnorm;
     real scaloc;
+    extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical notrna, notrnb;
     real smlnum;
@@ -271,7 +274,7 @@ void strsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STRSYL", &i__1);
+        xerbla_("STRSYL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

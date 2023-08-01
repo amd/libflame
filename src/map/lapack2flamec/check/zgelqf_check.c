@@ -43,7 +43,7 @@ int zgelqf_check(integer *m, integer *n, dcomplex *a, integer *lda, dcomplex *ta
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGELQF", &i__1, (ftnlen)6);
+        xerbla_("ZGELQF", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

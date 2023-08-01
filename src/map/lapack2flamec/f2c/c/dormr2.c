@@ -167,7 +167,11 @@ void dormr2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     aocl_int64_t i__, i1, i2, i3, mi, ni, nq;
     doublereal aii;
     logical left;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    int dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -243,7 +247,7 @@ void dormr2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DORMR2", &i__1);
+        xerbla_("DORMR2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

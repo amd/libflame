@@ -87,7 +87,7 @@ int zunmqr_check(char *side, char *trans, integer *m, integer *n, integer *k, dc
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZUNMLQ", &i__1, (ftnlen)6);
+        xerbla_("ZUNMQR", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

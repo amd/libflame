@@ -244,6 +244,8 @@ void cgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomple
     aocl_int64_t count;
     extern real slamch_(char *);
     real safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transn[1];
     char transt[1];
@@ -320,7 +322,7 @@ void cgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomple
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGTRFS", &i__1);
+        xerbla_("CGTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

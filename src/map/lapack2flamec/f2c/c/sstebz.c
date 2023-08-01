@@ -304,8 +304,13 @@ void sstebz_(char *range, char *order, aocl_int_t *n, real *vl, real *vu, aocl_i
     extern real slamch_(char *);
     real safemn;
     integer idumma[1];
-    aocl_int64_t idiscu;
-    aocl_int64_t iorder;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer idiscu;
+    extern /* Subroutine */
+    int slaebz_(integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    integer iorder;
     logical ncnvrg;
     real pivmin;
     logical toofew;
@@ -404,7 +409,7 @@ void sstebz_(char *range, char *order, aocl_int_t *n, real *vl, real *vu, aocl_i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSTEBZ", &i__1);
+        xerbla_("SSTEBZ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

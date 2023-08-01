@@ -214,6 +214,8 @@ void zsytf2_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t
     logical upper;
     doublereal absakk;
     extern logical disnan_(doublereal *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal colmax;
     doublereal rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
@@ -265,7 +267,7 @@ void zsytf2_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSYTF2", &i__1);
+        xerbla_("ZSYTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

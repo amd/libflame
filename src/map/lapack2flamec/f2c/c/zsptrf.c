@@ -189,6 +189,8 @@ void zsptrf_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, aocl_int
     aocl_int64_t kstep;
     logical upper;
     doublereal absakk;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal colmax;
     doublereal rowmax;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -234,7 +236,7 @@ void zsptrf_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, aocl_int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSPTRF", &i__1);
+        xerbla_("ZSPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

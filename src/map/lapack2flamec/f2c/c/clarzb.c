@@ -202,8 +202,12 @@ void clarzb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
         i__2, i__3, i__4, i__5;
     scomplex q__1;
     /* Local variables */
-    aocl_int64_t i__, j, info;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j, info;
+    extern /* Subroutine */
+    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int ccopy_(integer *, complex *, integer *, complex *, integer *), ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     char transt[1];
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -256,7 +260,7 @@ void clarzb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
     if(info != 0)
     {
         i__1 = -info;
-        xerbla_("CLARZB", &i__1);
+        xerbla_("CLARZB", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

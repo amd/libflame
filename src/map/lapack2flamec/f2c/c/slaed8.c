@@ -294,7 +294,12 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
     real eps, tau, tol;
     aocl_int64_t jlam, imax, jmax;
     extern real slapy2_(real *, real *), slamch_(char *);
-    /* -- LAPACK computational routine -- */
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer isamax_(integer *, real *, integer *);
+    extern /* Subroutine */
+    int slamrg_(integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -361,9 +366,8 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SLAED8", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SLAED8", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Need to initialize GIVPTR to O here in case of quick exit */
     /* to prevent an unspecified code behavior (usually sigfault) */

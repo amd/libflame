@@ -321,8 +321,13 @@ void ssygvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     logical upper;
     logical wantz;
     logical alleig, indeig, valeig;
-    aocl_int64_t lwkmin;
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer lwkmin;
+    extern /* Subroutine */
+    int spotrf_(char *, integer *, real *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     extern /* Subroutine */
     int ssygst_(integer *, char *, integer *, real *, integer *, real *, integer *, integer *), ssyevx_(char *, char *, char *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *);
@@ -444,7 +449,7 @@ void ssygvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYGVX", &i__1);
+        xerbla_("SSYGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

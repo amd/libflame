@@ -49,7 +49,7 @@ int zungqr_check(integer *m, integer *n, integer *k, dcomplex *a, integer *lda, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZUNGLQ", &i__1, (ftnlen)6);
+        xerbla_("ZUNGQR", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

@@ -122,7 +122,9 @@ void dorg2l_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a, aocl_in
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1;
     /* Local variables */
-    aocl_int64_t i__, j, l, ii;
+    integer i__, j, l, ii;
+    extern /* Subroutine */
+    int dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -169,7 +171,7 @@ void dorg2l_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a, aocl_in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DORG2L", &i__1);
+        xerbla_("DORG2L", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

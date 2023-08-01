@@ -167,6 +167,8 @@ real cla_gercond_c_(char *trans, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sc
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     real anorm;
+    extern /* Subroutine */
+    int clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     real ainvnm;
     logical notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -227,7 +229,7 @@ real cla_gercond_c_(char *trans, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sc
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLA_GERCOND_C", &i__1);
+        xerbla_("CLA_GERCOND_C", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return ret_val;
     }

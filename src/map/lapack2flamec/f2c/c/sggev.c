@@ -283,7 +283,7 @@ void aocl_lapack_sggev(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
     logical ilascl, ilbscl;
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int xerbla_(char *, integer *), sgghrd_( char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgghrd_( char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
     logical ldumma[1];
     char chtemp[1];
     real bignum;
@@ -434,9 +434,8 @@ void aocl_lapack_sggev(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGGEV ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SGGEV ", &i__1, (ftnlen)6);
+        return 0;
     }
     else if(lquery)
     {

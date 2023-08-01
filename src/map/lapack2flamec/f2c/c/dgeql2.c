@@ -135,6 +135,8 @@ void dgeql2_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doubl
     /* Local variables */
     aocl_int64_t i__, k;
     doublereal aii;
+    extern /* Subroutine */
+    int dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -177,7 +179,7 @@ void dgeql2_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doubl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGEQL2", &i__1);
+        xerbla_("DGEQL2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

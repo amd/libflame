@@ -302,6 +302,8 @@ void slasd7_(aocl_int_t *icompq, aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqr
     aocl_int64_t nlp1, nlp2, idxi, idxj;
     aocl_int64_t idxjp, jprev;
     extern real slapy2_(real *, real *), slamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slamrg_( integer *, integer *, real *, integer *, integer *, integer *);
     real hlftol;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -375,7 +377,7 @@ void slasd7_(aocl_int_t *icompq, aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqr
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLASD7", &i__1);
+        xerbla_("SLASD7", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

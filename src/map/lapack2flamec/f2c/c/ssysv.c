@@ -175,8 +175,10 @@ void ssysv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *ld
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t lwkopt;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    integer lwkopt;
     logical lquery;
     extern /* Subroutine */
     int ssytrf_(char *, integer *, real *, integer *, integer *, real *, integer *, integer *), ssytrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *), ssytrs2_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *);
@@ -250,7 +252,7 @@ void ssysv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *ld
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYSV ", &i__1);
+        xerbla_("SSYSV ", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -41,7 +41,7 @@ int dsygst_check(integer *itype, char *uplo, integer *n, double *a, integer *lda
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHEGST", &i__1, (ftnlen)6);
+        xerbla_("DSYGST", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

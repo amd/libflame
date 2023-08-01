@@ -157,6 +157,8 @@ void csycon_rook_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     logical upper;
+    extern /* Subroutine */
+    int clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     /* -- LAPACK computational routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -209,7 +211,7 @@ void csycon_rook_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSYCON_ROOK", &i__1);
+        xerbla_("CSYCON_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

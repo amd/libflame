@@ -29,7 +29,7 @@ int dpotri_check(char *uplo, integer *n, double *a, integer * lda, integer *info
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGETRFNP", &i__1, (ftnlen)8);
+        xerbla_("DPOTRI", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

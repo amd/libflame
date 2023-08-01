@@ -179,6 +179,9 @@ void cgeqpf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_in
     extern /* Subroutine */
     int cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern real slamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer isamax_(integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -225,7 +228,7 @@ void cgeqpf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGEQPF", &i__1);
+        xerbla_("CGEQPF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

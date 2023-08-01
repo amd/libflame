@@ -120,7 +120,9 @@ void zungl2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, dcomplex *a, aocl_int_
     /* Builtin functions */
     void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    aocl_int64_t i__, j, l;
+    integer i__, j, l;
+    extern /* Subroutine */
+    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -167,7 +169,7 @@ void zungl2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, dcomplex *a, aocl_int_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUNGL2", &i__1);
+        xerbla_("ZUNGL2", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

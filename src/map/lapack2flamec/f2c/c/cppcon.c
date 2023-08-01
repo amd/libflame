@@ -145,6 +145,8 @@ void cppcon_(char *uplo, aocl_int_t *n, scomplex *ap, real *anorm, real *rcond, 
     real scalel;
     extern real slamch_(char *);
     real scaleu;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), clatps_( char *, char *, char *, char *, integer *, complex *, complex *, real *, real *, integer *);
     real ainvnm;
     char normin[1];
     real smlnum;
@@ -197,7 +199,7 @@ void cppcon_(char *uplo, aocl_int_t *n, scomplex *ap, real *anorm, real *rcond, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPPCON", &i__1);
+        xerbla_("CPPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

@@ -296,7 +296,7 @@ void clalsa_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
     int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer ndimr;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), clals0_(integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *), xerbla_(char *, integer *), slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer * );
+    int ccopy_(integer *, complex *, integer *, complex *, integer *), clals0_(integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer * );
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -393,7 +393,7 @@ void clalsa_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLALSA", &i__1);
+        xerbla_("CLALSA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

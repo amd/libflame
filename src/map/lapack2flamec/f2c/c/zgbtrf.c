@@ -159,12 +159,18 @@ void zgbtrf_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, dcomp
     /* Builtin functions */
     void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    aocl_int64_t i__, j, i2, i3, j2, j3, k2, jb, nb, ii, jj, jm, ip, jp, km, ju, kv, nw;
-    dcomplex temp;
-    dcomplex work13[4160] /* was [65][64] */
-        ,
-        work31[4160] /* was [65][64] */
-        ;
+    integer i__, j, i2, i3, j2, j3, k2, jb, nb, ii, jj, jm, ip, jp, km, ju, kv, nw;
+    doublecomplex temp;
+    extern /* Subroutine */
+    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    doublecomplex work13[4160] /* was [65][64] */
+    , work31[4160] /* was [65][64] */
+    ;
+    extern /* Subroutine */
+    int zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsm_( char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zgbtf2_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *), izamax_(integer *, doublecomplex *, integer *);
+    extern /* Subroutine */
+    int zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -225,7 +231,7 @@ void zgbtrf_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, dcomp
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGBTRF", &i__1);
+        xerbla_("ZGBTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

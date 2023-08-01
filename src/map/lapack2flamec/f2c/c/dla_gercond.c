@@ -163,6 +163,8 @@ doublereal dla_gercond_(char *trans, aocl_int_t *n, doublereal *a, aocl_int_t *l
     aocl_int64_t kase;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
+    extern /* Subroutine */
+    int dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -219,7 +221,7 @@ doublereal dla_gercond_(char *trans, aocl_int_t *n, doublereal *a, aocl_int_t *l
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLA_GERCOND", &i__1);
+        xerbla_("DLA_GERCOND", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_LOG_EXIT
         return ret_val;
     }

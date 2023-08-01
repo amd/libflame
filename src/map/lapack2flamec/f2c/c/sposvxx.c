@@ -522,8 +522,7 @@ void sposvxx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, intege
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer infequ;
     extern /* Subroutine */
@@ -672,8 +671,7 @@ void sposvxx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, intege
     {
         i__1 = -(*info);
         xerbla_("SPOSVXX", &i__1, (ftnlen)7);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     if(equil)
     {

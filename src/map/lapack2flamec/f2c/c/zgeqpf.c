@@ -166,8 +166,15 @@ void zgeqpf_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_in
     dcomplex aii;
     aocl_int64_t pvt;
     doublereal temp, temp2, tol3z;
-    aocl_int64_t itemp;
-    extern doublereal dlamch_(char *);
+    integer itemp;
+    extern /* Subroutine */
+    int zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgeqr2_( integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_( char *);
+    extern /* Subroutine */
+    int zunm2r_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+    extern integer idamax_(integer *, doublereal *, integer *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfg_( integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -214,7 +221,7 @@ void zgeqpf_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGEQPF", &i__1);
+        xerbla_("ZGEQPF", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

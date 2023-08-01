@@ -181,6 +181,9 @@ void ztrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     extern doublereal dlamch_(char *);
     doublereal scaloc;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     doublereal bignum;
     extern /* Double Complex */
     void zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
@@ -257,7 +260,7 @@ void ztrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTRSYL", &i__1);
+        xerbla_("ZTRSYL", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

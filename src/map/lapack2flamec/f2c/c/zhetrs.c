@@ -140,6 +140,8 @@ void zhetrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     dcomplex denom;
     logical upper;
+    extern /* Subroutine */
+    int zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *), zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -194,7 +196,7 @@ void zhetrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHETRS", &i__1);
+        xerbla_("ZHETRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -168,6 +168,9 @@ void sgbcon_(char *norm, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, real *ab
     integer isave[3];
     logical lnoti;
     extern real slamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer isamax_(integer *, real *, integer *);
     real ainvnm;
     logical onenrm;
     char normin[1];
@@ -232,7 +235,7 @@ void sgbcon_(char *norm, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, real *ab
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGBCON", &i__1);
+        xerbla_("SGBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

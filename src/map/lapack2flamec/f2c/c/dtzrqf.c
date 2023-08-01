@@ -160,7 +160,9 @@ void aocl_lapack_dtzrqf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1;
     /* Local variables */
-    aocl_int64_t i__, k, m1;
+    integer i__, k, m1;
+    extern /* Subroutine */
+    int dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlarfg_( integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -202,8 +204,8 @@ void aocl_lapack_dtzrqf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DTZRQF", &i__1, (ftnlen)6);
-        return;
+        xerbla_("DTZRQF", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Perform the factorization. */
     if(*m == 0)

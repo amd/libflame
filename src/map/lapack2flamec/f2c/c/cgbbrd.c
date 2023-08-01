@@ -234,6 +234,8 @@ void cgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
     logical wantb, wantc;
     aocl_int64_t minmn;
     logical wantq;
+    extern /* Subroutine */
+    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clartg_(complex *, complex *, real *, complex *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clargv_(integer *, complex *, integer *, complex *, integer *, real *, integer *), clartv_(integer *, complex *, integer *, complex *, integer *, real *, complex *, integer *);
     logical wantpt;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -323,7 +325,7 @@ void cgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGBBRD", &i__1);
+        xerbla_("CGBBRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

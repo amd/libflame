@@ -138,7 +138,9 @@ void cgetrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -195,7 +197,7 @@ void cgetrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGETRS", &i__1);
+        xerbla_("CGETRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

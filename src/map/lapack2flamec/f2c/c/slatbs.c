@@ -289,6 +289,8 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
     aocl_int64_t jlast;
     logical upper;
     extern real slamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical notran;
     aocl_int64_t jfirst;
@@ -358,9 +360,8 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SLATBS", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SLATBS", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)

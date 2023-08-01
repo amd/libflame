@@ -467,8 +467,7 @@ AOCL_DTL_SNPRINTF("zla_herfsx_extended inputs: prec_type__ %" FLA_IS ", uplo %c,
         zaxpy_(integer *, dcomplex *, dcomplex *, integer *, dcomplex *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal normdx;
     extern /* Subroutine */
         void
@@ -561,7 +560,7 @@ AOCL_DTL_SNPRINTF("zla_herfsx_extended inputs: prec_type__ %" FLA_IS ", uplo %c,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZLA_HERFSX_EXTENDED", &i__1);
+        xerbla_("ZLA_HERFSX_EXTENDED", &i__1, (ftnlen)19);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

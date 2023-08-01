@@ -599,8 +599,7 @@ void sgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
                 real *, real *, real *, char *);
     logical nofact;
     extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer infequ;
     logical colequ;
@@ -809,8 +808,7 @@ void sgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
     {
         i__1 = -(*info);
         xerbla_("SGBSVXX", &i__1, (ftnlen)7);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        return 0;
     }
     if(equil)
     {

@@ -150,7 +150,7 @@ void zgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl, dcomple
     /* Local variables */
     integer j, jb, nb;
     extern /* Subroutine */
-    int zgtts2_(integer *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(char *, integer *);
+    int zgtts2_(integer *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer itrans;
     logical notran;
@@ -204,7 +204,7 @@ void zgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl, dcomple
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGTTRS", &i__1);
+        xerbla_("ZGTTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -302,7 +302,12 @@ void zsysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *
     doublereal anorm;
     extern doublereal dlamch_(char *);
     logical nofact;
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -409,7 +414,7 @@ void zsysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSYSVX", &i__1);
+        xerbla_("ZSYSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

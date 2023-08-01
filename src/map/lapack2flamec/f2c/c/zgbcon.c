@@ -168,6 +168,8 @@ void zgbcon_(char *norm, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, dcomplex
     integer isave[3];
     logical lnoti;
     extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
     char normin[1];
@@ -236,7 +238,7 @@ void zgbcon_(char *norm, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, dcomplex
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGBCON", &i__1);
+        xerbla_("ZGBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

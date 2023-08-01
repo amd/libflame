@@ -30,7 +30,7 @@ int dpotf2_check(char *uplo, integer *n, double *a, integer * lda, integer *info
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CLAUU2", &i__1, (ftnlen)6);
+        xerbla_("DPOTF2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

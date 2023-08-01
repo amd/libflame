@@ -325,6 +325,8 @@ void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, 
     logical leftv, bothv;
     real hnorm;
     extern real slamch_(char *);
+    extern /* Subroutine */
+    int slaein_(logical *, logical *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *, real *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern logical sisnan_(real *);
     logical noinit;
@@ -443,9 +445,8 @@ void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SHSEIN", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SHSEIN", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick return if possible. */
     if(*n == 0)

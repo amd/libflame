@@ -164,9 +164,13 @@ void sgbtrf_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, real 
     aocl_int64_t i__, j, i2, i3, j2, j3, k2, jb, nb, ii, jj, jm, ip, jp, km, ju, kv, nw;
     real temp;
     real work13[4160] /* was [65][64] */
-        ,
-        work31[4160] /* was [65][ 64] */
-        ;
+    , work31[4160] /* was [65][ 64] */
+    ;
+    extern /* Subroutine */
+    int scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), sgbtf2_(integer *, integer *, integer *, integer *, real *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *), isamax_(integer *, real *, integer *);
+    extern /* Subroutine */
+    int slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -227,7 +231,7 @@ void sgbtrf_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, real 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGBTRF", &i__1);
+        xerbla_("SGBTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

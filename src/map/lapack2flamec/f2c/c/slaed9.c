@@ -190,7 +190,13 @@ void aocl_lapack_slaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kst
     /* Local variables */
     aocl_int64_t i__, j;
     real temp;
-    /* -- LAPACK computational routine -- */
+    extern real snrm2_(integer *, real *, integer *);
+    extern /* Subroutine */
+    int scopy_(integer *, real *, integer *, real *, integer *), slaed4_(integer *, integer *, real *, real *, real *, real *, real *, integer *);
+    extern real slamc3_(real *, real *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -247,9 +253,8 @@ void aocl_lapack_slaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kst
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SLAED9", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SLAED9", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick return if possible */
     if(*k == 0)

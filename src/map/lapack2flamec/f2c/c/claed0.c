@@ -168,12 +168,25 @@ void claed0_(aocl_int_t *qsiz, aocl_int_t *n, real *d__, real *e, scomplex *q, a
     /* Local variables */
     aocl_int64_t i__, j, k, ll, iq, lgn, msd2, smm1, spm1, spm2;
     real temp;
-    aocl_int64_t curr, iperm;
-    aocl_int64_t indxq, iwrem;
-    aocl_int64_t iqptr;
-    aocl_int64_t tlvls;
-    aocl_int64_t igivcl;
-    aocl_int64_t igivnm, submat, curprb, subpbs, igivpt, curlvl, matsiz, iprmpt, smlsiz;
+    integer curr, iperm;
+    extern /* Subroutine */
+    int ccopy_(integer *, complex *, integer *, complex *, integer *);
+    integer indxq, iwrem;
+    extern /* Subroutine */
+    int scopy_(integer *, real *, integer *, real *, integer *);
+    integer iqptr;
+    extern /* Subroutine */
+    int claed7_(integer *, integer *, integer *, integer *, integer *, integer *, real *, complex *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, real *, complex *, real *, integer *, integer *);
+    integer tlvls;
+    extern /* Subroutine */
+    int clacrm_(integer *, integer *, complex *, integer *, real *, integer *, complex *, integer *, real *);
+    integer igivcl;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer igivnm, submat, curprb, subpbs, igivpt, curlvl, matsiz, iprmpt, smlsiz;
+    extern /* Subroutine */
+    int ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -232,7 +245,7 @@ void claed0_(aocl_int_t *qsiz, aocl_int_t *n, real *d__, real *e, scomplex *q, a
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLAED0", &i__1);
+        xerbla_("CLAED0", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

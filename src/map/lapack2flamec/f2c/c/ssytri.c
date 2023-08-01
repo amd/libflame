@@ -139,6 +139,8 @@ void ssytri_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ip
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t kstep;
     logical upper;
+    extern /* Subroutine */
+    int scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -184,7 +186,7 @@ void ssytri_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ip
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYTRI", &i__1);
+        xerbla_("SSYTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

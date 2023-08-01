@@ -141,6 +141,8 @@ void aocl_lapack_dopgtr(char *uplo, aocl_int64_t *n, doublereal *ap, doublereal 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     logical upper;
+    extern /* Subroutine */
+    int dorg2l_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dorg2r_fla(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -187,8 +189,8 @@ void aocl_lapack_dopgtr(char *uplo, aocl_int64_t *n, doublereal *ap, doublereal 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DOPGTR", &i__1, (ftnlen)6);
-        return;
+        xerbla_("DOPGTR", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)

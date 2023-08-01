@@ -31,7 +31,7 @@ int zlauu2_check(char *uplo, integer *n, dcomplex *a, integer *lda, integer *inf
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZLAUU2", &i__1, (ftnlen)6);
+        xerbla_("ZLAUU2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

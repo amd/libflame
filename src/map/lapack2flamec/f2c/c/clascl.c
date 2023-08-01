@@ -156,6 +156,8 @@ void clascl_(char *type__, aocl_int_t *kl, aocl_int_t *ku, real *cfrom, real *ct
     real cfrom1;
     extern real slamch_(char *);
     real cfromc;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern logical sisnan_(real *);
     real smlnum;
@@ -267,7 +269,7 @@ void clascl_(char *type__, aocl_int_t *kl, aocl_int_t *ku, real *cfrom, real *ct
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLASCL", &i__1);
+        xerbla_("CLASCL", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

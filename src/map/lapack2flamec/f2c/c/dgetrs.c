@@ -143,7 +143,7 @@ void dgetrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_i
 #ifndef FLA_ENABLE_AOCL_BLAS
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_( char *, integer *), dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
+    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
 #endif
     logical notran;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -243,11 +243,7 @@ void dgetrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_i
     if (*info != 0)
     {
         i__1 = -(*info);
-#if FLA_ENABLE_AOCL_BLAS
-        xerbla_("DGETRS", &i__1, 6);
-#else
-        xerbla_("DGETRS", &i__1);
-#endif
+        xerbla_("DGETRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

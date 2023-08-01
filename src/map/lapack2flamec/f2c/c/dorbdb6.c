@@ -174,7 +174,7 @@ void dorbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, doublereal *x1, aoc
     int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(char *, integer *), dlassq_( integer *, doublereal *, integer *, doublereal *, doublereal *);
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlassq_( integer *, doublereal *, integer *, doublereal *, doublereal *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -242,7 +242,7 @@ void dorbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, doublereal *x1, aoc
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DORBDB6", &i__1);
+        xerbla_("DORBDB6", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

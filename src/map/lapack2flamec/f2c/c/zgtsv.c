@@ -134,8 +134,10 @@ void zgtsv_(aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl, dcomplex *d__,
     double d_imag(dcomplex *);
     void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    aocl_int64_t j, k;
-    dcomplex temp, mult;
+    integer j, k;
+    doublecomplex temp, mult;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -182,7 +184,7 @@ void zgtsv_(aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl, dcomplex *d__,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGTSV ", &i__1);
+        xerbla_("ZGTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

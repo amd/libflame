@@ -296,6 +296,8 @@ void dsbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
     aocl_int64_t iscale, indibl;
     logical valeig;
     doublereal safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal abstll, bignum;
     aocl_int64_t indisp;
     aocl_int64_t indiwo;
@@ -403,7 +405,7 @@ void dsbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSBEVX", &i__1);
+        xerbla_("DSBEVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

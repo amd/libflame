@@ -200,6 +200,9 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real sfmin1, sfmin2, sfmax1, sfmax2;
     extern real slamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer isamax_(integer *, real *, integer *);
     extern logical sisnan_(real *);
     logical noconv;
     logical canswap;
@@ -245,9 +248,8 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGEBAL", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SGEBAL", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick returns. */
     if(*n == 0)
@@ -428,8 +430,27 @@ L180: /* Computing MIN */
                 continue;
             }
             /* Exit if NaN to avoid infinite loop */
-            r__1 = c__ + ca + r__ + ra;
-            if(sisnan_(&r__1))
+            *info = -3;
+            i__2 = -(*info);
+            xerbla_("SGEBAL", &i__2, (ftnlen)6);
+            return 0;
+        }
+        f /= 2.f;
+        c__ /= 2.f;
+        g /= 2.f;
+        ca /= 2.f;
+        r__ *= 2.f;
+        ra *= 2.f;
+        goto L180;
+        /* Now balance. */
+L190:
+        if (c__ + r__ >= s * .95f)
+        {
+            goto L200;
+        }
+        if (f < 1.f && scale[i__] < 1.f)
+        {
+            if (f * scale[i__] <= sfmin1)
             {
                 *info = -3;
                 i__2 = -(*info);

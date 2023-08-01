@@ -190,8 +190,12 @@ void dsbgv_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *k
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     logical upper, wantz;
-    aocl_int64_t indwrk;
-    /* -- LAPACK driver routine -- */
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dpbstf_( char *, integer *, integer *, doublereal *, integer *, integer *), dsbtrd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsbgst_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dsterf_(integer *, doublereal *, doublereal *, integer *);
+    integer indwrk;
+    extern /* Subroutine */
+    int dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -258,7 +262,7 @@ void dsbgv_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *k
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSBGV ", &i__1);
+        xerbla_("DSBGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -159,6 +159,8 @@ void cpbcon_(char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab, aocl_int_t
     real scalel;
     extern real slamch_(char *);
     real scaleu;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     char normin[1];
     real smlnum;
@@ -221,7 +223,7 @@ void cpbcon_(char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab, aocl_int_t
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPBCON", &i__1);
+        xerbla_("CPBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

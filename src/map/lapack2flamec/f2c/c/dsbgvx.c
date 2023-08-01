@@ -318,12 +318,24 @@ void dsbgvx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *ka,
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     char order[1];
-    logical upper, wantz, alleig, indeig, valeig;
-    aocl_int64_t indisp;
-    aocl_int64_t indiwo;
-    aocl_int64_t indwrk;
-    aocl_int64_t nsplit;
-    /* -- LAPACK driver routine -- */
+    extern /* Subroutine */
+    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    logical upper, wantz, alleig, indeig;
+    integer indibl;
+    logical valeig;
+    extern /* Subroutine */
+    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dpbstf_(char *, integer *, integer *, doublereal *, integer *, integer *), dsbtrd_( char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    integer indisp;
+    extern /* Subroutine */
+    int dsbgst_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *);
+    integer indiwo;
+    extern /* Subroutine */
+    int dsterf_(integer *, doublereal *, doublereal *, integer *), dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    integer indwrk;
+    extern /* Subroutine */
+    int dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    integer nsplit;
+    /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -434,7 +446,7 @@ void dsbgvx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *ka,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSBGVX", &i__1);
+        xerbla_("DSBGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

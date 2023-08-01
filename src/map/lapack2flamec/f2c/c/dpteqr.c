@@ -162,10 +162,14 @@ void dpteqr_(char *compz, aocl_int_t *n, doublereal *d__, doublereal *e, doubler
         ;
     aocl_int64_t i__;
     doublereal vt[1] /* was [1][1] */
-        ;
-    aocl_int64_t nru;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t icompz;
+    ;
+    integer nru;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    integer icompz;
+    extern /* Subroutine */
+    int dpttrf_(integer *, doublereal *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -229,7 +233,7 @@ void dpteqr_(char *compz, aocl_int_t *n, doublereal *d__, doublereal *e, doubler
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPTEQR", &i__1);
+        xerbla_("DPTEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

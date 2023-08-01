@@ -223,9 +223,12 @@ void aocl_lapack_sormhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     /* Local variables */
     aocl_int64_t i1, i2, nb, mi, nh, ni, nq, nw;
     logical left;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
-    aocl_int64_t lwkopt;
+    extern logical lsame_(char *, char *);
+    integer iinfo;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     extern /* Subroutine */
         int
@@ -328,8 +331,8 @@ void aocl_lapack_sormhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     if(*info != 0)
     {
         i__2 = -(*info);
-        aocl_blas_xerbla("SORMHR", &i__2, (ftnlen)6);
-        return;
+        xerbla_("SORMHR", &i__2, (ftnlen)6);
+        return 0;
     }
     else if(lquery)
     {

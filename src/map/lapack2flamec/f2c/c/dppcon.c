@@ -135,6 +135,8 @@ void dppcon_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *anorm, doubl
     extern doublereal dlamch_(char *);
     doublereal scalel;
     doublereal scaleu;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlatps_( char *, char *, char *, char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal ainvnm;
     char normin[1];
     doublereal smlnum;
@@ -183,7 +185,7 @@ void dppcon_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *anorm, doubl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPPCON", &i__1);
+        xerbla_("DPPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -338,10 +338,18 @@ void chbgvx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *ka,
     logical upper;
     logical wantz, alleig, indeig;
     logical valeig;
-    aocl_int64_t indiwk, indisp;
-    aocl_int64_t indrwk, indwrk;
-    aocl_int64_t nsplit;
-    /* -- LAPACK driver routine -- */
+    extern /* Subroutine */
+    int chbgst_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, real *, integer *), clacpy_( char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpbstf_( char *, integer *, integer *, complex *, integer *, integer *);
+    integer indiwk, indisp;
+    extern /* Subroutine */
+    int cstein_(integer *, real *, real *, integer *, real *, integer *, integer *, complex *, integer *, real *, integer *, integer *, integer *);
+    integer indrwk, indwrk;
+    extern /* Subroutine */
+    int csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *), ssterf_(integer *, real *, real *, integer *);
+    integer nsplit;
+    extern /* Subroutine */
+    int sstebz_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -453,7 +461,7 @@ void chbgvx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *ka,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHBGVX", &i__1);
+        xerbla_("CHBGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

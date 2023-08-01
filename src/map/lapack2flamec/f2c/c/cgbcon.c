@@ -176,7 +176,7 @@ void cgbcon_(char *norm, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomplex
     logical lnoti;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int clatbs_(char *, char *, char *, char *, integer *, integer *, complex *, integer *, complex *, real *, real *, integer *), xerbla_(char *, integer *);
+    int clatbs_(char *, char *, char *, char *, integer *, integer *, complex *, integer *, complex *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     logical onenrm;
     char normin[1];
@@ -245,7 +245,7 @@ void cgbcon_(char *norm, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomplex
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGBCON", &i__1);
+        xerbla_("CGBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

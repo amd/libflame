@@ -166,10 +166,14 @@ void spteqr_(char *compz, aocl_int_t *n, real *d__, real *e, real *z__, aocl_int
         ;
     aocl_int64_t i__;
     real vt[1] /* was [1][1] */
-        ;
-    aocl_int64_t nru;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t icompz;
+    ;
+    integer nru;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slaset_( char *, integer *, integer *, real *, real *, real *, integer *), sbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+    integer icompz;
+    extern /* Subroutine */
+    int spttrf_(integer *, real *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -233,7 +237,7 @@ void spteqr_(char *compz, aocl_int_t *n, real *d__, real *e, real *z__, aocl_int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SPTEQR", &i__1);
+        xerbla_("SPTEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

@@ -260,7 +260,7 @@ void aocl_lapack_sgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
     int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int xerbla_(char *, integer *);
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icompq;
     extern /* Subroutine */
     int slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *);
@@ -380,9 +380,8 @@ void aocl_lapack_sgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGGHRD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SGGHRD", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Initialize Q and Z if desired. */
     if(icompq == 3)

@@ -302,7 +302,15 @@ void ssysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, a
     real anorm;
     extern real slamch_(char *);
     logical nofact;
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    extern real slansy_(char *, char *, integer *, real *, integer *, real *);
+    extern /* Subroutine */
+    int ssycon_(char *, integer *, real *, integer *, integer *, real *, real *, real *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     extern /* Subroutine */
     int ssyrfs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), ssytrf_(char *, integer *, real *, integer *, integer *, real *, integer *, integer *), ssytrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
@@ -409,7 +417,7 @@ void ssysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, a
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYSVX", &i__1);
+        xerbla_("SSYSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

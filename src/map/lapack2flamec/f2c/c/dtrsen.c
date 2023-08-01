@@ -350,6 +350,11 @@ void dtrsen_(char *job, char *compq, logical *select, aocl_int_t *n, doublereal 
     aocl_int64_t lwmin;
     logical wantq, wants;
     doublereal rnorm;
+    extern /* Subroutine */
+    int dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    extern doublereal dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */
+    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical wantbh;
     aocl_int64_t liwmin;
     logical wantsp, lquery;
@@ -498,7 +503,7 @@ void dtrsen_(char *job, char *compq, logical *select, aocl_int_t *n, doublereal 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DTRSEN", &i__1);
+        xerbla_("DTRSEN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -255,6 +255,9 @@ void cgelsd_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_i
     extern /* Subroutine */
     int cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clalsd_( char *, integer *, integer *, integer *, real *, real *, complex *, integer *, real *, integer *, complex *, real *, integer *, integer *), clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *), cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     extern real slamch_(char *);
+    extern /* Subroutine */
+    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
     aocl_int64_t ldwork;
     aocl_int64_t liwork, minwrk, maxwrk;
@@ -476,7 +479,7 @@ void cgelsd_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGELSD", &i__1);
+        xerbla_("CGELSD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

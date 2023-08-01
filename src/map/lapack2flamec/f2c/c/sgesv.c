@@ -149,7 +149,7 @@ void aocl_lapack_sgesv(aocl_int64_t *n, aocl_int64_t *nrhs, real *a, aocl_int64_
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int xerbla_(char *, integer *), sgetrf_( integer *, integer *, real *, integer *, integer *, integer *), sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgetrf_( integer *, integer *, real *, integer *, integer *, integer *), sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -194,9 +194,8 @@ void aocl_lapack_sgesv(aocl_int64_t *n, aocl_int64_t *nrhs, real *a, aocl_int64_
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGESV ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SGESV ", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Compute the LU factorization of A. */
     aocl_lapack_sgetrf(n, n, &a[a_offset], lda, &ipiv[1], info);

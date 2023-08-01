@@ -162,6 +162,10 @@ void dtbcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, aocl_int_t *kd, 
     logical upper;
     doublereal xnorm;
     extern doublereal dlamch_(char *);
+    extern integer idamax_(integer *, doublereal *, integer *);
+    extern doublereal dlantb_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */
+    int dlatbs_(char *, char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
     char normin[1];
@@ -228,7 +232,7 @@ void dtbcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, aocl_int_t *kd, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DTBCON", &i__1);
+        xerbla_("DTBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

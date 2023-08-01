@@ -212,6 +212,8 @@ void cgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_i
     real anrm, bnrm, smin, smax;
     aocl_int64_t iascl, ibscl, ismin, ismax;
     extern real slamch_(char *);
+    extern /* Subroutine */
+    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     real sminpr;
     real smaxpr, smlnum;
@@ -279,7 +281,7 @@ void cgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGELSX", &i__1);
+        xerbla_("CGELSX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

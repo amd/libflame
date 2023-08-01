@@ -208,8 +208,12 @@ void ssysv_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    int ssytrf_rook_(char *, integer *, real *, integer *, integer *, real *, integer *, integer *), ssytrs_rook_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -281,7 +285,7 @@ void ssysv_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYSV_ROOK ", &i__1);
+        xerbla_("SSYSV_ROOK ", &i__1, (ftnlen)11);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

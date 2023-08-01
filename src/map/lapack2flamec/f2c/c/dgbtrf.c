@@ -165,9 +165,16 @@ void dgbtrf_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doubl
     extern /* Subroutine */
     int dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_( integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer * );
     doublereal work13[4160] /* was [65][64] */
-        ,
-        work31[4160] /* was [65][64] */
-        ;
+    , work31[4160] /* was [65][64] */
+    ;
+    extern /* Subroutine */
+    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dgbtf2_( integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, integer *);
+    extern integer idamax_(integer *, doublereal *, integer *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -228,7 +235,7 @@ void dgbtrf_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doubl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGBTRF", &i__1);
+        xerbla_("DGBTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -158,6 +158,11 @@ void ctpcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, scomplex *ap, re
     logical upper;
     real xnorm;
     extern real slamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern real clantp_(char *, char *, char *, integer *, complex *, real *);
+    extern /* Subroutine */
+    int clatps_(char *, char *, char *, char *, integer *, complex *, complex *, real *, real *, integer *);
     real ainvnm;
     logical onenrm;
     char normin[1];
@@ -218,7 +223,7 @@ void ctpcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, scomplex *ap, re
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTPCON", &i__1);
+        xerbla_("CTPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

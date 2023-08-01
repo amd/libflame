@@ -27,7 +27,7 @@ int dgetrf_check(integer *m, integer *n, double *a, integer * lda, integer *ipiv
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DGETRF", &i__1, (ftnlen)6);
+        xerbla_("DGETRF", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

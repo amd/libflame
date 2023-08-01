@@ -326,7 +326,10 @@ void cgegv_(char *jobvl, char *jobvr, aocl_int_t *n, scomplex *a, aocl_int_t *ld
     real safmax;
     char chtemp[1];
     logical ldumma[1];
-    aocl_int64_t ijobvl, iright;
+    extern /* Subroutine */
+    int chgeqz_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer ijobvl, iright;
     logical ilimit;
     aocl_int64_t ijobvr;
     aocl_int64_t lwkmin;
@@ -467,7 +470,7 @@ void cgegv_(char *jobvl, char *jobvr, aocl_int_t *n, scomplex *a, aocl_int_t *ld
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGEGV ", &i__1);
+        xerbla_("CGEGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

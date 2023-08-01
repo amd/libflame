@@ -209,6 +209,8 @@ void zporfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_
     logical upper;
     extern doublereal dlamch_(char *);
     doublereal safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal lstres;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -288,7 +290,7 @@ void zporfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZPORFS", &i__1);
+        xerbla_("ZPORFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

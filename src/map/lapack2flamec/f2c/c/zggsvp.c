@@ -283,6 +283,8 @@ void zggsvp_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
     aocl_int64_t i__, j;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical wantq, wantu, wantv;
+    extern /* Subroutine */
+    int zgeqr2_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgerq2_( integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zung2r_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zunm2r_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zunmr2_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zgeqpf_(integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, doublecomplex *, doublereal *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     logical forwrd;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -382,7 +384,7 @@ void zggsvp_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGGSVP", &i__1);
+        xerbla_("ZGGSVP", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

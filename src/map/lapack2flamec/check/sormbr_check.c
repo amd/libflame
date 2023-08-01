@@ -121,7 +121,7 @@ int sormbr_check(char *vect, char *side, char *trans, integer *m, integer *n, in
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SORMBR", &i__1, (ftnlen)6);
+        xerbla_("SORMBR", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

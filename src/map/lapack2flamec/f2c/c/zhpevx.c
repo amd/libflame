@@ -275,6 +275,8 @@ void zhpevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *ap, d
     aocl_int64_t iscale;
     logical valeig;
     doublereal safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_( integer *, doublereal *, doublecomplex *, integer *);
     doublereal abstll, bignum;
     aocl_int64_t indiwk, indisp, indtau;
     aocl_int64_t indrwk, indwrk, nsplit;
@@ -362,7 +364,7 @@ void zhpevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *ap, d
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHPEVX", &i__1);
+        xerbla_("ZHPEVX", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

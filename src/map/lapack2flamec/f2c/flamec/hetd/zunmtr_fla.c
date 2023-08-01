@@ -191,7 +191,10 @@ void zunmtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     logical upper;
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     extern void zunmqr_fla(char *, char *, aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, dcomplex *,
                  aocl_int64_t *, dcomplex *, dcomplex *, aocl_int64_t *, dcomplex *,
@@ -311,8 +314,8 @@ void zunmtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
     if(*info != 0)
     {
         i__2 = -(*info);
-        aocl_blas_xerbla("ZUNMTR", &i__2, (ftnlen)6);
-        return;
+        xerbla_("ZUNMTR", &i__2, (ftnlen)6);
+        return 0;
     }
     else if(lquery)
     {

@@ -117,7 +117,9 @@ void cungl2_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, 
     /* Builtin functions */
     void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    aocl_int64_t i__, j, l;
+    integer i__, j, l;
+    extern /* Subroutine */
+    int cscal_(integer *, complex *, complex *, integer *), clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -164,8 +166,8 @@ void cungl2_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CUNGL2", &i__1, (ftnlen)6);
-        return;
+        xerbla_("CUNGL2", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick return if possible */
     if(*m <= 0)

@@ -112,7 +112,7 @@ int dormtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, do
     if(*info != 0)
     {
         i__2 = -(*info);
-        aocl_blas_xerbla("DORMTR", &i__2, (ftnlen)6);
+        xerbla_("DORMTR", &i__2, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

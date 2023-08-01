@@ -328,7 +328,12 @@ void stgsyl_(char *trans, aocl_int_t *ijob, aocl_int_t *m, aocl_int_t *n, real *
     extern /* Subroutine */
     int stgsy2_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *, integer *);
     real scaloc;
-    aocl_int64_t iround;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    integer iround;
     logical notran;
     aocl_int64_t isolve;
     logical lquery;
@@ -455,7 +460,7 @@ void stgsyl_(char *trans, aocl_int_t *ijob, aocl_int_t *m, aocl_int_t *n, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STGSYL", &i__1);
+        xerbla_("STGSYL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

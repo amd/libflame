@@ -243,6 +243,10 @@ void zgelsd_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_i
     doublereal sfmin;
     aocl_int64_t minmn, maxmn, itaup, itauq, mnthr, nwork;
     extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zgebrd_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     doublereal bignum;
     aocl_int64_t ldwork;
     aocl_int64_t liwork, minwrk, maxwrk;
@@ -464,7 +468,7 @@ void zgelsd_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGELSD", &i__1);
+        xerbla_("ZGELSD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

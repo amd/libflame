@@ -268,6 +268,8 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
     logical somev;
     real xnorm;
     extern real slamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical rightv;
     real smlnum;
@@ -398,7 +400,7 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STREVC", &i__1);
+        xerbla_("STREVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

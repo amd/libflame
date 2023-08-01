@@ -307,7 +307,14 @@ void strsna_(char *job, char *howmny, logical *select, aocl_int_t *n, real *t, a
     integer isave[3];
     logical wants;
     real dummy[1];
-    extern real slapy2_(real *, real *), slamch_(char *);
+    extern /* Subroutine */
+    int slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+    extern real slapy2_(real *, real *);
+    extern /* Subroutine */
+    int slabad_(real *, real *);
+    extern real slamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical wantbh;
     logical somcon;
@@ -445,7 +452,7 @@ void strsna_(char *job, char *howmny, logical *select, aocl_int_t *n, real *t, a
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STRSNA", &i__1);
+        xerbla_("STRSNA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

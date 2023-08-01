@@ -235,7 +235,7 @@ void clalsd_(char *uplo, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *nrhs, re
     int clalsa_(integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int slasda_(integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_( char *, integer *), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer * );
+    int slasda_(integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer * );
     extern integer isamax_(integer *, real *, integer *);
     integer givcol;
     extern /* Subroutine */
@@ -290,7 +290,7 @@ void clalsd_(char *uplo, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *nrhs, re
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLALSD", &i__1);
+        xerbla_("CLALSD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

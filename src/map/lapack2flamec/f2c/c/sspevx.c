@@ -271,6 +271,8 @@ void sspevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *ap, real 
     logical valeig;
     extern real slamch_(char *);
     real safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real abstll, bignum;
     integer indtau, indisp, indiwo, indwrk;
     extern real slansp_(char *, char *, integer *, real *, real *);
@@ -362,7 +364,7 @@ void sspevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *ap, real 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSPEVX", &i__1);
+        xerbla_("SSPEVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

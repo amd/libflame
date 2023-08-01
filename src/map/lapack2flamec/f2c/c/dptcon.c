@@ -125,7 +125,10 @@ void dptcon_(aocl_int_t *n, doublereal *d__, doublereal *e, doublereal *anorm, d
     aocl_int64_t i__1;
     doublereal d__1;
     /* Local variables */
-    aocl_int64_t i__, ix;
+    integer i__, ix;
+    extern integer idamax_(integer *, doublereal *, integer *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -165,7 +168,7 @@ void dptcon_(aocl_int_t *n, doublereal *d__, doublereal *e, doublereal *anorm, d
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPTCON", &i__1);
+        xerbla_("DPTCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

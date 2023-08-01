@@ -223,7 +223,7 @@ void aocl_lapack_slaed0(aocl_int64_t *icompq, aocl_int64_t *qsiz, aocl_int64_t *
     int slaed1_(integer *, real *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *), slaed7_(integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, integer *);
     integer igivcl;
     extern /* Subroutine */
-    int xerbla_(char *, integer *);
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer igivnm, submat;
     extern /* Subroutine */
@@ -295,9 +295,8 @@ void aocl_lapack_slaed0(aocl_int64_t *icompq, aocl_int64_t *qsiz, aocl_int64_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SLAED0", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SLAED0", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)

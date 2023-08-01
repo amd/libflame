@@ -163,7 +163,7 @@ void sgbtf2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, real 
     /* Local variables */
     integer i__, j, km, jp, ju, kv;
     extern /* Subroutine */
-    int sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *), sscal_(integer *, real *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *), xerbla_(char *, integer *);
+    int sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *), sscal_(integer *, real *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -222,7 +222,7 @@ void sgbtf2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, real 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGBTF2", &i__1);
+        xerbla_("SGBTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

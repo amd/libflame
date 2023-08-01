@@ -374,6 +374,9 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
     logical cursl, ilvsl, ilvsr;
     aocl_int64_t irwrk, irows;
     logical ilascl, ilbscl;
+    extern /* Subroutine */
+    int cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clacpy_( char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern real slamch_(char *);
     real bignum;
     aocl_int64_t ijobvl, iright, ijobvr;
@@ -583,7 +586,7 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGGESX", &i__1);
+        xerbla_("CGGESX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

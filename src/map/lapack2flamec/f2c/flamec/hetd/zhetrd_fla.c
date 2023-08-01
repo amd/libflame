@@ -210,7 +210,12 @@ void zhetrd_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dou
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t nbmin, iinfo;
     logical upper;
-    aocl_int64_t ldwork, lwkopt;
+    extern /* Subroutine */
+    int zhetd2_fla(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zher2k_(char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int zlatrd_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, doublecomplex *, integer *);
+    integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -272,8 +277,8 @@ void zhetrd_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dou
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZHETRD", &i__1, (ftnlen)6);
-        return;
+        xerbla_("ZHETRD", &i__1, (ftnlen)6);
+        return 0;
     }
     else if(lquery)
     {

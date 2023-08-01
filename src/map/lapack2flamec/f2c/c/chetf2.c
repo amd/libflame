@@ -224,6 +224,9 @@ void chetf2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
     logical upper;
     extern real slapy2_(real *, real *);
     real absakk;
+    extern integer icamax_(integer *, complex *, integer *);
+    extern /* Subroutine */
+    int csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real colmax;
     extern logical sisnan_(real *);
     real rowmax;
@@ -277,7 +280,7 @@ void chetf2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHETF2", &i__1);
+        xerbla_("CHETF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

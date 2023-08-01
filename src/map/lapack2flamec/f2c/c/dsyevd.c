@@ -207,10 +207,23 @@ void dsyevd_(char *jobz, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *l
     logical lower, wantz;
     aocl_int64_t indwk2, llwrk2;
     extern doublereal dlamch_(char *);
-    aocl_int64_t iscale;
-    aocl_int64_t indtau;
-    aocl_int64_t indwrk, liwmin;
-    aocl_int64_t llwork;
+    integer iscale;
+    extern /* Subroutine */
+    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dstedc_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *), dlacpy_( char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+    doublereal safmin;
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    doublereal bignum;
+    integer indtau;
+    extern /* Subroutine */
+    int dsterf_(integer *, doublereal *, doublereal *, integer *);
+    extern doublereal dlansy_(char *, char *, integer *, doublereal *, integer *, doublereal *);
+    integer indwrk, liwmin;
+    extern /* Subroutine */
+    int dormtr_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dsytrd_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+    integer llwork;
+    doublereal smlnum;
     logical lquery;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -303,7 +316,7 @@ void dsyevd_(char *jobz, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *l
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYEVD", &i__1);
+        xerbla_("DSYEVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

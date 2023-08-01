@@ -211,6 +211,8 @@ void slasr_(char *side, char *pivot, char *direct, aocl_int_t *m, aocl_int_t *n,
     real temp;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real ctemp, stemp;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -266,7 +268,7 @@ void slasr_(char *side, char *pivot, char *direct, aocl_int_t *m, aocl_int_t *n,
     }
     if(info != 0)
     {
-        xerbla_("SLASR ", &info);
+        xerbla_("SLASR ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

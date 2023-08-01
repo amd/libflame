@@ -171,10 +171,16 @@ void dlaed1_(aocl_int_t *n, doublereal *d__, doublereal *q, aocl_int_t *ldq, aoc
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, i__1, i__2;
     /* Local variables */
-    aocl_int64_t i__, k, n1, n2, is, iw, iz, iq2, zpp1, indx, indxc;
-    aocl_int64_t indxp;
-    aocl_int64_t idlmda;
-    aocl_int64_t coltyp;
+    integer i__, k, n1, n2, is, iw, iz, iq2, zpp1, indx, indxc;
+    extern /* Subroutine */
+    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    integer indxp;
+    extern /* Subroutine */
+    int dlaed2_(integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, integer *), dlaed3_(integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *);
+    integer idlmda;
+    extern /* Subroutine */
+    int dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    integer coltyp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -223,7 +229,7 @@ void dlaed1_(aocl_int_t *n, doublereal *d__, doublereal *q, aocl_int_t *ldq, aoc
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLAED1", &i__1);
+        xerbla_("DLAED1", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -190,6 +190,8 @@ void zla_geamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, doublereal *alp
     aocl_int64_t lenx, leny;
     doublereal safe1;
     extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -249,7 +251,7 @@ void zla_geamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, doublereal *alp
     }
     if(info != 0)
     {
-        xerbla_("ZLA_GEAMV ", &info);
+        xerbla_("ZLA_GEAMV ", &info, (ftnlen)10);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

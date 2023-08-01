@@ -279,7 +279,7 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
     int saxpy_(integer *, real *, real *, integer *, real *, integer *), strsv_(char *, char *, char *, integer *, real *, integer *, real *, integer *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int xerbla_(char *, integer *);
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical notran;
     aocl_int64_t jfirst;
@@ -346,7 +346,7 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLATRS", &i__1);
+        xerbla_("SLATRS", &i__1, (ftnlen)6);
         return 0;
     }
     /* Quick return if possible */

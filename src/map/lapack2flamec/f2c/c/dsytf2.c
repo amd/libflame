@@ -213,6 +213,8 @@ void dsytf2_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
     logical upper;
     doublereal absakk;
     extern logical disnan_(doublereal *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal colmax, rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -259,7 +261,7 @@ void dsytf2_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYTF2", &i__1);
+        xerbla_("DSYTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

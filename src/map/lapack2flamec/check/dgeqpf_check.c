@@ -29,7 +29,7 @@ int dgeqpf_check(integer *m, integer *n, double *a, integer * lda, integer *jpvt
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGEQR2", &i__1, (ftnlen)6);
+        xerbla_("DGEQPF", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

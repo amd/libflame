@@ -204,6 +204,9 @@ void zgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_i
     doublereal anrm, bnrm, smin, smax;
     aocl_int64_t iascl, ibscl, ismin, ismax;
     extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    int zunm2r_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     doublereal bignum;
     doublereal sminpr, smaxpr, smlnum;
     /* -- LAPACK driver routine (version 3.4.0) -- */
@@ -270,7 +273,7 @@ void zgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGELSX", &i__1);
+        xerbla_("ZGELSX", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

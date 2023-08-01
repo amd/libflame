@@ -172,6 +172,8 @@ doublereal zla_gbrcond_x_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     doublereal anorm;
+    extern /* Subroutine */
+    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -239,7 +241,7 @@ doublereal zla_gbrcond_x_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZLA_GBRCOND_X", &i__1, (ftnlen)13);
+        xerbla_("ZLA_GBRCOND_X", &i__1, (ftnlen)13);
         return ret_val;
     }
     /* Compute norm of op(A)*op2(C). */

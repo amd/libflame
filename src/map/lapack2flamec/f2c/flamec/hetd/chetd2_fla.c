@@ -190,6 +190,8 @@ void chetd2_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, rea
     scomplex alpha;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
+    extern /* Subroutine */
+    int clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -236,8 +238,8 @@ void chetd2_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, rea
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHETD2", &i__1, (ftnlen)6);
-        return;
+        xerbla_("CHETD2", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick return if possible */
     if(*n <= 0)

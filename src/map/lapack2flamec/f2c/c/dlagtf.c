@@ -164,6 +164,8 @@ void dlagtf_(aocl_int_t *n, doublereal *a, doublereal *lambda, doublereal *b, do
     aocl_int64_t k;
     doublereal tl, eps, piv1, piv2, temp, mult, scale1, scale2;
     extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -196,7 +198,7 @@ void dlagtf_(aocl_int_t *n, doublereal *a, doublereal *lambda, doublereal *b, do
     {
         *info = -1;
         i__1 = -(*info);
-        xerbla_("DLAGTF", &i__1);
+        xerbla_("DLAGTF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -306,6 +306,8 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
     logical normaltransr, lside;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
+    extern /* Subroutine */
+    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical misodd, nisodd, notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -374,9 +376,8 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
     if(info != 0)
     {
         i__1 = -info;
-        aocl_blas_xerbla("STFSM ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("STFSM ", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick return when ( (N.EQ.0).OR.(M.EQ.0) ) */
     if(*m == 0 || *n == 0)

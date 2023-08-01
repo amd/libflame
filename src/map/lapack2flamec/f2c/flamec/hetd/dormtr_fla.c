@@ -191,10 +191,12 @@ void dormtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     logical upper;
-    extern void dormqr_fla(char *, char *, aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, doublereal *,
-                 aocl_int64_t *, doublereal *, doublereal *, aocl_int64_t *, doublereal *,
-                 aocl_int64_t *, aocl_int64_t *);
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int dormql_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -310,8 +312,8 @@ void dormtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
     if(*info != 0)
     {
         i__2 = -(*info);
-        aocl_blas_xerbla("DORMTR", &i__2, (ftnlen)6);
-        return;
+        xerbla_("DORMTR", &i__2, (ftnlen)6);
+        return 0;
     }
     else if(lquery)
     {

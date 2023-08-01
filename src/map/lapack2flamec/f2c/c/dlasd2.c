@@ -297,6 +297,8 @@ void dlasd2_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, do
     aocl_int64_t ctot[4], idxjp;
     aocl_int64_t jprev;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
+    extern /* Subroutine */
+    int dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal hlftol;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -378,7 +380,7 @@ void dlasd2_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, do
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLASD2", &i__1);
+        xerbla_("DLASD2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -136,7 +136,10 @@ void cptcon_(aocl_int_t *n, real *d__, scomplex *e, real *anorm, real *rcond, re
     /* Builtin functions */
     double c_abs(complex *);
     /* Local variables */
-    aocl_int64_t i__, ix;
+    integer i__, ix;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer isamax_(integer *, real *, integer *);
     real ainvnm;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -176,7 +179,7 @@ void cptcon_(aocl_int_t *n, real *d__, scomplex *e, real *anorm, real *rcond, re
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPTCON", &i__1);
+        xerbla_("CPTCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

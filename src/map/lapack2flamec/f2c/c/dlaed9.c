@@ -166,7 +166,13 @@ void dlaed9_(aocl_int_t *k, aocl_int_t *kstart, aocl_int_t *kstop, aocl_int_t *n
     /* Local variables */
     aocl_int64_t i__, j;
     doublereal temp;
-    /* -- LAPACK computational routine -- */
+    extern doublereal dnrm2_(integer *, doublereal *, integer *);
+    extern /* Subroutine */
+    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dlaed4_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
+    extern doublereal dlamc3_(doublereal *, doublereal *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -223,7 +229,7 @@ void dlaed9_(aocl_int_t *k, aocl_int_t *kstart, aocl_int_t *kstop, aocl_int_t *n
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLAED9", &i__1);
+        xerbla_("DLAED9", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -146,7 +146,9 @@ void dgecon_(char *norm, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublere
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     extern doublereal dlamch_(char *);
-    extern logical disnan_(doublereal *);
+    extern integer idamax_(integer *, doublereal *, integer *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
     char normin[1];
@@ -202,7 +204,7 @@ void dgecon_(char *norm, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublere
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGECON", &i__1);
+        xerbla_("DGECON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

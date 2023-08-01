@@ -133,7 +133,10 @@ void zungtr_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     logical upper;
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     extern void zungqr_fla(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, dcomplex *, aocl_int64_t *,
                  dcomplex *, dcomplex *, aocl_int64_t *, aocl_int64_t *);
@@ -216,8 +219,8 @@ void zungtr_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZUNGTR", &i__1, (ftnlen)6);
-        return;
+        xerbla_("ZUNGTR", &i__1, (ftnlen)6);
+        return 0;
     }
     else if(lquery)
     {

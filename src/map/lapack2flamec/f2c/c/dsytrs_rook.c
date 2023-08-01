@@ -152,6 +152,8 @@ void dsytrs_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, ao
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal denom;
     logical upper;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -206,7 +208,7 @@ void dsytrs_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, ao
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYTRS_ROOK", &i__1);
+        xerbla_("DSYTRS_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

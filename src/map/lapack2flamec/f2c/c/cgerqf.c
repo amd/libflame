@@ -159,7 +159,7 @@ void cgerqf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
     /* Local variables */
     integer i__, k, ib, nb, ki, kk, mu, nu, nx, iws, nbmin, iinfo;
     extern /* Subroutine */
-    int cgerq2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), clarft_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), xerbla_(char *, integer *);
+    int cgerq2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), clarft_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
@@ -228,7 +228,7 @@ void cgerqf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomple
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGERQF", &i__1);
+        xerbla_("CGERQF", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

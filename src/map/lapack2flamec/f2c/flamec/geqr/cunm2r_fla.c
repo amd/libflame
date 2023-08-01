@@ -171,8 +171,12 @@ void cunm2r_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     aocl_int64_t i__, i1, i2, i3, ic, jc, mi, ni, nq;
     scomplex aii;
     logical left;
-    scomplex taui;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    complex taui;
+    extern /* Subroutine */
+    int clarf_(char *, integer *, integer *, complex * , integer *, complex *, complex *, integer *, complex *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -248,8 +252,8 @@ void cunm2r_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CUNM2R", &i__1, (ftnlen)6);
-        return;
+        xerbla_("CUNM2R", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || *k == 0)

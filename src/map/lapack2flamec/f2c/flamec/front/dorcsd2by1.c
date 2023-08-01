@@ -290,7 +290,7 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
     int dbbcsd_();
     integer ibbcsd, lbbcsd, iorbdb, lorbdb;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(char *, integer *), dlapmr_(logical *, integer *, integer *, doublereal *, integer *, integer *), dlapmt_(logical *, integer *, integer *, doublereal *, integer *, integer *);
+    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlapmr_(logical *, integer *, integer *, doublereal *, integer *, integer *), dlapmt_(logical *, integer *, integer *, doublereal *, integer *, integer *);
     integer iorglq;
     extern int /* Subroutine */
       dorglq_fla(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *),
@@ -651,9 +651,8 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DORCSD2BY1", &i__1, (ftnlen)10);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("DORCSD2BY1", &i__1, (ftnlen)10);
+        return 0;
     }
     else if(lquery)
     {

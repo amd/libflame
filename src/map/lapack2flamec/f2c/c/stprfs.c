@@ -203,6 +203,8 @@ void stprfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
     logical upper;
     extern real slamch_(char *);
     real safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transt[1];
     logical nounit;
@@ -278,7 +280,7 @@ void stprfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STPRFS", &i__1);
+        xerbla_("STPRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

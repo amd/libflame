@@ -323,11 +323,23 @@ void ssbgvx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *ka,
     aocl_int64_t iinfo;
     char order[1];
     logical upper;
-    logical wantz, alleig, indeig, valeig;
-    aocl_int64_t indisp, indiwo;
-    aocl_int64_t indwrk;
-    aocl_int64_t nsplit;
-    /* -- LAPACK driver routine -- */
+    extern /* Subroutine */
+    int scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
+    logical wantz, alleig, indeig;
+    integer indibl;
+    logical valeig;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    integer indisp, indiwo;
+    extern /* Subroutine */
+    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    integer indwrk;
+    extern /* Subroutine */
+    int spbstf_(char *, integer *, integer *, real *, integer *, integer *), ssbtrd_(char *, char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *), ssbgst_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), sstein_(integer *, real *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *), ssterf_(integer *, real *, real *, integer *);
+    integer nsplit;
+    extern /* Subroutine */
+    int sstebz_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *), ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
+    /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -438,7 +450,7 @@ void ssbgvx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *ka,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSBGVX", &i__1);
+        xerbla_("SSBGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

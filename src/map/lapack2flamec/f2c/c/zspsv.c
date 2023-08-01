@@ -169,7 +169,9 @@ void zspsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *ap, aocl_int_
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zsptrf_( char *, integer *, doublecomplex *, integer *, integer *), zsptrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -214,7 +216,7 @@ void zspsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *ap, aocl_int_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSPSV ", &i__1);
+        xerbla_("ZSPSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -186,6 +186,8 @@ void dsbgst_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *
     int dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *), dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     logical upper, wantx;
+    extern /* Subroutine */
+    int dlar2v_(integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlargv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     logical update;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -260,7 +262,7 @@ void dsbgst_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSBGST", &i__1);
+        xerbla_("DSBGST", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

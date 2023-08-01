@@ -155,10 +155,13 @@ void zpbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab, aocl_int_t
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     dcomplex z__1;
     /* Local variables */
-    aocl_int64_t i__, j, i2, i3, ib, nb, ii, jj;
-    dcomplex work[1056] /* was [33][32] */
-        ;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j, i2, i3, ib, nb, ii, jj;
+    doublecomplex work[1056] /* was [33][32] */
+    ;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zpbtf2_(char *, integer *, integer *, doublecomplex *, integer *, integer *), zpotf2_(char *, integer *, doublecomplex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -207,7 +210,7 @@ void zpbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab, aocl_int_t
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZPBTRF", &i__1);
+        xerbla_("ZPBTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

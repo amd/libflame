@@ -141,8 +141,10 @@ void cgtsv_(aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__, scompl
     double r_imag(scomplex *);
     void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    aocl_int64_t j, k;
-    scomplex temp, mult;
+    integer j, k;
+    complex temp, mult;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -189,7 +191,7 @@ void cgtsv_(aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__, scompl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGTSV ", &i__1);
+        xerbla_("CGTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

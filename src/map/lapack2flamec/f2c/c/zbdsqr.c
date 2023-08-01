@@ -278,6 +278,8 @@ void zbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
     extern /* Subroutine */
     int zlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zdrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlasq1_(integer *, doublereal *, doublereal *, doublereal *, integer *), dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal sminoa, thresh;
     logical rotate;
     doublereal tolmul;
@@ -353,7 +355,7 @@ void zbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZBDSQR", &i__1);
+        xerbla_("ZBDSQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

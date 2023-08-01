@@ -30,7 +30,7 @@ int sgelq2_check(integer *m, integer *n, float *a, integer *lda, float *tau, flo
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGELQ2", &i__1, (ftnlen)6);
+        xerbla_("SGELQ2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     return LAPACK_SUCCESS;

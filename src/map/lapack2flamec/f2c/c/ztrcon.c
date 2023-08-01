@@ -156,6 +156,8 @@ void ztrcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, dcomplex *a, aoc
     logical upper;
     doublereal xnorm;
     extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
     char normin[1];
@@ -222,7 +224,7 @@ void ztrcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, dcomplex *a, aoc
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTRCON", &i__1);
+        xerbla_("ZTRCON", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

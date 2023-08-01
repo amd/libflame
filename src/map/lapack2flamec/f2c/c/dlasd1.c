@@ -219,8 +219,12 @@ void dlasd1_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, doublereal *d__, 
     aocl_int64_t u_dim1, u_offset, vt_dim1, vt_offset, i__1;
     doublereal d__1, d__2;
     /* Local variables */
-    aocl_int64_t i__, k, m, n, n1, n2, iq, iz, iu2, ldq, idx, ldu2, ivt2, idxc, idxp, ldvt2;
-    aocl_int64_t isigma;
+    integer i__, k, m, n, n1, n2, iq, iz, iu2, ldq, idx, ldu2, ivt2, idxc, idxp, ldvt2;
+    extern /* Subroutine */
+    int dlasd2_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, integer *, integer *, integer *), dlasd3_( integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *);
+    integer isigma;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal orgnrm;
     aocl_int64_t coltyp;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -270,7 +274,7 @@ void dlasd1_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, doublereal *d__, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLASD1", &i__1);
+        xerbla_("DLASD1", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

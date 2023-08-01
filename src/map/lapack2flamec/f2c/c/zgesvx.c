@@ -375,6 +375,9 @@ void zgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex 
     extern doublereal dlamch_(char *);
     doublereal colcnd;
     logical nofact;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     doublereal bignum;
     extern /* Subroutine */
     int zlaqge_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *), zgecon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
@@ -553,7 +556,7 @@ void zgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGESVX", &i__1);
+        xerbla_("ZGESVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -320,7 +320,7 @@ void zhegvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     logical upper, wantz;
     logical alleig, indeig, valeig;
     extern /* Subroutine */
-    int xerbla_(char *, integer *);
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
     int zhegst_(integer *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zheevx_(char *, char *, char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *);
@@ -446,7 +446,7 @@ void zhegvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHEGVX", &i__1);
+        xerbla_("ZHEGVX", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -222,7 +222,7 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), slaic1_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *), sorm2r_( char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), slabad_(real *, real *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int xerbla_(char *, integer *);
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     real sminpr, smaxpr, smlnum;
     /* -- LAPACK driver routine (version 3.4.0) -- */
@@ -288,9 +288,8 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGELSX", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SGELSX", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick return if possible */
     /* Computing MIN */

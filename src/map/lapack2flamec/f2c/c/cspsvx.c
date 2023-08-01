@@ -298,7 +298,7 @@ void cspsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(char *, integer *);
+    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern real clansp_(char *, char *, integer *, complex *, real *);
     extern /* Subroutine */
     int cspcon_(char *, integer *, complex *, integer *, real *, real *, complex *, integer *), csprfs_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), csptrf_(char *, integer *, complex *, integer *, integer *), csptrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
@@ -367,7 +367,7 @@ void cspsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSPSVX", &i__1);
+        xerbla_("CSPSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

@@ -313,6 +313,8 @@ void dgbtrs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
 #endif
 
     logical lnoti;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -386,7 +388,7 @@ void dgbtrs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGBTRS", &i__1);
+        xerbla_("DGBTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

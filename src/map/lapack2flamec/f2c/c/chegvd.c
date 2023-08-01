@@ -266,7 +266,9 @@ void chegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex 
     logical upper;
     aocl_int64_t lropt;
     logical wantz;
-    aocl_int64_t liwmin, lrwmin;
+    extern /* Subroutine */
+    int cheevd_(char *, char *, integer *, complex *, integer *, real *, complex *, integer *, real *, integer *, integer *, integer *, integer *), chegst_(integer *, char *, integer *, complex *, integer *, complex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpotrf_( char *, integer *, complex *, integer *, integer *);
+    integer liwmin, lrwmin;
     logical lquery;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -371,7 +373,7 @@ void chegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHEGVD", &i__1);
+        xerbla_("CHEGVD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

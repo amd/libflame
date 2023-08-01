@@ -153,6 +153,8 @@ doublereal zla_gercond_x_(char *trans, aocl_int_t *n, dcomplex *a, aocl_int_t *l
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     doublereal anorm;
+    extern /* Subroutine */
+    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -213,7 +215,7 @@ doublereal zla_gercond_x_(char *trans, aocl_int_t *n, dcomplex *a, aocl_int_t *l
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZLA_GERCOND_X", &i__1);
+        xerbla_("ZLA_GERCOND_X", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_LOG_EXIT
         return ret_val;
     }

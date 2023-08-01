@@ -284,6 +284,11 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t 
     aocl_int64_t iinfo;
     logical leftv, bothv;
     real hnorm;
+    extern /* Subroutine */
+    int claein_(logical *, logical *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, real *, real *, real *, integer *);
+    extern real slamch_(char *), clanhs_(char *, integer *, complex *, integer *, real *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern logical sisnan_(real *);
     logical noinit;
     aocl_int64_t ldwork;
@@ -385,7 +390,7 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHSEIN", &i__1);
+        xerbla_("CHSEIN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

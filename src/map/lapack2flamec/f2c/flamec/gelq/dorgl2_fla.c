@@ -115,7 +115,9 @@ void dorgl2_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1;
     /* Local variables */
-    aocl_int64_t i__, j, l;
+    integer i__, j, l;
+    extern /* Subroutine */
+    int dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -162,8 +164,8 @@ void dorgl2_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DORGL2", &i__1, (ftnlen)6);
-        return;
+        xerbla_("DORGL2", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick return if possible */
     if(*m <= 0)

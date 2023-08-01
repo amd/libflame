@@ -196,8 +196,13 @@ void ssygv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *a, a
     char trans[1];
     logical upper;
     logical wantz;
-    aocl_int64_t lwkmin;
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), ssyev_(char *, char *, integer *, real *, integer *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer lwkmin;
+    extern /* Subroutine */
+    int spotrf_(char *, integer *, real *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -277,7 +282,7 @@ void ssygv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *a, a
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYGV ", &i__1);
+        xerbla_("SSYGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

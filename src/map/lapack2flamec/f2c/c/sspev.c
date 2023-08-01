@@ -159,6 +159,8 @@ void sspev_(char *jobz, char *uplo, aocl_int_t *n, real *ap, real *w, real *z__,
     aocl_int64_t iscale;
     extern real slamch_(char *);
     real safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     aocl_int64_t indtau, indwrk;
     real smlnum;
@@ -212,7 +214,7 @@ void sspev_(char *jobz, char *uplo, aocl_int_t *n, real *ap, real *w, real *z__,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSPEV ", &i__1);
+        xerbla_("SSPEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

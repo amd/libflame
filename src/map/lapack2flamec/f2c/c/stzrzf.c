@@ -163,9 +163,16 @@ void stzrzf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, 
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
-    aocl_int64_t i__, m1, ib, nb, ki, kk, mu, nx, iws, nbmin;
-    aocl_int64_t lwkmin, ldwork;
-    aocl_int64_t lwkopt;
+    integer i__, m1, ib, nb, ki, kk, mu, nx, iws, nbmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int slarzb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+    integer lwkmin, ldwork;
+    extern /* Subroutine */
+    int slarzt_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -231,7 +238,7 @@ void stzrzf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STZRZF", &i__1);
+        xerbla_("STZRZF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

@@ -237,7 +237,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     integer nwork, icmpq1, icmpq2;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int slasda_(integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), xerbla_(char *, integer *), slalsa_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    int slasda_(integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slalsa_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
     integer givcol;
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
@@ -291,9 +291,8 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SLALSD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SLALSD", &i__1, (ftnlen)6);
+        return 0;
     }
     eps = slamch_("Epsilon");
     /* Set up the tolerance. */

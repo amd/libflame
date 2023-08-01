@@ -218,6 +218,8 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
     logical normaltransr;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -262,7 +264,7 @@ void dtftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, doublereal *a,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DTFTRI", &i__1);
+        xerbla_("DTFTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

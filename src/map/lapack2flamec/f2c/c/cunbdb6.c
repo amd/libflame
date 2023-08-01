@@ -186,7 +186,7 @@ void cunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
     int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(char *, integer *), classq_( integer *, complex *, integer *, real *, real *);
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), classq_( integer *, complex *, integer *, real *, real *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -254,7 +254,7 @@ void cunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNBDB6", &i__1);
+        xerbla_("CUNBDB6", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

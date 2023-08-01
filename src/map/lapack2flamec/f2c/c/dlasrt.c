@@ -101,8 +101,10 @@ void dlasrt_(char *id, aocl_int_t *n, doublereal *d__, aocl_int_t *info)
     integer stack[64] /* was [2][32] */
         ;
     doublereal dmnmx;
-    aocl_int64_t start;
-    aocl_int64_t stkpnt;
+    integer start;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    integer stkpnt;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -148,7 +150,7 @@ void dlasrt_(char *id, aocl_int_t *n, doublereal *d__, aocl_int_t *info)
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLASRT", &i__1);
+        xerbla_("DLASRT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

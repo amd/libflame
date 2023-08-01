@@ -129,7 +129,9 @@ void dtptri_(char *uplo, char *diag, aocl_int_t *n, doublereal *ap, aocl_int_t *
     doublereal ajj;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    aocl_int64_t jclast;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    integer jclast;
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -172,7 +174,7 @@ void dtptri_(char *uplo, char *diag, aocl_int_t *n, doublereal *ap, aocl_int_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DTPTRI", &i__1);
+        xerbla_("DTPTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

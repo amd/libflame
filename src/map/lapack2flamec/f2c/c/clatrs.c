@@ -279,6 +279,8 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
     extern /* Complex */
     void cladiv_f2c_(complex *, complex *, complex *);
     extern real slamch_(char *);
+    extern /* Subroutine */
+    int csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical notran;
     aocl_int64_t jfirst;
@@ -346,7 +348,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, s
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLATRS", &i__1);
+        xerbla_("CLATRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

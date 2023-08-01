@@ -194,6 +194,8 @@ void zhptrf_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, aocl_int
     logical upper;
     extern doublereal dlapy2_(doublereal *, doublereal *);
     doublereal absakk;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_( integer *, doublereal *, doublecomplex *, integer *);
     doublereal colmax;
     doublereal rowmax;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -240,7 +242,7 @@ void zhptrf_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, aocl_int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHPTRF", &i__1);
+        xerbla_("ZHPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

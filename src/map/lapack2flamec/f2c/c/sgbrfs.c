@@ -236,6 +236,8 @@ void sgbrfs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
     int scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transt[1];
     real lstres;
@@ -322,7 +324,7 @@ void sgbrfs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGBRFS", &i__1);
+        xerbla_("SGBRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

@@ -179,6 +179,9 @@ void zhbev_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab,
     extern doublereal dlamch_(char *);
     aocl_int64_t iscale;
     doublereal safmin;
+    extern doublereal zlanhb_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     aocl_int64_t indrwk;
     doublereal smlnum;
@@ -244,7 +247,7 @@ void zhbev_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHBEV ", &i__1);
+        xerbla_("ZHBEV ", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -261,10 +261,13 @@ void zlaed7_(aocl_int_t *n, aocl_int_t *cutpnt, aocl_int_t *qsiz, aocl_int_t *tl
     /* Builtin functions */
     integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     /* Local variables */
-    aocl_int64_t i__, k, n1, n2, iq, iw, iz, ptr, indx, curr, indxc, indxp;
-    aocl_int64_t idlmda;
-    aocl_int64_t coltyp;
-    aocl_int64_t givptr_sca;
+    integer i__, k, n1, n2, iq, iw, iz, ptr, indx, curr, indxc, indxp;
+    extern /* Subroutine */
+    int dlaed9_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), zlaed8_(integer *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *), dlaeda_(integer *, integer *, integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    integer idlmda;
+    extern /* Subroutine */
+    int dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacrm_(integer *, integer *, doublecomplex *, integer *, doublereal *, integer *, doublecomplex *, integer *, doublereal * );
+    integer coltyp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -322,7 +325,7 @@ void zlaed7_(aocl_int_t *n, aocl_int_t *cutpnt, aocl_int_t *qsiz, aocl_int_t *tl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZLAED7", &i__1);
+        xerbla_("ZLAED7", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

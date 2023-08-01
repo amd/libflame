@@ -224,6 +224,8 @@ void zhetf2_rook_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_
     logical upper;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
     doublereal absakk;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_( integer *, doublereal *, doublecomplex *, integer *);
     doublereal colmax;
     doublereal rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
@@ -276,7 +278,7 @@ void zhetf2_rook_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHETF2_ROOK", &i__1);
+        xerbla_("ZHETF2_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

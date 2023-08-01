@@ -237,6 +237,8 @@ void zgbrfs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
     int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlacn2_( integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transn[1], transt[1];
     doublereal lstres;
@@ -327,7 +329,7 @@ void zgbrfs_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGBRFS", &i__1);
+        xerbla_("ZGBRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

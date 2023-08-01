@@ -156,6 +156,8 @@ void dlascl_(char *type__, aocl_int_t *kl, aocl_int_t *ku, doublereal *cfrom, do
     extern doublereal dlamch_(char *);
     doublereal cfromc;
     extern logical disnan_(doublereal *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -265,7 +267,7 @@ void dlascl_(char *type__, aocl_int_t *kl, aocl_int_t *ku, doublereal *cfrom, do
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLASCL", &i__1);
+        xerbla_("DLASCL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -242,6 +242,11 @@ void sptsvx_(char *fact, aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, re
     real anorm;
     extern real slamch_(char *);
     logical nofact;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slacpy_( char *, integer *, integer *, real *, integer *, real *, integer * );
+    extern real slanst_(char *, integer *, real *, real *);
+    extern /* Subroutine */
+    int sptcon_(integer *, real *, real *, real *, real *, real *, integer *), sptrfs_(integer *, integer *, real *, real *, real *, real *, real *, integer *, real *, integer *, real *, real *, real *, integer *), spttrf_(integer *, real *, real *, integer *), spttrs_(integer *, integer *, real *, real *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -303,7 +308,7 @@ void sptsvx_(char *fact, aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, re
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SPTSVX", &i__1);
+        xerbla_("SPTSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

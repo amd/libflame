@@ -190,8 +190,11 @@ void cunmlq_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
         ;
     aocl_int64_t i1, i2, i3, ib, ic, jc, nb, mi, ni, nq, nw, iws;
     logical left;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t nbmin, iinfo;
+    extern logical lsame_(char *, char *);
+    integer nbmin, iinfo;
+    extern /* Subroutine */
+    int cunml2_fla(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), clarft_(char *, char * , integer *, integer *, complex *, integer *, complex *, complex * , integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical notran;
     aocl_int64_t ldwork;
     char transt[1];
@@ -292,8 +295,8 @@ void cunmlq_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CUNMLQ", &i__1, (ftnlen)6);
-        return;
+        xerbla_("CUNMLQ", &i__1, (ftnlen)6);
+        return 0;
     }
     else if(lquery)
     {

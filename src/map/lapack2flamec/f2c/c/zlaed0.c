@@ -161,11 +161,22 @@ void zlaed0_(aocl_int_t *qsiz, aocl_int_t *n, doublereal *d__, doublereal *e, dc
     /* Local variables */
     aocl_int64_t i__, j, k, ll, iq, lgn, msd2, smm1, spm1, spm2;
     doublereal temp;
-    aocl_int64_t curr, iperm;
-    aocl_int64_t indxq, iwrem, iqptr, tlvls;
-    aocl_int64_t igivcl;
-    aocl_int64_t igivnm, submat, curprb, subpbs, igivpt;
-    aocl_int64_t curlvl, matsiz, iprmpt, smlsiz;
+    integer curr, iperm;
+    extern /* Subroutine */
+    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    integer indxq, iwrem, iqptr, tlvls;
+    extern /* Subroutine */
+    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaed7_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublecomplex *, doublereal *, integer *, integer *) ;
+    integer igivcl;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int zlacrm_(integer *, integer *, doublecomplex *, integer *, doublereal *, integer *, doublecomplex *, integer *, doublereal *);
+    integer igivnm, submat, curprb, subpbs, igivpt;
+    extern /* Subroutine */
+    int dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    integer curlvl, matsiz, iprmpt, smlsiz;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -224,7 +235,7 @@ void zlaed0_(aocl_int_t *qsiz, aocl_int_t *n, doublereal *d__, doublereal *e, dc
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZLAED0", &i__1);
+        xerbla_("ZLAED0", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

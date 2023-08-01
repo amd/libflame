@@ -33,7 +33,7 @@ int ssytd2_check(char *uplo, integer *n, float *a, integer *lda, float *d__, flo
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CHETD2", &i__1, (ftnlen)6);
+        xerbla_("SSYTD2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

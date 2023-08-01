@@ -251,6 +251,10 @@ void zgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, dcomplex *a, aocl_int_t *
     int zggbak_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublecomplex *, integer *, integer *), zggbal_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     logical ilascl, ilbscl;
     doublereal safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     doublereal bignum;
     aocl_int64_t ijobvl, iright;
     aocl_int64_t ijobvr;
@@ -385,7 +389,7 @@ void zgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, dcomplex *a, aocl_int_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGEGS ", &i__1);
+        xerbla_("ZGEGS ", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

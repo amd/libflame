@@ -285,12 +285,22 @@ void aocl_lapack_sorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t itaup1, itaup2, itauq1;
     logical wantu1, wantu2;
-    aocl_int64_t ibbcsd, lbbcsd;
-    aocl_int64_t iorbdb, lorbdb;
-    real dumarr[1] = {0.f};
-    aocl_int64_t iorglq;
-    aocl_int64_t lorglq;
-    aocl_int64_t iorgqr, lorgqr;
+    integer ibbcsd, lbbcsd;
+    extern /* Subroutine */
+    int sbbcsd_();
+    integer iorbdb, lorbdb;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slacpy_( char *, integer *, integer *, real *, integer *, real *, integer * );
+    integer iorglq;
+    extern /* Subroutine */
+    int slapmr_(logical *, integer *, integer *, real *, integer *, integer *);
+    integer lorglq;
+    extern /* Subroutine */
+    int slapmt_(logical *, integer *, integer *, real *, integer *, integer *);
+    integer iorgqr, lorgqr;
+    extern int /* Subroutine */
+      sorglq_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *),
+      sorgqr_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
     logical lquery;
     logical wantv1t;
     /* -- LAPACK computational routine (version 3.5.0) -- */
@@ -629,8 +639,8 @@ void aocl_lapack_sorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SORCSD2BY1", &i__1, (ftnlen)10);
-        return;
+        xerbla_("SORCSD2BY1", &i__1, (ftnlen)10);
+        return 0;
     }
     else if(lquery)
     {

@@ -171,6 +171,8 @@ void dlagts_(aocl_int_t *job, aocl_int_t *n, doublereal *a, doublereal *b, doubl
     aocl_int64_t k;
     doublereal ak, eps, temp, pert, absak, sfmin;
     extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -212,7 +214,7 @@ void dlagts_(aocl_int_t *job, aocl_int_t *n, doublereal *a, doublereal *b, doubl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLAGTS", &i__1);
+        xerbla_("DLAGTS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

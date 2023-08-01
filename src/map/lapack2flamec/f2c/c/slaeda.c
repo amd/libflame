@@ -203,8 +203,12 @@ void aocl_lapack_slaeda(aocl_int64_t *n, aocl_int64_t *tlvls, aocl_int64_t *curl
     integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     double sqrt(doublereal);
     /* Local variables */
-    aocl_int64_t i__, k, mid, ptr, curr;
-    aocl_int64_t bsiz1, bsiz2, psiz1, psiz2, zptr1;
+    integer i__, k, mid, ptr, curr;
+    extern /* Subroutine */
+    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    integer bsiz1, bsiz2, psiz1, psiz2, zptr1;
+    extern /* Subroutine */
+    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -243,9 +247,8 @@ void aocl_lapack_slaeda(aocl_int64_t *n, aocl_int64_t *tlvls, aocl_int64_t *curl
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SLAEDA", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SLAEDA", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0)

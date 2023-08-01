@@ -223,6 +223,8 @@ void aocl_lapack_sla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
     aocl_int64_t lenx, leny;
     real safe1;
     extern real slamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -286,9 +288,8 @@ void aocl_lapack_sla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
     }
     if(info != 0)
     {
-        aocl_blas_xerbla("SLA_GBAMV ", &info, (ftnlen)10);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SLA_GBAMV ", &info, (ftnlen)10);
+        return 0;
     }
     /* Quick return if possible. */
     if(*m == 0 || *n == 0 || *alpha == 0.f && *beta == 1.f)

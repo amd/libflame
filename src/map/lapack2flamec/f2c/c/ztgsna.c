@@ -345,8 +345,13 @@ void ztgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, dcomplex *
     logical wants;
     dcomplex dummy[1];
     extern doublereal dlapy2_(doublereal *, doublereal *);
-    dcomplex dummy1[1];
-    extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    int dlabad_(doublereal *, doublereal *);
+    doublecomplex dummy1[1];
+    extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_( char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    doublereal bignum;
     logical wantbh, wantdf, somcon;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -471,7 +476,7 @@ void ztgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, dcomplex *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTGSNA", &i__1);
+        xerbla_("ZTGSNA", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

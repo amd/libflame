@@ -246,7 +246,10 @@ void zlaed8_(aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz, dcomplex *q, aocl_i
     doublereal eps, tau, tol;
     aocl_int64_t jlam, imax, jmax;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
-    /* -- LAPACK computational routine -- */
+    extern integer idamax_(integer *, doublereal *, integer *);
+    extern /* Subroutine */
+    int dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -309,7 +312,7 @@ void zlaed8_(aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz, dcomplex *q, aocl_i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZLAED8", &i__1);
+        xerbla_("ZLAED8", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

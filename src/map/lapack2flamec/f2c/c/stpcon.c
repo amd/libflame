@@ -152,6 +152,9 @@ void stpcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, real *ap, real *
     logical upper;
     real xnorm;
     extern real slamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer isamax_(integer *, real *, integer *);
     real ainvnm;
     logical onenrm;
     char normin[1];
@@ -208,7 +211,7 @@ void stpcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, real *ap, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STPCON", &i__1);
+        xerbla_("STPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

@@ -209,7 +209,12 @@ void ssytrd_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *d
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t nbmin, iinfo;
     logical upper;
-    aocl_int64_t ldwork, lwkopt;
+    extern /* Subroutine */
+    int ssytd2_fla(char *, integer *, real *, integer *, real *, real *, real *, integer *), ssyr2k_(char *, char * , integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int slatrd_(char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *);
+    integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -270,8 +275,8 @@ void ssytrd_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *d
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SSYTRD", &i__1, (ftnlen)6);
-        return;
+        xerbla_("SSYTRD", &i__1, (ftnlen)6);
+        return 0;
     }
     else if(lquery)
     {

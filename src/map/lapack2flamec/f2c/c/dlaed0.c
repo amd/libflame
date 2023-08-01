@@ -189,14 +189,29 @@ void dlaed0_(aocl_int_t *icompq, aocl_int_t *qsiz, aocl_int_t *n, doublereal *d_
     /* Local variables */
     aocl_int64_t i__, j, k, iq, lgn, msd2, smm1, spm1, spm2;
     doublereal temp;
-    aocl_int64_t curr;
-    aocl_int64_t iperm;
-    aocl_int64_t indxq, iwrem;
-    aocl_int64_t iqptr;
-    aocl_int64_t tlvls;
-    aocl_int64_t igivcl;
-    aocl_int64_t igivnm, submat, curprb, subpbs, igivpt;
-    aocl_int64_t curlvl, matsiz, iprmpt, smlsiz;
+    integer curr;
+    extern /* Subroutine */
+    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    integer iperm;
+    extern /* Subroutine */
+    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    integer indxq, iwrem;
+    extern /* Subroutine */
+    int dlaed1_(integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    integer iqptr;
+    extern /* Subroutine */
+    int dlaed7_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *);
+    integer tlvls;
+    extern /* Subroutine */
+    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+    integer igivcl;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer igivnm, submat, curprb, subpbs, igivpt;
+    extern /* Subroutine */
+    int dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    integer curlvl, matsiz, iprmpt, smlsiz;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -261,7 +276,7 @@ void dlaed0_(aocl_int_t *icompq, aocl_int_t *qsiz, aocl_int_t *n, doublereal *d_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLAED0", &i__1);
+        xerbla_("DLAED0", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

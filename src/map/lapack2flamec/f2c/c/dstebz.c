@@ -301,7 +301,10 @@ void dstebz_(char *range, char *order, aocl_int_t *n, doublereal *vl, doublereal
     aocl_int64_t irange, idiscl;
     doublereal safemn;
     integer idumma[1];
-    aocl_int64_t idiscu, iorder;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer idiscu, iorder;
     logical ncnvrg;
     doublereal pivmin;
     logical toofew;
@@ -400,7 +403,7 @@ void dstebz_(char *range, char *order, aocl_int_t *n, doublereal *vl, doublereal
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSTEBZ", &i__1);
+        xerbla_("DSTEBZ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

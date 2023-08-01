@@ -286,6 +286,8 @@ void cbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
     extern /* Subroutine */
     int csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *), slasq1_(integer *, real *, real *, real *, integer *), slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
     extern real slamch_(char *);
+    extern /* Subroutine */
+    int csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real sminoa;
     extern /* Subroutine */
         void
@@ -364,7 +366,7 @@ void cbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CBDSQR", &i__1);
+        xerbla_("CBDSQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

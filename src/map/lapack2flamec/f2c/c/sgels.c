@@ -233,7 +233,13 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t wsize;
     real rwork[1];
-    aocl_int64_t scllen;
+    extern /* Subroutine */
+    int slabad_(real *, real *);
+    extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer scllen;
     real bignum;
     real smlnum;
     logical lquery;
@@ -365,9 +371,8 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGELS ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SGELS ", &i__1, (ftnlen)6);
+        return 0;
     }
     else if(lquery)
     {

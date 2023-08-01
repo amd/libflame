@@ -338,7 +338,9 @@ void dgegv_(char *jobvl, char *jobvr, aocl_int_t *n, doublereal *a, aocl_int_t *
     doublereal safmax;
     char chtemp[1];
     logical ldumma[1];
-    aocl_int64_t ijobvl, iright;
+    extern /* Subroutine */
+    int dhgeqz_(char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dtgevc_(char *, char *, logical *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    integer ijobvl, iright;
     logical ilimit;
     aocl_int64_t ijobvr;
     doublereal onepls;
@@ -474,7 +476,7 @@ void dgegv_(char *jobvl, char *jobvr, aocl_int_t *n, doublereal *a, aocl_int_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGEGV ", &i__1);
+        xerbla_("DGEGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

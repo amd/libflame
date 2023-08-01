@@ -193,7 +193,12 @@ void dgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl
     doublereal c1, c2, s1, s2, t1, t2;
     aocl_int64_t mn;
     doublereal anrm, bnrm, smin, smax;
-    aocl_int64_t iascl, ibscl, ismin, ismax;
+    integer iascl, ibscl, ismin, ismax;
+    extern /* Subroutine */
+    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlaic1_( integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dorm2r_( char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlabad_(doublereal *, doublereal *);
+    extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */
+    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dgeqpf_(integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     doublereal sminpr, smaxpr, smlnum;
     /* -- LAPACK driver routine (version 3.4.0) -- */
@@ -259,7 +264,7 @@ void dgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGELSX", &i__1);
+        xerbla_("DGELSX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

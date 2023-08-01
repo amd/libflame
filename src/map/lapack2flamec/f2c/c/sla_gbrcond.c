@@ -203,6 +203,8 @@ real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aoc
     aocl_int64_t kase;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
+    extern /* Subroutine */
+    int slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     logical notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -267,7 +269,7 @@ real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aoc
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SLA_GBRCOND", &i__1, (ftnlen)11);
+        xerbla_("SLA_GBRCOND", &i__1, (ftnlen)11);
         return ret_val;
     }
     if(*n == 0)

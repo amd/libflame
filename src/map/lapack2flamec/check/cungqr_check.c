@@ -47,7 +47,7 @@ int cungqr_check(integer *m, integer *n, integer *k, scomplex *a, integer *lda, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CUNGLQ", &i__1, (ftnlen)6);
+        xerbla_("CUNGQR", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

@@ -353,6 +353,11 @@ void strsen_(char *job, char *compq, logical *select, aocl_int_t *n, real *t, ao
     aocl_int64_t lwmin;
     logical wantq, wants;
     real rnorm;
+    extern /* Subroutine */
+    int slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+    extern real slange_(char *, integer *, integer *, real *, integer *, real *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical wantbh;
     aocl_int64_t liwmin;
     logical wantsp, lquery;
@@ -502,7 +507,7 @@ void strsen_(char *job, char *compq, logical *select, aocl_int_t *n, real *t, ao
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STRSEN", &i__1);
+        xerbla_("STRSEN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

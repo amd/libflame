@@ -332,6 +332,8 @@ void aocl_lapack_slasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     aocl_int64_t psm[4], nlp1, nlp2, idxi, idxj, ctot[4];
     aocl_int64_t idxjp, jprev;
     extern real slapy2_(real *, real *), slamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slamrg_( integer *, integer *, real *, integer *, integer *, integer *);
     real hlftol;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -413,9 +415,8 @@ void aocl_lapack_slasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SLASD2", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SLASD2", &i__1, (ftnlen)6);
+        return 0;
     }
     nlp1 = *nl + 1;
     nlp2 = *nl + 2;

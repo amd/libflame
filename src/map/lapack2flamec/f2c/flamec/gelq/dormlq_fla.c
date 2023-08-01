@@ -189,8 +189,11 @@ void dormlq_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
         ;
     aocl_int64_t i1, i2, i3, ib, ic, jc, nb, mi, ni, nq, nw, iws;
     logical left;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t nbmin, iinfo;
+    extern logical lsame_(char *, char *);
+    integer nbmin, iinfo;
+    extern /* Subroutine */
+    int dorml2_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical notran;
     aocl_int64_t ldwork;
     char transt[1];
@@ -290,8 +293,8 @@ void dormlq_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DORMLQ", &i__1, (ftnlen)6);
-        return;
+        xerbla_("DORMLQ", &i__1, (ftnlen)6);
+        return 0;
     }
     else if(lquery)
     {

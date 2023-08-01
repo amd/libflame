@@ -380,6 +380,8 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     aocl_int64_t iv1tsn, iv2tsn;
     extern doublereal dlamch_(char *);
     doublereal sigma11, sigma21;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal thresh, tolmul;
     logical lquery;
     doublereal b11bulge, b12bulge;
@@ -499,7 +501,7 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZBBCSD", &i__1);
+        xerbla_("ZBBCSD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

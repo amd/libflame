@@ -194,7 +194,10 @@ void zunmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     logical upper;
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -311,7 +314,7 @@ void zunmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
     if(*info != 0)
     {
         i__2 = -(*info);
-        xerbla_("ZUNMTR", &i__2);
+        xerbla_("ZUNMTR", &i__2, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

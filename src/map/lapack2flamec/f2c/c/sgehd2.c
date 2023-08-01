@@ -180,6 +180,8 @@ void aocl_lapack_sgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, r
     /* Local variables */
     aocl_int64_t i__;
     real aii;
+    extern /* Subroutine */
+    int slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -226,9 +228,8 @@ void aocl_lapack_sgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, r
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGEHD2", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SGEHD2", &i__1, (ftnlen)6);
+        return 0;
     }
     i__1 = *ihi - 1;
     for(i__ = *ilo; i__ <= i__1; ++i__)

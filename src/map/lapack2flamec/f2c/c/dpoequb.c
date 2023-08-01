@@ -122,6 +122,8 @@ void dpoequb_(aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *s, doub
     aocl_int64_t i__;
     doublereal tmp, base, smin;
     extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -162,7 +164,7 @@ void dpoequb_(aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *s, doub
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPOEQUB", &i__1);
+        xerbla_("DPOEQUB", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

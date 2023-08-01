@@ -119,7 +119,8 @@ array.f"> */
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    aocl_int64_t i__;
+    integer i__;
+    extern /* Subroutine */ int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     char srname[32];
 
     /*  -- LAPACK auxiliary routine (version 3.4.0) -- */
@@ -156,6 +157,6 @@ array.f"> */
     {
         *(unsigned char *)&srname[i__ - 1] = *(unsigned char *)&srname_array__[i__];
     }
-    aocl_blas_xerbla(srname, info, i__1);
+    xerbla_(srname, info, i__1);
     return 0;
 } /* xerbla_array__ */

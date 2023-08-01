@@ -129,6 +129,8 @@ void dppequ_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *s, doublerea
     doublereal smin;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -167,7 +169,7 @@ void dppequ_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *s, doublerea
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPPEQU", &i__1);
+        xerbla_("DPPEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

@@ -177,6 +177,8 @@ void dptrfs_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, do
     aocl_int64_t count;
     extern doublereal dlamch_(char *);
     doublereal safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal lstres;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -234,7 +236,7 @@ void dptrfs_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, do
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPTRFS", &i__1);
+        xerbla_("DPTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

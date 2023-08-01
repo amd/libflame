@@ -200,8 +200,10 @@ void slarzt_(char *direct, char *storev, aocl_int_t *n, aocl_int_t *k, real *v, 
     aocl_int64_t t_dim1, t_offset, v_dim1, v_offset, i__1;
     real r__1;
     /* Local variables */
-    aocl_int64_t i__, j, info;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j, info;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -242,7 +244,7 @@ void slarzt_(char *direct, char *storev, aocl_int_t *n, aocl_int_t *k, real *v, 
     if(info != 0)
     {
         i__1 = -info;
-        xerbla_("SLARZT", &i__1);
+        xerbla_("SLARZT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

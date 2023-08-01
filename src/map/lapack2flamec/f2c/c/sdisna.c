@@ -148,6 +148,8 @@ void aocl_lapack_sdisna(char *job, aocl_int64_t *m, aocl_int64_t *n, real *d__, 
     real oldgap;
     extern real slamch_(char *);
     real safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real newgap, thresh;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -235,9 +237,8 @@ void aocl_lapack_sdisna(char *job, aocl_int64_t *m, aocl_int64_t *n, real *d__, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SDISNA", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SDISNA", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick return if possible */
     if(k == 0)

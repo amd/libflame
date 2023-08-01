@@ -201,6 +201,8 @@ void chbgst_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *
     aocl_int64_t kbt, nrt, inca;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper, wantx;
+    extern /* Subroutine */
+    int clar2v_(integer *, complex *, complex *, complex *, integer *, real *, complex *, integer *), clacgv_( integer *, complex *, integer *), csscal_(integer *, real *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clartg_( complex *, complex *, real *, complex *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clargv_(integer *, complex *, integer *, complex *, integer *, real *, integer *);
     logical update;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -277,7 +279,7 @@ void chbgst_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHBGST", &i__1);
+        xerbla_("CHBGST", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

@@ -160,6 +160,8 @@ void cgtcon_(char *norm, aocl_int_t *n, scomplex *dl, scomplex *d__, scomplex *d
     aocl_int64_t i__, kase, kase1;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
+    extern /* Subroutine */
+    int clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     logical onenrm;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -210,7 +212,7 @@ void cgtcon_(char *norm, aocl_int_t *n, scomplex *dl, scomplex *d__, scomplex *d
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGTCON", &i__1);
+        xerbla_("CGTCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

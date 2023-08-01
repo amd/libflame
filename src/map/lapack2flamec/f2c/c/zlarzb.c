@@ -196,8 +196,10 @@ void zlarzb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
         i__2, i__3, i__4, i__5;
     dcomplex z__1;
     /* Local variables */
-    aocl_int64_t i__, j, info;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j, info;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_(integer *, doublecomplex *, integer *);
     char transt[1];
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -250,7 +252,7 @@ void zlarzb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
     if(info != 0)
     {
         i__1 = -info;
-        xerbla_("ZLARZB", &i__1);
+        xerbla_("ZLARZB", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

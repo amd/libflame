@@ -148,8 +148,11 @@ void dgerqf_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doubl
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    aocl_int64_t i__, k, ib, nb, ki, kk, mu, nu, nx, iws, nbmin, iinfo;
-    aocl_int64_t ldwork, lwkopt;
+    integer i__, k, ib, nb, ki, kk, mu, nu, nx, iws, nbmin, iinfo;
+    extern /* Subroutine */
+    int dgerq2_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -215,7 +218,7 @@ void dgerqf_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doubl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGERQF", &i__1);
+        xerbla_("DGERQF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

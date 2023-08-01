@@ -170,10 +170,11 @@ void cunbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    aocl_int64_t i__, j, childinfo;
-    real scl, eps, ssq, norm;
-    extern real slamch_(char *);
-    /* -- LAPACK computational routine -- */
+    integer i__, j, childinfo;
+    extern real scnrm2_(integer *, complex *, integer *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), cunbdb6_( integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+    /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -240,7 +241,7 @@ void cunbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNBDB5", &i__1);
+        xerbla_("CUNBDB5", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

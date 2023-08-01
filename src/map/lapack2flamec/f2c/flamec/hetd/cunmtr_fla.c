@@ -192,10 +192,12 @@ void cunmtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     logical upper;
-    extern void cunmqr_fla(char *, char *, aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, scomplex *,
-                 aocl_int64_t *, scomplex *, scomplex *, aocl_int64_t *, scomplex *, aocl_int64_t *,
-                 aocl_int64_t *);
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int cunmql_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), cunmqr_fla(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -312,8 +314,8 @@ void cunmtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
     if(*info != 0)
     {
         i__2 = -(*info);
-        aocl_blas_xerbla("CUNMTR", &i__2, (ftnlen)6);
-        return;
+        xerbla_("CUNMTR", &i__2, (ftnlen)6);
+        return 0;
     }
     else if(lquery)
     {

@@ -268,10 +268,17 @@ void aocl_lapack_slasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     real rho;
     aocl_int64_t nlp1, nlp2, nrp1;
     real temp;
-    aocl_int64_t ctemp;
-    aocl_int64_t ktemp;
-    aocl_int64_t ctot_sca;
-    /* -- LAPACK auxiliary routine -- */
+    extern real snrm2_(integer *, real *, integer *);
+    integer ctemp;
+    extern /* Subroutine */
+    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    integer ktemp;
+    extern /* Subroutine */
+    int scopy_(integer *, real *, integer *, real *, integer *);
+    extern real slamc3_(real *, real *);
+    extern /* Subroutine */
+    int slasd4_(integer *, integer *, real *, real *, real *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -357,9 +364,8 @@ void aocl_lapack_slasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SLASD3", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SLASD3", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick return if possible */
     if(*k == 1)

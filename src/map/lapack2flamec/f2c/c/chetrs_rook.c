@@ -165,6 +165,8 @@ void chetrs_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl
     extern /* Subroutine */
     int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
     logical upper;
+    extern /* Subroutine */
+    int clacgv_(integer *, complex *, integer *), csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -219,7 +221,7 @@ void chetrs_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHETRS_ROOK", &i__1);
+        xerbla_("CHETRS_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

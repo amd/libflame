@@ -232,6 +232,8 @@ void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
     aocl_int64_t count;
     extern real slamch_(char *);
     real safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transt[1];
     real lstres;
@@ -310,9 +312,8 @@ void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGERFS", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("SGERFS", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)

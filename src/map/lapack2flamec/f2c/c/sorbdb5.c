@@ -169,7 +169,7 @@ void sorbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, real *x1, aocl_int_
     integer i__, j, childinfo;
     extern real snrm2_(integer *, real *, integer *);
     extern /* Subroutine */
-    int xerbla_(char *, integer *), sorbdb6_( integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), sorbdb6_( integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -237,7 +237,7 @@ void sorbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, real *x1, aocl_int_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SORBDB5", &i__1);
+        xerbla_("SORBDB5", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

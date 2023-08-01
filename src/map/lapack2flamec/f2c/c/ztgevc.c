@@ -270,6 +270,8 @@ void ztgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, dcomplex 
     extern doublereal dlamch_(char *);
     dcomplex salpha;
     doublereal safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical ilcomp;
     extern /* Double Complex */
@@ -386,7 +388,7 @@ void ztgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, dcomplex 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTGEVC", &i__1);
+        xerbla_("ZTGEVC", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
@@ -438,7 +440,7 @@ void ztgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, dcomplex 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTGEVC", &i__1);
+        xerbla_("ZTGEVC", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

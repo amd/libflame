@@ -219,6 +219,8 @@ void cgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int
     aocl_int64_t count;
     extern real slamch_(char *);
     real safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgetrs_( char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     logical notran;
     char transn[1], transt[1];
     real lstres;
@@ -301,7 +303,7 @@ void cgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGERFS", &i__1);
+        xerbla_("CGERFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

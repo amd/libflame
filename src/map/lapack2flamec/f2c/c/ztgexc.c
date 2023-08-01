@@ -211,7 +211,9 @@ void ztgexc_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1;
     /* Local variables */
-    aocl_int64_t here;
+    integer here;
+    extern /* Subroutine */
+    int ztgex2_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -275,7 +277,7 @@ void ztgexc_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTGEXC", &i__1);
+        xerbla_("ZTGEXC", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

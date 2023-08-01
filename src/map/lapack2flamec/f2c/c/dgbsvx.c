@@ -395,6 +395,8 @@ void dgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
     extern doublereal dlamch_(char *);
     doublereal colcnd;
     logical nofact;
+    extern /* Subroutine */
+    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     aocl_int64_t infequ;
     logical colequ;
@@ -577,7 +579,7 @@ void dgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGBSVX", &i__1);
+        xerbla_("DGBSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

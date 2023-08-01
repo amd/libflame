@@ -205,7 +205,11 @@ void chbgv_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *k
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     logical upper, wantz;
-    aocl_int64_t indwrk;
+    extern /* Subroutine */
+    int chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *, complex *, integer *, complex *, integer *), chbgst_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpbstf_(char *, integer *, integer *, complex *, integer *, integer *);
+    integer indwrk;
+    extern /* Subroutine */
+    int csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *), ssterf_(integer *, real *, real *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -275,7 +279,7 @@ void chbgv_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *k
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHBGV ", &i__1);
+        xerbla_("CHBGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

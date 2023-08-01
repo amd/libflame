@@ -369,7 +369,7 @@ void cggsvd_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *n, a
     int ctgsja_(char *, char *, char *, integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, real *, real *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
     integer ncycle;
     extern /* Subroutine */
-    int xerbla_(char *, integer *), cggsvp_( char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, real *, complex *, complex *, integer *);
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), cggsvp_( char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, real *, complex *, complex *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -462,7 +462,7 @@ void cggsvd_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *n, a
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGGSVD", &i__1);
+        xerbla_("CGGSVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

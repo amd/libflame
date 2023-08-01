@@ -230,6 +230,8 @@ void ztrttf_(char *transr, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *l
     logical normaltransr;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -279,7 +281,7 @@ void ztrttf_(char *transr, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *l
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTRTTF", &i__1);
+        xerbla_("ZTRTTF", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

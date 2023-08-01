@@ -187,6 +187,8 @@ void ssytd2_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *d
     real alpha;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
+    extern /* Subroutine */
+    int saxpy_(integer *, real *, real *, integer *, real *, integer *), ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -233,8 +235,8 @@ void ssytd2_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *d
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SSYTD2", &i__1, (ftnlen)6);
-        return;
+        xerbla_("SSYTD2", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick return if possible */
     if(*n <= 0)

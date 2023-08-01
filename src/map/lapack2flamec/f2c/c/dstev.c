@@ -137,6 +137,8 @@ void dstev_(char *jobz, aocl_int_t *n, doublereal *d__, doublereal *e, doublerea
     extern doublereal dlamch_(char *);
     aocl_int64_t iscale;
     doublereal safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
@@ -188,7 +190,7 @@ void dstev_(char *jobz, aocl_int_t *n, doublereal *d__, doublereal *e, doublerea
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSTEV ", &i__1);
+        xerbla_("DSTEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

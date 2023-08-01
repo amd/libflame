@@ -331,7 +331,10 @@ void ztgsyl_(char *trans, aocl_int_t *ijob, aocl_int_t *m, aocl_int_t *n, dcompl
     aocl_int64_t lwmin;
     doublereal scale2, dscale;
     doublereal scaloc;
-    aocl_int64_t iround;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer iround;
     logical notran;
     aocl_int64_t isolve;
     logical lquery;
@@ -460,7 +463,7 @@ void ztgsyl_(char *trans, aocl_int_t *ijob, aocl_int_t *m, aocl_int_t *n, dcompl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTGSYL", &i__1);
+        xerbla_("ZTGSYL", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

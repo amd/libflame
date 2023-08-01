@@ -133,8 +133,11 @@ void sorgtr_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *t
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     logical upper;
-    extern void sorgqr_fla(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, real *, aocl_int64_t *, real *,
-                 real *, aocl_int64_t *, aocl_int64_t *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int sorgql_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), sorgqr_fla( integer *, integer *, integer *, real *, integer *, real *, real * , integer *, integer *);
     logical lquery;
     aocl_int64_t lwkopt;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -215,8 +218,8 @@ void sorgtr_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *t
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SORGTR", &i__1, (ftnlen)6);
-        return;
+        xerbla_("SORGTR", &i__1, (ftnlen)6);
+        return 0;
     }
     else if(lquery)
     {

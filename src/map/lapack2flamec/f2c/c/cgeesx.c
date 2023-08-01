@@ -267,6 +267,9 @@ void cgeesx_(char *jobvs, char *sort, L_fp1 select, char *sense, aocl_int_t *n, 
     logical scalea;
     real cscale;
     extern real slamch_(char *);
+    extern /* Subroutine */
+    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
     logical wantsb;
     logical wantse;
@@ -402,7 +405,7 @@ void cgeesx_(char *jobvs, char *sort, L_fp1 select, char *sense, aocl_int_t *n, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGEESX", &i__1);
+        xerbla_("CGEESX", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

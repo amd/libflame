@@ -226,10 +226,13 @@ void slasdq_(char *uplo, aocl_int_t *sqre, aocl_int_t *n, aocl_int_t *ncvt, aocl
     real r__, cs, sn;
     aocl_int64_t np1, isub;
     real smin;
-    aocl_int64_t sqre1;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iuplo;
-    extern void slartg_(real *, real *, real *, real *, real *);
+    integer sqre1;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    int slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
+    integer iuplo;
+    extern /* Subroutine */
+    int sswap_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slartg_(real *, real *, real *, real *, real *);
     logical rotate;
     extern /* Subroutine */
     int sbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
@@ -317,7 +320,7 @@ void slasdq_(char *uplo, aocl_int_t *sqre, aocl_int_t *n, aocl_int_t *ncvt, aocl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLASDQ", &i__1);
+        xerbla_("SLASDQ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

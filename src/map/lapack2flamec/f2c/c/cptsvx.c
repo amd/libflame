@@ -255,7 +255,7 @@ void cptsvx_(char *fact, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e
     extern real slamch_(char *), clanht_(char *, integer *, real *, complex *);
     logical nofact;
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(char *, integer *), cptcon_(integer *, real *, complex *, real *, real *, real *, integer *), cptrfs_(char *, integer *, integer *, real *, complex *, real *, complex *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer * ), cpttrf_(integer *, real *, complex *, integer *), cpttrs_(char *, integer *, integer *, real *, complex *, complex *, integer *, integer *);
+    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cptcon_(integer *, real *, complex *, real *, real *, real *, integer *), cptrfs_(char *, integer *, integer *, real *, complex *, real *, complex *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer * ), cpttrf_(integer *, real *, complex *, integer *), cpttrs_(char *, integer *, integer *, real *, complex *, complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -318,7 +318,7 @@ void cptsvx_(char *fact, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPTSVX", &i__1);
+        xerbla_("CPTSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

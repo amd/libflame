@@ -156,6 +156,8 @@ void cgecon_(char *norm, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *anor
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     extern real slamch_(char *);
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     extern logical sisnan_(real *);
     logical onenrm;
@@ -214,7 +216,7 @@ void cgecon_(char *norm, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *anor
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGECON", &i__1);
+        xerbla_("CGECON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

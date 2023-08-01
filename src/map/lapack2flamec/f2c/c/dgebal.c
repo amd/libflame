@@ -181,7 +181,9 @@ void dgebal_(char *job, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_
     doublereal sfmin1, sfmin2, sfmax1, sfmax2;
     extern doublereal dlamch_(char *);
     extern logical disnan_(doublereal *);
-    logical noconv, canswap;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    logical noconv;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -224,7 +226,7 @@ void dgebal_(char *job, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGEBAL", &i__1);
+        xerbla_("DGEBAL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
@@ -393,7 +395,7 @@ L160: /* Computing MAX */
             /* Exit if NaN to avoid infinite loop */
             *info = -3;
             i__2 = -(*info);
-            xerbla_("DGEBAL", &i__2);
+            xerbla_("DGEBAL", &i__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
             return 0;
         }

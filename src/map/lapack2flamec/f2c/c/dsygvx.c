@@ -309,8 +309,15 @@ void dsygvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     char trans[1];
     logical upper, wantz, alleig, indeig, valeig;
-    aocl_int64_t lwkmin;
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int dpotrf_(char *, integer *, doublereal *, integer *, integer *);
+    integer lwkmin;
+    extern /* Subroutine */
+    int dsygst_(integer *, char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -431,7 +438,7 @@ void dsygvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYGVX", &i__1);
+        xerbla_("DSYGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }

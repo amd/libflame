@@ -190,8 +190,13 @@ void zunmqr_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
         ;
     aocl_int64_t i1, i2, i3, ib, ic, jc, nb, mi, ni, nq, nw, iws;
     logical left;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t nbmin, iinfo;
+    extern logical lsame_(char *, char *);
+    integer nbmin, iinfo;
+    extern /* Subroutine */
+    int zunm2r_fla(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */
+    int zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     logical notran;
     aocl_int64_t ldwork;
     aocl_int64_t lwkopt;
@@ -291,8 +296,8 @@ void zunmqr_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZUNMQR", &i__1, (ftnlen)6);
-        return;
+        xerbla_("ZUNMQR", &i__1, (ftnlen)6);
+        return 0;
     }
     else if(lquery)
     {

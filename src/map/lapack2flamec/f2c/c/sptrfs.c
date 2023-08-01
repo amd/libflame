@@ -181,6 +181,9 @@ void sptrfs_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *df, real
     aocl_int64_t count;
     extern real slamch_(char *);
     real safmin;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer isamax_(integer *, real *, integer *);
     real lstres;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -238,7 +241,7 @@ void sptrfs_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *df, real
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SPTRFS", &i__1);
+        xerbla_("SPTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return 0;
     }

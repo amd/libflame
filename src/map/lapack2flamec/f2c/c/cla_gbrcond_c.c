@@ -185,6 +185,8 @@ real cla_gbrcond_c_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     real anorm;
+    extern /* Subroutine */
+    int clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     real ainvnm;
     logical notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -253,7 +255,7 @@ real cla_gbrcond_c_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLA_GBRCOND_C", &i__1);
+        xerbla_("CLA_GBRCOND_C", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return ret_val;
     }

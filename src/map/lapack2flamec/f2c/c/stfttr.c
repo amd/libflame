@@ -222,6 +222,8 @@ void aocl_lapack_stfttr(char *transr, char *uplo, aocl_int64_t *n, real *arf, re
     logical normaltransr;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
+    extern /* Subroutine */
+    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -270,9 +272,8 @@ void aocl_lapack_stfttr(char *transr, char *uplo, aocl_int64_t *n, real *arf, re
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("STFTTR", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
+        xerbla_("STFTTR", &i__1, (ftnlen)6);
+        return 0;
     }
     /* Quick return if possible */
     if(*n <= 1)

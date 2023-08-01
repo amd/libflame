@@ -54,7 +54,7 @@ int cgehrd_check(integer *n, integer *ilo, integer *ihi, scomplex * a, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("CGEHRD", &i__1, (ftnlen)6);
+        xerbla_("CGEHRD", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

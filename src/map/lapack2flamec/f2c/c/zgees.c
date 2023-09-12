@@ -201,11 +201,7 @@ elements 1:ILO-1 and i+1:N of W */
 /* > \ingroup gees */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zgees_(char *jobvs, char *sort, L_fpz1 select, aocl_int_t *n, dcomplex *a,
-            aocl_int_t *lda, aocl_int_t *sdim, dcomplex *w, dcomplex *vs,
-            aocl_int_t *ldvs, dcomplex *work, aocl_int_t *lwork, doublereal *rwork,
-            logical *bwork, aocl_int_t *info)
+int zgees_(char *jobvs, char *sort, L_fpz1 select, integer *n, doublecomplex *a, integer *lda, integer *sdim, doublecomplex *w, doublecomplex *vs, integer *ldvs, doublecomplex *work, integer *lwork, doublereal *rwork, logical *bwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgees inputs: jobvs %c, sort %c, n %" FLA_IS ", lda %" FLA_IS ", sdim %" FLA_IS ", ldvs %" FLA_IS "",*jobvs, *sort, *n, *lda, *sdim, *ldvs);

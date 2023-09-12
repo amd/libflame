@@ -286,8 +286,6 @@ void aocl_lapack_sorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
     aocl_int64_t itaup1, itaup2, itauq1;
     logical wantu1, wantu2;
     integer ibbcsd, lbbcsd;
-    extern /* Subroutine */
-    int sbbcsd_();
     integer iorbdb, lorbdb;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slacpy_( char *, integer *, integer *, real *, integer *, real *, integer * );
@@ -302,6 +300,8 @@ void aocl_lapack_sorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
       sorglq_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *),
       sorgqr_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
     logical lquery;
+    extern /* Subroutine */
+    int sbbcsd_(char *, char *, char *, char *, char *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, real *, integer *, integer *), sorbdb1_(integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *, integer *, integer *), sorbdb2_(integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *, integer *, integer *), sorbdb3_(integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *, integer *, integer *), sorbdb4_(integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *, real *, integer *, integer *);
     logical wantv1t;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -465,11 +465,9 @@ void aocl_lapack_sorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
         iorglq = itauq1 + fla_max(1,*q);
         if (r__ == *q)
         {
-            aocl_lapack_sorbdb1(m, p, q, &x11[x11_offset], ldx11, &x21[x21_offset], ldx21,
-                                &theta[1], &dumarr[0], &dumarr[0], &dumarr[0], &dumarr[0], &work[1],
-                                &c_n1, &childinfo);
-            lorbdb = (integer)work[1];
-            if(*p >= *m - *p)
+            sorbdb1_(m, p, q, &x11[x11_offset], ldx11, &x21[x21_offset], ldx21, &theta[1], (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, &work[1], & c_n1, &childinfo);
+            lorbdb = (integer) work[1];
+            if (*p >= *m - *p)
             {
                 sorgqr_fla(p, p, q, &u1[u1_offset], ldu1, (real*)&c__0, &work[1], &c_n1, &childinfo);
                 lorgqrmin = fla_max(1,*p);
@@ -505,16 +503,14 @@ void aocl_lapack_sorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
             i__2 = *q - 1; // , expr subst
             lorglqmin = fla_max(i__1,i__2);
             lorglqopt = (integer) work[1];
-            sbbcsd_(jobu1, jobu2, jobv1t, "N", "N", m, p, q, &theta[1], &c__0, &u1[u1_offset], ldu1, &u2[u2_offset], ldu2, &v1t[ v1t_offset], ldv1t, &c__0, &c__1, &c__0, &c__0, &c__0, & c__0, &c__0, &c__0, &c__0, &c__0, &work[1], &c_n1, & childinfo);
+            sbbcsd_(jobu1, jobu2, jobv1t, "N", "N", m, p, q, &theta[1], (real*)&c__0, &u1[u1_offset], ldu1, &u2[u2_offset], ldu2, &v1t[ v1t_offset], ldv1t, (real*)&c__0, &c__1, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, &work[1], &c_n1, & childinfo);
             lbbcsd = (integer) work[1];
         }
         else if(r__ == *p)
         {
-            aocl_lapack_sorbdb2(m, p, q, &x11[x11_offset], ldx11, &x21[x21_offset], ldx21,
-                                &theta[1], &dumarr[0], &dumarr[0], &dumarr[0], &dumarr[0], &work[1],
-                                &c_n1, &childinfo);
-            lorbdb = (integer)work[1];
-            if(*p - 1 >= *m - *p)
+            sorbdb2_(m, p, q, &x11[x11_offset], ldx11, &x21[x21_offset], ldx21, &theta[1], (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, &work[1], & c_n1, &childinfo);
+            lorbdb = (integer) work[1];
+            if (*p - 1 >= *m - *p)
             {
                 i__1 = *p - 1;
                 i__2 = *p - 1;
@@ -542,16 +538,14 @@ void aocl_lapack_sorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
             sorglq_fla(q, q, &r__, &v1t[v1t_offset], ldv1t, (real*)&c__0, &work[1], & c_n1, &childinfo);
             lorglqmin = fla_max(1,*q);
             lorglqopt = (integer) work[1];
-            sbbcsd_(jobv1t, "N", jobu1, jobu2, "T", m, q, p, &theta[1], &c__0, &v1t[v1t_offset], ldv1t, &c__0, &c__1, &u1[u1_offset], ldu1, &u2[u2_offset], ldu2, &c__0, &c__0, &c__0, &c__0, & c__0, &c__0, &c__0, &c__0, &work[1], &c_n1, &childinfo);
+            sbbcsd_(jobv1t, "N", jobu1, jobu2, "T", m, q, p, &theta[1], (real*)&c__0, &v1t[v1t_offset], ldv1t, (real*)&c__0, &c__1, &u1[u1_offset], ldu1, &u2[u2_offset], ldu2, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, &work[1], &c_n1, &childinfo);
             lbbcsd = (integer) work[1];
         }
         else if(r__ == *m - *p)
         {
-            aocl_lapack_sorbdb3(m, p, q, &x11[x11_offset], ldx11, &x21[x21_offset], ldx21,
-                                &theta[1], &dumarr[0], &dumarr[0], &dumarr[0], &dumarr[0], &work[1],
-                                &c_n1, &childinfo);
-            lorbdb = (integer)work[1];
-            if(*p >= *m - *p - 1)
+            sorbdb3_(m, p, q, &x11[x11_offset], ldx11, &x21[x21_offset], ldx21, &theta[1], (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, &work[1], & c_n1, &childinfo);
+            lorbdb = (integer) work[1];
+            if (*p >= *m - *p - 1)
             {
                 sorgqr_fla(p, p, q, &u1[u1_offset], ldu1, (real*)&c__0, &work[1], &c_n1, &childinfo);
                 lorgqrmin = fla_max(1,*p);
@@ -575,20 +569,14 @@ void aocl_lapack_sorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
             lorglqopt = (integer) work[1];
             i__1 = *m - *q;
             i__2 = *m - *p;
-            aocl_lapack_sbbcsd("N", jobv1t, jobu2, jobu1, "T", m, &i__1, &i__2, &theta[1],
-                               &dumarr[0], &dumarr[0], &c__1, &v1t[v1t_offset], ldv1t,
-                               &u2[u2_offset], ldu2, &u1[u1_offset], ldu1, &dumarr[0], &dumarr[0],
-                               &dumarr[0], &dumarr[0], &dumarr[0], &dumarr[0], &dumarr[0],
-                               &dumarr[0], &work[1], &c_n1, &childinfo);
-            lbbcsd = (integer)work[1];
+            sbbcsd_("N", jobv1t, jobu2, jobu1, "T", m, &i__1, &i__2, &theta[1] , (real*)&c__0, (real*)&c__0, &c__1, &v1t[v1t_offset], ldv1t, &u2[ u2_offset], ldu2, &u1[u1_offset], ldu1, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, &work[1], &c_n1, &childinfo);
+            lbbcsd = (integer) work[1];
         }
         else
         {
-            aocl_lapack_sorbdb4(m, p, q, &x11[x11_offset], ldx11, &x21[x21_offset], ldx21,
-                                &theta[1], &dumarr[0], &dumarr[0], &dumarr[0], &dumarr[0],
-                                &dumarr[0], &work[1], &c_n1, &childinfo);
-            lorbdb = *m + (integer)work[1];
-            if(*p >= *m - *p)
+            sorbdb4_(m, p, q, &x11[x11_offset], ldx11, &x21[x21_offset], ldx21, &theta[1], (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, & work[1], &c_n1, &childinfo);
+            lorbdb = *m + (integer) work[1];
+            if (*p >= *m - *p)
             {
                 i__1 = *m - *q;
                 sorgqr_fla(p, p, &i__1, &u1[u1_offset], ldu1, (real*)&c__0, &work[1], & c_n1, &childinfo);
@@ -613,12 +601,8 @@ void aocl_lapack_sorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
             lorglqopt = (integer) work[1];
             i__1 = *m - *p;
             i__2 = *m - *q;
-            aocl_lapack_sbbcsd(jobu2, jobu1, "N", jobv1t, "N", m, &i__1, &i__2, &theta[1],
-                               &dumarr[0], &u2[u2_offset], ldu2, &u1[u1_offset], ldu1, &dumarr[0],
-                               &c__1, &v1t[v1t_offset], ldv1t, &dumarr[0], &dumarr[0], &dumarr[0],
-                               &dumarr[0], &dumarr[0], &dumarr[0], &dumarr[0], &dumarr[0], &work[1],
-                               &c_n1, &childinfo);
-            lbbcsd = (integer)work[1];
+            sbbcsd_(jobu2, jobu1, "N", jobv1t, "N", m, &i__1, &i__2, &theta[1] , (real*)&c__0, &u2[u2_offset], ldu2, &u1[u1_offset], ldu1, (real*)&c__0, &c__1, &v1t[v1t_offset], ldv1t, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, (real*)&c__0, &work[1], &c_n1, & childinfo);
+            lbbcsd = (integer) work[1];
         }
         /* Computing MAX */
         i__1 = iorbdb + lorbdb - 1, i__2 = iorgqr + lorgqrmin - 1, i__1 = fla_max( i__1,i__2), i__2 = iorglq + lorglqmin - 1;
@@ -693,11 +677,7 @@ void aocl_lapack_sorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
                        &work[iorglq], &lorglq, &childinfo);
         }
         /* Simultaneously diagonalize X11 and X21. */
-        aocl_lapack_sbbcsd(jobu1, jobu2, jobv1t, "N", "N", m, p, q, &theta[1], &work[iphi],
-                           &u1[u1_offset], ldu1, &u2[u2_offset], ldu2, &v1t[v1t_offset], ldv1t,
-                           &dumarr[0], &c__1, &work[ib11d], &work[ib11e], &work[ib12d],
-                           &work[ib12e], &work[ib21d], &work[ib21e], &work[ib22d], &work[ib22e],
-                           &work[ibbcsd], &lbbcsd, &childinfo);
+        sbbcsd_(jobu1, jobu2, jobv1t, "N", "N", m, p, q, &theta[1], &work[ iphi], &u1[u1_offset], ldu1, &u2[u2_offset], ldu2, &v1t[ v1t_offset], ldv1t, (real*)&c__0, &c__1, &work[ib11d], &work[ib11e], &work[ib12d], &work[ib12e], &work[ib21d], &work[ib21e], &work[ ib22d], &work[ib22e], &work[ibbcsd], &lbbcsd, &childinfo);
         /* Permute rows and columns to place zero submatrices in */
         /* preferred positions */
         if(*q > 0 && wantu2)
@@ -760,11 +740,7 @@ void aocl_lapack_sorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
                        &childinfo);
         }
         /* Simultaneously diagonalize X11 and X21. */
-        aocl_lapack_sbbcsd(jobv1t, "N", jobu1, jobu2, "T", m, q, p, &theta[1], &work[iphi],
-                           &v1t[v1t_offset], ldv1t, &dumarr[0], &c__1, &u1[u1_offset], ldu1,
-                           &u2[u2_offset], ldu2, &work[ib11d], &work[ib11e], &work[ib12d],
-                           &work[ib12e], &work[ib21d], &work[ib21e], &work[ib22d], &work[ib22e],
-                           &work[ibbcsd], &lbbcsd, &childinfo);
+        sbbcsd_(jobv1t, "N", jobu1, jobu2, "T", m, q, p, &theta[1], &work[ iphi], &v1t[v1t_offset], ldv1t, (real*)&c__0, &c__1, &u1[u1_offset], ldu1, &u2[u2_offset], ldu2, &work[ib11d], &work[ib11e], &work[ ib12d], &work[ib12e], &work[ib21d], &work[ib21e], &work[ib22d] , &work[ib22e], &work[ibbcsd], &lbbcsd, &childinfo);
         /* Permute rows and columns to place identity submatrices in */
         /* preferred positions */
         if(*q > 0 && wantu2)
@@ -827,11 +803,7 @@ void aocl_lapack_sorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
         /* Simultaneously diagonalize X11 and X21. */
         i__1 = *m - *q;
         i__2 = *m - *p;
-        aocl_lapack_sbbcsd("N", jobv1t, jobu2, jobu1, "T", m, &i__1, &i__2, &theta[1], &work[iphi],
-                           &dumarr[0], &c__1, &v1t[v1t_offset], ldv1t, &u2[u2_offset], ldu2,
-                           &u1[u1_offset], ldu1, &work[ib11d], &work[ib11e], &work[ib12d],
-                           &work[ib12e], &work[ib21d], &work[ib21e], &work[ib22d], &work[ib22e],
-                           &work[ibbcsd], &lbbcsd, &childinfo);
+        sbbcsd_("N", jobv1t, jobu2, jobu1, "T", m, &i__1, &i__2, &theta[1], & work[iphi], (real*)&c__0, &c__1, &v1t[v1t_offset], ldv1t, &u2[ u2_offset], ldu2, &u1[u1_offset], ldu1, &work[ib11d], &work[ ib11e], &work[ib12d], &work[ib12e], &work[ib21d], &work[ib21e] , &work[ib22d], &work[ib22e], &work[ibbcsd], &lbbcsd, & childinfo);
         /* Permute rows and columns to place identity submatrices in */
         /* preferred positions */
         if(*q > r__)
@@ -918,11 +890,7 @@ void aocl_lapack_sorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
         /* Simultaneously diagonalize X11 and X21. */
         i__1 = *m - *p;
         i__2 = *m - *q;
-        aocl_lapack_sbbcsd(jobu2, jobu1, "N", jobv1t, "N", m, &i__1, &i__2, &theta[1], &work[iphi],
-                           &u2[u2_offset], ldu2, &u1[u1_offset], ldu1, &dumarr[0], &c__1,
-                           &v1t[v1t_offset], ldv1t, &work[ib11d], &work[ib11e], &work[ib12d],
-                           &work[ib12e], &work[ib21d], &work[ib21e], &work[ib22d], &work[ib22e],
-                           &work[ibbcsd], &lbbcsd, &childinfo);
+        sbbcsd_(jobu2, jobu1, "N", jobv1t, "N", m, &i__1, &i__2, &theta[1], & work[iphi], &u2[u2_offset], ldu2, &u1[u1_offset], ldu1, (real*)&c__0, &c__1, &v1t[v1t_offset], ldv1t, &work[ib11d], &work[ib11e], & work[ib12d], &work[ib12e], &work[ib21d], &work[ib21e], &work[ ib22d], &work[ib22e], &work[ibbcsd], &lbbcsd, &childinfo);
         /* Permute rows and columns to place identity submatrices in */
         /* preferred positions */
         if(*p > r__)

@@ -198,10 +198,7 @@ elements 1:ILO-1 and i+1:N of W */
 /* > \ingroup complexGEeigen */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cgees_(char *jobvs, char *sort, L_fp1 select, aocl_int_t *n, scomplex *a, aocl_int_t *lda,
-            aocl_int_t *sdim, scomplex *w, scomplex *vs, aocl_int_t *ldvs, scomplex *work,
-            aocl_int_t *lwork, real *rwork, logical *bwork, aocl_int_t *info)
+int cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, integer *lda, integer *sdim, complex *w, complex *vs, integer *ldvs, complex *work, integer *lwork, real *rwork, logical * bwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cgees inputs: jobvs %c, sort %c, n %" FLA_IS ", lda %" FLA_IS ", ldvs %" FLA_IS "",*jobvs, *sort, *n, *lda, *ldvs);

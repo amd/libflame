@@ -446,6 +446,55 @@ typedef struct Namelist Namelist;
 #define bit_set(a,b)	((a) |  ((uinteger)1 << (b)))
 
 
+#define F2C_proc_par_types 1
+#ifdef __cplusplus
+typedef int /* Unknown procedure type */ (*U_fp)(...);
+typedef shortint (*J_fp)(...);
+typedef integer (*I_fp)(...);
+typedef real (*R_fp)(...);
+typedef doublereal (*D_fp)(...);
+typedef doublereal (*E_fp)(...);
+typedef /* Complex */ VOID (*C_fp)(...);
+typedef /* Double Complex */ VOID (*Z_fp)(...);
+typedef logical (*L_fp)(...);
+typedef logical (*L_fp1)(complex *);
+typedef logical (*L_fp2)(complex *, complex *);
+typedef logical (*L_fps2)(real *, real *);
+typedef logical (*L_fps3)(real *, real *, real *);
+typedef logical (*L_fpd2)(doublereal *, doublereal *);
+typedef logical (*L_fpd3)(doublereal *, doublereal *, doublereal *);
+typedef logical (*L_fpz1)(doublecomplex *);
+typedef logical (*L_fpz2)(doublecomplex *, doublecomplex *);
+typedef shortlogical (*K_fp)(...);
+typedef /* Character */ VOID (*H_fp)(...);
+typedef /* Subroutine */ int (*S_fp)(...);
+#else
+typedef int /* Unknown procedure type */ (*U_fp)();
+typedef shortint (*J_fp)();
+typedef integer (*I_fp)();
+typedef real (*R_fp)();
+typedef doublereal (*D_fp)();
+typedef doublereal (*E_fp)();
+typedef /* Complex */ VOID (*C_fp)();
+typedef /* Double Complex */ VOID (*Z_fp)();
+typedef logical (*L_fp)();
+typedef logical (*L_fp1)(complex *);
+typedef logical (*L_fp2)(complex *, complex *);
+typedef logical (*L_fps2)(real *, real *);
+typedef logical (*L_fps3)(real *, real *, real *);
+typedef logical (*L_fpd2)(doublereal *, doublereal *);
+typedef logical (*L_fpd3)(doublereal *, doublereal *, doublereal *);
+typedef logical (*L_fpz1)(doublecomplex *);
+typedef logical (*L_fpz2)(doublecomplex *, doublecomplex *);
+typedef shortlogical (*K_fp)();
+typedef /* Character */ VOID (*H_fp)();
+typedef /* Subroutine */ int (*S_fp)();
+#endif
+/* E_fp is for real functions when -R is not specified */
+typedef VOID C_f;	/* complex function */
+typedef VOID H_f;	/* character function */
+typedef VOID Z_f;	/* double complex function */
+typedef doublereal E_f;	/* real function with -R not specified */
 
 /* undef any lower-case symbols that your C compiler predefines, e.g.: */
 

@@ -220,10 +220,7 @@ if */
 /* > \ingroup realGEeigen */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgees_(char *jobvs, char *sort, L_fps2 select, aocl_int_t *n, real *a, aocl_int_t *lda,
-            aocl_int_t *sdim, real *wr, real *wi, real *vs, aocl_int_t *ldvs, real *work,
-            aocl_int_t *lwork, logical *bwork, aocl_int_t *info)
+int sgees_(char *jobvs, char *sort, L_fps2 select, integer *n, real *a, integer *lda, integer *sdim, real *wr, real *wi, real *vs, integer *ldvs, real *work, integer *lwork, logical *bwork, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgees inputs: jobvs %c, sort %c, n %" FLA_IS ", lda %" FLA_IS ", sdim %" FLA_IS ", ldvs %" FLA_IS "",*jobvs, *sort, *n, *lda, *sdim, *ldvs);

@@ -223,10 +223,7 @@ if */
 /* > \ingroup gees */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dgees_(char *jobvs, char *sort, L_fpd2 select, aocl_int_t *n, doublereal *a, aocl_int_t *lda,
-            aocl_int_t *sdim, doublereal *wr, doublereal *wi, doublereal *vs, aocl_int_t *ldvs,
-            doublereal *work, aocl_int_t *lwork, logical *bwork, aocl_int_t *info)
+int dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, integer *lda, integer *sdim, doublereal *wr, doublereal *wi, doublereal *vs, integer *ldvs, doublereal *work, integer *lwork, logical *bwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgees inputs: jobvs %c, sort %c, n %" FLA_IS ", lda %" FLA_IS ", ldvs %" FLA_IS ", lwork %" FLA_IS "",*jobvs, *sort, *n, *lda, *ldvs, *lwork);

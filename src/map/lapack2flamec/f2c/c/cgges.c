@@ -273,11 +273,7 @@ the routine */
 /* > \ingroup gges */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, aocl_int_t *n, scomplex *a,
-            aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, aocl_int_t *sdim, scomplex *alpha,
-            scomplex *beta, scomplex *vsl, aocl_int_t *ldvsl, scomplex *vsr, aocl_int_t *ldvsr,
-            scomplex *work, aocl_int_t *lwork, real *rwork, logical *bwork, aocl_int_t *info)
+int cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, integer *n, complex *a, integer *lda, complex *b, integer * ldb, integer *sdim, complex *alpha, complex *beta, complex *vsl, integer *ldvsl, complex *vsr, integer *ldvsr, complex *work, integer * lwork, real *rwork, logical *bwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE

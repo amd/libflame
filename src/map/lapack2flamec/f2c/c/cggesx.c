@@ -338,12 +338,7 @@ the */
 /* > \ingroup ggesx */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, aocl_int_t *n,
-             scomplex *a, aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, aocl_int_t *sdim,
-             scomplex *alpha, scomplex *beta, scomplex *vsl, aocl_int_t *ldvsl, scomplex *vsr,
-             aocl_int_t *ldvsr, real *rconde, real *rcondv, scomplex *work, aocl_int_t *lwork,
-             real *rwork, aocl_int_t *iwork, aocl_int_t *liwork, logical *bwork, aocl_int_t *info)
+int cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, integer *n, complex *a, integer *lda, complex *b, integer *ldb, integer *sdim, complex *alpha, complex *beta, complex * vsl, integer *ldvsl, complex *vsr, integer *ldvsr, real *rconde, real *rcondv, complex *work, integer *lwork, real *rwork, integer *iwork, integer *liwork, logical *bwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE

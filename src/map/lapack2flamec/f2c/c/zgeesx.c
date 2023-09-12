@@ -247,11 +247,7 @@ if */
 /* > \ingroup geesx */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zgeesx_(char *jobvs, char *sort, L_fpz1 select, char *sense, aocl_int_t *n, dcomplex *a,
-             aocl_int_t *lda, aocl_int_t *sdim, dcomplex *w, dcomplex *vs,
-             aocl_int_t *ldvs, doublereal *rconde, doublereal *rcondv, dcomplex *work,
-             aocl_int_t *lwork, doublereal *rwork, logical *bwork, aocl_int_t *info)
+int zgeesx_(char *jobvs, char *sort, L_fpz1 select, char * sense, integer *n, doublecomplex *a, integer *lda, integer *sdim, doublecomplex *w, doublecomplex *vs, integer *ldvs, doublereal * rconde, doublereal *rcondv, doublecomplex *work, integer *lwork, doublereal *rwork, logical *bwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgeesx inputs: jobvs %c, sort %c, sense %c, n %" FLA_IS ", lda %" FLA_IS ", sdim %" FLA_IS ", ldvs %" FLA_IS "",*jobvs, *sort, *sense, *n, *lda, *sdim, *ldvs);

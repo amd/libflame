@@ -17,12 +17,6 @@
 #ifdef FLA_ENABLE_LAPACK2FLAME
 
 #include "FLA_lapack2flame_prototypes.h"
-#include "FLA_lapack2flame_return_defs.h"
-#include "FLA_lapack2flame_util_defs.h"
-#include "fla_lapack_avx2_kernels.h"
-#include "fla_lapack_avx512_kernels.h"
-#include "fla_lapack_lu_small_kernels_d.h"
-#include "fla_lapack_lu_small_kernels_s.h"
 #include "fla_lapack_x86_common.h"
 
 /*

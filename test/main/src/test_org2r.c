@@ -1,48 +1,47 @@
 /*
-    Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
-#if ENABLE_CPP_TEST
-#include <invoke_common.hh>
-#endif
+#include "test_common.h"
+#include "test_prototype.h"
 
-extern double perf;
-extern double time_min;
 /* Local prototypes.*/
-void fla_test_org2r_experiment(char *tst_api, test_params_t *params, integer datatype,
-                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                               integer einfo);
-void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T, integer datatype,
-                       integer *info, integer interfacetype, test_params_t *params);
-void invoke_org2r(integer datatype, integer *m, integer *n, integer *min_A, void *a, integer *lda,
-                  void *tau, void *work, integer *info);
+void fla_test_org2r_experiment(test_params_t *params, integer datatype,
+                               integer  p_cur, integer  q_cur, integer  pci,
+                               integer  n_repeats, integer einfo, double* perf,
+                               double* t,double* residual);
+void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T,
+                       void* work, integer datatype, integer n_repeats,
+                       double* time_min_, integer *info);
+void invoke_org2r(integer datatype, integer* m, integer* n, integer *min_A,
+                  void* a, integer* lda, void* tau, void* work, integer* info);
 
-void fla_test_org2r(integer argc, char **argv, test_params_t *params)
+void fla_test_org2r(integer argc, char ** argv, test_params_t *params)
 {
-    char *op_str = "QR factorization";
-    char *front_str = "ORG2R";
+    char* op_str = "QR factorization";
+    char* front_str = "ORG2R";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
-    params->imatrix_char = '\0';
 
     if(argc == 1)
     {
         g_lwork = -1;
-        g_config_data = 1;
+        config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_org2r_experiment);
         tests_not_run = 0;
     }
-    if(argc == 8)
+    if (argc == 8)
     {
         FLA_TEST_PARSE_LAST_ARG(argv[7]);
     }
-    if(argc >= 7 && argc <= 8)
+    if (argc >= 7 && argc <= 8)
     {
-        integer i, num_types, N, M;
+        integer i, num_types,N,M;
         integer datatype, n_repeats;
-        char stype, type_flag[4] = {0};
+        double perf, time_min, residual;
+        char stype,type_flag[4] = {0};
         char *endptr;
 
         /* Parse the arguments */
@@ -53,7 +52,6 @@ void fla_test_org2r(integer argc, char **argv, test_params_t *params)
         g_lwork = -1;
 
         n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
-        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -77,7 +75,18 @@ void fla_test_org2r(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_org2r_experiment(front_str, params, datatype, M, N, 0, n_repeats, einfo);
+                fla_test_org2r_experiment(params, datatype,
+                                          M, N,
+                                          0,
+                                          n_repeats, einfo,
+                                          &perf, &time_min, &residual);
+                /* Print the results */
+                fla_test_print_status(front_str,
+                                      stype,
+                                      RECT_INPUT,
+                                      M, N,
+                                      residual, params->lin_solver_paramslist[0].solver_threshold,
+                                      time_min, perf);
                 tests_not_run = 0;
             }
         }
@@ -86,15 +95,14 @@ void fla_test_org2r(integer argc, char **argv, test_params_t *params)
     /* Print error messages */
     if(tests_not_run)
     {
-        printf("\nIllegal arguments for org2r/ung2r\n");
-        printf("./<EXE> org2r <precisions - sd> <M> <N> <lda> <repeats>\n");
-        printf("./<EXE> ung2r <precisions - cz> <M> <N> <lda> <repeats>\n");
+        printf("\nIllegal arguments for org2r\n");
+        printf("./<EXE> org2r <precisions - sdcz> <M> <N> <lda> <repeats>\n");
     }
     if(invalid_dtype)
     {
         printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
     }
-    if(g_ext_fptr != NULL)
+    if (g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
@@ -102,66 +110,62 @@ void fla_test_org2r(integer argc, char **argv, test_params_t *params)
     return;
 }
 
-void fla_test_org2r_experiment(char *tst_api, test_params_t *params, integer datatype,
-                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                               integer einfo)
+void fla_test_org2r_experiment(test_params_t *params,
+    integer datatype,
+    integer p_cur,
+    integer q_cur,
+    integer pci,
+    integer n_repeats,
+    integer einfo,
+    double* perf,
+    double* time_min,
+    double* residual)
 {
     integer m, n, lda;
     void *A = NULL, *A_test = NULL, *T_test = NULL;
-    void *work = NULL;
+    void *work = NULL, *work_test = NULL;
     void *Q = NULL, *R = NULL;
-    integer interfacetype = params->interfacetype;
-    integer lwork = -1, info = 0;
-    double residual, err_thresh;
-    void *filename = NULL;
+    integer lwork = -1, info = 0, vinfo = 0;
 
     /* Get input matrix dimensions.*/
     m = p_cur;
     n = q_cur;
     lda = params->lin_solver_paramslist[pci].lda;
-    time_min = 0.;
-    perf = 0.;
-    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
+    *time_min = 0.;
+    *perf = 0.;
+    *residual = params->lin_solver_paramslist[pci].solver_threshold;
 
-    /* When inputs are from config file,
-       1) if m < n(invalid case), interchange m, n
-       2) if leading dimensions = -1, set them to default value */
-    if(g_config_data)
+    /* If leading dimensions = -1, set them to default value
+       when inputs are from config files */
+    if (config_data)
     {
-        if(p_cur < q_cur)
+        if (lda == -1)
         {
-            m = q_cur;
-            n = p_cur;
-        }
-        if(lda == -1 || lda < m)
-        {
-            lda = fla_max(1, m);
+            lda = fla_max(1,m);
         }
     }
 
-    /* Create input matrix parameters */
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
-
-    /* create tau vector */
-    create_vector(datatype, &T_test, fla_min(m, n));
-
-    /* create Q matrix to check orthogonality */
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &Q, lda);
-    reset_matrix(datatype, m, n, Q, lda);
-    if(!FLA_BRT_VERIFICATION_RUN)
+    if(m >= n)
     {
+        /* Create input matrix parameters */
+        create_matrix(datatype, &A, lda, n);
+
+        /* create tau vector */
+        create_vector(datatype, &T_test, fla_min(m,n));
+
         init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        {
-            scale_matrix_underflow_overflow_org2r(datatype, m, n, A, lda, params->imatrix_char);
-        }
+
         /* Make a copy of input matrix A.
            This is required to validate the API functionality.*/
-        create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
+        create_matrix(datatype, &A_test, lda, n);
         copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
+        /* create Q matrix to check orthogonality */
+        create_matrix(datatype, &Q, lda, n);
+        reset_matrix(datatype, m, n, Q, lda);
+ 
         /* Make a workspace query the first time. This will provide us with
-        and ideal workspace size based on internal block size.*/
+           and ideal workspace size based on internal block size.*/
         if(g_lwork <= 0)
         {
             lwork = -1;
@@ -182,116 +186,90 @@ void fla_test_org2r_experiment(char *tst_api, test_params_t *params, integer dat
         }
 
         /* create work buffer */
-        create_vector(datatype, &work, lwork);
+        create_matrix(datatype, &work, lwork, 1);
+        create_vector(datatype, &work_test, n);
 
         /* QR Factorisation on matrix A to generate Q and R */
         invoke_geqrf(datatype, &m, &n, A_test, &lda, T_test, work, &lwork, &info);
 
-        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &R, n);
-        reset_matrix(datatype, n, n, R, n);
-        copy_matrix(datatype, "Upper", n, n, A_test, lda, R, n);
+        create_matrix(datatype, &R, m, n);
+        reset_matrix(datatype, m, n, R, m);
+        copy_matrix(datatype, "Upper", m, n, A_test, lda, R, m);
 
         copy_matrix(datatype, "full", m, n, A_test, lda, Q, lda);
-    }
-    FLA_BRT_PROCESS_TWO_INPUT(datatype, m, n, Q, lda, datatype, 1, fla_min(m, n), T_test, 1, "ddd",
-                              m, n, lda)
 
-    /*invoke org2r API */
-    prepare_org2r_run(m, n, Q, lda, T_test, datatype, &info, interfacetype, params);
+        /*invoke org2r API */
+        prepare_org2r_run(m, n, Q, lda, T_test, work_test, datatype, n_repeats, time_min, &info);
 
-    /* performance computation
-    (2/3)*n2*(3m - n) */
-    perf = (double)((2.0 * m * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
-    if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        perf *= 4.0;
+        /* performance computation
+           (2/3)*n2*(3m - n) */
+        *perf = (double)((2.0 * m * n * n) - (( 2.0 / 3.0 ) * n * n * n )) / *time_min / FLOPS_PER_UNIT_PERF;
+        if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+            *perf *= 4.0;
 
-    /* output validation */
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    IF_FLA_BRT_VALIDATION(
-        m, n, store_outputs_base(filename, params, 1, 0, datatype, m, n, Q, lda),
-        validate_orgqr(tst_api, m, n, A, lda, Q, R, datatype, residual, params->imatrix_char,
-                       params),
-        check_reproducibility_base(filename, params, 1, 0, datatype, m, n, Q, lda))
-    else if(!FLA_EXTREME_CASE_TEST)
-    {
-        validate_orgqr(tst_api, m, n, A, lda, Q, R, datatype, residual, params->imatrix_char,
-                       params);
-    }
-    /* check for output matrix when inputs as extreme values */
-    else
-    {
-        if(!check_extreme_value(datatype, m, n, Q, lda, params->imatrix_char))
-        {
-            residual = DBL_MAX;
-        }
-        else
-        {
-            residual = err_thresh;
-        }
-        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
-    }
+        /* output validation */
+        if(info == 0)
+            validate_orgqr(m, n, A, lda, Q, R, work_test, datatype, residual, &vinfo);
 
-    /* Free up the buffers */
-    if(!FLA_BRT_VERIFICATION_RUN)
-    {
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+
+        /* Free up the buffers */
+        free_matrix(A);
         free_matrix(A_test);
         free_matrix(work);
+        free_vector(work_test);
+        free_vector(T_test);
+        free_matrix(Q);
         free_matrix(R);
     }
-free_buffers:
-    FLA_FREE_FILENAME(filename)
-    free_matrix(A);
-    free_vector(T_test);
-    free_matrix(Q);
 }
 
-void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T, integer datatype,
-                       integer *info, integer interfacetype, test_params_t *params)
+void prepare_org2r_run(integer m, integer n,
+    void* A,
+    integer lda,
+    void* T,
+    void* work,
+    integer datatype,
+    integer n_repeats,
+    double* time_min_,
+    integer *info)
 {
-    void *A_save = NULL, *work = NULL;
-    double exe_time;
+    integer i;
+    void *A_save = NULL;
+    double time_min = 1e9, exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_save, lda);
+    create_matrix(datatype, &A_save, lda, n);
     copy_matrix(datatype, "full", m, n, A, lda, A_save, lda);
 
     *info = 0;
-    FLA_EXEC_LOOP_BEGIN
+    for (i = 0; i < n_repeats && *info == 0; ++i)
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
         copy_matrix(datatype, "full", m, n, A_save, lda, A, lda);
-        create_vector(datatype, &work, n);
-#if ENABLE_CPP_TEST
-        if(interfacetype == LAPACK_CPP_TEST)
-        {
-            exe_time = fla_test_clock();
-            /* Call CPP org2r API */
-            invoke_cpp_org2r(datatype, &m, &n, &n, A, &lda, T, work, info);
-            exe_time = fla_test_clock() - exe_time;
-        }
-        else
-#endif
-        {
-            exe_time = fla_test_clock();
 
-            /* Call LAPACK org2r API */
-            invoke_org2r(datatype, &m, &n, &n, A, &lda, T, work, info);
+        exe_time = fla_test_clock();
 
-            exe_time = fla_test_clock() - exe_time;
-        }
+        /* Call to  org2r API */
+        invoke_org2r(datatype, &m, &n, &n, A, &lda, T, work, info);
 
-        /* Update ctx and loop conditions */
-        FLA_EXEC_LOOP_UPDATE_WITH_INFO
-        free_vector(work);
+        exe_time = fla_test_clock() - exe_time;
+
+        /* Get the best execution time */
+        time_min = fla_min(time_min, exe_time);
+
     }
+
+    *time_min_ = time_min;
 
     free_matrix(A_save);
 }
 
-void invoke_org2r(integer datatype, integer *m, integer *n, integer *min_A, void *a, integer *lda,
-                  void *tau, void *work, integer *info)
+
+void invoke_org2r(integer datatype, integer* m, integer* n, integer *min_A,
+                  void* a, integer* lda, void* tau, void* work, integer* info)
 {
     switch(datatype)
     {

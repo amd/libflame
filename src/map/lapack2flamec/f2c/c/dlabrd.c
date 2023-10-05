@@ -322,11 +322,6 @@ int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda
     y_offset = 1 + y_dim1;
     y -= y_offset;
 
-#ifdef FLA_OPENMP_MULTITHREADING
-    /* Get optimum thread number for DLABRD*/
-    FLA_Thread_optimum( FLA_LABRD, &actual_num_threads);
-#endif
-
     /* Function Body */
     if(*m <= 0 || *n <= 0)
     {
@@ -335,17 +330,10 @@ int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda
 
 #ifdef FLA_OPENMP_MULTITHREADING
     /* Get optimum thread number for DLABRD*/
-    actual_num_threads = get_opt_threads_dlabrd(*m, *n);
-#if FLA_ENABLE_AOCL_BLAS
-    /* Set no. of threads to BLIS as 1 to run DGEMV in ST.
-     * This is to avoid isolated threading causing cache misses.
-     */
-    aocl_int64_t orig_blis_threads = bli_thread_get_num_threads();
-    bli_thread_set_num_threads(1);
-#endif
+    FLA_Thread_optimum( FLA_LABRD, &actual_num_threads);
 #endif
 
-    if(*m >= *n)
+    if (*m >= *n)
     {
         /* Reduce to upper bidiagonal form */
         i__1 = *nb;

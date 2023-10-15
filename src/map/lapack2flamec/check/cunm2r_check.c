@@ -32,11 +32,11 @@ int cunm2r_check(char *side, char *trans, integer *m, integer *n, integer *k, sc
     {
         nq = *n;
     }
-    if(!left && !lsame_(side, "R", 1, 1))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if(!notran && !lsame_(trans, "C", 1, 1))
+    else if (! notran && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }

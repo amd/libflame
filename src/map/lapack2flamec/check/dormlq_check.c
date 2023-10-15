@@ -39,11 +39,11 @@ int dormlq_check(char *side, char *trans, integer *m, integer *n, integer *k, do
         nq = *n;
         nw = *m;
     }
-    if(!left && !lsame_(side, "R", 1, 1))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if(!notran && !lsame_(trans, "T", 1, 1))
+    else if (! notran && ! lsame_(trans, "T", 1, 1))
     {
         *info = -2;
     }

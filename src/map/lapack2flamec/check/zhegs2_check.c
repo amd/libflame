@@ -17,11 +17,11 @@ int zhegs2_check(integer *itype, char *uplo, integer *n, dcomplex *a, integer *l
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(*itype < 1 || *itype > 3)
+    if (*itype < 1 || *itype > 3)
     {
         *info = -1;
     }
-    else if(!upper && !lsame_(uplo, "L", 1, 1))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }

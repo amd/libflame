@@ -24,7 +24,7 @@ int ssytrd_check(char *uplo, integer *n, float *a, integer *lda, float *d__, flo
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

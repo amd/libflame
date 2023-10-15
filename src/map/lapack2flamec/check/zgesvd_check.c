@@ -41,8 +41,8 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
     /* Function Body */
     *info = 0;
     minmn = fla_min(*m,*n);
-    wntua = lsame_(jobu, "A");
-    wntus = lsame_(jobu, "S");
+    wntua = lsame_(jobu, "A", 1, 1);
+    wntus = lsame_(jobu, "S", 1, 1);
     wntuas = wntua || wntus;
     wntuo = lsame_(jobu, "O", 1, 1);
     wntun = lsame_(jobu, "N", 1, 1);

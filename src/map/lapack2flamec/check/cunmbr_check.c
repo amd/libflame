@@ -46,15 +46,15 @@ int cunmbr_check(char *vect, char *side, char *trans, integer *m, integer *n, in
     {
         nw = 0;
     }
-    if(!applyq && !lsame_(vect, "P", 1, 1))
+    if (! applyq && ! lsame_(vect, "P", 1, 1))
     {
         *info = -1;
     }
-    else if(!left && !lsame_(side, "R", 1, 1))
+    else if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -2;
     }
-    else if(!notran && !lsame_(trans, "C", 1, 1))
+    else if (! notran && ! lsame_(trans, "C", 1, 1))
     {
         *info = -3;
     }

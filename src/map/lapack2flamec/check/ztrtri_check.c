@@ -18,11 +18,11 @@ int ztrtri_check(char *uplo, char *diag, integer *n, dcomplex *a, integer *lda, 
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if(!nounit && !lsame_(diag, "U", 1, 1))
+    else if (! nounit && ! lsame_(diag, "U", 1, 1))
     {
         *info = -2;
     }

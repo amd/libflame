@@ -18,7 +18,7 @@ int chetd2_check(char *uplo, integer *n, scomplex *a, integer *lda, float *d__, 
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

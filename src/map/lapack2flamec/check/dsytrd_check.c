@@ -26,7 +26,7 @@ int dsytrd_check(char *uplo, integer *n, double *a, integer * lda, double *d__, 
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

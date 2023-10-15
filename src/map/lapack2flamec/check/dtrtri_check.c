@@ -17,11 +17,11 @@ int dtrtri_check(char *uplo, char *diag, integer *n, double * a, integer *lda, i
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if(!nounit && !lsame_(diag, "U", 1, 1))
+    else if (! nounit && ! lsame_(diag, "U", 1, 1))
     {
         *info = -2;
     }

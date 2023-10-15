@@ -39,15 +39,15 @@ int zunmtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, dc
         nq = *n;
         nw = *m;
     }
-    if(!left && !lsame_(side, "R", 1, 1))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if(!upper && !lsame_(uplo, "L", 1, 1))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "C", 1, 1))
+    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -3;
     }

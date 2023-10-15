@@ -9,10 +9,9 @@
 */
 
 /*
-*     Modifications Copyright (c) 2023-2026 Advanced Micro Devices, Inc.  All rights reserved.
+*     Modifications Copyright (c) 2023 Advanced Micro Devices, Inc.  All rights reserved.
 */
 #include "blis1.h"
-#include "FLA_f2c.h"
 #if FLA_ENABLE_AOCL_BLAS
 #include "blis.h"
 #endif

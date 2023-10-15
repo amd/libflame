@@ -22,7 +22,7 @@ int zungtr_check(char *uplo, integer *n, dcomplex *a, integer *lda, dcomplex *ta
     *info = 0;
     lquery = *lwork == -1;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

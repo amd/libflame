@@ -1,6 +1,6 @@
 /******************************************************************************
- * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+* Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+*******************************************************************************/
 
 /*! @file fla_dgesvd_small6_avx2_.c
  *  @brief DGESVD Small path (path 6)
@@ -9,170 +9,198 @@
 
 #include "FLAME.h"
 #include "fla_lapack_avx2_kernels.h"
-#include "fla_lapack_x86_common.h"
 
 #if FLA_ENABLE_AMD_OPT
 
-/* SVD for small tall-matrices with QR factorization
+double d_sign(doublereal *, doublereal *);
+
+static integer c__0 = 0;
+static integer c__1 = 1;
+
+/* SVD for small fat-matrices with LQ factorization
  * already computed
  */
-void fla_dgesvd_small6_avx2(aocl_int64_t wntus, aocl_int64_t wntvs, aocl_int64_t *m,
-                            aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *qr,
-                            aocl_int64_t *ldqr, doublereal *s, doublereal *u, aocl_int64_t *ldu,
-                            doublereal *vt, aocl_int64_t *ldvt, doublereal *work,
-                            aocl_int64_t *info)
+void fla_dgesvd_small6_avx2(integer *m, integer *n,
+                            doublereal *a, integer *lda,
+                            doublereal *qr, integer *ldqr,
+                            doublereal *s,
+                            doublereal *u, integer *ldu,
+                            doublereal *vt, integer *ldvt,
+                            doublereal *work,
+                            integer *info)
 {
     /* Declare and init local variables */
     FLA_GEQRF_INIT_DSMALL();
 
-    aocl_int64_t ie;
-    aocl_int64_t itau, itauq, itaup;
-    aocl_int64_t rlen, knt;
-    aocl_int64_t ni;
-    aocl_int64_t tn;
-    aocl_int64_t ncvt, nru;
-    aocl_int64_t *ldau;
-    aocl_int64_t c__1 = 1;
+    integer iu, ie, iwork;
+    integer itau, itauq, itaup;
+    integer i__1, rlen, knt;
+    integer ni;
 
     doublereal *tau, *tauq, *taup;
     doublereal *e, *au;
     doublereal stau, d__1;
-    doublereal dum[2];
-    doublereal c_zero = 0.;
+    doublereal dum[1];
 
     /* indices for partitioning work buffer */
-    ie = 1;
-    itau = ie + *n;
-    itauq = itau + *n;
+    iu = 1;
+    itau = iu + *n * *lda;
+    ie = itau + *n;
+    itauq = ie + *n;
     itaup = itauq + *n;
+    iwork = itaup + *n;
 
     /* parameter adjustments */
     a -= (1 + *lda);
     u -= (1 + *ldu);
     vt -= (1 + *ldvt);
     qr -= (1 + *ldqr);
+    v = &dum[-1];
     --s;
     --work;
-
-    /* local variables initialization */
-    v = &dum[0];
-    ncvt = 0;
 
     /* work buffer distribution */
     e = &work[ie - 1];
     tauq = &work[itauq - 1];
     taup = &work[itaup - 1];
 
-    /* QR Factorization */
-    fla_dgeqrf_small(m, n, &a[1 + *lda], lda, &work[itau], &work[ie]);
-
     /* Upper Bidiagonalization */
-    if(wntus)
-    {
-        nru = *n;
-        au = u;
-        ldau = ldu;
-        /* Copy R to U */
-        aocl_lapack_dlacpy("U", n, n, &a[1 + *lda], lda, &au[1 + *ldau], ldau);
-    }
-    else
-    {
-        nru = 0;
-        au = a;
-        ldau = lda;
-    }
-    /* Set lower part of U to zero */
-    tn = *n - 1;
-    aocl_lapack_dlaset("L", &tn, &tn, &c_zero, &c_zero, &au[2 + *ldau], ldau);
+    FLA_BIDIAGONALIZE_SMALL(*n, *n);
 
-    FLA_BIDIAGONALIZE_SMALL(*n, *n, au, ldau, tauq, taup, s, e);
-
-    /* Form Vt' in vt from HH vectors in U (right bi-diagonalizing Q) */
-    if(wntvs)
+    for (i = 1; i <= *n; i++)
+        for (j = 1; j <= *n; j++)
+            vt[i + j * *ldvt] = 0.;
+    /* Generate Qr (from bidiag) in vt from work[iu] (a here) */
+    if (*n > 2)
     {
-        ncvt = *n;
-        for(i = 1; i <= *n; i++)
-            for(j = 1; j <= *n; j++)
-                vt[i + j * *ldvt] = 0.;
-        FLA_LARF_VTAPPLY_DSMALL_SQR(n, au, ldau, taup, vt, ldvt);
-    }
+        /* iteration corresponding to (n - 2) HH[n-2] */
+        stau = taup[*n - 2];
+        d__1 = a[*n - 2 + *n * *lda];
+        dtmp = - (stau * d__1); /* tau * v2 */
 
-    /* Form U' in U (left bi-diagonalizing Q) */
-    if(wntus)
-    {
-        FLA_LARF_UAPPLY_DSMALL_SQR(n, au, ldau, tauq, u, ldu, taup);
-    }
+        vt[*n - 1 + (*n - 1) * *ldvt] = 1.0 - stau; /* 1 - tau */
+        vt[*n + (*n - 1) * *ldvt] = dtmp; /* tau * v2 */
+        vt[*n - 1 + *n * *ldvt] = dtmp; /* tau * v2 */
+        vt[*n + *n * *ldvt] = 1.0 + (dtmp * d__1); /* 1 - tau * v2^2 */
 
-    /* Compute SVD for bi-diagonal matrix
-     * (dbdsqr with no lwork)
-     * */
-    if(*n == 2)
-    {
-        /* 2 by 2 block, handle separately */
-        doublereal sigmn, sigmx, sinr, cosr, sinl, cosl;
-
-        dlasv2_(&s[1], &e[1], &s[2], &sigmn, &sigmx, &sinr, &cosr, &sinl, &cosl);
-        s[1] = f2c_abs(sigmx);
-        s[2] = f2c_abs(sigmn);
-        /* Compute singular vectors, if desired */
-        if(ncvt > 0)
+        /* for HH vectors [n-3:1] */
+        for (i = *n - 3; i >= 1; i--)
         {
-            FLA_COMPUTE_VT_2X2(vt, ldvt, sigmx, sigmn, cosr, sinr);
-        }
-        if(nru > 0)
-        {
-            fla_drot_avx2(&nru, &u[1 + *ldu], &c__1, &u[1 + 2 * *ldu], &c__1, &cosl, &sinl);
-        }
+            stau = - taup[i];
 
-        /* Normalize singular values and scale corresponding vectors for 2x2 case */
-        FLA_NORMALIZE_SINGULAR_VALUE_AND_VECTORS_2X2(1, wntus);
-        FLA_NORMALIZE_SINGULAR_VALUE_AND_VECTORS_2X2(2, wntus);
-    }
-    else
-    {
-        /* Compute Singular Values and Vectors */
-        lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt,
-                            &u[1 + *ldu], ldu, info);
-    }
-
-    /* Compute U by updating U' by applying from the left the Q from QR */
-    if(wntus)
-    {
-        tau = &work[itau - 1];
-        /* First Iteration corresponding to HH(n) */
-        i = *n;
-        for(j = 1; j <= *n; j++)
-        {
-            /* - u[i][j] * tau[i] */
-            d__1 = -u[i + j * *ldu] * tau[i];
-
-            /* u[n+1:m, j] = d__1 * u[n+1:m, j] */
-            for(k = *n + 1; k <= *m; k++)
+            /* Scale row i by -tau and dlarf for rest of the rows */
+            for (j = i + 2; j <= *n; j++)
             {
-                u[k + j * *ldu] = d__1 * qr[k + *n * *ldqr];
+                vt[i + 1 + j * *ldvt] = stau * a[i + j * *lda];
+
+                /* GEMV part of the dlarf excluding zero first column */
+                dtmp = 0.;
+                for (k = i + 2; k <= *n; k++)
+                {
+                    dtmp = dtmp + vt[j + k * *ldvt] * a[i + k * *lda];
+                }
+                vt[j + (i + 1) * *ldvt] = stau * dtmp;
+            }
+            vt[i + 1 + (i + 1) * *ldvt] = 1.0 + stau;
+
+            for (j = i + 2; j <= *n; j++)
+            {
+                for (k = i + 2; k <= *n; k++)
+                {
+                    vt[j + k * *ldvt] = vt[j + k * *ldvt] + a[i + k * *lda] *
+                                        vt[j + (i + 1) * *ldvt];
+                }
             }
         }
-        /* u[m, 1:m] = u[m, 1:m] * (1 - tau) */
-        d__1 = 1 - tau[i];
-        for(j = 1; j <= *n; j++)
-        {
-            u[*n + j * *ldu] = u[*n + j * *ldu] * d__1;
-        }
+    }
 
-        /* Second Iteration onwards */
-        beta = 0;
-        xnorm = 1.;
-        for(i = *n - 1; i >= 1; i--)
-        {
-            /* incrementing n by i to compensate for decrement
-             * by i done in FLA_LARF_APPLY_DLARGE_COL
-             */
-            ni = *n + i;
+    /* Generate Ql (from bidiag) in u from a */
 
-            au = &u[-i * *ldu];
-            v = &qr[i + i * *ldqr - 1];
-            FLA_LARF_APPLY_DLARGE_COL(i, m, &ni, au, ldu, tau);
+    if (*n > 1)
+    {
+        /* iteration corresponding to (n - 1) HH(n-1) */
+        stau = tauq[*n - 1];
+        d__1 = a[*n + (*n - 1) * *lda];
+        dtmp = - (stau * d__1);
+
+        u[*n - 1 + (*n - 1) * *ldu] = 1.0 - stau; /* 1 - tau */
+        u[*n + (*n - 1) * *ldu] = dtmp; /* tau * v2 */
+        u[*n - 1 + *n * *ldu] = dtmp; /* tau * v2 */
+        u[*n + *n * *ldu] = 1.0 + (dtmp * d__1); /* 1 - tau * v2^2 */
+    }
+    else
+    {
+        u[1 + *ldu] = 1.0;
+    }
+
+    /* for HH vectors [n-2:1] */
+    for (i = *n - 2; i >= 1; i--)
+    {
+        stau = - tauq[i];
+
+        /* scale col i by -tau and dlarf for rest of the columns */
+        for (j = i + 1; j <= *n; j++)
+        {
+            u[j + i * *ldu] = stau * a[j + i * *lda];
+
+            /* GEMV part of dlarf excluding zero first row */
+            dtmp = 0;
+            for (k = i + 1; k <= *n; k++)
+            {
+                dtmp = dtmp + u[k + j * *ldu] * a[k + i * *lda];
+            }
+            u[i + j * *ldu] = stau * dtmp;
         }
+        u[i + i * *ldu] = 1.0 + stau;
+
+        for (j = i + 1; j <= *n; j++)
+        {
+            for (k = i + 1; k <= *n; k++)
+            {
+                u[k + j * *ldu] = u[k + j * *ldu] + a[k + i * *lda] * u[i + j * *ldu];
+            }
+        }
+    }
+    vt[1 + *ldvt] = 1.0;
+
+    lapack_dbdsqr("U", n, n, n, &c__0, &s[1], &e[1],
+                  &vt[1 + *ldvt], ldvt,
+                  &u[1 + *ldu], ldu,
+                  dum, &c__1,
+                  &work[iwork], info);
+
+    /* Apply HH from QR factorization (qr) on vt from left */
+
+    tau = &work[itau - 1];
+    /* First Iteration corresponding to HH(n) */
+    i = *n;
+    for (j = 1; j <= *n; j++)
+    {
+        /* - u[i][j] * tau[i] */
+        d__1 = - u[i + j * *ldu] * tau[i];
+
+        /* u[n+1:m, j] = d__1 * u[n+1:m, j] */
+        for (k = *n + 1; k <= *m; k++)
+        {
+            u[k + j * *ldu] = d__1 * qr[k + *n * *ldqr];
+        }
+    }
+    /* u[m, 1:m] = u[m, 1:m] * (1 - tau) */
+    d__1 = 1 - tau[i];
+    for (j = 1; j <= *n; j++)
+    {
+        u[*n + j * *ldu] = u[*n + j * *ldu] * d__1;
+    }
+
+    /* Second Iteration onwards */
+    beta = 0;
+    for (i = *n - 1; i >= 1; i--)
+    {
+        ni = *n + i;
+
+        au = &u[-i * *ldqr];
+        v = &qr[i + i * *ldqr - 1];
+        FLA_ELEM_REFLECTOR_APPLY_DLARGE(i, m, &ni, au, ldqr, tau);
     }
 
     return;

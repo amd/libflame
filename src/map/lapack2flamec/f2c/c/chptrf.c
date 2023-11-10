@@ -264,7 +264,7 @@ void chptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, aocl_int
         /* 1 or 2 */
         k = *n;
         kc = (*n - 1) * *n / 2 + 1;
-    L10:
+L10:
         kpc = knc = kc;
         /* If K < 1, exit from loop */
         if(k < 1)

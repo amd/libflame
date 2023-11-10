@@ -256,7 +256,7 @@ void csptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, aocl_int
         /* 1 or 2 */
         k = *n;
         kc = (*n - 1) * *n / 2 + 1;
-    L10:
+L10:
         kpc = knc = kc;
         /* If K < 1, exit from loop */
         if(k < 1)
@@ -310,7 +310,7 @@ void csptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, aocl_int
                     {
                         i__2 = kx;
                         rowmax = (r__1 = ap[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kx]), f2c_abs(r__2));
-                        jmax = j;
+                        /* jmax = j; */
                     }
                     kx += j;
                     /* L20: */
@@ -579,7 +579,7 @@ void csptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, aocl_int
                     {
                         i__2 = kx;
                         rowmax = (r__1 = ap[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kx]), f2c_abs(r__2));
-                        jmax = j;
+                        /* jmax = j; */
                     }
                     kx = kx + *n - j;
                     /* L70: */

@@ -699,7 +699,7 @@ L90:
     if(shift == 0.f)
     {
         oldsn = 0;
-        if(idir == 1)
+        if (idir == 1)
         {
             /* Chase bulge from top to bottom */
             /* Save cosines and sines for later singular vector updates */

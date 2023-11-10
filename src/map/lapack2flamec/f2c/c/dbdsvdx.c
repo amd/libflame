@@ -411,6 +411,7 @@ int dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, d
         return 0;
     }
     /* Temporary Eigen Value buffer Allocation */
+    ev_arr = NULL;
     ev_arr = (doublereal *) malloc(2 * *n * sizeof(doublereal));
     if (ev_arr == NULL)
     {

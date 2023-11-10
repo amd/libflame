@@ -337,11 +337,11 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t 
     --ifailr;
     /* Function Body */
     eps3 = 0.f;
-    bothv = lsame_(side, "B", 1, 1);
-    rightv = lsame_(side, "R", 1, 1) || bothv;
-    leftv = lsame_(side, "L", 1, 1) || bothv;
-    fromqr = lsame_(eigsrc, "Q", 1, 1);
-    noinit = lsame_(initv, "N", 1, 1);
+    bothv = lsame_(side, "B");
+    rightv = lsame_(side, "R") || bothv;
+    leftv = lsame_(side, "L") || bothv;
+    fromqr = lsame_(eigsrc, "Q");
+    noinit = lsame_(initv, "N");
     /* Set M to the number of columns required to store the selected */
     /* eigenvectors. */
     *m = 0;

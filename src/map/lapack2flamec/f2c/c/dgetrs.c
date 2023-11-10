@@ -126,15 +126,14 @@ int dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
     aocl_fla_init();
 
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
-    integer b_index, a_index, j, i, k;
-    doublereal temp, inv_akk;
-    void dtrsm_LLNU_small(int *m, int *n, double *alpha,
-                          double *a, int *lda,
-                          double *b, int *ldb);
-    void dtrsm_LUNN_small(int *m, int *n, double *alpha,
-                          double *a, int *lda,
-                          double *b, int *ldb);
+    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
+    integer i, j;
+    void dtrsm_LLNU_small(integer *m, integer *n, double *alpha,
+                          double *a, integer *lda,
+                          double *b, integer *ldb);
+    void dtrsm_LUNN_small(integer *m, integer *n, double *alpha,
+                          double *a, integer *lda,
+                          double *b, integer *ldb);
     /* Local variables */
 #ifndef FLA_ENABLE_AOCL_BLAS
     extern logical lsame_(char *, char *, integer a, integer b);
@@ -143,6 +142,10 @@ int dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
         dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
 #endif
     extern int dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *); 
+    extern int fla_dgetrs_small_notrans(char *trans, integer *n,
+                                        integer *nrhs, doublereal *a,
+                                        integer *lda, integer *ipiv,
+                                        doublereal *b, integer *ldb, integer *info);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -219,7 +222,7 @@ int dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
             integer b_index = j * b_dim1;
             for (i = 1; i <= i__1; i++)
             {
-                int ip = ipiv[i];
+                integer ip = ipiv[i];
                 if (ip != i)
                 {
                     doublereal temp = b[ip + b_index];
@@ -262,12 +265,12 @@ int dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
 /* dgetrs_ */
 
 // Function for dtrsm with SIDE='L', UPLO='L', TRANSA='N', DIAG='U'
-void dtrsm_LLNU_small(int *m, int *n, double *alpha,
-                      double *a, int *lda,
-                      double *b, int *ldb)
+void dtrsm_LLNU_small(integer *m, integer *n, double *alpha,
+                      double *a, integer *lda,
+                      double *b, integer *ldb)
 {
-    int i, j, k, i__1, i__, i__2, i__3;
-    int a_dim1, a_offset, b_dim1, b_offset;
+    integer j, k, i__1, i__, i__2, i__3;
+    integer a_dim1, a_offset, b_dim1, b_offset;
 
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -301,12 +304,12 @@ void dtrsm_LLNU_small(int *m, int *n, double *alpha,
 }
 
 // Function for dtrsm with SIDE='L', UPLO='U', TRANSA='N', DIAG='N'
-void dtrsm_LUNN_small(int *m, int *n, double *alpha,
-                      double *a, int *lda,
-                      double *b, int *ldb)
+void dtrsm_LUNN_small(integer *m, integer *n, double *alpha,
+                      double *a, integer *lda,
+                      double *b, integer *ldb)
 {
-    int i, j, k, i__1, i__, i__2, i__3;
-    int a_dim1, a_offset, b_dim1, b_offset;
+    integer j, k, i__1, i__, i__2;
+    integer a_dim1, a_offset, b_dim1, b_offset;
 
     /* Parameter adjustments */
     a_dim1 = *lda;

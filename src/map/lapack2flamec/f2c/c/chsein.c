@@ -323,6 +323,7 @@ int chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n,
     --ifaill;
     --ifailr;
     /* Function Body */
+    eps3 = 0.f;
     bothv = lsame_(side, "B");
     rightv = lsame_(side, "R") || bothv;
     leftv = lsame_(side, "L") || bothv;

@@ -233,7 +233,7 @@ int dsptrf_(char *uplo, integer *n, doublereal *ap, integer * ipiv, integer *inf
         k = *n;
         kc = (*n - 1) * *n / 2 + 1;
 L10:
-        knc = kc;
+        kpc = knc = kc;
         /* If K < 1, exit from loop */
         if (k < 1)
         {
@@ -274,7 +274,7 @@ L10:
             else
             {
                 rowmax = 0.;
-                jmax = imax;
+                /* jmax = imax; */
                 kx = imax * (imax + 1) / 2 + imax;
                 i__1 = k;
                 for (j = imax + 1;
@@ -284,7 +284,7 @@ L10:
                     if ((d__1 = ap[kx], f2c_dabs(d__1)) > rowmax)
                     {
                         rowmax = (d__1 = ap[kx], f2c_dabs(d__1));
-                        jmax = j;
+                        /* jmax = j; */
                     }
                     kx += j;
                     /* L20: */
@@ -479,7 +479,7 @@ L60:
                     if ((d__1 = ap[kx], f2c_dabs(d__1)) > rowmax)
                     {
                         rowmax = (d__1 = ap[kx], f2c_dabs(d__1));
-                        jmax = j;
+                        /* jmax = j; */
                     }
                     kx = kx + *n - j;
                     /* L70: */

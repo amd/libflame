@@ -387,6 +387,8 @@ int dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *il
     wend = 0;
     mb = 0;
     irange = 0;
+    cnt1 = cnt2 = 0;
+    indl = indu = 0;
     /* Quick return if possible */
     if (*n <= 0)
     {

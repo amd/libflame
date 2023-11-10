@@ -252,6 +252,7 @@ int dorcsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, 
     extern /* Subroutine */
     int dbbcsd_(char *, char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dorbdb1_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dorbdb2_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dorbdb3_( integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dorbdb4_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     logical lquery, wantv1t;
+    doublereal dumm_a[1] = {0.};
     /* -- LAPACK computational routine (3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -456,7 +457,7 @@ int dorcsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, 
         }
         else if (r__ == *p)
         {
-            dorbdb2_(m, p, q, &x11[x11_offset], ldx11, &x21[x21_offset], ldx21, &theta[1], (doublereal*)&c__0, (doublereal*)&c__0, (doublereal*)&c__0, (doublereal*)&c__0, &work[1], & c_n1, &childinfo);
+            dorbdb2_(m, p, q, &x11[x11_offset], ldx11, &x21[x21_offset], ldx21, &theta[1], dumm_a, dumm_a, dumm_a, dumm_a, &work[1], & c_n1, &childinfo);
             lorbdb = (integer) work[1];
             if (*p - 1 >= *m - *p)
             {
@@ -519,7 +520,7 @@ int dorcsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, 
         }
         else
         {
-            dorbdb4_(m, p, q, &x11[x11_offset], ldx11, &x21[x21_offset], ldx21, &theta[1], (doublereal*)&c__0, (doublereal*)&c__0, (doublereal*)&c__0, (doublereal*)&c__0, (doublereal*)&c__0, & work[1], &c_n1, &childinfo);
+            dorbdb4_(m, p, q, &x11[x11_offset], ldx11, &x21[x21_offset], ldx21, &theta[1], dumm_a, dumm_a, dumm_a, dumm_a, dumm_a, & work[1], &c_n1, &childinfo);
             lorbdb = *m + (integer) work[1];
             if (*p >= *m - *p)
             {

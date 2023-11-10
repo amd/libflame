@@ -254,7 +254,7 @@ int chptrf_(char *uplo, integer *n, complex *ap, integer * ipiv, integer *info)
         k = *n;
         kc = (*n - 1) * *n / 2 + 1;
 L10:
-        knc = kc;
+        kpc = knc = kc;
         /* If K < 1, exit from loop */
         if (k < 1)
         {

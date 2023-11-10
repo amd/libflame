@@ -329,7 +329,7 @@ int cgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, co
     extern /* Subroutine */
     int csscal_(integer *, real *, complex *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    logical select[1];
+    logical select[1] = {0};
     real bignum;
     extern /* Subroutine */
     int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);

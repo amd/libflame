@@ -252,7 +252,7 @@ int csptrf_(char *uplo, integer *n, complex *ap, integer * ipiv, integer *info)
         k = *n;
         kc = (*n - 1) * *n / 2 + 1;
 L10:
-        knc = kc;
+        kpc = knc = kc;
         /* If K < 1, exit from loop */
         if (k < 1)
         {
@@ -295,7 +295,7 @@ L10:
             else
             {
                 rowmax = 0.f;
-                jmax = imax;
+                /* jmax = imax; */
                 kx = imax * (imax + 1) / 2 + imax;
                 i__1 = k;
                 for (j = imax + 1;
@@ -307,7 +307,7 @@ L10:
                     {
                         i__2 = kx;
                         rowmax = (r__1 = ap[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kx]), f2c_abs(r__2));
-                        jmax = j;
+                        /* jmax = j; */
                     }
                     kx += j;
                     /* L20: */
@@ -584,7 +584,7 @@ L60:
                     {
                         i__2 = kx;
                         rowmax = (r__1 = ap[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kx]), f2c_abs(r__2));
-                        jmax = j;
+                        /* jmax = j; */
                     }
                     kx = kx + *n - j;
                     /* L70: */

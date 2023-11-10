@@ -697,6 +697,7 @@ L90:
     /* If SHIFT = 0, do simplified QR iteration */
     if (shift == 0.)
     {
+        oldsn = 0.;
         if (idir == 1)
         {
             /* Chase bulge from top to bottom */

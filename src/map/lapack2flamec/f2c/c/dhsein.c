@@ -333,6 +333,7 @@ int dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n,
     --ifaill;
     --ifailr;
     /* Function Body */
+    iinfo = 0;
     bothv = lsame_(side, "B");
     rightv = lsame_(side, "R") || bothv;
     leftv = lsame_(side, "L") || bothv;
@@ -424,6 +425,7 @@ int dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n,
     ulp = dlamch_("Precision");
     smlnum = unfl * (*n / ulp);
     bignum = (1. - ulp) / smlnum;
+    eps3 = smlnum;
     ldwork = *n + 1;
     kl = 1;
     kln = 0;

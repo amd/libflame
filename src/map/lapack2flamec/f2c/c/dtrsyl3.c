@@ -247,7 +247,14 @@ int dtrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     swork_dim1 = *ldswork;
     swork_offset = 1 + swork_dim1;
     swork -= swork_offset;
+    wnrm = NULL;
     wnrm = (doublereal *)malloc(fla_max(*m,*n) * sizeof(doublereal));
+    if (wnrm == NULL)
+    {
+        *info = -4;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
+    }
     /* Function Body */
     notrna = lsame_(trana, "N");
     notrnb = lsame_(tranb, "N");
@@ -312,19 +319,22 @@ int dtrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     {
         i__1 = -(*info);
         xerbla_("DTRSYL3", &i__1, (ftnlen)7);
-    AOCL_DTL_TRACE_LOG_EXIT
+        free(wnrm);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     else if (lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        free(wnrm);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Quick return if possible */
     *scale = 1.;
     if (*m == 0 || *n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        free(wnrm);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Use unblocked code for small problems or if insufficient */
@@ -332,7 +342,8 @@ int dtrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     if (fla_min(nba,nbb) == 1 || *ldswork < fla_max(nba,nbb) || *liwork < iwork[1])
     {
         dtrsyl_(trana, tranb, isgn, m, n, &a[a_offset], lda, &b[b_offset], ldb, &c__[c_offset], ldc, scale, info);
-    AOCL_DTL_TRACE_LOG_EXIT
+        free(wnrm);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Set constants to control overflow */
@@ -1544,7 +1555,8 @@ int dtrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
         iwork[1] = nba + nbb + 2;
         swork[swork_dim1 + 1] = (doublereal) fla_max(nba,nbb);
         swork[swork_dim1 + 2] = (doublereal) ((nbb << 1) + nba);
-    AOCL_DTL_TRACE_LOG_EXIT
+        free(wnrm);
+        AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
     /* Realize consistent scaling */
@@ -1626,6 +1638,7 @@ int dtrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     iwork[1] = nba + nbb + 2;
     swork[swork_dim1 + 1] = (doublereal) fla_max(nba,nbb);
     swork[swork_dim1 + 2] = (doublereal) ((nbb << 1) + nba);
+    free(wnrm);
     AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DTRSYL3 */

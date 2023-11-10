@@ -62,7 +62,7 @@ void fla_dgesvd_nn_small10(integer *m, integer *n,
                            doublereal *work,
                            integer *info);
 int fla_dgetrs_small_notrans(char *trans, integer *n,
-            integer *nrhs, doublereal *a,
-            integer *lda, integer *ipiv,
-            doublereal *b, integer *ldb, integer *info);
+                             integer *nrhs, doublereal *a,
+                             integer *lda, integer *ipiv,
+                             doublereal *b, integer *ldb, integer *info);
 #endif

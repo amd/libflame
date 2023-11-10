@@ -241,7 +241,7 @@ void dsptrf_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, aocl_i
         /* 1 or 2 */
         k = *n;
         kc = (*n - 1) * *n / 2 + 1;
-    L10:
+L10:
         kpc = knc = kc;
         /* If K < 1, exit from loop */
         if(k < 1)
@@ -291,7 +291,7 @@ void dsptrf_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, aocl_i
                     if ((d__1 = ap[kx], f2c_dabs(d__1)) > rowmax)
                     {
                         rowmax = (d__1 = ap[kx], f2c_dabs(d__1));
-                        jmax = j;
+                        /* jmax = j; */
                     }
                     kx += j;
                     /* L20: */
@@ -481,7 +481,7 @@ void dsptrf_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, aocl_i
                     if ((d__1 = ap[kx], f2c_dabs(d__1)) > rowmax)
                     {
                         rowmax = (d__1 = ap[kx], f2c_dabs(d__1));
-                        jmax = j;
+                        /* jmax = j; */
                     }
                     kx = kx + *n - j;
                     /* L70: */

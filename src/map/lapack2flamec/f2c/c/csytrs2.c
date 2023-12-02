@@ -148,7 +148,7 @@ void csytrs2_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, 
     complex akm1, bkm1, akm1k;
     extern /* Subroutine */
     void cscal_(integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     complex denom;
     integer iinfo;
     extern /* Subroutine */
@@ -187,8 +187,8 @@ void csytrs2_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, 
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

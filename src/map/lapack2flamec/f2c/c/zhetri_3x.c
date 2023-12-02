@@ -181,7 +181,7 @@ void zhetri_3x_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
     doublereal akp1;
     integer invd;
     doublecomplex akkp1;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical upper;
@@ -226,8 +226,8 @@ void zhetri_3x_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
     work -= work_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

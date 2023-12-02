@@ -288,8 +288,8 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
     doublereal ulp, wkr, eps3;
     logical pair;
     doublereal unfl;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer iinfo;
     logical leftv, bothv;
     doublereal hnorm;
     extern doublereal dlamch_(char *);
@@ -343,11 +343,11 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
     --ifailr;
     /* Function Body */
     iinfo = 0;
-    bothv = lsame_(side, "B");
-    rightv = lsame_(side, "R") || bothv;
-    leftv = lsame_(side, "L") || bothv;
-    fromqr = lsame_(eigsrc, "Q");
-    noinit = lsame_(initv, "N");
+    bothv = lsame_(side, "B", 1, 1);
+    rightv = lsame_(side, "R", 1, 1) || bothv;
+    leftv = lsame_(side, "L", 1, 1) || bothv;
+    fromqr = lsame_(eigsrc, "Q", 1, 1);
+    noinit = lsame_(initv, "N", 1, 1);
     /* Set M to the number of columns required to store the selected */
     /* eigenvectors, and standardize the array SELECT. */
     *m = 0;
@@ -386,11 +386,11 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
     {
         *info = -1;
     }
-    else if(!fromqr && !lsame_(eigsrc, "N", 1, 1))
+    else if (! fromqr && ! lsame_(eigsrc, "N", 1, 1))
     {
         *info = -2;
     }
-    else if(!noinit && !lsame_(initv, "U", 1, 1))
+    else if (! noinit && ! lsame_(initv, "U", 1, 1))
     {
         *info = -3;
     }

@@ -120,7 +120,7 @@ doublereal zla_syrpvgrw_(char *uplo, integer *n, integer *info, doublecomplex *a
     /* Local variables */
     integer i__, j, k, kp;
     doublereal tmp, amax, umax;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer ncols;
     logical upper;
     doublereal rpvgrw;
@@ -154,7 +154,7 @@ doublereal zla_syrpvgrw_(char *uplo, integer *n, integer *info, doublecomplex *a
     --ipiv;
     --work;
     /* Function Body */
-    upper = lsame_("Upper", uplo);
+    upper = lsame_("Upper", uplo, 1, 1);
     if (*info == 0)
     {
         if (upper)

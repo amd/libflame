@@ -247,7 +247,7 @@ void chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integ
     extern /* Subroutine */
     void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     real sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
@@ -306,8 +306,8 @@ void chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integ
     --rwork;
     --iwork;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
-    lower = lsame_(uplo, "L");
+    wantz = lsame_(jobz, "V", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
     lquery = *lwork == -1 || *liwork == -1 || *lrwork == -1;
     *info = 0;
     if (*n <= 1)
@@ -335,11 +335,11 @@ void chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integ
             liwmin = 1;
         }
     }
-    if (! (wantz || lsame_(jobz, "N")))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lower || lsame_(uplo, "U")))
+    else if (! (lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }

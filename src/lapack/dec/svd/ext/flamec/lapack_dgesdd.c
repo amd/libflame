@@ -238,7 +238,7 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal * a, integer *l
     integer lwork_dorglq_mn__, lwork_dorglq_nn__, lwork_dorgqr_mm__, lwork_dorgqr_mn__, iscl;
     doublereal anrm;
     integer idum[1], ierr, itau, lwork_dormbr_qln_mm__, lwork_dormbr_qln_mn__, lwork_dormbr_qln_nn__, lwork_dormbr_prt_mm__, lwork_dormbr_prt_mn__, lwork_dormbr_prt_nn__, i__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer chunk, minmn, wrkbl, itaup, itauq, mnthr;
     logical wntqa;
     integer nwork;
@@ -306,11 +306,11 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal * a, integer *l
     /* Function Body */
     *info = 0;
     minmn = fla_min(*m,*n);
-    wntqa = lsame_(jobz, "A");
-    wntqs = lsame_(jobz, "S");
+    wntqa = lsame_(jobz, "A", 1, 1);
+    wntqs = lsame_(jobz, "S", 1, 1);
     wntqas = wntqa || wntqs;
-    wntqo = lsame_(jobz, "O");
-    wntqn = lsame_(jobz, "N");
+    wntqo = lsame_(jobz, "O", 1, 1);
+    wntqn = lsame_(jobz, "N", 1, 1);
     lquery = *lwork == -1;
     if (! (wntqa || wntqs || wntqo || wntqn))
     {

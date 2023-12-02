@@ -235,7 +235,7 @@ void sptsvx_(char *fact, integer *n, integer *nrhs, real *d__, real *e, real *df
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     extern /* Subroutine */
     void scopy_(integer *, real *, integer *, real *, integer *);
@@ -284,7 +284,7 @@ void sptsvx_(char *fact, integer *n, integer *nrhs, real *d__, real *e, real *df
     /* Function Body */
     *info = 0;
     nofact = lsame_(fact, "N", 1, 1);
-    if(!nofact && !lsame_(fact, "F", 1, 1))
+    if (! nofact && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }

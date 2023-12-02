@@ -394,7 +394,7 @@ void zlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublecomplex
     /* Local variables */
     integer i__, j;
     logical lnotident;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     /* -- LAPACK auxiliary routine -- */
@@ -434,7 +434,7 @@ void zlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublecomplex
     AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    lnotident = ! lsame_(ident, "I");
+    lnotident = ! lsame_(ident, "I", 1, 1);
     /* ------------------------------------------------------------------ */
     /* First Step. Computation of the Column Block 2: */
     /* ( A2 ) := H * ( A2 ) */

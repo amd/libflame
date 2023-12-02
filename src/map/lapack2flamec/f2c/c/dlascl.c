@@ -148,8 +148,8 @@ void dlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublere
     doublereal mul, cto1;
     logical done;
     doublereal ctoc;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t itype;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer itype;
     doublereal cfrom1;
     extern doublereal dlamch_(char *);
     doublereal cfromc;
@@ -183,31 +183,31 @@ void dlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublere
     a -= a_offset;
     /* Function Body */
     *info = 0;
-    if(lsame_(type__, "G", 1, 1))
+    if (lsame_(type__, "G", 1, 1))
     {
         itype = 0;
     }
-    else if(lsame_(type__, "L", 1, 1))
+    else if (lsame_(type__, "L", 1, 1))
     {
         itype = 1;
     }
-    else if(lsame_(type__, "U", 1, 1))
+    else if (lsame_(type__, "U", 1, 1))
     {
         itype = 2;
     }
-    else if(lsame_(type__, "H", 1, 1))
+    else if (lsame_(type__, "H", 1, 1))
     {
         itype = 3;
     }
-    else if(lsame_(type__, "B", 1, 1))
+    else if (lsame_(type__, "B", 1, 1))
     {
         itype = 4;
     }
-    else if(lsame_(type__, "Q", 1, 1))
+    else if (lsame_(type__, "Q", 1, 1))
     {
         itype = 5;
     }
-    else if(lsame_(type__, "Z", 1, 1))
+    else if (lsame_(type__, "Z", 1, 1))
     {
         itype = 6;
     }

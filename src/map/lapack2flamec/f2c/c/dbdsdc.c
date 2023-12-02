@@ -217,7 +217,7 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *
     integer nm1;
     doublereal eps;
     integer ivt, difl, difr, ierr, perm, mlvl, sqre;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer poles, iuplo, nsize, start;
@@ -283,23 +283,23 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *
     is = 0;
     ic = 0;
     z__ = 0;
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         iuplo = 1;
     }
-    if (lsame_(uplo, "L"))
+    if (lsame_(uplo, "L", 1, 1))
     {
         iuplo = 2;
     }
-    if (lsame_(compq, "N"))
+    if (lsame_(compq, "N", 1, 1))
     {
         icompq = 0;
     }
-    else if (lsame_(compq, "P"))
+    else if (lsame_(compq, "P", 1, 1))
     {
         icompq = 1;
     }
-    else if (lsame_(compq, "I"))
+    else if (lsame_(compq, "I", 1, 1))
     {
         icompq = 2;
     }

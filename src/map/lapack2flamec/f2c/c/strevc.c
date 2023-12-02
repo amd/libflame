@@ -257,7 +257,7 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
     real vmax;
     aocl_int64_t jnxt;
     real scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
     real remax;

@@ -284,7 +284,7 @@ void dsbevx_(char *jobz, char *range, char *uplo, integer *n, integer *kd, doubl
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer iinfo;
@@ -360,7 +360,7 @@ void dsbevx_(char *jobz, char *range, char *uplo, integer *n, integer *kd, doubl
     indeig = lsame_(range, "I", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
     *info = 0;
-    if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
@@ -368,7 +368,7 @@ void dsbevx_(char *jobz, char *range, char *uplo, integer *n, integer *kd, doubl
     {
         *info = -2;
     }
-    else if(!(lower || lsame_(uplo, "U", 1, 1)))
+    else if (! (lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -3;
     }

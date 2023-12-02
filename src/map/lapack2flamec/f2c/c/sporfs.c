@@ -200,9 +200,8 @@ void sporfs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
     real eps;
     aocl_int64_t kase;
     real safe1, safe2;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int_t isave[3];
-    aocl_int64_t count;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer isave[3], count;
     logical upper;
     extern /* Subroutine */
     void scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), slacn2_( integer *, real *, real *, integer *, real *, integer *, integer * );
@@ -256,7 +255,7 @@ void sporfs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

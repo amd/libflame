@@ -148,7 +148,7 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
     integer i__, j;
     real ajj;
     integer pvt;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
     integer itemp;
@@ -193,8 +193,8 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
     a -= a_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

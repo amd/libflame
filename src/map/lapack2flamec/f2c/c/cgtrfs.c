@@ -235,7 +235,7 @@ void cgtrfs_(char *trans, integer *n, integer *nrhs, complex * dl, complex *d__,
     real eps;
     aocl_int64_t kase;
     real safe1, safe2;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
     void ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
@@ -301,7 +301,7 @@ void cgtrfs_(char *trans, integer *n, integer *nrhs, complex * dl, complex *d__,
     /* Function Body */
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
-    if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }

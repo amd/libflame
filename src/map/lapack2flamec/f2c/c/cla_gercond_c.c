@@ -163,8 +163,8 @@ real cla_gercond_c_(char *trans, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sc
     /* Local variables */
     aocl_int64_t i__, j;
     real tmp;
-    aocl_int64_t kase;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer kase;
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     real anorm;
     extern /* Subroutine */
@@ -210,7 +210,7 @@ real cla_gercond_c_(char *trans, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sc
     ret_val = 0.f;
     *info = 0;
     notrans = lsame_(trans, "N", 1, 1);
-    if(!notrans && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    if (! notrans && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }

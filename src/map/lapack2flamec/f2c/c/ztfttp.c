@@ -219,7 +219,7 @@ void ztfttp_(char *transr, char *uplo, integer *n, doublecomplex *arf, doublecom
     /* Local variables */
     integer i__, j, k, n1, n2, ij, jp, js, lda, ijp;
     logical normaltransr;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -250,11 +250,11 @@ void ztfttp_(char *transr, char *uplo, integer *n, doublecomplex *arf, doublecom
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if(!normaltransr && !lsame_(transr, "C", 1, 1))
+    if (! normaltransr && ! lsame_(transr, "C", 1, 1))
     {
         *info = -1;
     }
-    else if(!lower && !lsame_(uplo, "U", 1, 1))
+    else if (! lower && ! lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }

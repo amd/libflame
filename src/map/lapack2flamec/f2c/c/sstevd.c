@@ -169,7 +169,7 @@ void sstevd_(char *jobz, integer *n, real *d__, real *e, real *z__, integer *ldz
     double sqrt(doublereal);
     /* Local variables */
     real eps, rmin, rmax, tnrm, sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
     integer lwmin;
@@ -218,7 +218,7 @@ void sstevd_(char *jobz, integer *n, real *d__, real *e, real *z__, integer *ldz
     --work;
     --iwork;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
+    wantz = lsame_(jobz, "V", 1, 1);
     lquery = *lwork == -1 || *liwork == -1;
     *info = 0;
     liwmin = 1;
@@ -230,7 +230,7 @@ void sstevd_(char *jobz, integer *n, real *d__, real *e, real *z__, integer *ldz
         lwmin = (*n << 2) + 1 + i__1 * i__1;
         liwmin = *n * 5 + 3;
     }
-    if (! (wantz || lsame_(jobz, "N")))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }

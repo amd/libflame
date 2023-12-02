@@ -271,7 +271,7 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
     doublereal alpha;
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     doublereal dtemp, sfmin;
@@ -319,7 +319,7 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
     alpha = (sqrt(17.) + 1.) / 8.;
     /* Compute machine safe minimum */
     sfmin = dlamch_("S");
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         /* Factorize the trailing columns of A using the upper triangle */
         /* of A and working backwards, and compute the matrix W = U12*D */

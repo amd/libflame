@@ -132,7 +132,7 @@ void zlaqsp_(char *uplo, integer *n, doublecomplex *ap, doublereal *s, doublerea
     /* Local variables */
     aocl_int64_t i__, j, jc;
     doublereal cj, large;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal small_val;
     extern doublereal dlamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -173,7 +173,7 @@ void zlaqsp_(char *uplo, integer *n, doublecomplex *ap, doublereal *s, doublerea
     else
     {
         /* Replace A by diag(S) * A * diag(S). */
-        if(lsame_(uplo, "U", 1, 1))
+        if (lsame_(uplo, "U", 1, 1))
         {
             /* Upper triangle of A is stored. */
             jc = 1;

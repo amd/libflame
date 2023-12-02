@@ -123,7 +123,7 @@ real clansp_(char *norm, char *uplo, integer *n, complex *ap, real *work)
     /* Local variables */
     integer i__, j, k;
     real sum, absa, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real value;
     extern /* Subroutine */
     void classq_(integer *, complex *, integer *, real *, real *);
@@ -156,11 +156,11 @@ real clansp_(char *norm, char *uplo, integer *n, complex *ap, real *work)
     {
         value = 0.f;
     }
-    else if (lsame_(norm, "M"))
+    else if (lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(abs(A(i,j))). */
         value = 0.f;
-        if (lsame_(uplo, "U"))
+        if (lsame_(uplo, "U", 1, 1))
         {
             k = 1;
             i__1 = *n;
@@ -209,12 +209,12 @@ real clansp_(char *norm, char *uplo, integer *n, complex *ap, real *work)
             }
         }
     }
-    else if (lsame_(norm, "I") || lsame_(norm, "O") || *(unsigned char *)norm == '1')
+    else if (lsame_(norm, "I", 1, 1) || lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1')
     {
         /* Find normI(A) ( = norm1(A), since A is symmetric). */
         value = 0.f;
         k = 1;
-        if (lsame_(uplo, "U"))
+        if (lsame_(uplo, "U", 1, 1))
         {
             i__1 = *n;
             for (j = 1;
@@ -286,13 +286,13 @@ real clansp_(char *norm, char *uplo, integer *n, complex *ap, real *work)
             }
         }
     }
-    else if (lsame_(norm, "F") || lsame_(norm, "E"))
+    else if (lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
         scale = 0.f;
         sum = 1.f;
         k = 2;
-        if (lsame_(uplo, "U"))
+        if (lsame_(uplo, "U", 1, 1))
         {
             i__1 = *n;
             for (j = 2;
@@ -361,7 +361,7 @@ real clansp_(char *norm, char *uplo, integer *n, complex *ap, real *work)
                     sum += r__1 * r__1;
                 }
             }
-            if (lsame_(uplo, "U"))
+            if (lsame_(uplo, "U", 1, 1))
             {
                 k = k + i__ + 1;
             }

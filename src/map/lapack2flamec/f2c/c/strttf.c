@@ -216,7 +216,7 @@ void aocl_lapack_strttf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
     /* Local variables */
     aocl_int64_t i__, j, k, l, n1, n2, ij, nt, nx2, np1x2;
     logical normaltransr;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -249,11 +249,11 @@ void aocl_lapack_strttf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if(!normaltransr && !lsame_(transr, "T", 1, 1))
+    if (! normaltransr && ! lsame_(transr, "T", 1, 1))
     {
         *info = -1;
     }
-    else if(!lower && !lsame_(uplo, "U", 1, 1))
+    else if (! lower && ! lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }

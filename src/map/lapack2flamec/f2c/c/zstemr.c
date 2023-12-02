@@ -365,7 +365,7 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *
     void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal scale;
     integer indgp;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo, iindw, ilast;
     extern /* Subroutine */
     void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
@@ -431,10 +431,10 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *
     --work;
     --iwork;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
-    alleig = lsame_(range, "A");
-    valeig = lsame_(range, "V");
-    indeig = lsame_(range, "I");
+    wantz = lsame_(jobz, "V", 1, 1);
+    alleig = lsame_(range, "A", 1, 1);
+    valeig = lsame_(range, "V", 1, 1);
+    indeig = lsame_(range, "I", 1, 1);
     lquery = *lwork == -1 || *liwork == -1;
     zquery = *nzc == -1;
     /* DSTEMR needs WORK of size 6*N, IWORK of size 3*N. */
@@ -471,7 +471,7 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *
         iiu = *iu;
     }
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N")))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }

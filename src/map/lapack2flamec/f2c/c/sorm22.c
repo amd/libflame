@@ -162,7 +162,7 @@ void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
     /* Local variables */
     integer i__, nb, nq, nw, len;
     logical left;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     logical notran;
@@ -198,8 +198,8 @@ void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
     --work;
     /* Function Body */
     *info = 0;
-    left = lsame_(side, "L");
-    notran = lsame_(trans, "N");
+    left = lsame_(side, "L", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
     /* NQ is the order of Q;
     */
@@ -217,11 +217,11 @@ void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
     {
         nw = 1;
     }
-    if (! left && ! lsame_(side, "R"))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(trans, "N") && ! lsame_(trans, "T"))
+    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1))
     {
         *info = -2;
     }

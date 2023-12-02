@@ -149,8 +149,8 @@ doublereal zla_gercond_x_(char *trans, aocl_int_t *n, dcomplex *a, aocl_int_t *l
     /* Local variables */
     aocl_int64_t i__, j;
     doublereal tmp;
-    aocl_int64_t kase;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer kase;
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     doublereal anorm;
     extern /* Subroutine */
@@ -198,7 +198,7 @@ doublereal zla_gercond_x_(char *trans, aocl_int_t *n, dcomplex *a, aocl_int_t *l
     ret_val = 0.;
     *info = 0;
     notrans = lsame_(trans, "N", 1, 1);
-    if(!notrans && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    if (! notrans && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }

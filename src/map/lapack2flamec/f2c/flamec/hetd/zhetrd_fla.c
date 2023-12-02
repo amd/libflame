@@ -204,9 +204,9 @@ void zhetrd_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublere
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     dcomplex z__1;
     /* Local variables */
-    aocl_int64_t i__, j, nb, kk, nx, iws;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t nbmin, iinfo;
+    integer i__, j, nb, kk, nx, iws;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
     void zhetd2_fla(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zher2k_(char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -248,7 +248,7 @@ void zhetrd_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublere
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

@@ -303,7 +303,7 @@ void sgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, real *dl, real
     aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1;
     /* Local variables */
     char norm[1];
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     extern /* Subroutine */
     void scopy_(integer *, real *, integer *, real *, integer *);
@@ -360,11 +360,11 @@ void sgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, real *dl, real
     *info = 0;
     nofact = lsame_(fact, "N", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
-    if(!nofact && !lsame_(fact, "F", 1, 1))
+    if (! nofact && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }

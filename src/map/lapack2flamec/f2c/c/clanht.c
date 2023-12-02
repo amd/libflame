@@ -107,7 +107,7 @@ real clanht_(char *norm, aocl_int_t *n, real *d__, scomplex *e)
     /* Local variables */
     aocl_int64_t i__;
     real sum, scale;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     extern /* Subroutine */
     void classq_(integer *, complex *, integer *, real *, real *);
@@ -142,7 +142,7 @@ real clanht_(char *norm, aocl_int_t *n, real *d__, scomplex *e)
     {
         anorm = 0.f;
     }
-    else if(lsame_(norm, "M", 1, 1))
+    else if (lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(f2c_abs(A(i,j))). */
         anorm = (r__1 = d__[*n], f2c_abs(r__1));
@@ -162,7 +162,7 @@ real clanht_(char *norm, aocl_int_t *n, real *d__, scomplex *e)
             /* L10: */
         }
     }
-    else if(lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1' || lsame_(norm, "I", 1, 1))
+    else if (lsame_(norm, "O", 1, 1) || *(unsigned char *) norm == '1' || lsame_(norm, "I", 1, 1))
     {
         /* Find norm1(A). */
         if(*n == 1)
@@ -189,7 +189,7 @@ real clanht_(char *norm, aocl_int_t *n, real *d__, scomplex *e)
             }
         }
     }
-    else if(lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
+    else if (lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
         scale = 0.f;

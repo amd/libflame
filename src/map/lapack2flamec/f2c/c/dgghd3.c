@@ -256,7 +256,7 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     integer kacc22;
     extern /* Subroutine */
     void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer nbmin;
@@ -317,16 +317,16 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     i__1 = *n * 6 * nb;
     lwkopt = fla_max(i__1,1);
     work[1] = (doublereal) lwkopt;
-    initq = lsame_(compq, "I");
-    wantq = initq || lsame_(compq, "V");
-    initz = lsame_(compz, "I");
-    wantz = initz || lsame_(compz, "V");
+    initq = lsame_(compq, "I", 1, 1);
+    wantq = initq || lsame_(compq, "V", 1, 1);
+    initz = lsame_(compz, "I", 1, 1);
+    wantz = initz || lsame_(compz, "V", 1, 1);
     lquery = *lwork == -1;
-    if (! lsame_(compq, "N") && ! wantq)
+    if (! lsame_(compq, "N", 1, 1) && ! wantq)
     {
         *info = -1;
     }
-    else if (! lsame_(compz, "N") && ! wantz)
+    else if (! lsame_(compz, "N", 1, 1) && ! wantz)
     {
         *info = -2;
     }

@@ -215,7 +215,7 @@ void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, i
     integer nm1;
     real eps;
     integer ivt, difl, difr, ierr, perm, mlvl, sqre;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer poles;
     extern /* Subroutine */
     void slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
@@ -287,23 +287,23 @@ void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, i
     is = 0;
     ic = 0;
     z__ = 0;
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         iuplo = 1;
     }
-    if (lsame_(uplo, "L"))
+    if (lsame_(uplo, "L", 1, 1))
     {
         iuplo = 2;
     }
-    if (lsame_(compq, "N"))
+    if (lsame_(compq, "N", 1, 1))
     {
         icompq = 0;
     }
-    else if (lsame_(compq, "P"))
+    else if (lsame_(compq, "P", 1, 1))
     {
         icompq = 1;
     }
-    else if (lsame_(compq, "I"))
+    else if (lsame_(compq, "I", 1, 1))
     {
         icompq = 2;
     }

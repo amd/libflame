@@ -255,7 +255,7 @@ void aocl_lapack_sgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
     integer jrow;
     extern /* Subroutine */
     void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icompq;
@@ -297,17 +297,17 @@ void aocl_lapack_sgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
     z_offset = 1 + z_dim1;
     z__ -= z_offset;
     /* Function Body */
-    if(lsame_(compq, "N", 1, 1))
+    if (lsame_(compq, "N", 1, 1))
     {
         ilq = FALSE_;
         icompq = 1;
     }
-    else if(lsame_(compq, "V", 1, 1))
+    else if (lsame_(compq, "V", 1, 1))
     {
         ilq = TRUE_;
         icompq = 2;
     }
-    else if(lsame_(compq, "I", 1, 1))
+    else if (lsame_(compq, "I", 1, 1))
     {
         ilq = TRUE_;
         icompq = 3;
@@ -317,17 +317,17 @@ void aocl_lapack_sgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
         icompq = 0;
     }
     /* Decode COMPZ */
-    if(lsame_(compz, "N", 1, 1))
+    if (lsame_(compz, "N", 1, 1))
     {
         ilz = FALSE_;
         icompz = 1;
     }
-    else if(lsame_(compz, "V", 1, 1))
+    else if (lsame_(compz, "V", 1, 1))
     {
         ilz = TRUE_;
         icompz = 2;
     }
-    else if(lsame_(compz, "I", 1, 1))
+    else if (lsame_(compz, "I", 1, 1))
     {
         ilz = TRUE_;
         icompz = 3;

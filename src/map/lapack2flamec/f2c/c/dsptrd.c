@@ -166,7 +166,7 @@ void dsptrd_(char *uplo, integer *n, doublereal *ap, doublereal *d__, doublereal
     extern /* Subroutine */
     void dspr2_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *);
     doublereal alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dspmv_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     logical upper;
@@ -199,7 +199,7 @@ void dsptrd_(char *uplo, integer *n, doublereal *ap, doublereal *d__, doublereal
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

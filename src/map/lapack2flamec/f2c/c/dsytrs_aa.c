@@ -128,7 +128,7 @@ void dsytrs_aa_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *l
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
     integer k, kp;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dgtsv_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
@@ -166,9 +166,9 @@ void dsytrs_aa_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *l
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

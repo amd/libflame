@@ -198,7 +198,7 @@ void dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
     doublereal eps;
     aocl_int64_t kase;
     doublereal safe1, safe2;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer isave[3];
@@ -258,7 +258,7 @@ void dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
     /* Function Body */
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
-    if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }

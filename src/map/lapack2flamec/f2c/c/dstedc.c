@@ -200,7 +200,7 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     doublereal eps, tiny;
     extern /* Subroutine */
     void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer lwmin;
@@ -257,15 +257,15 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     lwmin = 0;
     liwmin = 0;
     lquery = *lwork == -1 || *liwork == -1;
-    if (lsame_(compz, "N"))
+    if (lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if (lsame_(compz, "V"))
+    else if (lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if (lsame_(compz, "I"))
+    else if (lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }

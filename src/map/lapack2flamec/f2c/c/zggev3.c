@@ -237,7 +237,7 @@ void zggev3_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *ld
     doublereal temp;
     logical ilvl, ilvr;
     integer iwrk;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer ileft, icols, irwrk, irows;
     extern /* Subroutine */
     void zgghd3_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), dlabad_( doublereal *, doublereal *);
@@ -310,12 +310,12 @@ void zggev3_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *ld
     --work;
     --rwork;
     /* Function Body */
-    if (lsame_(jobvl, "N"))
+    if (lsame_(jobvl, "N", 1, 1))
     {
         ijobvl = 1;
         ilvl = FALSE_;
     }
-    else if (lsame_(jobvl, "V"))
+    else if (lsame_(jobvl, "V", 1, 1))
     {
         ijobvl = 2;
         ilvl = TRUE_;
@@ -325,12 +325,12 @@ void zggev3_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *ld
         ijobvl = -1;
         ilvl = FALSE_;
     }
-    if (lsame_(jobvr, "N"))
+    if (lsame_(jobvr, "N", 1, 1))
     {
         ijobvr = 1;
         ilvr = FALSE_;
     }
-    else if (lsame_(jobvr, "V"))
+    else if (lsame_(jobvr, "V", 1, 1))
     {
         ijobvr = 2;
         ilvr = TRUE_;

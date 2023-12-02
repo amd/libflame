@@ -307,7 +307,7 @@ void cunbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, compl
     real z1, z2, z3, z4;
     extern /* Subroutine */
     void cscal_(integer *, complex *, complex *, integer *), clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     extern real scnrm2_(integer *, complex *, integer *);
@@ -359,8 +359,8 @@ void cunbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, compl
     --work;
     /* Function Body */
     *info = 0;
-    colmajor = ! lsame_(trans, "T");
-    if (! lsame_(signs, "O"))
+    colmajor = ! lsame_(trans, "T", 1, 1);
+    if (! lsame_(signs, "O", 1, 1))
     {
         z1 = 1.f;
         z2 = 1.f;

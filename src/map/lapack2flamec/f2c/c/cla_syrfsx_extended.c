@@ -520,7 +520,7 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -560,8 +560,8 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     /* Force HUGEVAL to Inf */
     hugeval *= hugeval;
     /* Using HUGEVAL may lead to spurious underflows. */
-    incr_thresh__ = (real)(*n) * eps;
-    if(lsame_(uplo, "L", 1, 1))
+    incr_thresh__ = (real) (*n) * eps;
+    if (lsame_(uplo, "L", 1, 1))
     {
         uplo2 = ilauplo_("L");
     }

@@ -198,7 +198,7 @@ void chbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, compl
     integer kbt, nrt, inca;
     extern /* Subroutine */
     void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *), cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
     logical upper, wantx;
@@ -247,11 +247,11 @@ void chbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, compl
     kb1 = *kb + 1;
     *info = 0;
     j2 = 0;
-    if (! wantx && ! lsame_(vect, "N"))
+    if (! wantx && ! lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }
-    else if(!upper && !lsame_(uplo, "L", 1, 1))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }

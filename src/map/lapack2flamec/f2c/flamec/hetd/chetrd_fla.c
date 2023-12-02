@@ -204,9 +204,9 @@ void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     scomplex q__1;
     /* Local variables */
-    aocl_int64_t i__, j, nb, kk, nx, iws;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t nbmin, iinfo;
+    integer i__, j, nb, kk, nx, iws;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
     void chetd2_fla(char *, integer *, complex *, integer *, real *, real *, complex *, integer *), cher2k_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, real *, complex *, integer *), clatrd_(char *, integer *, integer *, complex *, integer *, real *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -246,7 +246,7 @@ void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

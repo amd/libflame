@@ -211,9 +211,9 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     scomplex q__1, q__2, q__3;
     /* Local variables */
-    aocl_int64_t i__, j, info;
-    scomplex temp;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j, info;
+    complex temp;
+    extern logical lsame_(char *, char *, integer, integer);
     real ctemp, stemp;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -246,15 +246,15 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
     a -= a_offset;
     /* Function Body */
     info = 0;
-    if(!(lsame_(side, "L", 1, 1) || lsame_(side, "R", 1, 1)))
+    if (! (lsame_(side, "L", 1, 1) || lsame_(side, "R", 1, 1)))
     {
         info = 1;
     }
-    else if(!(lsame_(pivot, "V", 1, 1) || lsame_(pivot, "T", 1, 1) || lsame_(pivot, "B", 1, 1)))
+    else if (! (lsame_(pivot, "V", 1, 1) || lsame_(pivot, "T", 1, 1) || lsame_(pivot, "B", 1, 1)))
     {
         info = 2;
     }
-    else if(!(lsame_(direct, "F", 1, 1) || lsame_(direct, "B", 1, 1)))
+    else if (! (lsame_(direct, "F", 1, 1) || lsame_(direct, "B", 1, 1)))
     {
         info = 3;
     }
@@ -282,12 +282,12 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if(lsame_(side, "L", 1, 1))
+    if (lsame_(side, "L", 1, 1))
     {
         /* Form P * A */
-        if(lsame_(pivot, "V", 1, 1))
+        if (lsame_(pivot, "V", 1, 1))
         {
-            if(lsame_(direct, "F", 1, 1))
+            if (lsame_(direct, "F", 1, 1))
             {
                 i__1 = *m - 1;
                 for(j = 1; j <= i__1; ++j)
@@ -328,7 +328,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                     /* L20: */
                 }
             }
-            else if(lsame_(direct, "B", 1, 1))
+            else if (lsame_(direct, "B", 1, 1))
             {
                 for(j = *m - 1; j >= 1; --j)
                 {
@@ -369,9 +369,9 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                 }
             }
         }
-        else if(lsame_(pivot, "T", 1, 1))
+        else if (lsame_(pivot, "T", 1, 1))
         {
-            if(lsame_(direct, "F", 1, 1))
+            if (lsame_(direct, "F", 1, 1))
             {
                 i__1 = *m;
                 for(j = 2; j <= i__1; ++j)
@@ -412,7 +412,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                     /* L60: */
                 }
             }
-            else if(lsame_(direct, "B", 1, 1))
+            else if (lsame_(direct, "B", 1, 1))
             {
                 for(j = *m; j >= 2; --j)
                 {
@@ -453,9 +453,9 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                 }
             }
         }
-        else if(lsame_(pivot, "B", 1, 1))
+        else if (lsame_(pivot, "B", 1, 1))
         {
-            if(lsame_(direct, "F", 1, 1))
+            if (lsame_(direct, "F", 1, 1))
             {
                 i__1 = *m - 1;
                 for(j = 1; j <= i__1; ++j)
@@ -496,7 +496,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                     /* L100: */
                 }
             }
-            else if(lsame_(direct, "B", 1, 1))
+            else if (lsame_(direct, "B", 1, 1))
             {
                 for(j = *m - 1; j >= 1; --j)
                 {
@@ -538,12 +538,12 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
             }
         }
     }
-    else if(lsame_(side, "R", 1, 1))
+    else if (lsame_(side, "R", 1, 1))
     {
         /* Form A * P**T */
-        if(lsame_(pivot, "V", 1, 1))
+        if (lsame_(pivot, "V", 1, 1))
         {
-            if(lsame_(direct, "F", 1, 1))
+            if (lsame_(direct, "F", 1, 1))
             {
                 i__1 = *n - 1;
                 for(j = 1; j <= i__1; ++j)
@@ -584,7 +584,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                     /* L140: */
                 }
             }
-            else if(lsame_(direct, "B", 1, 1))
+            else if (lsame_(direct, "B", 1, 1))
             {
                 for(j = *n - 1; j >= 1; --j)
                 {
@@ -625,9 +625,9 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                 }
             }
         }
-        else if(lsame_(pivot, "T", 1, 1))
+        else if (lsame_(pivot, "T", 1, 1))
         {
-            if(lsame_(direct, "F", 1, 1))
+            if (lsame_(direct, "F", 1, 1))
             {
                 i__1 = *n;
                 for(j = 2; j <= i__1; ++j)
@@ -668,7 +668,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                     /* L180: */
                 }
             }
-            else if(lsame_(direct, "B", 1, 1))
+            else if (lsame_(direct, "B", 1, 1))
             {
                 for(j = *n; j >= 2; --j)
                 {
@@ -709,9 +709,9 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                 }
             }
         }
-        else if(lsame_(pivot, "B", 1, 1))
+        else if (lsame_(pivot, "B", 1, 1))
         {
-            if(lsame_(direct, "F", 1, 1))
+            if (lsame_(direct, "F", 1, 1))
             {
                 i__1 = *n - 1;
                 for(j = 1; j <= i__1; ++j)
@@ -752,7 +752,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                     /* L220: */
                 }
             }
-            else if(lsame_(direct, "B", 1, 1))
+            else if (lsame_(direct, "B", 1, 1))
             {
                 for(j = *n - 1; j >= 1; --j)
                 {

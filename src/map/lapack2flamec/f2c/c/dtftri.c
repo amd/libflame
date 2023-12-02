@@ -215,7 +215,7 @@ void dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, in
     /* Local variables */
     aocl_int64_t k, n1, n2;
     logical normaltransr;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical lower;
@@ -248,15 +248,15 @@ void dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, in
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if(!normaltransr && !lsame_(transr, "T", 1, 1))
+    if (! normaltransr && ! lsame_(transr, "T", 1, 1))
     {
         *info = -1;
     }
-    else if(!lower && !lsame_(uplo, "U", 1, 1))
+    else if (! lower && ! lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
-    else if(!lsame_(diag, "N", 1, 1) && !lsame_(diag, "U", 1, 1))
+    else if (! lsame_(diag, "N", 1, 1) && ! lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }

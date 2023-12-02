@@ -190,7 +190,7 @@ void cgetsls_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, i
     integer brow, tszm, tszo, info2, iascl, ibscl;
     extern /* Subroutine */
     void cgelq_(integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void cgeqr_(integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
     integer maxmn;
@@ -240,9 +240,9 @@ void cgetsls_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, i
     /* Function Body */
     *info = 0;
     maxmn = fla_max(*m,*n);
-    tran = lsame_(trans, "C");
+    tran = lsame_(trans, "C", 1, 1);
     lquery = *lwork == -1 || *lwork == -2;
-    if (! (lsame_(trans, "N") || lsame_(trans, "C")))
+    if (! (lsame_(trans, "N", 1, 1) || lsame_(trans, "C", 1, 1)))
     {
         *info = -1;
     }

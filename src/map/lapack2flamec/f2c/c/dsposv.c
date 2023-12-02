@@ -204,7 +204,7 @@ void dsposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda,
     integer ptsa;
     doublereal rnrm, xnrm;
     integer ptsx;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iiter;
     extern /* Subroutine */
     void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsymm_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlag2s_(integer *, integer *, doublereal *, integer *, real *, integer *, integer *), slag2d_(integer *, integer *, real *, integer *, doublereal *, integer *, integer *), dlat2s_(char *, integer *, doublereal *, integer *, real *, integer *, integer *);
@@ -251,7 +251,7 @@ void dsposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda,
     *info = 0;
     *iter = 0;
     /* Test the input parameters. */
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

@@ -239,7 +239,7 @@ void dsygvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *a,
     doublereal d__1, d__2;
     /* Local variables */
     integer lopt;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     integer lwmin;
@@ -313,11 +313,11 @@ void dsygvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *a,
     {
         *info = -1;
     }
-    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if(!(upper || lsame_(uplo, "L", 1, 1)))
+    else if (! (upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }

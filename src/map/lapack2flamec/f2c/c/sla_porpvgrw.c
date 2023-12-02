@@ -98,7 +98,7 @@ real sla_porpvgrw_(char *uplo, integer *ncols, real *a, integer *lda, real * af,
     /* Local variables */
     integer i__, j;
     real amax, umax;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     real rpvgrw;
     /* -- LAPACK computational routine (version 3.7.0) -- */
@@ -126,7 +126,7 @@ real sla_porpvgrw_(char *uplo, integer *ncols, real *a, integer *lda, real * af,
     af -= af_offset;
     --work;
     /* Function Body */
-    upper = lsame_("Upper", uplo);
+    upper = lsame_("Upper", uplo, 1, 1);
     /* SPOTRF will have factored only the NCOLSxNCOLS leading minor, so */
     /* we restrict the growth search to that minor and use only the first */
     /* 2*NCOLS workspace entries. */
@@ -179,7 +179,7 @@ real sla_porpvgrw_(char *uplo, integer *ncols, real *a, integer *lda, real * af,
     }
     /* Now find the max magnitude entry of each column of the factor in */
     /* AF. No pivoting, so no permutations. */
-    if (lsame_("Upper", uplo))
+    if (lsame_("Upper", uplo, 1, 1))
     {
         i__1 = *ncols;
         for (j = 1;
@@ -223,7 +223,7 @@ real sla_porpvgrw_(char *uplo, integer *ncols, real *a, integer *lda, real * af,
     /* massive pivots made the factor underflow to zero. Neither counts */
     /* as growth in itself, so simply ignore terms with zero */
     /* denominators. */
-    if (lsame_("Upper", uplo))
+    if (lsame_("Upper", uplo, 1, 1))
     {
         i__1 = *ncols;
         for (i__ = 1;

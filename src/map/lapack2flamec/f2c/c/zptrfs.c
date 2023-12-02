@@ -199,8 +199,8 @@ void zptrfs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecompl
     dcomplex bi, cx, dx, ex;
     aocl_int64_t ix, nz;
     doublereal eps, safe1, safe2;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t count;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer count;
     logical upper;
     extern /* Subroutine */
     void zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
@@ -254,7 +254,7 @@ void zptrfs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecompl
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

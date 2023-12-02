@@ -356,7 +356,7 @@ void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, dou
     /* Local variables */
     aocl_int64_t i__, j, j1, j2;
     doublereal amax, smin, smax;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal scond, anorm;
     logical equil, rcequ, upper;
     extern /* Subroutine */
@@ -415,9 +415,9 @@ void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, dou
     --rwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    equil = lsame_(fact, "E");
-    upper = lsame_(uplo, "U");
+    nofact = lsame_(fact, "N", 1, 1);
+    equil = lsame_(fact, "E", 1, 1);
+    upper = lsame_(uplo, "U", 1, 1);
     smlnum = 0.;
     bignum = 0.;
     if (nofact || equil)
@@ -432,11 +432,11 @@ void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, dou
         bignum = 1. / smlnum;
     }
     /* Test the input parameters. */
-    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
+    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if(!upper && !lsame_(uplo, "L", 1, 1))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -460,7 +460,7 @@ void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, dou
     {
         *info = -9;
     }
-    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
+    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -10;
     }
@@ -522,7 +522,7 @@ void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, dou
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            aocl_lapack_zlaqhb(uplo, n, kd, &ab[ab_offset], ldab, &s[1], &scond, &amax, equed);
+            zlaqhb_(uplo, n, kd, &ab[ab_offset], ldab, &s[1], &scond, &amax, equed);
             rcequ = lsame_(equed, "Y", 1, 1);
         }
     }

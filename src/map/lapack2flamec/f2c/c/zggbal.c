@@ -196,7 +196,7 @@ void zggbal_(char *job, integer *n, doublecomplex *a, integer *lda, doublecomple
     doublereal coef2, coef5, gamma, alpha;
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal sfmin, sfmax;
     integer iflow;
     extern /* Subroutine */
@@ -248,7 +248,7 @@ void zggbal_(char *job, integer *n, doublecomplex *a, integer *lda, doublecomple
     --work;
     /* Function Body */
     *info = 0;
-    if (! lsame_(job, "N") && ! lsame_(job, "P") && ! lsame_(job, "S") && ! lsame_(job, "B"))
+    if (! lsame_(job, "N", 1, 1) && ! lsame_(job, "P", 1, 1) && ! lsame_(job, "S", 1, 1) && ! lsame_(job, "B", 1, 1))
     {
         *info = -1;
     }
@@ -288,7 +288,7 @@ void zggbal_(char *job, integer *n, doublecomplex *a, integer *lda, doublecomple
     AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(job, "N"))
+    if (lsame_(job, "N", 1, 1))
     {
         *ilo = 1;
         *ihi = *n;
@@ -306,7 +306,7 @@ void zggbal_(char *job, integer *n, doublecomplex *a, integer *lda, doublecomple
     }
     k = 1;
     l = *n;
-    if (lsame_(job, "S"))
+    if (lsame_(job, "S", 1, 1))
     {
         goto L190;
     }
@@ -446,7 +446,7 @@ L180:
 L190:
     *ilo = k;
     *ihi = l;
-    if (lsame_(job, "P"))
+    if (lsame_(job, "P", 1, 1))
     {
         i__1 = *ihi;
         for (i__ = *ilo;

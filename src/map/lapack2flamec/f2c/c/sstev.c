@@ -133,7 +133,7 @@ void sstev_(char *jobz, integer *n, real *d__, real *e, real * z__, integer *ldz
     real eps;
     aocl_int64_t imax;
     real rmin, rmax, tnrm, sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
     logical wantz;
@@ -180,7 +180,7 @@ void sstev_(char *jobz, integer *n, real *d__, real *e, real * z__, integer *ldz
     /* Function Body */
     wantz = lsame_(jobz, "V", 1, 1);
     *info = 0;
-    if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }

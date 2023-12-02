@@ -275,7 +275,7 @@ void aocl_lapack_dorcsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
         x21_dim1, x21_offset, i__1, i__2, i__3;
     /* Local variables */
     integer lworkmin, lworkopt, i__, j, r__, childinfo, lorglqmin, lorgqrmin, lorglqopt, lorgqropt, ib11d, ib11e, ib12d, ib12e, ib21d, ib21e, ib22d, ib22e, iphi;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer itaup1, itaup2, itauq1;

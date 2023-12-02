@@ -168,7 +168,7 @@ void dsytrs_3_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *ld
     doublereal akm1, bkm1, akm1k;
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal denom;
     extern /* Subroutine */
     void dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
@@ -206,8 +206,8 @@ void dsytrs_3_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *ld
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

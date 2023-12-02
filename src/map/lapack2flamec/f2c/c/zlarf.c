@@ -140,7 +140,7 @@ void zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv,
     /* Local variables */
     integer i__;
     logical applyleft;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer lastc;
     extern /* Subroutine */
     void zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
@@ -171,7 +171,7 @@ void zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv,
     c__ -= c_offset;
     --work;
     /* Function Body */
-    applyleft = lsame_(side, "L");
+    applyleft = lsame_(side, "L", 1, 1);
     lastv = 0;
     lastc = 0;
     if (tau->r != 0. || tau->i != 0.)

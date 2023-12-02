@@ -168,7 +168,7 @@ void zgebal_(char *job, integer *n, doublecomplex *a, integer *lda, integer *ilo
     integer i__, j, k, l, m;
     doublereal r__, s, ca, ra;
     integer ica, ira, iexc;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal sfmin1, sfmin2, sfmax1, sfmax2;
@@ -204,7 +204,7 @@ void zgebal_(char *job, integer *n, doublecomplex *a, integer *lda, integer *ilo
     --scale;
     /* Function Body */
     *info = 0;
-    if (! lsame_(job, "N") && ! lsame_(job, "P") && ! lsame_(job, "S") && ! lsame_(job, "B"))
+    if (! lsame_(job, "N", 1, 1) && ! lsame_(job, "P", 1, 1) && ! lsame_(job, "S", 1, 1) && ! lsame_(job, "B", 1, 1))
     {
         *info = -1;
     }
@@ -229,7 +229,7 @@ void zgebal_(char *job, integer *n, doublecomplex *a, integer *lda, integer *ilo
     {
         goto L210;
     }
-    if (lsame_(job, "N"))
+    if (lsame_(job, "N", 1, 1))
     {
         i__1 = *n;
         for (i__ = 1;
@@ -241,7 +241,7 @@ void zgebal_(char *job, integer *n, doublecomplex *a, integer *lda, integer *ilo
         }
         goto L210;
     }
-    if (lsame_(job, "S"))
+    if (lsame_(job, "S", 1, 1))
     {
         goto L120;
     }
@@ -342,7 +342,7 @@ L120:
         scale[i__] = 1.;
         /* L130: */
     }
-    if (lsame_(job, "P"))
+    if (lsame_(job, "P", 1, 1))
     {
         goto L210;
     }

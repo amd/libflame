@@ -232,7 +232,7 @@ void sorcsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p,
     integer u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, x11_dim1, x11_offset, x21_dim1, x21_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9;
     /* Local variables */
     integer lworkmin, lworkopt, i__, j, r__, childinfo, lorglqmin, lorgqrmin, lorglqopt, lorgqropt, ib11d, ib11e, ib12d, ib12e, ib21d, ib21e, ib22d, ib22e, iphi;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void scopy_(integer *, real *, integer *, real *, integer *);
     integer itaup1, itaup2, itauq1;
@@ -297,9 +297,9 @@ void sorcsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p,
     --iwork;
     /* Function Body */
     *info = 0;
-    wantu1 = lsame_(jobu1, "Y");
-    wantu2 = lsame_(jobu2, "Y");
-    wantv1t = lsame_(jobv1t, "Y");
+    wantu1 = lsame_(jobu1, "Y", 1, 1);
+    wantu2 = lsame_(jobu2, "Y", 1, 1);
+    wantv1t = lsame_(jobv1t, "Y", 1, 1);
     lquery = *lwork == -1;
     iorgqr = 0;
     iorglq = 0;

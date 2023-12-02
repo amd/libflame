@@ -255,7 +255,7 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
     integer idbeg;
     real sqrt2;
     integer idend, isbeg;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer idtgk, ietgk;
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
@@ -320,17 +320,17 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
     --work;
     --iwork;
     /* Function Body */
-    allsv = lsame_(range, "A");
-    valsv = lsame_(range, "V");
-    indsv = lsame_(range, "I");
-    wantz = lsame_(jobz, "V");
-    lower = lsame_(uplo, "L");
+    allsv = lsame_(range, "A", 1, 1);
+    valsv = lsame_(range, "V", 1, 1);
+    indsv = lsame_(range, "I", 1, 1);
+    wantz = lsame_(jobz, "V", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
     *info = 0;
-    if (! lsame_(uplo, "U") && ! lower)
+    if (! lsame_(uplo, "U", 1, 1) && ! lower)
     {
         *info = -1;
     }
-    else if (! (wantz || lsame_(jobz, "N")))
+    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }

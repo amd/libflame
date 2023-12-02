@@ -111,7 +111,7 @@ void zlat2c_(char *uplo, integer *n, doublecomplex *a, integer *lda, complex *sa
     /* Local variables */
     integer i__, j;
     doublereal rmax;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -139,7 +139,7 @@ void zlat2c_(char *uplo, integer *n, doublecomplex *a, integer *lda, complex *sa
     sa -= sa_offset;
     /* Function Body */
     rmax = slamch_("O");
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     if (upper)
     {
         i__1 = *n;

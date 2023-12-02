@@ -127,7 +127,7 @@ void dlaqsy_(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *s
     /* Local variables */
     integer i__, j;
     doublereal cj, large;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal small_val;
     extern doublereal dlamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -170,7 +170,7 @@ void dlaqsy_(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *s
     else
     {
         /* Replace A by diag(S) * A * diag(S). */
-        if (lsame_(uplo, "U"))
+        if (lsame_(uplo, "U", 1, 1))
         {
             /* Upper triangle of A is stored. */
             i__1 = *n;

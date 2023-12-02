@@ -439,7 +439,7 @@ void cgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, complex *a, 
     char norm[1];
     logical ignore_cwise__;
     extern real cla_gercond_c_(char *, integer *, complex *, integer *, complex *, integer *, integer *, real *, logical *, integer *, complex *, real *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     extern real cla_gercond_x_(char *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, real *), clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
@@ -560,15 +560,15 @@ void cgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, complex *a, 
     {
         n_norms__ = 2;
     }
-    notran = lsame_(trans, "N");
-    rowequ = lsame_(equed, "R") || lsame_(equed, "B");
-    colequ = lsame_(equed, "C") || lsame_(equed, "B");
+    notran = lsame_(trans, "N", 1, 1);
+    rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
+    colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
     /* Test input parameters. */
     if (trans_type__ == -1)
     {
         *info = -1;
     }
-    else if (! rowequ && ! colequ && ! lsame_(equed, "N"))
+    else if (! rowequ && ! colequ && ! lsame_(equed, "N", 1, 1))
     {
         *info = -2;
     }

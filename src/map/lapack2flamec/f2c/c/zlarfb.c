@@ -204,7 +204,7 @@ void zlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
     doublecomplex z__1, z__2;
     /* Local variables */
     integer i__, j;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlacgv_(integer *, doublecomplex *, integer *);
     char transt[1];
@@ -248,7 +248,7 @@ void zlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(trans, "N"))
+    if (lsame_(trans, "N", 1, 1))
     {
         *(unsigned char *)transt = 'C';
     }
@@ -256,14 +256,14 @@ void zlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
     {
         *(unsigned char *)transt = 'N';
     }
-    if (lsame_(storev, "C"))
+    if (lsame_(storev, "C", 1, 1))
     {
-        if (lsame_(direct, "F"))
+        if (lsame_(direct, "F", 1, 1))
         {
             /* Let V = ( V1 ) (first K rows) */
             /* ( V2 ) */
             /* where V1 is unit lower triangular. */
-            if (lsame_(side, "L"))
+            if (lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**H * C where C = ( C1 ) */
                 /* ( C2 ) */
@@ -323,7 +323,7 @@ void zlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L30: */
                 }
             }
-            else if (lsame_(side, "R"))
+            else if (lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**H where C = ( C1 C2 ) */
                 /* W := C * V = (C1*V1 + C2*V2) (stored in WORK) */
@@ -386,7 +386,7 @@ void zlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
             /* Let V = ( V1 ) */
             /* ( V2 ) (last K rows) */
             /* where V2 is unit upper triangular. */
-            if (lsame_(side, "L"))
+            if (lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**H * C where C = ( C1 ) */
                 /* ( C2 ) */
@@ -446,7 +446,7 @@ void zlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L90: */
                 }
             }
-            else if (lsame_(side, "R"))
+            else if (lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**H where C = ( C1 C2 ) */
                 /* W := C * V = (C1*V1 + C2*V2) (stored in WORK) */
@@ -505,13 +505,13 @@ void zlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
             }
         }
     }
-    else if (lsame_(storev, "R"))
+    else if (lsame_(storev, "R", 1, 1))
     {
-        if (lsame_(direct, "F"))
+        if (lsame_(direct, "F", 1, 1))
         {
             /* Let V = ( V1 V2 ) (V1: first K columns) */
             /* where V1 is unit upper triangular. */
-            if (lsame_(side, "L"))
+            if (lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**H * C where C = ( C1 ) */
                 /* ( C2 ) */
@@ -571,7 +571,7 @@ void zlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L150: */
                 }
             }
-            else if (lsame_(side, "R"))
+            else if (lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**H where C = ( C1 C2 ) */
                 /* W := C * V**H = (C1*V1**H + C2*V2**H) (stored in WORK) */
@@ -633,7 +633,7 @@ void zlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         {
             /* Let V = ( V1 V2 ) (V2: last K columns) */
             /* where V2 is unit lower triangular. */
-            if (lsame_(side, "L"))
+            if (lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**H * C where C = ( C1 ) */
                 /* ( C2 ) */
@@ -693,7 +693,7 @@ void zlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L210: */
                 }
             }
-            else if (lsame_(side, "R"))
+            else if (lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**H where C = ( C1 C2 ) */
                 /* W := C * V**H = (C1*V1**H + C2*V2**H) (stored in WORK) */

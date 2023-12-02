@@ -131,7 +131,7 @@ void dpbcon_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
     /* Local variables */
     integer ix, kase;
     doublereal scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
     void drscl_(integer *, doublereal *, doublereal *, integer *);
@@ -180,8 +180,8 @@ void dpbcon_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
     --iwork;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

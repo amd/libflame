@@ -102,7 +102,7 @@ void zlaset_(char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecom
     integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
     integer i__, j;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -124,7 +124,7 @@ void zlaset_(char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecom
     a_offset = 1 + a_dim1;
     a -= a_offset;
     /* Function Body */
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         /* Set the diagonal to BETA and the strictly upper triangular */
         /* part of the array to ALPHA. */
@@ -158,7 +158,7 @@ void zlaset_(char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecom
             /* L30: */
         }
     }
-    else if (lsame_(uplo, "L"))
+    else if (lsame_(uplo, "L", 1, 1))
     {
         /* Set the diagonal to BETA and the strictly lower triangular */
         /* part of the array to ALPHA. */

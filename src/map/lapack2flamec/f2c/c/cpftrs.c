@@ -231,7 +231,7 @@ void cpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, complex *a, c
     integer b_dim1, b_offset, i__1;
     /* Local variables */
     logical normaltransr;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void ctfsm_(char *, char *, char *, char *, char *, integer *, integer *, complex *, complex *, complex *, integer *);
     logical lower;
@@ -264,13 +264,13 @@ void cpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, complex *a, c
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    normaltransr = lsame_(transr, "N");
-    lower = lsame_(uplo, "L");
-    if (! normaltransr && ! lsame_(transr, "C"))
+    normaltransr = lsame_(transr, "N", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
+    if (! normaltransr && ! lsame_(transr, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U"))
+    else if (! lower && ! lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }

@@ -269,7 +269,7 @@ void csytrf_rk_(char *uplo, integer *n, complex *a, integer * lda, complex *e, i
     extern /* Subroutine */
     void csytf2_rk_(char *, integer *, complex *, integer *, complex *, integer *, integer *), clasyf_rk_( char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
     integer kb, nb, ip, iws;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nbmin, iinfo;
     extern /* Subroutine */
     void cswap_(integer *, complex *, integer *, complex *, integer *);
@@ -307,9 +307,9 @@ void csytrf_rk_(char *uplo, integer *n, complex *a, integer * lda, complex *e, i
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

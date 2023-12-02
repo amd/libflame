@@ -288,7 +288,7 @@ void dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t
     doublereal rnrm;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     doublereal prod1, prod2, scale, delta;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     logical wants;
     doublereal dummy[1];
@@ -348,16 +348,16 @@ void dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t
     work -= work_offset;
     --iwork;
     /* Function Body */
-    wantbh = lsame_(job, "B");
-    wants = lsame_(job, "E") || wantbh;
-    wantsp = lsame_(job, "V") || wantbh;
-    somcon = lsame_(howmny, "S");
+    wantbh = lsame_(job, "B", 1, 1);
+    wants = lsame_(job, "E", 1, 1) || wantbh;
+    wantsp = lsame_(job, "V", 1, 1) || wantbh;
+    somcon = lsame_(howmny, "S", 1, 1);
     *info = 0;
     if (! wants && ! wantsp)
     {
         *info = -1;
     }
-    else if (! lsame_(howmny, "A") && ! somcon)
+    else if (! lsame_(howmny, "A", 1, 1) && ! somcon)
     {
         *info = -2;
     }

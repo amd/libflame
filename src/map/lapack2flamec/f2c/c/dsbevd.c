@@ -204,7 +204,7 @@ void dsbevd_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, in
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo, lwmin;
     logical lower, wantz;
     integer indwk2, llwrk2;
@@ -256,8 +256,8 @@ void dsbevd_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, in
     --work;
     --iwork;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
-    lower = lsame_(uplo, "L");
+    wantz = lsame_(jobz, "V", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
     lquery = *lwork == -1 || *liwork == -1;
     *info = 0;
     if (*n <= 1)
@@ -280,11 +280,11 @@ void dsbevd_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, in
             lwmin = *n << 1;
         }
     }
-    if (! (wantz || lsame_(jobz, "N")))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lower || lsame_(uplo, "U")))
+    else if (! (lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }

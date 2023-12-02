@@ -48,7 +48,7 @@ integer ilauplo_(char *uplo)
     /* System generated locals */
     integer ret_val;
     /* Local variables */
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -61,11 +61,11 @@ integer ilauplo_(char *uplo)
     /* .. External Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         ret_val = 121;
     }
-    else if (lsame_(uplo, "L"))
+    else if (lsame_(uplo, "L", 1, 1))
     {
         ret_val = 122;
     }

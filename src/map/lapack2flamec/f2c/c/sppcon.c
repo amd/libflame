@@ -122,7 +122,7 @@ void sppcon_(char *uplo, integer *n, real *ap, real *anorm, real *rcond, real *w
     /* Local variables */
     integer ix, kase;
     real scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
     void srscl_(integer *, real *, real *, integer *);
@@ -169,8 +169,8 @@ void sppcon_(char *uplo, integer *n, real *ap, real *anorm, real *rcond, real *w
     --ap;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

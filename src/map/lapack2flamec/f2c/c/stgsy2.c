@@ -284,7 +284,7 @@ void stgsy2_(char *trans, integer *ijob, integer *m, integer * n, real *a, integ
     void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
     integer ierr, zdim, ipiv[8], jpiv[8];
     real alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), sgesc2_(integer *, real *, integer *, real *, integer *, integer *, real *), sgetc2_(integer *, real *, integer *, integer *, integer *, integer *);
     real scaloc;
@@ -339,8 +339,8 @@ void stgsy2_(char *trans, integer *ijob, integer *m, integer * n, real *a, integ
     /* Function Body */
     *info = 0;
     ierr = 0;
-    notran = lsame_(trans, "N");
-    if (! notran && ! lsame_(trans, "T"))
+    notran = lsame_(trans, "N", 1, 1);
+    if (! notran && ! lsame_(trans, "T", 1, 1))
     {
         *info = -1;
     }

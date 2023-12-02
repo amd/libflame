@@ -110,7 +110,7 @@ void spptrs_(char *uplo, integer *n, integer *nrhs, real *ap, real *b, integer *
     integer b_dim1, b_offset, i__1;
     /* Local variables */
     integer i__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     void stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -140,8 +140,8 @@ void spptrs_(char *uplo, integer *n, integer *nrhs, real *ap, real *b, integer *
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

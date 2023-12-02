@@ -260,7 +260,7 @@ void ztgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex 
     , rhs[2];
     integer ierr, ipiv[2], jpiv[2];
     doublecomplex alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zgesc2_( integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublereal *), zgetc2_(integer *, doublecomplex *, integer *, integer *, integer *, integer *);
     doublereal scaloc;
@@ -312,8 +312,8 @@ void ztgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex 
     /* Function Body */
     *info = 0;
     ierr = 0;
-    notran = lsame_(trans, "N");
-    if (! notran && ! lsame_(trans, "C"))
+    notran = lsame_(trans, "N", 1, 1);
+    if (! notran && ! lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }

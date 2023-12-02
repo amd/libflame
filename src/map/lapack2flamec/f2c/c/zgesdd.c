@@ -261,7 +261,7 @@ void zgesdd_(char *jobz, integer *m, integer *n, doublecomplex *a, integer *lda,
     integer iscl;
     doublereal anrm;
     integer idum[1], ierr, itau, irvt, lwork_zunmbr_prc_mm__, lwork_zunmbr_prc_mn__, lwork_zunmbr_prc_nn__, lwork_zunmbr_qln_mm__, lwork_zunmbr_qln_mn__, lwork_zunmbr_qln_nn__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer chunk, minmn;
     extern /* Subroutine */
     void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
@@ -341,11 +341,11 @@ void zgesdd_(char *jobz, integer *m, integer *n, doublecomplex *a, integer *lda,
     minmn = fla_min(*m,*n);
     mnthr1 = (integer) (minmn * 17. / 9.);
     mnthr2 = (integer) (minmn * 5. / 3.);
-    wntqa = lsame_(jobz, "A");
-    wntqs = lsame_(jobz, "S");
+    wntqa = lsame_(jobz, "A", 1, 1);
+    wntqs = lsame_(jobz, "S", 1, 1);
     wntqas = wntqa || wntqs;
-    wntqo = lsame_(jobz, "O");
-    wntqn = lsame_(jobz, "N");
+    wntqo = lsame_(jobz, "O", 1, 1);
+    wntqn = lsame_(jobz, "N", 1, 1);
     lquery = *lwork == -1;
     minwrk = 1;
     maxwrk = 1;

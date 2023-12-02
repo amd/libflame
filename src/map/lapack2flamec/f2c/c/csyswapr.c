@@ -97,7 +97,7 @@ void csyswapr_(char *uplo, integer *n, complex *a, integer * lda, integer *i1, i
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     complex tmp;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void cswap_(integer *, complex *, integer *, complex *, integer *);
     logical upper;
@@ -120,7 +120,7 @@ void csyswapr_(char *uplo, integer *n, complex *a, integer * lda, integer *i1, i
     a_offset = 1 + a_dim1;
     a -= a_offset;
     /* Function Body */
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     if (upper)
     {
         /* UPPER */

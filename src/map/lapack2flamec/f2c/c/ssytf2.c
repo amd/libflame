@@ -203,7 +203,7 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
     extern /* Subroutine */
     void ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
     real alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
     integer kstep;
@@ -245,9 +245,9 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
     --ipiv;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     imax = 0;
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

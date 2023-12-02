@@ -100,7 +100,7 @@ logical lsamen_(integer *n, char *ca, char *cb)
 
     /* Local variables */
     integer i__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
 
     ftnlen ca_len, cb_len;
 
@@ -139,7 +139,7 @@ logical lsamen_(integer *n, char *ca, char *cb)
 
         /*        Test if the characters are equal using LSAME. */
 
-        if (! lsame_(ca + (i__ - 1), cb + (i__ - 1)))
+        if (! lsame_(ca + (i__ - 1), cb + (i__ - 1), 1, 1))
         {
             goto L20;
         }

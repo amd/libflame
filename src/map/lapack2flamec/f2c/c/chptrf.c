@@ -185,7 +185,7 @@ void chptrf_(char *uplo, integer *n, complex *ap, integer * ipiv, integer *info)
     void chpr_(char *, integer *, real *, complex *, integer *, complex *);
     integer imax, jmax;
     real alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void cswap_(integer *, complex *, integer *, complex *, integer *);
     integer kstep;
@@ -228,8 +228,8 @@ void chptrf_(char *uplo, integer *n, complex *ap, integer * ipiv, integer *info)
     *info = 0;
     imax = 0;
     jmax = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

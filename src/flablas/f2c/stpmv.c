@@ -9,7 +9,7 @@ int stpmv_(char *uplo, char *trans, char *diag, integer *n, real *ap, real *x, i
     integer info;
     real temp;
     integer i__, j, k;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer kk, ix, jx, kx;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -91,15 +91,15 @@ int stpmv_(char *uplo, char *trans, char *diag, integer *n, real *ap, real *x, i
     --ap;
     /* Function Body */
     info = 0;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         info = 1;
     }
-    else if (! lsame_(trans, "N") && ! lsame_(trans, "T") && ! lsame_(trans, "C"))
+    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         info = 2;
     }
-    else if (! lsame_(diag, "U") && ! lsame_(diag, "N"))
+    else if (! lsame_(diag, "U", 1, 1) && ! lsame_(diag, "N", 1, 1))
     {
         info = 3;
     }
@@ -121,7 +121,7 @@ int stpmv_(char *uplo, char *trans, char *diag, integer *n, real *ap, real *x, i
     {
         return 0;
     }
-    nounit = lsame_(diag, "N");
+    nounit = lsame_(diag, "N", 1, 1);
     /* Set up the start point in X if the increment is not unity. This */
     /* will be ( N - 1 )*INCX too small for descending loops. */
     if (*incx <= 0)
@@ -134,10 +134,10 @@ int stpmv_(char *uplo, char *trans, char *diag, integer *n, real *ap, real *x, i
     }
     /* Start the operations. In this version the elements of AP are */
     /* accessed sequentially with one pass through AP. */
-    if (lsame_(trans, "N"))
+    if (lsame_(trans, "N", 1, 1))
     {
         /* Form x:= A*x. */
-        if (lsame_(uplo, "U"))
+        if (lsame_(uplo, "U", 1, 1))
         {
             kk = 1;
             if (*incx == 1)
@@ -268,7 +268,7 @@ int stpmv_(char *uplo, char *trans, char *diag, integer *n, real *ap, real *x, i
     else
     {
         /* Form x := A'*x. */
-        if (lsame_(uplo, "U"))
+        if (lsame_(uplo, "U", 1, 1))
         {
             kk = *n * (*n + 1) / 2;
             if (*incx == 1)

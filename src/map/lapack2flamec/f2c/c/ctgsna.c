@@ -345,7 +345,7 @@ void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, i
     real rnrm, scale;
     extern /* Complex */
     VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     integer lwmin;
@@ -406,17 +406,17 @@ void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, i
     --work;
     --iwork;
     /* Function Body */
-    wantbh = lsame_(job, "B");
-    wants = lsame_(job, "E") || wantbh;
-    wantdf = lsame_(job, "V") || wantbh;
-    somcon = lsame_(howmny, "S");
+    wantbh = lsame_(job, "B", 1, 1);
+    wants = lsame_(job, "E", 1, 1) || wantbh;
+    wantdf = lsame_(job, "V", 1, 1) || wantbh;
+    somcon = lsame_(howmny, "S", 1, 1);
     *info = 0;
     lquery = *lwork == -1;
     if (! wants && ! wantdf)
     {
         *info = -1;
     }
-    else if (! lsame_(howmny, "A") && ! somcon)
+    else if (! lsame_(howmny, "A", 1, 1) && ! somcon)
     {
         *info = -2;
     }
@@ -467,7 +467,7 @@ void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, i
         {
             lwmin = 1;
         }
-        else if (lsame_(job, "V") || lsame_(job, "B"))
+        else if (lsame_(job, "V", 1, 1) || lsame_(job, "B", 1, 1))
         {
             lwmin = (*n << 1) * *n;
         }

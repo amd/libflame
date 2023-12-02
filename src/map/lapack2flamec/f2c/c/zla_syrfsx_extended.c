@@ -426,7 +426,7 @@ void zla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     integer y_prec_state__, uplo2;
     extern /* Subroutine */
     int blas_zsymv_x_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *) ;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal dxrat, dzrat;
     logical upper;
     extern /* Subroutine */
@@ -495,8 +495,8 @@ void zla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     --y_tail__;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -537,7 +537,7 @@ void zla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     hugeval *= hugeval;
     /* Using HUGEVAL may lead to spurious underflows. */
     incr_thresh__ = (doublereal) (*n) * eps;
-    if (lsame_(uplo, "L"))
+    if (lsame_(uplo, "L", 1, 1))
     {
         uplo2 = ilauplo_("L");
     }

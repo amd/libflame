@@ -244,7 +244,7 @@ void zbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
     doublereal unfl, sinl, cosr, smin, smax, sinr;
     extern /* Subroutine */
     void dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal oldcs;
     integer oldll;
     doublereal shift, sigmn, oldsn;
@@ -295,8 +295,8 @@ void zbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
     --rwork;
     /* Function Body */
     *info = 0;
-    lower = lsame_(uplo, "L");
-    if (! lsame_(uplo, "U") && ! lower)
+    lower = lsame_(uplo, "L", 1, 1);
+    if (! lsame_(uplo, "U", 1, 1) && ! lower)
     {
         *info = -1;
     }

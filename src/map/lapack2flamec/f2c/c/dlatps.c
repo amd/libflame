@@ -240,7 +240,7 @@ void dlatps_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
     doublereal tmax, tjjs, xmax, grow, sumj;
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal tscal, uscal;
     extern doublereal dasum_(integer *, doublereal *, integer *);
     integer jlast;
@@ -284,24 +284,24 @@ void dlatps_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
     --ap;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    notran = lsame_(trans, "N");
-    nounit = lsame_(diag, "N");
+    upper = lsame_(uplo, "U", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
+    nounit = lsame_(diag, "N", 1, 1);
     tjjs = 0.;
     /* Test the input parameters. */
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T") && ! lsame_(trans, "C"))
+    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U"))
+    else if (! nounit && ! lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
-    else if (! lsame_(normin, "Y") && ! lsame_(normin, "N"))
+    else if (! lsame_(normin, "Y", 1, 1) && ! lsame_(normin, "N", 1, 1))
     {
         *info = -4;
     }
@@ -326,7 +326,7 @@ void dlatps_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
     smlnum = dlamch_("Safe minimum") / dlamch_("Precision");
     bignum = 1. / smlnum;
     *scale = 1.;
-    if (lsame_(normin, "N"))
+    if (lsame_(normin, "N", 1, 1))
     {
         /* Compute the 1-norm of each column, not including the diagonal. */
         if (upper)

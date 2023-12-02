@@ -157,7 +157,7 @@ void spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
     real vt[1] /* was [1][1] */
     ;
     integer nru;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slaset_( char *, integer *, integer *, real *, real *, real *, integer *), sbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
     integer icompz;
@@ -195,15 +195,15 @@ void spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
     --work;
     /* Function Body */
     *info = 0;
-    if (lsame_(compz, "N"))
+    if (lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if (lsame_(compz, "V"))
+    else if (lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if (lsame_(compz, "I"))
+    else if (lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }

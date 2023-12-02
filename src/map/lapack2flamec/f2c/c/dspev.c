@@ -140,7 +140,7 @@ void dspev_(char *jobz, char *uplo, integer *n, doublereal * ap, doublereal *w, 
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     logical wantz;
     extern doublereal dlamch_(char *);
@@ -186,13 +186,13 @@ void dspev_(char *jobz, char *uplo, integer *n, doublereal * ap, doublereal *w, 
     z__ -= z_offset;
     --work;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
+    wantz = lsame_(jobz, "V", 1, 1);
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N")))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lsame_(uplo, "U") || lsame_(uplo, "L")))
+    else if (! (lsame_(uplo, "U", 1, 1) || lsame_(uplo, "L", 1, 1)))
     {
         *info = -2;
     }

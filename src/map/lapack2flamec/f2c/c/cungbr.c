@@ -157,7 +157,7 @@ void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer
     integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
     integer i__, j, mn;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     logical wantq;
     extern /* Subroutine */
@@ -192,10 +192,10 @@ void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer
     --work;
     /* Function Body */
     *info = 0;
-    wantq = lsame_(vect, "Q");
+    wantq = lsame_(vect, "Q", 1, 1);
     mn = fla_min(*m,*n);
     lquery = *lwork == -1;
-    if (! wantq && ! lsame_(vect, "P"))
+    if (! wantq && ! lsame_(vect, "P", 1, 1))
     {
         *info = -1;
     }

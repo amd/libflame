@@ -274,7 +274,7 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
     logical row, left;
     extern /* Subroutine */
     void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical right;
     extern /* Subroutine */
     void ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
@@ -322,12 +322,12 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (lsame_(storev, "C"))
+    if (lsame_(storev, "C", 1, 1))
     {
         column = TRUE_;
         row = FALSE_;
     }
-    else if (lsame_(storev, "R"))
+    else if (lsame_(storev, "R", 1, 1))
     {
         column = FALSE_;
         row = TRUE_;
@@ -337,12 +337,12 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         column = FALSE_;
         row = FALSE_;
     }
-    if (lsame_(side, "L"))
+    if (lsame_(side, "L", 1, 1))
     {
         left = TRUE_;
         right = FALSE_;
     }
-    else if (lsame_(side, "R"))
+    else if (lsame_(side, "R", 1, 1))
     {
         left = FALSE_;
         right = TRUE_;
@@ -352,12 +352,12 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         left = FALSE_;
         right = FALSE_;
     }
-    if (lsame_(direct, "F"))
+    if (lsame_(direct, "F", 1, 1))
     {
         forward = TRUE_;
         backward = FALSE_;
     }
-    else if (lsame_(direct, "B"))
+    else if (lsame_(direct, "B", 1, 1))
     {
         forward = FALSE_;
         backward = TRUE_;

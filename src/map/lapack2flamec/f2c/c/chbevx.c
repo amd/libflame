@@ -292,7 +292,7 @@ void chbevx_(char *jobz, char *range, char *uplo, integer *n, integer *kd, compl
     complex ctmp1;
     integer itmp1, indee;
     real sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     integer iinfo;
@@ -365,13 +365,13 @@ void chbevx_(char *jobz, char *range, char *uplo, integer *n, integer *kd, compl
     --iwork;
     --ifail;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
-    alleig = lsame_(range, "A");
-    valeig = lsame_(range, "V");
-    indeig = lsame_(range, "I");
-    lower = lsame_(uplo, "L");
+    wantz = lsame_(jobz, "V", 1, 1);
+    alleig = lsame_(range, "A", 1, 1);
+    valeig = lsame_(range, "V", 1, 1);
+    indeig = lsame_(range, "I", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N")))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
@@ -379,7 +379,7 @@ void chbevx_(char *jobz, char *range, char *uplo, integer *n, integer *kd, compl
     {
         *info = -2;
     }
-    else if (! (lower || lsame_(uplo, "U")))
+    else if (! (lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -3;
     }

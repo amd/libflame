@@ -127,7 +127,7 @@ void sspgst_(integer *itype, char *uplo, integer *n, real *ap, real *bp, integer
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     extern /* Subroutine */
     void sspr2_(char *, integer *, real *, real *, integer *, real *, integer *, real *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
     logical upper;
@@ -157,12 +157,12 @@ void sspgst_(integer *itype, char *uplo, integer *n, real *ap, real *bp, integer
     --ap;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     if (*itype < 1 || *itype > 3)
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L"))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }

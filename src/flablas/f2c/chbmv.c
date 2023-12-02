@@ -13,7 +13,7 @@ int chbmv_(char *uplo, integer *n, integer *k, complex * alpha, complex *a, inte
     integer info;
     complex temp1, temp2;
     integer i__, j, l;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer kplus1, ix, iy, jx, jy, kx, ky;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -131,7 +131,7 @@ int chbmv_(char *uplo, integer *n, integer *k, complex * alpha, complex *a, inte
     --y;
     /* Function Body */
     info = 0;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         info = 1;
     }
@@ -253,7 +253,7 @@ int chbmv_(char *uplo, integer *n, integer *k, complex * alpha, complex *a, inte
     {
         return 0;
     }
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         /* Form y when upper triangle of A is stored. */
         kplus1 = *k + 1;

@@ -129,7 +129,7 @@ void zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
     /* Local variables */
     integer i__, j, k, kk, ix, jx, kx, info;
     doublecomplex temp;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -157,7 +157,7 @@ void zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
     /* Function Body */
     info = 0;
     kx = 0;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         info = 1;
     }
@@ -193,7 +193,7 @@ void zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
     /* Start the operations. In this version the elements of the array AP */
     /* are accessed sequentially with one pass through AP. */
     kk = 1;
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         /* Form A when upper triangle is stored in AP. */
         if (*incx == 1)

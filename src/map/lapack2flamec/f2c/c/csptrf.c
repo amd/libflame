@@ -185,7 +185,7 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer * ipiv, integer *info)
     real alpha;
     extern /* Subroutine */
     void cscal_(integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void cswap_(integer *, complex *, integer *, complex *, integer *);
     integer kstep;
@@ -225,9 +225,9 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer * ipiv, integer *info)
     --ap;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     imax = 0;
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

@@ -171,7 +171,7 @@ void zhb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, i
     integer i__, j1, j2, lm, ln;
     doublecomplex ctmp;
     integer dpos, vpos;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     void zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
@@ -207,7 +207,7 @@ void zhb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, i
     --tau;
     --work;
     /* Function Body */
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     if (upper)
     {
         dpos = (*nb << 1) + 1;

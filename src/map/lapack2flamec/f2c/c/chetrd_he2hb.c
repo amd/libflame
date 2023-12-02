@@ -268,7 +268,7 @@ void chetrd_he2hb_(char *uplo, integer *n, integer *kd, complex *a, integer *lda
     integer tpos, wpos, s1pos, s2pos;
     extern /* Subroutine */
     void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), chemm_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
     void ccopy_(integer *, complex *, integer *, complex *, integer *);
@@ -310,10 +310,10 @@ void chetrd_he2hb_(char *uplo, integer *n, integer *kd, complex *a, integer *lda
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
     lwmin = ilaenv2stage_(&c__4, "CHETRD_HE2HB", "", n, kd, &c_n1, &c_n1);
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

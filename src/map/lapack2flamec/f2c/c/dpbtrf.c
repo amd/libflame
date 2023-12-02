@@ -146,7 +146,7 @@ void dpbtrf_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
     ;
     extern /* Subroutine */
     void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsyrk_( char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), dpbtf2_(char *, integer *, integer *, doublereal *, integer *, integer *), dpotf2_(char *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
@@ -179,7 +179,7 @@ void dpbtrf_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
     ab -= ab_offset;
     /* Function Body */
     *info = 0;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -221,7 +221,7 @@ void dpbtrf_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
     else
     {
         /* Use blocked code */
-        if (lsame_(uplo, "U"))
+        if (lsame_(uplo, "U", 1, 1))
         {
             /* Compute the Cholesky factorization of a symmetric band */
             /* matrix, given the upper triangle of the matrix in band */

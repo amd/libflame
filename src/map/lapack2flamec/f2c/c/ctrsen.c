@@ -281,7 +281,7 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
     real est;
     integer kase, ierr;
     real scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3], lwmin;
     logical wantq, wants;
     real rnorm;
@@ -332,10 +332,10 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
     --w;
     --work;
     /* Function Body */
-    wantbh = lsame_(job, "B");
-    wants = lsame_(job, "E") || wantbh;
-    wantsp = lsame_(job, "V") || wantbh;
-    wantq = lsame_(compq, "V");
+    wantbh = lsame_(job, "B", 1, 1);
+    wants = lsame_(job, "E", 1, 1) || wantbh;
+    wantsp = lsame_(job, "V", 1, 1) || wantbh;
+    wantq = lsame_(compq, "V", 1, 1);
     lwmin = 0;
     /* Set M to the number of selected eigenvalues. */
     *m = 0;
@@ -362,19 +362,19 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
         i__2 = nn << 1; // , expr subst
         lwmin = fla_max(i__1,i__2);
     }
-    else if (lsame_(job, "N"))
+    else if (lsame_(job, "N", 1, 1))
     {
         lwmin = 1;
     }
-    else if (lsame_(job, "E"))
+    else if (lsame_(job, "E", 1, 1))
     {
         lwmin = fla_max(1,nn);
     }
-    if (! lsame_(job, "N") && ! wants && ! wantsp)
+    if (! lsame_(job, "N", 1, 1) && ! wants && ! wantsp)
     {
         *info = -1;
     }
-    else if (! lsame_(compq, "N") && ! wantq)
+    else if (! lsame_(compq, "N", 1, 1) && ! wantq)
     {
         *info = -2;
     }

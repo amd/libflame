@@ -131,7 +131,7 @@ void zpbequ_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
     /* Local variables */
     integer i__, j;
     doublereal smin;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -163,8 +163,8 @@ void zpbequ_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
     --s;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

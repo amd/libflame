@@ -172,7 +172,7 @@ void ssytri_3x_(char *uplo, integer *n, real *a, integer * lda, real *e, integer
     real akp1;
     integer invd;
     real akkp1;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     logical upper;
@@ -217,8 +217,8 @@ void ssytri_3x_(char *uplo, integer *n, real *a, integer * lda, real *e, integer
     work -= work_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

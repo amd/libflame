@@ -313,7 +313,7 @@ void chseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, com
     complex hl[2401] /* was [49][49] */
     ;
     integer kbot, nmin;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void ccopy_(integer *, complex *, integer *, complex *, integer *);
     logical initz;
@@ -364,9 +364,9 @@ void chseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, com
     z__ -= z_offset;
     --work;
     /* Function Body */
-    wantt = lsame_(job, "S");
-    initz = lsame_(compz, "I");
-    wantz = initz || lsame_(compz, "V");
+    wantt = lsame_(job, "S", 1, 1);
+    initz = lsame_(compz, "I", 1, 1);
+    wantz = initz || lsame_(compz, "V", 1, 1);
     r__1 = (real) fla_max(1,*n);
     q__1.r = r__1;
     q__1.i = 0.f; // , expr subst
@@ -374,11 +374,11 @@ void chseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, com
     work[1].i = q__1.i; // , expr subst
     lquery = *lwork == -1;
     *info = 0;
-    if (! lsame_(job, "E") && ! wantt)
+    if (! lsame_(job, "E", 1, 1) && ! wantt)
     {
         *info = -1;
     }
-    else if (! lsame_(compz, "N") && ! wantz)
+    else if (! lsame_(compz, "N", 1, 1) && ! wantz)
     {
         *info = -2;
     }

@@ -48,7 +48,7 @@ integer ilatrans_(char *trans)
     /* System generated locals */
     integer ret_val;
     /* Local variables */
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -61,15 +61,15 @@ integer ilatrans_(char *trans)
     /* .. External Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    if (lsame_(trans, "N"))
+    if (lsame_(trans, "N", 1, 1))
     {
         ret_val = 111;
     }
-    else if (lsame_(trans, "T"))
+    else if (lsame_(trans, "T", 1, 1))
     {
         ret_val = 112;
     }
-    else if (lsame_(trans, "C"))
+    else if (lsame_(trans, "C", 1, 1))
     {
         ret_val = 113;
     }

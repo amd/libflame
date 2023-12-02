@@ -181,7 +181,7 @@ void chetrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, 
     complex ak, bk;
     integer kp;
     complex akm1, bkm1, akm1k;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     complex denom;
     extern /* Subroutine */
     void cswap_(integer *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
@@ -219,8 +219,8 @@ void chetrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, 
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

@@ -143,7 +143,7 @@ void dlarz_(char *side, integer *m, integer *n, integer *l, doublereal *v, integ
     /* Local variables */
     extern /* Subroutine */
     void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *) ;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -169,7 +169,7 @@ void dlarz_(char *side, integer *m, integer *n, integer *l, doublereal *v, integ
     c__ -= c_offset;
     --work;
     /* Function Body */
-    if (lsame_(side, "L"))
+    if (lsame_(side, "L", 1, 1))
     {
         /* Form H * C */
         if (*tau != 0.)

@@ -207,7 +207,7 @@ void cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, integ
     integer ibal;
     real anrm;
     integer ierr, itau, iwrk, icond, ieval;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void ccopy_(integer *, complex *, integer *, complex *, integer *), cgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, complex *, integer *, integer *), cgebal_(char *, integer *, complex *, integer *, integer *, integer *, real *, integer *), slabad_(real *, real *);
     logical scalea;
@@ -264,13 +264,13 @@ void cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, integ
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    wantvs = lsame_(jobvs, "V");
-    wantst = lsame_(sort, "S");
-    if (! wantvs && ! lsame_(jobvs, "N"))
+    wantvs = lsame_(jobvs, "V", 1, 1);
+    wantst = lsame_(sort, "S", 1, 1);
+    if (! wantvs && ! lsame_(jobvs, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! wantst && ! lsame_(sort, "N"))
+    else if (! wantst && ! lsame_(sort, "N", 1, 1))
     {
         *info = -2;
     }

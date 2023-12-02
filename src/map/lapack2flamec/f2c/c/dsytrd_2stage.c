@@ -234,7 +234,7 @@ void dsytrd_2stage_(char *vect, char *uplo, integer *n, doublereal *a, integer *
     integer wpos;
     extern /* Subroutine */
     void dsytrd_sy2sb_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer abpos, lhmin, lwmin;
     logical upper;
     extern /* Subroutine */
@@ -269,7 +269,7 @@ void dsytrd_2stage_(char *vect, char *uplo, integer *n, doublereal *a, integer *
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1 || *lhous2 == -1;
     /* Determine the block size, the workspace size and the hous size. */
     kd = ilaenv2stage_(&c__1, "DSYTRD_2STAGE", vect, n, &c_n1, &c_n1, &c_n1);
@@ -278,11 +278,11 @@ void dsytrd_2stage_(char *vect, char *uplo, integer *n, doublereal *a, integer *
     lwmin = ilaenv2stage_(&c__4, "DSYTRD_2STAGE", vect, n, &kd, &ib, &c_n1);
     /* WRITE(*,*),'DSYTRD_2STAGE N KD UPLO LHMIN LWMIN ',N, KD, UPLO, */
     /* $ LHMIN, LWMIN */
-    if (! lsame_(vect, "N"))
+    if (! lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L"))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }

@@ -200,7 +200,7 @@ void slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
     integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1, i__2;
     /* Local variables */
     integer i__, j;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *);
     char transt[1];
@@ -242,7 +242,7 @@ void slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (lsame_(trans, "N"))
+    if (lsame_(trans, "N", 1, 1))
     {
         *(unsigned char *)transt = 'T';
     }
@@ -250,14 +250,14 @@ void slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
     {
         *(unsigned char *)transt = 'N';
     }
-    if (lsame_(storev, "C"))
+    if (lsame_(storev, "C", 1, 1))
     {
-        if (lsame_(direct, "F"))
+        if (lsame_(direct, "F", 1, 1))
         {
             /* Let V = ( V1 ) (first K rows) */
             /* ( V2 ) */
             /* where V1 is unit lower triangular. */
-            if (lsame_(side, "L"))
+            if (lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**T * C where C = ( C1 ) */
                 /* ( C2 ) */
@@ -307,7 +307,7 @@ void slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L30: */
                 }
             }
-            else if (lsame_(side, "R"))
+            else if (lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**T where C = ( C1 C2 ) */
                 /* W := C * V = (C1*V1 + C2*V2) (stored in WORK) */
@@ -362,7 +362,7 @@ void slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
             /* Let V = ( V1 ) */
             /* ( V2 ) (last K rows) */
             /* where V2 is unit upper triangular. */
-            if (lsame_(side, "L"))
+            if (lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**T * C where C = ( C1 ) */
                 /* ( C2 ) */
@@ -412,7 +412,7 @@ void slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L90: */
                 }
             }
-            else if (lsame_(side, "R"))
+            else if (lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H' where C = ( C1 C2 ) */
                 /* W := C * V = (C1*V1 + C2*V2) (stored in WORK) */
@@ -463,13 +463,13 @@ void slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
             }
         }
     }
-    else if (lsame_(storev, "R"))
+    else if (lsame_(storev, "R", 1, 1))
     {
-        if (lsame_(direct, "F"))
+        if (lsame_(direct, "F", 1, 1))
         {
             /* Let V = ( V1 V2 ) (V1: first K columns) */
             /* where V1 is unit upper triangular. */
-            if (lsame_(side, "L"))
+            if (lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**T * C where C = ( C1 ) */
                 /* ( C2 ) */
@@ -519,7 +519,7 @@ void slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L150: */
                 }
             }
-            else if (lsame_(side, "R"))
+            else if (lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**T where C = ( C1 C2 ) */
                 /* W := C * V**T = (C1*V1**T + C2*V2**T) (stored in WORK) */
@@ -573,7 +573,7 @@ void slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         {
             /* Let V = ( V1 V2 ) (V2: last K columns) */
             /* where V2 is unit lower triangular. */
-            if (lsame_(side, "L"))
+            if (lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**T * C where C = ( C1 ) */
                 /* ( C2 ) */
@@ -623,7 +623,7 @@ void slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L210: */
                 }
             }
-            else if (lsame_(side, "R"))
+            else if (lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**T where C = ( C1 C2 ) */
                 /* W := C * V**T = (C1*V1**T + C2*V2**T) (stored in WORK) */

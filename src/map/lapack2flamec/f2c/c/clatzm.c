@@ -163,7 +163,7 @@ void clatzm_(char *side, integer *m, integer *n, complex *v, integer *incv, comp
     /* Local variables */
     extern /* Subroutine */
     void cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), clacgv_(integer *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -199,7 +199,7 @@ void clatzm_(char *side, integer *m, integer *n, complex *v, integer *incv, comp
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (lsame_(side, "L"))
+    if (lsame_(side, "L", 1, 1))
     {
         /* w := ( C1 + v**H * C2 )**H */
         ccopy_(n, &c1[c1_offset], ldc, &work[1], &c__1);
@@ -217,7 +217,7 @@ void clatzm_(char *side, integer *m, integer *n, complex *v, integer *incv, comp
         q__1.i = -tau->i; // , expr subst
         cgeru_(&i__1, n, &q__1, &v[1], incv, &work[1], &c__1, &c2[c2_offset], ldc);
     }
-    else if (lsame_(side, "R"))
+    else if (lsame_(side, "R", 1, 1))
     {
         /* w := C1 + C2 * v */
         ccopy_(m, &c1[c1_offset], &c__1, &work[1], &c__1);

@@ -98,7 +98,7 @@ void zlacpy_(char *uplo, integer *m, integer *n, doublecomplex *a, integer *lda,
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
     integer i__, j;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -123,7 +123,7 @@ void zlacpy_(char *uplo, integer *m, integer *n, doublecomplex *a, integer *lda,
     b_offset = 1 + b_dim1;
     b -= b_offset;
     /* Function Body */
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         i__1 = *n;
         for (j = 1;
@@ -144,7 +144,7 @@ void zlacpy_(char *uplo, integer *m, integer *n, doublecomplex *a, integer *lda,
             /* L20: */
         }
     }
-    else if (lsame_(uplo, "L"))
+    else if (lsame_(uplo, "L", 1, 1))
     {
         i__1 = *n;
         for (j = 1;

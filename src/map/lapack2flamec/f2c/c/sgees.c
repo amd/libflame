@@ -229,7 +229,7 @@ void sgees_(char *jobvs, char *sort, L_fps2 select, integer *n, real *a, integer
     integer ibal;
     real anrm;
     integer idum[1], ierr, itau, iwrk, inxt, icond, ieval;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical cursl;
     extern /* Subroutine */
     void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
@@ -294,13 +294,13 @@ void sgees_(char *jobvs, char *sort, L_fps2 select, integer *n, real *a, integer
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    wantvs = lsame_(jobvs, "V");
-    wantst = lsame_(sort, "S");
-    if (! wantvs && ! lsame_(jobvs, "N"))
+    wantvs = lsame_(jobvs, "V", 1, 1);
+    wantst = lsame_(sort, "S", 1, 1);
+    if (! wantvs && ! lsame_(jobvs, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! wantst && ! lsame_(sort, "N"))
+    else if (! wantst && ! lsame_(sort, "N", 1, 1))
     {
         *info = -2;
     }

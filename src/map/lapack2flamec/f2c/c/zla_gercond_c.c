@@ -143,7 +143,7 @@ doublereal zla_gercond_c_(char *trans, integer *n, doublecomplex *a, integer *ld
     integer i__, j;
     doublereal tmp;
     integer kase;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     doublereal anorm;
     extern /* Subroutine */
@@ -190,8 +190,8 @@ doublereal zla_gercond_c_(char *trans, integer *n, doublecomplex *a, integer *ld
     /* Function Body */
     ret_val = 0.;
     *info = 0;
-    notrans = lsame_(trans, "N");
-    if (! notrans && ! lsame_(trans, "T") && ! lsame_( trans, "C"))
+    notrans = lsame_(trans, "N", 1, 1);
+    if (! notrans && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }

@@ -143,7 +143,7 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
     void d_cnjg(doublecomplex *, doublecomplex *);
     /* Local variables */
     integer i__, j;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -224,7 +224,7 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
     }
     if (*alpha == 1.)
     {
-        if (lsame_(trans, "N"))
+        if (lsame_(trans, "N", 1, 1))
         {
             /* Compute B := B + A*X */
             i__1 = *nrhs;
@@ -309,7 +309,7 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
                 /* L60: */
             }
         }
-        else if (lsame_(trans, "T"))
+        else if (lsame_(trans, "T", 1, 1))
         {
             /* Compute B := B + A**T * X */
             i__1 = *nrhs;
@@ -394,7 +394,7 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
                 /* L80: */
             }
         }
-        else if (lsame_(trans, "C"))
+        else if (lsame_(trans, "C", 1, 1))
         {
             /* Compute B := B + A**H * X */
             i__1 = *nrhs;
@@ -485,7 +485,7 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
     }
     else if (*alpha == -1.)
     {
-        if (lsame_(trans, "N"))
+        if (lsame_(trans, "N", 1, 1))
         {
             /* Compute B := B - A*X */
             i__1 = *nrhs;
@@ -570,7 +570,7 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
                 /* L120: */
             }
         }
-        else if (lsame_(trans, "T"))
+        else if (lsame_(trans, "T", 1, 1))
         {
             /* Compute B := B - A**T *X */
             i__1 = *nrhs;
@@ -655,7 +655,7 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
                 /* L140: */
             }
         }
-        else if (lsame_(trans, "C"))
+        else if (lsame_(trans, "C", 1, 1))
         {
             /* Compute B := B - A**H *X */
             i__1 = *nrhs;

@@ -305,7 +305,7 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
     logical ilvl, ilvr;
     integer lopt;
     doublereal anrm1, anrm2, bnrm1, bnrm2, absai, scale, absar, sbeta;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer ileft, iinfo, icols, iwork, irows;
     extern doublereal dlamch_(char *);
     doublereal salfai;
@@ -378,12 +378,12 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
     --work;
     --rwork;
     /* Function Body */
-    if (lsame_(jobvl, "N"))
+    if (lsame_(jobvl, "N", 1, 1))
     {
         ijobvl = 1;
         ilvl = FALSE_;
     }
-    else if (lsame_(jobvl, "V"))
+    else if (lsame_(jobvl, "V", 1, 1))
     {
         ijobvl = 2;
         ilvl = TRUE_;
@@ -393,12 +393,12 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
         ijobvl = -1;
         ilvl = FALSE_;
     }
-    if (lsame_(jobvr, "N"))
+    if (lsame_(jobvr, "N", 1, 1))
     {
         ijobvr = 1;
         ilvr = FALSE_;
     }
-    else if (lsame_(jobvr, "V"))
+    else if (lsame_(jobvr, "V", 1, 1))
     {
         ijobvr = 2;
         ilvr = TRUE_;

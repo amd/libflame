@@ -113,7 +113,7 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex * tau, complex *q, int
     integer q_dim1, q_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
     integer i__, j, ij;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     logical upper;
     extern /* Subroutine */
@@ -148,8 +148,8 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex * tau, complex *q, int
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

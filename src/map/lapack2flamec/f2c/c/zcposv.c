@@ -222,7 +222,7 @@ void zcposv_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
     integer ptsa;
     doublereal rnrm, xnrm;
     integer ptsx;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iiter;
     extern /* Subroutine */
     void zhemm_(char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlag2c_(integer *, integer *, doublecomplex *, integer *, complex *, integer *, integer *), clag2z_(integer *, integer *, complex *, integer *, doublecomplex *, integer *, integer *), zlat2c_(char *, integer *, doublecomplex *, integer *, complex *, integer *, integer *);
@@ -273,7 +273,7 @@ void zcposv_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
     *info = 0;
     *iter = 0;
     /* Test the input parameters. */
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

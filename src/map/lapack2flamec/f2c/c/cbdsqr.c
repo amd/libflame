@@ -252,7 +252,7 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
     real unfl, sinl, cosr, smin, smax, sinr;
     extern /* Subroutine */
     void slas2_(real *, real *, real *, real *, real *) ;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real oldcs;
     extern /* Subroutine */
     void clasr_(char *, char *, char *, integer *, integer *, real *, real *, complex *, integer *);
@@ -310,8 +310,8 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
     --rwork;
     /* Function Body */
     *info = 0;
-    lower = lsame_(uplo, "L");
-    if (! lsame_(uplo, "U") && ! lower)
+    lower = lsame_(uplo, "L", 1, 1);
+    if (! lsame_(uplo, "U", 1, 1) && ! lower)
     {
         *info = -1;
     }

@@ -435,7 +435,7 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     extern /* Subroutine */
     int blas_csymv_x_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     integer uplo2;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     int blas_csymv2_x_(integer *, integer *, complex *, complex *, integer *, complex *, complex *, integer *, complex *, complex *, integer *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *);
     real dxrat, dzrat;
@@ -506,8 +506,8 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     --y_tail__;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -548,7 +548,7 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     hugeval *= hugeval;
     /* Using HUGEVAL may lead to spurious underflows. */
     incr_thresh__ = (real) (*n) * eps;
-    if (lsame_(uplo, "L"))
+    if (lsame_(uplo, "L", 1, 1))
     {
         uplo2 = ilauplo_("L");
     }

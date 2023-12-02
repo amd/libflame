@@ -216,7 +216,7 @@ void csytrf_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
     integer j, k, kb, nb, iws;
     extern /* Subroutine */
     void csytf2_rook_(char *, integer *, complex *, integer *, integer *, integer *), clasyf_rook_(char *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
@@ -251,9 +251,9 @@ void csytrf_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

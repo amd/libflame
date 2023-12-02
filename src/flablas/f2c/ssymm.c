@@ -9,7 +9,7 @@ int ssymm_(char *side, char *uplo, integer *m, integer *n, real *alpha, real *a,
     integer info;
     real temp1, temp2;
     integer i__, j, k;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nrowa;
     logical upper;
     extern /* Subroutine */
@@ -131,7 +131,7 @@ int ssymm_(char *side, char *uplo, integer *m, integer *n, real *alpha, real *a,
     c_offset = 1 + c_dim1 * 1;
     c__ -= c_offset;
     /* Function Body */
-    if (lsame_(side, "L"))
+    if (lsame_(side, "L", 1, 1))
     {
         nrowa = *m;
     }
@@ -139,14 +139,14 @@ int ssymm_(char *side, char *uplo, integer *m, integer *n, real *alpha, real *a,
     {
         nrowa = *n;
     }
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     /* Test the input parameters. */
     info = 0;
-    if (! lsame_(side, "L") && ! lsame_(side, "R"))
+    if (! lsame_(side, "L", 1, 1) && ! lsame_(side, "R", 1, 1))
     {
         info = 1;
     }
-    else if (! upper && ! lsame_(uplo, "L"))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         info = 2;
     }
@@ -222,7 +222,7 @@ int ssymm_(char *side, char *uplo, integer *m, integer *n, real *alpha, real *a,
         return 0;
     }
     /* Start the operations. */
-    if (lsame_(side, "L"))
+    if (lsame_(side, "L", 1, 1))
     {
         /* Form C := alpha*A*B + beta*C. */
         if (upper)

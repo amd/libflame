@@ -123,7 +123,7 @@ void spbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, real *ab, inte
     integer ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     integer j;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     void stbsv_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -155,8 +155,8 @@ void spbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, real *ab, inte
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

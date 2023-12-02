@@ -12,7 +12,7 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, comple
     integer info;
     complex temp;
     integer lenx, leny, i__, j, k;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer ix, iy, jx, jy, kx, ky;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -127,7 +127,7 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, comple
     --y;
     /* Function Body */
     info = 0;
-    if (! lsame_(trans, "N") && ! lsame_(trans, "T") && ! lsame_(trans, "C") )
+    if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1) )
     {
         info = 1;
     }
@@ -169,10 +169,10 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, comple
     {
         return 0;
     }
-    noconj = lsame_(trans, "T");
+    noconj = lsame_(trans, "T", 1, 1);
     /* Set LENX and LENY, the lengths of the vectors x and y, and set */
     /* up the start points in X and Y. */
-    if (lsame_(trans, "N"))
+    if (lsame_(trans, "N", 1, 1))
     {
         lenx = *n;
         leny = *m;
@@ -270,7 +270,7 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, comple
         return 0;
     }
     kup1 = *ku + 1;
-    if (lsame_(trans, "N"))
+    if (lsame_(trans, "N", 1, 1))
     {
         /* Form y := alpha*A*x + y. */
         jx = kx;

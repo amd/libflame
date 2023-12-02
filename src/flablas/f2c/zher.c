@@ -13,7 +13,7 @@ int zher_(char *uplo, integer *n, doublereal *alpha, doublecomplex *x, integer *
     integer info;
     doublecomplex temp;
     integer i__, j;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer ix, jx, kx;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -95,7 +95,7 @@ int zher_(char *uplo, integer *n, doublereal *alpha, doublecomplex *x, integer *
     a -= a_offset;
     /* Function Body */
     info = 0;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         info = 1;
     }
@@ -133,7 +133,7 @@ int zher_(char *uplo, integer *n, doublereal *alpha, doublecomplex *x, integer *
     /* Start the operations. In this version the elements of A are */
     /* accessed sequentially with one pass through the triangular part */
     /* of A. */
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         /* Form A when A is stored in upper triangle. */
         if (*incx == 1)

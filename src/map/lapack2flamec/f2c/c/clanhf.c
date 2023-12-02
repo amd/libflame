@@ -261,7 +261,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
     real aa;
     integer lda, ifm, noe, ilu;
     real temp, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real value;
     extern /* Subroutine */
     void classq_(integer *, complex *, integer *, real *, real *);
@@ -305,13 +305,13 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
     }
     /* set ifm = 0 when form='C' or 'c' and 1 otherwise */
     ifm = 1;
-    if (lsame_(transr, "C"))
+    if (lsame_(transr, "C", 1, 1))
     {
         ifm = 0;
     }
     /* set ilu = 0 when uplo='U or 'u' and 1 otherwise */
     ilu = 1;
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         ilu = 0;
     }
@@ -335,7 +335,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
         /* ifm=0 */
         lda = (*n + 1) / 2;
     }
-    if (lsame_(norm, "M"))
+    if (lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(f2c_abs(A(i,j))). */
         k = (*n + 1) / 2;
@@ -1028,7 +1028,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
             }
         }
     }
-    else if (lsame_(norm, "I") || lsame_(norm, "O") || *(unsigned char *)norm == '1')
+    else if (lsame_(norm, "I", 1, 1) || lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1')
     {
         /* Find normI(A) ( = norm1(A), since A is Hermitian). */
         if (ifm == 1)
@@ -1752,7 +1752,7 @@ L10:
             }
         }
     }
-    else if (lsame_(norm, "F") || lsame_(norm, "E"))
+    else if (lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
         k = (*n + 1) / 2;

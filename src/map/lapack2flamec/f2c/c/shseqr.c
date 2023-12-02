@@ -322,7 +322,7 @@ void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, rea
     real hl[2401] /* was [49][49] */
     ;
     integer kbot, nmin;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical initz;
     real workl[49];
     logical wantt, wantz;
@@ -374,17 +374,17 @@ void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, rea
     z__ -= z_offset;
     --work;
     /* Function Body */
-    wantt = lsame_(job, "S");
-    initz = lsame_(compz, "I");
-    wantz = initz || lsame_(compz, "V");
+    wantt = lsame_(job, "S", 1, 1);
+    initz = lsame_(compz, "I", 1, 1);
+    wantz = initz || lsame_(compz, "V", 1, 1);
     work[1] = (real) fla_max(1,*n);
     lquery = *lwork == -1;
     *info = 0;
-    if (! lsame_(job, "E") && ! wantt)
+    if (! lsame_(job, "E", 1, 1) && ! wantt)
     {
         *info = -1;
     }
-    else if (! lsame_(compz, "N") && ! wantz)
+    else if (! lsame_(compz, "N", 1, 1) && ! wantz)
     {
         *info = -2;
     }

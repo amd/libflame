@@ -163,7 +163,7 @@ void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer
     real r__, s, ca, ra;
     integer ica, ira, iexc;
     extern real snrm2_(integer *, real *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *);
     real sfmin1, sfmin2, sfmax1, sfmax2;
@@ -201,7 +201,7 @@ void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer
     --scale;
     /* Function Body */
     *info = 0;
-    if (! lsame_(job, "N") && ! lsame_(job, "P") && ! lsame_(job, "S") && ! lsame_(job, "B"))
+    if (! lsame_(job, "N", 1, 1) && ! lsame_(job, "P", 1, 1) && ! lsame_(job, "S", 1, 1) && ! lsame_(job, "B", 1, 1))
     {
         *info = -1;
     }
@@ -225,7 +225,7 @@ void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer
     {
         goto L210;
     }
-    if (lsame_(job, "N"))
+    if (lsame_(job, "N", 1, 1))
     {
         i__1 = *n;
         for (i__ = 1;
@@ -237,7 +237,7 @@ void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer
         }
         goto L210;
     }
-    if (lsame_(job, "S"))
+    if (lsame_(job, "S", 1, 1))
     {
         goto L120;
     }
@@ -336,7 +336,7 @@ L120:
         scale[i__] = 1.f;
         /* L130: */
     }
-    if (lsame_(job, "P"))
+    if (lsame_(job, "P", 1, 1))
     {
         goto L210;
     }

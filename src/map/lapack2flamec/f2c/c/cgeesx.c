@@ -251,7 +251,7 @@ void cgeesx_(char *jobvs, char *sort, L_fp1 select, char * sense, integer *n, co
     integer ibal;
     real anrm;
     integer ierr, itau, iwrk, lwrk, icond, ieval;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void ccopy_(integer *, complex *, integer *, complex *, integer *), cgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, complex *, integer *, integer *), cgebal_(char *, integer *, complex *, integer *, integer *, integer *, real *, integer *), slabad_(real *, real *);
     logical scalea;
@@ -312,19 +312,19 @@ void cgeesx_(char *jobvs, char *sort, L_fp1 select, char * sense, integer *n, co
     --bwork;
     /* Function Body */
     *info = 0;
-    wantvs = lsame_(jobvs, "V");
-    wantst = lsame_(sort, "S");
-    wantsn = lsame_(sense, "N");
-    wantse = lsame_(sense, "E");
-    wantsv = lsame_(sense, "V");
-    wantsb = lsame_(sense, "B");
+    wantvs = lsame_(jobvs, "V", 1, 1);
+    wantst = lsame_(sort, "S", 1, 1);
+    wantsn = lsame_(sense, "N", 1, 1);
+    wantse = lsame_(sense, "E", 1, 1);
+    wantsv = lsame_(sense, "V", 1, 1);
+    wantsb = lsame_(sense, "B", 1, 1);
     lquery = *lwork == -1;
     maxwrk = 0;
-    if (! wantvs && ! lsame_(jobvs, "N"))
+    if (! wantvs && ! lsame_(jobvs, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! wantst && ! lsame_(sort, "N"))
+    else if (! wantst && ! lsame_(sort, "N", 1, 1))
     {
         *info = -2;
     }

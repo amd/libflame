@@ -261,7 +261,7 @@ void zgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
     doublecomplex temp1, temp2, temp3;
     integer kacc22;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nbmin;
     doublecomplex ctemp;
     extern /* Subroutine */
@@ -329,16 +329,16 @@ void zgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     z__1.i = 0.; // , expr subst
     work[1].r = z__1.r;
     work[1].i = z__1.i; // , expr subst
-    initq = lsame_(compq, "I");
-    wantq = initq || lsame_(compq, "V");
-    initz = lsame_(compz, "I");
-    wantz = initz || lsame_(compz, "V");
+    initq = lsame_(compq, "I", 1, 1);
+    wantq = initq || lsame_(compq, "V", 1, 1);
+    initz = lsame_(compz, "I", 1, 1);
+    wantz = initz || lsame_(compz, "V", 1, 1);
     lquery = *lwork == -1;
-    if (! lsame_(compq, "N") && ! wantq)
+    if (! lsame_(compq, "N", 1, 1) && ! wantq)
     {
         *info = -1;
     }
-    else if (! lsame_(compz, "N") && ! wantz)
+    else if (! lsame_(compz, "N", 1, 1) && ! wantz)
     {
         *info = -2;
     }

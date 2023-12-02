@@ -232,7 +232,7 @@ void dsbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, doubl
     char vect[1];
     extern /* Subroutine */
     void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo, lwmin;
     logical upper, wantz;
     integer indwk2, llwrk2;
@@ -273,8 +273,8 @@ void dsbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, doubl
     --work;
     --iwork;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
-    upper = lsame_(uplo, "U");
+    wantz = lsame_(jobz, "V", 1, 1);
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1 || *liwork == -1;
     *info = 0;
     if (*n <= 1)
@@ -294,11 +294,11 @@ void dsbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, doubl
         liwmin = 1;
         lwmin = *n << 1;
     }
-    if (! (wantz || lsame_(jobz, "N")))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (upper || lsame_(uplo, "L")))
+    else if (! (upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -2;
     }

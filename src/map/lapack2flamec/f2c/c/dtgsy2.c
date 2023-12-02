@@ -282,7 +282,7 @@ void dtgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublereal *a,
     doublereal alpha;
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dgesc2_(integer *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *), dgetc2_(integer *, doublereal *, integer *, integer *, integer *, integer *), dlatdf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     doublereal scaloc;
@@ -337,8 +337,8 @@ void dtgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublereal *a,
     /* Function Body */
     *info = 0;
     ierr = 0;
-    notran = lsame_(trans, "N");
-    if (! notran && ! lsame_(trans, "T"))
+    notran = lsame_(trans, "N", 1, 1);
+    if (! notran && ! lsame_(trans, "T", 1, 1))
     {
         *info = -1;
     }

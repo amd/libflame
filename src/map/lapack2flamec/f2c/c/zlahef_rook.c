@@ -194,7 +194,7 @@ void zlahef_rook_(char *uplo, integer *n, integer *nb, integer *kb, doublecomple
     logical done;
     integer imax, jmax;
     doublereal alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal dtemp, sfmin;
     integer itemp;
     extern /* Subroutine */
@@ -251,7 +251,7 @@ void zlahef_rook_(char *uplo, integer *n, integer *nb, integer *kb, doublecomple
     alpha = (sqrt(17.) + 1.) / 8.;
     /* Compute machine safe minimum */
     sfmin = dlamch_("S");
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         /* Factorize the trailing columns of A using the upper triangle */
         /* of A and working backwards, and compute the matrix W = U12*D */

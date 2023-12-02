@@ -122,7 +122,7 @@ void dsytri_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv
     doublereal akp1;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal temp, akkp1;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer kstep;
@@ -158,8 +158,8 @@ void dsytri_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

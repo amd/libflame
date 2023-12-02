@@ -207,7 +207,7 @@ void csyconvf_rook_(char *uplo, char *way, integer *n, complex *a, integer *lda,
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     integer i__, ip, ip2;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void cswap_(integer *, complex *, integer *, complex *, integer *);
     logical upper;
@@ -238,13 +238,13 @@ void csyconvf_rook_(char *uplo, char *way, integer *n, complex *a, integer *lda,
     --ipiv;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    convert = lsame_(way, "C");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    convert = lsame_(way, "C", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! convert && ! lsame_(way, "R"))
+    else if (! convert && ! lsame_(way, "R", 1, 1))
     {
         *info = -2;
     }

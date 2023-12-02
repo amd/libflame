@@ -13,7 +13,7 @@ int chpmv_(char *uplo, integer *n, complex *alpha, complex * ap, complex *x, int
     integer info;
     complex temp1, temp2;
     integer i__, j, k;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer kk, ix, iy, jx, jy, kx, ky;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -101,7 +101,7 @@ int chpmv_(char *uplo, integer *n, complex *alpha, complex * ap, complex *x, int
     --ap;
     /* Function Body */
     info = 0;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         info = 1;
     }
@@ -216,7 +216,7 @@ int chpmv_(char *uplo, integer *n, complex *alpha, complex * ap, complex *x, int
         return 0;
     }
     kk = 1;
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         /* Form y when AP contains the upper triangle. */
         if (*incx == 1 && *incy == 1)

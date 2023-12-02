@@ -287,7 +287,7 @@ void zgges_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, integer *n, d
     doublereal eps, anrm, bnrm;
     integer idum[1], ierr, itau, iwrk;
     doublereal pvsl, pvsr;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer ileft, icols;
     logical cursl, ilvsl, ilvsr;
     integer irwrk, irows;
@@ -363,12 +363,12 @@ void zgges_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, integer *n, d
     --rwork;
     --bwork;
     /* Function Body */
-    if (lsame_(jobvsl, "N"))
+    if (lsame_(jobvsl, "N", 1, 1))
     {
         ijobvl = 1;
         ilvsl = FALSE_;
     }
-    else if (lsame_(jobvsl, "V"))
+    else if (lsame_(jobvsl, "V", 1, 1))
     {
         ijobvl = 2;
         ilvsl = TRUE_;
@@ -378,12 +378,12 @@ void zgges_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, integer *n, d
         ijobvl = -1;
         ilvsl = FALSE_;
     }
-    if (lsame_(jobvsr, "N"))
+    if (lsame_(jobvsr, "N", 1, 1))
     {
         ijobvr = 1;
         ilvsr = FALSE_;
     }
-    else if (lsame_(jobvsr, "V"))
+    else if (lsame_(jobvsr, "V", 1, 1))
     {
         ijobvr = 2;
         ilvsr = TRUE_;
@@ -393,7 +393,7 @@ void zgges_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, integer *n, d
         ijobvr = -1;
         ilvsr = FALSE_;
     }
-    wantst = lsame_(sort, "S");
+    wantst = lsame_(sort, "S", 1, 1);
     /* Test the input arguments */
     *info = 0;
     lquery = *lwork == -1;
@@ -405,7 +405,7 @@ void zgges_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, integer *n, d
     {
         *info = -2;
     }
-    else if (! wantst && ! lsame_(sort, "N"))
+    else if (! wantst && ! lsame_(sort, "N", 1, 1))
     {
         *info = -3;
     }

@@ -155,7 +155,7 @@ void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *
     integer i__, i1, i2, i3, ic, jc, ii, mi, ni, nq;
     real aii;
     logical left;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
     logical upper;
@@ -192,9 +192,9 @@ void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *
     --work;
     /* Function Body */
     *info = 0;
-    left = lsame_(side, "L");
-    notran = lsame_(trans, "N");
-    upper = lsame_(uplo, "U");
+    left = lsame_(side, "L", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
+    upper = lsame_(uplo, "U", 1, 1);
     /* NQ is the order of Q */
     if (left)
     {
@@ -204,15 +204,15 @@ void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R"))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L"))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! notran && ! lsame_(trans, "T"))
+    else if (! notran && ! lsame_(trans, "T", 1, 1))
     {
         *info = -3;
     }

@@ -151,7 +151,7 @@ void zpbtrf_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
     integer i__, j, i2, i3, ib, nb, ii, jj;
     doublecomplex work[1056] /* was [33][32] */
     ;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zpbtf2_(char *, integer *, integer *, doublecomplex *, integer *, integer *), zpotf2_(char *, integer *, doublecomplex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
@@ -184,7 +184,7 @@ void zpbtrf_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
     ab -= ab_offset;
     /* Function Body */
     *info = 0;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -226,7 +226,7 @@ void zpbtrf_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
     else
     {
         /* Use blocked code */
-        if (lsame_(uplo, "U"))
+        if (lsame_(uplo, "U", 1, 1))
         {
             /* Compute the Cholesky factorization of a Hermitian band */
             /* matrix, given the upper triangle of the matrix in band */

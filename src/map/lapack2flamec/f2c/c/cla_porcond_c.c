@@ -140,7 +140,7 @@ real cla_porcond_c_(char *uplo, integer *n, complex *a, integer *lda, complex *a
     logical up;
     real tmp;
     integer kase;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     real anorm;
     logical upper;
@@ -186,8 +186,8 @@ real cla_porcond_c_(char *uplo, integer *n, complex *a, integer *lda, complex *a
     /* Function Body */
     ret_val = 0.f;
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -211,7 +211,7 @@ real cla_porcond_c_(char *uplo, integer *n, complex *a, integer *lda, complex *a
         return ret_val;
     }
     up = FALSE_;
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         up = TRUE_;
     }

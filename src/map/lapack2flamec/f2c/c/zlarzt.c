@@ -191,7 +191,7 @@ void zlarzt_(char *direct, char *storev, integer *n, integer * k, doublecomplex 
     doublecomplex z__1;
     /* Local variables */
     integer i__, j, info;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -223,11 +223,11 @@ void zlarzt_(char *direct, char *storev, integer *n, integer * k, doublecomplex 
     t -= t_offset;
     /* Function Body */
     info = 0;
-    if (! lsame_(direct, "B"))
+    if (! lsame_(direct, "B", 1, 1))
     {
         info = -1;
     }
-    else if (! lsame_(storev, "R"))
+    else if (! lsame_(storev, "R", 1, 1))
     {
         info = -2;
     }

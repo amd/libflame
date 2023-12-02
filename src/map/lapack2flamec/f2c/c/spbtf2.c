@@ -151,7 +151,7 @@ void spbtf2_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
     integer kld;
     extern /* Subroutine */
     void ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
     logical upper;
@@ -184,8 +184,8 @@ void spbtf2_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
     ab -= ab_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

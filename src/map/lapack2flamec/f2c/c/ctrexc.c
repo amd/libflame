@@ -137,7 +137,7 @@ void ctrexc_(char *compq, integer *n, complex *t, integer * ldt, complex *q, int
     complex t11, t22, sn, temp;
     extern /* Subroutine */
     void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical wantq;
     extern /* Subroutine */
     void clartg_(complex *, complex *, real *, complex *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -169,8 +169,8 @@ void ctrexc_(char *compq, integer *n, complex *t, integer * ldt, complex *q, int
     q -= q_offset;
     /* Function Body */
     *info = 0;
-    wantq = lsame_(compq, "V");
-    if (! lsame_(compq, "N") && ! wantq)
+    wantq = lsame_(compq, "V", 1, 1);
+    if (! lsame_(compq, "N", 1, 1) && ! wantq)
     {
         *info = -1;
     }

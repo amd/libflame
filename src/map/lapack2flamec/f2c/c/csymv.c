@@ -161,7 +161,7 @@ void csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, c
     /* Local variables */
     integer i__, j, ix, iy, jx, jy, kx, ky, info;
     complex temp1, temp2;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -193,7 +193,7 @@ void csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, c
     --y;
     /* Function Body */
     info = 0;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         info = 1;
     }
@@ -321,7 +321,7 @@ void csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, c
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         /* Form y when A is stored in upper triangle. */
         if (*incx == 1 && *incy == 1)

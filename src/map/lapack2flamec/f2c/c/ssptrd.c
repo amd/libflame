@@ -162,7 +162,7 @@ void ssptrd_(char *uplo, integer *n, real *ap, real *d__, real *e, real *tau, in
     extern /* Subroutine */
     void sspr2_(char *, integer *, real *, real *, integer *, real *, integer *, real *);
     real alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     void saxpy_(integer *, real *, real *, integer *, real *, integer *), sspmv_(char *, integer *, real *, real *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
@@ -192,8 +192,8 @@ void ssptrd_(char *uplo, integer *n, real *ap, real *d__, real *e, real *tau, in
     --ap;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

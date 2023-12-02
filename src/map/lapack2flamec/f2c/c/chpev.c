@@ -152,7 +152,7 @@ void chpev_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z
     real anrm;
     integer imax;
     real rmin, rmax, sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
@@ -202,13 +202,13 @@ void chpev_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z
     --work;
     --rwork;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
+    wantz = lsame_(jobz, "V", 1, 1);
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N")))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lsame_(uplo, "L") || lsame_(uplo, "U")))
+    else if (! (lsame_(uplo, "L", 1, 1) || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }

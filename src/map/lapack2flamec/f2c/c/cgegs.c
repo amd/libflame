@@ -244,7 +244,7 @@ void cgegs_(char *jobvsl, char *jobvsr, integer *n, complex * a, integer *lda, c
     integer nb, nb1, nb2, nb3, ihi, ilo;
     real eps, anrm, bnrm;
     integer itau, lopt;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer ileft, iinfo, icols;
     logical ilvsl;
     integer iwork;
@@ -316,12 +316,12 @@ void cgegs_(char *jobvsl, char *jobvsr, integer *n, complex * a, integer *lda, c
     --work;
     --rwork;
     /* Function Body */
-    if (lsame_(jobvsl, "N"))
+    if (lsame_(jobvsl, "N", 1, 1))
     {
         ijobvl = 1;
         ilvsl = FALSE_;
     }
-    else if (lsame_(jobvsl, "V"))
+    else if (lsame_(jobvsl, "V", 1, 1))
     {
         ijobvl = 2;
         ilvsl = TRUE_;
@@ -331,12 +331,12 @@ void cgegs_(char *jobvsl, char *jobvsr, integer *n, complex * a, integer *lda, c
         ijobvl = -1;
         ilvsl = FALSE_;
     }
-    if (lsame_(jobvsr, "N"))
+    if (lsame_(jobvsr, "N", 1, 1))
     {
         ijobvr = 1;
         ilvsr = FALSE_;
     }
-    else if (lsame_(jobvsr, "V"))
+    else if (lsame_(jobvsr, "V", 1, 1))
     {
         ijobvr = 2;
         ilvsr = TRUE_;

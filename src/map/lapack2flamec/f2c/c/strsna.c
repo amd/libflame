@@ -292,7 +292,7 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
     real rnrm, prod1, prod2;
     extern real snrm2_(integer *, real *, integer *);
     real scale, delta;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     logical wants;
     real dummy[1];
@@ -354,16 +354,16 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
     work -= work_offset;
     --iwork;
     /* Function Body */
-    wantbh = lsame_(job, "B");
-    wants = lsame_(job, "E") || wantbh;
-    wantsp = lsame_(job, "V") || wantbh;
-    somcon = lsame_(howmny, "S");
+    wantbh = lsame_(job, "B", 1, 1);
+    wants = lsame_(job, "E", 1, 1) || wantbh;
+    wantsp = lsame_(job, "V", 1, 1) || wantbh;
+    somcon = lsame_(howmny, "S", 1, 1);
     *info = 0;
     if (! wants && ! wantsp)
     {
         *info = -1;
     }
-    else if (! lsame_(howmny, "A") && ! somcon)
+    else if (! lsame_(howmny, "A", 1, 1) && ! somcon)
     {
         *info = -2;
     }

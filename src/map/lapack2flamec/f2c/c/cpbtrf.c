@@ -160,7 +160,7 @@ void cpbtrf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
     ;
     extern /* Subroutine */
     void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), cpbtf2_(char *, integer *, integer *, complex *, integer *, integer *), cpotf2_(char *, integer *, complex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
@@ -193,7 +193,7 @@ void cpbtrf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
     ab -= ab_offset;
     /* Function Body */
     *info = 0;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -235,7 +235,7 @@ void cpbtrf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
     else
     {
         /* Use blocked code */
-        if (lsame_(uplo, "U"))
+        if (lsame_(uplo, "U", 1, 1))
         {
             /* Compute the Cholesky factorization of a Hermitian band */
             /* matrix, given the upper triangle of the matrix in band */

@@ -204,7 +204,7 @@ void stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer 
     /* Local variables */
     integer k, n1, n2;
     logical normaltransr;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
     void strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -233,17 +233,17 @@ void stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer 
     /* .. Executable Statements .. */
     /* Test the input parameters. */
     *info = 0;
-    normaltransr = lsame_(transr, "N");
-    lower = lsame_(uplo, "L");
-    if (! normaltransr && ! lsame_(transr, "T"))
+    normaltransr = lsame_(transr, "N", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
+    if (! normaltransr && ! lsame_(transr, "T", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U"))
+    else if (! lower && ! lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
-    else if (! lsame_(diag, "N") && ! lsame_(diag, "U"))
+    else if (! lsame_(diag, "N", 1, 1) && ! lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }

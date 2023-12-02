@@ -148,7 +148,7 @@ void slatzm_(char *side, integer *m, integer *n, real *v, integer *incv, real *t
     /* Local variables */
     extern /* Subroutine */
     void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -183,7 +183,7 @@ void slatzm_(char *side, integer *m, integer *n, real *v, integer *incv, real *t
     {
         return;
     }
-    if (lsame_(side, "L"))
+    if (lsame_(side, "L", 1, 1))
     {
         /* w := (C1 + v**T * C2)**T */
         scopy_(n, &c1[c1_offset], ldc, &work[1], &c__1);
@@ -197,7 +197,7 @@ void slatzm_(char *side, integer *m, integer *n, real *v, integer *incv, real *t
         r__1 = -(*tau);
         sger_(&i__1, n, &r__1, &v[1], incv, &work[1], &c__1, &c2[c2_offset], ldc);
     }
-    else if (lsame_(side, "R"))
+    else if (lsame_(side, "R", 1, 1))
     {
         /* w := C1 + C2 * v */
         scopy_(m, &c1[c1_offset], &c__1, &work[1], &c__1);

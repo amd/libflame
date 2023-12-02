@@ -146,7 +146,7 @@ void dlasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, doublereal *a,
     doublereal piv, alpha;
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_( integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
@@ -185,7 +185,7 @@ void dlasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, doublereal *a,
     /* K1 is the first column of the panel to be factorized */
     /* i.e., K1 is 2 for the first block column, and 1 for the rest of the blocks */
     k1 = 2 - *j1 + 1;
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         /* ..................................................... */
         /* Factorize A as U**T*D*U using the upper triangle of A */

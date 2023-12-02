@@ -87,7 +87,7 @@ void dlasrt_(char *id, integer *n, doublereal *d__, integer * info)
     integer dir;
     doublereal tmp;
     integer endd;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer stack[64] /* was [2][32] */
     ;
     doublereal dmnmx;
@@ -121,11 +121,11 @@ void dlasrt_(char *id, integer *n, doublereal *d__, integer * info)
     /* Function Body */
     *info = 0;
     dir = -1;
-    if (lsame_(id, "D"))
+    if (lsame_(id, "D", 1, 1))
     {
         dir = 0;
     }
-    else if (lsame_(id, "I"))
+    else if (lsame_(id, "I", 1, 1))
     {
         dir = 1;
     }

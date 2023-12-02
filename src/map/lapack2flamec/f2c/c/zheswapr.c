@@ -105,7 +105,7 @@ void zheswapr_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
     /* Local variables */
     integer i__;
     doublecomplex tmp;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
@@ -129,7 +129,7 @@ void zheswapr_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
     a_offset = 1 + a_dim1;
     a -= a_offset;
     /* Function Body */
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     if (upper)
     {
         /* UPPER */

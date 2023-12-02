@@ -164,7 +164,7 @@ void dgemlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
     /* Local variables */
     integer i__, q, ib, kf;
     logical left, tran;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical right;
     extern /* Subroutine */
     void dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -202,10 +202,10 @@ void dgemlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
     --work;
     /* Function Body */
     *info = 0;
-    left = lsame_(side, "L");
-    right = lsame_(side, "R");
-    tran = lsame_(trans, "T");
-    notran = lsame_(trans, "N");
+    left = lsame_(side, "L", 1, 1);
+    right = lsame_(side, "R", 1, 1);
+    tran = lsame_(trans, "T", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     if (left)
     {
         ldwork = fla_max(1,*n);

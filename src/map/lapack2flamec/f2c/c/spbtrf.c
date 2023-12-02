@@ -148,7 +148,7 @@ void spbtrf_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
     integer i__, j, i2, i3, ib, nb, ii, jj;
     real work[1056] /* was [33][32] */
     ;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer *), spbtf2_(char *, integer *, integer *, real *, integer *, integer *), spotf2_(char *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
@@ -181,7 +181,7 @@ void spbtrf_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
     ab -= ab_offset;
     /* Function Body */
     *info = 0;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -223,7 +223,7 @@ void spbtrf_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
     else
     {
         /* Use blocked code */
-        if (lsame_(uplo, "U"))
+        if (lsame_(uplo, "U", 1, 1))
         {
             /* Compute the Cholesky factorization of a symmetric band */
             /* matrix, given the upper triangle of the matrix in band */

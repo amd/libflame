@@ -414,7 +414,7 @@ void cporfsx_(char *uplo, char *equed, integer *n, integer * nrhs, complex *a, i
     void cla_porfsx_extended_(integer *, char *, integer *, integer *, complex *, integer *, complex *, integer *, logical *, real *, complex *, integer *, complex *, integer *, real *, integer *, real *, real *, complex *, real *, complex *, real *, real *, integer *, real *, real *, logical *, integer *);
     char norm[1];
     logical ignore_cwise__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     logical rcequ;
     extern real cla_porcond_c_(char *, integer *, complex *, integer *, complex *, integer *, real *, logical *, integer *, complex *, real *), cla_porcond_x_(char *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, real *), clanhe_(char *, char *, integer *, complex *, integer *, real *), slamch_(char *);
@@ -529,13 +529,13 @@ void cporfsx_(char *uplo, char *equed, integer *n, integer * nrhs, complex *a, i
     {
         n_norms__ = 2;
     }
-    rcequ = lsame_(equed, "Y");
+    rcequ = lsame_(equed, "Y", 1, 1);
     /* Test input parameters. */
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! rcequ && ! lsame_(equed, "N"))
+    else if (! rcequ && ! lsame_(equed, "N", 1, 1))
     {
         *info = -2;
     }

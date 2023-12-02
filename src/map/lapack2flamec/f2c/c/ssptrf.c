@@ -171,7 +171,7 @@ void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
     extern /* Subroutine */
     void sspr_(char *, integer *, real *, real *, integer *, real *);
     real alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
     integer kstep;
@@ -209,9 +209,9 @@ void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
     --ap;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     imax = 0;
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

@@ -274,7 +274,7 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
     /* Local variables */
     integer i__, j, k, m1, m2, n1, n2, info;
     logical normaltransr, lside;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     logical lower;
@@ -309,27 +309,27 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
     b -= b_offset;
     /* Function Body */
     info = 0;
-    normaltransr = lsame_(transr, "N");
-    lside = lsame_(side, "L");
-    lower = lsame_(uplo, "L");
-    notrans = lsame_(trans, "N");
-    if (! normaltransr && ! lsame_(transr, "T"))
+    normaltransr = lsame_(transr, "N", 1, 1);
+    lside = lsame_(side, "L", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
+    notrans = lsame_(trans, "N", 1, 1);
+    if (! normaltransr && ! lsame_(transr, "T", 1, 1))
     {
         info = -1;
     }
-    else if (! lside && ! lsame_(side, "R"))
+    else if (! lside && ! lsame_(side, "R", 1, 1))
     {
         info = -2;
     }
-    else if (! lower && ! lsame_(uplo, "U"))
+    else if (! lower && ! lsame_(uplo, "U", 1, 1))
     {
         info = -3;
     }
-    else if (! notrans && ! lsame_(trans, "T"))
+    else if (! notrans && ! lsame_(trans, "T", 1, 1))
     {
         info = -4;
     }
-    else if (! lsame_(diag, "N") && ! lsame_(diag, "U"))
+    else if (! lsame_(diag, "N", 1, 1) && ! lsame_(diag, "U", 1, 1))
     {
         info = -5;
     }

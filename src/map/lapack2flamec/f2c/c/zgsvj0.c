@@ -234,7 +234,7 @@ void zgsvj0_(char *jobv, integer *m, integer *n, doublecomplex *a, integer *lda,
     extern /* Subroutine */
     void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
     doublereal aapp0, aapq1, temp1, apoaq, aqoap;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal theta, small_val;
     logical applv, rsvec;
     extern /* Double Complex */
@@ -294,9 +294,9 @@ void zgsvj0_(char *jobv, integer *m, integer *n, doublecomplex *a, integer *lda,
     v -= v_offset;
     --work;
     /* Function Body */
-    applv = lsame_(jobv, "A");
-    rsvec = lsame_(jobv, "V");
-    if (! (rsvec || applv || lsame_(jobv, "N")))
+    applv = lsame_(jobv, "A", 1, 1);
+    rsvec = lsame_(jobv, "V", 1, 1);
+    if (! (rsvec || applv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -1;
     }

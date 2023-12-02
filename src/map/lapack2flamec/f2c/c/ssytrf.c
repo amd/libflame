@@ -186,7 +186,7 @@ void ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     integer j, k, kb, nb, iws;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
@@ -223,9 +223,9 @@ void ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

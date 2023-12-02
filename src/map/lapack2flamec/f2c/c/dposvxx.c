@@ -499,7 +499,7 @@ void dposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a,
     integer j;
     doublereal amax, smin, smax;
     extern doublereal dla_porpvgrw_(char *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal scond;
     logical equil, rcequ;
     extern doublereal dlamch_(char *);
@@ -559,8 +559,8 @@ void dposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a,
     --iwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    equil = lsame_(fact, "E");
+    nofact = lsame_(fact, "N", 1, 1);
+    equil = lsame_(fact, "E", 1, 1);
     smlnum = dlamch_("Safe minimum");
     bignum = 1. / smlnum;
     if (nofact || equil)
@@ -570,18 +570,18 @@ void dposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a,
     }
     else
     {
-        rcequ = lsame_(equed, "Y");
+        rcequ = lsame_(equed, "Y", 1, 1);
     }
     /* Default is failure. If an input parameter is wrong or */
     /* factorization fails, make everything look horrible. Only the */
     /* pivot growth is set here, the rest is initialized in DPORFSX. */
     *rpvgrw = 0.;
     /* Test the input parameters. PARAMS is not tested until DPORFSX. */
-    if (! nofact && ! equil && ! lsame_(fact, "F"))
+    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -601,7 +601,7 @@ void dposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a,
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F") && ! (rcequ || lsame_( equed, "N")))
+    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -9;
     }
@@ -666,7 +666,7 @@ void dposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a,
         {
             /* Equilibrate the matrix. */
             dlaqsy_(uplo, n, &a[a_offset], lda, &s[1], &scond, &amax, equed);
-            rcequ = lsame_(equed, "Y");
+            rcequ = lsame_(equed, "Y", 1, 1);
         }
     }
     /* Scale the right-hand side. */

@@ -125,7 +125,7 @@ void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *inf
     /* Local variables */
     integer j, jc, jj;
     doublecomplex ajj;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     logical upper;
@@ -156,14 +156,14 @@ void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *inf
     --ap;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    nounit = lsame_(diag, "N");
+    upper = lsame_(uplo, "U", 1, 1);
+    nounit = lsame_(diag, "N", 1, 1);
     jclast = 0;
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! nounit && ! lsame_(diag, "U"))
+    else if (! nounit && ! lsame_(diag, "U", 1, 1))
     {
         *info = -2;
     }

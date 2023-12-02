@@ -322,7 +322,7 @@ void zheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, doublecompl
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zhetrd_2stage_(char *, char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     integer iinfo;
@@ -393,14 +393,14 @@ void zheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, doublecompl
     --iwork;
     --ifail;
     /* Function Body */
-    lower = lsame_(uplo, "L");
-    wantz = lsame_(jobz, "V");
-    alleig = lsame_(range, "A");
-    valeig = lsame_(range, "V");
-    indeig = lsame_(range, "I");
+    lower = lsame_(uplo, "L", 1, 1);
+    wantz = lsame_(jobz, "V", 1, 1);
+    alleig = lsame_(range, "A", 1, 1);
+    valeig = lsame_(range, "V", 1, 1);
+    indeig = lsame_(range, "I", 1, 1);
     lquery = *lwork == -1;
     *info = 0;
-    if (! lsame_(jobz, "N"))
+    if (! lsame_(jobz, "N", 1, 1))
     {
         *info = -1;
     }
@@ -408,7 +408,7 @@ void zheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, doublecompl
     {
         *info = -2;
     }
-    else if (! (lower || lsame_(uplo, "U")))
+    else if (! (lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -3;
     }

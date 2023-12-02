@@ -196,7 +196,7 @@ void dgels_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a, 
     integer brow;
     logical tpsd;
     integer iascl, ibscl;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer wsize;
     doublereal rwork[1];
     extern /* Subroutine */
@@ -248,7 +248,7 @@ void dgels_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a, 
     *info = 0;
     mn = fla_min(*m,*n);
     lquery = *lwork == -1;
-    if (! (lsame_(trans, "N") || lsame_(trans, "T")))
+    if (! (lsame_(trans, "N", 1, 1) || lsame_(trans, "T", 1, 1)))
     {
         *info = -1;
     }
@@ -291,7 +291,7 @@ void dgels_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a, 
     if (*info == 0 || *info == -10)
     {
         tpsd = TRUE_;
-        if (lsame_(trans, "N"))
+        if (lsame_(trans, "N", 1, 1))
         {
             tpsd = FALSE_;
         }

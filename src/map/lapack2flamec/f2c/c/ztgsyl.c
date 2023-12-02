@@ -311,7 +311,7 @@ void ztgsyl_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex 
     /* Local variables */
     integer i__, j, k, p, q, ie, je, mb, nb, is, js, pq;
     doublereal dsum;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer ifunc, linfo;
     extern /* Subroutine */
     void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
@@ -375,10 +375,10 @@ void ztgsyl_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex 
     --iwork;
     /* Function Body */
     *info = 0;
-    notran = lsame_(trans, "N");
+    notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
     scale2 = 0.;
-    if (! notran && ! lsame_(trans, "C"))
+    if (! notran && ! lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }

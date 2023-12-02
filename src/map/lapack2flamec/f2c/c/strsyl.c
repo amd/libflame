@@ -182,7 +182,7 @@ void strsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, re
     real smin;
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     real suml, sumr;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
     integer knext, lnext;
@@ -230,14 +230,14 @@ void strsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, re
     c_offset = 1 + c_dim1;
     c__ -= c_offset;
     /* Function Body */
-    notrna = lsame_(trana, "N");
-    notrnb = lsame_(tranb, "N");
+    notrna = lsame_(trana, "N", 1, 1);
+    notrnb = lsame_(tranb, "N", 1, 1);
     *info = 0;
-    if (! notrna && ! lsame_(trana, "T") && ! lsame_( trana, "C"))
+    if (! notrna && ! lsame_(trana, "T", 1, 1) && ! lsame_(trana, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! notrnb && ! lsame_(tranb, "T") && ! lsame_(tranb, "C"))
+    else if (! notrnb && ! lsame_(tranb, "T", 1, 1) && ! lsame_(tranb, "C", 1, 1))
     {
         *info = -2;
     }

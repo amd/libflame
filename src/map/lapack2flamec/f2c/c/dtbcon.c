@@ -144,7 +144,7 @@ void dtbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, double
     /* Local variables */
     integer ix, kase, kase1;
     doublereal scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
     void drscl_(integer *, doublereal *, doublereal *, integer *);
@@ -194,18 +194,18 @@ void dtbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, double
     --iwork;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O");
-    nounit = lsame_(diag, "N");
-    if (! onenrm && ! lsame_(norm, "I"))
+    upper = lsame_(uplo, "U", 1, 1);
+    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
+    nounit = lsame_(diag, "N", 1, 1);
+    if (! onenrm && ! lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L"))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U"))
+    else if (! nounit && ! lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }

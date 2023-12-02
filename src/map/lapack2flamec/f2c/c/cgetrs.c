@@ -131,7 +131,7 @@ void cgetrs_(char *trans, integer *n, integer *nrhs, complex * a, integer *lda, 
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
     logical notran;
@@ -166,8 +166,8 @@ void cgetrs_(char *trans, integer *n, integer *nrhs, complex * a, integer *lda, 
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    notran = lsame_(trans, "N");
-    if (! notran && ! lsame_(trans, "T") && ! lsame_( trans, "C"))
+    notran = lsame_(trans, "N", 1, 1);
+    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }

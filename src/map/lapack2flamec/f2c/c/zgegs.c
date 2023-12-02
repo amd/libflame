@@ -236,7 +236,7 @@ void zgegs_(char *jobvsl, char *jobvsr, integer *n, doublecomplex *a, integer *l
     integer nb, nb1, nb2, nb3, ihi, ilo;
     doublereal eps, anrm, bnrm;
     integer itau, lopt;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer ileft, iinfo, icols;
     logical ilvsl;
     integer iwork;
@@ -307,12 +307,12 @@ void zgegs_(char *jobvsl, char *jobvsr, integer *n, doublecomplex *a, integer *l
     --work;
     --rwork;
     /* Function Body */
-    if (lsame_(jobvsl, "N"))
+    if (lsame_(jobvsl, "N", 1, 1))
     {
         ijobvl = 1;
         ilvsl = FALSE_;
     }
-    else if (lsame_(jobvsl, "V"))
+    else if (lsame_(jobvsl, "V", 1, 1))
     {
         ijobvl = 2;
         ilvsl = TRUE_;
@@ -322,12 +322,12 @@ void zgegs_(char *jobvsl, char *jobvsr, integer *n, doublecomplex *a, integer *l
         ijobvl = -1;
         ilvsl = FALSE_;
     }
-    if (lsame_(jobvsr, "N"))
+    if (lsame_(jobvsr, "N", 1, 1))
     {
         ijobvr = 1;
         ilvsr = FALSE_;
     }
-    else if (lsame_(jobvsr, "V"))
+    else if (lsame_(jobvsr, "V", 1, 1))
     {
         ijobvr = 2;
         ilvsr = TRUE_;

@@ -153,7 +153,7 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
     integer q_dim1, q_offset, t_dim1, t_offset, i__1;
     /* Local variables */
     integer nbf, nbl, here;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical wantq;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slaexc_( logical *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, real *, integer *);
@@ -189,8 +189,8 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
     --work;
     /* Function Body */
     *info = 0;
-    wantq = lsame_(compq, "V");
-    if (! wantq && ! lsame_(compq, "N"))
+    wantq = lsame_(compq, "V", 1, 1);
+    if (! wantq && ! lsame_(compq, "N", 1, 1))
     {
         *info = -1;
     }

@@ -199,7 +199,7 @@ void dtrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
     doublereal *wnrm, xnrm;
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
@@ -256,8 +256,8 @@ void dtrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
         return;
     }
     /* Function Body */
-    notrna = lsame_(trana, "N");
-    notrnb = lsame_(tranb, "N");
+    notrna = lsame_(trana, "N", 1, 1);
+    notrnb = lsame_(tranb, "N", 1, 1);
     /* Use the same block size for all matrices. */
     /* Computing fla_max */
     i__1 = 8;
@@ -283,11 +283,11 @@ void dtrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
         swork[swork_dim1 + 2] = (doublereal) ((nbb << 1) + nba);
     }
     /* Test the input arguments */
-    if (! notrna && ! lsame_(trana, "T") && ! lsame_( trana, "C"))
+    if (! notrna && ! lsame_(trana, "T", 1, 1) && ! lsame_(trana, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! notrnb && ! lsame_(tranb, "T") && ! lsame_(tranb, "C"))
+    else if (! notrnb && ! lsame_(tranb, "T", 1, 1) && ! lsame_(tranb, "C", 1, 1))
     {
         *info = -2;
     }

@@ -252,7 +252,7 @@ void dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *
     integer tpos, wpos, s1pos, s2pos;
     extern /* Subroutine */
     void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
     void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
@@ -296,10 +296,10 @@ void dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
     lwmin = ilaenv2stage_(&c__4, "DSYTRD_SY2SB", "", n, kd, &c_n1, &c_n1);
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

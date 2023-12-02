@@ -141,7 +141,7 @@ void zgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
     doublecomplex z__1;
     /* Local variables */
     integer i__, j, l, kd, lm;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical lnoti;
     extern /* Subroutine */
     void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztbsv_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_( integer *, doublecomplex *, integer *);
@@ -177,8 +177,8 @@ void zgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    notran = lsame_(trans, "N");
-    if (! notran && ! lsame_(trans, "T") && ! lsame_( trans, "C"))
+    notran = lsame_(trans, "N", 1, 1);
+    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
@@ -262,7 +262,7 @@ void zgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
             /* L20: */
         }
     }
-    else if (lsame_(trans, "T"))
+    else if (lsame_(trans, "T", 1, 1))
     {
         /* Solve A**T * X = B. */
         i__1 = *nrhs;

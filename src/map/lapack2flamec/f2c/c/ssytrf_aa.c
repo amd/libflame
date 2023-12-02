@@ -137,7 +137,7 @@ void ssytrf_aa_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, r
     void slasyf_aa_(char *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, real * );
     integer j1, k1, k2, j2, j3, jb, nb, mj, nj;
     real alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     logical upper;
@@ -175,9 +175,9 @@ void ssytrf_aa_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, r
     nb = ilaenv_(&c__1, "SSYTRF_AA", uplo, n, &c_n1, &c_n1, &c_n1);
     /* Test the input parameters. */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

@@ -116,7 +116,7 @@ void ddisna_(char *job, integer *m, integer *n, doublereal * d__, doublereal *se
     integer i__, k;
     doublereal eps;
     logical decr, left, incr, sing, eigen;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal anorm;
     logical right;
     extern doublereal dlamch_(char *);
@@ -150,9 +150,9 @@ void ddisna_(char *job, integer *m, integer *n, doublereal * d__, doublereal *se
     --d__;
     /* Function Body */
     *info = 0;
-    eigen = lsame_(job, "E");
-    left = lsame_(job, "L");
-    right = lsame_(job, "R");
+    eigen = lsame_(job, "E", 1, 1);
+    left = lsame_(job, "L", 1, 1);
+    right = lsame_(job, "R", 1, 1);
     sing = left || right;
     if (eigen)
     {

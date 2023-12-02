@@ -208,7 +208,7 @@ void zsyconvf_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     integer i__, ip;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -237,13 +237,13 @@ void zsyconvf_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda
     --ipiv;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    convert = lsame_(way, "C");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    convert = lsame_(way, "C", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! convert && ! lsame_(way, "R"))
+    else if (! convert && ! lsame_(way, "R", 1, 1))
     {
         *info = -2;
     }

@@ -129,7 +129,7 @@ void sgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real
     integer i__, k;
     real s;
     integer ii;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
     logical leftv;
@@ -162,10 +162,10 @@ void sgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real
     v_offset = 1 + v_dim1;
     v -= v_offset;
     /* Function Body */
-    rightv = lsame_(side, "R");
-    leftv = lsame_(side, "L");
+    rightv = lsame_(side, "R", 1, 1);
+    leftv = lsame_(side, "L", 1, 1);
     *info = 0;
-    if (! lsame_(job, "N") && ! lsame_(job, "P") && ! lsame_(job, "S") && ! lsame_(job, "B"))
+    if (! lsame_(job, "N", 1, 1) && ! lsame_(job, "P", 1, 1) && ! lsame_(job, "S", 1, 1) && ! lsame_(job, "B", 1, 1))
     {
         *info = -1;
     }
@@ -211,7 +211,7 @@ void sgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real
     AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(job, "N"))
+    if (lsame_(job, "N", 1, 1))
     {
     AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -221,7 +221,7 @@ void sgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real
         goto L30;
     }
     /* Backward balance */
-    if (lsame_(job, "S") || lsame_(job, "B"))
+    if (lsame_(job, "S", 1, 1) || lsame_(job, "B", 1, 1))
     {
         if (rightv)
         {
@@ -252,7 +252,7 @@ void sgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real
     /* For I = ILO-1 step -1 until 1, */
     /* IHI+1 step 1 until N do -- */
 L30:
-    if (lsame_(job, "P") || lsame_(job, "B"))
+    if (lsame_(job, "P", 1, 1) || lsame_(job, "B", 1, 1))
     {
         if (rightv)
         {

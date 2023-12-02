@@ -171,7 +171,7 @@ void zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex 
     void d_cnjg(doublecomplex *, doublecomplex *);
     /* Local variables */
     integer i__, j, prevlastv;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     integer lastv;
@@ -210,7 +210,7 @@ void zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex 
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(direct, "F"))
+    if (lsame_(direct, "F", 1, 1))
     {
         prevlastv = *n;
         i__1 = *k;
@@ -236,7 +236,7 @@ void zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex 
             else
             {
                 /* general case */
-                if (lsame_(storev, "C"))
+                if (lsame_(storev, "C", 1, 1))
                 {
                     /* Skip any trailing zeros. */
                     i__2 = i__ + 1;
@@ -356,7 +356,7 @@ void zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex 
                 /* general case */
                 if (i__ < *k)
                 {
-                    if (lsame_(storev, "C"))
+                    if (lsame_(storev, "C", 1, 1))
                     {
                         /* Skip any leading zeros. */
                         i__1 = i__ - 1;

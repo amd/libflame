@@ -558,7 +558,7 @@ void cgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, complex *a, i
     integer j;
     real amax;
     extern real cla_gerpvgrw_(integer *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real rcmin, rcmax;
     logical equil;
     extern /* Subroutine */
@@ -627,9 +627,9 @@ void cgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, complex *a, i
     --rwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    equil = lsame_(fact, "E");
-    notran = lsame_(trans, "N");
+    nofact = lsame_(fact, "N", 1, 1);
+    equil = lsame_(fact, "E", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     smlnum = slamch_("Safe minimum");
     bignum = 1.f / smlnum;
     if (nofact || equil)
@@ -640,19 +640,19 @@ void cgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, complex *a, i
     }
     else
     {
-        rowequ = lsame_(equed, "R") || lsame_(equed, "B");
-        colequ = lsame_(equed, "C") || lsame_(equed, "B");
+        rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
+        colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
     }
     /* Default is failure. If an input parameter is wrong or */
     /* factorization fails, make everything look horrible. Only the */
     /* pivot growth is set here, the rest is initialized in CGERFSX. */
     *rpvgrw = 0.f;
     /* Test the input parameters. PARAMS is not tested until CGERFSX. */
-    if (! nofact && ! equil && ! lsame_(fact, "F"))
+    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T") && ! lsame_(trans, "C"))
+    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -672,7 +672,7 @@ void cgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, complex *a, i
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F") && ! (rowequ || colequ || lsame_(equed, "N")))
+    else if (lsame_(fact, "F", 1, 1) && ! (rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -10;
     }
@@ -769,8 +769,8 @@ void cgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, complex *a, i
         {
             /* Equilibrate the matrix. */
             claqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, & colcnd, &amax, equed);
-            rowequ = lsame_(equed, "R") || lsame_(equed, "B");
-            colequ = lsame_(equed, "C") || lsame_(equed, "B");
+            rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
+            colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }
         /* If the scaling factors are not applied, set them to 1.0. */
         if (! rowequ)

@@ -141,7 +141,7 @@ doublereal zlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
     integer i__, j;
     doublereal sum, scale;
     logical udiag;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal value;
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
@@ -176,13 +176,13 @@ doublereal zlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
     {
         value = 0.;
     }
-    else if (lsame_(norm, "M"))
+    else if (lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(abs(A(i,j))). */
-        if (lsame_(diag, "U"))
+        if (lsame_(diag, "U", 1, 1))
         {
             value = 1.;
-            if (lsame_(uplo, "U"))
+            if (lsame_(uplo, "U", 1, 1))
             {
                 i__1 = *n;
                 for (j = 1;
@@ -233,7 +233,7 @@ doublereal zlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
         else
         {
             value = 0.;
-            if (lsame_(uplo, "U"))
+            if (lsame_(uplo, "U", 1, 1))
             {
                 i__1 = *n;
                 for (j = 1;
@@ -279,12 +279,12 @@ doublereal zlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
             }
         }
     }
-    else if (lsame_(norm, "O") || *(unsigned char *) norm == '1')
+    else if (lsame_(norm, "O", 1, 1) || *(unsigned char *) norm == '1')
     {
         /* Find norm1(A). */
         value = 0.;
-        udiag = lsame_(diag, "U");
-        if (lsame_(uplo, "U"))
+        udiag = lsame_(diag, "U", 1, 1);
+        if (lsame_(uplo, "U", 1, 1))
         {
             i__1 = *n;
             for (j = 1;
@@ -361,12 +361,12 @@ doublereal zlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
             }
         }
     }
-    else if (lsame_(norm, "I"))
+    else if (lsame_(norm, "I", 1, 1))
     {
         /* Find normI(A). */
-        if (lsame_(uplo, "U"))
+        if (lsame_(uplo, "U", 1, 1))
         {
-            if (lsame_(diag, "U"))
+            if (lsame_(diag, "U", 1, 1))
             {
                 i__1 = *m;
                 for (i__ = 1;
@@ -424,7 +424,7 @@ doublereal zlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
         }
         else
         {
-            if (lsame_(diag, "U"))
+            if (lsame_(diag, "U", 1, 1))
             {
                 i__1 = fla_min(*m,*n);
                 for (i__ = 1;
@@ -499,12 +499,12 @@ doublereal zlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
             /* L280: */
         }
     }
-    else if (lsame_(norm, "F") || lsame_(norm, "E"))
+    else if (lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
-        if (lsame_(uplo, "U"))
+        if (lsame_(uplo, "U", 1, 1))
         {
-            if (lsame_(diag, "U"))
+            if (lsame_(diag, "U", 1, 1))
             {
                 scale = 1.;
                 sum = (doublereal) fla_min(*m,*n);
@@ -538,7 +538,7 @@ doublereal zlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
         }
         else
         {
-            if (lsame_(diag, "U"))
+            if (lsame_(diag, "U", 1, 1))
             {
                 scale = 1.;
                 sum = (doublereal) fla_min(*m,*n);

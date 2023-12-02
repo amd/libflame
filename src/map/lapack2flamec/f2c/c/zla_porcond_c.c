@@ -133,7 +133,7 @@ doublereal zla_porcond_c_(char *uplo, integer *n, doublecomplex *a, integer * ld
     logical up;
     doublereal tmp;
     integer kase;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     doublereal anorm;
     logical upper;
@@ -179,8 +179,8 @@ doublereal zla_porcond_c_(char *uplo, integer *n, doublecomplex *a, integer * ld
     /* Function Body */
     ret_val = 0.;
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -204,7 +204,7 @@ doublereal zla_porcond_c_(char *uplo, integer *n, doublecomplex *a, integer * ld
         return ret_val;
     }
     up = FALSE_;
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         up = TRUE_;
     }

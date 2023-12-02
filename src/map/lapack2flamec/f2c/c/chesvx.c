@@ -289,7 +289,7 @@ void chesvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
     /* Local variables */
     integer nb;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     extern real clanhe_(char *, char *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
@@ -344,13 +344,13 @@ void chesvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
     --rwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
+    nofact = lsame_(fact, "N", 1, 1);
     lquery = *lwork == -1;
-    if (! nofact && ! lsame_(fact, "F"))
+    if (! nofact && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }

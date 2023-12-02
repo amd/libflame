@@ -149,7 +149,7 @@ void dgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublereal *ab, i
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer kase1;
     doublereal scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
     void drscl_(integer *, doublereal *, doublereal *, integer *);
@@ -196,8 +196,8 @@ void dgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublereal *ab, i
     --iwork;
     /* Function Body */
     *info = 0;
-    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O");
-    if (! onenrm && ! lsame_(norm, "I"))
+    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
+    if (! onenrm && ! lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }

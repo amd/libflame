@@ -177,7 +177,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
     integer awrk, bwrk;
     int temp;
     doublereal *wnrm, xnrm;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
     void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
@@ -233,8 +233,8 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
         return;
     }
     /* Function Body */
-    notrna = lsame_(trana, "N");
-    notrnb = lsame_(tranb, "N");
+    notrna = lsame_(trana, "N", 1, 1);
+    notrnb = lsame_(tranb, "N", 1, 1);
     /* Use the same block size for all matrices. */
     /* Computing fla_max */
     i__1 = 8;
@@ -259,11 +259,11 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
         swork[swork_dim1 + 2] = (doublereal) ((nbb << 1) + nba);
     }
     /* Test the input arguments */
-    if (! notrna && ! lsame_(trana, "C"))
+    if (! notrna && ! lsame_(trana, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! notrnb && ! lsame_(tranb, "C"))
+    else if (! notrnb && ! lsame_(tranb, "C", 1, 1))
     {
         *info = -2;
     }

@@ -244,7 +244,7 @@ void cgsvj0_(char *jobv, integer *m, integer *n, complex *a, integer *lda, compl
     extern /* Complex */
     VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     real apoaq, aqoap;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real theta, small_val;
     extern /* Subroutine */
     void ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
@@ -302,9 +302,9 @@ void cgsvj0_(char *jobv, integer *m, integer *n, complex *a, integer *lda, compl
     v -= v_offset;
     --work;
     /* Function Body */
-    applv = lsame_(jobv, "A");
-    rsvec = lsame_(jobv, "V");
-    if (! (rsvec || applv || lsame_(jobv, "N")))
+    applv = lsame_(jobv, "A", 1, 1);
+    rsvec = lsame_(jobv, "V", 1, 1);
+    if (! (rsvec || applv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -1;
     }

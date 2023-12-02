@@ -176,7 +176,7 @@ void sormr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     /* Local variables */
     integer i__, i1, i2, i3, ja, ic, jc, mi, ni, nq;
     logical left;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void slarz_(char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
@@ -210,8 +210,8 @@ void sormr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     --work;
     /* Function Body */
     *info = 0;
-    left = lsame_(side, "L");
-    notran = lsame_(trans, "N");
+    left = lsame_(side, "L", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     /* NQ is the order of Q */
     if (left)
     {
@@ -221,11 +221,11 @@ void sormr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R"))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T"))
+    else if (! notran && ! lsame_(trans, "T", 1, 1))
     {
         *info = -2;
     }

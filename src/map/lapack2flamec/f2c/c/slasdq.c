@@ -214,7 +214,7 @@ void slasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru
     integer np1, isub;
     real smin;
     integer sqre1;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
     integer iuplo;
@@ -260,11 +260,11 @@ void slasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru
     /* Function Body */
     *info = 0;
     iuplo = 0;
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         iuplo = 1;
     }
-    if (lsame_(uplo, "L"))
+    if (lsame_(uplo, "L", 1, 1))
     {
         iuplo = 2;
     }

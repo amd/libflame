@@ -182,7 +182,7 @@ void ssygv_(integer *itype, char *jobz, char *uplo, integer * n, real *a, intege
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
     integer nb, neig;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     char trans[1];
     logical upper;
     extern /* Subroutine */
@@ -229,19 +229,19 @@ void ssygv_(integer *itype, char *jobz, char *uplo, integer * n, real *a, intege
     --w;
     --work;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
-    upper = lsame_(uplo, "U");
+    wantz = lsame_(jobz, "V", 1, 1);
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
     *info = 0;
     if (*itype < 1 || *itype > 3)
     {
         *info = -1;
     }
-    else if (! (wantz || lsame_(jobz, "N")))
+    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (upper || lsame_(uplo, "L")))
+    else if (! (upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }

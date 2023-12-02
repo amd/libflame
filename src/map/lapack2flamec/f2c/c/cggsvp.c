@@ -284,8 +284,8 @@ void cggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     /* Builtin functions */
     double r_imag(scomplex *);
     /* Local variables */
-    aocl_int64_t i__, j;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j;
+    extern logical lsame_(char *, char *, integer, integer);
     logical wantq, wantu, wantv;
     extern /* Subroutine */
     void cgeqr2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), cgerq2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), cung2r_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), cunmr2_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), cgeqpf_(integer *, integer *, complex *, integer *, integer *, complex *, complex *, real *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clapmt_(logical *, integer *, integer *, complex *, integer *, integer *);
@@ -341,15 +341,15 @@ void cggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     wantq = lsame_(jobq, "Q", 1, 1);
     forwrd = TRUE_;
     *info = 0;
-    if(!(wantu || lsame_(jobu, "N", 1, 1)))
+    if (! (wantu || lsame_(jobu, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if(!(wantv || lsame_(jobv, "N", 1, 1)))
+    else if (! (wantv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if(!(wantq || lsame_(jobq, "N", 1, 1)))
+    else if (! (wantq || lsame_(jobq, "N", 1, 1)))
     {
         *info = -3;
     }

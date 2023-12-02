@@ -142,7 +142,7 @@ void aocl_lapack_slarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, r
     /* Local variables */
     aocl_int64_t j;
     real t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10, sum;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -174,7 +174,7 @@ void aocl_lapack_slarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, r
     {
         return;
     }
-    if(lsame_(side, "L", 1, 1))
+    if (lsame_(side, "L", 1, 1))
     {
         /* Form H * C, where H has order m. */
         switch(*m)

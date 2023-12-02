@@ -226,7 +226,7 @@ void chesv_rk_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, 
     /* Local variables */
     extern /* Subroutine */
     void chetrf_rk_(char *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
@@ -264,7 +264,7 @@ void chesv_rk_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, 
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

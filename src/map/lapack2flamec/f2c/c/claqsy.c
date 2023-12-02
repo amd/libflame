@@ -147,7 +147,7 @@ void claqsy_(char *uplo, integer *n, complex *a, integer *lda, real *s, real *sc
     /* Local variables */
     aocl_int64_t i__, j;
     real cj, large;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real small_val;
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -190,7 +190,7 @@ void claqsy_(char *uplo, integer *n, complex *a, integer *lda, real *s, real *sc
     else
     {
         /* Replace A by diag(S) * A * diag(S). */
-        if(lsame_(uplo, "U", 1, 1))
+        if (lsame_(uplo, "U", 1, 1))
         {
             /* Upper triangle of A is stored. */
             i__1 = *n;

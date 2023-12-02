@@ -203,7 +203,7 @@ int lapack_sormbr(char *vect, char *side, char *trans, integer *m, integer *n, i
 
     /* Local variables */
     logical left;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo, i1, i2, nb, mi, ni, nq, nw;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -245,9 +245,9 @@ int lapack_sormbr(char *vect, char *side, char *trans, integer *m, integer *n, i
     --work;
     /* Function Body */
     *info = 0;
-    applyq = lsame_(vect, "Q");
-    left = lsame_(side, "L");
-    notran = lsame_(trans, "N");
+    applyq = lsame_(vect, "Q", 1, 1);
+    left = lsame_(side, "L", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
     /* NQ is the order of Q or P and NW is the minimum dimension of WORK */
     if (left)
@@ -260,15 +260,15 @@ int lapack_sormbr(char *vect, char *side, char *trans, integer *m, integer *n, i
         nq = *n;
         nw = fla_max(1,*m);
     }
-    if (! applyq && ! lsame_(vect, "P"))
+    if (! applyq && ! lsame_(vect, "P", 1, 1))
     {
         *info = -1;
     }
-    else if (! left && ! lsame_(side, "R"))
+    else if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -2;
     }
-    else if (! notran && ! lsame_(trans, "T"))
+    else if (! notran && ! lsame_(trans, "T", 1, 1))
     {
         *info = -3;
     }

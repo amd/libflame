@@ -227,7 +227,7 @@ void dsysv_rk_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *ld
     /* Local variables */
     extern /* Subroutine */
     void dsytrs_3_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dsytrf_rk_(char *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
@@ -264,7 +264,7 @@ void dsysv_rk_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *ld
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

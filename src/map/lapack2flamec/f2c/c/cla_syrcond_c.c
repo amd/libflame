@@ -160,8 +160,8 @@ real cla_syrcond_c_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sco
     aocl_int64_t i__, j;
     logical up;
     real tmp;
-    aocl_int64_t kase;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer kase;
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     real anorm;
     logical upper;
@@ -209,7 +209,7 @@ real cla_syrcond_c_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sco
     ret_val = 0.f;
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -233,7 +233,7 @@ real cla_syrcond_c_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sco
         return ret_val;
     }
     up = FALSE_;
-    if(lsame_(uplo, "U", 1, 1))
+    if (lsame_(uplo, "U", 1, 1))
     {
         up = TRUE_;
     }

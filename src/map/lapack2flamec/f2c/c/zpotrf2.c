@@ -114,7 +114,7 @@ void zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
     /* Local variables */
     integer n1, n2;
     doublereal ajj;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
     void zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
@@ -151,8 +151,8 @@ void zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
     a -= a_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

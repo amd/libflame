@@ -254,7 +254,7 @@ void ssytrd_sy2sb_(char *uplo, integer *n, integer *kd, real *a, integer *lda, r
     integer i__, j, lk, pk, pn, lt, lw, ls1, ls2, ldt, ldw, lds1, lds2;
     extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer tpos, wpos, s1pos, s2pos;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
     void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
@@ -296,10 +296,10 @@ void ssytrd_sy2sb_(char *uplo, integer *n, integer *kd, real *a, integer *lda, r
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
     lwmin = ilaenv2stage_(&c__4, "SSYTRD_SY2SB", "", n, kd, &c_n1, &c_n1);
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

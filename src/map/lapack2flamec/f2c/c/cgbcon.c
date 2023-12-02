@@ -168,7 +168,9 @@ void cgbcon_(char *norm, integer *n, integer *kl, integer *ku, complex *ab, inte
     scomplex t;
     aocl_int64_t kd, lm, jp, ix, kase, kase1;
     real scale;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Complex */
+    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
     void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
@@ -222,7 +224,7 @@ void cgbcon_(char *norm, integer *n, integer *kl, integer *ku, complex *ab, inte
     /* Function Body */
     *info = 0;
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
-    if(!onenrm && !lsame_(norm, "I", 1, 1))
+    if (! onenrm && ! lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }

@@ -225,7 +225,7 @@ void aocl_lapack_spftrs(char *transr, char *uplo, aocl_int64_t *n, aocl_int64_t 
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
     logical normaltransr;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
     void stfsm_(char *, char *, char *, char *, char *, integer *, integer *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -258,11 +258,11 @@ void aocl_lapack_spftrs(char *transr, char *uplo, aocl_int64_t *n, aocl_int64_t 
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if(!normaltransr && !lsame_(transr, "T", 1, 1))
+    if (! normaltransr && ! lsame_(transr, "T", 1, 1))
     {
         *info = -1;
     }
-    else if(!lower && !lsame_(uplo, "U", 1, 1))
+    else if (! lower && ! lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }

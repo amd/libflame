@@ -130,7 +130,7 @@ void slarrc_(char *jobt, integer *n, real *vl, real *vu, real *d__, real *e, rea
     integer i__;
     real sl, su, tmp, tmp2;
     logical matt;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real lpivot, rpivot;
     /* -- LAPACK auxiliary routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -161,7 +161,7 @@ void slarrc_(char *jobt, integer *n, real *vl, real *vu, real *d__, real *e, rea
     *lcnt = 0;
     *rcnt = 0;
     *eigcnt = 0;
-    matt = lsame_(jobt, "T");
+    matt = lsame_(jobt, "T", 1, 1);
     if (matt)
     {
         /* Sturm sequence count on T */

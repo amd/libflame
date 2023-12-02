@@ -300,8 +300,8 @@ void aocl_lapack_sggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
         v_offset, i__1, i__2, i__3;
     real r__1;
     /* Local variables */
-    aocl_int64_t i__, j;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j;
+    extern logical lsame_(char *, char *, integer, integer);
     logical wantq, wantu, wantv;
     extern /* Subroutine */
     void sgeqr2_(integer *, integer *, real *, integer *, real *, real *, integer *), sgerq2_(integer *, integer *, real *, integer *, real *, real *, integer *), sorg2r_(integer *, integer *, integer *, real *, integer *, real *, real *, integer * ), sorm2r_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), sormr2_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgeqpf_( integer *, integer *, real *, integer *, integer *, real *, real *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slapmt_( logical *, integer *, integer *, real *, integer *, integer *);
@@ -352,15 +352,15 @@ void aocl_lapack_sggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     wantq = lsame_(jobq, "Q", 1, 1);
     forwrd = TRUE_;
     *info = 0;
-    if(!(wantu || lsame_(jobu, "N", 1, 1)))
+    if (! (wantu || lsame_(jobu, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if(!(wantv || lsame_(jobv, "N", 1, 1)))
+    else if (! (wantv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if(!(wantq || lsame_(jobq, "N", 1, 1)))
+    else if (! (wantq || lsame_(jobq, "N", 1, 1)))
     {
         *info = -3;
     }

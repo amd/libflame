@@ -203,7 +203,7 @@ void chegv_(integer *itype, char *jobz, char *uplo, integer * n, complex *a, int
     integer nb, neig;
     extern /* Subroutine */
     void cheev_(char *, char *, integer *, complex *, integer *, real *, complex *, integer *, real *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     char trans[1];
@@ -256,11 +256,11 @@ void chegv_(integer *itype, char *jobz, char *uplo, integer * n, complex *a, int
     {
         *info = -1;
     }
-    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if(!(upper || lsame_(uplo, "L", 1, 1)))
+    else if (! (upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }

@@ -186,7 +186,7 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     extern /* Complex */
     VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Complex */
     VOID cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern /* Subroutine */
@@ -237,11 +237,11 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
     notrna = lsame_(trana, "N", 1, 1);
     notrnb = lsame_(tranb, "N", 1, 1);
     *info = 0;
-    if(!notrna && !lsame_(trana, "C", 1, 1))
+    if (! notrna && ! lsame_(trana, "C", 1, 1))
     {
         *info = -1;
     }
-    else if(!notrnb && !lsame_(tranb, "C", 1, 1))
+    else if (! notrnb && ! lsame_(tranb, "C", 1, 1))
     {
         *info = -2;
     }

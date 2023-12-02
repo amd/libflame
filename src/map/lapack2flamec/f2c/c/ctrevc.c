@@ -251,7 +251,7 @@ void ctrevc_(char *side, char *howmny, logical *select, integer *n, complex *t, 
     real unfl, smin;
     logical over;
     real scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     real remax;

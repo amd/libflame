@@ -174,8 +174,8 @@ void sspgv_(integer *itype, char *jobz, char *uplo, integer * n, real *ap, real 
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1;
     /* Local variables */
-    aocl_int64_t j, neig;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer j, neig;
+    extern logical lsame_(char *, char *, integer, integer);
     char trans[1];
     logical upper;
     extern /* Subroutine */
@@ -216,11 +216,11 @@ void sspgv_(integer *itype, char *jobz, char *uplo, integer * n, real *ap, real 
     {
         *info = -1;
     }
-    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if(!(upper || lsame_(uplo, "L", 1, 1)))
+    else if (! (upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }

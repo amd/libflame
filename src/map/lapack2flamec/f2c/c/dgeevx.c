@@ -328,7 +328,7 @@ void dgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, d
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
     integer icond;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern doublereal dlapy2_(doublereal *, doublereal *);
     extern /* Subroutine */
     void dlabad_(doublereal *, doublereal *), dgebak_( char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dgebal_(char *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *);
@@ -397,21 +397,21 @@ void dgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, d
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    wantvl = lsame_(jobvl, "V");
-    wantvr = lsame_(jobvr, "V");
-    wntsnn = lsame_(sense, "N");
-    wntsne = lsame_(sense, "E");
-    wntsnv = lsame_(sense, "V");
-    wntsnb = lsame_(sense, "B");
-    if (! (lsame_(balanc, "N") || lsame_(balanc, "S") || lsame_(balanc, "P") || lsame_(balanc, "B")))
+    wantvl = lsame_(jobvl, "V", 1, 1);
+    wantvr = lsame_(jobvr, "V", 1, 1);
+    wntsnn = lsame_(sense, "N", 1, 1);
+    wntsne = lsame_(sense, "E", 1, 1);
+    wntsnv = lsame_(sense, "V", 1, 1);
+    wntsnb = lsame_(sense, "B", 1, 1);
+    if (! (lsame_(balanc, "N", 1, 1) || lsame_(balanc, "S", 1, 1) || lsame_(balanc, "P", 1, 1) || lsame_(balanc, "B", 1, 1)))
     {
         *info = -1;
     }
-    else if (! wantvl && ! lsame_(jobvl, "N"))
+    else if (! wantvl && ! lsame_(jobvl, "N", 1, 1))
     {
         *info = -2;
     }
-    else if (! wantvr && ! lsame_(jobvr, "N"))
+    else if (! wantvr && ! lsame_(jobvr, "N", 1, 1))
     {
         *info = -3;
     }

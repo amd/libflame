@@ -303,7 +303,7 @@ void cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
     double c_abs(complex *);
     /* Local variables */
     integer i__, j;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical wantq, wantu, wantv;
     extern /* Subroutine */
     void cgeqp3_(integer *, integer *, complex *, integer *, integer *, complex *, complex *, integer *, real *, integer *), cgeqr2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), cgerq2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), cung2r_( integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), cunmr2_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clapmt_(logical *, integer *, integer *, complex *, integer *, integer *);
@@ -352,23 +352,23 @@ void cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
     --tau;
     --work;
     /* Function Body */
-    wantu = lsame_(jobu, "U");
-    wantv = lsame_(jobv, "V");
-    wantq = lsame_(jobq, "Q");
+    wantu = lsame_(jobu, "U", 1, 1);
+    wantv = lsame_(jobv, "V", 1, 1);
+    wantq = lsame_(jobq, "Q", 1, 1);
     forwrd = TRUE_;
     lquery = *lwork == -1;
     lwkopt = 1;
     /* Test the input arguments */
     *info = 0;
-    if (! (wantu || lsame_(jobu, "N")))
+    if (! (wantu || lsame_(jobu, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (wantv || lsame_(jobv, "N")))
+    else if (! (wantv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (wantq || lsame_(jobq, "N")))
+    else if (! (wantq || lsame_(jobq, "N", 1, 1)))
     {
         *info = -3;
     }

@@ -134,7 +134,7 @@ void dpptrf_(char *uplo, integer *n, doublereal *ap, integer * info)
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern /* Subroutine */
     void dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *), dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     void dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -164,7 +164,7 @@ void dpptrf_(char *uplo, integer *n, doublereal *ap, integer * info)
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

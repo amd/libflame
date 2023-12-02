@@ -235,7 +235,7 @@ int lapack_sgesdd(char *jobz, integer *m, integer *n, real *a, integer *lda, rea
     integer lwork_sgelqf_mn__, lwork_sgeqrf_mn__, iscl, lwork_sorglq_mn__, lwork_sorglq_nn__;
     real anrm;
     integer idum[1], ierr, itau, lwork_sorgqr_mm__, lwork_sorgqr_mn__, lwork_sormbr_qln_mm__, lwork_sormbr_qln_mn__, lwork_sormbr_qln_nn__, lwork_sormbr_prt_mm__, lwork_sormbr_prt_mn__, lwork_sormbr_prt_nn__, i__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer chunk;
     extern /* Subroutine */
     void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
@@ -312,11 +312,11 @@ int lapack_sgesdd(char *jobz, integer *m, integer *n, real *a, integer *lda, rea
     /* Function Body */
     *info = 0;
     minmn = fla_min(*m,*n);
-    wntqa = lsame_(jobz, "A");
-    wntqs = lsame_(jobz, "S");
+    wntqa = lsame_(jobz, "A", 1, 1);
+    wntqs = lsame_(jobz, "S", 1, 1);
     wntqas = wntqa || wntqs;
-    wntqo = lsame_(jobz, "O");
-    wntqn = lsame_(jobz, "N");
+    wntqo = lsame_(jobz, "O", 1, 1);
+    wntqn = lsame_(jobz, "N", 1, 1);
     lquery = *lwork == -1;
     if (! (wntqa || wntqs || wntqo || wntqn))
     {

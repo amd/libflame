@@ -184,8 +184,8 @@ void dsbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, double
     /* Local variables */
     aocl_int64_t inde;
     char vect[1];
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer iinfo;
     logical upper, wantz;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dpbstf_( char *, integer *, integer *, doublereal *, integer *, integer *), dsbtrd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsbgst_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dsterf_(integer *, doublereal *, doublereal *, integer *);
@@ -224,11 +224,11 @@ void dsbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, double
     wantz = lsame_(jobz, "V", 1, 1);
     upper = lsame_(uplo, "U", 1, 1);
     *info = 0;
-    if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if(!(upper || lsame_(uplo, "L", 1, 1)))
+    else if (! (upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -2;
     }

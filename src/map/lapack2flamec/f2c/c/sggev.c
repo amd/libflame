@@ -275,7 +275,7 @@ void aocl_lapack_sggev(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
     real temp;
     logical ilvl, ilvr;
     integer iwrk;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer ileft, icols, irows;
     extern /* Subroutine */
     void slabad_(real *, real *), sggbak_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, integer *), sggbal_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, real *, real *, integer *);
@@ -345,12 +345,12 @@ void aocl_lapack_sggev(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
     vr -= vr_offset;
     --work;
     /* Function Body */
-    if(lsame_(jobvl, "N", 1, 1))
+    if (lsame_(jobvl, "N", 1, 1))
     {
         ijobvl = 1;
         ilvl = FALSE_;
     }
-    else if(lsame_(jobvl, "V", 1, 1))
+    else if (lsame_(jobvl, "V", 1, 1))
     {
         ijobvl = 2;
         ilvl = TRUE_;
@@ -360,12 +360,12 @@ void aocl_lapack_sggev(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
         ijobvl = -1;
         ilvl = FALSE_;
     }
-    if(lsame_(jobvr, "N", 1, 1))
+    if (lsame_(jobvr, "N", 1, 1))
     {
         ijobvr = 1;
         ilvr = FALSE_;
     }
-    else if(lsame_(jobvr, "V", 1, 1))
+    else if (lsame_(jobvr, "V", 1, 1))
     {
         ijobvr = 2;
         ilvr = TRUE_;

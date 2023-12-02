@@ -179,7 +179,7 @@ void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
     integer kld;
     extern /* Subroutine */
     void cher_(char *, integer *, real *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     void clacgv_(integer *, complex *, integer *), csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -211,7 +211,7 @@ void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

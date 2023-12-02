@@ -417,7 +417,7 @@ void stgsna_(char *job, char *howmny, logical *select, integer *n, real *a, inte
     void slag2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *);
     extern real snrm2_(integer *, real *, integer *);
     real root1, root2, scale;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     real uhavi, uhbvi;
     extern /* Subroutine */
     void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
@@ -490,7 +490,7 @@ void stgsna_(char *job, char *howmny, logical *select, integer *n, real *a, inte
     {
         *info = -1;
     }
-    else if(!lsame_(howmny, "A", 1, 1) && !somcon)
+    else if (! lsame_(howmny, "A", 1, 1) && ! somcon)
     {
         *info = -2;
     }
@@ -568,7 +568,7 @@ void stgsna_(char *job, char *howmny, logical *select, integer *n, real *a, inte
         {
             lwmin = 1;
         }
-        else if(lsame_(job, "V", 1, 1) || lsame_(job, "B", 1, 1))
+        else if (lsame_(job, "V", 1, 1) || lsame_(job, "B", 1, 1))
         {
             lwmin = (*n << 1) * (*n + 2) + 16;
         }

@@ -185,7 +185,7 @@ void zunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     aocl_int64_t i__, i1, i2, i3, ja, ic, jc, mi, ni, nq;
     logical left;
     doublecomplex taui;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zlarz_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
@@ -230,11 +230,11 @@ void zunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     {
         nq = *n;
     }
-    if(!left && !lsame_(side, "R", 1, 1))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if(!notran && !lsame_(trans, "C", 1, 1))
+    else if (! notran && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }

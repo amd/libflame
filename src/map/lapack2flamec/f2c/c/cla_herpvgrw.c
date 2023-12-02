@@ -128,7 +128,7 @@ real cla_herpvgrw_(char *uplo, integer *n, integer *info, complex *a, integer *l
     /* Local variables */
     integer i__, j, k, kp;
     real tmp, amax, umax;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer ncols;
     logical upper;
     real rpvgrw;
@@ -162,7 +162,7 @@ real cla_herpvgrw_(char *uplo, integer *n, integer *info, complex *a, integer *l
     --ipiv;
     --work;
     /* Function Body */
-    upper = lsame_("Upper", uplo);
+    upper = lsame_("Upper", uplo, 1, 1);
     if (*info == 0)
     {
         if (upper)

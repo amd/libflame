@@ -189,7 +189,7 @@ void zunmhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
     /* Local variables */
     aocl_int64_t i1, i2, nb, mi, nh, ni, nq, nw;
     logical left;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -241,11 +241,11 @@ void zunmhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
         nq = *n;
         nw = fla_max(1,*m);
     }
-    if(!left && !lsame_(side, "R", 1, 1))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "C", 1, 1))
+    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }

@@ -335,7 +335,7 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
     dcomplex yhax, yhbx;
     aocl_int64_t ilst;
     doublereal rnrm, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Double Complex */
     VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer lwmin;
@@ -409,7 +409,7 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
     {
         *info = -1;
     }
-    else if(!lsame_(howmny, "A", 1, 1) && !somcon)
+    else if (! lsame_(howmny, "A", 1, 1) && ! somcon)
     {
         *info = -2;
     }
@@ -458,7 +458,7 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
         {
             lwmin = 1;
         }
-        else if(lsame_(job, "V", 1, 1) || lsame_(job, "B", 1, 1))
+        else if (lsame_(job, "V", 1, 1) || lsame_(job, "B", 1, 1))
         {
             lwmin = (*n << 1) * *n;
         }

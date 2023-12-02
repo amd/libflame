@@ -307,7 +307,7 @@ void ztfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
     /* Local variables */
     aocl_int64_t i__, j, k, m1, m2, n1, n2, info;
     logical normaltransr, lside;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical lower;
@@ -346,23 +346,23 @@ void ztfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
     lside = lsame_(side, "L", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
     notrans = lsame_(trans, "N", 1, 1);
-    if(!normaltransr && !lsame_(transr, "C", 1, 1))
+    if (! normaltransr && ! lsame_(transr, "C", 1, 1))
     {
         info = -1;
     }
-    else if(!lside && !lsame_(side, "R", 1, 1))
+    else if (! lside && ! lsame_(side, "R", 1, 1))
     {
         info = -2;
     }
-    else if(!lower && !lsame_(uplo, "U", 1, 1))
+    else if (! lower && ! lsame_(uplo, "U", 1, 1))
     {
         info = -3;
     }
-    else if(!notrans && !lsame_(trans, "C", 1, 1))
+    else if (! notrans && ! lsame_(trans, "C", 1, 1))
     {
         info = -4;
     }
-    else if(!lsame_(diag, "N", 1, 1) && !lsame_(diag, "U", 1, 1))
+    else if (! lsame_(diag, "N", 1, 1) && ! lsame_(diag, "U", 1, 1))
     {
         info = -5;
     }

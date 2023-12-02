@@ -173,7 +173,7 @@ void zhetri_3_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecom
     extern /* Subroutine */
     void zhetri_3x_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     integer nb;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -208,7 +208,7 @@ void zhetri_3_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecom
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
     /* Determine the block size */
     /* Computing MAX */
@@ -216,7 +216,7 @@ void zhetri_3_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecom
     i__2 = ilaenv_(&c__1, "ZHETRI_3", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
     nb = fla_max(i__1,i__2);
     lwkopt = (*n + nb + 1) * (nb + 3);
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

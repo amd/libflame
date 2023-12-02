@@ -494,8 +494,8 @@ void dla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     /* Force HUGEVAL to Inf */
     hugeval *= hugeval;
     /* Using HUGEVAL may lead to spurious underflows. */
-    incr_thresh__ = (doublereal)(*n) * eps;
-    if(lsame_(uplo, "L", 1, 1))
+    incr_thresh__ = (doublereal) (*n) * eps;
+    if (lsame_(uplo, "L", 1, 1))
     {
         uplo2 = ilauplo_("L");
     }

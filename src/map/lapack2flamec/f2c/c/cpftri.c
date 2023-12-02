@@ -234,7 +234,7 @@ void cpftri_(char *transr, char *uplo, integer *n, complex *a, integer *info)
     logical normaltransr;
     extern /* Subroutine */
     void cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     logical lower;
@@ -266,11 +266,11 @@ void cpftri_(char *transr, char *uplo, integer *n, complex *a, integer *info)
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if(!normaltransr && !lsame_(transr, "C", 1, 1))
+    if (! normaltransr && ! lsame_(transr, "C", 1, 1))
     {
         *info = -1;
     }
-    else if(!lower && !lsame_(uplo, "U", 1, 1))
+    else if (! lower && ! lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }

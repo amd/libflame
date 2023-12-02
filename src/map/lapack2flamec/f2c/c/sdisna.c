@@ -141,7 +141,7 @@ void aocl_lapack_sdisna(char *job, aocl_int64_t *m, aocl_int64_t *n, real *d__, 
     aocl_int64_t i__, k;
     real eps;
     logical decr, left, incr, sing, eigen;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     logical right;
     real oldgap;

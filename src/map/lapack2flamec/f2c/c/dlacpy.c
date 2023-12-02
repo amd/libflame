@@ -107,8 +107,10 @@ void dlacpy_(char *uplo, integer *m, integer *n, doublereal * a, integer *lda, d
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlacpy inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *m, *n, *lda, *ldb);
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
+    /* Local variables */
+    integer i__, j;
+    extern logical lsame_(char *, char *, integer, integer);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -133,51 +135,7 @@ void dlacpy_(char *uplo, integer *m, integer *n, doublereal * a, integer *lda, d
     b_offset = 1 + b_dim1;
     b -= b_offset;
     /* Function Body */
-#ifdef FLA_ENABLE_AMD_OPT
-    /* Handling invalid cases */
-    if(*m <= 0 || *n <= 0 || a_dim1 < *m || b_dim1 < *m)
-    {
-        AOCL_DTL_TRACE_LOG_EXIT
-        return;
-    }
-
-    if(lsame_(uplo, "U", 1, 1))
-    {
-        /* Upper triangular part */
-        for(aocl_int64_t i = 1; i <= *n; i++)
-        {
-            memcpy(b + (i * b_dim1) + 1, a + (i * a_dim1) + 1, fla_min(i, *m) * sizeof(double));
-        }
-    }
-    else if(lsame_(uplo, "L", 1, 1))
-    {
-        /* Lower triangular part */
-        for(aocl_int64_t i = 1; i <= *n && i <= *m; i++)
-        {
-            memcpy(b + (i * b_dim1 + i), a + (i * a_dim1 + i), (*m - i + 1) * sizeof(double));
-        }
-    }
-    else
-    {
-        /* All of the matrix A */
-        /* If the leading dimension of A and B are the same, and the number of rows of A and B are
-         * the same, then we can use memcpy to copy the entire matrix. */
-        if(a_dim1 == b_dim1 && a_dim1 == *m)
-        {
-            memcpy(b + b_offset, a + a_offset, a_dim1 * *n * sizeof(double));
-        }
-        else
-        {
-            /* Otherwise, we need to copy the matrix column by column. */
-            for(aocl_int64_t i = 1; i <= *n; i++)
-            {
-                memcpy(b + (i * b_dim1) + 1, a + (i * a_dim1) + 1, *m * sizeof(double));
-            }
-        }
-    }
-#else
-    aocl_int64_t i__1, i__2, i__, j;
-    if(lsame_(uplo, "U", 1, 1))
+    if (lsame_(uplo, "U", 1, 1))
     {
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
@@ -193,7 +151,7 @@ void dlacpy_(char *uplo, integer *m, integer *n, doublereal * a, integer *lda, d
             /* L20: */
         }
     }
-    else if(lsame_(uplo, "L", 1, 1))
+    else if (lsame_(uplo, "L", 1, 1))
     {
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)

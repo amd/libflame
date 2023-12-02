@@ -139,7 +139,7 @@ void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *ta
     logical applyleft;
     extern /* Subroutine */
     void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer lastc;
     extern /* Subroutine */
     void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);

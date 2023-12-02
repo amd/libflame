@@ -261,7 +261,7 @@ void zgeesx_(char *jobvs, char *sort, L_fpz1 select, char * sense, integer *n, d
     aocl_int64_t ibal;
     doublereal anrm;
     integer ierr, itau, iwrk, lwrk, icond, ieval;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
     logical scalea;
@@ -332,11 +332,11 @@ void zgeesx_(char *jobvs, char *sort, L_fpz1 select, char * sense, integer *n, d
     wantsv = lsame_(sense, "V", 1, 1);
     wantsb = lsame_(sense, "B", 1, 1);
     lquery = *lwork == -1;
-    if(!wantvs && !lsame_(jobvs, "N", 1, 1))
+    if (! wantvs && ! lsame_(jobvs, "N", 1, 1))
     {
         *info = -1;
     }
-    else if(!wantst && !lsame_(sort, "N", 1, 1))
+    else if (! wantst && ! lsame_(sort, "N", 1, 1))
     {
         *info = -2;
     }

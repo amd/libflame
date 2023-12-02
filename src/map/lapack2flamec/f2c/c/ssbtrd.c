@@ -188,7 +188,7 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
     extern /* Subroutine */
     void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     integer j1end, j1inc, iqend;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical initq, wantq, upper;
     extern /* Subroutine */
     void slar2v_(integer *, real *, real *, real *, integer *, real *, real *, integer *);
@@ -235,11 +235,11 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
     incx = *ldab - 1;
     iqend = 1;
     *info = 0;
-    if(!wantq && !lsame_(vect, "N", 1, 1))
+    if (! wantq && ! lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }
-    else if(!upper && !lsame_(uplo, "L", 1, 1))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }

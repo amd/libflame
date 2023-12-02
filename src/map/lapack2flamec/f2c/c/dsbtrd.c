@@ -184,7 +184,7 @@ void dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, in
     extern /* Subroutine */
     void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
     integer j1end, j1inc, iqend;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical initq, wantq, upper;
     extern /* Subroutine */
     void dlar2v_(integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
@@ -231,11 +231,11 @@ void dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, in
     incx = *ldab - 1;
     iqend = 1;
     *info = 0;
-    if(!wantq && !lsame_(vect, "N", 1, 1))
+    if (! wantq && ! lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }
-    else if(!upper && !lsame_(uplo, "L", 1, 1))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }

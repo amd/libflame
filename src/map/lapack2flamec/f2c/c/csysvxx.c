@@ -522,7 +522,7 @@ void csysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, in
     integer j;
     real amax, smin, smax;
     extern real cla_syrpvgrw_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, real *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real scond;
     logical equil, rcequ;
     extern real slamch_(char *);
@@ -583,8 +583,8 @@ void csysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, in
     --rwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    equil = lsame_(fact, "E");
+    nofact = lsame_(fact, "N", 1, 1);
+    equil = lsame_(fact, "E", 1, 1);
     smlnum = slamch_("Safe minimum");
     bignum = 1.f / smlnum;
     if (nofact || equil)
@@ -594,18 +594,18 @@ void csysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, in
     }
     else
     {
-        rcequ = lsame_(equed, "Y");
+        rcequ = lsame_(equed, "Y", 1, 1);
     }
     /* Default is failure. If an input parameter is wrong or */
     /* factorization fails, make everything look horrible. Only the */
     /* pivot growth is set here, the rest is initialized in CSYRFSX. */
     *rpvgrw = 0.f;
     /* Test the input parameters. PARAMS is not tested until CSYRFSX. */
-    if (! nofact && ! equil && ! lsame_(fact, "F"))
+    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -625,7 +625,7 @@ void csysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, in
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F") && ! (rcequ || lsame_( equed, "N")))
+    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -10;
     }
@@ -690,7 +690,7 @@ void csysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, in
         {
             /* Equilibrate the matrix. */
             claqsy_(uplo, n, &a[a_offset], lda, &s[1], &scond, &amax, equed);
-            rcequ = lsame_(equed, "Y");
+            rcequ = lsame_(equed, "Y", 1, 1);
         }
     }
     /* Scale the right hand-side. */

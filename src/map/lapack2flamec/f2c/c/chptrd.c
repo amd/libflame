@@ -166,7 +166,7 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
     complex alpha;
     extern /* Complex */
     VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void chpmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
@@ -200,7 +200,7 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

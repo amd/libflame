@@ -178,7 +178,7 @@ void clarft_(char *direct, char *storev, integer *n, integer * k, complex *v, in
     integer i__, j, prevlastv;
     extern /* Subroutine */
     void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer lastv;
     extern /* Subroutine */
     void ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), f90_exit_(void);
@@ -215,7 +215,7 @@ void clarft_(char *direct, char *storev, integer *n, integer * k, complex *v, in
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (lsame_(direct, "F"))
+    if (lsame_(direct, "F", 1, 1))
     {
         prevlastv = *n;
         i__1 = *k;
@@ -241,7 +241,7 @@ void clarft_(char *direct, char *storev, integer *n, integer * k, complex *v, in
             else
             {
                 /* general case */
-                if (lsame_(storev, "C"))
+                if (lsame_(storev, "C", 1, 1))
                 {
                     /* Skip any trailing zeros. */
                     i__2 = i__ + 1;
@@ -362,7 +362,7 @@ void clarft_(char *direct, char *storev, integer *n, integer * k, complex *v, in
                 /* general case */
                 if (i__ < *k)
                 {
-                    if (lsame_(storev, "C"))
+                    if (lsame_(storev, "C", 1, 1))
                     {
                         /* Skip any leading zeros. */
                         i__1 = i__ - 1;

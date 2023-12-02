@@ -220,7 +220,7 @@ void zgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
     doublereal abst;
     extern /* Subroutine */
     void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical wantb, wantc;
     extern /* Subroutine */
     void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
@@ -276,7 +276,7 @@ void zgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
     wantc = *ncc > 0;
     klu1 = *kl + *ku + 1;
     *info = 0;
-    if(!wantq && !wantpt && !lsame_(vect, "N", 1, 1))
+    if (! wantq && ! wantpt && ! lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }

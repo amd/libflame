@@ -210,7 +210,7 @@ void dpftrf_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
     /* Local variables */
     aocl_int64_t k, n1, n2;
     logical normaltransr;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
     void dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsyrk_( char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -240,11 +240,11 @@ void dpftrf_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if(!normaltransr && !lsame_(transr, "T", 1, 1))
+    if (! normaltransr && ! lsame_(transr, "T", 1, 1))
     {
         *info = -1;
     }
-    else if(!lower && !lsame_(uplo, "U", 1, 1))
+    else if (! lower && ! lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }

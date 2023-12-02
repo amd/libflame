@@ -137,7 +137,7 @@ void csytri2_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, 
     /* Local variables */
     extern /* Subroutine */
     void csytri2x_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nbmax;
     logical upper;
     extern /* Subroutine */
@@ -172,7 +172,7 @@ void csytri2_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, 
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
     /* Get blocksize */
     nbmax = ilaenv_(&c__1, "CSYTRI2", uplo, n, &c_n1, &c_n1, &c_n1);
@@ -184,7 +184,7 @@ void csytri2_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, 
     {
         minsize = (*n + nbmax + 1) * (nbmax + 3);
     }
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

@@ -164,7 +164,7 @@ void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *
     aocl_int64_t i__, i1, i2, i3, ic, jc, ii, mi, ni, nq;
     real aii;
     logical left;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
     logical upper;
@@ -213,15 +213,15 @@ void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *
     {
         nq = *n;
     }
-    if(!left && !lsame_(side, "R", 1, 1))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if(!upper && !lsame_(uplo, "L", 1, 1))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if(!notran && !lsame_(trans, "T", 1, 1))
+    else if (! notran && ! lsame_(trans, "T", 1, 1))
     {
         *info = -3;
     }

@@ -269,7 +269,7 @@ void ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
     logical backward;
     integer i__, j, kp, mp, np;
     logical row, left;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical right;
     extern /* Subroutine */
     void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
@@ -317,12 +317,12 @@ void ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
     AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(storev, "C"))
+    if (lsame_(storev, "C", 1, 1))
     {
         column = TRUE_;
         row = FALSE_;
     }
-    else if (lsame_(storev, "R"))
+    else if (lsame_(storev, "R", 1, 1))
     {
         column = FALSE_;
         row = TRUE_;
@@ -332,12 +332,12 @@ void ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         column = FALSE_;
         row = FALSE_;
     }
-    if (lsame_(side, "L"))
+    if (lsame_(side, "L", 1, 1))
     {
         left = TRUE_;
         right = FALSE_;
     }
-    else if (lsame_(side, "R"))
+    else if (lsame_(side, "R", 1, 1))
     {
         left = FALSE_;
         right = TRUE_;
@@ -347,12 +347,12 @@ void ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         left = FALSE_;
         right = FALSE_;
     }
-    if (lsame_(direct, "F"))
+    if (lsame_(direct, "F", 1, 1))
     {
         forward = TRUE_;
         backward = FALSE_;
     }
-    else if (lsame_(direct, "B"))
+    else if (lsame_(direct, "B", 1, 1))
     {
         forward = FALSE_;
         backward = TRUE_;

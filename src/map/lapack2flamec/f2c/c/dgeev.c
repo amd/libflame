@@ -211,7 +211,7 @@ void dgeev_(char *jobvl, char *jobvr, integer *n, doublereal * a, integer *lda, 
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern doublereal dlapy2_(doublereal *, doublereal *);
     extern /* Subroutine */
     void dlabad_(doublereal *, doublereal *), dgebak_( char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dgebal_(char *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *);
@@ -275,13 +275,13 @@ void dgeev_(char *jobvl, char *jobvr, integer *n, doublereal * a, integer *lda, 
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    wantvl = lsame_(jobvl, "V");
-    wantvr = lsame_(jobvr, "V");
-    if (! wantvl && ! lsame_(jobvl, "N"))
+    wantvl = lsame_(jobvl, "V", 1, 1);
+    wantvr = lsame_(jobvr, "V", 1, 1);
+    if (! wantvl && ! lsame_(jobvl, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! wantvr && ! lsame_(jobvr, "N"))
+    else if (! wantvr && ! lsame_(jobvr, "N", 1, 1))
     {
         *info = -2;
     }

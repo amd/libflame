@@ -310,7 +310,7 @@ void dsbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     char vect[1];
     logical test;
     integer itmp1, indee;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer iinfo;
@@ -376,7 +376,7 @@ void dsbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     valeig = lsame_(range, "V", 1, 1);
     indeig = lsame_(range, "I", 1, 1);
     *info = 0;
-    if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
@@ -384,7 +384,7 @@ void dsbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     {
         *info = -2;
     }
-    else if(!(upper || lsame_(uplo, "L", 1, 1)))
+    else if (! (upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }

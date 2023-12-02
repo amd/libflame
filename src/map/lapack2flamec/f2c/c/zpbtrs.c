@@ -128,8 +128,8 @@ void zpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, doublecomplex 
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    aocl_int64_t j;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer j;
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     void ztbsv_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -162,7 +162,7 @@ void zpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, doublecomplex 
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

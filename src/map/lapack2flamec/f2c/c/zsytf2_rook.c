@@ -212,7 +212,7 @@ void zsytf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, intege
     extern /* Subroutine */
     void zsyr_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal dtemp, sfmin;
     extern /* Subroutine */
     void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
@@ -258,10 +258,10 @@ void zsytf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, intege
     --ipiv;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     jmax = 0;
     imax = 0;
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

@@ -148,7 +148,7 @@ void ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, i
     /* Local variables */
     aocl_int64_t ix, kase, kase1;
     doublereal scale;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     doublereal anorm;
     logical upper;
@@ -205,15 +205,15 @@ void ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, i
     upper = lsame_(uplo, "U", 1, 1);
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
-    if(!onenrm && !lsame_(norm, "I", 1, 1))
+    if (! onenrm && ! lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
-    else if(!upper && !lsame_(uplo, "L", 1, 1))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if(!nounit && !lsame_(diag, "U", 1, 1))
+    else if (! nounit && ! lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }

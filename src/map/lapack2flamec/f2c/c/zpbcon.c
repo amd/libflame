@@ -144,7 +144,7 @@ void zpbcon_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
     /* Local variables */
     aocl_int64_t ix, kase;
     doublereal scale;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     logical upper;
     extern /* Subroutine */
@@ -195,7 +195,7 @@ void zpbcon_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

@@ -154,7 +154,7 @@ int lapack_sorgbr(char *vect, integer *m, integer *n, integer *k, real *a, integ
     integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
     integer i__, j;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     logical wantq;
     integer mn;
@@ -190,10 +190,10 @@ int lapack_sorgbr(char *vect, integer *m, integer *n, integer *k, real *a, integ
     --work;
     /* Function Body */
     *info = 0;
-    wantq = lsame_(vect, "Q");
+    wantq = lsame_(vect, "Q", 1, 1);
     mn = fla_min(*m,*n);
     lquery = *lwork == -1;
-    if (! wantq && ! lsame_(vect, "P"))
+    if (! wantq && ! lsame_(vect, "P", 1, 1))
     {
         *info = -1;
     }

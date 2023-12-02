@@ -328,7 +328,7 @@ void sppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
     /* Local variables */
     aocl_int64_t i__, j;
     real amax, smin, smax;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     real scond, anorm;
     logical equil, rcequ;
     extern /* Subroutine */
@@ -383,8 +383,8 @@ void sppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
     --iwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    equil = lsame_(fact, "E");
+    nofact = lsame_(fact, "N", 1, 1);
+    equil = lsame_(fact, "E", 1, 1);
     smlnum = 0.f;
     bignum = 0.f;
     if (nofact || equil)
@@ -399,11 +399,11 @@ void sppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
         bignum = 1.f / smlnum;
     }
     /* Test the input parameters. */
-    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
+    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
+    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -415,7 +415,7 @@ void sppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
     {
         *info = -4;
     }
-    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
+    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -7;
     }
@@ -477,7 +477,7 @@ void sppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            aocl_lapack_slaqsp(uplo, n, &ap[1], &s[1], &scond, &amax, equed);
+            slaqsp_(uplo, n, &ap[1], &s[1], &scond, &amax, equed);
             rcequ = lsame_(equed, "Y", 1, 1);
         }
     }

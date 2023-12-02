@@ -114,8 +114,8 @@ void clacpy_(char *uplo, integer *m, integer *n, complex *a, integer *lda, compl
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    aocl_int64_t i__, j;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j;
+    extern logical lsame_(char *, char *, integer, integer);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -140,7 +140,7 @@ void clacpy_(char *uplo, integer *m, integer *n, complex *a, integer *lda, compl
     b_offset = 1 + b_dim1;
     b -= b_offset;
     /* Function Body */
-    if(lsame_(uplo, "U", 1, 1))
+    if (lsame_(uplo, "U", 1, 1))
     {
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
@@ -159,7 +159,7 @@ void clacpy_(char *uplo, integer *m, integer *n, complex *a, integer *lda, compl
             /* L20: */
         }
     }
-    else if(lsame_(uplo, "L", 1, 1))
+    else if (lsame_(uplo, "L", 1, 1))
     {
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)

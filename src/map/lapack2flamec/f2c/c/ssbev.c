@@ -167,7 +167,7 @@ void ssbev_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer *
     real anrm;
     aocl_int64_t imax;
     real rmin, rmax, sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
@@ -221,11 +221,11 @@ void ssbev_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer *
     wantz = lsame_(jobz, "V", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
     *info = 0;
-    if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if(!(lower || lsame_(uplo, "U", 1, 1)))
+    else if (! (lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }

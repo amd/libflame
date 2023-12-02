@@ -362,7 +362,7 @@ void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *il
     extern
     void dlag2_( doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal temp2, s1inv, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iiter, ilast, jiter;
     doublereal anorm, bnorm;
     integer maxit;
@@ -438,12 +438,12 @@ void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *il
     ilz = FALSE_;
     ilq = FALSE_;
     ilschr = FALSE_;
-    if (lsame_(job, "E"))
+    if (lsame_(job, "E", 1, 1))
     {
         ilschr = FALSE_;
         ischur = 1;
     }
-    else if (lsame_(job, "S"))
+    else if (lsame_(job, "S", 1, 1))
     {
         ilschr = TRUE_;
         ischur = 2;
@@ -452,17 +452,17 @@ void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *il
     {
         ischur = 0;
     }
-    if (lsame_(compq, "N"))
+    if (lsame_(compq, "N", 1, 1))
     {
         ilq = FALSE_;
         icompq = 1;
     }
-    else if (lsame_(compq, "V"))
+    else if (lsame_(compq, "V", 1, 1))
     {
         ilq = TRUE_;
         icompq = 2;
     }
-    else if (lsame_(compq, "I"))
+    else if (lsame_(compq, "I", 1, 1))
     {
         ilq = TRUE_;
         icompq = 3;
@@ -471,17 +471,17 @@ void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *il
     {
         icompq = 0;
     }
-    if (lsame_(compz, "N"))
+    if (lsame_(compz, "N", 1, 1))
     {
         ilz = FALSE_;
         icompz = 1;
     }
-    else if (lsame_(compz, "V"))
+    else if (lsame_(compz, "V", 1, 1))
     {
         ilz = TRUE_;
         icompz = 2;
     }
-    else if (lsame_(compz, "I"))
+    else if (lsame_(compz, "I", 1, 1))
     {
         ilz = TRUE_;
         icompz = 3;
@@ -1618,7 +1618,7 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
     extern
     void dlag2_( doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal temp2, s1inv, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iiter, ilast, jiter;
     doublereal anorm, bnorm;
     integer maxit;
@@ -1693,12 +1693,12 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
     ilz = FALSE_;
     ilq = FALSE_;
     ilschr = FALSE_;
-    if (lsame_(job, "E"))
+    if (lsame_(job, "E", 1, 1))
     {
         ilschr = FALSE_;
         ischur = 1;
     }
-    else if (lsame_(job, "S"))
+    else if (lsame_(job, "S", 1, 1))
     {
         ilschr = TRUE_;
         ischur = 2;
@@ -1707,17 +1707,17 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
     {
         ischur = 0;
     }
-    if (lsame_(compq, "N"))
+    if (lsame_(compq, "N", 1, 1))
     {
         ilq = FALSE_;
         icompq = 1;
     }
-    else if (lsame_(compq, "V"))
+    else if (lsame_(compq, "V", 1, 1))
     {
         ilq = TRUE_;
         icompq = 2;
     }
-    else if (lsame_(compq, "I"))
+    else if (lsame_(compq, "I", 1, 1))
     {
         ilq = TRUE_;
         icompq = 3;
@@ -1726,17 +1726,17 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
     {
         icompq = 0;
     }
-    if (lsame_(compz, "N"))
+    if (lsame_(compz, "N", 1, 1))
     {
         ilz = FALSE_;
         icompz = 1;
     }
-    else if (lsame_(compz, "V"))
+    else if (lsame_(compz, "V", 1, 1))
     {
         ilz = TRUE_;
         icompz = 2;
     }
-    else if (lsame_(compz, "I"))
+    else if (lsame_(compz, "I", 1, 1))
     {
         ilz = TRUE_;
         icompz = 3;

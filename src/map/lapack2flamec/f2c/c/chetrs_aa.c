@@ -140,7 +140,7 @@ void chetrs_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda,
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
     integer k, kp;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void cswap_(integer *, complex *, integer *, complex *, integer *), cgtsv_(integer *, integer *, complex *, complex *, complex *, complex *, integer *, integer *), ctrsm_( char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
@@ -178,9 +178,9 @@ void chetrs_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda,
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

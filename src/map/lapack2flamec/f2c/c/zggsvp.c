@@ -279,8 +279,8 @@ void zggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     /* Builtin functions */
     double d_imag(dcomplex *);
     /* Local variables */
-    aocl_int64_t i__, j;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j;
+    extern logical lsame_(char *, char *, integer, integer);
     logical wantq, wantu, wantv;
     extern /* Subroutine */
     void zgeqr2_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgerq2_( integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zung2r_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zunm2r_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zunmr2_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zgeqpf_(integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, doublecomplex *, doublereal *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
@@ -338,15 +338,15 @@ void zggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     wantq = lsame_(jobq, "Q", 1, 1);
     forwrd = TRUE_;
     *info = 0;
-    if(!(wantu || lsame_(jobu, "N", 1, 1)))
+    if (! (wantu || lsame_(jobu, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if(!(wantv || lsame_(jobv, "N", 1, 1)))
+    else if (! (wantv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if(!(wantq || lsame_(jobq, "N", 1, 1)))
+    else if (! (wantq || lsame_(jobq, "N", 1, 1)))
     {
         *info = -3;
     }

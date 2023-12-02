@@ -264,9 +264,9 @@ void aocl_lapack_sgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, real *a, aoc
     /* Local variables */
     aocl_int64_t nb, nb1, nb2, nb3, ihi, ilo;
     real eps, anrm, bnrm;
-    aocl_int64_t itau, lopt;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t ileft, iinfo, icols;
+    integer itau, lopt;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer ileft, iinfo, icols;
     logical ilvsl;
     aocl_int64_t iwork;
     logical ilvsr;
@@ -338,12 +338,12 @@ void aocl_lapack_sgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, real *a, aoc
     vsr -= vsr_offset;
     --work;
     /* Function Body */
-    if(lsame_(jobvsl, "N", 1, 1))
+    if (lsame_(jobvsl, "N", 1, 1))
     {
         ijobvl = 1;
         ilvsl = FALSE_;
     }
-    else if(lsame_(jobvsl, "V", 1, 1))
+    else if (lsame_(jobvsl, "V", 1, 1))
     {
         ijobvl = 2;
         ilvsl = TRUE_;
@@ -353,12 +353,12 @@ void aocl_lapack_sgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, real *a, aoc
         ijobvl = -1;
         ilvsl = FALSE_;
     }
-    if(lsame_(jobvsr, "N", 1, 1))
+    if (lsame_(jobvsr, "N", 1, 1))
     {
         ijobvr = 1;
         ilvsr = FALSE_;
     }
-    else if(lsame_(jobvsr, "V", 1, 1))
+    else if (lsame_(jobvsr, "V", 1, 1))
     {
         ijobvr = 2;
         ilvsr = TRUE_;

@@ -359,7 +359,7 @@ void cggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer
     real tola;
     aocl_int64_t isub;
     real tolb, unfl, temp, smax;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     real anorm, bnorm;
     logical wantq;
     extern /* Subroutine */
@@ -416,15 +416,15 @@ void cggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer
     wantv = lsame_(jobv, "V", 1, 1);
     wantq = lsame_(jobq, "Q", 1, 1);
     *info = 0;
-    if(!(wantu || lsame_(jobu, "N", 1, 1)))
+    if (! (wantu || lsame_(jobu, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if(!(wantv || lsame_(jobv, "N", 1, 1)))
+    else if (! (wantv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if(!(wantq || lsame_(jobq, "N", 1, 1)))
+    else if (! (wantq || lsame_(jobq, "N", 1, 1)))
     {
         *info = -3;
     }

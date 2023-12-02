@@ -221,7 +221,7 @@ void dgtrfs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal 
     doublereal eps;
     aocl_int64_t kase;
     doublereal safe1, safe2;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
     void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
@@ -285,7 +285,7 @@ void dgtrfs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal 
     /* Function Body */
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
-    if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }

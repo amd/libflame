@@ -416,9 +416,7 @@ void sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     void sla_lin_berr_(integer *, integer *, integer *, real *, real *, real *);
     integer y_prec_state__, uplo2;
     extern /* Subroutine */
-        int
-        blas_ssymv_x_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-                      real *, integer *, integer *);
+    int blas_ssymv_x_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     real dxrat, dzrat;
     extern /* Subroutine */
@@ -488,8 +486,8 @@ void sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     /* Force HUGEVAL to Inf */
     hugeval *= hugeval;
     /* Using HUGEVAL may lead to spurious underflows. */
-    incr_thresh__ = (real)(*n) * eps;
-    if(lsame_(uplo, "L", 1, 1))
+    incr_thresh__ = (real) (*n) * eps;
+    if (lsame_(uplo, "L", 1, 1))
     {
         uplo2 = ilauplo_("L");
     }

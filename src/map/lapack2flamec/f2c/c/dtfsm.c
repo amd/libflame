@@ -288,7 +288,7 @@ void dtfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
     extern /* Subroutine */
     void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     logical lside;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
     void dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -325,23 +325,23 @@ void dtfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
     lside = lsame_(side, "L", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
     notrans = lsame_(trans, "N", 1, 1);
-    if(!normaltransr && !lsame_(transr, "T", 1, 1))
+    if (! normaltransr && ! lsame_(transr, "T", 1, 1))
     {
         info = -1;
     }
-    else if(!lside && !lsame_(side, "R", 1, 1))
+    else if (! lside && ! lsame_(side, "R", 1, 1))
     {
         info = -2;
     }
-    else if(!lower && !lsame_(uplo, "U", 1, 1))
+    else if (! lower && ! lsame_(uplo, "U", 1, 1))
     {
         info = -3;
     }
-    else if(!notrans && !lsame_(trans, "T", 1, 1))
+    else if (! notrans && ! lsame_(trans, "T", 1, 1))
     {
         info = -4;
     }
-    else if(!lsame_(diag, "N", 1, 1) && !lsame_(diag, "U", 1, 1))
+    else if (! lsame_(diag, "N", 1, 1) && ! lsame_(diag, "U", 1, 1))
     {
         info = -5;
     }

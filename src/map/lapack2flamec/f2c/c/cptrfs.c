@@ -206,7 +206,7 @@ void cptrfs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, real 
     scomplex bi, cx, dx, ex;
     aocl_int64_t ix, nz;
     real eps, safe1, safe2;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     integer count;
@@ -262,7 +262,7 @@ void cptrfs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, real 
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

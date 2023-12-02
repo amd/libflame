@@ -177,7 +177,7 @@ void dsytd2_fla(char *uplo, integer *n, doublereal *a, integer * lda, doublereal
     extern /* Subroutine */
     void dsyr2_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
@@ -213,8 +213,8 @@ void dsytd2_fla(char *uplo, integer *n, doublereal *a, integer * lda, doublereal
     --tau;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

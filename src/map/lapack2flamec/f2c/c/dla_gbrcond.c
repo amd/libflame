@@ -179,8 +179,8 @@ doublereal dla_gbrcond_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *
     /* Local variables */
     aocl_int64_t i__, j, kd, ke;
     doublereal tmp;
-    aocl_int64_t kase;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer kase;
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
     void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgbtrs_(char *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
@@ -221,7 +221,7 @@ doublereal dla_gbrcond_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *
     ret_val = 0.;
     *info = 0;
     notrans = lsame_(trans, "N", 1, 1);
-    if(!notrans && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    if (! notrans && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }

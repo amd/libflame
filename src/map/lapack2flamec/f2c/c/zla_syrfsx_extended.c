@@ -435,10 +435,7 @@ void zla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     void zla_lin_berr_(integer *, integer *, integer *, doublecomplex *, doublereal *, doublereal *);
     integer y_prec_state__, uplo2;
     extern /* Subroutine */
-        int
-        blas_zsymv_x_(integer *, integer *, dcomplex *, dcomplex *, integer *,
-                      dcomplex *, integer *, dcomplex *, dcomplex *, integer *,
-                      integer *);
+    int blas_zsymv_x_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *) ;
     extern logical lsame_(char *, char *, integer, integer);
     doublereal dxrat, dzrat;
     logical upper;
@@ -512,7 +509,7 @@ void zla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -552,8 +549,8 @@ void zla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     /* Force HUGEVAL to Inf */
     hugeval *= hugeval;
     /* Using HUGEVAL may lead to spurious underflows. */
-    incr_thresh__ = (doublereal)(*n) * eps;
-    if(lsame_(uplo, "L", 1, 1))
+    incr_thresh__ = (doublereal) (*n) * eps;
+    if (lsame_(uplo, "L", 1, 1))
     {
         uplo2 = ilauplo_("L");
     }

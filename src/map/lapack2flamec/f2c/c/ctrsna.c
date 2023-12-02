@@ -275,7 +275,9 @@ void ctrsna_(char *job, char *howmny, logical *select, integer *n, complex *t, i
     aocl_int64_t kase, ierr;
     scomplex prod;
     real lnrm, rnrm, scale;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Complex */
+    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     scomplex dummy[1];
     logical wants;
@@ -369,7 +371,7 @@ void ctrsna_(char *job, char *howmny, logical *select, integer *n, complex *t, i
     {
         *info = -1;
     }
-    else if(!lsame_(howmny, "A", 1, 1) && !somcon)
+    else if (! lsame_(howmny, "A", 1, 1) && ! somcon)
     {
         *info = -2;
     }

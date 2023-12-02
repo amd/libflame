@@ -215,7 +215,7 @@ void cherfs_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, c
     real eps;
     aocl_int64_t kase;
     real safe1, safe2;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * );
     integer isave[3];
@@ -278,7 +278,7 @@ void cherfs_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, c
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

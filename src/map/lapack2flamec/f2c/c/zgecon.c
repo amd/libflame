@@ -144,7 +144,7 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
     doublereal su;
     aocl_int64_t kase, kase1;
     doublereal scale;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
     void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
@@ -195,7 +195,7 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
     /* Test the input parameters. */
     *info = 0;
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
-    if(!onenrm && !lsame_(norm, "I", 1, 1))
+    if (! onenrm && ! lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }

@@ -277,7 +277,7 @@ void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
     real r__1;
     /* Local variables */
     integer i__, j;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical wantq, wantu, wantv;
     extern /* Subroutine */
     void sgeqp3_(integer *, integer *, real *, integer *, integer *, real *, real *, integer *, integer *), sgeqr2_( integer *, integer *, real *, integer *, real *, real *, integer * ), sgerq2_(integer *, integer *, real *, integer *, real *, real *, integer *), sorg2r_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *), sorm2r_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), sormr2_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slapmt_(logical *, integer *, integer *, real *, integer *, integer *);
@@ -325,23 +325,23 @@ void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
     --tau;
     --work;
     /* Function Body */
-    wantu = lsame_(jobu, "U");
-    wantv = lsame_(jobv, "V");
-    wantq = lsame_(jobq, "Q");
+    wantu = lsame_(jobu, "U", 1, 1);
+    wantv = lsame_(jobv, "V", 1, 1);
+    wantq = lsame_(jobq, "Q", 1, 1);
     forwrd = TRUE_;
     lquery = *lwork == -1;
     lwkopt = 1;
     /* Test the input arguments */
     *info = 0;
-    if (! (wantu || lsame_(jobu, "N")))
+    if (! (wantu || lsame_(jobu, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (wantv || lsame_(jobv, "N")))
+    else if (! (wantv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (wantq || lsame_(jobq, "N")))
+    else if (! (wantq || lsame_(jobq, "N", 1, 1)))
     {
         *info = -3;
     }

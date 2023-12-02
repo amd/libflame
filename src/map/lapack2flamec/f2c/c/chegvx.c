@@ -327,7 +327,7 @@ void chegvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, c
     real r__1;
     /* Local variables */
     integer nb;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     char trans[1];
@@ -388,7 +388,7 @@ void chegvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, c
     {
         *info = -1;
     }
-    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
@@ -396,7 +396,7 @@ void chegvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, c
     {
         *info = -3;
     }
-    else if(!(upper || lsame_(uplo, "L", 1, 1)))
+    else if (! (upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -4;
     }

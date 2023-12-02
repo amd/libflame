@@ -202,8 +202,8 @@ void dsyevd_(char *jobz, char *uplo, integer *n, doublereal * a, integer *lda, d
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo, lwmin, liopt;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer iinfo, lwmin, liopt;
     logical lower, wantz;
     aocl_int64_t indwk2, llwrk2;
     extern doublereal dlamch_(char *);
@@ -257,11 +257,11 @@ void dsyevd_(char *jobz, char *uplo, integer *n, doublereal * a, integer *lda, d
     lower = lsame_(uplo, "L", 1, 1);
     lquery = *lwork == -1 || *liwork == -1;
     *info = 0;
-    if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if(!(lower || lsame_(uplo, "U", 1, 1)))
+    else if (! (lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }

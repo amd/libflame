@@ -131,7 +131,7 @@ void ztrexc_(char *compq, integer *n, doublecomplex *t, integer *ldt, doublecomp
     doublecomplex t11, t22, sn, temp;
     extern /* Subroutine */
     void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical wantq;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlartg_( doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
@@ -163,8 +163,8 @@ void ztrexc_(char *compq, integer *n, doublecomplex *t, integer *ldt, doublecomp
     q -= q_offset;
     /* Function Body */
     *info = 0;
-    wantq = lsame_(compq, "V");
-    if (! lsame_(compq, "N") && ! wantq)
+    wantq = lsame_(compq, "V", 1, 1);
+    if (! lsame_(compq, "N", 1, 1) && ! wantq)
     {
         *info = -1;
     }

@@ -432,7 +432,7 @@ void dgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, doublereal *
     void dla_gerfsx_extended_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, logical *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, logical *, integer *);
     char norm[1];
     logical ignore_cwise__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal anorm;
     extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
@@ -550,15 +550,15 @@ void dgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, doublereal *
     {
         n_norms__ = 2;
     }
-    notran = lsame_(trans, "N");
-    rowequ = lsame_(equed, "R") || lsame_(equed, "B");
-    colequ = lsame_(equed, "C") || lsame_(equed, "B");
+    notran = lsame_(trans, "N", 1, 1);
+    rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
+    colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
     /* Test input parameters. */
     if (trans_type__ == -1)
     {
         *info = -1;
     }
-    else if (! rowequ && ! colequ && ! lsame_(equed, "N"))
+    else if (! rowequ && ! colequ && ! lsame_(equed, "N", 1, 1))
     {
         *info = -2;
     }

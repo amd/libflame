@@ -158,7 +158,7 @@ void zlatzm_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv
     aocl_int64_t c1_dim1, c1_offset, c2_dim1, c2_offset, i__1;
     dcomplex z__1;
     /* Local variables */
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -194,7 +194,7 @@ void zlatzm_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv
     AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if(lsame_(side, "L", 1, 1))
+    if (lsame_(side, "L", 1, 1))
     {
         /* w := ( C1 + v**H * C2 )**H */
         aocl_blas_zcopy(n, &c1[c1_offset], ldc, &work[1], &c__1);
@@ -213,7 +213,7 @@ void zlatzm_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv
         z__1.imag = -tau->imag; // , expr subst
         aocl_blas_zgeru(&i__1, n, &z__1, &v[1], incv, &work[1], &c__1, &c2[c2_offset], ldc);
     }
-    else if(lsame_(side, "R", 1, 1))
+    else if (lsame_(side, "R", 1, 1))
     {
         /* w := C1 + C2 * v */
         aocl_blas_zcopy(m, &c1[c1_offset], &c__1, &work[1], &c__1);

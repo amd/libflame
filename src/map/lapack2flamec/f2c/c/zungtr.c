@@ -130,9 +130,9 @@ void zungtr_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecompl
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    aocl_int64_t i__, j, nb;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    integer i__, j, nb;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer iinfo;
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -172,7 +172,7 @@ void zungtr_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecompl
     *info = 0;
     lquery = *lwork == -1;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

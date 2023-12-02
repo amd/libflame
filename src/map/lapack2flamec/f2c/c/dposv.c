@@ -133,7 +133,7 @@ void dposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, 
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dpotrf_( char *, integer *, doublereal *, integer *, integer *), dpotrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
@@ -162,7 +162,7 @@ void dposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, 
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

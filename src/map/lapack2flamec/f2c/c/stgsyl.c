@@ -316,7 +316,7 @@ void stgsyl_(char *trans, integer *ijob, integer *m, integer * n, real *a, integ
     aocl_int64_t i__, j, k, p, q, ie, je, mb, nb, is, js, pq;
     real dsum;
     integer ppqq;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer ifunc;
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
@@ -385,7 +385,7 @@ void stgsyl_(char *trans, integer *ijob, integer *m, integer * n, real *a, integ
     notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
     scale2 = 0.f;
-    if (! notran && ! lsame_(trans, "T"))
+    if (! notran && ! lsame_(trans, "T", 1, 1))
     {
         *info = -1;
     }

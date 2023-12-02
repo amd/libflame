@@ -246,7 +246,7 @@ void dgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublereal *a, int
     doublereal aapp0;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     doublereal temp1, apoaq, aqoap;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal theta, small_val;
     extern /* Subroutine */
     void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
@@ -305,9 +305,9 @@ void dgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublereal *a, int
     v -= v_offset;
     --work;
     /* Function Body */
-    applv = lsame_(jobv, "A");
-    rsvec = lsame_(jobv, "V");
-    if (! (rsvec || applv || lsame_(jobv, "N")))
+    applv = lsame_(jobv, "A", 1, 1);
+    rsvec = lsame_(jobv, "V", 1, 1);
+    if (! (rsvec || applv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -1;
     }

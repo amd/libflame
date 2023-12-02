@@ -299,8 +299,8 @@ void chesvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
         i__2;
     real r__1;
     /* Local variables */
-    aocl_int64_t nb;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer nb;
+    extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     extern real clanhe_(char *, char *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
@@ -356,11 +356,11 @@ void chesvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
     *info = 0;
     nofact = lsame_(fact, "N", 1, 1);
     lquery = *lwork == -1;
-    if(!nofact && !lsame_(fact, "F", 1, 1))
+    if (! nofact && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
+    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }

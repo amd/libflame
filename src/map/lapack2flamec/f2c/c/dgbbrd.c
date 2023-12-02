@@ -206,7 +206,7 @@ void dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
     integer kb1, ml0, mu0, klm, kun, nrt, klu1, inca;
     extern /* Subroutine */
     void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical wantb, wantc;
     aocl_int64_t minmn;
     logical wantq;
@@ -257,7 +257,7 @@ void dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
     wantc = *ncc > 0;
     klu1 = *kl + *ku + 1;
     *info = 0;
-    if(!wantq && !wantpt && !lsame_(vect, "N", 1, 1))
+    if (! wantq && ! wantpt && ! lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }

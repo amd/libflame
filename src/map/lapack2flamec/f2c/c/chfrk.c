@@ -184,7 +184,7 @@ void chfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real 
     logical normaltransr;
     extern /* Subroutine */
     void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nrowa;
     logical lower;
     complex calpha;
@@ -223,7 +223,7 @@ void chfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real 
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
     notrans = lsame_(trans, "N", 1, 1);
-    if(notrans)
+    if (notrans)
     {
         nrowa = *n;
     }
@@ -231,15 +231,15 @@ void chfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real 
     {
         nrowa = *k;
     }
-    if(!normaltransr && !lsame_(transr, "C", 1, 1))
+    if (! normaltransr && ! lsame_(transr, "C", 1, 1))
     {
         info = -1;
     }
-    else if(!lower && !lsame_(uplo, "U", 1, 1))
+    else if (! lower && ! lsame_(uplo, "U", 1, 1))
     {
         info = -2;
     }
-    else if(!notrans && !lsame_(trans, "C", 1, 1))
+    else if (! notrans && ! lsame_(trans, "C", 1, 1))
     {
         info = -3;
     }

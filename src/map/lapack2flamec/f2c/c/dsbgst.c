@@ -181,7 +181,7 @@ void dsbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, doubl
     integer kbt, nrt, inca;
     extern /* Subroutine */
     void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *), dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper, wantx;
     extern /* Subroutine */
     void dlar2v_(integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlargv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
@@ -226,11 +226,11 @@ void dsbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, doubl
     ka1 = *ka + 1;
     kb1 = *kb + 1;
     *info = 0;
-    if(!wantx && !lsame_(vect, "N", 1, 1))
+    if (! wantx && ! lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }
-    else if(!upper && !lsame_(uplo, "L", 1, 1))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }

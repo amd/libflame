@@ -178,8 +178,8 @@ void dstevd_(char *jobz, integer *n, doublereal *d__, doublereal *e, doublereal 
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t lwmin;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer lwmin;
     logical wantz;
     extern doublereal dlamch_(char *);
     integer iscale;
@@ -237,7 +237,7 @@ void dstevd_(char *jobz, integer *n, doublereal *d__, doublereal *e, doublereal 
         lwmin = (*n << 2) + 1 + i__1 * i__1;
         liwmin = *n * 5 + 3;
     }
-    if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }

@@ -242,7 +242,7 @@ void chetrd_2stage_(char *vect, char *uplo, integer *n, complex *a, integer *lda
     void chetrd_hb2st_(char *, char *, char *, integer *, integer *, complex *, integer *, real *, real *, complex *, integer *, complex *, integer *, integer *);
     extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwrk, wpos;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer abpos, lhmin, lwmin;
     logical upper;
     extern /* Subroutine */
@@ -277,7 +277,7 @@ void chetrd_2stage_(char *vect, char *uplo, integer *n, complex *a, integer *lda
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1 || *lhous2 == -1;
     /* Determine the block size, the workspace size and the hous size. */
     kd = ilaenv2stage_(&c__1, "CHETRD_2STAGE", vect, n, &c_n1, &c_n1, &c_n1);
@@ -286,11 +286,11 @@ void chetrd_2stage_(char *vect, char *uplo, integer *n, complex *a, integer *lda
     lwmin = ilaenv2stage_(&c__4, "CHETRD_2STAGE", vect, n, &kd, &ib, &c_n1);
     /* WRITE(*,*),'CHETRD_2STAGE N KD UPLO LHMIN LWMIN ',N, KD, UPLO, */
     /* $ LHMIN, LWMIN */
-    if (! lsame_(vect, "N"))
+    if (! lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L"))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }

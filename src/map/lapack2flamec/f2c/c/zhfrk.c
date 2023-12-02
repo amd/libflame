@@ -174,7 +174,7 @@ void zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doubl
     aocl_int64_t j, n1, n2, nk, info;
     dcomplex cbeta;
     logical normaltransr;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
     integer nrowa;
@@ -214,7 +214,7 @@ void zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doubl
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
     notrans = lsame_(trans, "N", 1, 1);
-    if(notrans)
+    if (notrans)
     {
         nrowa = *n;
     }
@@ -222,15 +222,15 @@ void zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doubl
     {
         nrowa = *k;
     }
-    if(!normaltransr && !lsame_(transr, "C", 1, 1))
+    if (! normaltransr && ! lsame_(transr, "C", 1, 1))
     {
         info = -1;
     }
-    else if(!lower && !lsame_(uplo, "U", 1, 1))
+    else if (! lower && ! lsame_(uplo, "U", 1, 1))
     {
         info = -2;
     }
-    else if(!notrans && !lsame_(trans, "C", 1, 1))
+    else if (! notrans && ! lsame_(trans, "C", 1, 1))
     {
         info = -3;
     }

@@ -263,7 +263,7 @@ void dbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
     doublereal unfl, sinl, cosr, smin, smax, sinr;
     extern /* Subroutine */
     void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *), dlas2_( doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal oldcs;
     extern /* Subroutine */
     void dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
@@ -317,8 +317,8 @@ void dbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
     --work;
     /* Function Body */
     *info = 0;
-    lower = lsame_(uplo, "L");
-    if (! lsame_(uplo, "U") && ! lower)
+    lower = lsame_(uplo, "L", 1, 1);
+    if (! lsame_(uplo, "U", 1, 1) && ! lower)
     {
         *info = -1;
     }

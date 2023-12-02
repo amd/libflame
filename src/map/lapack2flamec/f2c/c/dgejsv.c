@@ -492,7 +492,7 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     logical jracc;
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal small_val, entra, sfmin;
     logical lsvec;
     extern /* Subroutine */
@@ -569,26 +569,26 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     --work;
     --iwork;
     /* Function Body */
-    lsvec = lsame_(jobu, "U") || lsame_(jobu, "F");
-    jracc = lsame_(jobv, "J");
-    rsvec = lsame_(jobv, "V") || jracc;
-    rowpiv = lsame_(joba, "F") || lsame_(joba, "G");
-    l2rank = lsame_(joba, "R");
-    l2aber = lsame_(joba, "A");
-    errest = lsame_(joba, "E") || lsame_(joba, "G");
-    l2tran = lsame_(jobt, "T");
-    l2kill = lsame_(jobr, "R");
-    defr = lsame_(jobr, "N");
-    l2pert = lsame_(jobp, "P");
-    if (! (rowpiv || l2rank || l2aber || errest || lsame_(joba, "C")))
+    lsvec = lsame_(jobu, "U", 1, 1) || lsame_(jobu, "F", 1, 1);
+    jracc = lsame_(jobv, "J", 1, 1);
+    rsvec = lsame_(jobv, "V", 1, 1) || jracc;
+    rowpiv = lsame_(joba, "F", 1, 1) || lsame_(joba, "G", 1, 1);
+    l2rank = lsame_(joba, "R", 1, 1);
+    l2aber = lsame_(joba, "A", 1, 1);
+    errest = lsame_(joba, "E", 1, 1) || lsame_(joba, "G", 1, 1);
+    l2tran = lsame_(jobt, "T", 1, 1);
+    l2kill = lsame_(jobr, "R", 1, 1);
+    defr = lsame_(jobr, "N", 1, 1);
+    l2pert = lsame_(jobp, "P", 1, 1);
+    if (! (rowpiv || l2rank || l2aber || errest || lsame_(joba, "C", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lsvec || lsame_(jobu, "N") || lsame_( jobu, "W")))
+    else if (! (lsvec || lsame_(jobu, "N", 1, 1) || lsame_(jobu, "W", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (rsvec || lsame_(jobv, "N") || lsame_( jobv, "W")) || jracc && ! lsvec)
+    else if (! (rsvec || lsame_(jobv, "N", 1, 1) || lsame_(jobv, "W", 1, 1)) || jracc && ! lsvec)
     {
         *info = -3;
     }
@@ -596,11 +596,11 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     {
         *info = -4;
     }
-    else if (! (l2tran || lsame_(jobt, "N")))
+    else if (! (l2tran || lsame_(jobt, "N", 1, 1)))
     {
         *info = -5;
     }
-    else if (! (l2pert || lsame_(jobp, "N")))
+    else if (! (l2pert || lsame_(jobp, "N", 1, 1)))
     {
         *info = -6;
     }
@@ -692,7 +692,7 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     if (lsvec)
     {
         n1 = *n;
-        if (lsame_(jobu, "F"))
+        if (lsame_(jobu, "F", 1, 1))
         {
             n1 = *m;
         }

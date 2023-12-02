@@ -138,7 +138,7 @@ void zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv,
     /* Local variables */
     aocl_int64_t i__;
     logical applyleft;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer lastc;
     extern /* Subroutine */
     void zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);

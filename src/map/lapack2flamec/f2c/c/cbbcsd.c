@@ -368,7 +368,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
     integer iu1sn, iu2sn;
     extern /* Subroutine */
     void cscal_(integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void clasr_(char *, char *, char *, integer *, integer *, real *, real *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
     integer maxit;
@@ -437,8 +437,8 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
     wantu2 = lsame_(jobu2, "Y", 1, 1);
     wantv1t = lsame_(jobv1t, "Y", 1, 1);
     wantv2t = lsame_(jobv2t, "Y", 1, 1);
-    colmajor = !lsame_(trans, "T", 1, 1);
-    if(*m < 0)
+    colmajor = ! lsame_(trans, "T", 1, 1);
+    if (*m < 0)
     {
         *info = -6;
     }

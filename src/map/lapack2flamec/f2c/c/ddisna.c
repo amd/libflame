@@ -125,7 +125,7 @@ void ddisna_(char *job, integer *m, integer *n, doublereal * d__, doublereal *se
     aocl_int64_t i__, k;
     doublereal eps;
     logical decr, left, incr, sing, eigen;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal anorm;
     logical right;
     extern doublereal dlamch_(char *);

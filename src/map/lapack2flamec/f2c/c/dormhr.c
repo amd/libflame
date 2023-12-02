@@ -195,8 +195,8 @@ void dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
     /* Local variables */
     aocl_int64_t i1, i2, nb, mi, nh, ni, nq, nw;
     logical left;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer iinfo;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
@@ -248,11 +248,11 @@ void dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
         nq = *n;
         nw = *m;
     }
-    if(!left && !lsame_(side, "R", 1, 1))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "T", 1, 1))
+    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1))
     {
         *info = -2;
     }

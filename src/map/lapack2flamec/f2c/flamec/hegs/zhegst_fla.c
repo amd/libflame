@@ -136,7 +136,7 @@ void zhegst_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
     doublecomplex z__1;
     /* Local variables */
     integer k, kb, nb;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zhemm_(char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical upper;
@@ -172,12 +172,12 @@ void zhegst_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     if (*itype < 1 || *itype > 3)
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L"))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }

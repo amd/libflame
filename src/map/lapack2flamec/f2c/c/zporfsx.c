@@ -406,7 +406,7 @@ void zporfsx_(char *uplo, char *equed, integer *n, integer * nrhs, doublecomplex
     void zla_porfsx_extended_(integer *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, logical *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, doublecomplex *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, logical *, integer *);
     char norm[1];
     logical ignore_cwise__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal anorm;
     logical rcequ;
     extern doublereal zla_porcond_c_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, logical *, integer *, doublecomplex *, doublereal *), zla_porcond_x_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *), dlamch_(char *);
@@ -524,13 +524,13 @@ void zporfsx_(char *uplo, char *equed, integer *n, integer * nrhs, doublecomplex
     {
         n_norms__ = 2;
     }
-    rcequ = lsame_(equed, "Y");
+    rcequ = lsame_(equed, "Y", 1, 1);
     /* Test input parameters. */
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! rcequ && ! lsame_(equed, "N"))
+    else if (! rcequ && ! lsame_(equed, "N", 1, 1))
     {
         *info = -2;
     }

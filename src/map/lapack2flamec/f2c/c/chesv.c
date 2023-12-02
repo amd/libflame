@@ -187,7 +187,7 @@ void chesv_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, int
     real r__1;
     /* Local variables */
     integer nb;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void chetrf_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
@@ -227,7 +227,7 @@ void chesv_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, int
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

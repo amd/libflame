@@ -175,8 +175,8 @@ real cla_gbrcond_x_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, 
     /* Local variables */
     aocl_int64_t i__, j, kd, ke;
     real tmp;
-    aocl_int64_t kase;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer kase;
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     real anorm;
     extern /* Subroutine */
@@ -222,7 +222,7 @@ real cla_gbrcond_x_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, 
     ret_val = 0.f;
     *info = 0;
     notrans = lsame_(trans, "N", 1, 1);
-    if(!notrans && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    if (! notrans && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }

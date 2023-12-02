@@ -110,7 +110,7 @@ void spptri_(char *uplo, integer *n, real *ap, integer *info)
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     extern /* Subroutine */
     void sspr_(char *, integer *, real *, real *, integer *, real *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
     logical upper;
@@ -140,7 +140,7 @@ void spptri_(char *uplo, integer *n, real *ap, integer *info)
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

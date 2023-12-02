@@ -148,8 +148,8 @@ void zgtcon_(char *norm, integer *n, doublecomplex *dl, doublecomplex *d__, doub
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     /* Local variables */
-    aocl_int64_t i__, kase, kase1;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, kase, kase1;
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
     void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -190,7 +190,7 @@ void zgtcon_(char *norm, integer *n, doublecomplex *dl, doublecomplex *d__, doub
     /* Function Body */
     *info = 0;
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
-    if(!onenrm && !lsame_(norm, "I", 1, 1))
+    if (! onenrm && ! lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }

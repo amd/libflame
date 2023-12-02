@@ -178,7 +178,7 @@ void dormlq_fla(char *side, char *trans, integer *m, integer *n, integer *k, dou
     ;
     integer i1, i2, i3, ib, ic, jc, nb, mi, ni, nq, nw, iws;
     logical left;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nbmin, iinfo;
     extern /* Subroutine */
     void dorml2_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -222,8 +222,8 @@ void dormlq_fla(char *side, char *trans, integer *m, integer *n, integer *k, dou
     --work;
     /* Function Body */
     *info = 0;
-    left = lsame_(side, "L");
-    notran = lsame_(trans, "N");
+    left = lsame_(side, "L", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
     /* NQ is the order of Q and NW is the minimum dimension of WORK */
     if (left)
@@ -236,11 +236,11 @@ void dormlq_fla(char *side, char *trans, integer *m, integer *n, integer *k, dou
         nq = *n;
         nw = *m;
     }
-    if (! left && ! lsame_(side, "R"))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T"))
+    else if (! notran && ! lsame_(trans, "T", 1, 1))
     {
         *info = -2;
     }

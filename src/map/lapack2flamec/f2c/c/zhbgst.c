@@ -190,7 +190,7 @@ void zhbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, doubl
     integer kbt, nrt, inca;
     extern /* Subroutine */
     void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     logical upper;
@@ -242,11 +242,11 @@ void zhbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, doubl
     kb1 = *kb + 1;
     *info = 0;
     j2 = 0;
-    if (! wantx && ! lsame_(vect, "N"))
+    if (! wantx && ! lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }
-    else if(!upper && !lsame_(uplo, "L", 1, 1))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }

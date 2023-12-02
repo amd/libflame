@@ -134,8 +134,8 @@ void ssytri_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
     aocl_int64_t kp;
     real akp1, temp;
     real akkp1;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t kstep;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer kstep;
     logical upper;
     extern /* Subroutine */
     void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -169,7 +169,7 @@ void ssytri_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

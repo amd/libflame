@@ -390,7 +390,7 @@ void cheevr_(char *jobz, char *range, char *uplo, integer *n, complex *a, intege
     logical test;
     aocl_int64_t itmp1, indrd, indre;
     real sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
@@ -464,7 +464,7 @@ void cheevr_(char *jobz, char *range, char *uplo, integer *n, complex *a, intege
     --rwork;
     --iwork;
     /* Function Body */
-    ieeeok = aocl_lapack_ilaenv(&c__10, "CHEEVR", "N", &c__1, &c__2, &c__3, &c__4);
+    ieeeok = ilaenv_(&c__10, "CHEEVR", "N", &c__1, &c__2, &c__3, &c__4);
     lower = lsame_(uplo, "L", 1, 1);
     wantz = lsame_(jobz, "V", 1, 1);
     alleig = lsame_(range, "A", 1, 1);
@@ -484,7 +484,7 @@ void cheevr_(char *jobz, char *range, char *uplo, integer *n, complex *a, intege
     i__2 = *n << 1; // , expr subst
     lwmin = fla_max(i__1,i__2);
     *info = 0;
-    if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
@@ -492,7 +492,7 @@ void cheevr_(char *jobz, char *range, char *uplo, integer *n, complex *a, intege
     {
         *info = -2;
     }
-    else if(!(lower || lsame_(uplo, "U", 1, 1)))
+    else if (! (lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -3;
     }

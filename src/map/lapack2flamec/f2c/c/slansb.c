@@ -128,7 +128,7 @@ real slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab, integer *
     /* Local variables */
     integer i__, j, l;
     real sum, absa, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real value;
     extern /* Subroutine */
     void slassq_(integer *, real *, integer *, real *, real *);
@@ -162,11 +162,11 @@ real slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab, integer *
     {
         value = 0.f;
     }
-    else if (lsame_(norm, "M"))
+    else if (lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(abs(A(i,j))). */
         value = 0.f;
-        if (lsame_(uplo, "U"))
+        if (lsame_(uplo, "U", 1, 1))
         {
             i__1 = *n;
             for (j = 1;
@@ -216,11 +216,11 @@ real slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab, integer *
             }
         }
     }
-    else if (lsame_(norm, "I") || lsame_(norm, "O") || *(unsigned char *)norm == '1')
+    else if (lsame_(norm, "I", 1, 1) || lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1')
     {
         /* Find normI(A) ( = norm1(A), since A is symmetric). */
         value = 0.f;
-        if (lsame_(uplo, "U"))
+        if (lsame_(uplo, "U", 1, 1))
         {
             i__1 = *n;
             for (j = 1;
@@ -296,14 +296,14 @@ real slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab, integer *
             }
         }
     }
-    else if (lsame_(norm, "F") || lsame_(norm, "E"))
+    else if (lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
         scale = 0.f;
         sum = 1.f;
         if (*k > 0)
         {
-            if (lsame_(uplo, "U"))
+            if (lsame_(uplo, "U", 1, 1))
             {
                 i__1 = *n;
                 for (j = 2;

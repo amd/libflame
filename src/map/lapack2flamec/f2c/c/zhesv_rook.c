@@ -214,7 +214,7 @@ void zhesv_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, intege
     integer nb;
     extern /* Subroutine */
     void zhetrf_rook_(char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zhetrs_rook_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
@@ -251,7 +251,7 @@ void zhesv_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, intege
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

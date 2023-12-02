@@ -187,7 +187,7 @@ void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     doublereal smin, suml, sumr;
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer knext, lnext;
     doublereal xnorm;
     extern /* Subroutine */
@@ -235,11 +235,11 @@ void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     notrna = lsame_(trana, "N", 1, 1);
     notrnb = lsame_(tranb, "N", 1, 1);
     *info = 0;
-    if(!notrna && !lsame_(trana, "T", 1, 1) && !lsame_(trana, "C", 1, 1))
+    if (! notrna && ! lsame_(trana, "T", 1, 1) && ! lsame_(trana, "C", 1, 1))
     {
         *info = -1;
     }
-    else if(!notrnb && !lsame_(tranb, "T", 1, 1) && !lsame_(tranb, "C", 1, 1))
+    else if (! notrnb && ! lsame_(tranb, "T", 1, 1) && ! lsame_(tranb, "C", 1, 1))
     {
         *info = -2;
     }

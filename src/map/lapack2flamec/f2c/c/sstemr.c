@@ -353,7 +353,7 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     integer itmp2;
     real rtol1, rtol2, scale;
     integer indgp;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
@@ -466,7 +466,7 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         iiu = *iu;
     }
     *info = 0;
-    if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }

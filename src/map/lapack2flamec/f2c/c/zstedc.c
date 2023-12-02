@@ -222,7 +222,7 @@ void zstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
     doublereal p;
     integer ii, ll, lgn;
     doublereal eps, tiny;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer lwmin, start;
     extern /* Subroutine */
     void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaed0_(integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *);
@@ -279,15 +279,15 @@ void zstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
     liwmin = 0;
     lrwmin = 0;
     lquery = *lwork == -1 || *lrwork == -1 || *liwork == -1;
-    if (lsame_(compz, "N"))
+    if (lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if (lsame_(compz, "V"))
+    else if (lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if (lsame_(compz, "I"))
+    else if (lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }

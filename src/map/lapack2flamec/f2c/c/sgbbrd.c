@@ -236,7 +236,7 @@ void aocl_lapack_sgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     integer kb1, ml0, mu0, klm, kun, nrt, klu1, inca;
     extern /* Subroutine */
     void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical wantb, wantc;
     aocl_int64_t minmn;
     logical wantq;
@@ -287,7 +287,7 @@ void aocl_lapack_sgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     wantc = *ncc > 0;
     klu1 = *kl + *ku + 1;
     *info = 0;
-    if(!wantq && !wantpt && !lsame_(vect, "N", 1, 1))
+    if (! wantq && ! wantpt && ! lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }

@@ -128,7 +128,7 @@ void dpocon_(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *a
     /* Local variables */
     aocl_int64_t ix, kase;
     doublereal scale;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
     void drscl_(integer *, doublereal *, doublereal *, integer *);
@@ -177,7 +177,7 @@ void dpocon_(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *a
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

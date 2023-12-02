@@ -129,7 +129,7 @@ void zsptrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, integer *
     doublecomplex ak, bk;
     integer kc, kp;
     doublecomplex akm1, bkm1, akm1k;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublecomplex denom;
     extern /* Subroutine */
     void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
@@ -165,7 +165,7 @@ void zsptrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, integer *
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

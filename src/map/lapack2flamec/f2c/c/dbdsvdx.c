@@ -258,7 +258,7 @@ void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, 
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
     integer isbeg;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer idtgk, ietgk, iltgk, itemp;
     extern /* Subroutine */
     void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
@@ -319,17 +319,17 @@ void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, 
     --work;
     --iwork;
     /* Function Body */
-    allsv = lsame_(range, "A");
-    valsv = lsame_(range, "V");
-    indsv = lsame_(range, "I");
-    wantz = lsame_(jobz, "V");
-    lower = lsame_(uplo, "L");
+    allsv = lsame_(range, "A", 1, 1);
+    valsv = lsame_(range, "V", 1, 1);
+    indsv = lsame_(range, "I", 1, 1);
+    wantz = lsame_(jobz, "V", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
     *info = 0;
-    if (! lsame_(uplo, "U") && ! lower)
+    if (! lsame_(uplo, "U", 1, 1) && ! lower)
     {
         *info = -1;
     }
-    else if (! (wantz || lsame_(jobz, "N")))
+    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }

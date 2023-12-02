@@ -139,7 +139,7 @@ void cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *
     real avg, std, tol, base;
     integer iter;
     real smin, smax, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real sumsq;
     extern real slamch_(char *);
     extern /* Subroutine */
@@ -180,7 +180,7 @@ void cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *
     --work;
     /* Function Body */
     *info = 0;
-    if (! (lsame_(uplo, "U") || lsame_(uplo, "L")))
+    if (! (lsame_(uplo, "U", 1, 1) || lsame_(uplo, "L", 1, 1)))
     {
         *info = -1;
     }
@@ -199,7 +199,7 @@ void cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *
     AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    up = lsame_(uplo, "U");
+    up = lsame_(uplo, "U", 1, 1);
     *amax = 0.f;
     /* Quick return if possible. */
     if (*n == 0)

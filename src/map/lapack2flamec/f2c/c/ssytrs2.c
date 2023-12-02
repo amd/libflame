@@ -136,7 +136,7 @@ void ssytrs2_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, inte
     real ak, bk;
     integer kp;
     real akm1, bkm1, akm1k;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real denom;
     integer iinfo;
     extern /* Subroutine */
@@ -175,8 +175,8 @@ void ssytrs2_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, inte
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

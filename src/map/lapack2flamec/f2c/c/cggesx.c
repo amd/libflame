@@ -363,9 +363,9 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
     real eps;
     aocl_int64_t ijob;
     real anrm, bnrm;
-    aocl_int64_t ierr, itau, iwrk, lwrk;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t ileft, icols;
+    integer ierr, itau, iwrk, lwrk;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer ileft, icols;
     logical cursl, ilvsl, ilvsr;
     integer irwrk, irows;
     extern /* Subroutine */
@@ -440,12 +440,12 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
     --iwork;
     --bwork;
     /* Function Body */
-    if(lsame_(jobvsl, "N", 1, 1))
+    if (lsame_(jobvsl, "N", 1, 1))
     {
         ijobvl = 1;
         ilvsl = FALSE_;
     }
-    else if(lsame_(jobvsl, "V", 1, 1))
+    else if (lsame_(jobvsl, "V", 1, 1))
     {
         ijobvl = 2;
         ilvsl = TRUE_;
@@ -455,12 +455,12 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
         ijobvl = -1;
         ilvsl = FALSE_;
     }
-    if(lsame_(jobvsr, "N", 1, 1))
+    if (lsame_(jobvsr, "N", 1, 1))
     {
         ijobvr = 1;
         ilvsr = FALSE_;
     }
-    else if(lsame_(jobvsr, "V", 1, 1))
+    else if (lsame_(jobvsr, "V", 1, 1))
     {
         ijobvr = 2;
         ilvsr = TRUE_;
@@ -502,7 +502,7 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
     {
         *info = -2;
     }
-    else if(!wantst && !lsame_(sort, "N", 1, 1))
+    else if (! wantst && ! lsame_(sort, "N", 1, 1))
     {
         *info = -3;
     }

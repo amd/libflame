@@ -581,8 +581,7 @@ void sgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
     /* Local variables */
     integer i__, j;
     real amax;
-    extern real sla_gbrpvgrw_(integer *, integer *, integer *, integer *, real *, integer *, real *,
-                              integer *);
+    extern real sla_gbrpvgrw_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     real rcmin, rcmax;
     logical equil;
@@ -675,11 +674,11 @@ void sgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
     /* pivot growth is set here, the rest is initialized in SGBRFSX. */
     *rpvgrw = 0.f;
     /* Test the input parameters. PARAMS is not tested until SGBRFSX. */
-    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
+    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -707,7 +706,7 @@ void sgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
     {
         *info = -10;
     }
-    else if(lsame_(fact, "F", 1, 1) && !(rowequ || colequ || lsame_(equed, "N", 1, 1)))
+    else if (lsame_(fact, "F", 1, 1) && ! (rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -12;
     }
@@ -799,8 +798,7 @@ void sgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            slaqgb_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
-                    equed);
+            slaqgb_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], & rowcnd, &colcnd, &amax, equed);
             rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
             colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }

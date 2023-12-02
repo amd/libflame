@@ -298,7 +298,7 @@ void dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doubl
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
@@ -347,8 +347,8 @@ void dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doubl
     --work;
     /* Function Body */
     *info = 0;
-    colmajor = ! lsame_(trans, "T");
-    if (! lsame_(signs, "O"))
+    colmajor = ! lsame_(trans, "T", 1, 1);
+    if (! lsame_(signs, "O", 1, 1))
     {
         z1 = 1.;
         z2 = 1.;

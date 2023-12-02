@@ -316,7 +316,7 @@ void claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, i
     extern /* Subroutine */
     void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
     integer n_undeflated__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iiter;
     real bnorm;
     integer maxit, rcost, istop;
@@ -370,12 +370,12 @@ void claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, i
     /* Function Body */
     eshift.r = 0.f;
     eshift.i = 0.f;
-    if (lsame_(wants, "E"))
+    if (lsame_(wants, "E", 1, 1))
     {
         ilschur = FALSE_;
         iwants = 1;
     }
-    else if (lsame_(wants, "S"))
+    else if (lsame_(wants, "S", 1, 1))
     {
         ilschur = TRUE_;
         iwants = 2;
@@ -384,17 +384,17 @@ void claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, i
     {
         iwants = 0;
     }
-    if (lsame_(wantq, "N"))
+    if (lsame_(wantq, "N", 1, 1))
     {
         ilq = FALSE_;
         iwantq = 1;
     }
-    else if (lsame_(wantq, "V"))
+    else if (lsame_(wantq, "V", 1, 1))
     {
         ilq = TRUE_;
         iwantq = 2;
     }
-    else if (lsame_(wantq, "I"))
+    else if (lsame_(wantq, "I", 1, 1))
     {
         ilq = TRUE_;
         iwantq = 3;
@@ -403,17 +403,17 @@ void claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, i
     {
         iwantq = 0;
     }
-    if (lsame_(wantz, "N"))
+    if (lsame_(wantz, "N", 1, 1))
     {
         ilz = FALSE_;
         iwantz = 1;
     }
-    else if (lsame_(wantz, "V"))
+    else if (lsame_(wantz, "V", 1, 1))
     {
         ilz = TRUE_;
         iwantz = 2;
     }
-    else if (lsame_(wantz, "I"))
+    else if (lsame_(wantz, "I", 1, 1))
     {
         ilz = TRUE_;
         iwantz = 3;

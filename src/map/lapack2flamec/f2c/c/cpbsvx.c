@@ -363,7 +363,7 @@ void cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, com
     /* Local variables */
     aocl_int64_t i__, j, j1, j2;
     real amax, smin, smax;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     real scond, anorm;
     extern /* Subroutine */
     void ccopy_(integer *, complex *, integer *, complex *, integer *);
@@ -422,9 +422,9 @@ void cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, com
     --rwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    equil = lsame_(fact, "E");
-    upper = lsame_(uplo, "U");
+    nofact = lsame_(fact, "N", 1, 1);
+    equil = lsame_(fact, "E", 1, 1);
+    upper = lsame_(uplo, "U", 1, 1);
     smlnum = 0.f;
     bignum = 0.f;
     if (nofact || equil)
@@ -439,11 +439,11 @@ void cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, com
         bignum = 1.f / smlnum;
     }
     /* Test the input parameters. */
-    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
+    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if(!upper && !lsame_(uplo, "L", 1, 1))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -467,7 +467,7 @@ void cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, com
     {
         *info = -9;
     }
-    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
+    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -10;
     }
@@ -529,7 +529,7 @@ void cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, com
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            aocl_lapack_claqhb(uplo, n, kd, &ab[ab_offset], ldab, &s[1], &scond, &amax, equed);
+            claqhb_(uplo, n, kd, &ab[ab_offset], ldab, &s[1], &scond, &amax, equed);
             rcequ = lsame_(equed, "Y", 1, 1);
         }
     }

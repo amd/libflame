@@ -189,9 +189,9 @@ void zsytrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    aocl_int64_t j, k, kb, nb, iws;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t nbmin, iinfo;
+    integer j, k, kb, nb, iws;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
     void zsytf2_(char *, integer *, doublecomplex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -229,7 +229,7 @@ void zsytrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

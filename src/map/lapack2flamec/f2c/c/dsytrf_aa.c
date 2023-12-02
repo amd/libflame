@@ -139,7 +139,7 @@ void dsytrf_aa_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ip
     doublereal alpha;
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
@@ -177,9 +177,9 @@ void dsytrf_aa_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ip
     nb = ilaenv_(&c__1, "DSYTRF_AA", uplo, n, &c_n1, &c_n1, &c_n1);
     /* Test the input parameters. */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

@@ -273,7 +273,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     integer maind;
     extern /* Complex */
     VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
     real tscal;
@@ -327,26 +327,23 @@ void clatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     --cnorm;
     /* Function Body */
     *info = 0;
-    // initializing as {1, 0} because it is
-    // used as divisor
-    tjjs = (scomplex){.real = 1.f, .imag = 0.f};
     upper = lsame_(uplo, "U", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
     /* Test the input parameters. */
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if(!nounit && !lsame_(diag, "U", 1, 1))
+    else if (! nounit && ! lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
-    else if(!lsame_(normin, "Y", 1, 1) && !lsame_(normin, "N", 1, 1))
+    else if (! lsame_(normin, "Y", 1, 1) && ! lsame_(normin, "N", 1, 1))
     {
         *info = -4;
     }
@@ -379,7 +376,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     /* Determine machine dependent parameters to control overflow. */
     smlnum = slamch_("Safe minimum") / slamch_("Precision");
     bignum = 1.f / smlnum;
-    if (lsame_(normin, "N"))
+    if (lsame_(normin, "N", 1, 1))
     {
         /* Compute the 1-norm of each column, not including the diagonal. */
         if(upper)
@@ -819,7 +816,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                 /* L110: */
             }
         }
-        else if(lsame_(trans, "T", 1, 1))
+        else if (lsame_(trans, "T", 1, 1))
         {
             /* Solve A**T * x = b */
             i__2 = jlast;

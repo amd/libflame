@@ -108,8 +108,8 @@ void ztrttp_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecompl
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    aocl_int64_t i__, j, k;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j, k;
+    extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -140,7 +140,7 @@ void ztrttp_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecompl
     /* Function Body */
     *info = 0;
     lower = lsame_(uplo, "L", 1, 1);
-    if(!lower && !lsame_(uplo, "U", 1, 1))
+    if (! lower && ! lsame_(uplo, "U", 1, 1))
     {
         *info = -1;
     }

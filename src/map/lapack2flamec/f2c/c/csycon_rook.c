@@ -154,7 +154,7 @@ void csycon_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
     extern /* Subroutine */
     void csytrs_rook_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     integer kase;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     logical upper;
     extern /* Subroutine */
@@ -192,7 +192,7 @@ void csycon_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

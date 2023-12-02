@@ -126,13 +126,13 @@ void zsytri_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     /* Builtin functions */
     void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    dcomplex d__;
-    aocl_int64_t k;
-    dcomplex t, ak;
-    aocl_int64_t kp;
-    dcomplex akp1, temp, akkp1;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t kstep;
+    doublecomplex d__;
+    integer k;
+    doublecomplex t, ak;
+    integer kp;
+    doublecomplex akp1, temp, akkp1;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer kstep;
     logical upper;
     extern /* Subroutine */
     void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
@@ -170,7 +170,7 @@ void zsytri_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

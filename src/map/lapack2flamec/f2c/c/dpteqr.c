@@ -162,7 +162,7 @@ void dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     doublereal vt[1] /* was [1][1] */
     ;
     integer nru;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     integer icompz;
@@ -200,15 +200,15 @@ void dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     --work;
     /* Function Body */
     *info = 0;
-    if(lsame_(compz, "N", 1, 1))
+    if (lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if(lsame_(compz, "V", 1, 1))
+    else if (lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if(lsame_(compz, "I", 1, 1))
+    else if (lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }

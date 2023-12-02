@@ -268,8 +268,8 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
         v_offset, i__1, i__2, i__3;
     doublereal d__1;
     /* Local variables */
-    aocl_int64_t i__, j;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j;
+    extern logical lsame_(char *, char *, integer, integer);
     logical wantq, wantu, wantv;
     extern /* Subroutine */
     void dgeqr2_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dgerq2_( integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dorg2r_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dorm2r_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dormr2_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dgeqpf_(integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlapmt_(logical *, integer *, integer *, doublereal *, integer *, integer *);
@@ -320,15 +320,15 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     wantq = lsame_(jobq, "Q", 1, 1);
     forwrd = TRUE_;
     *info = 0;
-    if(!(wantu || lsame_(jobu, "N", 1, 1)))
+    if (! (wantu || lsame_(jobu, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if(!(wantv || lsame_(jobv, "N", 1, 1)))
+    else if (! (wantv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if(!(wantq || lsame_(jobq, "N", 1, 1)))
+    else if (! (wantq || lsame_(jobq, "N", 1, 1)))
     {
         *info = -3;
     }

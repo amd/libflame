@@ -160,8 +160,8 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
     /* Builtin functions */
     void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    aocl_int64_t i__, j;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j;
+    extern logical lsame_(char *, char *, integer, integer);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -234,7 +234,7 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
     }
     if(*alpha == 1.f)
     {
-        if(lsame_(trans, "N", 1, 1))
+        if (lsame_(trans, "N", 1, 1))
         {
             /* Compute B := B + A*X */
             i__1 = *nrhs;
@@ -315,7 +315,7 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
                 /* L60: */
             }
         }
-        else if(lsame_(trans, "T", 1, 1))
+        else if (lsame_(trans, "T", 1, 1))
         {
             /* Compute B := B + A**T * X */
             i__1 = *nrhs;
@@ -396,7 +396,7 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
                 /* L80: */
             }
         }
-        else if(lsame_(trans, "C", 1, 1))
+        else if (lsame_(trans, "C", 1, 1))
         {
             /* Compute B := B + A**H * X */
             i__1 = *nrhs;
@@ -483,7 +483,7 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
     }
     else if(*alpha == -1.f)
     {
-        if(lsame_(trans, "N", 1, 1))
+        if (lsame_(trans, "N", 1, 1))
         {
             /* Compute B := B - A*X */
             i__1 = *nrhs;
@@ -564,7 +564,7 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
                 /* L120: */
             }
         }
-        else if(lsame_(trans, "T", 1, 1))
+        else if (lsame_(trans, "T", 1, 1))
         {
             /* Compute B := B - A**T*X */
             i__1 = *nrhs;
@@ -645,7 +645,7 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
                 /* L140: */
             }
         }
-        else if(lsame_(trans, "C", 1, 1))
+        else if (lsame_(trans, "C", 1, 1))
         {
             /* Compute B := B - A**H*X */
             i__1 = *nrhs;

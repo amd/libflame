@@ -239,7 +239,7 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
     aocl_int64_t ibal;
     doublereal anrm;
     integer idum[1], ierr, itau, iwrk, inxt, icond, ieval;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical cursl;
@@ -300,11 +300,11 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
     lquery = *lwork == -1;
     wantvs = lsame_(jobvs, "V", 1, 1);
     wantst = lsame_(sort, "S", 1, 1);
-    if(!wantvs && !lsame_(jobvs, "N", 1, 1))
+    if (! wantvs && ! lsame_(jobvs, "N", 1, 1))
     {
         *info = -1;
     }
-    else if(!wantst && !lsame_(sort, "N", 1, 1))
+    else if (! wantst && ! lsame_(sort, "N", 1, 1))
     {
         *info = -2;
     }

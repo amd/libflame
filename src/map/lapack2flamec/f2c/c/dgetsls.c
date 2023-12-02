@@ -175,7 +175,7 @@ void dgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a
     integer brow, tszm, tszo, info2, iascl, ibscl;
     extern /* Subroutine */
     void dgelq_(integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dgeqr_(integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer maxmn;
@@ -222,9 +222,9 @@ void dgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a
     /* Function Body */
     *info = 0;
     maxmn = fla_max(*m,*n);
-    tran = lsame_(trans, "T");
+    tran = lsame_(trans, "T", 1, 1);
     lquery = *lwork == -1 || *lwork == -2;
-    if (! (lsame_(trans, "N") || lsame_(trans, "T")))
+    if (! (lsame_(trans, "N", 1, 1) || lsame_(trans, "T", 1, 1)))
     {
         *info = -1;
     }

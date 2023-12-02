@@ -345,9 +345,8 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
     aocl_int64_t ierr;
     logical swap;
     real scale;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int_t isave[3];
-    aocl_int64_t lwmin;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer isave[3], lwmin;
     logical wantq, wants;
     real rnorm;
     extern /* Subroutine */
@@ -407,11 +406,11 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
     lquery = *lwork == -1;
     liwmin = 0;
     lwmin = 0;
-    if (! lsame_(job, "N") && ! wants && ! wantsp)
+    if (! lsame_(job, "N", 1, 1) && ! wants && ! wantsp)
     {
         *info = -1;
     }
-    else if(!lsame_(compq, "N", 1, 1) && !wantq)
+    else if (! lsame_(compq, "N", 1, 1) && ! wantq)
     {
         *info = -2;
     }
@@ -481,12 +480,12 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
             lwmin = fla_max(i__1,i__2);
             liwmin = fla_max(1,nn);
         }
-        else if(lsame_(job, "N", 1, 1))
+        else if (lsame_(job, "N", 1, 1))
         {
             lwmin = fla_max(1,*n);
             liwmin = 1;
         }
-        else if(lsame_(job, "E", 1, 1))
+        else if (lsame_(job, "E", 1, 1))
         {
             lwmin = fla_max(1,nn);
             liwmin = 1;

@@ -284,9 +284,9 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     doublereal ulp, wlu, wul;
     aocl_int64_t nwu;
     doublereal tmp1, tmp2;
-    aocl_int64_t iend, ioff, iout, itmp1, jdisc;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    integer iend, ioff, iout, itmp1, jdisc;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer iinfo;
     doublereal atoli;
     aocl_int64_t iwoff;
     doublereal bnorm;
@@ -341,15 +341,15 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     wlu = 0;
     wul = 0;
     /* Decode RANGE */
-    if(lsame_(range, "A", 1, 1))
+    if (lsame_(range, "A", 1, 1))
     {
         irange = 1;
     }
-    else if(lsame_(range, "V", 1, 1))
+    else if (lsame_(range, "V", 1, 1))
     {
         irange = 2;
     }
-    else if(lsame_(range, "I", 1, 1))
+    else if (lsame_(range, "I", 1, 1))
     {
         irange = 3;
     }
@@ -358,11 +358,11 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
         irange = 0;
     }
     /* Decode ORDER */
-    if(lsame_(order, "B", 1, 1))
+    if (lsame_(order, "B", 1, 1))
     {
         iorder = 2;
     }
-    else if(lsame_(order, "E", 1, 1))
+    else if (lsame_(order, "E", 1, 1))
     {
         iorder = 1;
     }

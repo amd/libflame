@@ -175,7 +175,7 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     dcomplex vec;
     doublereal dum[1], eps, sgn, smin;
     doublecomplex suml, sumr;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Double Complex */
     VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zdotu_f2c_( doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern /* Subroutine */
@@ -228,11 +228,11 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     notrna = lsame_(trana, "N", 1, 1);
     notrnb = lsame_(tranb, "N", 1, 1);
     *info = 0;
-    if(!notrna && !lsame_(trana, "C", 1, 1))
+    if (! notrna && ! lsame_(trana, "C", 1, 1))
     {
         *info = -1;
     }
-    else if(!notrnb && !lsame_(tranb, "C", 1, 1))
+    else if (! notrnb && ! lsame_(tranb, "C", 1, 1))
     {
         *info = -2;
     }

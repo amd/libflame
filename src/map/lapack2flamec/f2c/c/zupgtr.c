@@ -117,9 +117,9 @@ void zupgtr_(char *uplo, integer *n, doublecomplex *ap, doublecomplex *tau, doub
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    aocl_int64_t i__, j, ij;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    integer i__, j, ij;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer iinfo;
     logical upper;
     extern /* Subroutine */
     void zung2l_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zung2r_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -154,7 +154,7 @@ void zupgtr_(char *uplo, integer *n, doublecomplex *ap, doublecomplex *tau, doub
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

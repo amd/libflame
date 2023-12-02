@@ -172,7 +172,7 @@ void spbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, real *ab, integ
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), spbtrf_( char *, integer *, integer *, real *, integer *, integer *), spbtrs_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
@@ -201,7 +201,7 @@ void spbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, real *ab, integ
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

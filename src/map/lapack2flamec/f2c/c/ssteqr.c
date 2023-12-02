@@ -158,7 +158,7 @@ void ssteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
     aocl_int64_t lend, jtot;
     extern /* Subroutine */
     void slae2_(real *, real *, real *, real *, real *) ;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     aocl_int64_t lendm1, lendp1;
     extern /* Subroutine */
@@ -214,15 +214,15 @@ void ssteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
     --work;
     /* Function Body */
     *info = 0;
-    if(lsame_(compz, "N", 1, 1))
+    if (lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if(lsame_(compz, "V", 1, 1))
+    else if (lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if(lsame_(compz, "I", 1, 1))
+    else if (lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }

@@ -208,9 +208,8 @@ void zsyrfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
     doublereal eps;
     aocl_int64_t kase;
     doublereal safe1, safe2;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int_t isave[3];
-    aocl_int64_t count;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer isave[3], count;
     logical upper;
     extern /* Subroutine */
     void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zsymv_( char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
@@ -269,7 +268,7 @@ void zsyrfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

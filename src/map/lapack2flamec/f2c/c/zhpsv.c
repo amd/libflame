@@ -166,7 +166,7 @@ void zhpsv_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, integer *i
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zhptrf_( char *, integer *, doublecomplex *, integer *, integer *), zhptrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
@@ -194,7 +194,7 @@ void zhpsv_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, integer *i
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

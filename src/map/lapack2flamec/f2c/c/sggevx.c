@@ -453,9 +453,9 @@ void aocl_lapack_sggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
     aocl_int64_t ierr, itau;
     real temp;
     logical ilvl, ilvr;
-    aocl_int64_t iwrk, iwrk1;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t icols;
+    integer iwrk, iwrk1;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer icols;
     logical noscl;
     integer irows;
     extern /* Subroutine */
@@ -539,12 +539,12 @@ void aocl_lapack_sggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
     --iwork;
     --bwork;
     /* Function Body */
-    if(lsame_(jobvl, "N", 1, 1))
+    if (lsame_(jobvl, "N", 1, 1))
     {
         ijobvl = 1;
         ilvl = FALSE_;
     }
-    else if(lsame_(jobvl, "V", 1, 1))
+    else if (lsame_(jobvl, "V", 1, 1))
     {
         ijobvl = 2;
         ilvl = TRUE_;
@@ -554,12 +554,12 @@ void aocl_lapack_sggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
         ijobvl = -1;
         ilvl = FALSE_;
     }
-    if(lsame_(jobvr, "N", 1, 1))
+    if (lsame_(jobvr, "N", 1, 1))
     {
         ijobvr = 1;
         ilvr = FALSE_;
     }
-    else if(lsame_(jobvr, "V", 1, 1))
+    else if (lsame_(jobvr, "V", 1, 1))
     {
         ijobvr = 2;
         ilvr = TRUE_;
@@ -578,7 +578,7 @@ void aocl_lapack_sggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
     /* Test the input arguments */
     *info = 0;
     lquery = *lwork == -1;
-    if(!(noscl || lsame_(balanc, "S", 1, 1) || lsame_(balanc, "B", 1, 1)))
+    if (! (noscl || lsame_(balanc, "S", 1, 1) || lsame_(balanc, "B", 1, 1)))
     {
         *info = -1;
     }

@@ -553,8 +553,7 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
     /* Local variables */
     integer j;
     doublereal amax;
-    extern doublereal zla_gerpvgrw_(integer *, integer *, dcomplex *, integer *,
-                                    dcomplex *, integer *);
+    extern doublereal zla_gerpvgrw_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     doublereal rcmin, rcmax;
     logical equil;
@@ -647,11 +646,11 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
     /* pivot growth is set here, the rest is initialized in ZGERFSX. */
     *rpvgrw = 0.;
     /* Test the input parameters. PARAMS is not tested until ZGERFSX. */
-    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
+    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -671,7 +670,7 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
     {
         *info = -8;
     }
-    else if(lsame_(fact, "F", 1, 1) && !(rowequ || colequ || lsame_(equed, "N", 1, 1)))
+    else if (lsame_(fact, "F", 1, 1) && ! (rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -10;
     }
@@ -763,7 +762,7 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            zlaqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax, equed);
+            zlaqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, & colcnd, &amax, equed);
             rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
             colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }

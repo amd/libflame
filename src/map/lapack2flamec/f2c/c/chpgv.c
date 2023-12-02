@@ -184,7 +184,7 @@ void chpgv_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, co
     aocl_int64_t z_dim1, z_offset, i__1;
     /* Local variables */
     integer j, neig;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void chpev_(char *, char *, integer *, complex *, real *, complex *, integer *, complex *, real *, integer *);
     char trans[1];
@@ -230,11 +230,11 @@ void chpgv_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, co
     {
         *info = -1;
     }
-    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if(!(upper || lsame_(uplo, "L", 1, 1)))
+    else if (! (upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }

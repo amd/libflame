@@ -170,7 +170,7 @@ void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     complex vt[1] /* was [1][1] */
     ;
     integer nru;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *);
     integer icompz;
@@ -208,15 +208,15 @@ void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     --work;
     /* Function Body */
     *info = 0;
-    if(lsame_(compz, "N", 1, 1))
+    if (lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if(lsame_(compz, "V", 1, 1))
+    else if (lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if(lsame_(compz, "I", 1, 1))
+    else if (lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }

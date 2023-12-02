@@ -381,7 +381,7 @@ void sggesx_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, char *sense,
     integer ijob;
     real anrm, bnrm;
     integer ierr, itau, iwrk, lwrk;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer ileft, icols;
     logical cursl, ilvsl, ilvsr;
     integer irows;
@@ -464,12 +464,12 @@ void sggesx_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, char *sense,
     --iwork;
     --bwork;
     /* Function Body */
-    if (lsame_(jobvsl, "N"))
+    if (lsame_(jobvsl, "N", 1, 1))
     {
         ijobvl = 1;
         ilvsl = FALSE_;
     }
-    else if (lsame_(jobvsl, "V"))
+    else if (lsame_(jobvsl, "V", 1, 1))
     {
         ijobvl = 2;
         ilvsl = TRUE_;
@@ -479,12 +479,12 @@ void sggesx_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, char *sense,
         ijobvl = -1;
         ilvsl = FALSE_;
     }
-    if (lsame_(jobvsr, "N"))
+    if (lsame_(jobvsr, "N", 1, 1))
     {
         ijobvr = 1;
         ilvsr = FALSE_;
     }
-    else if (lsame_(jobvsr, "V"))
+    else if (lsame_(jobvsr, "V", 1, 1))
     {
         ijobvr = 2;
         ilvsr = TRUE_;
@@ -494,11 +494,11 @@ void sggesx_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, char *sense,
         ijobvr = -1;
         ilvsr = FALSE_;
     }
-    wantst = lsame_(sort, "S");
-    wantsn = lsame_(sense, "N");
-    wantse = lsame_(sense, "E");
-    wantsv = lsame_(sense, "V");
-    wantsb = lsame_(sense, "B");
+    wantst = lsame_(sort, "S", 1, 1);
+    wantsn = lsame_(sense, "N", 1, 1);
+    wantse = lsame_(sense, "E", 1, 1);
+    wantsv = lsame_(sense, "V", 1, 1);
+    wantsb = lsame_(sense, "B", 1, 1);
     lquery = *lwork == -1 || *liwork == -1;
     if (wantsn)
     {
@@ -526,7 +526,7 @@ void sggesx_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, char *sense,
     {
         *info = -2;
     }
-    else if (! wantst && ! lsame_(sort, "N"))
+    else if (! wantst && ! lsame_(sort, "N", 1, 1))
     {
         *info = -3;
     }

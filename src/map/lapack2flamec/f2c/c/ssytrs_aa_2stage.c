@@ -142,7 +142,7 @@ void ssytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     integer nb, ldtb;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *), slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
@@ -177,8 +177,8 @@ void ssytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

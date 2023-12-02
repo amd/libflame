@@ -216,7 +216,7 @@ void clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
     integer i__, j;
     extern /* Subroutine */
     void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void ccopy_(integer *, complex *, integer *, complex *, integer *), ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), clacgv_(integer *, complex *, integer *);
     char transt[1];
@@ -260,7 +260,7 @@ void clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if(lsame_(trans, "N", 1, 1))
+    if (lsame_(trans, "N", 1, 1))
     {
         *(unsigned char *)transt = 'C';
     }
@@ -268,14 +268,14 @@ void clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
     {
         *(unsigned char *)transt = 'N';
     }
-    if(lsame_(storev, "C", 1, 1))
+    if (lsame_(storev, "C", 1, 1))
     {
-        if(lsame_(direct, "F", 1, 1))
+        if (lsame_(direct, "F", 1, 1))
         {
             /* Let V = ( V1 ) (first K rows) */
             /* ( V2 ) */
             /* where V1 is unit lower triangular. */
-            if(lsame_(side, "L", 1, 1))
+            if (lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**H * C where C = ( C1 ) */
                 /* ( C2 ) */
@@ -340,7 +340,7 @@ void clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L30: */
                 }
             }
-            else if(lsame_(side, "R", 1, 1))
+            else if (lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**H where C = ( C1 C2 ) */
                 /* W := C * V = (C1*V1 + C2*V2) (stored in WORK) */
@@ -405,7 +405,7 @@ void clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
             /* Let V = ( V1 ) */
             /* ( V2 ) (last K rows) */
             /* where V2 is unit upper triangular. */
-            if(lsame_(side, "L", 1, 1))
+            if (lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**H * C where C = ( C1 ) */
                 /* ( C2 ) */
@@ -473,7 +473,7 @@ void clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L90: */
                 }
             }
-            else if(lsame_(side, "R", 1, 1))
+            else if (lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**H where C = ( C1 C2 ) */
                 /* W := C * V = (C1*V1 + C2*V2) (stored in WORK) */
@@ -534,13 +534,13 @@ void clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
             }
         }
     }
-    else if(lsame_(storev, "R", 1, 1))
+    else if (lsame_(storev, "R", 1, 1))
     {
-        if(lsame_(direct, "F", 1, 1))
+        if (lsame_(direct, "F", 1, 1))
         {
             /* Let V = ( V1 V2 ) (V1: first K columns) */
             /* where V1 is unit upper triangular. */
-            if(lsame_(side, "L", 1, 1))
+            if (lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**H * C where C = ( C1 ) */
                 /* ( C2 ) */
@@ -605,7 +605,7 @@ void clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L150: */
                 }
             }
-            else if(lsame_(side, "R", 1, 1))
+            else if (lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**H where C = ( C1 C2 ) */
                 /* W := C * V**H = (C1*V1**H + C2*V2**H) (stored in WORK) */
@@ -667,7 +667,7 @@ void clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         {
             /* Let V = ( V1 V2 ) (V2: last K columns) */
             /* where V2 is unit lower triangular. */
-            if(lsame_(side, "L", 1, 1))
+            if (lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**H * C where C = ( C1 ) */
                 /* ( C2 ) */
@@ -735,7 +735,7 @@ void clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L210: */
                 }
             }
-            else if(lsame_(side, "R", 1, 1))
+            else if (lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**H where C = ( C1 C2 ) */
                 /* W := C * V**H = (C1*V1**H + C2*V2**H) (stored in WORK) */

@@ -187,7 +187,7 @@ void dsygv_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *a, 
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
     integer nb, neig;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     char trans[1];
@@ -246,11 +246,11 @@ void dsygv_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *a, 
     {
         *info = -1;
     }
-    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if(!(upper || lsame_(uplo, "L", 1, 1)))
+    else if (! (upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }

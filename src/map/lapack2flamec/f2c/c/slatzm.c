@@ -176,7 +176,7 @@ void aocl_lapack_slatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, a
     /* Local variables */
     extern /* Subroutine */
     void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -211,7 +211,7 @@ void aocl_lapack_slatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, a
     {
         return;
     }
-    if(lsame_(side, "L", 1, 1))
+    if (lsame_(side, "L", 1, 1))
     {
         /* w := (C1 + v**T * C2)**T */
         aocl_blas_scopy(n, &c1[c1_offset], ldc, &work[1], &c__1);
@@ -226,7 +226,7 @@ void aocl_lapack_slatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, a
         r__1 = -(*tau);
         aocl_blas_sger(&i__1, n, &r__1, &v[1], incv, &work[1], &c__1, &c2[c2_offset], ldc);
     }
-    else if(lsame_(side, "R", 1, 1))
+    else if (lsame_(side, "R", 1, 1))
     {
         /* w := C1 + C2 * v */
         aocl_blas_scopy(m, &c1[c1_offset], &c__1, &work[1], &c__1);

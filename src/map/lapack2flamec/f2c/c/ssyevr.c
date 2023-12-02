@@ -366,7 +366,7 @@ void ssyevr_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
     logical test;
     aocl_int64_t inddd, indee;
     real sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
@@ -429,7 +429,7 @@ void ssyevr_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
     --work;
     --iwork;
     /* Function Body */
-    ieeeok = aocl_lapack_ilaenv(&c__10, "SSYEVR", "N", &c__1, &c__2, &c__3, &c__4);
+    ieeeok = ilaenv_(&c__10, "SSYEVR", "N", &c__1, &c__2, &c__3, &c__4);
     lower = lsame_(uplo, "L", 1, 1);
     wantz = lsame_(jobz, "V", 1, 1);
     alleig = lsame_(range, "A", 1, 1);
@@ -445,7 +445,7 @@ void ssyevr_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
     i__2 = *n * 10; // , expr subst
     liwmin = fla_max(i__1,i__2);
     *info = 0;
-    if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
@@ -453,7 +453,7 @@ void ssyevr_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
     {
         *info = -2;
     }
-    else if(!(lower || lsame_(uplo, "U", 1, 1)))
+    else if (! (lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -3;
     }

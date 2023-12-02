@@ -123,8 +123,8 @@ void zhpcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublerea
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     /* Local variables */
-    aocl_int64_t i__, ip, kase;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, ip, kase;
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     logical upper;
     extern /* Subroutine */
@@ -160,7 +160,7 @@ void zhpcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublerea
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

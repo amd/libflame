@@ -206,7 +206,7 @@ void sgeev_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *w
     extern /* Subroutine */
     void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     extern real snrm2_(integer *, real *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
     extern real slapy2_(real *, real *);
@@ -273,13 +273,13 @@ void sgeev_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *w
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    wantvl = lsame_(jobvl, "V");
-    wantvr = lsame_(jobvr, "V");
-    if (! wantvl && ! lsame_(jobvl, "N"))
+    wantvl = lsame_(jobvl, "V", 1, 1);
+    wantvr = lsame_(jobvr, "V", 1, 1);
+    if (! wantvl && ! lsame_(jobvl, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! wantvr && ! lsame_(jobvr, "N"))
+    else if (! wantvr && ! lsame_(jobvr, "N", 1, 1))
     {
         *info = -2;
     }

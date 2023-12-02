@@ -134,7 +134,7 @@ void ssptrs_(char *uplo, integer *n, integer *nrhs, real *ap, integer *ipiv, rea
     extern /* Subroutine */
     void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
     real akm1k;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     real denom;
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
@@ -170,7 +170,7 @@ void ssptrs_(char *uplo, integer *n, integer *nrhs, real *ap, integer *ipiv, rea
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

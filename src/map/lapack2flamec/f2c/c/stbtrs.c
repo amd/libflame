@@ -156,8 +156,8 @@ void stbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    aocl_int64_t j;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer j;
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     void stbsv_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -194,15 +194,15 @@ void stbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
     *info = 0;
     nounit = lsame_(diag, "N", 1, 1);
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if(!nounit && !lsame_(diag, "U", 1, 1))
+    else if (! nounit && ! lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }

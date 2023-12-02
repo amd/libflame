@@ -57,7 +57,7 @@ integer ilaprec_(char *prec)
     /* System generated locals */
     aocl_int64_t ret_val;
     /* Local variables */
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -70,19 +70,19 @@ integer ilaprec_(char *prec)
     /* .. External Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    if(lsame_(prec, "S", 1, 1))
+    if (lsame_(prec, "S", 1, 1))
     {
         ret_val = 211;
     }
-    else if(lsame_(prec, "D", 1, 1))
+    else if (lsame_(prec, "D", 1, 1))
     {
         ret_val = 212;
     }
-    else if(lsame_(prec, "I", 1, 1))
+    else if (lsame_(prec, "I", 1, 1))
     {
         ret_val = 213;
     }
-    else if(lsame_(prec, "X", 1, 1) || lsame_(prec, "E", 1, 1))
+    else if (lsame_(prec, "X", 1, 1) || lsame_(prec, "E", 1, 1))
     {
         ret_val = 214;
     }

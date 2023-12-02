@@ -205,7 +205,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
     doublereal eps;
     aocl_int64_t kase;
     doublereal safe1, safe2;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     logical upper;
     extern /* Subroutine */
@@ -264,15 +264,15 @@ void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
     upper = lsame_(uplo, "U", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if(!nounit && !lsame_(diag, "U", 1, 1))
+    else if (! nounit && ! lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }

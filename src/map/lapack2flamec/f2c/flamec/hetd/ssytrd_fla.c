@@ -204,9 +204,9 @@ void ssytrd_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    aocl_int64_t i__, j, nb, kk, nx, iws;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t nbmin, iinfo;
+    integer i__, j, nb, kk, nx, iws;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
     void ssytd2_fla(char *, integer *, real *, integer *, real *, real *, real *, integer *), ssyr2k_(char *, char * , integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -248,7 +248,7 @@ void ssytrd_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

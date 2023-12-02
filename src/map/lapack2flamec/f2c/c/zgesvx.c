@@ -364,7 +364,7 @@ void zgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex 
     aocl_int64_t i__, j;
     doublereal amax;
     char norm[1];
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal rcmin, rcmax, anorm;
     logical equil;
     extern doublereal dlamch_(char *);
@@ -432,9 +432,9 @@ void zgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex 
     --rwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    equil = lsame_(fact, "E");
-    notran = lsame_(trans, "N");
+    nofact = lsame_(fact, "N", 1, 1);
+    equil = lsame_(fact, "E", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     smlnum = 0.;
     bignum = 0.;
     if (nofact || equil)
@@ -451,11 +451,11 @@ void zgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex 
         bignum = 1. / smlnum;
     }
     /* Test the input parameters. */
-    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
+    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -475,7 +475,7 @@ void zgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex 
     {
         *info = -8;
     }
-    else if(lsame_(fact, "F", 1, 1) && !(rowequ || colequ || lsame_(equed, "N", 1, 1)))
+    else if (lsame_(fact, "F", 1, 1) && ! (rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -10;
     }
@@ -568,8 +568,7 @@ void zgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex 
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            aocl_lapack_zlaqge(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
-                               equed);
+            zlaqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, & colcnd, &amax, equed);
             rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
             colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }

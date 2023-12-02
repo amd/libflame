@@ -112,7 +112,7 @@ doublereal zlanht_(char *norm, aocl_int_t *n, doublereal *d__, dcomplex *e)
     /* Local variables */
     aocl_int64_t i__;
     doublereal sum, scale;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal anorm;
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
@@ -146,7 +146,7 @@ doublereal zlanht_(char *norm, aocl_int_t *n, doublereal *d__, dcomplex *e)
     {
         anorm = 0.;
     }
-    else if(lsame_(norm, "M", 1, 1))
+    else if (lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(f2c_dabs(A(i,j))). */
         anorm = (d__1 = d__[*n], f2c_dabs(d__1));
@@ -166,7 +166,7 @@ doublereal zlanht_(char *norm, aocl_int_t *n, doublereal *d__, dcomplex *e)
             /* L10: */
         }
     }
-    else if(lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1' || lsame_(norm, "I", 1, 1))
+    else if (lsame_(norm, "O", 1, 1) || *(unsigned char *) norm == '1' || lsame_(norm, "I", 1, 1))
     {
         /* Find norm1(A). */
         if(*n == 1)
@@ -193,7 +193,7 @@ doublereal zlanht_(char *norm, aocl_int_t *n, doublereal *d__, dcomplex *e)
             }
         }
     }
-    else if(lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
+    else if (lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
         scale = 0.;

@@ -249,7 +249,7 @@ void sstevx_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     real tnrm;
     aocl_int64_t itmp1;
     real sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
     char order[1];
@@ -309,7 +309,7 @@ void sstevx_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     valeig = lsame_(range, "V", 1, 1);
     indeig = lsame_(range, "I", 1, 1);
     *info = 0;
-    if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }

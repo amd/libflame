@@ -135,7 +135,7 @@ void ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scon
     real avg, std, tol, base;
     integer iter;
     real smin, smax, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real sumsq;
     extern real slamch_(char *);
     extern /* Subroutine */
@@ -173,7 +173,7 @@ void ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scon
     --work;
     /* Function Body */
     *info = 0;
-    if (! (lsame_(uplo, "U") || lsame_(uplo, "L")))
+    if (! (lsame_(uplo, "U", 1, 1) || lsame_(uplo, "L", 1, 1)))
     {
         *info = -1;
     }
@@ -191,7 +191,7 @@ void ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scon
         xerbla_("SSYEQUB", &i__1, (ftnlen)7);
         return;
     }
-    up = lsame_(uplo, "U");
+    up = lsame_(uplo, "U", 1, 1);
     *amax = 0.f;
     /* Quick return if possible. */
     if (*n == 0)

@@ -389,7 +389,7 @@ void zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     aocl_int64_t i__, j, j1, j2;
     doublereal amax;
     char norm[1];
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal rcmin, rcmax, anorm;
     logical equil;
     extern /* Subroutine */
@@ -461,9 +461,9 @@ void zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     --rwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    equil = lsame_(fact, "E");
-    notran = lsame_(trans, "N");
+    nofact = lsame_(fact, "N", 1, 1);
+    equil = lsame_(fact, "E", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     smlnum = 0.;
     bignum = 0.;
     if (nofact || equil)
@@ -480,11 +480,11 @@ void zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
         bignum = 1. / smlnum;
     }
     /* Test the input parameters. */
-    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
+    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -512,7 +512,7 @@ void zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     {
         *info = -10;
     }
-    else if(lsame_(fact, "F", 1, 1) && !(rowequ || colequ || lsame_(equed, "N", 1, 1)))
+    else if (lsame_(fact, "F", 1, 1) && ! (rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -12;
     }
@@ -605,8 +605,7 @@ void zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            aocl_lapack_zlaqgb(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd,
-                               &colcnd, &amax, equed);
+            zlaqgb_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], & rowcnd, &colcnd, &amax, equed);
             rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
             colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }

@@ -313,9 +313,9 @@ void ssbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     aocl_int64_t indd, inde;
     char vect[1];
     logical test;
-    aocl_int64_t itmp1, indee;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    integer itmp1, indee;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer iinfo;
     char order[1];
     extern /* Subroutine */
     void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
@@ -380,7 +380,7 @@ void ssbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     valeig = lsame_(range, "V", 1, 1);
     indeig = lsame_(range, "I", 1, 1);
     *info = 0;
-    if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
@@ -388,7 +388,7 @@ void ssbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     {
         *info = -2;
     }
-    else if(!(upper || lsame_(uplo, "L", 1, 1)))
+    else if (! (upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }

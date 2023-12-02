@@ -294,7 +294,7 @@ void chbevx_(char *jobz, char *range, char *uplo, integer *n, integer *kd, compl
     scomplex ctmp1;
     aocl_int64_t itmp1, indee;
     real sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     integer iinfo;
@@ -372,7 +372,7 @@ void chbevx_(char *jobz, char *range, char *uplo, integer *n, integer *kd, compl
     indeig = lsame_(range, "I", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
     *info = 0;
-    if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
@@ -380,7 +380,7 @@ void chbevx_(char *jobz, char *range, char *uplo, integer *n, integer *kd, compl
     {
         *info = -2;
     }
-    else if(!(lower || lsame_(uplo, "U", 1, 1)))
+    else if (! (lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -3;
     }

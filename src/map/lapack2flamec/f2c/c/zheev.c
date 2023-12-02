@@ -163,8 +163,8 @@ void zheev_(char *jobz, char *uplo, integer *n, doublecomplex *a, integer *lda, 
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer iinfo;
     logical lower, wantz;
     extern doublereal dlamch_(char *);
     aocl_int64_t iscale;
@@ -219,11 +219,11 @@ void zheev_(char *jobz, char *uplo, integer *n, doublecomplex *a, integer *lda, 
     lower = lsame_(uplo, "L", 1, 1);
     lquery = *lwork == -1;
     *info = 0;
-    if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if(!(lower || lsame_(uplo, "U", 1, 1)))
+    else if (! (lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }

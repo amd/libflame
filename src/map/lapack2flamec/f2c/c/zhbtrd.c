@@ -192,7 +192,7 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
     extern /* Subroutine */
     void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
     integer j1end, j1inc, iqend;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     logical initq, wantq, upper;
@@ -241,11 +241,11 @@ void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
     incx = *ldab - 1;
     iqend = 1;
     *info = 0;
-    if(!wantq && !lsame_(vect, "N", 1, 1))
+    if (! wantq && ! lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }
-    else if(!upper && !lsame_(uplo, "L", 1, 1))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }

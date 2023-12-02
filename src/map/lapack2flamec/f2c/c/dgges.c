@@ -308,8 +308,8 @@ void dgges_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, integer *n, d
     aocl_int64_t ierr, itau, iwrk;
     aocl_int_t idum[1];
     doublereal pvsl, pvsr;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t ileft, icols;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer ileft, icols;
     logical cursl, ilvsl, ilvsr;
     integer irows;
     extern /* Subroutine */
@@ -385,12 +385,12 @@ void dgges_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, integer *n, d
     --work;
     --bwork;
     /* Function Body */
-    if(lsame_(jobvsl, "N", 1, 1))
+    if (lsame_(jobvsl, "N", 1, 1))
     {
         ijobvl = 1;
         ilvsl = FALSE_;
     }
-    else if(lsame_(jobvsl, "V", 1, 1))
+    else if (lsame_(jobvsl, "V", 1, 1))
     {
         ijobvl = 2;
         ilvsl = TRUE_;
@@ -400,12 +400,12 @@ void dgges_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, integer *n, d
         ijobvl = -1;
         ilvsl = FALSE_;
     }
-    if(lsame_(jobvsr, "N", 1, 1))
+    if (lsame_(jobvsr, "N", 1, 1))
     {
         ijobvr = 1;
         ilvsr = FALSE_;
     }
-    else if(lsame_(jobvsr, "V", 1, 1))
+    else if (lsame_(jobvsr, "V", 1, 1))
     {
         ijobvr = 2;
         ilvsr = TRUE_;
@@ -427,7 +427,7 @@ void dgges_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, integer *n, d
     {
         *info = -2;
     }
-    else if(!wantst && !lsame_(sort, "N", 1, 1))
+    else if (! wantst && ! lsame_(sort, "N", 1, 1))
     {
         *info = -3;
     }

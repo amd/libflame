@@ -299,7 +299,7 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
     aocl_int64_t ilst;
     real rnrm, prod1, prod2;
     real scale, delta;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     logical wants;
     real dummy[1];
@@ -370,7 +370,7 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
     {
         *info = -1;
     }
-    else if(!lsame_(howmny, "A", 1, 1) && !somcon)
+    else if (! lsame_(howmny, "A", 1, 1) && ! somcon)
     {
         *info = -2;
     }

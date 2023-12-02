@@ -166,7 +166,7 @@ void dorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
     logical left;
     extern /* Subroutine */
     void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlacpy_( char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
@@ -202,8 +202,8 @@ void dorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
     --work;
     /* Function Body */
     *info = 0;
-    left = lsame_(side, "L");
-    notran = lsame_(trans, "N");
+    left = lsame_(side, "L", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
     /* NQ is the order of Q;
     */
@@ -221,11 +221,11 @@ void dorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
     {
         nw = 1;
     }
-    if (! left && ! lsame_(side, "R"))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(trans, "N") && ! lsame_(trans, "T"))
+    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1))
     {
         *info = -2;
     }

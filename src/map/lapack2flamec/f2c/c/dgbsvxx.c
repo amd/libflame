@@ -574,8 +574,7 @@ void dgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
     /* Local variables */
     integer i__, j;
     doublereal amax;
-    extern doublereal dla_gbrpvgrw_(integer *, integer *, integer *, integer *, doublereal *,
-                                    integer *, doublereal *, integer *);
+    extern doublereal dla_gbrpvgrw_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     doublereal rcmin, rcmax;
     logical equil;
@@ -668,11 +667,11 @@ void dgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
     /* pivot growth is set here, the rest is initialized in DGBRFSX. */
     *rpvgrw = 0.;
     /* Test the input parameters. PARAMS is not tested until DGBRFSX. */
-    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
+    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -700,7 +699,7 @@ void dgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
     {
         *info = -10;
     }
-    else if(lsame_(fact, "F", 1, 1) && !(rowequ || colequ || lsame_(equed, "N", 1, 1)))
+    else if (lsame_(fact, "F", 1, 1) && ! (rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -12;
     }
@@ -793,8 +792,7 @@ void dgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            dlaqgb_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
-                    equed);
+            dlaqgb_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], & rowcnd, &colcnd, &amax, equed);
             rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
             colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }

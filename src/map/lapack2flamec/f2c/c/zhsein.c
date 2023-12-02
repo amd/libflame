@@ -268,8 +268,8 @@ void zhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
     dcomplex wk;
     aocl_int64_t kln;
     doublereal ulp, eps3, unfl;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer iinfo;
     logical leftv, bothv;
     doublereal hnorm;
     extern doublereal dlamch_(char *);
@@ -345,11 +345,11 @@ void zhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
     {
         *info = -1;
     }
-    else if(!fromqr && !lsame_(eigsrc, "N", 1, 1))
+    else if (! fromqr && ! lsame_(eigsrc, "N", 1, 1))
     {
         *info = -2;
     }
-    else if(!noinit && !lsame_(initv, "U", 1, 1))
+    else if (! noinit && ! lsame_(initv, "U", 1, 1))
     {
         *info = -3;
     }

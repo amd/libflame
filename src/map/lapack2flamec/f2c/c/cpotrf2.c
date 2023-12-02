@@ -124,7 +124,7 @@ void cpotrf2_(char *uplo, integer *n, complex *a, integer * lda, integer *info)
     real ajj;
     extern /* Subroutine */
     void cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
     void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
@@ -159,8 +159,8 @@ void cpotrf2_(char *uplo, integer *n, complex *a, integer * lda, integer *info)
     a -= a_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

@@ -223,8 +223,8 @@ void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo, lwmin, llrwk, llwrk;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer iinfo, lwmin, llrwk, llwrk;
     logical wantz;
     extern doublereal dlamch_(char *);
     aocl_int64_t iscale;
@@ -279,11 +279,11 @@ void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *
     wantz = lsame_(jobz, "V", 1, 1);
     lquery = *lwork == -1 || *lrwork == -1 || *liwork == -1;
     *info = 0;
-    if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if(!(lsame_(uplo, "L", 1, 1) || lsame_(uplo, "U", 1, 1)))
+    else if (! (lsame_(uplo, "L", 1, 1) || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }

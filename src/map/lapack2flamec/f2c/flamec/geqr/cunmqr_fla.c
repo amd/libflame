@@ -189,7 +189,7 @@ void cunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
         ;
     aocl_int64_t i1, i2, i3, ib, ic, jc, nb, mi, ni, nq, nw, iws;
     logical left;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nbmin, iinfo;
     extern /* Subroutine */
     void cunm2r_fla(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), clarft_(char *, char * , integer *, integer *, complex *, integer *, complex *, complex * , integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -245,11 +245,11 @@ void cunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
         nq = *n;
         nw = *m;
     }
-    if(!left && !lsame_(side, "R", 1, 1))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if(!notran && !lsame_(trans, "C", 1, 1))
+    else if (! notran && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }

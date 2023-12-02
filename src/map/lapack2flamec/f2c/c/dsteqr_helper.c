@@ -24,7 +24,7 @@ void dsteqr_helper_(char *jobz, char *uplo, integer *n, doublereal * a, integer 
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo, lwmin, liopt;
     logical wantz;
     integer indwk2, llwrk2;
@@ -78,7 +78,7 @@ void dsteqr_helper_(char *jobz, char *uplo, integer *n, doublereal * a, integer 
     --work;
     --iwork;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
+    wantz = lsame_(jobz, "V", 1, 1);
     lquery = *lwork == -1 || *liwork == -1;
     *info = 0;
 

@@ -168,7 +168,7 @@ void cunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
     complex taui;
     extern /* Subroutine */
     void clarf_(char *, integer *, integer *, complex * , integer *, complex *, complex *, integer *, complex *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
@@ -215,11 +215,11 @@ void cunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
     {
         nq = *n;
     }
-    if(!left && !lsame_(side, "R", 1, 1))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if(!notran && !lsame_(trans, "C", 1, 1))
+    else if (! notran && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }

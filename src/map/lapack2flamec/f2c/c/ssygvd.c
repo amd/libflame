@@ -235,9 +235,9 @@ void ssygvd_(integer *itype, char *jobz, char *uplo, integer * n, real *a, integ
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     real r__1, r__2;
     /* Local variables */
-    aocl_int64_t lopt;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t lwmin;
+    integer lopt;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer lwmin;
     char trans[1];
     aocl_int64_t liopt;
     logical upper;
@@ -310,11 +310,11 @@ void ssygvd_(integer *itype, char *jobz, char *uplo, integer * n, real *a, integ
     {
         *info = -1;
     }
-    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if(!(upper || lsame_(uplo, "L", 1, 1)))
+    else if (! (upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }

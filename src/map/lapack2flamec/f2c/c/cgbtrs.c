@@ -153,7 +153,7 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
     scomplex q__1;
     /* Local variables */
     integer i__, j, l, kd, lm;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *), ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *);
     logical lnoti;
@@ -192,7 +192,7 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
     /* Function Body */
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
-    if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
@@ -274,7 +274,7 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
             /* L20: */
         }
     }
-    else if(lsame_(trans, "T", 1, 1))
+    else if (lsame_(trans, "T", 1, 1))
     {
         /* Solve A**T * X = B. */
         i__1 = *nrhs;

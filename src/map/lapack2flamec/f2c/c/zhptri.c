@@ -128,9 +128,11 @@ void zhptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecom
     doublereal t, ak;
     aocl_int64_t kc, kp, kx, kpc, npp;
     doublereal akp1;
-    dcomplex temp, akkp1;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t kstep;
+    doublecomplex temp, akkp1;
+    extern logical lsame_(char *, char *, integer, integer);
+    extern /* Double Complex */
+    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    integer kstep;
     logical upper;
     extern /* Subroutine */
     void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zhpmv_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zswap_( integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -163,7 +165,7 @@ void zhptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecom
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

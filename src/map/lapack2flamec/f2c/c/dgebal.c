@@ -178,7 +178,7 @@ void dgebal_(char *job, integer *n, doublereal *a, integer * lda, integer *ilo, 
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal sfmin1, sfmin2, sfmax1, sfmax2;
@@ -213,8 +213,7 @@ void dgebal_(char *job, integer *n, doublereal *a, integer * lda, integer *ilo, 
     --scale;
     /* Function Body */
     *info = 0;
-    if(!lsame_(job, "N", 1, 1) && !lsame_(job, "P", 1, 1) && !lsame_(job, "S", 1, 1)
-       && !lsame_(job, "B", 1, 1))
+    if (! lsame_(job, "N", 1, 1) && ! lsame_(job, "P", 1, 1) && ! lsame_(job, "S", 1, 1) && ! lsame_(job, "B", 1, 1))
     {
         *info = -1;
     }
@@ -241,7 +240,7 @@ void dgebal_(char *job, integer *n, doublereal *a, integer * lda, integer *ilo, 
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if(lsame_(job, "N", 1, 1))
+    if (lsame_(job, "N", 1, 1))
     {
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
@@ -253,10 +252,7 @@ void dgebal_(char *job, integer *n, doublereal *a, integer * lda, integer *ilo, 
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    /* Permutation to isolate eigenvalues if possible. */
-    k = 1;
-    l = *n;
-    if(!lsame_(job, "S", 1, 1))
+    if (lsame_(job, "S", 1, 1))
     {
         /* Row and column exchange. */
         noconv = TRUE_;
@@ -336,8 +332,7 @@ void dgebal_(char *job, integer *n, doublereal *a, integer * lda, integer *ilo, 
     {
         scale[i__] = 1.;
     }
-    /* If we only had to permute, we are done. */
-    if(lsame_(job, "P", 1, 1))
+    if (lsame_(job, "P", 1, 1))
     {
         *ilo = k;
         *ihi = l;

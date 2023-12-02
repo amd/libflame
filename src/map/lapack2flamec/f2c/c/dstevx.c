@@ -247,7 +247,7 @@ void dstevx_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
     char order[1];
     extern /* Subroutine */
     void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
@@ -308,7 +308,7 @@ void dstevx_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *
     valeig = lsame_(range, "V", 1, 1);
     indeig = lsame_(range, "I", 1, 1);
     *info = 0;
-    if(!(wantz || lsame_(jobz, "N", 1, 1)))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }

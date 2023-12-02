@@ -212,7 +212,7 @@ void cunmbr_(char *vect, char *side, char *trans, integer *m, integer *n, intege
     /* Local variables */
     aocl_int64_t i1, i2, nb, mi, ni, nq, nw;
     logical left;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -270,15 +270,15 @@ void cunmbr_(char *vect, char *side, char *trans, integer *m, integer *n, intege
         nq = *n;
         nw = fla_max(1,*m);
     }
-    if (! applyq && ! lsame_(vect, "P"))
+    if (! applyq && ! lsame_(vect, "P", 1, 1))
     {
         *info = -1;
     }
-    else if(!left && !lsame_(side, "R", 1, 1))
+    else if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -2;
     }
-    else if(!notran && !lsame_(trans, "C", 1, 1))
+    else if (! notran && ! lsame_(trans, "C", 1, 1))
     {
         *info = -3;
     }

@@ -129,7 +129,7 @@ void zgetrs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
@@ -167,7 +167,7 @@ void zgetrs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *
     /* Function Body */
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
-    if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }

@@ -109,7 +109,7 @@ doublereal dlanhs_(char *norm, integer *n, doublereal *a, integer *lda, doublere
     /* Local variables */
     integer i__, j;
     doublereal sum, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal value;
     extern /* Subroutine */
     void dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
@@ -143,7 +143,7 @@ doublereal dlanhs_(char *norm, integer *n, doublereal *a, integer *lda, doublere
     {
         value = 0.;
     }
-    else if (lsame_(norm, "M"))
+    else if (lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(abs(A(i,j))). */
         value = 0.;
@@ -170,7 +170,7 @@ doublereal dlanhs_(char *norm, integer *n, doublereal *a, integer *lda, doublere
             /* L20: */
         }
     }
-    else if (lsame_(norm, "O") || *(unsigned char *) norm == '1')
+    else if (lsame_(norm, "O", 1, 1) || *(unsigned char *) norm == '1')
     {
         /* Find norm1(A). */
         value = 0.;
@@ -198,7 +198,7 @@ doublereal dlanhs_(char *norm, integer *n, doublereal *a, integer *lda, doublere
             /* L40: */
         }
     }
-    else if (lsame_(norm, "I"))
+    else if (lsame_(norm, "I", 1, 1))
     {
         /* Find normI(A). */
         i__1 = *n;
@@ -241,7 +241,7 @@ doublereal dlanhs_(char *norm, integer *n, doublereal *a, integer *lda, doublere
             /* L80: */
         }
     }
-    else if (lsame_(norm, "F") || lsame_(norm, "E"))
+    else if (lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
         scale = 0.;

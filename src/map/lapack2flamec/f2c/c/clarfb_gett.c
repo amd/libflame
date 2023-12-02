@@ -395,7 +395,7 @@ void clarfb_gett_(char *ident, integer *m, integer *n, integer *k, complex *t, i
     logical lnotident;
     extern /* Subroutine */
     void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void ccopy_(integer *, complex *, integer *, complex *, integer *), ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     /* -- LAPACK auxiliary routine -- */
@@ -434,7 +434,7 @@ void clarfb_gett_(char *ident, integer *m, integer *n, integer *k, complex *t, i
     {
         return;
     }
-    lnotident = ! lsame_(ident, "I");
+    lnotident = ! lsame_(ident, "I", 1, 1);
     /* ------------------------------------------------------------------ */
     /* First Step. Computation of the Column Block 2: */
     /* ( A2 ) := H * ( A2 ) */

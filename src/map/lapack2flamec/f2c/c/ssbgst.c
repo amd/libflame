@@ -185,7 +185,7 @@ void ssbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, real 
     integer kbt, nrt, inca;
     extern /* Subroutine */
     void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *), srot_(integer *, real *, integer *, real *, integer *, real *, real *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
     logical upper, wantx;
@@ -232,11 +232,11 @@ void ssbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, real 
     ka1 = *ka + 1;
     kb1 = *kb + 1;
     *info = 0;
-    if(!wantx && !lsame_(vect, "N", 1, 1))
+    if (! wantx && ! lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }
-    else if(!upper && !lsame_(uplo, "L", 1, 1))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }

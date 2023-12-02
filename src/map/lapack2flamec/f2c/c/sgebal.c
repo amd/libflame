@@ -196,7 +196,7 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     real r__, s, ca, ra;
     integer ica, ira, iexc;
     extern real snrm2_(integer *, real *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *);
     real sfmin1, sfmin2, sfmax1, sfmax2;
@@ -233,8 +233,7 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     --scale;
     /* Function Body */
     *info = 0;
-    if(!lsame_(job, "N", 1, 1) && !lsame_(job, "P", 1, 1) && !lsame_(job, "S", 1, 1)
-       && !lsame_(job, "B", 1, 1))
+    if (! lsame_(job, "N", 1, 1) && ! lsame_(job, "P", 1, 1) && ! lsame_(job, "S", 1, 1) && ! lsame_(job, "B", 1, 1))
     {
         *info = -1;
     }
@@ -260,7 +259,7 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if(lsame_(job, "N", 1, 1))
+    if (lsame_(job, "N", 1, 1))
     {
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
@@ -272,10 +271,7 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    /* Permutation to isolate eigenvalues if possible. */
-    k = 1;
-    l = *n;
-    if(!lsame_(job, "S", 1, 1))
+    if (lsame_(job, "S", 1, 1))
     {
         /* Row and column exchange. */
         noconv = TRUE_;
@@ -355,8 +351,7 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     {
         scale[i__] = 1.f;
     }
-    /* If we only had to permute, we are done. */
-    if(lsame_(job, "P", 1, 1))
+    if (lsame_(job, "P", 1, 1))
     {
         *ilo = k;
         *ihi = l;

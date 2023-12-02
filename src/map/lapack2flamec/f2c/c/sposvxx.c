@@ -590,11 +590,11 @@ void sposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integ
     /* pivot growth is set here, the rest is initialized in SPORFSX. */
     *rpvgrw = 0.f;
     /* Test the input parameters. PARAMS is not tested until SPORFSX. */
-    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
+    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
+    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -614,7 +614,7 @@ void sposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integ
     {
         *info = -8;
     }
-    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
+    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -9;
     }

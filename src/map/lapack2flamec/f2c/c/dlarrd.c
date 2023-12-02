@@ -342,7 +342,7 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     integer nwu;
     doublereal tmp1, tmp2;
     integer iend, jblk, ioff, iout, itmp1, itmp2, jdisc;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     doublereal atoli;
     integer iwoff, itmax;
@@ -400,15 +400,15 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
         return;
     }
     /* Decode RANGE */
-    if (lsame_(range, "A"))
+    if (lsame_(range, "A", 1, 1))
     {
         irange = 1;
     }
-    else if (lsame_(range, "V"))
+    else if (lsame_(range, "V", 1, 1))
     {
         irange = 2;
     }
-    else if (lsame_(range, "I"))
+    else if (lsame_(range, "I", 1, 1))
     {
         irange = 3;
     }
@@ -421,7 +421,7 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     {
         *info = -1;
     }
-    else if (! (lsame_(order, "B") || lsame_(order, "E")))
+    else if (! (lsame_(order, "B", 1, 1) || lsame_(order, "E", 1, 1)))
     {
         *info = -2;
     }
@@ -947,7 +947,7 @@ L70:
     /* If ORDER='B', do nothing the eigenvalues are already sorted by */
     /* block. */
     /* If ORDER='E', sort the eigenvalues from smallest to largest */
-    if (lsame_(order, "E") && *nsplit > 1)
+    if (lsame_(order, "E", 1, 1) && *nsplit > 1)
     {
         i__1 = *m - 1;
         for (je = 1;

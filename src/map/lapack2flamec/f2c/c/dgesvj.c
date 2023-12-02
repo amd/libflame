@@ -365,7 +365,7 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal apoaq, aqoap;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal theta, small_val, sfmin;
     logical lsvec;
     extern /* Subroutine */
@@ -438,21 +438,21 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
     v -= v_offset;
     --work;
     /* Function Body */
-    lsvec = lsame_(jobu, "U");
-    uctol = lsame_(jobu, "C");
-    rsvec = lsame_(jobv, "V");
-    applv = lsame_(jobv, "A");
-    upper = lsame_(joba, "U");
-    lower = lsame_(joba, "L");
-    if (! (upper || lower || lsame_(joba, "G")))
+    lsvec = lsame_(jobu, "U", 1, 1);
+    uctol = lsame_(jobu, "C", 1, 1);
+    rsvec = lsame_(jobv, "V", 1, 1);
+    applv = lsame_(jobv, "A", 1, 1);
+    upper = lsame_(joba, "U", 1, 1);
+    lower = lsame_(joba, "L", 1, 1);
+    if (! (upper || lower || lsame_(joba, "G", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lsvec || uctol || lsame_(jobu, "N")))
+    else if (! (lsvec || uctol || lsame_(jobu, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (rsvec || applv || lsame_(jobv, "N")))
+    else if (! (rsvec || applv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -3;
     }

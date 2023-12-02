@@ -197,7 +197,7 @@ void sggbal_(char *job, integer *n, real *a, integer *lda, real *b, integer *ldb
     aocl_int64_t irab, lrab;
     real basl, cmax;
     real coef2, coef5, gamma, alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
     real sfmin, sfmax;
@@ -245,8 +245,7 @@ void sggbal_(char *job, integer *n, real *a, integer *lda, real *b, integer *ldb
     --work;
     /* Function Body */
     *info = 0;
-    if(!lsame_(job, "N", 1, 1) && !lsame_(job, "P", 1, 1) && !lsame_(job, "S", 1, 1)
-       && !lsame_(job, "B", 1, 1))
+    if (! lsame_(job, "N", 1, 1) && ! lsame_(job, "P", 1, 1) && ! lsame_(job, "S", 1, 1) && ! lsame_(job, "B", 1, 1))
     {
         *info = -1;
     }
@@ -286,7 +285,7 @@ void sggbal_(char *job, integer *n, real *a, integer *lda, real *b, integer *ldb
     AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if(lsame_(job, "N", 1, 1))
+    if (lsame_(job, "N", 1, 1))
     {
         *ilo = 1;
         *ihi = *n;
@@ -302,7 +301,7 @@ void sggbal_(char *job, integer *n, real *a, integer *lda, real *b, integer *ldb
     }
     k = 1;
     l = *n;
-    if(lsame_(job, "S", 1, 1))
+    if (lsame_(job, "S", 1, 1))
     {
         goto L190;
     }
@@ -420,7 +419,7 @@ L180:
 L190:
     *ilo = k;
     *ihi = l;
-    if(lsame_(job, "P", 1, 1))
+    if (lsame_(job, "P", 1, 1))
     {
         i__1 = *ihi;
         for(i__ = *ilo; i__ <= i__1; ++i__)

@@ -564,7 +564,7 @@ void cgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, complex *a, i
     /* Local variables */
     integer j;
     real amax;
-    extern real cla_gerpvgrw_(integer *, integer *, scomplex *, integer *, scomplex *, integer *);
+    extern real cla_gerpvgrw_(integer *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     real rcmin, rcmax;
     logical equil;
@@ -655,11 +655,11 @@ void cgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, complex *a, i
     /* pivot growth is set here, the rest is initialized in CGERFSX. */
     *rpvgrw = 0.f;
     /* Test the input parameters. PARAMS is not tested until CGERFSX. */
-    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
+    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
+    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -679,7 +679,7 @@ void cgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, complex *a, i
     {
         *info = -8;
     }
-    else if(lsame_(fact, "F", 1, 1) && !(rowequ || colequ || lsame_(equed, "N", 1, 1)))
+    else if (lsame_(fact, "F", 1, 1) && ! (rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -10;
     }
@@ -771,7 +771,7 @@ void cgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, complex *a, i
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            claqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax, equed);
+            claqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, & colcnd, &amax, equed);
             rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
             colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }

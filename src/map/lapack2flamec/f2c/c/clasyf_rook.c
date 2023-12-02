@@ -203,7 +203,7 @@ void clasyf_rook_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, 
     real alpha;
     extern /* Subroutine */
     void cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     real sfmin;
@@ -256,7 +256,7 @@ void clasyf_rook_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, 
     alpha = (sqrt(17.f) + 1.f) / 8.f;
     /* Compute machine safe minimum */
     sfmin = slamch_("S");
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         /* Factorize the trailing columns of A using the upper triangle */
         /* of A and working backwards, and compute the matrix W = U12*D */

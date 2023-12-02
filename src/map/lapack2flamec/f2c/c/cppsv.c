@@ -147,7 +147,7 @@ void cppsv_(char *uplo, integer *n, integer *nrhs, complex * ap, complex *b, int
     /* System generated locals */
     integer b_dim1, b_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpptrf_( char *, integer *, complex *, integer *), cpptrs_(char *, integer *, integer *, complex *, complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
@@ -174,7 +174,7 @@ void cppsv_(char *uplo, integer *n, integer *nrhs, complex * ap, complex *b, int
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

@@ -135,7 +135,7 @@ void cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real
     real su;
     integer kase, kase1;
     real scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
     void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
@@ -184,8 +184,8 @@ void cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real
     --rwork;
     /* Function Body */
     *info = 0;
-    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O");
-    if (! onenrm && ! lsame_(norm, "I"))
+    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
+    if (! onenrm && ! lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }

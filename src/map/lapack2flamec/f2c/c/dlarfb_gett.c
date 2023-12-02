@@ -392,7 +392,7 @@ void dlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublereal *t
     logical lnotident;
     extern /* Subroutine */
     void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     /* -- LAPACK auxiliary routine -- */
@@ -432,7 +432,7 @@ void dlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublereal *t
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    lnotident = ! lsame_(ident, "I");
+    lnotident = ! lsame_(ident, "I", 1, 1);
     /* ------------------------------------------------------------------ */
     /* First Step. Computation of the Column Block 2: */
     /* ( A2 ) := H * ( A2 ) */

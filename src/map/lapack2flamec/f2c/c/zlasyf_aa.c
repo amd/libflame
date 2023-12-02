@@ -159,7 +159,7 @@ void zlasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, doublecomplex 
     /* Local variables */
     integer j, k, i1, k1, i2, mj;
     doublecomplex piv, alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern integer izamax_(integer *, doublecomplex *, integer *);
@@ -198,7 +198,7 @@ void zlasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, doublecomplex 
     /* K1 is the first column of the panel to be factorized */
     /* i.e., K1 is 2 for the first block column, and 1 for the rest of the blocks */
     k1 = 2 - *j1 + 1;
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         /* ..................................................... */
         /* Factorize A as U**T*D*U using the upper triangle of A */

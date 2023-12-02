@@ -314,7 +314,7 @@ void dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap,
     /* Local variables */
     integer i__, j;
     doublereal amax, smin, smax;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal scond, anorm;
     extern /* Subroutine */
     void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
@@ -369,8 +369,8 @@ void dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap,
     --iwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    equil = lsame_(fact, "E");
+    nofact = lsame_(fact, "N", 1, 1);
+    equil = lsame_(fact, "E", 1, 1);
     smlnum = 0.;
     bignum = 0.;
     if (nofact || equil)
@@ -380,16 +380,16 @@ void dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap,
     }
     else
     {
-        rcequ = lsame_(equed, "Y");
+        rcequ = lsame_(equed, "Y", 1, 1);
         smlnum = dlamch_("Safe minimum");
         bignum = 1. / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F"))
+    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -401,7 +401,7 @@ void dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap,
     {
         *info = -4;
     }
-    else if (lsame_(fact, "F") && ! (rcequ || lsame_( equed, "N")))
+    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -7;
     }
@@ -466,7 +466,7 @@ void dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap,
         {
             /* Equilibrate the matrix. */
             dlaqsp_(uplo, n, &ap[1], &s[1], &scond, &amax, equed);
-            rcequ = lsame_(equed, "Y");
+            rcequ = lsame_(equed, "Y", 1, 1);
         }
     }
     /* Scale the right-hand side. */

@@ -129,7 +129,7 @@ void sgecon_(char *norm, integer *n, real *a, integer *lda, real *anorm, real *r
     real su;
     integer kase, kase1;
     real scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
     void srscl_(integer *, real *, real *, integer *), slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
@@ -174,8 +174,8 @@ void sgecon_(char *norm, integer *n, real *a, integer *lda, real *anorm, real *r
     --iwork;
     /* Function Body */
     *info = 0;
-    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O");
-    if (! onenrm && ! lsame_(norm, "I"))
+    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
+    if (! onenrm && ! lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }

@@ -388,7 +388,7 @@ void slarfb_gett_(char *ident, integer *m, integer *n, integer *k, real *t, inte
     /* Local variables */
     integer i__, j;
     logical lnotident;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK auxiliary routine -- */
@@ -427,7 +427,7 @@ void slarfb_gett_(char *ident, integer *m, integer *n, integer *k, real *t, inte
     {
         return;
     }
-    lnotident = ! lsame_(ident, "I");
+    lnotident = ! lsame_(ident, "I", 1, 1);
     /* ------------------------------------------------------------------ */
     /* First Step. Computation of the Column Block 2: */
     /* ( A2 ) := H * ( A2 ) */

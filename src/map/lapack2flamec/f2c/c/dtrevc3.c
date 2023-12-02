@@ -274,7 +274,7 @@ void dtrevc3_(char *side, char *howmny, logical *select, integer *n, doublereal 
     doublereal scale;
     extern /* Subroutine */
     void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     doublereal remax;
@@ -336,12 +336,12 @@ void dtrevc3_(char *side, char *howmny, logical *select, integer *n, doublereal 
     vr -= vr_offset;
     --work;
     /* Function Body */
-    bothv = lsame_(side, "B");
-    rightv = lsame_(side, "R") || bothv;
-    leftv = lsame_(side, "L") || bothv;
-    allv = lsame_(howmny, "A");
-    over = lsame_(howmny, "B");
-    somev = lsame_(howmny, "S");
+    bothv = lsame_(side, "B", 1, 1);
+    rightv = lsame_(side, "R", 1, 1) || bothv;
+    leftv = lsame_(side, "L", 1, 1) || bothv;
+    allv = lsame_(howmny, "A", 1, 1);
+    over = lsame_(howmny, "B", 1, 1);
+    somev = lsame_(howmny, "S", 1, 1);
     *info = 0;
     nb = ilaenv_(&c__1, "DTREVC", ch__1, n, &c_n1, &c_n1, &c_n1);
     maxwrk = *n + (*n << 1) * nb;

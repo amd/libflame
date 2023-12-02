@@ -19,7 +19,7 @@ real slamch_(char *cmach)
     static TLS_CLASS_SPEC real  eps, sfmin, base, prec, t, rnd, emin, rmin, emax, rmax;
     real rmach, small_val;
 
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
 
     /*  Purpose */
     /*  ======= */
@@ -96,43 +96,43 @@ real slamch_(char *cmach)
         rmax = FLT_MAX;
     }
 
-    if (lsame_(cmach, "E"))
+    if (lsame_(cmach, "E", 1, 1))
     {
         rmach = eps;
     }
-    else if (lsame_(cmach, "S"))
+    else if (lsame_(cmach, "S", 1, 1))
     {
         rmach = sfmin;
     }
-    else if (lsame_(cmach, "B"))
+    else if (lsame_(cmach, "B", 1, 1))
     {
         rmach = base;
     }
-    else if (lsame_(cmach, "P"))
+    else if (lsame_(cmach, "P", 1, 1))
     {
         rmach = prec;
     }
-    else if (lsame_(cmach, "N"))
+    else if (lsame_(cmach, "N", 1, 1))
     {
         rmach = t;
     }
-    else if (lsame_(cmach, "R"))
+    else if (lsame_(cmach, "R", 1, 1))
     {
         rmach = rnd;
     }
-    else if (lsame_(cmach, "M"))
+    else if (lsame_(cmach, "M", 1, 1))
     {
         rmach = emin;
     }
-    else if (lsame_(cmach, "U"))
+    else if (lsame_(cmach, "U", 1, 1))
     {
         rmach = rmin;
     }
-    else if (lsame_(cmach, "L"))
+    else if (lsame_(cmach, "L", 1, 1))
     {
         rmach = emax;
     }
-    else if (lsame_(cmach, "O"))
+    else if (lsame_(cmach, "O", 1, 1))
     {
         rmach = rmax;
     }

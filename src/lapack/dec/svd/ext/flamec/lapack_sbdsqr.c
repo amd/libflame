@@ -256,7 +256,7 @@ int lapack_sbdsqr(char *uplo, integer *n, integer *ncvt, integer * nru, integer 
     real f, g, h__;
     integer i__, j, m;
     real r__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real oldcs;
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
@@ -321,8 +321,8 @@ int lapack_sbdsqr(char *uplo, integer *n, integer *ncvt, integer * nru, integer 
     --work;
     /* Function Body */
     *info = 0;
-    lower = lsame_(uplo, "L");
-    if (! lsame_(uplo, "U") && ! lower)
+    lower = lsame_(uplo, "L", 1, 1);
+    if (! lsame_(uplo, "U", 1, 1) && ! lower)
     {
         *info = -1;
     }

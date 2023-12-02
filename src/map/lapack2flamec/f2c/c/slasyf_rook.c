@@ -186,7 +186,7 @@ void slasyf_rook_(char *uplo, integer *n, integer *nb, integer *kb, real *a, int
     logical done;
     integer imax, jmax;
     real alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     real sfmin;
@@ -236,7 +236,7 @@ void slasyf_rook_(char *uplo, integer *n, integer *nb, integer *kb, real *a, int
     /* Compute machine safe minimum */
     sfmin = slamch_("S");
     jmax = 0;
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         /* Factorize the trailing columns of A using the upper triangle */
         /* of A and working backwards, and compute the matrix W = U12*D */

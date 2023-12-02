@@ -258,7 +258,7 @@ void zuncsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p,
     doublecomplex cdum[1] /* was [1][1] */
     ;
     integer iphi;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer itaup1, itaup2, itauq1;
@@ -323,9 +323,9 @@ void zuncsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p,
     --iwork;
     /* Function Body */
     *info = 0;
-    wantu1 = lsame_(jobu1, "Y");
-    wantu2 = lsame_(jobu2, "Y");
-    wantv1t = lsame_(jobv1t, "Y");
+    wantu1 = lsame_(jobu1, "Y", 1, 1);
+    wantu2 = lsame_(jobu2, "Y", 1, 1);
+    wantv1t = lsame_(jobv1t, "Y", 1, 1);
     lquery = *lwork == -1 || *lrwork == -1;
     if (*m < 0)
     {

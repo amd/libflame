@@ -161,7 +161,7 @@ void zhesv_aa_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
     extern /* Subroutine */
     void zhetrf_aa_(char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zhetrs_aa_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     integer lwkopt_hetrf__, lwkopt_hetrs__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
@@ -197,7 +197,7 @@ void zhesv_aa_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

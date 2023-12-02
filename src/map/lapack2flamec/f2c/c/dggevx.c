@@ -408,7 +408,7 @@ void dggevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, d
     doublereal temp;
     logical ilvl, ilvr;
     integer iwrk, iwrk1;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer icols;
     logical noscl;
     integer irows;
@@ -489,12 +489,12 @@ void dggevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, d
     --iwork;
     --bwork;
     /* Function Body */
-    if (lsame_(jobvl, "N"))
+    if (lsame_(jobvl, "N", 1, 1))
     {
         ijobvl = 1;
         ilvl = FALSE_;
     }
-    else if (lsame_(jobvl, "V"))
+    else if (lsame_(jobvl, "V", 1, 1))
     {
         ijobvl = 2;
         ilvl = TRUE_;
@@ -504,12 +504,12 @@ void dggevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, d
         ijobvl = -1;
         ilvl = FALSE_;
     }
-    if (lsame_(jobvr, "N"))
+    if (lsame_(jobvr, "N", 1, 1))
     {
         ijobvr = 1;
         ilvr = FALSE_;
     }
-    else if (lsame_(jobvr, "V"))
+    else if (lsame_(jobvr, "V", 1, 1))
     {
         ijobvr = 2;
         ilvr = TRUE_;
@@ -520,15 +520,15 @@ void dggevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, d
         ilvr = FALSE_;
     }
     ilv = ilvl || ilvr;
-    noscl = lsame_(balanc, "N") || lsame_(balanc, "P");
-    wantsn = lsame_(sense, "N");
-    wantse = lsame_(sense, "E");
-    wantsv = lsame_(sense, "V");
-    wantsb = lsame_(sense, "B");
+    noscl = lsame_(balanc, "N", 1, 1) || lsame_(balanc, "P", 1, 1);
+    wantsn = lsame_(sense, "N", 1, 1);
+    wantse = lsame_(sense, "E", 1, 1);
+    wantsv = lsame_(sense, "V", 1, 1);
+    wantsb = lsame_(sense, "B", 1, 1);
     /* Test the input arguments */
     *info = 0;
     lquery = *lwork == -1;
-    if (! (lsame_(balanc, "N") || lsame_(balanc, "S") || lsame_(balanc, "P") || lsame_(balanc, "B")))
+    if (! (lsame_(balanc, "N", 1, 1) || lsame_(balanc, "S", 1, 1) || lsame_(balanc, "P", 1, 1) || lsame_(balanc, "B", 1, 1)))
     {
         *info = -1;
     }

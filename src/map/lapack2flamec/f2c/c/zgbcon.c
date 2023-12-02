@@ -152,7 +152,7 @@ void zgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublecomplex *ab
     doublecomplex t;
     integer kd, lm, jp, ix, kase, kase1;
     doublereal scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Double Complex */
     VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
@@ -205,8 +205,8 @@ void zgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublecomplex *ab
     --rwork;
     /* Function Body */
     *info = 0;
-    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O");
-    if (! onenrm && ! lsame_(norm, "I"))
+    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
+    if (! onenrm && ! lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }

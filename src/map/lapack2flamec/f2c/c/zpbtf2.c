@@ -148,7 +148,7 @@ void zpbtf2_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
     integer kld;
     extern /* Subroutine */
     void zher_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_( integer *, doublereal *, doublecomplex *, integer *), zlacgv_( integer *, doublecomplex *, integer *);
@@ -179,8 +179,8 @@ void zpbtf2_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
     ab -= ab_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

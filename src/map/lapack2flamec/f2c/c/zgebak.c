@@ -131,7 +131,7 @@ void zgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
     integer i__, k;
     doublereal s;
     integer ii;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical leftv;
     extern /* Subroutine */
     void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
@@ -163,10 +163,10 @@ void zgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
     v_offset = 1 + v_dim1;
     v -= v_offset;
     /* Function Body */
-    rightv = lsame_(side, "R");
-    leftv = lsame_(side, "L");
+    rightv = lsame_(side, "R", 1, 1);
+    leftv = lsame_(side, "L", 1, 1);
     *info = 0;
-    if (! lsame_(job, "N") && ! lsame_(job, "P") && ! lsame_(job, "S") && ! lsame_(job, "B"))
+    if (! lsame_(job, "N", 1, 1) && ! lsame_(job, "P", 1, 1) && ! lsame_(job, "S", 1, 1) && ! lsame_(job, "B", 1, 1))
     {
         *info = -1;
     }
@@ -212,7 +212,7 @@ void zgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
     AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(job, "N"))
+    if (lsame_(job, "N", 1, 1))
     {
     AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -222,7 +222,7 @@ void zgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
         goto L30;
     }
     /* Backward balance */
-    if (lsame_(job, "S") || lsame_(job, "B"))
+    if (lsame_(job, "S", 1, 1) || lsame_(job, "B", 1, 1))
     {
         if (rightv)
         {
@@ -253,7 +253,7 @@ void zgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
     /* For I = ILO-1 step -1 until 1, */
     /* IHI+1 step 1 until N do -- */
 L30:
-    if (lsame_(job, "P") || lsame_(job, "B"))
+    if (lsame_(job, "P", 1, 1) || lsame_(job, "B", 1, 1))
     {
         if (rightv)
         {

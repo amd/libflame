@@ -126,7 +126,7 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
     integer i__, j, nb;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     logical upper;
     extern /* Subroutine */
@@ -166,8 +166,8 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

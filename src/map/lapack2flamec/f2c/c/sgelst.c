@@ -206,7 +206,7 @@ void sgelst_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integ
     integer brow;
     logical tpsd;
     integer iascl, ibscl;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nbmin;
     real rwork[1];
     integer lwopt;
@@ -261,7 +261,7 @@ void sgelst_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integ
     *info = 0;
     mn = fla_min(*m,*n);
     lquery = *lwork == -1;
-    if (! (lsame_(trans, "N") || lsame_(trans, "T")))
+    if (! (lsame_(trans, "N", 1, 1) || lsame_(trans, "T", 1, 1)))
     {
         *info = -1;
     }
@@ -304,7 +304,7 @@ void sgelst_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integ
     if (*info == 0 || *info == -10)
     {
         tpsd = TRUE_;
-        if (lsame_(trans, "N"))
+        if (lsame_(trans, "N", 1, 1))
         {
             tpsd = FALSE_;
         }

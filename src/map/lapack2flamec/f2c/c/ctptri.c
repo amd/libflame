@@ -135,7 +135,7 @@ void ctptri_(char *uplo, char *diag, integer *n, complex *ap, integer *info)
     complex ajj;
     extern /* Subroutine */
     void cscal_(integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical upper;
@@ -166,14 +166,14 @@ void ctptri_(char *uplo, char *diag, integer *n, complex *ap, integer *info)
     --ap;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    nounit = lsame_(diag, "N");
+    upper = lsame_(uplo, "U", 1, 1);
+    nounit = lsame_(diag, "N", 1, 1);
     jclast = 0;
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! nounit && ! lsame_(diag, "U"))
+    else if (! nounit && ! lsame_(diag, "U", 1, 1))
     {
         *info = -2;
     }

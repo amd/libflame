@@ -309,7 +309,7 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
     /* Local variables */
     integer i__, j;
     real amax, smin, smax;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real scond, anorm;
     logical equil, rcequ;
     extern real slamch_(char *);
@@ -364,8 +364,8 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
     --iwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    equil = lsame_(fact, "E");
+    nofact = lsame_(fact, "N", 1, 1);
+    equil = lsame_(fact, "E", 1, 1);
     smlnum = 0.f;
     bignum = 0.f;
     if (nofact || equil)
@@ -375,16 +375,16 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
     }
     else
     {
-        rcequ = lsame_(equed, "Y");
+        rcequ = lsame_(equed, "Y", 1, 1);
         smlnum = slamch_("Safe minimum");
         bignum = 1.f / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F"))
+    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -404,7 +404,7 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F") && ! (rcequ || lsame_( equed, "N")))
+    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -9;
     }
@@ -469,7 +469,7 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
         {
             /* Equilibrate the matrix. */
             slaqsy_(uplo, n, &a[a_offset], lda, &s[1], &scond, &amax, equed);
-            rcequ = lsame_(equed, "Y");
+            rcequ = lsame_(equed, "Y", 1, 1);
         }
     }
     /* Scale the right hand side. */

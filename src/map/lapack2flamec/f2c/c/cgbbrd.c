@@ -226,7 +226,7 @@ void cgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
     real abst;
     extern /* Subroutine */
     void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *), cscal_(integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical wantb, wantc;
     integer minmn;
     logical wantq;
@@ -272,13 +272,13 @@ void cgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
     --work;
     --rwork;
     /* Function Body */
-    wantb = lsame_(vect, "B");
-    wantq = lsame_(vect, "Q") || wantb;
-    wantpt = lsame_(vect, "P") || wantb;
+    wantb = lsame_(vect, "B", 1, 1);
+    wantq = lsame_(vect, "Q", 1, 1) || wantb;
+    wantpt = lsame_(vect, "P", 1, 1) || wantb;
     wantc = *ncc > 0;
     klu1 = *kl + *ku + 1;
     *info = 0;
-    if (! wantq && ! wantpt && ! lsame_(vect, "N"))
+    if (! wantq && ! wantpt && ! lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }

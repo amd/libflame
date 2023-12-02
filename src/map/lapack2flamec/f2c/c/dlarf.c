@@ -130,7 +130,7 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
     logical applyleft;
     extern /* Subroutine */
     void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer lastc, lastv;
@@ -160,7 +160,7 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
     c__ -= c_offset;
     --work;
     /* Function Body */
-    applyleft = lsame_(side, "L");
+    applyleft = lsame_(side, "L", 1, 1);
     lastv = 0;
     lastc = 0;
     if (*tau != 0.)

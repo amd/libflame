@@ -180,7 +180,7 @@ void ctrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, c
     real xnrm;
     extern /* Subroutine */
     void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
@@ -240,8 +240,8 @@ void ctrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, c
         return;
     }
     /* Function Body */
-    notrna = lsame_(trana, "N");
-    notrnb = lsame_(tranb, "N");
+    notrna = lsame_(trana, "N", 1, 1);
+    notrnb = lsame_(tranb, "N", 1, 1);
     /* Use the same block size for all matrices. */
     /* Computing fla_max */
     i__1 = 8;
@@ -266,11 +266,11 @@ void ctrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, c
         swork[swork_dim1 + 2] = (real) ((nbb << 1) + nba);
     }
     /* Test the input arguments */
-    if (! notrna && ! lsame_(trana, "C"))
+    if (! notrna && ! lsame_(trana, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! notrnb && ! lsame_(tranb, "C"))
+    else if (! notrnb && ! lsame_(tranb, "C", 1, 1))
     {
         *info = -2;
     }

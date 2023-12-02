@@ -169,7 +169,7 @@ void ssytrf_aa_2stage_(char *uplo, integer *n, real *a, integer *lda, real *tb, 
     integer i__, j, k, i1, i2, jb, kb, nb, td, nt;
     real piv;
     integer ldtb;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
     void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
@@ -212,10 +212,10 @@ void ssytrf_aa_2stage_(char *uplo, integer *n, real *a, integer *lda, real *tb, 
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     wquery = *lwork == -1;
     tquery = *ltb == -1;
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

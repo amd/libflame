@@ -320,7 +320,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
     real rtol;
     integer iseed[4];
     real avgap, sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     logical norep;
     extern /* Subroutine */
@@ -387,15 +387,15 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
         return;
     }
     /* Decode RANGE */
-    if (lsame_(range, "A"))
+    if (lsame_(range, "A", 1, 1))
     {
         irange = 1;
     }
-    else if (lsame_(range, "V"))
+    else if (lsame_(range, "V", 1, 1))
     {
         irange = 3;
     }
-    else if (lsame_(range, "I"))
+    else if (lsame_(range, "I", 1, 1))
     {
         irange = 2;
     }

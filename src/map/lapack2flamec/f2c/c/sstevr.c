@@ -322,7 +322,7 @@ void sstevr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     real rmin, rmax;
     logical test;
     real tnrm, sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
     char order[1];
@@ -383,10 +383,10 @@ void sstevr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     --iwork;
     /* Function Body */
     ieeeok = ilaenv_(&c__10, "SSTEVR", "N", &c__1, &c__2, &c__3, &c__4);
-    wantz = lsame_(jobz, "V");
-    alleig = lsame_(range, "A");
-    valeig = lsame_(range, "V");
-    indeig = lsame_(range, "I");
+    wantz = lsame_(jobz, "V", 1, 1);
+    alleig = lsame_(range, "A", 1, 1);
+    valeig = lsame_(range, "V", 1, 1);
+    indeig = lsame_(range, "I", 1, 1);
     lquery = *lwork == -1 || *liwork == -1;
     /* Computing MAX */
     i__1 = 1;
@@ -397,7 +397,7 @@ void sstevr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     i__2 = *n * 10; // , expr subst
     liwmin = fla_max(i__1,i__2);
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N")))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }

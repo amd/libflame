@@ -133,7 +133,7 @@ void spbequ_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real 
     /* Local variables */
     integer i__, j;
     real smin;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -165,8 +165,8 @@ void spbequ_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real 
     --s;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

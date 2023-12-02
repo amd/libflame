@@ -10,7 +10,7 @@ int csyr2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
     integer info;
     complex temp1, temp2;
     integer i__, j, l;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nrowa;
     logical upper;
     extern /* Subroutine */
@@ -131,7 +131,7 @@ int csyr2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
     c_offset = 1 + c_dim1 * 1;
     c__ -= c_offset;
     /* Function Body */
-    if (lsame_(trans, "N"))
+    if (lsame_(trans, "N", 1, 1))
     {
         nrowa = *n;
     }
@@ -139,13 +139,13 @@ int csyr2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
     {
         nrowa = *k;
     }
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     info = 0;
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         info = 1;
     }
-    else if (! lsame_(trans, "N") && ! lsame_(trans, "T"))
+    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1))
     {
         info = 2;
     }
@@ -271,7 +271,7 @@ int csyr2k_(char *uplo, char *trans, integer *n, integer *k, complex *alpha, com
         return 0;
     }
     /* Start the operations. */
-    if (lsame_(trans, "N"))
+    if (lsame_(trans, "N", 1, 1))
     {
         /* Form C := alpha*A*B' + alpha*B*A' + C. */
         if (upper)

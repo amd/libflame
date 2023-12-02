@@ -190,7 +190,7 @@ void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     /* Local variables */
     integer inde;
     char vect[1];
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     logical upper, wantz;
     extern /* Subroutine */
@@ -229,14 +229,14 @@ void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     --work;
     --rwork;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
-    upper = lsame_(uplo, "U");
+    wantz = lsame_(jobz, "V", 1, 1);
+    upper = lsame_(uplo, "U", 1, 1);
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N")))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (upper || lsame_(uplo, "L")))
+    else if (! (upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -2;
     }

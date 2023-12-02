@@ -173,7 +173,7 @@ void dgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, double
     void dlamswlq_(char *, char *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer mb, nb, mn, lw;
     logical left, tran;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical right;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -211,10 +211,10 @@ void dgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, double
     --work;
     /* Function Body */
     lquery = *lwork == -1;
-    notran = lsame_(trans, "N");
-    tran = lsame_(trans, "T");
-    left = lsame_(side, "L");
-    right = lsame_(side, "R");
+    notran = lsame_(trans, "N", 1, 1);
+    tran = lsame_(trans, "T", 1, 1);
+    left = lsame_(side, "L", 1, 1);
+    right = lsame_(side, "R", 1, 1);
     mb = (integer) t[2];
     nb = (integer) t[3];
     if (left)

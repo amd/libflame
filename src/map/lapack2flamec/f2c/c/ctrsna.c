@@ -268,7 +268,7 @@ void ctrsna_(char *job, char *howmny, logical *select, integer *n, complex *t, i
     real lnrm, rnrm, scale;
     extern /* Complex */
     VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     complex dummy[1];
     logical wants;
@@ -335,10 +335,10 @@ void ctrsna_(char *job, char *howmny, logical *select, integer *n, complex *t, i
     work -= work_offset;
     --rwork;
     /* Function Body */
-    wantbh = lsame_(job, "B");
-    wants = lsame_(job, "E") || wantbh;
-    wantsp = lsame_(job, "V") || wantbh;
-    somcon = lsame_(howmny, "S");
+    wantbh = lsame_(job, "B", 1, 1);
+    wants = lsame_(job, "E", 1, 1) || wantbh;
+    wantsp = lsame_(job, "V", 1, 1) || wantbh;
+    somcon = lsame_(howmny, "S", 1, 1);
     /* Set M to the number of eigenpairs for which condition numbers are */
     /* to be computed. */
     if (somcon)
@@ -365,7 +365,7 @@ void ctrsna_(char *job, char *howmny, logical *select, integer *n, complex *t, i
     {
         *info = -1;
     }
-    else if (! lsame_(howmny, "A") && ! somcon)
+    else if (! lsame_(howmny, "A", 1, 1) && ! somcon)
     {
         *info = -2;
     }

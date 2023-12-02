@@ -250,7 +250,7 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
     integer iscl;
     doublereal anrm;
     integer ierr, itau, ncvt, nrvt, lwork_zgebrd__, lwork_zgelqf__, lwork_zgeqrf__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer chunk, minmn;
     extern /* Subroutine */
     void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
@@ -317,16 +317,16 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
     /* Function Body */
     *info = 0;
     minmn = fla_min(*m,*n);
-    wntua = lsame_(jobu, "A");
-    wntus = lsame_(jobu, "S");
+    wntua = lsame_(jobu, "A", 1, 1);
+    wntus = lsame_(jobu, "S", 1, 1);
     wntuas = wntua || wntus;
-    wntuo = lsame_(jobu, "O");
-    wntun = lsame_(jobu, "N");
-    wntva = lsame_(jobvt, "A");
-    wntvs = lsame_(jobvt, "S");
+    wntuo = lsame_(jobu, "O", 1, 1);
+    wntun = lsame_(jobu, "N", 1, 1);
+    wntva = lsame_(jobvt, "A", 1, 1);
+    wntvs = lsame_(jobvt, "S", 1, 1);
     wntvas = wntva || wntvs;
-    wntvo = lsame_(jobvt, "O");
-    wntvn = lsame_(jobvt, "N");
+    wntvo = lsame_(jobvt, "O", 1, 1);
+    wntvn = lsame_(jobvt, "N", 1, 1);
     lquery = *lwork == -1;
     mnthr = 0;
     wrkbl = 0;

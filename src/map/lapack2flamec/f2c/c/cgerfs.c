@@ -203,7 +203,7 @@ void cgerfs_(char *trans, integer *n, integer *nrhs, complex * a, integer *lda, 
     real eps;
     integer kase;
     real safe1, safe2;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     integer isave[3];
@@ -266,8 +266,8 @@ void cgerfs_(char *trans, integer *n, integer *nrhs, complex * a, integer *lda, 
     --rwork;
     /* Function Body */
     *info = 0;
-    notran = lsame_(trans, "N");
-    if (! notran && ! lsame_(trans, "T") && ! lsame_( trans, "C"))
+    notran = lsame_(trans, "N", 1, 1);
+    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }

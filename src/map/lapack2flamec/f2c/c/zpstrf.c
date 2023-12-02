@@ -154,7 +154,7 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
     integer i__, j, k, jb, nb;
     doublereal ajj;
     integer pvt;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal dtemp;
     integer itemp;
     extern /* Subroutine */
@@ -205,8 +205,8 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
     a -= a_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

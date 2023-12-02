@@ -405,7 +405,7 @@ void dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a
     void dlag2_(doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     doublereal root1, root2, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     doublereal uhavi, uhbvi, tmpii;
@@ -466,10 +466,10 @@ void dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a
     --work;
     --iwork;
     /* Function Body */
-    wantbh = lsame_(job, "B");
-    wants = lsame_(job, "E") || wantbh;
-    wantdf = lsame_(job, "V") || wantbh;
-    somcon = lsame_(howmny, "S");
+    wantbh = lsame_(job, "B", 1, 1);
+    wants = lsame_(job, "E", 1, 1) || wantbh;
+    wantdf = lsame_(job, "V", 1, 1) || wantbh;
+    somcon = lsame_(howmny, "S", 1, 1);
     *info = 0;
     lquery = *lwork == -1;
     cond = 0.;
@@ -477,7 +477,7 @@ void dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a
     {
         *info = -1;
     }
-    else if (! lsame_(howmny, "A") && ! somcon)
+    else if (! lsame_(howmny, "A", 1, 1) && ! somcon)
     {
         *info = -2;
     }
@@ -557,7 +557,7 @@ void dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a
         {
             lwmin = 1;
         }
-        else if (lsame_(job, "V") || lsame_(job, "B"))
+        else if (lsame_(job, "V", 1, 1) || lsame_(job, "B", 1, 1))
         {
             lwmin = (*n << 1) * (*n + 2) + 16;
         }

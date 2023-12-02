@@ -285,7 +285,7 @@ void dgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, dou
     integer ierr, iqrf, itau;
     char jobz[1];
     logical vals;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iltgk, itemp, minmn;
     extern /* Subroutine */
     void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
@@ -349,8 +349,8 @@ void dgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, dou
     *info = 0;
     lquery = *lwork == -1;
     minmn = fla_min(*m,*n);
-    wantu = lsame_(jobu, "V");
-    wantvt = lsame_(jobvt, "V");
+    wantu = lsame_(jobu, "V", 1, 1);
+    wantvt = lsame_(jobvt, "V", 1, 1);
     mnthr = 0;
     if (wantu || wantvt)
     {
@@ -360,15 +360,15 @@ void dgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, dou
     {
         *(unsigned char *)jobz = 'N';
     }
-    alls = lsame_(range, "A");
-    vals = lsame_(range, "V");
-    inds = lsame_(range, "I");
+    alls = lsame_(range, "A", 1, 1);
+    vals = lsame_(range, "V", 1, 1);
+    inds = lsame_(range, "I", 1, 1);
     *info = 0;
-    if (! lsame_(jobu, "V") && ! lsame_(jobu, "N"))
+    if (! lsame_(jobu, "V", 1, 1) && ! lsame_(jobu, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(jobvt, "V") && ! lsame_(jobvt, "N"))
+    else if (! lsame_(jobvt, "V", 1, 1) && ! lsame_(jobvt, "N", 1, 1))
     {
         *info = -2;
     }

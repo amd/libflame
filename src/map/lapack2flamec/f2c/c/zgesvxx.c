@@ -547,7 +547,7 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
     integer j;
     doublereal amax;
     extern doublereal zla_gerpvgrw_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal rcmin, rcmax;
     logical equil;
     extern doublereal dlamch_(char *);
@@ -618,9 +618,9 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
     --rwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    equil = lsame_(fact, "E");
-    notran = lsame_(trans, "N");
+    nofact = lsame_(fact, "N", 1, 1);
+    equil = lsame_(fact, "E", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     smlnum = dlamch_("Safe minimum");
     bignum = 1. / smlnum;
     if (nofact || equil)
@@ -631,19 +631,19 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
     }
     else
     {
-        rowequ = lsame_(equed, "R") || lsame_(equed, "B");
-        colequ = lsame_(equed, "C") || lsame_(equed, "B");
+        rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
+        colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
     }
     /* Default is failure. If an input parameter is wrong or */
     /* factorization fails, make everything look horrible. Only the */
     /* pivot growth is set here, the rest is initialized in ZGERFSX. */
     *rpvgrw = 0.;
     /* Test the input parameters. PARAMS is not tested until ZGERFSX. */
-    if (! nofact && ! equil && ! lsame_(fact, "F"))
+    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T") && ! lsame_(trans, "C"))
+    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -663,7 +663,7 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F") && ! (rowequ || colequ || lsame_(equed, "N")))
+    else if (lsame_(fact, "F", 1, 1) && ! (rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -10;
     }
@@ -760,8 +760,8 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
         {
             /* Equilibrate the matrix. */
             zlaqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, & colcnd, &amax, equed);
-            rowequ = lsame_(equed, "R") || lsame_(equed, "B");
-            colequ = lsame_(equed, "C") || lsame_(equed, "B");
+            rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
+            colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }
         /* If the scaling factors are not applied, set them to 1.0. */
         if (! rowequ)

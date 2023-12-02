@@ -321,7 +321,7 @@ void ctgsyl_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
     real dsum;
     extern /* Subroutine */
     void cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer ifunc, linfo, lwmin;
     real scale2;
     extern /* Subroutine */
@@ -381,9 +381,9 @@ void ctgsyl_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
     /* Function Body */
     *info = 0;
     scale2 = 0.f;
-    notran = lsame_(trans, "N");
+    notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
-    if (! notran && ! lsame_(trans, "C"))
+    if (! notran && ! lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }

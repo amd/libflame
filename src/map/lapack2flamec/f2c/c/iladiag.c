@@ -48,7 +48,7 @@ integer iladiag_(char *diag)
     /* System generated locals */
     integer ret_val;
     /* Local variables */
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -61,11 +61,11 @@ integer iladiag_(char *diag)
     /* .. External Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    if (lsame_(diag, "N"))
+    if (lsame_(diag, "N", 1, 1))
     {
         ret_val = 131;
     }
-    else if (lsame_(diag, "U"))
+    else if (lsame_(diag, "U", 1, 1))
     {
         ret_val = 132;
     }

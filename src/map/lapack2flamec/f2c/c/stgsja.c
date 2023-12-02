@@ -396,7 +396,7 @@ void stgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     extern /* Subroutine */
     void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     real gamma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *);
     logical initq, initu, initv, wantq, upper;
@@ -449,22 +449,22 @@ void stgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     --work;
     /* Function Body */
     hugenum = 3.40282347e38f;
-    initu = lsame_(jobu, "I");
-    wantu = initu || lsame_(jobu, "U");
-    initv = lsame_(jobv, "I");
-    wantv = initv || lsame_(jobv, "V");
-    initq = lsame_(jobq, "I");
-    wantq = initq || lsame_(jobq, "Q");
+    initu = lsame_(jobu, "I", 1, 1);
+    wantu = initu || lsame_(jobu, "U", 1, 1);
+    initv = lsame_(jobv, "I", 1, 1);
+    wantv = initv || lsame_(jobv, "V", 1, 1);
+    initq = lsame_(jobq, "I", 1, 1);
+    wantq = initq || lsame_(jobq, "Q", 1, 1);
     *info = 0;
-    if (! (initu || wantu || lsame_(jobu, "N")))
+    if (! (initu || wantu || lsame_(jobu, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (initv || wantv || lsame_(jobv, "N")))
+    else if (! (initv || wantv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (initq || wantq || lsame_(jobq, "N")))
+    else if (! (initq || wantq || lsame_(jobq, "N", 1, 1)))
     {
         *info = -3;
     }

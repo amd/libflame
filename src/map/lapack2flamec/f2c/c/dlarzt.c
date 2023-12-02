@@ -186,7 +186,7 @@ void dlarzt_(char *direct, char *storev, integer *n, integer * k, doublereal *v,
     doublereal d__1;
     /* Local variables */
     integer i__, j, info;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -218,11 +218,11 @@ void dlarzt_(char *direct, char *storev, integer *n, integer * k, doublereal *v,
     t -= t_offset;
     /* Function Body */
     info = 0;
-    if (! lsame_(direct, "B"))
+    if (! lsame_(direct, "B", 1, 1))
     {
         info = -1;
     }
-    else if (! lsame_(storev, "R"))
+    else if (! lsame_(storev, "R", 1, 1))
     {
         info = -2;
     }

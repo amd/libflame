@@ -204,7 +204,7 @@ void slatrd_(char *uplo, integer *n, integer *nb, real *a, integer *lda, real *e
     integer i__, iw;
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     real alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), saxpy_( integer *, real *, real *, integer *, real *, integer *), ssymv_( char *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -242,7 +242,7 @@ void slatrd_(char *uplo, integer *n, integer *nb, real *a, integer *lda, real *e
     {
         return;
     }
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         /* Reduce last NB columns of upper triangle */
         i__1 = *n - *nb + 1;

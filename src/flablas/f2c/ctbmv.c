@@ -12,7 +12,7 @@ int ctbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, complex 
     integer info;
     complex temp;
     integer i__, j, l;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer kplus1, ix, jx, kx;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -131,15 +131,15 @@ int ctbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, complex 
     --x;
     /* Function Body */
     info = 0;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         info = 1;
     }
-    else if (! lsame_(trans, "N") && ! lsame_(trans, "T") && ! lsame_(trans, "C"))
+    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         info = 2;
     }
-    else if (! lsame_(diag, "U") && ! lsame_(diag, "N"))
+    else if (! lsame_(diag, "U", 1, 1) && ! lsame_(diag, "N", 1, 1))
     {
         info = 3;
     }
@@ -169,8 +169,8 @@ int ctbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, complex 
     {
         return 0;
     }
-    noconj = lsame_(trans, "T");
-    nounit = lsame_(diag, "N");
+    noconj = lsame_(trans, "T", 1, 1);
+    nounit = lsame_(diag, "N", 1, 1);
     /* Set up the start point in X if the increment is not unity. This */
     /* will be ( N - 1 )*INCX too small for descending loops. */
     if (*incx <= 0)
@@ -183,10 +183,10 @@ int ctbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, complex 
     }
     /* Start the operations. In this version the elements of A are */
     /* accessed sequentially with one pass through A. */
-    if (lsame_(trans, "N"))
+    if (lsame_(trans, "N", 1, 1))
     {
         /* Form x := A*x. */
-        if (lsame_(uplo, "U"))
+        if (lsame_(uplo, "U", 1, 1))
         {
             kplus1 = *k + 1;
             if (*incx == 1)
@@ -372,7 +372,7 @@ int ctbmv_(char *uplo, char *trans, char *diag, integer *n, integer *k, complex 
     else
     {
         /* Form x := A'*x or x := conjg( A' )*x. */
-        if (lsame_(uplo, "U"))
+        if (lsame_(uplo, "U", 1, 1))
         {
             kplus1 = *k + 1;
             if (*incx == 1)

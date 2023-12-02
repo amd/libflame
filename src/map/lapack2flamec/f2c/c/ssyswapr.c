@@ -97,7 +97,7 @@ void ssyswapr_(char *uplo, integer *n, real *a, integer *lda, integer *i1, integ
     integer a_dim1, a_offset, i__1;
     /* Local variables */
     real tmp;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     void sswap_(integer *, real *, integer *, real *, integer *);
@@ -120,7 +120,7 @@ void ssyswapr_(char *uplo, integer *n, real *a, integer *lda, integer *i1, integ
     a_offset = 1 + a_dim1;
     a -= a_offset;
     /* Function Body */
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     if (upper)
     {
         /* UPPER */

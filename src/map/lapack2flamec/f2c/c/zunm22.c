@@ -168,7 +168,7 @@ void zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
     /* Local variables */
     integer i__, nb, nq, nw, len;
     logical left;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
@@ -207,8 +207,8 @@ void zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
     --work;
     /* Function Body */
     *info = 0;
-    left = lsame_(side, "L");
-    notran = lsame_(trans, "N");
+    left = lsame_(side, "L", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
     /* NQ is the order of Q;
     */
@@ -226,11 +226,11 @@ void zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
     {
         nw = 1;
     }
-    if (! left && ! lsame_(side, "R"))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(trans, "N") && ! lsame_(trans, "C"))
+    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }

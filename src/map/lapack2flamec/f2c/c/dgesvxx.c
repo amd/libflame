@@ -547,7 +547,7 @@ void dgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a
     integer j;
     doublereal amax;
     extern doublereal dla_gerpvgrw_(integer *, integer *, doublereal *, integer *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal rcmin, rcmax;
     logical equil;
     extern doublereal dlamch_(char *);
@@ -616,9 +616,9 @@ void dgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a
     --iwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    equil = lsame_(fact, "E");
-    notran = lsame_(trans, "N");
+    nofact = lsame_(fact, "N", 1, 1);
+    equil = lsame_(fact, "E", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     smlnum = dlamch_("Safe minimum");
     bignum = 1. / smlnum;
     if (nofact || equil)
@@ -629,19 +629,19 @@ void dgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a
     }
     else
     {
-        rowequ = lsame_(equed, "R") || lsame_(equed, "B");
-        colequ = lsame_(equed, "C") || lsame_(equed, "B");
+        rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
+        colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
     }
     /* Default is failure. If an input parameter is wrong or */
     /* factorization fails, make everything look horrible. Only the */
     /* pivot growth is set here, the rest is initialized in DGERFSX. */
     *rpvgrw = 0.;
     /* Test the input parameters. PARAMS is not tested until DGERFSX. */
-    if (! nofact && ! equil && ! lsame_(fact, "F"))
+    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T") && ! lsame_(trans, "C"))
+    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -661,7 +661,7 @@ void dgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F") && ! (rowequ || colequ || lsame_(equed, "N")))
+    else if (lsame_(fact, "F", 1, 1) && ! (rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -10;
     }
@@ -758,8 +758,8 @@ void dgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a
         {
             /* Equilibrate the matrix. */
             dlaqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, & colcnd, &amax, equed);
-            rowequ = lsame_(equed, "R") || lsame_(equed, "B");
-            colequ = lsame_(equed, "C") || lsame_(equed, "B");
+            rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
+            colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }
         /* If the scaling factors are not applied, set them to 1.0. */
         if (! rowequ)

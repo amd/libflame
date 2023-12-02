@@ -164,7 +164,7 @@ void dlarft_(char *direct, char *storev, integer *n, integer * k, doublereal *v,
     doublereal d__1;
     /* Local variables */
     integer i__, j, prevlastv;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer lastv;
@@ -203,7 +203,7 @@ void dlarft_(char *direct, char *storev, integer *n, integer * k, doublereal *v,
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(direct, "F"))
+    if (lsame_(direct, "F", 1, 1))
     {
         prevlastv = *n;
         i__1 = *k;
@@ -226,7 +226,7 @@ void dlarft_(char *direct, char *storev, integer *n, integer * k, doublereal *v,
             else
             {
                 /* general case */
-                if (lsame_(storev, "C"))
+                if (lsame_(storev, "C", 1, 1))
                 {
                     /* Skip any trailing zeros. */
                     i__2 = i__ + 1;
@@ -318,7 +318,7 @@ void dlarft_(char *direct, char *storev, integer *n, integer * k, doublereal *v,
                 /* general case */
                 if (i__ < *k)
                 {
-                    if (lsame_(storev, "C"))
+                    if (lsame_(storev, "C", 1, 1))
                     {
                         /* Skip any leading zeros. */
                         i__1 = i__ - 1;

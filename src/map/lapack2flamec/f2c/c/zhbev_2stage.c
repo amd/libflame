@@ -228,7 +228,7 @@ void zhbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, doublecomple
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo, lhtrd, lwmin;
     logical lower;
     integer lwtrd;
@@ -280,15 +280,15 @@ void zhbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, doublecomple
     --work;
     --rwork;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
-    lower = lsame_(uplo, "L");
+    wantz = lsame_(jobz, "V", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
     lquery = *lwork == -1;
     *info = 0;
-    if (! lsame_(jobz, "N"))
+    if (! lsame_(jobz, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! (lower || lsame_(uplo, "U")))
+    else if (! (lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }

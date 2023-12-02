@@ -369,7 +369,7 @@ void cggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, intege
     real tola;
     integer isub;
     real tolb, unfl, temp, smax;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real anorm, bnorm;
     logical wantq;
     extern /* Subroutine */
@@ -426,22 +426,22 @@ void cggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, intege
     --rwork;
     --iwork;
     /* Function Body */
-    wantu = lsame_(jobu, "U");
-    wantv = lsame_(jobv, "V");
-    wantq = lsame_(jobq, "Q");
+    wantu = lsame_(jobu, "U", 1, 1);
+    wantv = lsame_(jobv, "V", 1, 1);
+    wantq = lsame_(jobq, "Q", 1, 1);
     lquery = *lwork == -1;
     lwkopt = 1;
     /* Test the input arguments */
     *info = 0;
-    if (! (wantu || lsame_(jobu, "N")))
+    if (! (wantu || lsame_(jobu, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (wantv || lsame_(jobv, "N")))
+    else if (! (wantv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (wantq || lsame_(jobq, "N")))
+    else if (! (wantq || lsame_(jobq, "N", 1, 1)))
     {
         *info = -3;
     }

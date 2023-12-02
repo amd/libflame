@@ -182,7 +182,7 @@ void dtprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
     doublereal eps;
     integer kase;
     doublereal safe1, safe2;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
     void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
@@ -234,18 +234,18 @@ void dtprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
     --iwork;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    notran = lsame_(trans, "N");
-    nounit = lsame_(diag, "N");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
+    nounit = lsame_(diag, "N", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T") && ! lsame_(trans, "C"))
+    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U"))
+    else if (! nounit && ! lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }

@@ -204,7 +204,7 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
     integer ierr, itau, iwrk, nout;
     extern /* Subroutine */
     void cscal_(integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern real scnrm2_(integer *, complex *, integer *);
     extern /* Subroutine */
     void cgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, complex *, integer *, integer *), cgebal_(char *, integer *, complex *, integer *, integer *, integer *, real *, integer *), slabad_(real *, real *);
@@ -268,13 +268,13 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    wantvl = lsame_(jobvl, "V");
-    wantvr = lsame_(jobvr, "V");
-    if (! wantvl && ! lsame_(jobvl, "N"))
+    wantvl = lsame_(jobvl, "V", 1, 1);
+    wantvr = lsame_(jobvr, "V", 1, 1);
+    if (! wantvl && ! lsame_(jobvl, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! wantvr && ! lsame_(jobvr, "N"))
+    else if (! wantvr && ! lsame_(jobvr, "N", 1, 1))
     {
         *info = -2;
     }

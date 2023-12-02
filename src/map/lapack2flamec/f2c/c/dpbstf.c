@@ -159,7 +159,7 @@ void dpbstf_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
     integer kld;
     extern /* Subroutine */
     void dsyr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dscal_( integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -190,8 +190,8 @@ void dpbstf_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
     ab -= ab_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

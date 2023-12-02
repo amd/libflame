@@ -305,7 +305,7 @@ void dtgsyl_(char *trans, integer *ijob, integer *m, integer * n, doublereal *a,
     integer ppqq;
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer ifunc, linfo, lwmin;
     doublereal scale2;
     extern /* Subroutine */
@@ -366,10 +366,10 @@ void dtgsyl_(char *trans, integer *ijob, integer *m, integer * n, doublereal *a,
     --iwork;
     /* Function Body */
     *info = 0;
-    notran = lsame_(trans, "N");
+    notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
     scale2 = 0.;
-    if (! notran && ! lsame_(trans, "T"))
+    if (! notran && ! lsame_(trans, "T", 1, 1))
     {
         *info = -1;
     }

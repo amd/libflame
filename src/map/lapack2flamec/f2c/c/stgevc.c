@@ -321,7 +321,7 @@ void stgevc_(char *side, char *howmny, logical *select, integer *n, real *s, int
     logical ilall;
     integer iside;
     real sbeta;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical il2by2;
     integer iinfo;
     real small_val;
@@ -386,19 +386,19 @@ void stgevc_(char *side, char *howmny, logical *select, integer *n, real *s, int
     --work;
     /* Function Body */
     ilback = FALSE_;
-    if (lsame_(howmny, "A"))
+    if (lsame_(howmny, "A", 1, 1))
     {
         ihwmny = 1;
         ilall = TRUE_;
         ilback = FALSE_;
     }
-    else if (lsame_(howmny, "S"))
+    else if (lsame_(howmny, "S", 1, 1))
     {
         ihwmny = 2;
         ilall = FALSE_;
         ilback = FALSE_;
     }
-    else if (lsame_(howmny, "B"))
+    else if (lsame_(howmny, "B", 1, 1))
     {
         ihwmny = 3;
         ilall = TRUE_;
@@ -409,19 +409,19 @@ void stgevc_(char *side, char *howmny, logical *select, integer *n, real *s, int
         ihwmny = -1;
         ilall = TRUE_;
     }
-    if (lsame_(side, "R"))
+    if (lsame_(side, "R", 1, 1))
     {
         iside = 1;
         compl = FALSE_;
         compr = TRUE_;
     }
-    else if (lsame_(side, "L"))
+    else if (lsame_(side, "L", 1, 1))
     {
         iside = 2;
         compl = TRUE_;
         compr = FALSE_;
     }
-    else if (lsame_(side, "B"))
+    else if (lsame_(side, "B", 1, 1))
     {
         iside = 3;
         compl = TRUE_;

@@ -335,7 +335,7 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
     doublecomplex yhax, yhbx;
     integer ilst;
     doublereal rnrm, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Double Complex */
     VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer lwmin;
@@ -400,17 +400,17 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
     --work;
     --iwork;
     /* Function Body */
-    wantbh = lsame_(job, "B");
-    wants = lsame_(job, "E") || wantbh;
-    wantdf = lsame_(job, "V") || wantbh;
-    somcon = lsame_(howmny, "S");
+    wantbh = lsame_(job, "B", 1, 1);
+    wants = lsame_(job, "E", 1, 1) || wantbh;
+    wantdf = lsame_(job, "V", 1, 1) || wantbh;
+    somcon = lsame_(howmny, "S", 1, 1);
     *info = 0;
     lquery = *lwork == -1;
     if (! wants && ! wantdf)
     {
         *info = -1;
     }
-    else if (! lsame_(howmny, "A") && ! somcon)
+    else if (! lsame_(howmny, "A", 1, 1) && ! somcon)
     {
         *info = -2;
     }
@@ -461,7 +461,7 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
         {
             lwmin = 1;
         }
-        else if (lsame_(job, "V") || lsame_(job, "B"))
+        else if (lsame_(job, "V", 1, 1) || lsame_(job, "B", 1, 1))
         {
             lwmin = (*n << 1) * *n;
         }

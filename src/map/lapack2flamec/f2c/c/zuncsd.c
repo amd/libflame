@@ -321,7 +321,7 @@ void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
     logical colmajor;
     integer lworkmin, lworkopt, i__, j, childinfo, p1, q1, lrworkmin, lrworkopt, lbbcsdwork, lorbdbwork, lorglqwork, lorgqrwork, ib11d, ib11e, ib12d, ib12e, ib21d, ib21e, ib22d, ib22e, iphi;
     logical defaultsigns;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer lbbcsdworkmin, itaup1, itaup2, itauq1, itauq2, lorbdbworkmin, lbbcsdworkopt;
     logical wantu1, wantu2;
     integer ibbcsd, lorbdbworkopt, iorbdb, lorglqworkmin;
@@ -399,12 +399,12 @@ void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
     --iwork;
     /* Function Body */
     *info = 0;
-    wantu1 = lsame_(jobu1, "Y");
-    wantu2 = lsame_(jobu2, "Y");
-    wantv1t = lsame_(jobv1t, "Y");
-    wantv2t = lsame_(jobv2t, "Y");
-    colmajor = ! lsame_(trans, "T");
-    defaultsigns = ! lsame_(signs, "O");
+    wantu1 = lsame_(jobu1, "Y", 1, 1);
+    wantu2 = lsame_(jobu2, "Y", 1, 1);
+    wantv1t = lsame_(jobv1t, "Y", 1, 1);
+    wantv2t = lsame_(jobv2t, "Y", 1, 1);
+    colmajor = ! lsame_(trans, "T", 1, 1);
+    defaultsigns = ! lsame_(signs, "O", 1, 1);
     lquery = *lwork == -1;
     lrquery = *lrwork == -1;
     iorgqr = 0;

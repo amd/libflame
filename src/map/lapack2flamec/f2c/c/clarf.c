@@ -146,7 +146,7 @@ void clarf_(char *side, integer *m, integer *n, complex *v, integer *incv, compl
     logical applyleft;
     extern /* Subroutine */
     void cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer lastc, lastv;
     extern integer ilaclc_(integer *, integer *, complex *, integer *), ilaclr_(integer *, integer *, complex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -174,7 +174,7 @@ void clarf_(char *side, integer *m, integer *n, complex *v, integer *incv, compl
     c__ -= c_offset;
     --work;
     /* Function Body */
-    applyleft = lsame_(side, "L");
+    applyleft = lsame_(side, "L", 1, 1);
     lastv = 0;
     lastc = 0;
     if (tau->r != 0.f || tau->i != 0.f)

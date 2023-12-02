@@ -145,7 +145,7 @@ real cla_gercond_x_(char *trans, integer *n, complex *a, integer *lda, complex *
     integer i__, j;
     real tmp;
     integer kase;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     real anorm;
     extern /* Subroutine */
@@ -190,8 +190,8 @@ real cla_gercond_x_(char *trans, integer *n, complex *a, integer *lda, complex *
     /* Function Body */
     ret_val = 0.f;
     *info = 0;
-    notrans = lsame_(trans, "N");
-    if (! notrans && ! lsame_(trans, "T") && ! lsame_( trans, "C"))
+    notrans = lsame_(trans, "N", 1, 1);
+    if (! notrans && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }

@@ -184,7 +184,7 @@ void zpprfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, doublecom
     doublereal eps;
     integer kase;
     doublereal safe1, safe2;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3], count;
     logical upper;
     extern /* Subroutine */
@@ -238,8 +238,8 @@ void zpprfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, doublecom
     --rwork;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

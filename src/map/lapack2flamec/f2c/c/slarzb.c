@@ -186,7 +186,7 @@ void slarzb_(char *side, char *trans, char *direct, char * storev, integer *m, i
     integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1, i__2;
     /* Local variables */
     integer i__, j, info;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     char transt[1];
@@ -230,11 +230,11 @@ void slarzb_(char *side, char *trans, char *direct, char * storev, integer *m, i
     }
     /* Check for currently supported options */
     info = 0;
-    if (! lsame_(direct, "B"))
+    if (! lsame_(direct, "B", 1, 1))
     {
         info = -3;
     }
-    else if (! lsame_(storev, "R"))
+    else if (! lsame_(storev, "R", 1, 1))
     {
         info = -4;
     }
@@ -245,7 +245,7 @@ void slarzb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (lsame_(trans, "N"))
+    if (lsame_(trans, "N", 1, 1))
     {
         *(unsigned char *)transt = 'T';
     }
@@ -253,7 +253,7 @@ void slarzb_(char *side, char *trans, char *direct, char * storev, integer *m, i
     {
         *(unsigned char *)transt = 'N';
     }
-    if (lsame_(side, "L"))
+    if (lsame_(side, "L", 1, 1))
     {
         /* Form H * C or H**T * C */
         /* W( 1:n, 1:k ) = C( 1:k, 1:n )**T */
@@ -296,7 +296,7 @@ void slarzb_(char *side, char *trans, char *direct, char * storev, integer *m, i
             sgemm_("Transpose", "Transpose", l, n, k, &c_b23, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b13, &c__[*m - *l + 1 + c_dim1], ldc);
         }
     }
-    else if (lsame_(side, "R"))
+    else if (lsame_(side, "R", 1, 1))
     {
         /* Form C * H or C * H**T */
         /* W( 1:m, 1:k ) = C( 1:m, 1:k ) */

@@ -255,7 +255,7 @@ void chetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     integer stt, inda;
     extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer thed, indv, myid, indw, apos, dpos, edind;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer lhmin, sizea, shift, stind, colpt, lwmin, awpos;
     logical wantq, upper;
     integer grsiz, ttype;
@@ -310,23 +310,23 @@ void chetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     --work;
     /* Function Body */
     *info = 0;
-    afters1 = lsame_(stage1, "Y");
-    wantq = lsame_(vect, "V");
-    upper = lsame_(uplo, "U");
+    afters1 = lsame_(stage1, "Y", 1, 1);
+    wantq = lsame_(vect, "V", 1, 1);
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1 || *lhous == -1;
     /* Determine the block size, the workspace size and the hous size. */
     ib = ilaenv2stage_(&c__2, "CHETRD_HB2ST", vect, n, kd, &c_n1, &c_n1);
     lhmin = ilaenv2stage_(&c__3, "CHETRD_HB2ST", vect, n, kd, &ib, &c_n1);
     lwmin = ilaenv2stage_(&c__4, "CHETRD_HB2ST", vect, n, kd, &ib, &c_n1);
-    if (!afters1 && !lsame_(stage1, "N"))
+    if (!afters1 && !lsame_(stage1, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (!lsame_(vect, "N"))
+    else if (!lsame_(vect, "N", 1, 1))
     {
         *info = -2;
     }
-    else if (!upper && !lsame_(uplo, "L"))
+    else if (!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -3;
     }

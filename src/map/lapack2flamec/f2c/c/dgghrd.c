@@ -218,7 +218,7 @@ void dgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     extern /* Subroutine */
     void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
     integer jrow;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icompq, icompz;
@@ -257,17 +257,17 @@ void dgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     z_offset = 1 + z_dim1;
     z__ -= z_offset;
     /* Function Body */
-    if (lsame_(compq, "N"))
+    if (lsame_(compq, "N", 1, 1))
     {
         ilq = FALSE_;
         icompq = 1;
     }
-    else if (lsame_(compq, "V"))
+    else if (lsame_(compq, "V", 1, 1))
     {
         ilq = TRUE_;
         icompq = 2;
     }
-    else if (lsame_(compq, "I"))
+    else if (lsame_(compq, "I", 1, 1))
     {
         ilq = TRUE_;
         icompq = 3;
@@ -277,17 +277,17 @@ void dgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
         icompq = 0;
     }
     /* Decode COMPZ */
-    if (lsame_(compz, "N"))
+    if (lsame_(compz, "N", 1, 1))
     {
         ilz = FALSE_;
         icompz = 1;
     }
-    else if (lsame_(compz, "V"))
+    else if (lsame_(compz, "V", 1, 1))
     {
         ilz = TRUE_;
         icompz = 2;
     }
-    else if (lsame_(compz, "I"))
+    else if (lsame_(compz, "I", 1, 1))
     {
         ilz = TRUE_;
         icompz = 3;

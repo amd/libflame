@@ -13,7 +13,7 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
     doublecomplex temp;
     integer i__, j, k;
     logical lside;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nrowa;
     logical upper;
     extern /* Subroutine */
@@ -120,7 +120,7 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
     b_offset = 1 + b_dim1 * 1;
     b -= b_offset;
     /* Function Body */
-    lside = lsame_(side, "L");
+    lside = lsame_(side, "L", 1, 1);
     if (lside)
     {
         nrowa = *m;
@@ -129,23 +129,23 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
     {
         nrowa = *n;
     }
-    noconj = lsame_(transa, "T");
-    nounit = lsame_(diag, "N");
-    upper = lsame_(uplo, "U");
+    noconj = lsame_(transa, "T", 1, 1);
+    nounit = lsame_(diag, "N", 1, 1);
+    upper = lsame_(uplo, "U", 1, 1);
     info = 0;
-    if (! lside && ! lsame_(side, "R"))
+    if (! lside && ! lsame_(side, "R", 1, 1))
     {
         info = 1;
     }
-    else if (! upper && ! lsame_(uplo, "L"))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         info = 2;
     }
-    else if (! lsame_(transa, "N") && ! lsame_(transa, "T") && ! lsame_(transa, "C"))
+    else if (! lsame_(transa, "N", 1, 1) && ! lsame_(transa, "T", 1, 1) && ! lsame_(transa, "C", 1, 1))
     {
         info = 3;
     }
-    else if (! lsame_(diag, "U") && ! lsame_(diag, "N"))
+    else if (! lsame_(diag, "U", 1, 1) && ! lsame_(diag, "N", 1, 1))
     {
         info = 4;
     }
@@ -199,7 +199,7 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
     /* Start the operations. */
     if (lside)
     {
-        if (lsame_(transa, "N"))
+        if (lsame_(transa, "N", 1, 1))
         {
             /* Form B := alpha*A*B. */
             if (upper)
@@ -428,7 +428,7 @@ int ztrmm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer
     }
     else
     {
-        if (lsame_(transa, "N"))
+        if (lsame_(transa, "N", 1, 1))
         {
             /* Form B := alpha*B*A. */
             if (upper)

@@ -143,7 +143,7 @@ real sla_syrcond_(char *uplo, integer *n, real *a, integer *lda, real *af, integ
     logical up;
     real tmp;
     integer kase;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
     void slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
@@ -212,7 +212,7 @@ real sla_syrcond_(char *uplo, integer *n, real *a, integer *lda, real *af, integ
         return ret_val;
     }
     up = FALSE_;
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         up = TRUE_;
     }

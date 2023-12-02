@@ -266,7 +266,7 @@ void chetf2_rk_(char *uplo, integer *n, complex *a, integer * lda, complex *e, i
     logical done;
     integer imax, jmax;
     real alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real sfmin;
     extern /* Subroutine */
     void cswap_(integer *, complex *, integer *, complex *, integer *);
@@ -315,8 +315,8 @@ void chetf2_rk_(char *uplo, integer *n, complex *a, integer * lda, complex *e, i
     *info = 0;
     imax = 0;
     jmax = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

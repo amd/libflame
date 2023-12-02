@@ -150,7 +150,7 @@ void dlatzm_(char *side, integer *m, integer *n, doublereal * v, integer *incv, 
     /* Local variables */
     extern /* Subroutine */
     void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *) ;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -186,7 +186,7 @@ void dlatzm_(char *side, integer *m, integer *n, doublereal * v, integer *incv, 
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(side, "L"))
+    if (lsame_(side, "L", 1, 1))
     {
         /* w := (C1 + v**T * C2)**T */
         dcopy_(n, &c1[c1_offset], ldc, &work[1], &c__1);
@@ -200,7 +200,7 @@ void dlatzm_(char *side, integer *m, integer *n, doublereal * v, integer *incv, 
         d__1 = -(*tau);
         dger_(&i__1, n, &d__1, &v[1], incv, &work[1], &c__1, &c2[c2_offset], ldc);
     }
-    else if (lsame_(side, "R"))
+    else if (lsame_(side, "R", 1, 1))
     {
         /* w := C1 + C2 * v */
         dcopy_(m, &c1[c1_offset], &c__1, &work[1], &c__1);

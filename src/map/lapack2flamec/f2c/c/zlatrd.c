@@ -215,7 +215,7 @@ void zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda
     /* Local variables */
     integer i__, iw;
     doublecomplex alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     extern /* Double Complex */
@@ -258,7 +258,7 @@ void zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda
     AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         /* Reduce last NB columns of upper triangle */
         i__1 = *n - *nb + 1;

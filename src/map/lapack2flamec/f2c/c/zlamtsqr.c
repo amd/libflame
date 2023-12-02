@@ -205,7 +205,7 @@ void zlamtsqr_(char *side, char *trans, integer *m, integer * n, integer *k, int
     void ztpmqrt_(char *, char *, integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer i__, q, ii, kk, lw, ctr;
     logical left, tran;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical right;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -241,10 +241,10 @@ void zlamtsqr_(char *side, char *trans, integer *m, integer * n, integer *k, int
     --work;
     /* Function Body */
     lquery = *lwork < 0;
-    notran = lsame_(trans, "N");
-    tran = lsame_(trans, "C");
-    left = lsame_(side, "L");
-    right = lsame_(side, "R");
+    notran = lsame_(trans, "N", 1, 1);
+    tran = lsame_(trans, "C", 1, 1);
+    left = lsame_(side, "L", 1, 1);
+    right = lsame_(side, "R", 1, 1);
     if (left)
     {
         lw = *n * *nb;

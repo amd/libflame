@@ -163,7 +163,7 @@ void csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     integer lend, jtot;
     extern /* Subroutine */
     void slae2_(real *, real *, real *, real *, real *) ;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void clasr_(char *, char *, char *, integer *, integer *, real *, real *, complex *, integer *);
     real anorm;
@@ -222,15 +222,15 @@ void csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     --work;
     /* Function Body */
     *info = 0;
-    if (lsame_(compz, "N"))
+    if (lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if (lsame_(compz, "V"))
+    else if (lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if (lsame_(compz, "I"))
+    else if (lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }

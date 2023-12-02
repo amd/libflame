@@ -114,7 +114,7 @@ void sdisna_(char *job, integer *m, integer *n, real *d__, real *sep, integer *i
     integer i__, k;
     real eps;
     logical decr, left, incr, sing, eigen;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     logical right;
     real oldgap;
@@ -149,9 +149,9 @@ void sdisna_(char *job, integer *m, integer *n, real *d__, real *sep, integer *i
     --d__;
     /* Function Body */
     *info = 0;
-    eigen = lsame_(job, "E");
-    left = lsame_(job, "L");
-    right = lsame_(job, "R");
+    eigen = lsame_(job, "E", 1, 1);
+    left = lsame_(job, "L", 1, 1);
+    right = lsame_(job, "R", 1, 1);
     sing = left || right;
     if (eigen)
     {

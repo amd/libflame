@@ -168,7 +168,7 @@ void dstevd_(char *jobz, integer *n, doublereal *d__, doublereal *e, doublereal 
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer lwmin;
     logical wantz;
     extern doublereal dlamch_(char *);
@@ -215,7 +215,7 @@ void dstevd_(char *jobz, integer *n, doublereal *d__, doublereal *e, doublereal 
     --work;
     --iwork;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
+    wantz = lsame_(jobz, "V", 1, 1);
     lquery = *lwork == -1 || *liwork == -1;
     *info = 0;
     liwmin = 1;
@@ -227,7 +227,7 @@ void dstevd_(char *jobz, integer *n, doublereal *d__, doublereal *e, doublereal 
         lwmin = (*n << 2) + 1 + i__1 * i__1;
         liwmin = *n * 5 + 3;
     }
-    if (! (wantz || lsame_(jobz, "N")))
+    if (! (wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }

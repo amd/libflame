@@ -119,7 +119,7 @@ void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex
     /* Local variables */
     integer j;
     doublecomplex t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10, sum;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -154,7 +154,7 @@ void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex
     AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(side, "L"))
+    if (lsame_(side, "L", 1, 1))
     {
         /* Form H * C, where H has order m. */
         switch (*m)

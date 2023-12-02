@@ -153,7 +153,7 @@ void sgbcon_(char *norm, integer *n, integer *kl, integer *ku, real *ab, integer
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     integer kase1;
     real scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     logical lnoti;
     extern /* Subroutine */
@@ -200,8 +200,8 @@ void sgbcon_(char *norm, integer *n, integer *kl, integer *ku, real *ab, integer
     --iwork;
     /* Function Body */
     *info = 0;
-    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O");
-    if (! onenrm && ! lsame_(norm, "I"))
+    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
+    if (! onenrm && ! lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }

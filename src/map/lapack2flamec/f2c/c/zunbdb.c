@@ -297,7 +297,7 @@ void zunbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doubl
     logical colmajor;
     integer lworkmin, lworkopt, i__;
     doublereal z1, z2, z3, z4;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
@@ -349,8 +349,8 @@ void zunbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doubl
     --work;
     /* Function Body */
     *info = 0;
-    colmajor = ! lsame_(trans, "T");
-    if (! lsame_(signs, "O"))
+    colmajor = ! lsame_(trans, "T", 1, 1);
+    if (! lsame_(signs, "O", 1, 1))
     {
         z1 = 1.;
         z2 = 1.;

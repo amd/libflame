@@ -270,7 +270,7 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
     complex alpha;
     extern /* Subroutine */
     void cscal_(integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), cgesc2_(integer *, complex *, integer *, complex *, integer *, integer *, real *), cgetc2_( integer *, complex *, integer *, integer *, integer *, integer *), clatdf_(integer *, integer *, complex *, integer *, complex *, real *, real *, integer *, integer *);
     real scaloc;
@@ -322,8 +322,8 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
     /* Function Body */
     *info = 0;
     ierr = 0;
-    notran = lsame_(trans, "N");
-    if (! notran && ! lsame_(trans, "C"))
+    notran = lsame_(trans, "N", 1, 1);
+    if (! notran && ! lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }

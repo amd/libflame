@@ -147,7 +147,7 @@ void slarz_(char *side, integer *m, integer *n, integer *l, real *v, integer *in
     /* Local variables */
     extern /* Subroutine */
     void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -173,7 +173,7 @@ void slarz_(char *side, integer *m, integer *n, integer *l, real *v, integer *in
     c__ -= c_offset;
     --work;
     /* Function Body */
-    if (lsame_(side, "L"))
+    if (lsame_(side, "L", 1, 1))
     {
         /* Form H * C */
         if (*tau != 0.f)

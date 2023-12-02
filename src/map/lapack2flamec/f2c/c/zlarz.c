@@ -148,7 +148,7 @@ void zlarz_(char *side, integer *m, integer *n, integer *l, doublecomplex *v, in
     integer c_dim1, c_offset;
     doublecomplex z__1;
     /* Local variables */
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -174,7 +174,7 @@ void zlarz_(char *side, integer *m, integer *n, integer *l, doublecomplex *v, in
     c__ -= c_offset;
     --work;
     /* Function Body */
-    if (lsame_(side, "L"))
+    if (lsame_(side, "L", 1, 1))
     {
         /* Form H * C */
         if (tau->r != 0. || tau->i != 0.)

@@ -190,7 +190,7 @@ void dtrttf_(char *transr, char *uplo, integer *n, doublereal *a, integer *lda, 
     /* Local variables */
     integer i__, j, k, l, n1, n2, ij, nt, nx2, np1x2;
     logical normaltransr;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -221,13 +221,13 @@ void dtrttf_(char *transr, char *uplo, integer *n, doublereal *a, integer *lda, 
     a -= a_offset;
     /* Function Body */
     *info = 0;
-    normaltransr = lsame_(transr, "N");
-    lower = lsame_(uplo, "L");
-    if (! normaltransr && ! lsame_(transr, "T"))
+    normaltransr = lsame_(transr, "N", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
+    if (! normaltransr && ! lsame_(transr, "T", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U"))
+    else if (! lower && ! lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }

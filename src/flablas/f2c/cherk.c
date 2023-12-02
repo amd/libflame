@@ -13,7 +13,7 @@ int cherk_(char *uplo, char *trans, integer *n, integer *k, real *alpha, complex
     integer info;
     complex temp;
     integer i__, j, l;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nrowa;
     real rtemp;
     logical upper;
@@ -122,7 +122,7 @@ int cherk_(char *uplo, char *trans, integer *n, integer *k, real *alpha, complex
     c_offset = 1 + c_dim1 * 1;
     c__ -= c_offset;
     /* Function Body */
-    if (lsame_(trans, "N"))
+    if (lsame_(trans, "N", 1, 1))
     {
         nrowa = *n;
     }
@@ -130,13 +130,13 @@ int cherk_(char *uplo, char *trans, integer *n, integer *k, real *alpha, complex
     {
         nrowa = *k;
     }
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     info = 0;
-    if (! upper && ! lsame_(uplo, "L"))
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         info = 1;
     }
-    else if (! lsame_(trans, "N") && ! lsame_(trans, "C"))
+    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         info = 2;
     }
@@ -266,7 +266,7 @@ int cherk_(char *uplo, char *trans, integer *n, integer *k, real *alpha, complex
         return 0;
     }
     /* Start the operations. */
-    if (lsame_(trans, "N"))
+    if (lsame_(trans, "N", 1, 1))
     {
         /* Form C := alpha*A*conjg( A' ) + beta*C. */
         if (upper)

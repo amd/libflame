@@ -612,7 +612,7 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     extern /* Subroutine */
     void dscal_(integer *, doublereal *, doublereal *, integer *);
     integer lwrk_zgesvju__, lwrk_zgesvjv__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer lwrk_zunmqrm__;
     doublecomplex ctemp;
     doublereal entra, small_val;
@@ -712,31 +712,31 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     --rwork;
     --iwork;
     /* Function Body */
-    lsvec = lsame_(jobu, "U") || lsame_(jobu, "F");
-    jracc = lsame_(jobv, "J");
-    rsvec = lsame_(jobv, "V") || jracc;
-    rowpiv = lsame_(joba, "F") || lsame_(joba, "G");
-    l2rank = lsame_(joba, "R");
-    l2aber = lsame_(joba, "A");
-    errest = lsame_(joba, "E") || lsame_(joba, "G");
-    l2tran = lsame_(jobt, "T") && *m == *n;
-    l2kill = lsame_(jobr, "R");
-    defr = lsame_(jobr, "N");
-    l2pert = lsame_(jobp, "P");
+    lsvec = lsame_(jobu, "U", 1, 1) || lsame_(jobu, "F", 1, 1);
+    jracc = lsame_(jobv, "J", 1, 1);
+    rsvec = lsame_(jobv, "V", 1, 1) || jracc;
+    rowpiv = lsame_(joba, "F", 1, 1) || lsame_(joba, "G", 1, 1);
+    l2rank = lsame_(joba, "R", 1, 1);
+    l2aber = lsame_(joba, "A", 1, 1);
+    errest = lsame_(joba, "E", 1, 1) || lsame_(joba, "G", 1, 1);
+    l2tran = lsame_(jobt, "T", 1, 1) && *m == *n;
+    l2kill = lsame_(jobr, "R", 1, 1);
+    defr = lsame_(jobr, "N", 1, 1);
+    l2pert = lsame_(jobp, "P", 1, 1);
     lquery = *lwork == -1 || *lrwork == -1;
     iwoff = 0;
     lwrk_zgeqrf__ = 0;
     lwrk_zgelqf__ = 0;
     lwrk_zgeqp3__ = 0;
-    if (! (rowpiv || l2rank || l2aber || errest || lsame_(joba, "C")))
+    if (! (rowpiv || l2rank || l2aber || errest || lsame_(joba, "C", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lsvec || lsame_(jobu, "N") || lsame_( jobu, "W") && rsvec && l2tran))
+    else if (! (lsvec || lsame_(jobu, "N", 1, 1) || lsame_(jobu, "W", 1, 1) && rsvec && l2tran))
     {
         *info = -2;
     }
-    else if (! (rsvec || lsame_(jobv, "N") || lsame_( jobv, "W") && lsvec && l2tran))
+    else if (! (rsvec || lsame_(jobv, "N", 1, 1) || lsame_(jobv, "W", 1, 1) && lsvec && l2tran))
     {
         *info = -3;
     }
@@ -744,11 +744,11 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     {
         *info = -4;
     }
-    else if (! (lsame_(jobt, "T") || lsame_(jobt, "N")))
+    else if (! (lsame_(jobt, "T", 1, 1) || lsame_(jobt, "N", 1, 1)))
     {
         *info = -5;
     }
-    else if (! (l2pert || lsame_(jobp, "N")))
+    else if (! (l2pert || lsame_(jobp, "N", 1, 1)))
     {
         *info = -6;
     }
@@ -1346,7 +1346,7 @@ void zgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     if (lsvec)
     {
         n1 = *n;
-        if (lsame_(jobu, "F"))
+        if (lsame_(jobu, "F", 1, 1))
         {
             n1 = *m;
         }

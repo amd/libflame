@@ -15,7 +15,7 @@ int zgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, doub
     integer i__, j, l;
     logical conja, conjb;
     integer ncola;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nrowa, nrowb;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -133,10 +133,10 @@ int zgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, doub
     c_offset = 1 + c_dim1 * 1;
     c__ -= c_offset;
     /* Function Body */
-    nota = lsame_(transa, "N");
-    notb = lsame_(transb, "N");
-    conja = lsame_(transa, "C");
-    conjb = lsame_(transb, "C");
+    nota = lsame_(transa, "N", 1, 1);
+    notb = lsame_(transb, "N", 1, 1);
+    conja = lsame_(transa, "C", 1, 1);
+    conjb = lsame_(transb, "C", 1, 1);
     if (nota)
     {
         nrowa = *m;
@@ -157,11 +157,11 @@ int zgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, doub
     }
     /* Test the input parameters. */
     info = 0;
-    if (! nota && ! conja && ! lsame_(transa, "T"))
+    if (! nota && ! conja && ! lsame_(transa, "T", 1, 1))
     {
         info = 1;
     }
-    else if (! notb && ! conjb && ! lsame_(transb, "T"))
+    else if (! notb && ! conjb && ! lsame_(transb, "T", 1, 1))
     {
         info = 2;
     }

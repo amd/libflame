@@ -447,7 +447,7 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
     logical lsvc0, accla;
     integer lwqp3;
     logical acclh, acclm, conda;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical lsvec;
     doublereal sfmin, epsln;
     integer lwcon;
@@ -524,23 +524,23 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
     --cwork;
     --rwork;
     /* Function Body */
-    wntus = lsame_(jobu, "S") || lsame_(jobu, "U");
-    wntur = lsame_(jobu, "R");
-    wntua = lsame_(jobu, "A");
-    wntuf = lsame_(jobu, "F");
+    wntus = lsame_(jobu, "S", 1, 1) || lsame_(jobu, "U", 1, 1);
+    wntur = lsame_(jobu, "R", 1, 1);
+    wntua = lsame_(jobu, "A", 1, 1);
+    wntuf = lsame_(jobu, "F", 1, 1);
     lsvc0 = wntus || wntur || wntua;
     lsvec = lsvc0 || wntuf;
-    dntwu = lsame_(jobu, "N");
-    wntvr = lsame_(jobv, "R");
-    wntva = lsame_(jobv, "A") || lsame_(jobv, "V");
+    dntwu = lsame_(jobu, "N", 1, 1);
+    wntvr = lsame_(jobv, "R", 1, 1);
+    wntva = lsame_(jobv, "A", 1, 1) || lsame_(jobv, "V", 1, 1);
     rsvec = wntvr || wntva;
-    dntwv = lsame_(jobv, "N");
-    accla = lsame_(joba, "A");
-    acclm = lsame_(joba, "M");
-    conda = lsame_(joba, "E");
-    acclh = lsame_(joba, "H") || conda;
-    rowprm = lsame_(jobp, "P");
-    rtrans = lsame_(jobr, "T");
+    dntwv = lsame_(jobv, "N", 1, 1);
+    accla = lsame_(joba, "A", 1, 1);
+    acclm = lsame_(joba, "M", 1, 1);
+    conda = lsame_(joba, "E", 1, 1);
+    acclh = lsame_(joba, "H", 1, 1) || conda;
+    rowprm = lsame_(jobp, "P", 1, 1);
+    rtrans = lsame_(jobr, "T", 1, 1);
     sconda = 0.;
     lwunq = 0;
     lwrk_zunmqr__ = 0;
@@ -570,11 +570,11 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
     {
         *info = -1;
     }
-    else if (! (rowprm || lsame_(jobp, "N")))
+    else if (! (rowprm || lsame_(jobp, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (rtrans || lsame_(jobr, "N")))
+    else if (! (rtrans || lsame_(jobr, "N", 1, 1)))
     {
         *info = -3;
     }

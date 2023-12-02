@@ -184,7 +184,7 @@ void sormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
     /* Local variables */
     integer i1, i2, nb, mi, nh, ni, nq, nw;
     logical left;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -224,7 +224,7 @@ void sormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
     /* Function Body */
     *info = 0;
     nh = *ihi - *ilo;
-    left = lsame_(side, "L");
+    left = lsame_(side, "L", 1, 1);
     lquery = *lwork == -1;
     /* NQ is the order of Q and NW is the minimum dimension of WORK */
     if (left)
@@ -237,11 +237,11 @@ void sormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
         nq = *n;
         nw = *m;
     }
-    if (! left && ! lsame_(side, "R"))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(trans, "N") && ! lsame_(trans, "T"))
+    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1))
     {
         *info = -2;
     }

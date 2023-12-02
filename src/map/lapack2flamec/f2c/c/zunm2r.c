@@ -162,7 +162,7 @@ void zunm2r_(char *side, char *trans, integer *m, integer *n, integer *k, double
     doublecomplex aii;
     logical left;
     doublecomplex taui;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
@@ -198,8 +198,8 @@ void zunm2r_(char *side, char *trans, integer *m, integer *n, integer *k, double
     --work;
     /* Function Body */
     *info = 0;
-    left = lsame_(side, "L");
-    notran = lsame_(trans, "N");
+    left = lsame_(side, "L", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     /* NQ is the order of Q */
     if (left)
     {
@@ -209,11 +209,11 @@ void zunm2r_(char *side, char *trans, integer *m, integer *n, integer *k, double
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R"))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "C"))
+    else if (! notran && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }

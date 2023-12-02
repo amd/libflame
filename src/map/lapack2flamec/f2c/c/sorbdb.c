@@ -300,7 +300,7 @@ void sorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, real 
     integer lworkmin, lworkopt, i__;
     real z1, z2, z3, z4;
     extern real snrm2_(integer *, real *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void sscal_(integer *, real *, real *, integer *), slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), saxpy_(integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
@@ -349,8 +349,8 @@ void sorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, real 
     --work;
     /* Function Body */
     *info = 0;
-    colmajor = ! lsame_(trans, "T");
-    if (! lsame_(signs, "O"))
+    colmajor = ! lsame_(trans, "T", 1, 1);
+    if (! lsame_(signs, "O", 1, 1))
     {
         z1 = 1.f;
         z2 = 1.f;

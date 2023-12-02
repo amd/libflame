@@ -142,7 +142,7 @@ void slascl_(char *type__, integer *kl, integer *ku, real * cfrom, real *cto, in
     real mul, cto1;
     logical done;
     real ctoc;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer itype;
     real cfrom1;
     extern real slamch_(char *);
@@ -178,31 +178,31 @@ void slascl_(char *type__, integer *kl, integer *ku, real * cfrom, real *cto, in
     a -= a_offset;
     /* Function Body */
     *info = 0;
-    if (lsame_(type__, "G"))
+    if (lsame_(type__, "G", 1, 1))
     {
         itype = 0;
     }
-    else if (lsame_(type__, "L"))
+    else if (lsame_(type__, "L", 1, 1))
     {
         itype = 1;
     }
-    else if (lsame_(type__, "U"))
+    else if (lsame_(type__, "U", 1, 1))
     {
         itype = 2;
     }
-    else if (lsame_(type__, "H"))
+    else if (lsame_(type__, "H", 1, 1))
     {
         itype = 3;
     }
-    else if (lsame_(type__, "B"))
+    else if (lsame_(type__, "B", 1, 1))
     {
         itype = 4;
     }
-    else if (lsame_(type__, "Q"))
+    else if (lsame_(type__, "Q", 1, 1))
     {
         itype = 5;
     }
-    else if (lsame_(type__, "Z"))
+    else if (lsame_(type__, "Z", 1, 1))
     {
         itype = 6;
     }

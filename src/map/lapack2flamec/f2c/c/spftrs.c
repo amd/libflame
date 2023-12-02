@@ -195,7 +195,7 @@ void spftrs_(char *transr, char *uplo, integer *n, integer * nrhs, real *a, real
     integer b_dim1, b_offset, i__1;
     /* Local variables */
     logical normaltransr;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
     void stfsm_(char *, char *, char *, char *, char *, integer *, integer *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -226,13 +226,13 @@ void spftrs_(char *transr, char *uplo, integer *n, integer * nrhs, real *a, real
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    normaltransr = lsame_(transr, "N");
-    lower = lsame_(uplo, "L");
-    if (! normaltransr && ! lsame_(transr, "T"))
+    normaltransr = lsame_(transr, "N", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
+    if (! normaltransr && ! lsame_(transr, "T", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U"))
+    else if (! lower && ! lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }

@@ -137,7 +137,7 @@ void dsyequb_(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *
     doublereal avg, std, tol, base;
     integer iter;
     doublereal smin, smax, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal sumsq;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
@@ -175,7 +175,7 @@ void dsyequb_(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *
     --work;
     /* Function Body */
     *info = 0;
-    if (! (lsame_(uplo, "U") || lsame_(uplo, "L")))
+    if (! (lsame_(uplo, "U", 1, 1) || lsame_(uplo, "L", 1, 1)))
     {
         *info = -1;
     }
@@ -194,7 +194,7 @@ void dsyequb_(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    up = lsame_(uplo, "U");
+    up = lsame_(uplo, "U", 1, 1);
     *amax = 0.;
     /* Quick return if possible. */
     if (*n == 0)

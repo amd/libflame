@@ -149,7 +149,7 @@ void dtrexc_(char *compq, integer *n, doublereal *t, integer * ldt, doublereal *
     integer q_dim1, q_offset, t_dim1, t_offset, i__1;
     /* Local variables */
     integer nbf, nbl, here;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical wantq;
     extern /* Subroutine */
     void dlaexc_(logical *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -185,8 +185,8 @@ void dtrexc_(char *compq, integer *n, doublereal *t, integer * ldt, doublereal *
     --work;
     /* Function Body */
     *info = 0;
-    wantq = lsame_(compq, "V");
-    if (! wantq && ! lsame_(compq, "N"))
+    wantq = lsame_(compq, "V", 1, 1);
+    if (! wantq && ! lsame_(compq, "N", 1, 1))
     {
         *info = -1;
     }

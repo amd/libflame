@@ -322,7 +322,7 @@ void dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *i
     doublereal rtol;
     integer iseed[4];
     doublereal avgap, sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
     void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
@@ -396,15 +396,15 @@ void dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *i
         return;
     }
     /* Decode RANGE */
-    if (lsame_(range, "A"))
+    if (lsame_(range, "A", 1, 1))
     {
         irange = 1;
     }
-    else if (lsame_(range, "V"))
+    else if (lsame_(range, "V", 1, 1))
     {
         irange = 3;
     }
-    else if (lsame_(range, "I"))
+    else if (lsame_(range, "I", 1, 1))
     {
         irange = 2;
     }

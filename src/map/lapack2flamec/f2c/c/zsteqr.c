@@ -155,7 +155,7 @@ void zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
     integer lend, jtot;
     extern /* Subroutine */
     void dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal anorm;
     extern /* Subroutine */
     void zlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
@@ -209,15 +209,15 @@ void zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
     --work;
     /* Function Body */
     *info = 0;
-    if (lsame_(compz, "N"))
+    if (lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if (lsame_(compz, "V"))
+    else if (lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if (lsame_(compz, "I"))
+    else if (lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }

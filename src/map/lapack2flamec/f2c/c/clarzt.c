@@ -200,7 +200,7 @@ void clarzt_(char *direct, char *storev, integer *n, integer * k, complex *v, in
     integer i__, j, info;
     extern /* Subroutine */
     void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -232,11 +232,11 @@ void clarzt_(char *direct, char *storev, integer *n, integer * k, complex *v, in
     t -= t_offset;
     /* Function Body */
     info = 0;
-    if (! lsame_(direct, "B"))
+    if (! lsame_(direct, "B", 1, 1))
     {
         info = -1;
     }
-    else if (! lsame_(storev, "R"))
+    else if (! lsame_(storev, "R", 1, 1))
     {
         info = -2;
     }

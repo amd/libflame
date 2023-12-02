@@ -202,7 +202,7 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
     extern /* Subroutine */
     void cscal_(integer *, complex *, complex *, integer *);
     integer iqend;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical initq, wantq, upper;
     extern /* Subroutine */
     void clar2v_(integer *, complex *, complex *, complex *, integer *, real *, complex *, integer *), clacgv_( integer *, complex *, integer *);
@@ -241,19 +241,19 @@ void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integ
     q -= q_offset;
     --work;
     /* Function Body */
-    initq = lsame_(vect, "V");
-    wantq = initq || lsame_(vect, "U");
-    upper = lsame_(uplo, "U");
+    initq = lsame_(vect, "V", 1, 1);
+    wantq = initq || lsame_(vect, "U", 1, 1);
+    upper = lsame_(uplo, "U", 1, 1);
     kd1 = *kd + 1;
     kdm1 = *kd - 1;
     incx = *ldab - 1;
     iqend = 1;
     *info = 0;
-    if (! wantq && ! lsame_(vect, "N"))
+    if (! wantq && ! lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L"))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }

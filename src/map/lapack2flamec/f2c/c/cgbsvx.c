@@ -385,7 +385,7 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     integer i__, j, j1, j2;
     real amax;
     char norm[1];
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real rcmin, rcmax, anorm;
     extern /* Subroutine */
     void ccopy_(integer *, complex *, integer *, complex *, integer *);
@@ -458,9 +458,9 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     --rwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    equil = lsame_(fact, "E");
-    notran = lsame_(trans, "N");
+    nofact = lsame_(fact, "N", 1, 1);
+    equil = lsame_(fact, "E", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     smlnum = 0.f;
     bignum = 0.f;
     if (nofact || equil)
@@ -471,17 +471,17 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     }
     else
     {
-        rowequ = lsame_(equed, "R") || lsame_(equed, "B");
-        colequ = lsame_(equed, "C") || lsame_(equed, "B");
+        rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
+        colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         smlnum = slamch_("Safe minimum");
         bignum = 1.f / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F"))
+    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T") && ! lsame_(trans, "C"))
+    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -509,7 +509,7 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     {
         *info = -10;
     }
-    else if (lsame_(fact, "F") && ! (rowequ || colequ || lsame_(equed, "N")))
+    else if (lsame_(fact, "F", 1, 1) && ! (rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -12;
     }
@@ -606,8 +606,8 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
         {
             /* Equilibrate the matrix. */
             claqgb_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], & rowcnd, &colcnd, &amax, equed);
-            rowequ = lsame_(equed, "R") || lsame_(equed, "B");
-            colequ = lsame_(equed, "C") || lsame_(equed, "B");
+            rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
+            colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }
     }
     /* Scale the right hand side. */

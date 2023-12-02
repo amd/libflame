@@ -177,7 +177,7 @@ void ssytd2_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *
     extern /* Subroutine */
     void ssyr2_(char *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
     real alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     void saxpy_(integer *, real *, real *, integer *, real *, integer *), ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
@@ -211,8 +211,8 @@ void ssytd2_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *
     --tau;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

@@ -126,7 +126,7 @@ void zsptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecom
     doublecomplex t, ak;
     integer kc, kp, kx, kpc, npp;
     doublecomplex akp1, temp, akkp1;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer kstep;
     logical upper;
     extern /* Subroutine */
@@ -163,8 +163,8 @@ void zsptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecom
     --ap;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

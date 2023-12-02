@@ -110,7 +110,7 @@ void slaset_(char *uplo, integer *m, integer *n, real *alpha, real *beta, real *
     integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
     integer i__, j;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -132,7 +132,7 @@ void slaset_(char *uplo, integer *m, integer *n, real *alpha, real *beta, real *
     a_offset = 1 + a_dim1;
     a -= a_offset;
     /* Function Body */
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         /* Set the strictly upper triangular or trapezoidal part of the */
         /* array to ALPHA. */
@@ -154,7 +154,7 @@ void slaset_(char *uplo, integer *m, integer *n, real *alpha, real *beta, real *
             /* L20: */
         }
     }
-    else if (lsame_(uplo, "L"))
+    else if (lsame_(uplo, "L", 1, 1))
     {
         /* Set the strictly lower triangular or trapezoidal part of the */
         /* array to ALPHA. */

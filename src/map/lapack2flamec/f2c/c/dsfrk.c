@@ -163,7 +163,7 @@ void dsfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doubl
     logical normaltransr;
     extern /* Subroutine */
     void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nrowa;
     logical lower;
     extern /* Subroutine */
@@ -198,9 +198,9 @@ void dsfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doubl
     --c__;
     /* Function Body */
     info = 0;
-    normaltransr = lsame_(transr, "N");
-    lower = lsame_(uplo, "L");
-    notrans = lsame_(trans, "N");
+    normaltransr = lsame_(transr, "N", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
+    notrans = lsame_(trans, "N", 1, 1);
     if (notrans)
     {
         nrowa = *n;
@@ -209,15 +209,15 @@ void dsfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doubl
     {
         nrowa = *k;
     }
-    if (! normaltransr && ! lsame_(transr, "T"))
+    if (! normaltransr && ! lsame_(transr, "T", 1, 1))
     {
         info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U"))
+    else if (! lower && ! lsame_(uplo, "U", 1, 1))
     {
         info = -2;
     }
-    else if (! notrans && ! lsame_(trans, "T"))
+    else if (! notrans && ! lsame_(trans, "T", 1, 1))
     {
         info = -3;
     }

@@ -38,7 +38,7 @@ int MAIN__(void)
 
     /* Local variables */
     integer i1, i2;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
 
     /* Fortran I/O blocks */
     static cilist io___3 = { 0, 6, 0, 0, 0 };

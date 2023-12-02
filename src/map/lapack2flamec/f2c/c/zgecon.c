@@ -128,7 +128,7 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
     doublereal su;
     integer kase, kase1;
     doublereal scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
     void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
@@ -179,8 +179,8 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
     --rwork;
     /* Function Body */
     *info = 0;
-    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O");
-    if (! onenrm && ! lsame_(norm, "I"))
+    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
+    if (! onenrm && ! lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }

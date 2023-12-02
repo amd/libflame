@@ -110,7 +110,7 @@ void dsyconv_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, i
     /* Local variables */
     integer i__, j, ip;
     doublereal temp;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -139,13 +139,13 @@ void dsyconv_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, i
     --e;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    convert = lsame_(way, "C");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    convert = lsame_(way, "C", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! convert && ! lsame_(way, "R"))
+    else if (! convert && ! lsame_(way, "R", 1, 1))
     {
         *info = -2;
     }

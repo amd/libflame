@@ -155,7 +155,7 @@ void zupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
     doublecomplex aii;
     logical left;
     doublecomplex taui;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     logical upper;
@@ -192,9 +192,9 @@ void zupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
     --work;
     /* Function Body */
     *info = 0;
-    left = lsame_(side, "L");
-    notran = lsame_(trans, "N");
-    upper = lsame_(uplo, "U");
+    left = lsame_(side, "L", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
+    upper = lsame_(uplo, "U", 1, 1);
     /* NQ is the order of Q */
     if (left)
     {
@@ -204,15 +204,15 @@ void zupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R"))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L"))
+    else if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! notran && ! lsame_(trans, "C"))
+    else if (! notran && ! lsame_(trans, "C", 1, 1))
     {
         *info = -3;
     }

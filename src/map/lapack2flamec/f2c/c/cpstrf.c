@@ -163,7 +163,7 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
     integer pvt;
     extern /* Subroutine */
     void cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
     void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     complex ctemp;
@@ -209,8 +209,8 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
     a -= a_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if (! upper && ! lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }

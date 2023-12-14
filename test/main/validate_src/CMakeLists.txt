@@ -40,5 +40,6 @@ ${CMAKE_CURRENT_SOURCE_DIR}/validate_gtsv.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_syevx.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gesvdx.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gelsd.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_sytrf.c
 )
 

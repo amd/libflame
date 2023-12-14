@@ -133,4 +133,7 @@ void validate_gbtrf(integer m_A, integer n_A, integer kl, integer ku, void *AB, 
 void validate_gelsd(integer m, integer n, integer NRHS, void *A, integer lda, void *B, integer ldb,
                     void *S, void *X, void *rcond, integer *rank, integer datatype,
                     double *residual);
+
+void validate_sytrf(char *uplo, integer n, integer lda, void *A_res, integer datatype,
+                    integer *ipiv, double *residual, integer *info, void *A);
 #endif // VALIDATE_COMMON_H

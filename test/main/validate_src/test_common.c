@@ -278,6 +278,49 @@ void copy_vector(integer datatype, integer M, void *A, integer LDA, void *B, int
     return;
 }
 
+/* copy subvector
+ * m - elements in the vector to be copied
+ * A - Source matrix
+ * B - Destination matrix
+ * (srow, scol) - start location of the source vector in a matrix
+ * (if A is a vector (srow, scol) = (0,0))
+ * (drow, dcol) - start location of the destination vector in a matrix
+ * (if B is a vector (drow, dcol) = (0,0)) */
+
+void copy_subvector(integer datatype, integer m, void *A, integer lda, void *B, integer ldb,
+                    integer srow, integer scol, integer drow, integer dcol)
+{
+    void *Ax = NULL, *Bx = NULL;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            Ax = ((float *)A + (scol * lda + srow));
+            Bx = ((float *)B + (dcol * ldb + drow));
+            break;
+        }
+        case DOUBLE:
+        {
+            Ax = ((double *)A + (scol * lda + srow));
+            Bx = ((double *)B + (dcol * ldb + drow));
+            break;
+        }
+        case COMPLEX:
+        {
+            Ax = ((scomplex *)A + (scol * lda + srow));
+            Bx = ((scomplex *)B + (dcol * ldb + drow));
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            Ax = ((dcomplex *)A + (scol * lda + srow));
+            Bx = ((dcomplex *)B + (dcol * ldb + drow));
+            break;
+        }
+    }
+    copy_vector(datatype, m, Ax, 1, Bx, 1);
+}
+
 void copy_realtype_vector(integer datatype, integer M, void *A, integer LDA, void *B, integer LDB)
 {
     if(datatype == FLOAT || datatype == COMPLEX)
@@ -1242,60 +1285,41 @@ double check_orthogonality(integer datatype, void *A, integer m, integer n, inte
  * (m, n) - dimensions of the sub-matrix to be copied
  * A - original matirx
  * B - destination matrix
- * (srow, scol) - start location of the original matrix from where the value has to be copied */
+ * (srow, scol) - start location of the original matrix from where the value has to be copied
+ * (drow, dcol) - start location of the destination matrix to where the values has to be copied*/
 
 void copy_submatrix(integer datatype, integer m, integer n, void *A, integer lda, void *B,
-                    integer ldb, integer srow, integer scol)
+                    integer ldb, integer srow, integer scol, integer drow, integer dcol)
 {
-    integer i, j;
-
+    void *sub_A = NULL, *sub_B = NULL;
     switch(datatype)
     {
         case FLOAT:
         {
-            float *float_A, *float_B;
-            for(i = scol, j = 0; j < n; i++, j++)
-            {
-                float_A = ((float *)A + (i * lda + srow));
-                float_B = ((float *)B + (j * ldb));
-                copy_vector(datatype, m, float_A, 1, float_B, 1);
-            }
+            sub_A = ((float *)A + (scol * lda + srow));
+            sub_B = ((float *)B + (dcol * ldb + drow));
             break;
         }
         case DOUBLE:
         {
-            double *double_A, *double_B;
-            for(i = scol, j = 0; j < n; i++, j++)
-            {
-                double_A = ((double *)A + (i * lda + srow));
-                double_B = ((double *)B + (j * ldb));
-                copy_vector(datatype, m, double_A, 1, double_B, 1);
-            }
+            sub_A = ((double *)A + (scol * lda + srow));
+            sub_B = ((double *)B + (dcol * ldb + drow));
             break;
         }
         case COMPLEX:
         {
-            scomplex *scomplex_A, *scomplex_B;
-            for(i = scol, j = 0; j < n; i++, j++)
-            {
-                scomplex_A = ((scomplex *)A + (i * lda + srow));
-                scomplex_B = ((scomplex *)B + (j * ldb));
-                copy_vector(datatype, m, scomplex_A, 1, scomplex_B, 1);
-            }
+            sub_A = ((scomplex *)A + (scol * lda + srow));
+            sub_B = ((scomplex *)B + (dcol * ldb + drow));
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            dcomplex *dcomplex_A, *dcomplex_B;
-            for(i = scol, j = 0; j < n; i++, j++)
-            {
-                dcomplex_A = ((dcomplex *)A + (i * lda + srow));
-                dcomplex_B = ((dcomplex *)B + (j * ldb));
-                copy_vector(datatype, m, dcomplex_A, 1, dcomplex_B, 1);
-            }
+            sub_A = ((dcomplex *)A + (scol * lda + srow));
+            sub_B = ((dcomplex *)B + (dcol * ldb + drow));
             break;
         }
     }
+    copy_matrix(datatype, "FULL", m, n, sub_A, lda, sub_B, ldb);
 }
 
 void scgemv(char TRANS, integer real_alpha, integer m, integer n, scomplex *alpha, float *a,
@@ -3914,7 +3938,6 @@ void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, 
     void *X = NULL, *Q = NULL;
     integer realtype, info = 0;
     realtype = get_realtype(datatype);
-
     if((range == 'V') || (range == 'v'))
     {
         /* Generate random vector of size n with values ranging
@@ -3925,24 +3948,21 @@ void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, 
     {
         rand_realtype_vector(realtype, L, n, 1);
     }
-
     create_matrix(datatype, &X, n, n);
     rand_matrix(datatype, X, n, n, n);
     create_matrix(datatype, &Q, n, n);
-
     /* Generate random orthogonal matrix(Q) of size n x n */
     get_orthogonal_matrix_from_QR(datatype, n, X, n, Q, n, &info);
-
     /* Generate input matrix A using L(Eigen values)
        and Q(Eigen vectors) obtained above using reverse
        Eigen decompostion */
     generate_matrix_from_ED(datatype, n, A, lda, Q, L);
-
     /* Free up the buffers */
     free_matrix(X);
     free_matrix(Q);
     return;
 }
+
 /* Get absolute value of a real vector*/
 void get_abs_vector_value(integer datatype, void *S, integer M, integer inc)
 {
@@ -4772,6 +4792,147 @@ void residual_sum_of_squares(int datatype, integer m, integer n, integer nrhs, v
             for(integer i = 0; i < nrhs; i++)
             {
                 *resid = fla_max(dznrm2_(&temp, &((dcomplex *)x)[(i * ldx) + n], &i_one), *resid);
+            }
+            break;
+        }
+    }
+}
+
+/* swap row or column in a matrix
+ * This function can be used to swap -> a row of the matrix with another row
+                                     -> a column of matrix with another column
+                                     -> a row with a column and vice-versa
+ * m - Elements in vector to be copied
+ * A - Matrix
+ * incx - Increment for first row/col
+ * incy - Increment for second row/col
+ * (srow, scol) - Start location of the first vector in a matrix
+ * (drow, dcol) - Start location of the second vector in a matrix */
+void swap_row_col(integer datatype, integer *m, void *A, integer lda, integer *incx, integer *incy,
+                  integer srow, integer scol, integer drow, integer dcol)
+{
+    void *x = NULL, *y = NULL;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            x = ((float *)A + (scol * lda + srow));
+            y = ((float *)A + (dcol * lda + drow));
+            sswap_(m, x, incx, y, incy);
+            break;
+        }
+        case DOUBLE:
+        {
+            x = ((double *)A + (scol * lda + srow));
+            y = ((double *)A + (dcol * lda + drow));
+            dswap_(m, x, incx, y, incy);
+            break;
+        }
+        case COMPLEX:
+        {
+            x = ((scomplex *)A + (scol * lda + srow));
+            y = ((scomplex *)A + (dcol * lda + drow));
+            cswap_(m, x, incx, y, incy);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            x = ((dcomplex *)A + (scol * lda + srow));
+            y = ((dcomplex *)A + (dcol * lda + drow));
+            zswap_(m, x, incx, y, incy);
+            break;
+        }
+    }
+}
+
+/* GEMM implementation for  C := alpha*op( A )*op( B ) + beta*C
+ * Where alpha = 1, beta = 0
+ */
+void fla_invoke_gemm(integer datatype, char *transA, char *transB, integer *m, integer *n,
+                     integer *k, void *A, integer *lda, void *B, integer *ldb, void *C,
+                     integer *ldc)
+{
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            sgemm_(transA, transB, m, n, k, &s_one, A, lda, B, ldb, &s_zero, C, ldc);
+            break;
+        }
+        case DOUBLE:
+        {
+            dgemm_(transA, transB, m, n, k, &d_one, A, lda, B, ldb, &d_zero, C, ldc);
+            break;
+        }
+        case COMPLEX:
+        {
+            cgemm_(transA, transB, m, n, k, &c_one, A, lda, B, ldb, &c_zero, C, ldc);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            zgemm_(transA, transB, m, n, k, &z_one, A, lda, B, ldb, &z_zero, C, ldc);
+            break;
+        }
+    }
+}
+
+/* Generate a symmetric or hermitian matrix from existing matrix A
+ * If type = "C" hermitian matrix formed.
+ * If type = "S" symmetric matrix is formed.
+ */
+void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, char *type)
+{
+    integer i, j, conj = 1;
+    if(*type == 'C')
+    {
+        conj = -1;
+    }
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            for(i = 0; i < n; i++)
+            {
+                for(j = i; j < n; j++)
+                {
+                    ((float *)A)[i * lda + j] = ((float *)A)[j * lda + i];
+                }
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            for(i = 0; i < n; i++)
+            {
+                for(j = i; j < n; j++)
+                {
+                    ((double *)A)[i * lda + j] = ((double *)A)[j * lda + i];
+                }
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            for(i = 0; i < n; i++)
+            {
+                for(j = i; j < n; j++)
+                {
+                    ((scomplex *)A)[j * lda + i].real = ((scomplex *)A)[i * lda + j].real;
+                    ((scomplex *)A)[j * lda + i].imag = conj * ((scomplex *)A)[i * lda + j].imag;
+                }
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            for(i = 0; i < n; i++)
+            {
+                for(j = i; j < n; j++)
+                {
+                    ((dcomplex *)A)[j * lda + i].real = ((dcomplex *)A)[i * lda + j].real;
+                    ((dcomplex *)A)[j * lda + i].imag = conj * ((dcomplex *)A)[i * lda + j].imag;
+                }
             }
             break;
         }

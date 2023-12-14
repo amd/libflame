@@ -1,40 +1,28 @@
-/*
-    Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.
-*/
+/******************************************************************************
+ * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
+#include "test_common.h"
 #include "test_lapack.h"
-#if ENABLE_CPP_TEST
-#include <invoke_common.hh>
-#endif
-#include <invoke_lapacke.h>
-
-#define SYTRF_VU 10.0 // Maximum eigen value for condition number.
-#define SYTRF_VL 0.01 // Minimum eigen value for condition number.
-
-extern double perf;
-extern double time_min;
-integer row_major_sytrf_lda;
+#include "test_prototype.h"
 
 void invoke_sytrf(integer datatype, char *uplo, integer *n, void *a, integer *lda, integer *ipiv,
                   void *work, integer *lwork, integer *info);
-void fla_test_sytrf_experiment(char *tst_api, test_params_t *params, integer datatype,
-                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                               integer einfo);
+void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual);
 void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer lda, integer *ipiv,
-                       void *work, integer lwork, integer *info, integer interfacetype,
-                       integer mlayout, test_params_t *params);
-double prepare_lapacke_sytrf_run(integer datatype, integer layout, char uplo, integer n, void *A,
-                                 integer lda, void *ipiv, integer *info);
+                       void *work, integer lwork, integer n_repeats, double *time_min_,
+                       integer *info);
 
 void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "LDL**T / U**TDU factorization";
     char *front_str = "SYTRF";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
-    params->imatrix_char = '\0';
     if(argc == 1)
     {
-        g_config_data = 1;
+        config_data = 1;
         g_lwork = -1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
@@ -49,6 +37,7 @@ void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
     {
         integer i, num_types, N;
         integer datatype, n_repeats;
+        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -56,17 +45,8 @@ void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
         num_types = strlen(argv[2]);
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].Uplo = argv[3][0];
-        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
-        {
-            row_major_sytrf_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-            params->lin_solver_paramslist[0].lda = N;
-        }
-        else
-        {
-            params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-        }
+        params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        params->n_repeats = n_repeats;
         g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
 
         if(n_repeats > 0)
@@ -91,7 +71,13 @@ void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_sytrf_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
+                fla_test_sytrf_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
+                                          &time_min, &residual);
+
+                /* Print the result */
+                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
+                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
+                                      perf);
                 tests_not_run = 0;
             }
         }
@@ -111,30 +97,26 @@ void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
     }
+    return;
 }
 
-void fla_test_sytrf_experiment(char *tst_api, test_params_t *params, integer datatype,
-                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                               integer einfo)
+void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual)
 {
     integer n, lda, lwork = -1, info = 0;
-    void *A = NULL, *A_test = NULL, *ipiv = NULL, *work = NULL, *L = NULL;
+    void *A = NULL, *A_test = NULL, *ipiv = NULL, *work = NULL, *L = NULL, *VL = NULL, *VU = NULL;
     char uplo;
-    double residual, err_thresh;
-    void *filename = NULL;
-
-    integer interfacetype = params->interfacetype;
-    integer layout = params->matrix_major;
 
     /* Determine the dimensions */
     n = p_cur;
     lda = params->lin_solver_paramslist[pci].lda;
-    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
+    *residual = params->lin_solver_paramslist[pci].solver_threshold;
     uplo = params->lin_solver_paramslist[pci].Uplo;
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(g_config_data)
+    if(config_data)
     {
         if(lda == -1)
         {
@@ -143,122 +125,71 @@ void fla_test_sytrf_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Create the matrices for the current operation */
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
+    create_matrix(datatype, &A, lda, n);
     create_vector(INTEGER, &ipiv, n);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
+    create_matrix(datatype, &A_test, lda, n);
 
-    /* This code path is run to generate the matrix to be passed to the API. This is the default
-     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
-     * Test cases. For verification runs the input is loaded from the input generated during Ground
-     * truth run */
-    if(!FLA_BRT_VERIFICATION_RUN)
+    /* Initialize the test matrices */
+    if(g_ext_fptr != NULL)
     {
-        /* Initialize the test matrices */
-        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
-        {
-            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-            if(params->imatrix_char != '\0')
-            {
-                form_symmetric_matrix(datatype, n, A, lda, "S", 'U');
-            }
-        }
-        else
-        {
-            /* Generating input matrix with condition number < 1000 */
-            create_realtype_vector(datatype, &L, n);
-            generate_matrix_from_EVs(datatype, 'V', n, A, lda, L, SYTRF_VL, SYTRF_VU,
-                                     USE_ABS_EIGEN_VALUES);
-            form_symmetric_matrix(datatype, n, A, lda, "S", 'U');
-            free_vector(L);
-            /* Oveflow or underflow test initialization */
-            if(FLA_OVERFLOW_UNDERFLOW_TEST)
-            {
-                scale_matrix_overflow_underflow_sytrf(datatype, n, A, lda, params->imatrix_char);
-            }
-        }
+        init_matrix_from_file(datatype, A, n, n, lda, g_ext_fptr);
     }
-
-    /* This macro is used in the BRT test cases for the following purposes:
-     *    - In the Ground truth runs (BRT_char => G, F), the input is stored in a file for future
-     * reference
-     *    - In the verification runs (BRT_char => V, M), the input is loaded from the file and
-     * passed as input to the API
-     * */
-    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, n, n, A, lda, "cddd", uplo, n, lda, g_lwork)
+    else
+    {
+        /* Generating input matrix with condition number < 1000 */
+        create_realtype_vector(datatype, &L, n);
+        create_realtype_vector(datatype, &VL, 1);
+        create_realtype_vector(datatype, &VU, 1);
+        assign_value(get_realtype(datatype), VU, MIN_VL, d_zero);
+        assign_value(get_realtype(datatype), VL, MAX_VU, d_zero);
+        generate_matrix_from_EVs(datatype, 'V', n, A, lda, L, VL, VU);
+        form_symmetric_matrix(datatype, n, A, lda, "S");
+        free_vector(L);
+        free_vector(VU);
+        free_vector(VL);
+    }
 
     /* Save the original matrix */
     copy_matrix(datatype, "full", lda, n, A, lda, A_test, lda);
 
     /* call to API */
-    prepare_sytrf_run(datatype, n, A_test, uplo, lda, ipiv, work, lwork, &info, interfacetype,
-                      layout, params);
+    prepare_sytrf_run(datatype, n, A_test, uplo, lda, ipiv, work, lwork, n_repeats, t, &info);
 
     /* Performance computation */
-    perf = (double)((1.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
+    *perf = (double)(n * n * n) * (1.0 / 3.0) / *t / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        perf *= 4.0;
+        *perf *= 4.0;
 
     /* Output validataion */
+    if(info >= 0)
+    {
+        validate_sytrf(&uplo, n, lda, A_test, datatype, ipiv, residual, &info, A);
+        info = 0;
+    }
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    IF_FLA_BRT_VALIDATION(
-        n, n,
-        store_outputs_base(filename, params, 1, 1, datatype, n, n, A_test, lda, INTEGER, n, ipiv),
-        validate_sytrf(tst_api, &uplo, n, lda, A_test, datatype, ipiv, residual, A, params),
-        check_reproducibility_base(filename, params, 1, 1, datatype, n, n, A_test, lda, INTEGER, n,
-                                   ipiv))
-    else if(!FLA_EXTREME_CASE_TEST)
-    {
-        validate_sytrf(tst_api, &uplo, n, lda, A_test, datatype, ipiv, residual, A, params);
-    }
-    else if(FLA_EXTREME_CASE_TEST)
-    {
-        if((!check_extreme_value(datatype, n, n, A_test, lda, params->imatrix_char)))
-        {
-            residual = DBL_MAX;
-        }
-        else
-        {
-            residual = err_thresh;
-        }
-        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    }
 
     /* Free up buffers */
-free_buffers:
-    FLA_FREE_FILENAME(filename);
     free_vector(ipiv);
     free_matrix(A);
     free_matrix(A_test);
 }
 
 void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer lda, integer *ipiv,
-                       void *work, integer lwork, integer *info, integer interfacetype,
-                       integer layout, test_params_t *params)
+                       void *work, integer lwork, integer n_repeats, double *time_min_,
+                       integer *info)
 {
+    integer i;
     void *A_save = NULL;
-    double exe_time;
+    double time_min = 1e9, exe_time;
 
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
+    create_matrix(datatype, &A_save, lda, n);
 
-    /* Make a workspace query the first time through. This will provide us with
-     and ideal workspace size based on an internal block size.
-     NOTE: LAPACKE interface handles workspace query internally */
-    if((interfacetype != LAPACKE_ROW_TEST) && (interfacetype != LAPACKE_COLUMN_TEST)
-       && (g_lwork == -1))
+    if(g_lwork <= 0)
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
         /* Getting lwork from api by passing lwork = -1 */
-#if ENABLE_CPP_TEST
-        if(interfacetype == LAPACK_CPP_TEST)
-        {
-            invoke_cpp_sytrf(datatype, &uplo, &n, NULL, &lda, ipiv, work, &lwork, info);
-        }
-        else
-#endif
-        {
-            invoke_sytrf(datatype, &uplo, &n, NULL, &lda, ipiv, work, &lwork, info);
-        }
+        invoke_sytrf(datatype, &uplo, &n, NULL, &lda, ipiv, work, &lwork, info);
         if(*info == 0)
         {
             lwork = get_work_value(datatype, work);
@@ -272,82 +203,32 @@ void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer 
 
     *info = 0;
 
-    FLA_EXEC_LOOP_BEGIN
+    for(i = 0; i < n_repeats && *info == 0; i++)
     {
         /* Copy original input */
         copy_matrix(datatype, "full", lda, n, A, lda, A_save, lda);
 
         /* Create work buffer */
         create_vector(datatype, &work, lwork);
-        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
-        {
-            exe_time
-                = prepare_lapacke_sytrf_run(datatype, layout, uplo, n, A_save, lda, ipiv, info);
-        }
-#if ENABLE_CPP_TEST
-        else if(interfacetype == LAPACK_CPP_TEST) /* Call CPP SYTRF API */
-        {
-            exe_time = fla_test_clock();
-            invoke_cpp_sytrf(datatype, &uplo, &n, A_save, &lda, ipiv, work, &lwork, info);
-            exe_time = fla_test_clock() - exe_time;
-        }
-#endif
-        else
-        {
-            exe_time = fla_test_clock();
 
-            /*  call to API */
-            invoke_sytrf(datatype, &uplo, &n, A_save, &lda, ipiv, work, &lwork, info);
+        exe_time = fla_test_clock();
 
-            exe_time = fla_test_clock() - exe_time;
-        }
+        /*  call to API */
+        invoke_sytrf(datatype, &uplo, &n, A_save, &lda, ipiv, work, &lwork, info);
 
-        /* Update ctx and loop conditions */
-        FLA_EXEC_LOOP_UPDATE_WITH_INFO
+        exe_time = fla_test_clock() - exe_time;
+
+        /* Get the best execution time */
+        time_min = fla_min(time_min, exe_time);
 
         free_vector(work);
     }
 
+    *time_min_ = time_min;
+
     /* Save the output to vector A */
     copy_matrix(datatype, "full", lda, n, A_save, lda, A, lda);
     free_matrix(A_save);
-}
-
-double prepare_lapacke_sytrf_run(integer datatype, integer layout, char uplo, integer n, void *A,
-                                 integer lda, void *ipiv, integer *info)
-{
-    double exe_time = 0;
-    integer lda_t = lda;
-    void *A_t = NULL;
-    A_t = A;
-
-    /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_sytrf_lda, lda_t);
-
-    /* In case of row_major matrix layout,
-       convert input matrix to row_major */
-    if(layout == LAPACK_ROW_MAJOR)
-    {
-        create_matrix(datatype, layout, n, n, &A_t, fla_max(lda_t, n));
-        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, A, lda, A_t, fla_max(lda_t, n));
-    }
-
-    exe_time = fla_test_clock();
-
-    /* call to LAPACKE sytrf API */
-    *info = invoke_lapacke_sytrf(datatype, layout, uplo, n, A_t, lda_t, ipiv);
-
-    exe_time = fla_test_clock() - exe_time;
-
-    /* In case of row_major matrix layout, convert output matrices
-       to column_major layout */
-    if((layout == LAPACK_ROW_MAJOR))
-    {
-        convert_matrix_layout(layout, datatype, n, n, A_t, lda_t, A, lda);
-        free_matrix(A_t);
-    }
-
-    return exe_time;
 }
 
 /*

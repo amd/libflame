@@ -44,6 +44,9 @@ extern dcomplex z_zero, z_one, z_n_one;
 #define MAX_FLT_DIFF 0.00001 // Maximum allowed difference for float comparision
 #define MAX_DBL_DIFF 0.0000000001 // Maximum allowed difference for double comparision
 
+#define MAX_VU 100.0 // Maximum eigon value for condition number.
+#define MIN_VL 0.0001 // Minimum eigon value for condion number.
+
 #if defined(FLA_ENABLE_ILP64)
 #ifdef _WIN32
 #define FT_IS "lld"
@@ -63,6 +66,10 @@ void free_vector(void *A);
 void reset_vector(integer datatype, void *A, integer M, integer incA);
 void rand_vector(integer datatype, void *A, integer M, integer LDA);
 void copy_vector(integer datatype, integer M, void *A, integer LDA, void *B, integer LDB);
+void copy_subvector(integer datatype, integer m, void *A, integer lda, void *B, integer ldb,
+                    integer srow, integer scol, integer drow, integer dcol);
+void swap_row_col(integer datatype, integer *m, void *A, integer lda, integer *incx, integer *incy,
+                  integer srow, integer scol, integer drow, integer dcol);
 void copy_realtype_vector(integer datatype, integer M, void *A, integer LDA, void *B, integer LDB);
 
 /* matrix functions*/
@@ -85,12 +92,19 @@ void copy_realtype_matrix(integer datatype, char *uplo, integer M, integer N, vo
 void reset_matrix(integer datatype, integer M, integer N, void *A, integer LDA);
 void set_identity_matrix(integer datatype, integer M, integer N, void *A, integer LDA);
 void copy_submatrix(integer datatype, integer m, integer n, void *A, integer lda, void *B,
-                    integer ldb, integer srow, integer scol);
+                    integer ldb, integer srow, integer scol, integer drow, integer dcol);
 void copy_realtype_subvector(integer datatype, integer m, void *A, void *B, integer index);
 void assign_value(integer datatype, void *x, double data_real, double data_imag);
 
 void matrix_difference(integer datatype, integer m, integer n, void *A, integer lda, void *B,
                        integer ldb);
+
+/* GEMM implementation for  C := alpha*op( A )*op( B ) + beta*C
+ * Where alpha = 1, beta = 0
+ */
+void fla_invoke_gemm(integer datatype, char *transA, char *transB, integer *m, integer *n,
+                     integer *k, void *A, integer *lda, void *B, integer *ldb, void *C,
+                     integer *ldc);
 /* orthgonality property of matrix */
 double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, integer n, integer k,
                                integer lda);
@@ -105,6 +119,9 @@ void copy_tridiag_matrix(integer datatype, void *dl, void *d, void *du, integer 
                          void *A, integer LDA);
 void tridiag_matrix_multiply(integer datatype, integer n, integer nrhs, void *dl, void *d, void *du,
                              void *B, integer ldb, void *C, integer ldc);
+void copy_sym_tridiag_matrix(integer datatype, void *D, void *E, integer M, integer N, void *B,
+                             integer LDA);
+
 /* Division of complex types */
 void c_div_t(scomplex *cp, scomplex *ap, scomplex *bp);
 void z_div_t(dcomplex *cp, dcomplex *ap, dcomplex *bp);
@@ -232,4 +249,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
 /* To calculate the resudial sum of squares of solution for solution x of Ax = b and m < n*/
 void residual_sum_of_squares(int datatype, integer m, integer n, integer nrhs, void *x, integer ldx,
                              double *resid);
+/* Generate a symmetric or hermitian matrix from existing matrix A
+ * If type = "C" hermitian matrix formed.
+ * If type = "S" symmetric matrix is formed.
+ */
+void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, char *type);
 #endif // TEST_COMMON_H

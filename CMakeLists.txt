@@ -11,9 +11,8 @@ else()
 endif()
 
 if(WIN32)
-	SET(CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH "${CMAKE_SOURCE_DIR}/bin/Release" CACHE STRING "AOCL-BLIS library path name")
-	SET(EXT_BLAS_LIBNAME "AOCL-LibBlis-Win-MT-dll.lib" CACHE STRING "AOCL-BLIS library name")
-	SET(OpenMP_libomp_LIB "C:/Program Files/LLVM/lib/libomp.lib" CACHE STRING "openmp library path")
+	SET(CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH "${CMAKE_SOURCE_DIR}/bin/Release" CACHE STRING "BLAS library path")
+	SET(EXT_BLAS_LIBNAME "" CACHE STRING "BLAS library name")
 	SET(LIBAOCLUTILS_LIBRARY_PATH "" CACHE STRING "AOCLUtils library name")
 	SET(LIBAOCLUTILS_INCLUDE_PATH "" CACHE STRING "AOCLUtils library header files path")
 endif()
@@ -21,11 +20,6 @@ endif()
 message(STATUS "External blas library Path : ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}")
 message(STATUS "External blas library name : ${EXT_BLAS_LIBNAME}")
 SET(LF_ISA_CONFIG "AVX2" CACHE STRING "LibFlame Instruction set architecture Configuration")
-
-#gccopenmp
-if(WIN32)
-	SET(OpenMP_libomp_LIBRARY "${OpenMP_libomp_LIB}" CACHE STRING "openmp library path")
-endif()
 
 message(STATUS "CMAKE_C_COMPILER_ID: ${CMAKE_C_COMPILER_ID}")
 message(STATUS "C compiler version: ${CMAKE_C_COMPILER_VERSION}")
@@ -947,10 +941,14 @@ install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 
 #Logic to create AOCL-libFLAME library name according to the linking AOCL-BLIS library name.
 if(WIN32)
-	string(REPLACE "LibBlis" "LibFlame" TEMP_VAR ${EXT_BLAS_LIBNAME})
-	string(REPLACE ".lib" "" TEMP_VAR ${TEMP_VAR})
-	set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "${TEMP_VAR}")
-	message(STATUS "Library Name : ${TEMP_VAR}${CMAKE_SHARED_LIBRARY_SUFFIX}")
+	if(EXT_BLAS_LIBNAME)
+		string(REPLACE "LibBlis" "LibFlame" TEMP_VAR ${EXT_BLAS_LIBNAME})
+		string(REPLACE ".lib" "" TEMP_VAR ${TEMP_VAR})
+		set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "${TEMP_VAR}")
+		message(STATUS "Library Name : ${TEMP_VAR}${CMAKE_SHARED_LIBRARY_SUFFIX}")
+	else(EXT_BLAS_LIBNAME)
+		message(FATAL_ERROR "BLAS Library name not provided! Set BLAS library name using flag EXT_BLAS_LIBNAME")
+	endif()
 endif()
 
 if(ENABLE_OPENMP)
@@ -1117,10 +1115,15 @@ add_definitions(-DEXPMODULE)
 add_subdirectory(src)
 
 if (BUILD_TEST OR BUILD_LEGACY_TEST)
-# enable ctest
-enable_testing()
-message(STATUS "CTEST ENABLED")
-# CHECKS if blas library exists 
+	# enable ctest
+	enable_testing()
+	message(STATUS "CTEST ENABLED")
+
+	if(NOT CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH OR NOT EXT_BLAS_LIBNAME)
+		message(FATAL_ERROR "Please set path and name of BLAS library using CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH and EXT_BLAS_LIBNAME options respectively.")
+	endif()
+
+	# CHECKS if blas library exists 
 	if(NOT EXISTS ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME})
 		message(FATAL_ERROR "\n Invalid path to blas Library \n \
 ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME} \

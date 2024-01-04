@@ -11,6 +11,11 @@ double d_zero = 0, d_one = 1, d_n_one = -1;
 scomplex c_zero = {0,0}, c_one = {1,0}, c_n_one = {-1,0};
 dcomplex z_zero = {0,0}, z_one = {1,0}, z_n_one = {-1,0};
 
+/* Integer absolute function */
+integer fla_i_abs(integer* x)
+{
+    return (*x >= 0 ? (*x) : (-*x));
+}
 /* Allocate dynamic memory. If FLA_MEM_UNALIGNED is set, unaligned memory is allocated */
 char* fla_mem_alloc(size_t size)
 {
@@ -2424,7 +2429,7 @@ void print_matrix(char* desc, integer datatype, integer M, integer N, void* A, i
             {
                 for( j = 0; j < N; j++ )
                 {
-                    printf(" %d", ((integer *)A)[i + j * lda]);
+                    printf(" %"FT_IS" ", ((integer *)A)[i + j * lda]);
                 }
                 printf( "\n" );
             }
@@ -2661,14 +2666,14 @@ double svd_check_order(integer datatype, void *s, integer m, integer n, double r
 /* Intialize matrix with special values*/
 void init_matrix_spec_in(integer datatype, void *A, integer M, integer N, integer LDA, char type)
 {
-    integer i, j, realdatatype;
+    integer i, j;
     if (LDA < M)
         return;
     switch( datatype )
     {
         case FLOAT:
         {
-            float value;
+            float value=0.f;
             if(type == 'I')
                 value = INFINITY;
             else if(type == 'N')
@@ -2684,7 +2689,7 @@ void init_matrix_spec_in(integer datatype, void *A, integer M, integer N, intege
         }
         case DOUBLE:
         {
-            double value;
+            double value=0.;
             if(type == 'I')
                 value = INFINITY;
             else if(type == 'N')
@@ -2700,7 +2705,7 @@ void init_matrix_spec_in(integer datatype, void *A, integer M, integer N, intege
         }
         case COMPLEX:
         {
-            float value;
+            float value=0.f;
             if(type == 'I')
                 value = INFINITY;
             else if(type == 'N')
@@ -2717,7 +2722,7 @@ void init_matrix_spec_in(integer datatype, void *A, integer M, integer N, intege
         }
         case DOUBLE_COMPLEX:
         {
-            double value;
+            double value=0.;
             if(type == 'I')
                 value = INFINITY;
             else if(type == 'N')

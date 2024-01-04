@@ -53,16 +53,6 @@
 
 #define NUM_SUB_TESTS (4)
 
-#if defined(FLA_ENABLE_ILP64)
-#ifdef _WIN32
-#define FT_IS "lld"
-#else
-#define FT_IS "ld"
-#endif
-#else
-#define FT_IS "d"
-#endif
-
 // API categories
 #define LIN            (1)
 #define EIG_SYM        (2)
@@ -126,7 +116,7 @@ extern FILE* g_ext_fptr;
         params->imatrix_char  = info_value[1][0];         \
     }                                                     \
     else                                                  \
-    {                                                     \ 
+    {                                                     \
         g_ext_fptr = fopen(argv, "r");                    \
         if (g_ext_fptr == NULL)                           \
         {                                                 \

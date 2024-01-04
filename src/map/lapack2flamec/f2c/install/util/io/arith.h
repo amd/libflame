@@ -28,6 +28,8 @@ use or performance of this software.
 #include <math.h>
 
 #ifdef _MSC_VER
+#undef isnan
+#undef isinf
 #define isnan _isnan
 #define isinf(x) (!_finite(x))
 #endif

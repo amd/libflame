@@ -20,7 +20,7 @@ void validate_gerqf(integer m_A,
 {
     if(m_A == 0 || n_A == 0)
       return;
-    void *R, *Q, *work;
+    void *R, *Q, *work=NULL;
     integer min_A, diff_A;
     integer lwork = -1;
     *info = 0;

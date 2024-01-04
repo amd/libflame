@@ -49,7 +49,7 @@ void validate_hgeqz(char *job,
     {
         case FLOAT:
         {
-            float norm, norm_H, norm_T, eps, resid1, resid2, resid3, resid4;
+            float norm, norm_H, norm_T, eps, resid1=0.f, resid2=0.f, resid3, resid4;
             double res_max, res_max1, *res_gghrd = residual;
             eps = fla_lapack_slamch("P");
 
@@ -118,7 +118,7 @@ void validate_hgeqz(char *job,
         }
         case DOUBLE:
         {
-            double norm, norm_H, norm_T, eps, resid1, resid2, resid3, resid4;
+            double norm, norm_H, norm_T, eps, resid1=0., resid2=0., resid3, resid4;
             double res_max, res_max1, *res_gghrd = residual;
             eps = fla_lapack_dlamch("P");
             
@@ -187,7 +187,7 @@ void validate_hgeqz(char *job,
         }        
         case COMPLEX:
         {
-            float norm, norm_H, norm_T, eps, resid1, resid2, resid3, resid4;
+            float norm, norm_H, norm_T, eps, resid1=0.f, resid2=0.f, resid3, resid4;
             double res_max, res_max1, *res_gghrd = residual;
             eps = fla_lapack_slamch("P");
 
@@ -258,7 +258,7 @@ void validate_hgeqz(char *job,
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_H, norm_T, eps, resid1, resid2, resid3, resid4;
+            double norm, norm_H, norm_T, eps, resid1=0., resid2=0., resid3, resid4;
             double res_max, res_max1, *res_gghrd = residual;
             eps = fla_lapack_dlamch("P");
 

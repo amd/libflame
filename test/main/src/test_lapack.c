@@ -160,7 +160,7 @@ int  main( int argc, char** argv )
 /* Function for checking cmd option or config file directory */
 int fla_check_cmd_config_dir( int argc, char** argv )
 {
-    integer i, j, len_lin_file, len_eig_file, len_svd_file, len_eig_nsy_file, len_aux_file;
+    integer len_lin_file, len_eig_file, len_svd_file, len_eig_nsy_file, len_aux_file;
     int cmd_test_option = 0;
     char *config_dir = NULL;
     char *lin_file;

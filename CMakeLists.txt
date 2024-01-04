@@ -193,10 +193,8 @@ if(UNIX)
 	add_compile_options(-fPIC)
 endif()
 
-#Temporary hack for Clang. Enable -Wno-error=implicit-function-declaration
-#and -Wno-error=incompatible-function-pointer-types
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error=implicit-function-declaration -Wno-error=incompatible-function-pointer-types")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-parentheses -Wno-deprecated-declarations")
 endif ()
 
 # Adding missing Macros
@@ -473,9 +471,6 @@ endif()
 
 add_definitions(-DLAPACK_COMPLEX_STRUCTURE)
 
-if(WIN32)
-	add_definitions(-DBLIS1_ENABLE_WINDOWS_BUILD)
-endif()
 
 add_definitions(-DHAVE_LAPACK_CONFIG_H)
 add_definitions(-DFLA_ENABLE_LAPACK2FLAME)

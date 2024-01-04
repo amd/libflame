@@ -36,6 +36,18 @@ extern dcomplex z_zero, z_one, z_n_one;
 #define DOUBLE_COMPLEX    106
 #define INVALID_TYPE     -106
 
+#if defined(FLA_ENABLE_ILP64)
+#ifdef _WIN32
+#define FT_IS "lld"
+#else
+#define FT_IS "ld"
+#endif
+#else
+#define FT_IS "d"
+#endif
+
+/* Integer absolute function */
+integer fla_i_abs(integer* x);
 /* vector functions*/
 void create_vector(integer datatype, void **A, integer M);
 void create_realtype_vector(integer datatype, void **A, integer M);

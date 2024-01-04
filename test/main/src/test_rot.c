@@ -5,6 +5,7 @@
 #include "test_lapack.h"
 
 /* Local prototypes */
+integer i_abs(integer* x);
 void fla_test_rot_experiment(test_params_t *params, integer  datatype, integer  p_cur, integer  q_cur, integer pci,
                                     integer n_repeats, integer einfo, double* perf, double* t, double* residual);
 void prepare_rot_run(integer datatype, integer n_A, void* cx, integer incx, void* cy, integer incy, void *c, void *s, 
@@ -137,11 +138,11 @@ void fla_test_rot_experiment(test_params_t *params,
     }
 
     /* Create the vectors for the current operation*/
-    create_vector(datatype, &cx, 1 + (n-1)*abs(incx));
-    create_vector(datatype, &cy, 1 + (n-1)*abs(incy));
+    create_vector(datatype, &cx, 1 + (n-1)* fla_i_abs(&incx));
+    create_vector(datatype, &cy, 1 + (n-1)* fla_i_abs(&incy));
 
-    create_vector(datatype, &cx_test, 1 + (n-1)*abs(incx));
-    create_vector(datatype, &cy_test, 1 + (n-1)*abs(incy));
+    create_vector(datatype, &cx_test, 1 + (n-1)* fla_i_abs(&incx));
+    create_vector(datatype, &cy_test, 1 + (n-1)* fla_i_abs(&incy));
 
     create_vector(realtype, &c, 1);
     create_vector(datatype, &s, 1);
@@ -159,17 +160,17 @@ void fla_test_rot_experiment(test_params_t *params,
     if (g_ext_fptr != NULL)
     {
         /* Initialize input vectors with custom data */
-        init_vector_from_file(datatype, cx, 1 + (n-1)*abs(incx), 1, g_ext_fptr);
-        init_vector_from_file(datatype, cy, 1 + (n-1)*abs(incy), 1, g_ext_fptr);
+        init_vector_from_file(datatype, cx, 1 + (n-1)* fla_i_abs(&incx), 1, g_ext_fptr);
+        init_vector_from_file(datatype, cy, 1 + (n-1)* fla_i_abs(&incy), 1, g_ext_fptr);
     }
     else
     {
         /* Initialize input matrix with random numbers */
-        rand_vector(datatype, cx, 1 + (n-1)*abs(incx), 1);
-        rand_vector(datatype, cy, 1 + (n-1)*abs(incy), 1);
+        rand_vector(datatype, cx, 1 + (n-1)* fla_i_abs(&incx), 1);
+        rand_vector(datatype, cy, 1 + (n-1)* fla_i_abs(&incy), 1);
     }
-    copy_vector(datatype, 1 + (n - 1)*abs(incx), cx, i_one, cx_test, i_one);
-    copy_vector(datatype, 1 + (n - 1)*abs(incy), cy, i_one, cy_test, i_one);
+    copy_vector(datatype, 1 + (n - 1)* fla_i_abs(&incx), cx, i_one, cx_test, i_one);
+    copy_vector(datatype, 1 + (n - 1)* fla_i_abs(&incy), cy, i_one, cy_test, i_one);
     /* call to API */
     prepare_rot_run(datatype, n, cx, incx, cy, incy, c, s, n_repeats, &time_min);
 
@@ -214,14 +215,14 @@ void prepare_rot_run(integer datatype,
     void *cx_save = NULL, *cy_save = NULL;
     double time_min = 1e9, exe_time;
 
-    create_vector(datatype, &cx_save, 1 + (n_A - 1)*abs(incx));
-    create_vector(datatype, &cy_save, 1 + (n_A - 1)*abs(incy));
+    create_vector(datatype, &cx_save, 1 + (n_A - 1)* fla_i_abs(&incx));
+    create_vector(datatype, &cy_save, 1 + (n_A - 1)* fla_i_abs(&incy));
 
     for (i = 0; i < n_repeats; ++i)
     {
         /* Copy original input data */
-        copy_vector(datatype, 1 + (n_A - 1)*abs(incx), cx, i_one, cx_save, i_one);
-        copy_vector(datatype, 1 + (n_A - 1)*abs(incy), cy, i_one, cy_save, i_one);
+        copy_vector(datatype, 1 + (n_A - 1)* fla_i_abs(&incx), cx, i_one, cx_save, i_one);
+        copy_vector(datatype, 1 + (n_A - 1)* fla_i_abs(&incy), cy, i_one, cy_save, i_one);
 
         exe_time = fla_test_clock();
 
@@ -236,8 +237,8 @@ void prepare_rot_run(integer datatype,
 
     *time_min_ = time_min;
     /*  Save the final result to A matrix*/
-    copy_vector(datatype, 1 + (n_A - 1)*abs(incx), cx_save, i_one, cx, i_one);
-    copy_vector(datatype, 1 + (n_A - 1)*abs(incy), cy_save, i_one, cy, i_one);
+    copy_vector(datatype, 1 + (n_A - 1)* fla_i_abs(&incx), cx_save, i_one, cx, i_one);
+    copy_vector(datatype, 1 + (n_A - 1)* fla_i_abs(&incy), cy_save, i_one, cy, i_one);
 
     free_vector(cx_save);
     free_vector(cy_save);

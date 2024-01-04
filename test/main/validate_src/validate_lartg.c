@@ -96,7 +96,7 @@ void validate_lartg(integer datatype, void *f, void *g, void *r, void *c, void *
             eps = fla_lapack_slamch("P");
 
             /*Test 1 validating C and S */
-            norm_1 = snrm2_(&i_one, &c_one, &i_one);
+            norm_1 = snrm2_(&i_one, &s_one, &i_one);
             /*square root of ((c*c) + (s*s)) = 1*/
             res = sqrt((((float *)c)[0]*((float *)c)[0]) + (((scomplex *)s)[0].real*((scomplex *)s)[0].real) + 
                        (((scomplex *)s)[0].imag*((scomplex *)s)[0].imag));
@@ -133,7 +133,7 @@ void validate_lartg(integer datatype, void *f, void *g, void *r, void *c, void *
             eps = fla_lapack_slamch("P");
 
             /*Test 1 validating C and S */
-            norm_1 = snrm2_(&i_one, &c_one, &i_one);
+            norm_1 = snrm2_(&i_one, &s_one, &i_one);
             /*square root of ((c*c) + (s*s)) = 1*/
             res = sqrt((((double *)c)[0]*((double *)c)[0]) + (((dcomplex *)s)[0].real*((dcomplex *)s)[0].real) + 
                        (((dcomplex *)s)[0].imag*((dcomplex *)s)[0].imag));

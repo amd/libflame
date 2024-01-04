@@ -193,7 +193,7 @@ void prepare_geqp3_run(integer m_A, integer n_A,
 {
     integer min_A, i;
     void *A_save = NULL, *T_test = NULL, *work = NULL;
-    void *rwork;
+    void *rwork=NULL;
     integer lwork = -1;
     double time_min = 1e9, exe_time;
 

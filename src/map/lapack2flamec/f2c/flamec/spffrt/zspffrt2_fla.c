@@ -13,7 +13,6 @@ extern integer zgemmt_( char *, char *, char *, integer *, integer *, doublecomp
 #endif
 
 void zspffrt2_fla_def(doublecomplex *ap, integer *n, integer *ncolm, doublecomplex *work );
-static void zspffrt2_fla_unp_var1( doublecomplex *ap, integer *n, integer *ncolm, doublecomplex *work );
 static void zspffrt2_fla_unp_var2( doublecomplex *ap, integer *n, integer *ncolm, doublecomplex *work );
 
 extern void DTL_Trace(
@@ -197,91 +196,6 @@ void zsffrk2_fla( doublecomplex *au, integer *m, integer *n, integer *lda, doubl
        kc = kcn;
     }
 
-    return;
-}
-
-/*
- * LDLT factorization of symmetric matrices (M > N)
- * in unpacked format.
- * Blocked algorithm employing GEMMT is used for better
- * performance.
- *
- * Only the lower triangular part of the matrix is updated.
- * The strictly upper triangular part is left untouched.
- *
- * Variant 1 does both factorization of (N x ncolm) and
- * trailing matrix update inside the main loop
- */
-void zspffrt2_fla_unp_var1( doublecomplex *ap, integer *n, integer *ncolm, doublecomplex *work )
-{
-    doublecomplex c_b1 = { 1., 0. };
-    integer k, kc;
-    integer m, nb;
-
-    doublecomplex *au, *bt;
-    doublecomplex *mau, *mbt;
-
-    /* Choose block size for the blocked variant */
-    if( *n < FLA_SPFFRT2__BSIZE_NL1 )
-        nb = FLA_SPFFRT2__BSIZE1;
-    else if( *n < FLA_SPFFRT2__BSIZE_NL2 )
-        nb = FLA_SPFFRT2__BSIZE2;
-    else
-        nb = FLA_SPFFRT2__BSIZE3;
-    nb = (nb > *ncolm) ? *ncolm : nb;
-
-    /* Allocate unpacked matrix and do the unpacking */
-    mau = ( doublecomplex * ) malloc( *n * *n * sizeof( doublecomplex ) );
-    mbt = ( doublecomplex * ) malloc( nb * (*n - nb) * sizeof( doublecomplex ) );
-
-    zunpack_fla(ap, mau, *n, *n, *n );
-
-    --ap;
-    au = mau - 1;
-    bt = mbt - 1;
-
-    /* Factorize A as L*D*L**T using the lower triangle of A */
-    /* k is the main loop index, increasing from 1 to ncolm in steps of nb */
-    m  = *n;
-    for( k = 1; k <= ( *ncolm - nb ); k += nb )
-    {
-        kc = k * *n - *n + k;
-
-        /* Panel factorization using unblocked variant */
-        zsffrk2_fla( &au[kc], &m, &nb, n, &bt[1], &nb );
-        m -= nb;
-
-        /* Update trailing matrix */
-#ifndef FLA_ENABLE_BLAS_EXT_GEMMT
-        zgemm_( "N", "N", &m, &m, &nb, &c_b1, &au[kc + nb], n, &bt[1], &nb, &c_b1, &au[kc + nb * *n + nb], n );
-#else
-        zgemmt_( "L", "N", "N", &m, &nb, &c_b1, &au[kc + nb], n, &bt[1], &nb, &c_b1, &au[kc + nb * *n + nb], n );
-#endif
-    }
-
-    /* Process the remaining columns */
-    if( k <= *ncolm )
-    {
-        kc = k * *n - *n + k;
-        nb = *ncolm - k + 1;
-
-        /* Panel factorization using unblocked variant */
-        zsffrk2_fla( &au[kc], &m, &nb, n, &bt[1], &nb );
-        m -= nb;
-
-        /* Update trailing matrix */
-#ifndef FLA_ENABLE_BLAS_EXT_GEMMT
-        zgemm_( "N", "N", &m, &m, &nb, &c_b1, &au[kc + nb], n, &bt[1], &nb, &c_b1, &au[kc + nb * *n + nb], n );
-#else
-        zgemmt_( "L", "N", "N", &m, &nb, &c_b1, &au[kc + nb], n, &bt[1], &nb, &c_b1, &au[kc + nb * *n + nb], n );
-#endif
-    }
-
-    /* Pack the updated matrix */
-    zpack_fla( mau, &ap[1], *n, *n, *n );
-
-    free( mau );
-    free( mbt );
     return;
 }
 

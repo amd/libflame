@@ -40,7 +40,7 @@ void fla_dgesvd_small6_avx2(integer *m, integer *n,
     doublereal *tau, *tauq, *taup;
     doublereal *e, *au;
     doublereal stau, d__1;
-    doublereal dum[1];
+    doublereal dum[2];
 
     /* indices for partitioning work buffer */
     iu = 1;
@@ -55,7 +55,7 @@ void fla_dgesvd_small6_avx2(integer *m, integer *n,
     u -= (1 + *ldu);
     vt -= (1 + *ldvt);
     qr -= (1 + *ldqr);
-    v = &dum[-1];
+    v = &dum[0];
     --s;
     --work;
 

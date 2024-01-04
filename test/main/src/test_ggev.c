@@ -10,8 +10,8 @@
 void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p_cur, integer  q_cur, integer pci, integer n_repeats, integer einfo, double* perf, double* t, double* residual);
 void prepare_ggev_run(char *jobvl, char *jobvr, integer n, void *a, integer lda, void *b, integer ldb, void* alpha, void * alphar, void * alphai, void *beta,	void *vl, integer ldvl, 
                       void *vr, integer ldvr,	integer datatype, integer n_repeats, double* time_min_, integer* info);
-void invoke_ggev(integer datatype, char* jobvl, char* jobvr, integer* n, void* a, integer* lda, void* b, integer* ldb, integer* alpha, integer* alphar,
-    integer* alphai, integer* beta, void* vl, integer* ldvl, void* vr, integer* ldvr, void* work, integer* lwork, void* rwork, integer* info);
+void invoke_ggev(integer datatype, char* jobvl, char* jobvr, integer* n, void* a, integer* lda, void* b, integer* ldb, void* alpha, void* alphar,
+    void* alphai, void* beta, void* vl, integer* ldvl, void* vr, integer* ldvr, void* work, integer* lwork, void* rwork, integer* info);
 
 void fla_test_ggev(integer argc, char ** argv, test_params_t *params)
 {
@@ -326,8 +326,8 @@ void prepare_ggev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer ld
 }
 
 
-void invoke_ggev(integer datatype, char *jobvl, char *jobvr,integer *n, void *a, integer *lda, void *b, integer *ldb, integer* alpha, integer * alphar,
-    integer* alphai, integer* beta, void *vl, integer *ldvl, void *vr, integer *ldvr, void* work, integer* lwork, void* rwork, integer* info)
+void invoke_ggev(integer datatype, char *jobvl, char *jobvr,integer *n, void *a, integer *lda, void *b, integer *ldb, void* alpha, void * alphar,
+    void* alphai, void* beta, void *vl, integer *ldvl, void *vr, integer *ldvr, void* work, integer* lwork, void* rwork, integer* info)
 {
     switch(datatype)
     {

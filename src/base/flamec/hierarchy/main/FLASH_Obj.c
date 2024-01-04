@@ -953,8 +953,8 @@ void FLASH_print_struct_helper( FLA_Obj H, int indent )
 	{
 		fprintf( stdout, "LEAF (%3d | rs %3lu | cs %3lu | %3lu x %3lu | addr %p)\n",
 		                 FLA_Obj_datatype( H ),
-		                 FLA_Obj_row_stride( H ), FLA_Obj_col_stride( H ),
-		                 FLA_Obj_length( H ), FLA_Obj_width( H ),
+                         (unsigned long)FLA_Obj_row_stride( H ), (unsigned long)FLA_Obj_col_stride( H ),
+                         (unsigned long)FLA_Obj_length( H ), (unsigned long)FLA_Obj_width( H ),
 		                 FLA_Obj_buffer_at_view( H ) );
 		fflush( stdout );
 	}
@@ -966,7 +966,7 @@ void FLASH_print_struct_helper( FLA_Obj H, int indent )
 		cs  = FLA_Obj_col_stride( H );
 		
 		fprintf( stdout, "MATRIX (%lux%lu):%d - %p\n",
-		                 m_H, n_H,
+                         (unsigned long)m_H, (unsigned long)n_H,
 		                 FLA_Obj_datatype( H ),
 		                 FLA_Obj_buffer_at_view( H ) );
 		fflush( stdout );

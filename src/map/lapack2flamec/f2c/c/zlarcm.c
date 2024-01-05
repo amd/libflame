@@ -105,7 +105,7 @@ B is M by N and complex;
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zlarcm_(integer *m, integer *n, doublereal *a, integer * lda, doublecomplex *b, integer *ldb, doublecomplex *c__, integer *ldc, doublereal *rwork)
+void zlarcm_(integer *m, integer *n, doublereal *a, integer * lda, doublecomplex *b, integer *ldb, doublecomplex *c__, integer *ldc, doublereal *rwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarcm inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS "",*m, *n, *lda, *ldb, *ldc);
@@ -118,7 +118,7 @@ int zlarcm_(integer *m, integer *n, doublereal *a, integer * lda, doublecomplex 
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -153,7 +153,7 @@ int zlarcm_(integer *m, integer *n, doublereal *a, integer * lda, doublecomplex 
     if (*m == 0 || *n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *n;
     for (j = 1;
@@ -230,7 +230,7 @@ int zlarcm_(integer *m, integer *n, doublereal *a, integer * lda, doublecomplex 
         /* L80: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLARCM */
 }
 /* zlarcm_ */

@@ -137,7 +137,7 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgbtf2_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer *ldab, integer *ipiv, integer *info)
+void sgbtf2_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer *ldab, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -151,7 +151,7 @@ int sgbtf2_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer 
     /* Local variables */
     integer i__, j, km, jp, ju, kv;
     extern /* Subroutine */
-    int sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *), sscal_(integer *, real *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *), sscal_(integer *, real *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -212,13 +212,13 @@ int sgbtf2_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer 
         i__1 = -(*info);
         xerbla_("SGBTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     #if AOCL_FLA_PROGRESS_H
         progress_step_count =0;
@@ -326,7 +326,7 @@ int sgbtf2_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer 
         /* L40: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SGBTF2 */
 }
 /* sgbtf2_ */

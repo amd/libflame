@@ -221,7 +221,7 @@ the */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-int ssbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real *ab, integer *ldab, real *bb, integer *ldbb, real * w, real *z__, integer *ldz, real *work, integer *lwork, integer * iwork, integer *liwork, integer *info)
+void ssbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real *ab, integer *ldab, real *bb, integer *ldbb, real * w, real *z__, integer *ldz, real *work, integer *lwork, integer * iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -237,7 +237,7 @@ int ssbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real *
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer lwmin;
     logical upper, wantz;
     integer indwk2, llwrk2;
@@ -245,7 +245,7 @@ int ssbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real *
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), sstedc_( char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer indwrk, liwmin;
     extern /* Subroutine */
-    int spbstf_(char *, integer *, integer *, real *, integer *, integer *), ssbtrd_(char *, char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *), ssbgst_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), ssterf_(integer *, real *, real *, integer *);
+    void spbstf_(char *, integer *, integer *, real *, integer *, integer *), ssbtrd_(char *, char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *), ssbgst_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), ssterf_(integer *, real *, real *, integer *);
     logical lquery;
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -351,18 +351,18 @@ int ssbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real *
         i__1 = -(*info);
         xerbla_("SSBGVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Form a split Cholesky factorization of B. */
     spbstf_(uplo, n, kb, &bb[bb_offset], ldbb, info);
@@ -370,7 +370,7 @@ int ssbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real *
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem. */
     inde = 1;
@@ -402,7 +402,7 @@ int ssbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real *
     work[1] = (real) lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSBGVD */
 }
 /* ssbgvd_ */

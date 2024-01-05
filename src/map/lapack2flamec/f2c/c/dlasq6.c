@@ -104,7 +104,7 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dlasq6_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *dmin__, doublereal *dmin1, doublereal *dmin2, doublereal *dn, doublereal *dnm1, doublereal *dnm2)
+void dlasq6_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *dmin__, doublereal *dmin1, doublereal *dmin2, doublereal *dn, doublereal *dnm1, doublereal *dnm2)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasq6 inputs: i0 %" FLA_IS ", n0 %" FLA_IS ", pp %" FLA_IS "",*i0, *n0, *pp);
@@ -141,7 +141,7 @@ int dlasq6_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *
     if (*n0 - *i0 - 1 <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     safmin = dlamch_("Safe minimum");
     j4 = (*i0 << 2) + *pp - 3;
@@ -267,7 +267,7 @@ int dlasq6_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *
     z__[j4 + 2] = *dn;
     z__[(*n0 << 2) - *pp] = emin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASQ6 */
 }
 /* dlasq6_ */

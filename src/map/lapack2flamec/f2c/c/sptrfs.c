@@ -150,7 +150,7 @@ static real c_b11 = 1.f;
 /* > \ingroup realPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real *work, integer *info)
+void sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -168,7 +168,7 @@ int sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, r
     real eps, safe1, safe2;
     integer count;
     extern /* Subroutine */
-    int saxpy_(integer *, real *, real *, integer *, real *, integer *);
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
@@ -176,7 +176,7 @@ int sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, r
     extern integer isamax_(integer *, real *, integer *);
     real lstres;
     extern /* Subroutine */
-    int spttrs_(integer *, integer *, real *, real *, real *, integer *, integer *);
+    void spttrs_(integer *, integer *, real *, real *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -235,7 +235,7 @@ int sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, r
         i__1 = -(*info);
         xerbla_("SPTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
@@ -250,7 +250,7 @@ int sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, r
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* NZ = maximum number of nonzero elements in each row of A, plus 1 */
     nz = 4;
@@ -423,7 +423,7 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* L90: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPTRFS */
 }
 /* sptrfs_ */

@@ -188,7 +188,7 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int chetrd_(char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tau, complex *work, integer *lwork, integer *info)
+void chetrd_(char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tau, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("chetrd inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -201,7 +201,7 @@ int chetrd_(char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e
     integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
-    int chetd2_(char *, integer *, complex *, integer *, real *, real *, complex *, integer *), cher2k_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, real *, complex *, integer *), clatrd_(char *, integer *, integer *, complex *, integer *, real *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void chetd2_(char *, integer *, complex *, integer *, real *, real *, complex *, integer *), cher2k_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, real *, complex *, integer *), clatrd_(char *, integer *, integer *, complex *, integer *, real *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
@@ -266,12 +266,12 @@ int chetrd_(char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e
         i__1 = -(*info);
         xerbla_("CHETRD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
@@ -279,7 +279,7 @@ int chetrd_(char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     nx = *n;
     iws = 1;
@@ -406,7 +406,7 @@ int chetrd_(char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CHETRD */
 }
 /* chetrd_ */

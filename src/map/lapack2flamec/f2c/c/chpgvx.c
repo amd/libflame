@@ -273,7 +273,7 @@ if RANGE = 'V', the exact value of M */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-int chpgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, complex *ap, complex *bp, real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, complex * z__, integer *ldz, complex *work, real *rwork, integer *iwork, integer *ifail, integer *info)
+void chpgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, complex *ap, complex *bp, real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, complex * z__, integer *ldz, complex *work, real *rwork, integer *iwork, integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -292,10 +292,10 @@ int chpgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, co
     extern logical lsame_(char *, char *);
     char trans[1];
     extern /* Subroutine */
-    int ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+    void ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+    void ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical wantz, alleig, indeig, valeig;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), chpgst_( integer *, char *, integer *, complex *, complex *, integer *), chpevx_(char *, char *, char *, integer *, complex *, real *, real *, integer *, integer *, real *, integer *, real *, complex *, integer *, complex *, real *, integer *, integer *, integer *), cpptrf_(char *, integer *, complex *, integer *);
@@ -389,13 +389,13 @@ int chpgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, co
         i__1 = -(*info);
         xerbla_("CHPGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of B. */
     cpptrf_(uplo, n, &bp[1], info);
@@ -403,7 +403,7 @@ int chpgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, co
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     chpgst_(itype, uplo, n, &ap[1], &bp[1], info);
@@ -461,7 +461,7 @@ int chpgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, co
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHPGVX */
 }
 /* chpgvx_ */

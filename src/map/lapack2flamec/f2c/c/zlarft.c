@@ -159,7 +159,7 @@ if DIRECT = 'B', T is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex *v, integer *ldv, doublecomplex *tau, doublecomplex * t, integer *ldt)
+void zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex *v, integer *ldv, doublecomplex *tau, doublecomplex * t, integer *ldt)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarft inputs: direct %c, storev %c, n %" FLA_IS ", k %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS "",*direct, *storev, *n, *k, *ldv, *ldt);
@@ -173,10 +173,10 @@ int zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex *
     integer i__, j, prevlastv;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     integer lastv;
     extern /* Subroutine */
-    int ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), f90_exit_(void);
+    void ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), f90_exit_(void);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -208,7 +208,7 @@ int zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex *
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (lsame_(direct, "F"))
     {
@@ -452,7 +452,7 @@ int zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex *
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLARFT */
 }
 /* zlarft_ */

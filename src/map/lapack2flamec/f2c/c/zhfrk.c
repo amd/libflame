@@ -154,7 +154,7 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, doublecomplex *a, integer *lda, doublereal *beta, doublecomplex *c__)
+void zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, doublecomplex *a, integer *lda, doublereal *beta, doublecomplex *c__)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhfrk inputs: transr %c, uplo %c, trans %c, n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",*transr, *uplo, *trans, *n, *k, *lda);
@@ -167,7 +167,7 @@ int zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, double
     logical normaltransr;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
     integer nrowa;
     logical lower;
     doublecomplex calpha;
@@ -242,7 +242,7 @@ int zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, double
         i__1 = -info;
         xerbla_("ZHFRK ", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     /* The quick return case: ((ALPHA.EQ.0).AND.(BETA.NE.ZERO)) is not */
@@ -250,7 +250,7 @@ int zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, double
     if (*n == 0 || (*alpha == 0. || *k == 0) && *beta == 1.)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*alpha == 0. && *beta == 0.)
     {
@@ -264,7 +264,7 @@ int zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, double
             c__[i__2].i = 0.; // , expr subst
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     z__1.r = *alpha;
     z__1.i = 0.; // , expr subst
@@ -477,7 +477,7 @@ int zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, double
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHFRK */
 }
 /* zhfrk_ */

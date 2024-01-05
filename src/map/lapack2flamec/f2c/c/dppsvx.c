@@ -304,7 +304,7 @@ if EQUED = 'Y', */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap, doublereal *afp, char *equed, doublereal *s, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal * rcond, doublereal *ferr, doublereal *berr, doublereal *work, integer * iwork, integer *info)
+void dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap, doublereal *afp, char *equed, doublereal *s, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal * rcond, doublereal *ferr, doublereal *berr, doublereal *work, integer * iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dppsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *nrhs, *equed, *ldb, *ldx);
@@ -317,22 +317,22 @@ int dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap, 
     extern logical lsame_(char *, char *);
     doublereal scond, anorm;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical equil, rcequ;
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern doublereal dlansp_(char *, char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
-    int dppcon_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlaqsp_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
+    void dppcon_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlaqsp_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
     integer infequ;
     extern /* Subroutine */
-    int dppequ_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dpprfs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dpptrf_(char *, integer *, doublereal *, integer *);
+    void dppequ_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dpprfs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dpptrf_(char *, integer *, doublereal *, integer *);
     doublereal smlnum;
     extern /* Subroutine */
-    int dpptrs_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *);
+    void dpptrs_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -456,7 +456,7 @@ int dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap, 
         i__1 = -(*info);
         xerbla_("DPPSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (equil)
     {
@@ -499,7 +499,7 @@ int dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap, 
         {
             *rcond = 0.;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -546,7 +546,7 @@ int dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap, 
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPPSVX */
 }
 /* dppsvx_ */

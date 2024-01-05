@@ -191,7 +191,7 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ztgexc_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *q, integer *ldq, doublecomplex *z__, integer *ldz, integer *ifst, integer *ilst, integer *info)
+void ztgexc_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *q, integer *ldq, doublecomplex *z__, integer *ldz, integer *ifst, integer *ilst, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztgexc inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS "",*n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
@@ -200,7 +200,7 @@ int ztgexc_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, intege
     /* Local variables */
     integer here;
     extern /* Subroutine */
-    int ztgex2_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ztgex2_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -266,18 +266,18 @@ int ztgexc_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, intege
         i__1 = -(*info);
         xerbla_("ZTGEXC", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 1)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*ifst == *ilst)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*ifst < *ilst)
     {
@@ -288,7 +288,7 @@ L10: /* Swap with next one below */
         {
             *ilst = here;
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         ++here;
         if (here < *ilst)
@@ -306,7 +306,7 @@ L20: /* Swap with next one above */
         {
             *ilst = here;
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         --here;
         if (here >= *ilst)
@@ -317,7 +317,7 @@ L20: /* Swap with next one above */
     }
     *ilst = here;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTGEXC */
 }
 /* ztgexc_ */

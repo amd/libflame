@@ -113,7 +113,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ctptri_(char *uplo, char *diag, integer *n, complex *ap, integer *info)
+void ctptri_(char *uplo, char *diag, integer *n, complex *ap, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -134,10 +134,10 @@ int ctptri_(char *uplo, char *diag, integer *n, complex *ap, integer *info)
     integer j, jc, jj;
     complex ajj;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+    void ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -186,7 +186,7 @@ int ctptri_(char *uplo, char *diag, integer *n, complex *ap, integer *info)
         i__1 = -(*info);
         xerbla_("CTPTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check for singularity if non-unit. */
     if (nounit)
@@ -204,7 +204,7 @@ int ctptri_(char *uplo, char *diag, integer *n, complex *ap, integer *info)
                 if (ap[i__2].r == 0.f && ap[i__2].i == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 /* L10: */
             }
@@ -221,7 +221,7 @@ int ctptri_(char *uplo, char *diag, integer *n, complex *ap, integer *info)
                 if (ap[i__2].r == 0.f && ap[i__2].i == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 jj = jj + *n - *info + 1;
                 /* L20: */
@@ -307,7 +307,7 @@ int ctptri_(char *uplo, char *diag, integer *n, complex *ap, integer *info)
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTPTRI */
 }
 /* ctptri_ */

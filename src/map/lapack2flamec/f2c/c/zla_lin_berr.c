@@ -87,7 +87,7 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zla_lin_berr_(integer *n, integer *nz, integer *nrhs, doublecomplex *res, doublereal *ayb, doublereal *berr)
+void zla_lin_berr_(integer *n, integer *nz, integer *nrhs, doublecomplex *res, doublereal *ayb, doublereal *berr)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_lin_berr inputs: n %" FLA_IS ", nz %" FLA_IS ", nrhs %" FLA_IS "", *n, *nz, *nrhs);
@@ -167,6 +167,6 @@ int zla_lin_berr_(integer *n, integer *nz, integer *nrhs, doublecomplex *res, do
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* zla_lin_berr__ */

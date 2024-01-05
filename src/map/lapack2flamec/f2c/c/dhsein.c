@@ -265,7 +265,7 @@ here the magnitude of a complex number */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n, doublereal *h__, integer *ldh, doublereal *wr, doublereal *wi, doublereal *vl, integer *ldvl, doublereal *vr, integer *ldvr, integer *mm, integer *m, doublereal *work, integer * ifaill, integer *ifailr, integer *info)
+void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n, doublereal *h__, integer *ldh, doublereal *wr, doublereal *wi, doublereal *vl, integer *ldvl, doublereal *vr, integer *ldvr, integer *mm, integer *m, doublereal *work, integer * ifaill, integer *ifailr, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dhsein inputs: side %c, eigsrc %c, initv %c, n %" FLA_IS ", ldh %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",*side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
@@ -285,7 +285,7 @@ int dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n,
     doublereal hnorm;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlaein_(logical *, logical *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
+    void dlaein_(logical *, logical *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
     extern doublereal dlanhs_(char *, integer *, doublereal *, integer *, doublereal *);
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
@@ -412,13 +412,13 @@ int dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n,
         i__1 = -(*info);
         xerbla_("DHSEIN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set machine-dependent constants. */
     unfl = dlamch_("Safe minimum");
@@ -497,7 +497,7 @@ L50:
                 {
                     *info = -6;
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 else if (hnorm > 0.)
                 {
@@ -633,7 +633,7 @@ L60:
         /* L120: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DHSEIN */
 }
 /* dhsein_ */

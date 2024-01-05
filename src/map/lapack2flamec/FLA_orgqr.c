@@ -27,11 +27,11 @@
 */
 
 extern int lapack_dorgqr(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *lwork, integer *info);
-extern int sorgqr_fla(integer *m, integer *n, integer *k, real * a, integer *lda, real *tau, real *work, integer *lwork, integer *info);
-extern int dorg2r_fla(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info);
+extern void sorgqr_fla(integer *m, integer *n, integer *k, real * a, integer *lda, real *tau, real *work, integer *lwork, integer *info);
+extern void dorg2r_fla(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info);
 
 #define LAPACK_orgqr(prefix, name)                                      \
-  int F77_ ## prefix ## name ## qr( integer* m,                             \
+  void F77_ ## prefix ## name ## qr( integer* m,                             \
                                     integer* n,                             \
                                     integer* k,                             \
                                     PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, \
@@ -98,7 +98,7 @@ LAPACK_orgqr(s, org)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
         sorgqr_fla(m, n, k,
@@ -107,7 +107,7 @@ LAPACK_orgqr(s, org)
                    buff_w, lwork,
                    info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 #endif
 }
@@ -131,7 +131,7 @@ LAPACK_orgqr(d, org)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
         lapack_dorgqr(m, n, k,
@@ -140,7 +140,7 @@ LAPACK_orgqr(d, org)
                       buff_w, lwork,
                       info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 #endif
 }
@@ -165,7 +165,7 @@ LAPACK_orgqr(c, ung)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_orgqr(z, ung)
 {
@@ -186,12 +186,12 @@ LAPACK_orgqr(z, ung)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 
 #define LAPACK_org2r(prefix, name)                                      \
-  int F77_ ## prefix ## name ## 2r( integer* m,                                  \
+  void F77_ ## prefix ## name ## 2r( integer* m,                                  \
                                     integer* n,                             \
                                     integer* k,                             \
                                     PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, \
@@ -204,7 +204,7 @@ LAPACK_org2r(s, org)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sorg2r inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "", *m, *n, *k, *ldim_A);
-    extern int sorg2r_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work, integer *info);
+    extern void sorg2r_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work, integer *info);
 
 #if !FLA_ENABLE_AMD_OPT
     int fla_error = LAPACK_SUCCESS;
@@ -222,7 +222,7 @@ LAPACK_org2r(s, org)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;   
+    return;   
 #else
     {
         sorg2r_fla( m, n, k,
@@ -231,7 +231,7 @@ LAPACK_org2r(s, org)
                     buff_w,
                     info );
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 #endif
 }
@@ -257,7 +257,7 @@ LAPACK_org2r(d, org)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
         dorg2r_fla( m, n, k,
@@ -266,7 +266,7 @@ LAPACK_org2r(d, org)
                     buff_w,
                     info );
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 #endif
 }
@@ -291,7 +291,7 @@ LAPACK_org2r(c, ung)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_org2r(z, ung)
 {
@@ -312,7 +312,7 @@ LAPACK_org2r(z, ung)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 

@@ -220,7 +220,7 @@ if RANGE = 'V', the exact value of M */
 /* > \ingroup doubleOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int dspevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *ap, doublereal *vl, doublereal *vu, integer *il, integer * iu, doublereal *abstol, integer *m, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *iwork, integer *ifail, integer *info)
+void dspevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *ap, doublereal *vl, doublereal *vu, integer *il, integer * iu, doublereal *abstol, integer *m, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *iwork, integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dspevx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",*jobz, *range, *uplo, *n, *il, *iu, *ldz);
@@ -239,13 +239,13 @@ int dspevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *ap, dou
     logical test;
     integer itmp1, indee;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *);
     integer iinfo;
     char order[1];
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical wantz;
     extern doublereal dlamch_(char *);
     logical alleig, indeig;
@@ -258,13 +258,13 @@ int dspevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *ap, dou
     extern doublereal dlansp_(char *, char *, integer *, doublereal *, doublereal *);
     integer indtau, indisp;
     extern /* Subroutine */
-    int dstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *), dsterf_(integer *, doublereal *, doublereal *, integer *);
+    void dstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *), dsterf_(integer *, doublereal *, doublereal *, integer *);
     integer indiwo;
     extern /* Subroutine */
-    int dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     integer indwrk;
     extern /* Subroutine */
-    int dopgtr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsptrd_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *), dopmtr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dopgtr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsptrd_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *), dopmtr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     integer nsplit;
     doublereal smlnum;
     /* -- LAPACK driver routine (version 3.4.0) -- */
@@ -352,14 +352,14 @@ int dspevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *ap, dou
         i__1 = -(*info);
         xerbla_("DSPEVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = 0;
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -381,7 +381,7 @@ int dspevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *ap, dou
             z__[z_dim1 + 1] = 1.;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -560,7 +560,7 @@ L20:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSPEVX */
 }
 /* dspevx_ */

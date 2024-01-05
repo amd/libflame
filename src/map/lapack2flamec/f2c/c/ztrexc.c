@@ -116,7 +116,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ztrexc_(char *compq, integer *n, doublecomplex *t, integer *ldt, doublecomplex *q, integer *ldq, integer *ifst, integer * ilst, integer *info)
+void ztrexc_(char *compq, integer *n, doublecomplex *t, integer *ldt, doublecomplex *q, integer *ldq, integer *ifst, integer * ilst, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztrexc inputs: compq %c, n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS "",*compq, *n, *ldt, *ldq, *ifst, *ilst);
@@ -130,7 +130,7 @@ int ztrexc_(char *compq, integer *n, doublecomplex *t, integer *ldt, doublecompl
     doublereal cs;
     doublecomplex t11, t22, sn, temp;
     extern /* Subroutine */
-    int zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
+    void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
     extern logical lsame_(char *, char *);
     logical wantq;
     extern /* Subroutine */
@@ -193,13 +193,13 @@ int ztrexc_(char *compq, integer *n, doublecomplex *t, integer *ldt, doublecompl
         i__1 = -(*info);
         xerbla_("ZTREXC", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 1 || *ifst == *ilst)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*ifst < *ilst)
     {
@@ -256,7 +256,7 @@ int ztrexc_(char *compq, integer *n, doublecomplex *t, integer *ldt, doublecompl
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTREXC */
 }
 /* ztrexc_ */

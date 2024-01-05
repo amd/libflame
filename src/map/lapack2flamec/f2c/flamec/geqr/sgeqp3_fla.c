@@ -144,7 +144,7 @@ v(i+1:m) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgeqp3_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, real *tau, real *work, integer *lwork, integer *info)
+void sgeqp3_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, real *tau, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -153,17 +153,17 @@ int sgeqp3_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, rea
     extern real snrm2_(integer *, real *, integer *);
     integer nbmin, minmn, minws;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *), slaqp2_(integer *, integer *, integer *, real *, integer *, integer *, real *, real *, real *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sswap_(integer *, real *, integer *, real *, integer *), slaqp2_(integer *, integer *, integer *, real *, integer *, integer *, real *, real *, real *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    void sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
     integer topbmn, sminmn;
     extern /* Subroutine */
-    int slaqps_(integer *, integer *, integer *, integer *, integer *, real *, integer *, integer *, real *, real *, real *, real *, real *, integer *);
+    void slaqps_(integer *, integer *, integer *, integer *, integer *, real *, integer *, integer *, real *, real *, real *, real *, real *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+    void sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -230,11 +230,11 @@ int sgeqp3_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, rea
     {
         i__1 = -(*info);
         xerbla_("SGEQP3", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Move initial columns up front. */
     nfxd = 1;
@@ -370,7 +370,7 @@ L30:
         }
     }
     work[1] = (real) iws;
-    return 0;
+    return;
     /* End of SGEQP3_FLA */
 }
 /* sgeqp3_fla */

@@ -154,7 +154,7 @@ static integer c__1 = 1;
 /* > \ingroup realOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int sspgv_(integer *itype, char *jobz, char *uplo, integer * n, real *ap, real *bp, real *w, real *z__, integer *ldz, real *work, integer *info)
+void sspgv_(integer *itype, char *jobz, char *uplo, integer * n, real *ap, real *bp, real *w, real *z__, integer *ldz, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -170,10 +170,10 @@ int sspgv_(integer *itype, char *jobz, char *uplo, integer * n, real *ap, real *
     char trans[1];
     logical upper;
     extern /* Subroutine */
-    int sspev_(char *, char *, integer *, real *, real *, real *, integer *, real *, integer *);
+    void sspev_(char *, char *, integer *, real *, real *, real *, integer *, real *, integer *);
     logical wantz;
     extern /* Subroutine */
-    int stpmv_(char *, char *, char *, integer *, real *, real *, integer *), stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), spptrf_(char *, integer *, real *, integer *), sspgst_(integer *, char *, integer *, real *, real *, integer *);
+    void stpmv_(char *, char *, char *, integer *, real *, real *, integer *), stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), spptrf_(char *, integer *, real *, integer *), sspgst_(integer *, char *, integer *, real *, real *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -228,13 +228,13 @@ int sspgv_(integer *itype, char *jobz, char *uplo, integer * n, real *ap, real *
         i__1 = -(*info);
         xerbla_("SSPGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of B. */
     spptrf_(uplo, n, &bp[1], info);
@@ -242,7 +242,7 @@ int sspgv_(integer *itype, char *jobz, char *uplo, integer * n, real *ap, real *
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     sspgst_(itype, uplo, n, &ap[1], &bp[1], info);
@@ -301,7 +301,7 @@ int sspgv_(integer *itype, char *jobz, char *uplo, integer * n, real *ap, real *
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSPGV */
 }
 /* sspgv_ */

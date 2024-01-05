@@ -145,7 +145,7 @@ v(i+2:n) is stored on exit in AP, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dsptrd_(char *uplo, integer *n, doublereal *ap, doublereal *d__, doublereal *e, doublereal *tau, integer *info)
+void dsptrd_(char *uplo, integer *n, doublereal *ap, doublereal *d__, doublereal *e, doublereal *tau, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsptrd inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
@@ -156,14 +156,14 @@ int dsptrd_(char *uplo, integer *n, doublereal *ap, doublereal *d__, doublereal 
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal taui;
     extern /* Subroutine */
-    int dspr2_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *);
+    void dspr2_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *);
     doublereal alpha;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dspmv_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dspmv_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-    int dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -204,13 +204,13 @@ int dsptrd_(char *uplo, integer *n, doublereal *ap, doublereal *d__, doublereal 
         i__1 = -(*info);
         xerbla_("DSPTRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -288,7 +288,7 @@ int dsptrd_(char *uplo, integer *n, doublereal *ap, doublereal *d__, doublereal 
         d__[*n] = ap[ii];
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSPTRD */
 }
 /* dsptrd_ */

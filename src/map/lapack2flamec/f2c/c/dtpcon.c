@@ -121,7 +121,7 @@ static integer c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dtpcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *ap, doublereal *rcond, doublereal *work, integer *iwork, integer *info)
+void dtpcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *ap, doublereal *rcond, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtpcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS "",*norm, *uplo, *diag, *n);
@@ -134,12 +134,12 @@ int dtpcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *ap, doub
     extern logical lsame_(char *, char *);
     integer isave[3];
     extern /* Subroutine */
-    int drscl_(integer *, doublereal *, doublereal *, integer *);
+    void drscl_(integer *, doublereal *, doublereal *, integer *);
     doublereal anorm;
     logical upper;
     doublereal xnorm;
     extern /* Subroutine */
-    int dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
@@ -147,7 +147,7 @@ int dtpcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *ap, doub
     extern doublereal dlantp_(char *, char *, char *, integer *, doublereal *, doublereal *);
     doublereal ainvnm;
     extern /* Subroutine */
-    int dlatps_(char *, char *, char *, char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
+    void dlatps_(char *, char *, char *, char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
     logical onenrm;
     char normin[1];
     doublereal smlnum;
@@ -205,14 +205,14 @@ int dtpcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *ap, doub
         i__1 = -(*info);
         xerbla_("DTPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     *rcond = 0.;
     smlnum = dlamch_("Safe minimum") * (doublereal) fla_max(1,*n);
@@ -269,7 +269,7 @@ L10:
     }
 L20:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTPCON */
 }
 /* dtpcon_ */

@@ -218,7 +218,7 @@ static integer c_n1 = -1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dsysv_rk_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *e, integer *ipiv, doublereal *b, integer *ldb, doublereal *work, integer *lwork, integer *info)
+void dsysv_rk_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *e, integer *ipiv, doublereal *b, integer *ldb, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsysv_rk inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb, *lwork);
@@ -226,7 +226,7 @@ int dsysv_rk_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int dsytrs_3_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dsytrf_rk_(char *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dsytrs_3_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dsytrf_rk_(char *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -306,12 +306,12 @@ int dsysv_rk_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda
         i__1 = -(*info);
         xerbla_("DSYSV_RK ", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the factorization A = P*U*D*(U**T)*(P**T) or */
     /* A = P*U*D*(U**T)*(P**T). */
@@ -323,7 +323,7 @@ int dsysv_rk_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda
     }
     work[1] = (doublereal) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYSV_RK */
 }
 /* dsysv_rk__ */

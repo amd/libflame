@@ -191,7 +191,7 @@
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda, doublecomplex *e, integer *ipiv, integer *info)
+void zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda, doublecomplex *e, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsyconvf_rook inputs: uplo %c, way %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *way, *n, *lda);
@@ -202,7 +202,7 @@ int zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer 
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical convert;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -251,13 +251,13 @@ int zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer 
         i__1 = -(*info);
         xerbla_("ZSYCONVF_ROOK", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -555,7 +555,7 @@ int zsyconvf_rook_(char *uplo, char *way, integer *n, doublecomplex *a, integer 
         /* End A is LOWER */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSYCONVF_ROOK */
 }
 /* zsyconvf_rook__ */

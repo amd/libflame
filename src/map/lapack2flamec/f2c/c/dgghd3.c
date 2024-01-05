@@ -232,7 +232,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *q, integer *ldq, doublereal *z__, integer * ldz, doublereal *work, integer *lwork, integer *info)
+void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *q, integer *ldq, doublereal *z__, integer * ldz, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgghd3 inputs: compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",*compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz, *lwork);
@@ -250,29 +250,29 @@ int dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, d
     integer cola, jcol, ierr;
     doublereal temp;
     extern /* Subroutine */
-    int drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
     integer jrow, topq, ppwo;
     doublereal temp1, temp2, temp3;
     integer kacc22;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer nbmin;
     extern /* Subroutine */
-    int dorm22_(char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dorm22_(char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer nblst;
     logical initq, wantq;
     extern /* Subroutine */
-    int dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *);
     logical initz, wantz;
     char compq2[1], compz2[1];
     extern /* Subroutine */
-    int dgghrd_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_( doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dgghrd_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_( doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
@@ -367,12 +367,12 @@ int dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, d
         i__1 = -(*info);
         xerbla_("DGGHD3", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize Q and Z if desired. */
     if (initq)
@@ -396,7 +396,7 @@ int dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, d
     {
         work[1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine the blocksize. */
     nbmin = ilaenv_(&c__2, "DGGHD3", " ", n, ilo, ihi, &c_n1);
@@ -1054,7 +1054,7 @@ int dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, d
     }
     work[1] = (doublereal) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGGHD3 */
 }
 /* dgghd3_ */

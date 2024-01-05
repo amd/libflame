@@ -213,7 +213,7 @@ if */
 /* > \ingroup realGEeigen */
 /* ===================================================================== */
 /* Subroutine */
-int sgees_(char *jobvs, char *sort, L_fps2 select, integer *n, real *a, integer *lda, integer *sdim, real *wr, real *wi, real *vs, integer *ldvs, real *work, integer *lwork, logical *bwork, integer * info)
+void sgees_(char *jobvs, char *sort, L_fps2 select, integer *n, real *a, integer *lda, integer *sdim, real *wr, real *wi, real *vs, integer *ldvs, real *work, integer *lwork, logical *bwork, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgees inputs: jobvs %c, sort %c, n %" FLA_IS ", lda %" FLA_IS ", sdim %" FLA_IS ", ldvs %" FLA_IS "",*jobvs, *sort, *n, *lda, *sdim, *ldvs);
@@ -232,29 +232,29 @@ int sgees_(char *jobvs, char *sort, L_fps2 select, integer *n, real *a, integer 
     extern logical lsame_(char *, char *);
     logical cursl;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
+    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
     logical lst2sl;
     extern /* Subroutine */
-    int slabad_(real *, real *);
+    void slabad_(real *, real *);
     logical scalea;
     real cscale;
     extern /* Subroutine */
-    int sgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *), sgebal_(char *, integer *, real *, integer *, integer *, integer *, real *, integer *);
+    void sgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *), sgebal_(char *, integer *, real *, integer *, integer *, integer *, real *, integer *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int sgehrd_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sgehrd_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     logical lastsl;
     extern /* Subroutine */
-    int sorghr_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), shseqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *, integer *);
+    void sorghr_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), shseqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *, integer *);
     integer minwrk, maxwrk;
     real smlnum;
     integer hswork;
     extern /* Subroutine */
-    int strsen_(char *, char *, logical *, integer *, real *, integer *, real *, integer *, real *, real *, integer *, real *, real *, real *, integer *, integer *, integer *, integer * );
+    void strsen_(char *, char *, logical *, integer *, real *, integer *, real *, integer *, real *, real *, integer *, real *, real *, real *, integer *, integer *, integer *, integer * );
     logical wantst, lquery, wantvs;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -368,19 +368,19 @@ int sgees_(char *jobvs, char *sort, L_fps2 select, integer *n, real *a, integer 
         i__1 = -(*info);
         xerbla_("SGEES ", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         *sdim = 0;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = slamch_("P");
@@ -607,7 +607,7 @@ L20:
     }
     work[1] = (real) maxwrk;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SGEES */
 }
 /* sgees_ */

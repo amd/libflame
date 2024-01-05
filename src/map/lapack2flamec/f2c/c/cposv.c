@@ -117,7 +117,7 @@
 /* > \ingroup complexPOsolve */
 /* ===================================================================== */
 /* Subroutine */
-int cposv_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *b, integer *ldb, integer *info)
+void cposv_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -186,7 +186,7 @@ int cposv_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, comp
         i__1 = -(*info);
         xerbla_("CPOSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the Cholesky factorization A = U**H*U or A = L*L**H. */
     cpotrf_(uplo, n, &a[a_offset], lda, info);
@@ -196,7 +196,7 @@ int cposv_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, comp
         cpotrs_(uplo, n, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPOSV */
 }
 /* cposv_ */

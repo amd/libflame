@@ -32,11 +32,11 @@
   if SIDE = 'R'.
 */
 
-extern int dormqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal * c__, integer *ldc, doublereal *work, integer *lwork, integer *info);
-extern int sormqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real * c__, integer *ldc, real *work, integer *lwork, integer *info);
+extern void dormqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal * c__, integer *ldc, doublereal *work, integer *lwork, integer *info);
+extern void sormqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real * c__, integer *ldc, real *work, integer *lwork, integer *info);
 
 #define LAPACK_ormqr(prefix, name)                                      \
-  int F77_ ## prefix ## name ## qr( char* side,                              \
+  void F77_ ## prefix ## name ## qr( char* side,                              \
                                     char* trans,                        \
                                     integer* m,                             \
                                     integer* n,                             \
@@ -118,7 +118,7 @@ LAPACK_ormqr(s, orm)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
         sormqr_fla(side, trans, m, n, k,
@@ -127,7 +127,7 @@ LAPACK_ormqr(s, orm)
                    buff_B, ldim_B,
                    buff_w, lwork, info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 #endif
 }
@@ -153,7 +153,7 @@ LAPACK_ormqr(d, orm)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
         dormqr_fla(side, trans, m, n, k,
@@ -162,7 +162,7 @@ LAPACK_ormqr(d, orm)
                    buff_B, ldim_B,
                    buff_w, lwork, info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 #endif
 }
@@ -189,7 +189,7 @@ LAPACK_ormqr(c, unm)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_ormqr(z, unm)
 {
@@ -212,12 +212,12 @@ LAPACK_ormqr(z, unm)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 
 #define LAPACK_orm2r(prefix, name)                                      \
-  int F77_ ## prefix ## name ## 2r( char* side,                              \
+  void F77_ ## prefix ## name ## 2r( char* side,                              \
                                     char* trans,                        \
                                     integer* m,                             \
                                     integer* n,                             \
@@ -232,7 +232,7 @@ LAPACK_orm2r(s, orm)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sorm2r inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "", *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
-    extern int sorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *info);
+    extern void sorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *info);
 
 #if !FLA_ENABLE_AMD_OPT 
     int fla_error = LAPACK_SUCCESS;
@@ -252,7 +252,7 @@ LAPACK_orm2r(s, orm)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
         sorm2r_fla( side, trans,
@@ -263,7 +263,7 @@ LAPACK_orm2r(s, orm)
                     buff_w,
                     info );
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 #endif
 }
@@ -272,7 +272,7 @@ LAPACK_orm2r(d, orm)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dorm2r inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "", *side, *trans, *m, *n, *k, *ldim_A, *ldim_B);
-    extern int dorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal * c__, integer *ldc, doublereal *work, integer *info);
+    extern void dorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal * c__, integer *ldc, doublereal *work, integer *info);
 
 #if !FLA_ENABLE_AMD_OPT
     int fla_error = LAPACK_SUCCESS;
@@ -292,7 +292,7 @@ LAPACK_orm2r(d, orm)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
         dorm2r_fla( side, trans,
@@ -303,7 +303,7 @@ LAPACK_orm2r(d, orm)
                     buff_w,
                     info );
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
 
     }
 #endif
@@ -331,7 +331,7 @@ LAPACK_orm2r(c, unm)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_orm2r(z, unm)
 {
@@ -354,7 +354,7 @@ LAPACK_orm2r(z, unm)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 

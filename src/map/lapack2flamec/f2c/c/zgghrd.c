@@ -209,7 +209,7 @@ LDZ >= 1 otherwise. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *q, integer *ldq, doublecomplex *z__, integer *ldz, integer *info)
+void zgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *q, integer *ldq, doublecomplex *z__, integer *ldz, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgghrd inputs: compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS "",*compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
@@ -224,14 +224,14 @@ int zgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, d
     logical ilq, ilz;
     integer jcol, jrow;
     extern /* Subroutine */
-    int zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
+    void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
     extern logical lsame_(char *, char *);
     doublecomplex ctemp;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icompq, icompz;
     extern /* Subroutine */
-    int zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
+    void zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -349,7 +349,7 @@ int zgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, d
         i__1 = -(*info);
         xerbla_("ZGGHRD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize Q and Z if desired. */
     if (icompq == 3)
@@ -364,7 +364,7 @@ int zgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, d
     if (*n <= 1)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Zero out lower triangle of B */
     i__1 = *n - 1;
@@ -432,7 +432,7 @@ int zgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, d
         /* L40: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGGHRD */
 }
 /* zgghrd_ */

@@ -108,7 +108,7 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cppcon_(char *uplo, integer *n, complex *ap, real *anorm, real *rcond, complex *work, real *rwork, integer *info)
+void cppcon_(char *uplo, integer *n, complex *ap, real *anorm, real *rcond, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -132,7 +132,7 @@ int cppcon_(char *uplo, integer *n, complex *ap, real *anorm, real *rcond, compl
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    int clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
+    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     extern integer icamax_(integer *, complex *, integer *);
     real scalel;
     extern real slamch_(char *);
@@ -141,7 +141,7 @@ int cppcon_(char *uplo, integer *n, complex *ap, real *anorm, real *rcond, compl
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), clatps_( char *, char *, char *, char *, integer *, complex *, complex *, real *, real *, integer *);
     real ainvnm;
     extern /* Subroutine */
-    int csrscl_(integer *, real *, complex *, integer *);
+    void csrscl_(integer *, real *, complex *, integer *);
     char normin[1];
     real smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -195,7 +195,7 @@ int cppcon_(char *uplo, integer *n, complex *ap, real *anorm, real *rcond, compl
         i__1 = -(*info);
         xerbla_("CPPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.f;
@@ -203,12 +203,12 @@ int cppcon_(char *uplo, integer *n, complex *ap, real *anorm, real *rcond, compl
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (*anorm == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     smlnum = slamch_("Safe minimum");
     /* Estimate the 1-norm of the inverse. */
@@ -255,7 +255,7 @@ L10:
     }
 L20:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPPCON */
 }
 /* cppcon_ */

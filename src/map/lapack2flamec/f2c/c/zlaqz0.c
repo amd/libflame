@@ -292,7 +292,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zlaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, integer *ihi, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *alpha, doublecomplex * beta, doublecomplex *q, integer *ldq, doublecomplex *z__, integer * ldz, doublecomplex *work, integer *lwork, doublereal *rwork, integer * rec, integer *info)
+void zlaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, integer *ihi, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *alpha, doublecomplex * beta, doublecomplex *q, integer *ldq, doublecomplex *z__, integer * ldz, doublecomplex *work, integer *lwork, doublereal *rwork, integer * rec, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqz0 inputs: wants %c, wantq %c, wantz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS ", rec %" FLA_IS "", *wants, *wantq, *wantz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz, *lwork, *rec);
@@ -320,13 +320,13 @@ int zlaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     doublecomplex temp;
     integer n_undeflated__;
     extern /* Subroutine */
-    int zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
+    void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
     extern logical lsame_(char *, char *);
     integer iiter;
     doublereal bnorm;
     integer maxit, rcost, istop, itemp1, itemp2;
     extern /* Subroutine */
-    int dlabad_(doublereal *, doublereal *), zlaqz2_( logical *, logical *, logical *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *), zlaqz3_(logical *, logical *, logical *, integer *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *) ;
+    void dlabad_(doublereal *, doublereal *), zlaqz2_( logical *, logical *, logical *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *), zlaqz3_(logical *, logical *, logical *, integer *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *) ;
     extern doublereal dlamch_(char *);
     integer nibble, nblock;
     doublereal safmin;
@@ -338,13 +338,13 @@ int zlaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     char jbcmpz[3];
     extern doublereal zlanhs_(char *, integer *, doublecomplex *, integer *, doublereal *);
     extern /* Subroutine */
-    int zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+    void zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
     integer iwantq;
     extern /* Subroutine */
-    int zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
+    void zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
     integer iwants, istart;
     extern /* Subroutine */
-    int zhgeqz_(char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *);
+    void zhgeqz_(char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *);
     doublereal smlnum;
     integer istopm, iwantz, istart2;
     extern /* Subroutine */
@@ -475,7 +475,7 @@ int zlaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
         i__1 = -(*info);
         xerbla_("ZLAQZ0", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 0)
@@ -483,7 +483,7 @@ int zlaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get the parameters */
     *(unsigned char *)jbcmpz = *(unsigned char *)wants;
@@ -516,7 +516,7 @@ int zlaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     {
         zhgeqz_(wants, wantq, wantz, n, ilo, ihi, &a[a_offset], lda, &b[ b_offset], ldb, &alpha[1], &beta[1], &q[q_offset], ldq, &z__[ z_offset], ldz, &work[1], lwork, &rwork[1], info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Find out required workspace */
     /* Workspace query to ZLAQZ2 */
@@ -540,7 +540,7 @@ int zlaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
         work[1].r = d__1;
         work[1].i = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*lwork < lworkreq)
     {
@@ -550,7 +550,7 @@ int zlaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     {
         xerbla_("ZLAQZ0", info, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize Q and Z */
     if (iwantq == 3)
@@ -830,6 +830,6 @@ L80:
     zhgeqz_(wants, wantq, wantz, n, ilo, ihi, &a[a_offset], lda, &b[b_offset], ldb, &alpha[1], &beta[1], &q[q_offset], ldq, &z__[z_offset], ldz, &work[1], lwork, &rwork[1], &norm_info__);
     *info = norm_info__;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* zlaqz0_ */

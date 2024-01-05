@@ -142,7 +142,7 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, doublereal *c__, doublereal *tol, doublereal *d__, integer *in, integer *info)
+void dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, doublereal *c__, doublereal *tol, doublereal *d__, integer *in, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlagtf inputs: n %" FLA_IS "",*n);
@@ -189,12 +189,12 @@ int dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, double
         i__1 = -(*info);
         xerbla_("DLAGTF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     a[1] -= *lambda;
     in[*n] = 0;
@@ -205,7 +205,7 @@ int dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, double
             in[1] = 1;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     eps = dlamch_("Epsilon");
     tl = fla_max(*tol,eps);
@@ -280,7 +280,7 @@ int dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, double
         in[*n] = *n;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAGTF */
 }
 /* dlagtf_ */

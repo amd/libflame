@@ -256,7 +256,7 @@ and if */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-int slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *b, integer *ldb, real *bx, integer *ldbx, real * u, integer *ldu, real *vt, integer *k, real *difl, real *difr, real * z__, real *poles, integer *givptr, integer *givcol, integer *ldgcol, integer *perm, real *givnum, real *c__, real *s, real *work, integer * iwork, integer *info)
+void slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *b, integer *ldb, real *bx, integer *ldbx, real * u, integer *ldu, real *vt, integer *k, real *difl, real *difr, real * z__, real *poles, integer *givptr, integer *givcol, integer *ldgcol, integer *perm, real *givnum, real *c__, real *s, real *work, integer * iwork, integer *info)
 {
     /* System generated locals */
     integer givcol_dim1, givcol_offset, perm_dim1, perm_offset, b_dim1, b_offset, bx_dim1, bx_offset, difl_dim1, difl_offset, difr_dim1, difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, u_dim1, u_offset, vt_dim1, vt_offset, z_dim1, z_offset, i__1, i__2;
@@ -265,10 +265,10 @@ int slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *b
     /* Local variables */
     integer i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1, nlvl, sqre, inode, ndiml;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer ndimr;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), slals0_(integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *), slals0_(integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -364,7 +364,7 @@ int slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *b
     {
         i__1 = -(*info);
         xerbla_("SLALSA", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Book-keeping and setting up the computation tree. */
     inode = 1;
@@ -530,7 +530,7 @@ L50: /* First now go through the right singular vector matrices of all */
         /* L80: */
     }
 L90:
-    return 0;
+    return;
     /* End of SLALSA */
 }
 /* slalsa_ */

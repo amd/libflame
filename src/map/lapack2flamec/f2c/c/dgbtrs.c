@@ -128,7 +128,7 @@ for 1 <= i <= N, row i of the matrix was */
 /* > \ingroup doubleGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, doublereal *ab, integer *ldab, integer *ipiv, doublereal *b, integer *ldb, integer *info)
+void dgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, doublereal *ab, integer *ldab, integer *ipiv, doublereal *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgbtrs inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*trans, *n, *kl, *ku, *nrhs, *ldab, *ldb);
@@ -137,10 +137,10 @@ int dgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, d
     /* Local variables */
     integer i__, j, l, kd, lm;
     extern /* Subroutine */
-    int dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dtbsv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dtbsv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     logical lnoti;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -210,13 +210,13 @@ int dgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, d
         i__1 = -(*info);
         xerbla_("DGBTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     kd = *ku + *kl + 1;
     lnoti = *kl > 0;
@@ -294,7 +294,7 @@ int dgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, d
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGBTRS */
 }
 /* dgbtrs_ */

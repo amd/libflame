@@ -174,7 +174,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real *work, integer *lwork, integer *info)
+void ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -190,10 +190,10 @@ int ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real *
     integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
-    int ssytf2_(char *, integer *, real *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ssytf2_(char *, integer *, real *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int slasyf_(char *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    void slasyf_(char *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -253,12 +253,12 @@ int ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real *
         i__1 = -(*info);
         xerbla_("SSYTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     nbmin = 2;
     ldwork = *n;
@@ -373,7 +373,7 @@ L20: /* If K > N, exit from loop */
 L40:
     work[1] = (real) lwkopt;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTRF */
 }
 /* ssytrf_ */

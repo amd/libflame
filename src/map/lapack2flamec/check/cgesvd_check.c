@@ -14,7 +14,7 @@ int cgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, scomplex *a, i
     integer ierr, lwork_cgebrd__, lwork_cgelqf__, lwork_cgeqrf__;
     integer minmn, wrkbl, mnthr;
     logical wntua, wntva, wntun, wntuo, wntvn, wntvo, wntus, wntvs;
-    extern int 
+    extern void 
       cgebrd_(integer*, integer*, scomplex*, integer*, float*, float*, scomplex*, scomplex*, scomplex*, integer*, integer*),
       cgelqf_(integer*, integer*, scomplex*, integer*, scomplex*, scomplex*, integer*, integer* ), 
       cgeqrf_(integer*, integer*, scomplex*, integer*, scomplex*, scomplex*, integer*, integer* ),

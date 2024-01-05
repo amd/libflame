@@ -132,7 +132,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int spbtf2_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integer *info)
+void spbtf2_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -150,10 +150,10 @@ int spbtf2_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, intege
     real ajj;
     integer kld;
     extern /* Subroutine */
-    int ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
+    void ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -206,13 +206,13 @@ int spbtf2_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, intege
         i__1 = -(*info);
         xerbla_("SPBTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Computing MAX */
     i__1 = 1;
@@ -281,11 +281,11 @@ int spbtf2_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, intege
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 L30:
     *info = j;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPBTF2 */
 }
 /* spbtf2_ */

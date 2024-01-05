@@ -67,7 +67,7 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cla_wwaddw_(integer *n, complex *x, complex *y, complex *w)
+void cla_wwaddw_(integer *n, complex *x, complex *y, complex *w)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -137,6 +137,6 @@ int cla_wwaddw_(integer *n, complex *x, complex *y, complex *w)
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* cla_wwaddw__ */

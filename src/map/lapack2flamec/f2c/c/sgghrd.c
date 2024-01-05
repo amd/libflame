@@ -204,7 +204,7 @@ LDZ >= 1 otherwise. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, real *a, integer *lda, real *b, integer *ldb, real *q, integer *ldq, real *z__, integer *ldz, integer *info)
+void sgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, real *a, integer *lda, real *b, integer *ldb, real *q, integer *ldq, real *z__, integer *ldz, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2, i__3;
@@ -215,13 +215,13 @@ int sgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, r
     real temp;
     integer jrow;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icompq;
     extern /* Subroutine */
-    int slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *);
+    void slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *);
     integer icompz;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -339,7 +339,7 @@ int sgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, r
     {
         i__1 = -(*info);
         xerbla_("SGGHRD", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Initialize Q and Z if desired. */
     if (icompq == 3)
@@ -353,7 +353,7 @@ int sgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, r
     /* Quick return if possible */
     if (*n <= 1)
     {
-        return 0;
+        return;
     }
     /* Zero out lower triangle of B */
     i__1 = *n - 1;
@@ -409,7 +409,7 @@ int sgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, r
         }
         /* L40: */
     }
-    return 0;
+    return;
     /* End of SGGHRD */
 }
 /* sgghrd_ */

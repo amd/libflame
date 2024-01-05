@@ -101,7 +101,7 @@
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, integer *ipiv, complex *e, integer *info)
+void csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, integer *ipiv, complex *e, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -170,13 +170,13 @@ int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, intege
         i__1 = -(*info);
         xerbla_("CSYCONV", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -504,7 +504,7 @@ int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, intege
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYCONV */
 }
 /* csyconv_ */

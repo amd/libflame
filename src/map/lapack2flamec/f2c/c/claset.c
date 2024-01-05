@@ -93,7 +93,7 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int claset_(char *uplo, integer *m, integer *n, complex * alpha, complex *beta, complex *a, integer *lda)
+void claset_(char *uplo, integer *m, integer *n, complex * alpha, complex *beta, complex *a, integer *lda)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -230,7 +230,7 @@ int claset_(char *uplo, integer *m, integer *n, complex * alpha, complex *beta, 
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLASET */
 }
 /* claset_ */

@@ -121,7 +121,7 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int spbcon_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *anorm, real *rcond, real *work, integer *iwork, integer *info)
+void spbcon_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *anorm, real *rcond, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -138,10 +138,10 @@ int spbcon_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *
     extern logical lsame_(char *, char *);
     integer isave[3];
     extern /* Subroutine */
-    int srscl_(integer *, real *, real *, integer *);
+    void srscl_(integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    int slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+    void slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     real scalel;
     extern real slamch_(char *);
     real scaleu;
@@ -150,7 +150,7 @@ int spbcon_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *
     extern integer isamax_(integer *, real *, integer *);
     real ainvnm;
     extern /* Subroutine */
-    int slatbs_(char *, char *, char *, char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *);
+    void slatbs_(char *, char *, char *, char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *);
     char normin[1];
     real smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -210,7 +210,7 @@ int spbcon_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *
         i__1 = -(*info);
         xerbla_("SPBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.f;
@@ -218,12 +218,12 @@ int spbcon_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (*anorm == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     smlnum = slamch_("Safe minimum");
     /* Estimate the 1-norm of the inverse. */
@@ -269,7 +269,7 @@ L10:
     }
 L20:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPBCON */
 }
 /* spbcon_ */

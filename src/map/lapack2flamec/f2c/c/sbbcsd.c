@@ -330,7 +330,7 @@ the */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, integer *m, integer *p, integer *q, real *theta, real *phi, real *u1, integer *ldu1, real *u2, integer *ldu2, real * v1t, integer *ldv1t, real *v2t, integer *ldv2t, real *b11d, real * b11e, real *b12d, real *b12e, real *b21d, real *b21e, real *b22d, real *b22e, real *work, integer *lwork, integer *info)
+void sbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, integer *m, integer *p, integer *q, real *theta, real *phi, real *u1, integer *ldu1, real *u2, integer *ldu2, real * v1t, integer *ldv1t, real *v2t, integer *ldv2t, real *b11d, real * b11e, real *b12d, real *b12e, real *b21d, real *b21e, real *b22d, real *b22e, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS ", ldv2t %" FLA_IS "",*jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t);
@@ -350,17 +350,17 @@ int sbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
     real unfl, temp;
     integer iu1cs, iu2cs;
     extern /* Subroutine */
-    int slas2_(real *, real *, real *, real *, real *) ;
+    void slas2_(real *, real *, real *, real *, real *) ;
     integer iu1sn, iu2sn;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     integer maxit;
     extern /* Subroutine */
-    int slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
+    void slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
     real dummy;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *);
+    void sswap_(integer *, real *, integer *, real *, integer *);
     integer iv1tcs, iv2tcs;
     logical wantu1, wantu2;
     integer iv1tsn, iv2tsn;
@@ -374,7 +374,7 @@ int sbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
     logical wantv1t, wantv2t;
     real b21bulge, b22bulge;
     extern /* Subroutine */
-    int slartgp_(real *, real *, real *, real *, real *), slartgs_(real *, real *, real *, real *, real *);
+    void slartgp_(real *, real *, real *, real *, real *), slartgs_(real *, real *, real *, real *, real *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -464,7 +464,7 @@ int sbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
         lworkmin = 1;
         work[1] = (real) lworkmin;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute workspace */
     if (*info == 0)
@@ -490,12 +490,12 @@ int sbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
         i__1 = -(*info);
         xerbla_("SBBCSD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = slamch_("Epsilon");
@@ -605,7 +605,7 @@ int sbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
                 }
             }
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         iter = iter + imax - imin;
         /* Compute shifts */
@@ -1303,7 +1303,7 @@ int sbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SBBCSD */
 }
 /* sbbcsd_ */

@@ -191,7 +191,7 @@ elements 1:ILO-1 and i+1:N of W */
 /* > \ingroup complexGEeigen */
 /* ===================================================================== */
 /* Subroutine */
-int cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, integer *lda, integer *sdim, complex *w, complex *vs, integer *ldvs, complex *work, integer *lwork, real *rwork, logical * bwork, integer *info)
+void cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, integer *lda, integer *sdim, complex *w, complex *vs, integer *ldvs, complex *work, integer *lwork, real *rwork, logical * bwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cgees inputs: jobvs %c, sort %c, n %" FLA_IS ", lda %" FLA_IS ", ldvs %" FLA_IS "",*jobvs, *sort, *n, *lda, *ldvs);
@@ -209,19 +209,19 @@ int cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, intege
     integer ierr, itau, iwrk, icond, ieval;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), cgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, complex *, integer *, integer *), cgebal_(char *, integer *, complex *, integer *, integer *, integer *, real *, integer *), slabad_(real *, real *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), cgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, complex *, integer *, integer *), cgebal_(char *, integer *, complex *, integer *, integer *, integer *, real *, integer *), slabad_(real *, real *);
     logical scalea;
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     real cscale;
     extern /* Subroutine */
-    int cgehrd_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
+    void cgehrd_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
     extern /* Subroutine */
-    int chseqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), cunghr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), ctrsen_(char *, char *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, integer *, integer *);
+    void chseqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), cunghr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), ctrsen_(char *, char *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, integer *, integer *);
     integer minwrk, maxwrk;
     real smlnum;
     integer hswork;
@@ -334,19 +334,19 @@ int cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, intege
         i__1 = -(*info);
         xerbla_("CGEES ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         *sdim = 0;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = slamch_("P");
@@ -443,7 +443,7 @@ int cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, intege
     work[1].r = (real) maxwrk;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CGEES */
 }
 /* cgees_ */

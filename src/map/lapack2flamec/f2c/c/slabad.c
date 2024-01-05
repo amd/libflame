@@ -60,7 +60,7 @@
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slabad_(real *small_val, real *large)
+void slabad_(real *small_val, real *large)
 {
     /* Builtin functions */
     double r_lg10(real *), sqrt(doublereal);
@@ -81,7 +81,7 @@ int slabad_(real *small_val, real *large)
         *small_val = sqrt(*small_val);
         *large = sqrt(*large);
     }
-    return 0;
+    return;
     /* End of SLABAD */
 }
 /* slabad_ */

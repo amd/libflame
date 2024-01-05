@@ -175,7 +175,7 @@ static complex c_b16 =
 /* > \ingroup complexPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cptrfs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, real *df, complex *ef, complex *b, integer *ldb, complex *x, integer *ldx, real *ferr, real *berr, complex *work, real *rwork, integer *info)
+void cptrfs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, real *df, complex *ef, complex *b, integer *ldb, complex *x, integer *ldx, real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -203,7 +203,7 @@ int cptrfs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, real *
     real eps, safe1, safe2;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     integer count;
     logical upper;
     extern real slamch_(char *);
@@ -213,7 +213,7 @@ int cptrfs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, real *
     extern integer isamax_(integer *, real *, integer *);
     real lstres;
     extern /* Subroutine */
-    int cpttrs_(char *, integer *, integer *, real *, complex *, complex *, integer *, integer *);
+    void cpttrs_(char *, integer *, integer *, real *, complex *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -282,7 +282,7 @@ int cptrfs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, real *
         i__1 = -(*info);
         xerbla_("CPTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
@@ -297,7 +297,7 @@ int cptrfs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, real *
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* NZ = maximum number of nonzero elements in each row of A, plus 1 */
     nz = 4;
@@ -662,7 +662,7 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* L100: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPTRFS */
 }
 /* cptrfs_ */

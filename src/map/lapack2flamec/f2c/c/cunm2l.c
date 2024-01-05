@@ -148,7 +148,7 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cunm2l_(char *side, char *trans, integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *info)
+void cunm2l_(char *side, char *trans, integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -167,7 +167,7 @@ int cunm2l_(char *side, char *trans, integer *m, integer *n, integer *k, complex
     logical left;
     complex taui;
     extern /* Subroutine */
-    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
+    void clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -248,13 +248,13 @@ int cunm2l_(char *side, char *trans, integer *m, integer *n, integer *k, complex
         i__1 = -(*info);
         xerbla_("CUNM2L", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0 || *k == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (left && notran || ! left && ! notran)
     {
@@ -318,7 +318,7 @@ int cunm2l_(char *side, char *trans, integer *m, integer *n, integer *k, complex
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CUNM2L */
 }
 /* cunm2l_ */

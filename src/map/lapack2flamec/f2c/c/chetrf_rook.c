@@ -202,7 +202,7 @@ the routine */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int chetrf_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work, integer *lwork, integer * info)
+void chetrf_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work, integer *lwork, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -219,10 +219,10 @@ int chetrf_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv
     /* Local variables */
     integer j, k, kb, nb;
     extern /* Subroutine */
-    int chetf2_rook_(char *, integer *, complex *, integer *, integer *, integer *);
+    void chetf2_rook_(char *, integer *, complex *, integer *, integer *, integer *);
     integer iws;
     extern /* Subroutine */
-    int clahef_rook_(char *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+    void clahef_rook_(char *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     extern logical lsame_(char *, char *);
     integer nbmin, iinfo;
     logical upper;
@@ -292,12 +292,12 @@ int chetrf_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv
         i__1 = -(*info);
         xerbla_("CHETRF_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     nbmin = 2;
     ldwork = *n;
@@ -414,7 +414,7 @@ L40:
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHETRF_ROOK */
 }
 /* chetrf_rook__ */

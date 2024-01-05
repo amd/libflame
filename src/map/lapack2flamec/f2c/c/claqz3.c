@@ -201,7 +201,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int claqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi, integer *nshifts, integer * nblock_desired__, complex *alpha, complex *beta, complex *a, integer * lda, complex *b, integer *ldb, complex *q, integer *ldq, complex *z__, integer *ldz, complex *qc, integer *ldqc, complex *zc, integer *ldzc, complex *work, integer *lwork, integer *info)
+void claqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi, integer *nshifts, integer * nblock_desired__, complex *alpha, complex *beta, complex *a, integer * lda, complex *b, integer *ldb, complex *q, integer *ldq, complex *z__, integer *ldz, complex *qc, integer *ldqc, complex *zc, integer *ldzc, complex *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, qc_dim1, qc_offset, zc_dim1, zc_offset, i__1, i__2, i__3, i__4, i__5;
@@ -216,22 +216,22 @@ int claqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     integer np, ns;
     complex temp;
     extern /* Subroutine */
-    int crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
+    void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
     integer npos;
     complex temp2, temp3;
     real scale;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), claqz1_(logical *, logical *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, complex *, integer *, integer *, integer *, complex *, integer *), slabad_(real *, real *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), claqz1_(logical *, logical *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, complex *, integer *, integer *, integer *, complex *, integer *), slabad_(real *, real *);
     extern real slamch_(char *);
     integer nblock;
     extern /* Subroutine */
-    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clartg_(complex *, complex *, real *, complex *, complex *);
+    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clartg_(complex *, complex *, real *, complex *, complex *);
     real safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real safmax;
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
     integer ishift, istopb, swidth, istopm, sheight, istartb, istartm;
     /* Function arguments */
     /* Parameters */
@@ -271,7 +271,7 @@ int claqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         i__1 = *n * *nblock_desired__;
         work[1].r = (real) i__1;
         work[1].i = 0.f; // , expr subst
-        return 0;
+        return;
     }
     else if (*lwork < *n * *nblock_desired__)
     {
@@ -281,7 +281,7 @@ int claqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     {
         i__1 = -(*info);
         xerbla_("CLAQZ3", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Executable statements */
     /* Get machine constants */
@@ -290,7 +290,7 @@ int claqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     slabad_(&safmin, &safmax);
     if (*ilo >= *ihi)
     {
-        return 0;
+        return;
     }
     if (*ilschur)
     {
@@ -549,6 +549,6 @@ int claqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         i__1 = ns + 1;
         clacpy_("ALL", n, &i__1, &work[1], n, &z__[(*ihi - ns) * z_dim1 + 1], ldz);
     }
-    return 0;
+    return;
 }
 /* claqz3_ */

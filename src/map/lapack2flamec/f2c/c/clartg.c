@@ -89,7 +89,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int clartg_(complex *f, complex *g, real *cs, complex *sn, complex *r__)
+void clartg_(complex *f, complex *g, real *cs, complex *sn, complex *r__)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
@@ -180,7 +180,7 @@ L10:
             sn->r = 0.f, sn->i = 0.f;
             r__->r = f->r, r__->i = f->i;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
 L20:
         --count;
@@ -228,7 +228,7 @@ L20:
             q__1.i = r__2; // , expr subst
             sn->r = q__1.r, sn->i = q__1.i;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         r__1 = fs.r;
         r__2 = fs.i;
@@ -344,7 +344,7 @@ L20:
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLARTG */
 }
 /* clartg_ */

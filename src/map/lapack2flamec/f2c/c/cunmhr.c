@@ -171,7 +171,7 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cunmhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *lwork, integer * info)
+void cunmhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *lwork, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cunmhr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *ilo, *ihi, *lda, *ldc);
@@ -190,7 +190,7 @@ int cunmhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integ
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -291,12 +291,12 @@ int cunmhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integ
         i__2 = -(*info);
         xerbla_("CUNMHR", &i__2, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0 || nh == 0)
@@ -304,7 +304,7 @@ int cunmhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integ
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (left)
     {
@@ -324,7 +324,7 @@ int cunmhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integ
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CUNMHR */
 }
 /* cunmhr_ */

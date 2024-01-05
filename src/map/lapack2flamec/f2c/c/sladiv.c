@@ -77,7 +77,7 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int sladiv_(real *a, real *b, real *c__, real *d__, real *p, real *q)
+void sladiv_(real *a, real *b, real *c__, real *d__, real *p, real *q)
 {
     /* System generated locals */
     real r__1, r__2;
@@ -85,7 +85,7 @@ int sladiv_(real *a, real *b, real *c__, real *d__, real *p, real *q)
     real s, aa, ab, bb, cc, cd, dd, be, un, ov, eps;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int sladiv1_(real *, real *, real *, real *, real *, real *);
+    void sladiv1_(real *, real *, real *, real *, real *, real *);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -155,13 +155,13 @@ int sladiv_(real *a, real *b, real *c__, real *d__, real *p, real *q)
     }
     *p *= s;
     *q *= s;
-    return 0;
+    return;
     /* End of SLADIV */
 }
 /* sladiv_ */
 /* > \ingroup realOTHERauxiliary */
 /* Subroutine */
-int sladiv1_(real *a, real *b, real *c__, real *d__, real *p, real *q)
+void sladiv1_(real *a, real *b, real *c__, real *d__, real *p, real *q)
 {
     real r__, t;
     extern real sladiv2_(real *, real *, real *, real *, real *, real *);
@@ -183,7 +183,7 @@ int sladiv1_(real *a, real *b, real *c__, real *d__, real *p, real *q)
     *p = sladiv2_(a, b, c__, d__, &r__, &t);
     *a = -(*a);
     *q = sladiv2_(b, a, c__, d__, &r__, &t);
-    return 0;
+    return;
     /* End of SLADIV1 */
 }
 /* sladiv1_ */

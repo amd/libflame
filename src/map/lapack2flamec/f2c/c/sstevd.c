@@ -154,7 +154,7 @@ i */
 /* > \ingroup realOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int sstevd_(char *jobz, integer *n, real *d__, real *e, real *z__, integer *ldz, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void sstevd_(char *jobz, integer *n, real *d__, real *e, real *z__, integer *ldz, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -171,7 +171,7 @@ int sstevd_(char *jobz, integer *n, real *d__, real *e, real *z__, integer *ldz,
     real eps, rmin, rmax, tnrm, sigma;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     integer lwmin;
     logical wantz;
     integer iscale;
@@ -181,11 +181,11 @@ int sstevd_(char *jobz, integer *n, real *d__, real *e, real *z__, integer *ldz,
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */
-    int sstedc_(char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *);
+    void sstedc_(char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *);
     integer liwmin;
     extern real slanst_(char *, integer *, real *, real *);
     extern /* Subroutine */
-    int ssterf_(integer *, real *, real *, integer *);
+    void ssterf_(integer *, real *, real *, integer *);
     real smlnum;
     logical lquery;
     /* -- LAPACK driver routine (version 3.7.0) -- */
@@ -260,18 +260,18 @@ int sstevd_(char *jobz, integer *n, real *d__, real *e, real *z__, integer *ldz,
         i__1 = -(*info);
         xerbla_("SSTEVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -280,7 +280,7 @@ int sstevd_(char *jobz, integer *n, real *d__, real *e, real *z__, integer *ldz,
             z__[z_dim1 + 1] = 1.f;
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -327,7 +327,7 @@ int sstevd_(char *jobz, integer *n, real *d__, real *e, real *z__, integer *ldz,
     work[1] = (real) lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSTEVD */
 }
 /* sstevd_ */

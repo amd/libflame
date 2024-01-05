@@ -147,7 +147,7 @@ static integer c__1 = 1;
 /* > J. Lewis, Boeing Computer Services Company */
 /* ===================================================================== */
 /* Subroutine */
-int zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *info)
+void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhptrf inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
@@ -174,13 +174,13 @@ int zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *i
     doublecomplex wkm1, wkp1;
     integer imax, jmax;
     extern /* Subroutine */
-    int zhpr_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *);
+    void zhpr_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *);
     doublereal alpha;
     extern logical lsame_(char *, char *);
     integer kstep;
     logical upper;
     extern /* Subroutine */
-    int zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlapy2_(doublereal *, doublereal *);
     doublereal absakk;
     extern /* Subroutine */
@@ -234,7 +234,7 @@ int zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *i
         i__1 = -(*info);
         xerbla_("ZHPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.) + 1.) / 8.;
@@ -880,7 +880,7 @@ L60:
     }
 L110:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHPTRF */
 }
 /* zhptrf_ */

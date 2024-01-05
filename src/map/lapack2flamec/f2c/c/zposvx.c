@@ -294,7 +294,7 @@ if EQUED = 'Y', */
 /* > \ingroup complex16POsolve */
 /* ===================================================================== */
 /* Subroutine */
-int zposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *a, integer *lda, doublecomplex *af, integer * ldaf, char *equed, doublereal *s, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer * info)
+void zposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *a, integer *lda, doublecomplex *af, integer * ldaf, char *equed, doublereal *s, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zposvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
@@ -316,13 +316,13 @@ int zposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *a
     doublereal bignum;
     extern doublereal zlanhe_(char *, char *, integer *, doublecomplex *, integer *, doublereal *);
     extern /* Subroutine */
-    int zlaqhe_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, char *);
+    void zlaqhe_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, char *);
     integer infequ;
     extern /* Subroutine */
-    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zpocon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *) ;
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zpocon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *) ;
     doublereal smlnum;
     extern /* Subroutine */
-    int zpoequ_(integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, integer *), zporfs_( char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zpotrf_(char *, integer *, doublecomplex *, integer *, integer *), zpotrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zpoequ_(integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, integer *), zporfs_( char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zpotrf_(char *, integer *, doublecomplex *, integer *, integer *), zpotrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -458,7 +458,7 @@ int zposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *a
         i__1 = -(*info);
         xerbla_("ZPOSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (equil)
     {
@@ -506,7 +506,7 @@ int zposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *a
         {
             *rcond = 0.;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -559,7 +559,7 @@ int zposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *a
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPOSVX */
 }
 /* zposvx_ */

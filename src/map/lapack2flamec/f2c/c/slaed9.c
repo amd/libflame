@@ -142,7 +142,7 @@ static integer c__1 = 1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int slaed9_(integer *k, integer *kstart, integer *kstop, integer *n, real *d__, real *q, integer *ldq, real *rho, real *dlamda, real *w, real *s, integer *lds, integer *info)
+void slaed9_(integer *k, integer *kstart, integer *kstop, integer *n, real *d__, real *q, integer *ldq, real *rho, real *dlamda, real *w, real *s, integer *lds, integer *info)
 {
     /* System generated locals */
     integer q_dim1, q_offset, s_dim1, s_offset, i__1, i__2;
@@ -154,7 +154,7 @@ int slaed9_(integer *k, integer *kstart, integer *kstop, integer *n, real *d__, 
     real temp;
     extern real snrm2_(integer *, real *, integer *);
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), slaed4_(integer *, integer *, real *, real *, real *, real *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *), slaed4_(integer *, integer *, real *, real *, real *, real *, real *, integer *);
     extern real slamc3_(real *, real *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -217,12 +217,12 @@ int slaed9_(integer *k, integer *kstart, integer *kstop, integer *n, real *d__, 
     {
         i__1 = -(*info);
         xerbla_("SLAED9", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*k == 0)
     {
-        return 0;
+        return;
     }
     /* Modify values DLAMDA(i) to make sure all DLAMDA(i)-DLAMDA(j) can */
     /* be computed with high relative accuracy (barring over/underflow). */
@@ -344,7 +344,7 @@ int slaed9_(integer *k, integer *kstart, integer *kstop, integer *n, real *d__, 
         /* L110: */
     }
 L120:
-    return 0;
+    return;
     /* End of SLAED9 */
 }
 /* slaed9_ */

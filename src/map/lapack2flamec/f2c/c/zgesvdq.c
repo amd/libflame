@@ -425,7 +425,7 @@ the routine */
 /* > \ingroup complex16GEsing */
 /* ===================================================================== */
 /* Subroutine */
-int zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *s, doublecomplex *u, integer *ldu, doublecomplex *v, integer *ldv, integer *numrank, integer *iwork, integer *liwork, doublecomplex *cwork, integer *lcwork, doublereal *rwork, integer * lrwork, integer *info)
+void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *s, doublecomplex *u, integer *ldu, doublecomplex *v, integer *ldv, integer *numrank, integer *iwork, integer *liwork, doublecomplex *cwork, integer *lcwork, doublereal *rwork, integer * lrwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgesvdq inputs: joba %c, jobp %c, jobr %c, jobu %c, jobv %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", numrank %" FLA_IS "",*joba, *jobp, *jobr, *jobu, *jobv, *m, *n, *lda, *ldu, *ldv, *numrank);
@@ -459,35 +459,35 @@ int zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
     integer lwunq;
     logical wntur, wntus, wntvr;
     extern /* Subroutine */
-    int zgeqp3_(integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublereal *, integer *);
+    void zgeqp3_(integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublereal *, integer *);
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
     integer lwsvd2, lwunq2;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     doublereal sconda;
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+    void dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     extern /* Subroutine */
-    int zgelqf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer * ), zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zgelqf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer * ), zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *);
     doublecomplex cdummy[1];
     extern /* Subroutine */
-    int zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer * ), zgesvd_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+    void zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer * ), zgesvd_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
     integer minwrk;
     logical rtrans;
     extern /* Subroutine */
-    int zlapmt_(logical *, integer *, integer *, doublecomplex *, integer *, integer *), zpocon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
+    void zlapmt_(logical *, integer *, integer *, doublecomplex *, integer *, integer *), zpocon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
     doublereal rdummy[1];
     logical lquery;
     integer lwunlq;
     extern /* Subroutine */
-    int zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
+    void zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
     integer optwrk;
     logical rowprm;
     extern /* Subroutine */
-    int zunmlq_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zunmlq_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     integer minwrk2;
     logical ascaled;
     integer optwrk2, iminwrk, rminwrk;
@@ -941,7 +941,7 @@ int zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
         i__1 = -(*info);
         xerbla_("ZGESVDQ", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
@@ -953,14 +953,14 @@ int zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
         cwork[2].i = 0.; // , expr subst
         rwork[1] = (doublereal) rminwrk;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if the matrix is void. */
     if (*m == 0 || *n == 0)
     {
         /* .. all output is void. */
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     big = dlamch_("O");
     ascaled = FALSE_;
@@ -984,7 +984,7 @@ int zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
                 i__2 = -(*info);
                 xerbla_("ZGESVDQ", &i__2, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L1904: */
         }
@@ -1051,7 +1051,7 @@ int zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
             }
             rwork[2] = -1.;
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         if (rwork[1] > big / sqrt((doublereal) (*m)))
         {
@@ -1077,7 +1077,7 @@ int zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
             i__1 = -(*info);
             xerbla_("ZGESVDQ", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         if (rtmp > big / sqrt((doublereal) (*m)))
         {
@@ -2074,7 +2074,7 @@ L4002: /* .. if numerical rank deficiency is detected, the truncated */
     /* full row rank triangular (trapezoidal) factor of A. */
     *numrank = nr;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGESVDQ */
 }
 /* zgesvdq_ */

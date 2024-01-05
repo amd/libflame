@@ -103,7 +103,7 @@ static integer c__4 = 4;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlasq2_(integer *n, doublereal *z__, integer *info)
+void dlasq2_(integer *n, doublereal *z__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasq2 inputs: n %" FLA_IS "",*n);
@@ -135,7 +135,7 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
     doublereal tempe, tempq;
     integer ttype;
     extern /* Subroutine */
-    int dlasq3_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, logical *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlasq3_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, logical *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     doublereal deemin;
     integer iwhila, iwhilb;
@@ -144,7 +144,7 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int dlasrt_(char *, integer *, doublereal *, integer *);
+    void dlasrt_(char *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -181,12 +181,12 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
         *info = -1;
         xerbla_("DLASQ2", &c__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*n == 1)
     {
@@ -197,7 +197,7 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
             xerbla_("DLASQ2", &c__2, (ftnlen)6);
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*n == 2)
     {
@@ -207,21 +207,21 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
             *info = -201;
             xerbla_("DLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else if (z__[2] < 0.)
         {
             *info = -202;
             xerbla_("DLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else if (z__[3] < 0.)
         {
             *info = -203;
             xerbla_("DLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else if (z__[3] > z__[1])
         {
@@ -249,7 +249,7 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
         z__[2] = z__[3];
         z__[6] = z__[2] + z__[1];
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check for negative data and compute sums of q's and e's. */
     z__[*n * 2] = 0.;
@@ -268,14 +268,14 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
             *info = -(k + 200);
             xerbla_("DLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else if (z__[k + 1] < 0.)
         {
             *info = -(k + 201);
             xerbla_("DLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         d__ += z__[k];
         e += z__[k + 1];
@@ -298,7 +298,7 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
         *info = -((*n << 1) + 199);
         xerbla_("DLASQ2", &c__2, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     d__ += z__[(*n << 1) - 1];
     /* Computing MAX */
@@ -320,7 +320,7 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
         dlasrt_("D", n, &z__[1], &iinfo);
         z__[(*n << 1) - 1] = d__;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     trace = d__ + e;
     /* Check for zero data. */
@@ -328,7 +328,7 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
     {
         z__[(*n << 1) - 1] = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check whether the machine is IEEE conformable. */
     ieee = ilaenv_(&c__10, "DLASQ2", "N", &c__1, &c__2, &c__3, &c__4) == 1;
@@ -474,7 +474,7 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
         {
             *info = 1;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Find last unreduced submatrix's top index I0, find QMAX and */
         /* EMIN. Find Gershgorin-type bound if Q's much greater than E's. */
@@ -683,14 +683,14 @@ L145:
             }
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
         /* end IWHILB */
 L150: /* L160: */
         ;
     }
     *info = 3;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* end IWHILA */
 L170: /* Move q's to the front. */
     i__1 = *n;
@@ -720,7 +720,7 @@ L170: /* Move q's to the front. */
     z__[(*n << 1) + 4] = (doublereal) ndiv / (doublereal) (i__1 * i__1);
     z__[(*n << 1) + 5] = nfail * 100. / (doublereal) iter;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASQ2 */
 }
 /* dlasq2_ */

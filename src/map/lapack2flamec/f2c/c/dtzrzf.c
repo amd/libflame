@@ -142,7 +142,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dtzrzf_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info)
+void dtzrzf_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
@@ -152,10 +152,10 @@ int dtzrzf_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *ta
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlarzb_( char *, char *, char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int dlarzt_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dlarzt_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer lwkmin, ldwork;
     extern /* Subroutine */
-    int dlatrz_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+    void dlatrz_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.1) -- */
@@ -225,16 +225,16 @@ int dtzrzf_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *ta
     {
         i__1 = -(*info);
         xerbla_("DTZRZF", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0)
     {
-        return 0;
+        return;
     }
     else if (*m == *n)
     {
@@ -246,7 +246,7 @@ int dtzrzf_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *ta
             tau[i__] = 0.;
             /* L10: */
         }
-        return 0;
+        return;
     }
     nbmin = 2;
     nx = 1;
@@ -328,7 +328,7 @@ int dtzrzf_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *ta
         dlatrz_(&mu, n, &i__2, &a[a_offset], lda, &tau[1], &work[1]);
     }
     work[1] = (doublereal) lwkopt;
-    return 0;
+    return;
     /* End of DTZRZF */
 }
 /* dtzrzf_ */

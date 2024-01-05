@@ -178,7 +178,7 @@ i off-diagonal elements of an intermediate */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dsyevd_(char *jobz, char *uplo, integer *n, doublereal * a, integer *lda, doublereal *w, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void dsyevd_(char *jobz, char *uplo, integer *n, doublereal * a, integer *lda, doublereal *w, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsyevd inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*jobz, *uplo, *n, *lda, *lwork, *liwork);
@@ -193,7 +193,7 @@ int dsyevd_(char *jobz, char *uplo, integer *n, doublereal * a, integer *lda, do
     doublereal anrm, rmin, rmax;
     integer lopt;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *);
     integer iinfo, lwmin, liopt;
@@ -202,7 +202,7 @@ int dsyevd_(char *jobz, char *uplo, integer *n, doublereal * a, integer *lda, do
     extern doublereal dlamch_(char *);
     integer iscale;
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dstedc_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *), dlacpy_( char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dstedc_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *), dlacpy_( char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal safmin;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
@@ -210,11 +210,11 @@ int dsyevd_(char *jobz, char *uplo, integer *n, doublereal * a, integer *lda, do
     doublereal bignum;
     integer indtau;
     extern /* Subroutine */
-    int dsterf_(integer *, doublereal *, doublereal *, integer *);
+    void dsterf_(integer *, doublereal *, doublereal *, integer *);
     extern doublereal dlansy_(char *, char *, integer *, doublereal *, integer *, doublereal *);
     integer indwrk, liwmin;
     extern /* Subroutine */
-    int dormtr_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dsytrd_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+    void dormtr_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dsytrd_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     integer llwork;
     doublereal smlnum;
     logical lquery;
@@ -311,18 +311,18 @@ int dsyevd_(char *jobz, char *uplo, integer *n, doublereal * a, integer *lda, do
         i__1 = -(*info);
         xerbla_("DSYEVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -332,7 +332,7 @@ int dsyevd_(char *jobz, char *uplo, integer *n, doublereal * a, integer *lda, do
             a[a_dim1 + 1] = 1.;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -389,7 +389,7 @@ int dsyevd_(char *jobz, char *uplo, integer *n, doublereal * a, integer *lda, do
     work[1] = (doublereal) lopt;
     iwork[1] = liopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYEVD */
 }
 /* dsyevd_ */

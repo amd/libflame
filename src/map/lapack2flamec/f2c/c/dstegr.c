@@ -243,7 +243,7 @@ the */
 /* > Christof Voemel, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-int dstegr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m, doublereal *w, doublereal *z__, integer *ldz, integer *isuppz, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void dstegr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m, doublereal *w, doublereal *z__, integer *ldz, integer *isuppz, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dstegr inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*jobz, *range, *n, *il, *iu, *ldz, *lwork, *liwork);
@@ -251,7 +251,7 @@ int dstegr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
     integer z_dim1, z_offset;
     /* Local variables */
     extern /* Subroutine */
-    int dstemr_(char *, char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, integer *, logical *, doublereal *, integer *, integer *, integer *, integer *);
+    void dstemr_(char *, char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, integer *, logical *, doublereal *, integer *, integer *, integer *, integer *);
     logical tryrac;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -283,6 +283,6 @@ int dstegr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
     dstemr_(jobz, range, n, &d__[1], &e[1], vl, vu, il, iu, m, &w[1], &z__[ z_offset], ldz, n, &isuppz[1], &tryrac, &work[1], lwork, &iwork[1], liwork, info);
     /* End of DSTEGR */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dstegr_ */

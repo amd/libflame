@@ -164,7 +164,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *t, integer * tsize, doublereal *c__, integer *ldc, doublereal *work, integer * lwork, integer *info)
+void dgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *t, integer * tsize, doublereal *c__, integer *ldc, doublereal *work, integer * lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgemqr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", tsize %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "",*side, *trans, *m, *n, *k, *lda, *tsize, *ldc, *lwork);
@@ -172,7 +172,7 @@ int dgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, doubler
     integer a_dim1, a_offset, c_dim1, c_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int dlamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dlamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer mb, nb, mn, lw;
     logical left, tran;
     extern logical lsame_(char *, char *);
@@ -181,7 +181,7 @@ int dgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, doubler
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, lquery;
     extern /* Subroutine */
-    int dgemqrt_(char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dgemqrt_(char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -275,12 +275,12 @@ int dgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, doubler
         i__1 = -(*info);
         xerbla_("DGEMQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Computing MIN */
@@ -288,7 +288,7 @@ int dgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, doubler
     if (fla_min(i__1,*k) == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Computing MAX */
     i__1 = fla_max(*m,*n);
@@ -302,7 +302,7 @@ int dgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, doubler
     }
     work[1] = (doublereal) lw;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGEMQR */
 }
 /* dgemqr_ */

@@ -203,7 +203,7 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doublereal *ca, doublereal *a, integer *lda, doublereal *d1, doublereal *d2, doublereal *b, integer *ldb, doublereal *wr, doublereal *wi, doublereal *x, integer *ldx, doublereal *scale, doublereal *xnorm, integer *info)
+void dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doublereal *ca, doublereal *a, integer *lda, doublereal *d1, doublereal *d2, doublereal *b, integer *ldb, doublereal *wr, doublereal *wi, doublereal *x, integer *ldx, doublereal *scale, doublereal *xnorm, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaln2 inputs: na %" FLA_IS ", nw %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*na, *nw, *lda, *ldb, *ldx);
@@ -241,7 +241,7 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
     doublereal bnorm, cnorm, smini;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal bignum, smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -401,7 +401,7 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
                 *xnorm = temp * bnorm;
                 *info = 1;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* Gaussian elimination with complete pivoting. */
             ur11 = crv[icmax - 1];
@@ -511,7 +511,7 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
                 *xnorm = temp * bnorm;
                 *info = 1;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* Gaussian elimination with complete pivoting. */
             ur11 = crv[icmax - 1];
@@ -637,7 +637,7 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLALN2 */
 }
 /* dlaln2_ */

@@ -182,7 +182,7 @@ LDC >= 1 if NCC = 0. */
 /* > \ingroup doubleGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integer *ku, doublereal *ab, integer *ldab, doublereal * d__, doublereal *e, doublereal *q, integer *ldq, doublereal *pt, integer *ldpt, doublereal *c__, integer *ldc, doublereal *work, integer *info)
+void dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integer *ku, doublereal *ab, integer *ldab, doublereal * d__, doublereal *e, doublereal *q, integer *ldq, doublereal *pt, integer *ldpt, doublereal *c__, integer *ldc, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgbbrd inputs: vect %c, m %" FLA_IS ", n %" FLA_IS ", ncc %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", ldq %" FLA_IS ", ldpt %" FLA_IS ", ldc %" FLA_IS "",*vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
@@ -195,13 +195,13 @@ int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
     doublereal rs;
     integer kb1, ml0, mu0, klm, kun, nrt, klu1, inca;
     extern /* Subroutine */
-    int drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
     extern logical lsame_(char *, char *);
     logical wantb, wantc;
     integer minmn;
     logical wantq;
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlargv_( integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlartv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlargv_( integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlartv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     logical wantpt;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -292,7 +292,7 @@ int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
         i__1 = -(*info);
         xerbla_("DGBBRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize Q and P**T to the unit matrix, if needed */
     if (wantq)
@@ -307,7 +307,7 @@ int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     minmn = fla_min(*m,*n);
     if (*kl + *ku > 1)
@@ -642,7 +642,7 @@ int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGBBRD */
 }
 /* dgbbrd_ */

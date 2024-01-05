@@ -312,7 +312,7 @@ the */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e, doublereal *vl, doublereal *vu, integer *il, integer *iu, integer *m, doublereal *w, doublereal *z__, integer *ldz, integer *nzc, integer *isuppz, logical *tryrac, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e, doublereal *vl, doublereal *vu, integer *il, integer *iu, integer *m, doublereal *w, doublereal *z__, integer *ldz, integer *nzc, integer *isuppz, logical *tryrac, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dstemr inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS ", nzc %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*jobz, *range, *n, *il, *iu, *ldz, *nzc, *lwork, *liwork);
@@ -335,21 +335,21 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
     integer itmp;
     doublereal tnrm;
     extern /* Subroutine */
-    int dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     integer inde2, itmp2;
     doublereal rtol1, rtol2;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal scale;
     integer indgp;
     extern logical lsame_(char *, char *);
     integer iinfo, iindw, ilast;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer lwmin;
     logical wantz;
     extern /* Subroutine */
-    int dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     logical alleig;
     integer ibegin;
@@ -357,16 +357,16 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
     integer iindbl;
     logical valeig;
     extern /* Subroutine */
-    int dlarrc_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *), dlarre_(char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+    void dlarrc_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *), dlarre_(char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     integer wbegin;
     doublereal safmin;
     extern /* Subroutine */
-    int dlarrj_(integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlarrj_(integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     integer inderr, iindwk, indgrs, offset;
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlarrr_(integer *, doublereal *, doublereal *, integer *), dlarrv_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlasrt_(char *, integer *, doublereal *, integer *);
+    void dlarrr_(integer *, doublereal *, doublereal *, integer *), dlarrv_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlasrt_(char *, integer *, doublereal *, integer *);
     doublereal thresh;
     integer iinspl, ifirst, indwrk, liwmin, nzcmin;
     doublereal pivmin;
@@ -527,19 +527,19 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
         i__1 = -(*info);
         xerbla_("DSTEMR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery || zquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Handle N = 0, 1, and 2 cases immediately */
     *m = 0;
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -563,7 +563,7 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
             isuppz[2] = 1;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 2)
     {
@@ -746,7 +746,7 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
         {
             *info = f2c_abs(iinfo) + 10;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Note that if RANGE .NE. 'V', DLARRE computes bounds on the desired */
         /* part of the spectrum. All desired eigenvalues are contained in */
@@ -760,7 +760,7 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
             {
                 *info = f2c_abs(iinfo) + 20;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
         else
@@ -838,7 +838,7 @@ L39:
             {
                 *info = 3;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
         else
@@ -884,7 +884,7 @@ L39:
     work[1] = (doublereal) lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSTEMR */
 }
 /* dstemr_ */

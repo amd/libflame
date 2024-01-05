@@ -44,7 +44,7 @@ extern int cgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, scomple
 extern int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, integer *lda, double *s, dcomplex *u, integer *ldu, dcomplex *vt, integer *ldvt, dcomplex *work, integer *lwork, double *rwork, integer *info);
 
 #define LAPACK_gesvd_real(prefix)                                       \
-  int F77_ ## prefix ## gesvd( char* jobu,                              \
+  void F77_ ## prefix ## gesvd( char* jobu,                              \
                                char* jobv,                              \
                                integer*  m,                                 \
                                integer*  n,                                 \
@@ -56,7 +56,7 @@ extern int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomple
                                integer* info )
 
 #define LAPACK_gesvd_complex(prefix)                                    \
-  int F77_ ## prefix ## gesvd( char* jobu,                              \
+  void F77_ ## prefix ## gesvd( char* jobu,                              \
                                char* jobv,                              \
                                integer*  m,                                 \
                                integer*  n,                                 \
@@ -148,7 +148,7 @@ LAPACK_gesvd_real(s)
       fla_error = *info;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
         LAPACK_RETURN_CHECK_VAR1(sgesvd_check(jobu, jobv,
@@ -167,7 +167,7 @@ LAPACK_gesvd_real(s)
           fla_error = e_val;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #endif
 }
 
@@ -187,7 +187,7 @@ LAPACK_gesvd_real(d)
       fla_error = *info;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
        LAPACK_RETURN_CHECK_VAR1( dgesvd_check (  jobu, jobv,
@@ -207,7 +207,7 @@ LAPACK_gesvd_real(d)
       fla_error = e_val;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #endif
 }
 
@@ -235,7 +235,7 @@ LAPACK_gesvd_complex(c)
       fla_error = e_val;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_gesvd_complex(z)
 {
@@ -260,7 +260,7 @@ LAPACK_gesvd_complex(z)
       fla_error = e_val;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 

@@ -281,7 +281,7 @@ IPIV(i) = i indicates */
 /* > \ingroup realGTsolve */
 /* ===================================================================== */
 /* Subroutine */
-int sgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, real *dl, real *d__, real *du, real *dlf, real *df, real *duf, real *du2, integer *ipiv, real *b, integer *ldb, real *x, integer * ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
+void sgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, real *dl, real *d__, real *du, real *dlf, real *df, real *duf, real *du2, integer *ipiv, real *b, integer *ldb, real *x, integer * ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -296,17 +296,17 @@ int sgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, real *dl, real 
     extern logical lsame_(char *, char *);
     real anorm;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern real slangt_(char *, integer *, real *, real *, real *);
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), sgtcon_(char *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *, integer *);
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), sgtcon_(char *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *, integer *);
     logical notran;
     extern /* Subroutine */
-    int sgtrfs_(char *, integer *, integer *, real *, real *, real *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), sgttrf_(integer *, real *, real *, real *, real *, integer *, integer *), sgttrs_(char *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *, integer *);
+    void sgtrfs_(char *, integer *, integer *, real *, real *, real *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), sgttrf_(integer *, real *, real *, real *, real *, integer *, integer *), sgttrs_(char *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -379,7 +379,7 @@ int sgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, real *dl, real 
         i__1 = -(*info);
         xerbla_("SGTSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (nofact)
     {
@@ -398,7 +398,7 @@ int sgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, real *dl, real 
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -425,7 +425,7 @@ int sgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, real *dl, real 
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SGTSVX */
 }
 /* sgtsvx_ */

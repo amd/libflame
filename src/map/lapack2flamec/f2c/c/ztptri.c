@@ -113,7 +113,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *info)
+void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztptri inputs: uplo %c, diag %c, n %" FLA_IS "",*uplo, *diag, *n);
@@ -127,10 +127,10 @@ int ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *info
     doublecomplex ajj;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer jclast;
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -176,7 +176,7 @@ int ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *info
         i__1 = -(*info);
         xerbla_("ZTPTRI", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check for singularity if non-unit. */
     if (nounit)
@@ -194,7 +194,7 @@ int ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *info
                 if (ap[i__2].r == 0. && ap[i__2].i == 0.)
                 {
     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 /* L10: */
             }
@@ -211,7 +211,7 @@ int ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *info
                 if (ap[i__2].r == 0. && ap[i__2].i == 0.)
                 {
     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 jj = jj + *n - *info + 1;
                 /* L20: */
@@ -297,7 +297,7 @@ int ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *info
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTPTRI */
 }
 /* ztptri_ */

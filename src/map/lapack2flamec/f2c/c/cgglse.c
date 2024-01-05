@@ -175,7 +175,7 @@ the least squares solution could not */
 /* > \ingroup complexOTHERsolve */
 /* ===================================================================== */
 /* Subroutine */
-int cgglse_(integer *m, integer *n, integer *p, complex *a, integer *lda, complex *b, integer *ldb, complex *c__, complex *d__, complex *x, complex *work, integer *lwork, integer *info)
+void cgglse_(integer *m, integer *n, integer *p, complex *a, integer *lda, complex *b, integer *ldb, complex *c__, complex *d__, complex *x, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
@@ -183,15 +183,15 @@ int cgglse_(integer *m, integer *n, integer *p, complex *a, integer *lda, comple
     /* Local variables */
     integer nb, mn, nr, nb1, nb2, nb3, nb4, lopt;
     extern /* Subroutine */
-    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), cggrqf_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, complex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), cggrqf_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, complex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkmin;
     extern /* Subroutine */
-    int cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), cunmrq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), cunmrq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int ctrtrs_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void ctrtrs_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -280,18 +280,18 @@ int cgglse_(integer *m, integer *n, integer *p, complex *a, integer *lda, comple
         i__1 = -(*info);
         xerbla_("CGGLSE", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the GRQ factorization of matrices B and A: */
     /* B*Q**H = ( 0 T12 ) P Z**H*A*Q**H = ( R11 R12 ) N-P */
@@ -321,7 +321,7 @@ int cgglse_(integer *m, integer *n, integer *p, complex *a, integer *lda, comple
         {
             *info = 1;
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Put the solution in X */
         ccopy_(p, &d__[1], &c__1, &x[*n - *p + 1], &c__1);
@@ -341,7 +341,7 @@ int cgglse_(integer *m, integer *n, integer *p, complex *a, integer *lda, comple
         {
             *info = 2;
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Put the solutions in X */
         i__1 = *n - *p;
@@ -381,7 +381,7 @@ int cgglse_(integer *m, integer *n, integer *p, complex *a, integer *lda, comple
     work[1].r = (real) i__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CGGLSE */
 }
 /* cgglse_ */

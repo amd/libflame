@@ -222,7 +222,7 @@ the routine */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int ssygv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, real *a, integer *lda, real *b, integer *ldb, real *w, real *work, integer *lwork, integer *info)
+void ssygv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, real *a, integer *lda, real *b, integer *ldb, real *w, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -236,20 +236,20 @@ int ssygv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, real *a, i
     integer ib, kd, neig;
     extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int ssyev_2stage_(char *, char *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    void ssyev_2stage_(char *, char *, integer *, real *, integer *, real *, real *, integer *, integer *);
     extern logical lsame_(char *, char *);
     integer lhtrd, lwmin;
     char trans[1];
     logical upper;
     integer lwtrd;
     extern /* Subroutine */
-    int strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * );
+    void strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * );
     logical wantz;
     extern /* Subroutine */
-    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len), spotrf_(char *, integer *, real *, integer *, integer *);
+    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len), spotrf_(char *, integer *, real *, integer *, integer *);
     logical lquery;
     extern /* Subroutine */
-    int ssygst_(integer *, char *, integer *, real *, integer *, real *, integer *, integer *);
+    void ssygst_(integer *, char *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -327,18 +327,18 @@ int ssygv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, real *a, i
         i__1 = -(*info);
         xerbla_("SSYGV_2STAGE ", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of B. */
     spotrf_(uplo, n, &b[b_offset], ldb, info);
@@ -346,7 +346,7 @@ int ssygv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, real *a, i
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     ssygst_(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
@@ -392,7 +392,7 @@ int ssygv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, real *a, i
     }
     work[1] = (real) lwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYGV_2STAGE */
 }
 /* ssygv_2stage__ */

@@ -238,7 +238,7 @@ if */
 /* > \ingroup complex16GEeigen */
 /* ===================================================================== */
 /* Subroutine */
-int zgeesx_(char *jobvs, char *sort, L_fpz1 select, char * sense, integer *n, doublecomplex *a, integer *lda, integer *sdim, doublecomplex *w, doublecomplex *vs, integer *ldvs, doublereal * rconde, doublereal *rcondv, doublecomplex *work, integer *lwork, doublereal *rwork, logical *bwork, integer *info)
+void zgeesx_(char *jobvs, char *sort, L_fpz1 select, char * sense, integer *n, doublecomplex *a, integer *lda, integer *sdim, doublecomplex *w, doublecomplex *vs, integer *ldvs, doublereal * rconde, doublereal *rcondv, doublecomplex *work, integer *lwork, doublereal *rwork, logical *bwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgeesx inputs: jobvs %c, sort %c, sense %c, n %" FLA_IS ", lda %" FLA_IS ", sdim %" FLA_IS ", ldvs %" FLA_IS "",*jobvs, *sort, *sense, *n, *lda, *sdim, *ldvs);
@@ -254,31 +254,31 @@ int zgeesx_(char *jobvs, char *sort, L_fpz1 select, char * sense, integer *n, do
     integer ierr, itau, iwrk, lwrk, icond, ieval;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
     logical scalea;
     extern doublereal dlamch_(char *);
     doublereal cscale;
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), zgebak_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublecomplex *, integer *, integer *), zgebal_(char *, integer *, doublecomplex *, integer *, integer *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), zgebak_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublecomplex *, integer *, integer *), zgebal_(char *, integer *, doublecomplex *, integer *, integer *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     doublereal bignum;
     extern /* Subroutine */
-    int zgehrd_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *), zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zgehrd_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *), zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *);
     logical wantsb, wantse;
     extern /* Subroutine */
-    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer minwrk, maxwrk;
     logical wantsn;
     doublereal smlnum;
     extern /* Subroutine */
-    int zhseqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zhseqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     integer hswork;
     extern /* Subroutine */
-    int zunghr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
+    void zunghr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
     logical wantst, lquery, wantsv, wantvs;
     extern /* Subroutine */
-    int ztrsen_(char *, char *, logical *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, integer *);
+    void ztrsen_(char *, char *, logical *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -408,19 +408,19 @@ int zgeesx_(char *jobvs, char *sort, L_fpz1 select, char * sense, integer *n, do
         i__1 = -(*info);
         xerbla_("ZGEESX", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         *sdim = 0;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = dlamch_("P");
@@ -537,7 +537,7 @@ int zgeesx_(char *jobvs, char *sort, L_fpz1 select, char * sense, integer *n, do
     work[1].r = (doublereal) maxwrk;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGEESX */
 }
 /* zgeesx_ */

@@ -110,7 +110,7 @@ static real c_b16 = -1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int spptrf_(char *uplo, integer *n, real *ap, integer *info)
+void spptrf_(char *uplo, integer *n, real *ap, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -128,13 +128,13 @@ int spptrf_(char *uplo, integer *n, real *ap, integer *info)
     real ajj;
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     extern /* Subroutine */
-    int sspr_(char *, integer *, real *, real *, integer *, real *);
+    void sspr_(char *, integer *, real *, real *, integer *, real *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    int stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -174,13 +174,13 @@ int spptrf_(char *uplo, integer *n, real *ap, integer *info)
         i__1 = -(*info);
         xerbla_("SPPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -248,7 +248,7 @@ L30:
     *info = j;
 L40:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPPTRF */
 }
 /* spptrf_ */

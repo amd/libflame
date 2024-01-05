@@ -79,7 +79,7 @@ E(N) is set to ZERO. */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int dlarrr_(integer *n, doublereal *d__, doublereal *e, integer *info)
+void dlarrr_(integer *n, doublereal *d__, doublereal *e, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarrr inputs: n %" FLA_IS "",*n);
@@ -122,7 +122,7 @@ int dlarrr_(integer *n, doublereal *d__, doublereal *e, integer *info)
     {
         *info = 0;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* As a default, do NOT go for relative-accuracy preserving computations. */
     *info = 1;
@@ -187,7 +187,7 @@ L11:
     {
         *info = 0;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else
     {
@@ -201,7 +201,7 @@ L11:
     /* of the eigenvector computation, the flip needs to be applied */
     /* to the computed eigenvectors (and the support) */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* END OF DLARRR */
 }
 /* dlarrr_ */

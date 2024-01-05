@@ -152,7 +152,7 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ssfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *alpha, real *a, integer *lda, real *beta, real * c__)
+void ssfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *alpha, real *a, integer *lda, real *beta, real * c__)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -167,11 +167,11 @@ int ssfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *
     logical normaltransr;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer nrowa;
     logical lower;
     extern /* Subroutine */
-    int ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd, notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -241,7 +241,7 @@ int ssfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *
         i__1 = -info;
         xerbla_("SSFRK ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     /* The quick return case: ((ALPHA.EQ.0).AND.(BETA.NE.ZERO)) is not */
@@ -249,7 +249,7 @@ int ssfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *
     if (*n == 0 || (*alpha == 0.f || *k == 0) && *beta == 1.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*alpha == 0.f && *beta == 0.f)
     {
@@ -261,7 +261,7 @@ int ssfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *
             c__[j] = 0.f;
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* C is N-by-N. */
     /* If N is odd, set NISODD = .TRUE., and N1 and N2. */
@@ -466,7 +466,7 @@ int ssfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSFRK */
 }
 /* ssfrk_ */

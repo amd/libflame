@@ -165,7 +165,7 @@ VR is set to the */
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ldh, real *wr, real *wi, real *vr, real *vi, real *b, integer *ldb, real *work, real *eps3, real *smlnum, real *bignum, integer *info)
+void slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ldh, real *wr, real *wi, real *vr, real *vi, real *b, integer *ldb, real *work, real *eps3, real *smlnum, real *bignum, integer *info)
 {
     /* System generated locals */
     integer b_dim1, b_offset, h_dim1, h_offset, i__1, i__2, i__3, i__4;
@@ -182,7 +182,7 @@ int slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ld
     extern real snrm2_(integer *, real *, integer *);
     real scale;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     char trans[1];
     real vcrit;
     extern real sasum_(integer *, real *, integer *);
@@ -191,11 +191,11 @@ int slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ld
     real absbii, absbjj;
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int sladiv_(real *, real *, real *, real *, real *, real *);
+    void sladiv_(real *, real *, real *, real *, real *, real *);
     char normin[1];
     real nrmsml;
     extern /* Subroutine */
-    int slatrs_(char *, char *, char *, char *, integer *, real *, integer *, real *, real *, real *, integer *);
+    void slatrs_(char *, char *, char *, char *, integer *, real *, integer *, real *, real *, real *, integer *);
     real growto;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -750,7 +750,7 @@ L280: /* Normalize eigenvector. */
         r__1 = 1.f / vnorm;
         sscal_(n, &r__1, &vi[1], &c__1);
     }
-    return 0;
+    return;
     /* End of SLAEIN */
 }
 /* slaein_ */

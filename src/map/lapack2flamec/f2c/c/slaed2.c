@@ -203,7 +203,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *ldq, integer *indxq, real *rho, real *z__, real * dlamda, real *w, real *q2, integer *indx, integer *indxc, integer * indxp, integer *coltyp, integer *info)
+void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *ldq, integer *indxq, real *rho, real *z__, real * dlamda, real *w, real *q2, integer *indx, integer *indxc, integer * indxp, integer *coltyp, integer *info)
 {
     /* System generated locals */
     integer q_dim1, q_offset, i__1, i__2;
@@ -218,13 +218,13 @@ int slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *ld
     real eps, tau, tol;
     integer psm[4], imax, jmax, ctot[4];
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *), sscal_(integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer * );
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *), sscal_(integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer * );
     extern real slapy2_(real *, real *), slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int slamrg_(integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void slamrg_(integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -287,12 +287,12 @@ int slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *ld
     {
         i__1 = -(*info);
         xerbla_("SLAED2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     n2 = *n - *n1;
     n1p1 = *n1 + 1;
@@ -611,7 +611,7 @@ L100: /* Record the last eigenvalue. */
         /* L180: */
     }
 L190:
-    return 0;
+    return;
     /* End of SLAED2 */
 }
 /* slaed2_ */

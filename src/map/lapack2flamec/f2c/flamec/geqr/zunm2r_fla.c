@@ -148,7 +148,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zunm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *info)
+void zunm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3;
@@ -162,7 +162,7 @@ int zunm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, doub
     doublecomplex taui;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -239,12 +239,12 @@ int zunm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, doub
     {
         i__1 = -(*info);
         xerbla_("ZUNM2R", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0 || *k == 0)
     {
-        return 0;
+        return;
     }
     if (left && ! notran || ! left && notran)
     {
@@ -311,7 +311,7 @@ int zunm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, doub
         a[i__3].i = aii.i; // , expr subst
         /* L10: */
     }
-    return 0;
+    return;
     /* End of ZUNM2R */
 }
 /* zunm2r_ */

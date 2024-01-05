@@ -70,13 +70,13 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int drscl_(integer *n, doublereal *sa, doublereal *sx, integer *incx)
+void drscl_(integer *n, doublereal *sa, doublereal *sx, integer *incx)
 {
     doublereal mul, cden;
     logical done;
     doublereal cnum, cden1, cnum1;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dlabad_(doublereal *, doublereal *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *), dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     doublereal bignum, smlnum;
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
@@ -109,7 +109,7 @@ int drscl_(integer *n, doublereal *sa, doublereal *sx, integer *incx)
     /* Function Body */
     if (*n <= 0)
     {
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = dlamch_("S");
@@ -148,7 +148,7 @@ L10:
         goto L10;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DRSCL */
 }
 /* drscl_ */

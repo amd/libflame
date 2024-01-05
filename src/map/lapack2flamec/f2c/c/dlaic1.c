@@ -123,7 +123,7 @@ static doublereal c_b5 = 1.;
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublereal *w, doublereal *gamma, doublereal * sestpr, doublereal *s, doublereal *c__)
+void dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublereal *w, doublereal *gamma, doublereal * sestpr, doublereal *s, doublereal *c__)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaic1 inputs: job %" FLA_IS ", j %" FLA_IS "",*job, *j);
@@ -187,7 +187,7 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
                 *sestpr = s1 * tmp;
             }
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else if (absgam <= eps * absest)
         {
@@ -198,7 +198,7 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
             s2 = absalp / tmp;
             *sestpr = tmp * sqrt(s1 * s1 + s2 * s2);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else if (absalp <= eps * absest)
         {
@@ -217,7 +217,7 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
                 *sestpr = s1;
             }
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else if (absest <= eps * absalp || absest <= eps * absgam)
         {
@@ -240,7 +240,7 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
                 *c__ = d_sign(&c_b5, gamma) / *c__;
             }
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else
         {
@@ -264,7 +264,7 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
             *c__ = cosine / tmp;
             *sestpr = sqrt(t + 1.) * absest;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     else if (*job == 2)
@@ -294,7 +294,7 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
             *s /= tmp;
             *c__ /= tmp;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else if (absgam <= eps * absest)
         {
@@ -302,7 +302,7 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
             *c__ = 1.;
             *sestpr = absgam;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else if (absalp <= eps * absest)
         {
@@ -321,7 +321,7 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
                 *sestpr = s2;
             }
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else if (absest <= eps * absalp || absest <= eps * absgam)
         {
@@ -344,7 +344,7 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
                 *s = -d_sign(&c_b5, gamma) / *s;
             }
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else
         {
@@ -388,11 +388,11 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
             *s = sine / tmp;
             *c__ = cosine / tmp;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAIC1 */
 }
 /* dlaic1_ */

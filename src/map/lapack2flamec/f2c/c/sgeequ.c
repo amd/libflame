@@ -124,7 +124,7 @@
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sgeequ_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
+void sgeequ_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -188,7 +188,7 @@ int sgeequ_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__,
         i__1 = -(*info);
         xerbla_("SGEEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
@@ -197,7 +197,7 @@ int sgeequ_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__,
         *colcnd = 1.f;
         *amax = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     smlnum = slamch_("S");
@@ -261,7 +261,7 @@ int sgeequ_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__,
             {
                 *info = i__;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L50: */
         }
@@ -343,7 +343,7 @@ int sgeequ_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__,
             {
                 *info = *m + j;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L110: */
         }
@@ -367,7 +367,7 @@ int sgeequ_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__,
         *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SGEEQU */
 }
 /* sgeequ_ */

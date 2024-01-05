@@ -399,7 +399,7 @@ i+1}
 /* > \ingroup complexGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cla_gerfsx_extended_(integer *prec_type__, integer * trans_type__, integer *n, integer *nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer *ipiv, logical *colequ, real *c__, complex *b, integer *ldb, complex *y, integer *ldy, real *berr_out__, integer *n_norms__, real *errs_n__, real *errs_c__, complex *res, real *ayb, complex *dy, complex *y_tail__, real *rcond, integer * ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__, integer *info)
+void cla_gerfsx_extended_(integer *prec_type__, integer * trans_type__, integer *n, integer *nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer *ipiv, logical *colequ, real *c__, complex *b, integer *ldb, complex *y, integer *ldy, real *berr_out__, integer *n_norms__, real *errs_n__, real *errs_c__, complex *res, real *ayb, complex *dy, complex *y_tail__, real *rcond, integer * ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -421,16 +421,16 @@ int cla_gerfsx_extended_(integer *prec_type__, integer * trans_type__, integer *
     real dxratmax, dzratmax;
     integer i__, j;
     extern /* Subroutine */
-    int cla_geamv_(integer *, integer *, integer *, real *, complex *, integer *, complex *, integer *, real *, real *, integer *);
+    void cla_geamv_(integer *, integer *, integer *, real *, complex *, integer *, complex *, integer *, real *, real *, integer *);
     logical incr_prec__;
     real prev_dz_z__, yk, final_dx_x__;
     extern /* Subroutine */
-    int cla_wwaddw_(integer *, complex *, complex *, complex *);
+    void cla_wwaddw_(integer *, complex *, complex *, complex *);
     real final_dz_z__, prevnormdx;
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__;
     extern /* Subroutine */
-    int cla_lin_berr_(integer *, integer *, integer *, complex *, real *, real *);
+    void cla_lin_berr_(integer *, integer *, integer *, complex *, real *, real *);
     real ymin;
     extern /* Subroutine */
     int blas_cgemv_x_(integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
@@ -439,12 +439,12 @@ int cla_gerfsx_extended_(integer *prec_type__, integer * trans_type__, integer *
     int blas_cgemv2_x_(integer *, integer *, integer *, complex *, complex *, integer *, complex *, complex *, integer *, complex *, complex *, integer *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ccopy_( integer *, complex *, integer *, complex *, integer *);
     real dxrat, dzrat;
     extern /* Subroutine */
-    int caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     char trans[1];
     real normx, normy;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int cgetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+    void cgetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     real normdx;
     extern /* Character */
     VOID chla_transtype_(char *, integer *);
@@ -502,7 +502,7 @@ int cla_gerfsx_extended_(integer *prec_type__, integer * trans_type__, integer *
     if (*info != 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     chla_transtype_(ch__1, trans_type__);
     *(unsigned char *)trans = *(unsigned char *)&ch__1[0];
@@ -791,7 +791,7 @@ L666: /* Set final_* when cnt hits ithresh */
         /* End of loop for each RHS. */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* cla_gerfsx_extended__ */
 #endif

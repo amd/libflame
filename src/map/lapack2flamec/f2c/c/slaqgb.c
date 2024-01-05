@@ -143,7 +143,7 @@
 /* > \ingroup realGBauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slaqgb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer *ldab, real *r__, real *c__, real *rowcnd, real * colcnd, real *amax, char *equed)
+void slaqgb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer *ldab, real *r__, real *c__, real *rowcnd, real * colcnd, real *amax, char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -187,7 +187,7 @@ int slaqgb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer 
     {
         *(unsigned char *)equed = 'N';
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize LARGE and SMALL. */
     small_val = slamch_("Safe minimum") / slamch_("Precision");
@@ -282,7 +282,7 @@ int slaqgb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer 
         *(unsigned char *)equed = 'B';
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLAQGB */
 }
 /* slaqgb_ */

@@ -196,7 +196,7 @@
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int ssyconvf_(char *uplo, char *way, integer *n, real *a, integer *lda, real *e, integer *ipiv, integer *info)
+void ssyconvf_(char *uplo, char *way, integer *n, real *a, integer *lda, real *e, integer *ipiv, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -205,7 +205,7 @@ int ssyconvf_(char *uplo, char *way, integer *n, real *a, integer *lda, real *e,
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sswap_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical convert;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -253,12 +253,12 @@ int ssyconvf_(char *uplo, char *way, integer *n, real *a, integer *lda, real *e,
     {
         i__1 = -(*info);
         xerbla_("SSYCONVF", &i__1, (ftnlen)8);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -520,7 +520,7 @@ int ssyconvf_(char *uplo, char *way, integer *n, real *a, integer *lda, real *e,
         }
         /* End A is LOWER */
     }
-    return 0;
+    return;
     /* End of SSYCONVF */
 }
 /* ssyconvf_ */

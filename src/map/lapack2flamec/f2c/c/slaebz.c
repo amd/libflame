@@ -303,7 +303,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer *minp, integer *nbmin, real *abstol, real * reltol, real *pivmin, real *d__, real *e, real *e2, integer *nval, real *ab, real *c__, integer *mout, integer *nab, real *work, integer *iwork, integer *info)
+void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer *minp, integer *nbmin, real *abstol, real * reltol, real *pivmin, real *d__, real *e, real *e2, integer *nval, real *ab, real *c__, integer *mout, integer *nab, real *work, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer nab_dim1, nab_offset, ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
@@ -348,7 +348,7 @@ int slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer *
     if (*ijob < 1 || *ijob > 3)
     {
         *info = -1;
-        return 0;
+        return;
     }
     /* Initialize NAB */
     if (*ijob == 1)
@@ -395,7 +395,7 @@ int slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer *
             *mout = *mout + nab[ji + (nab_dim1 << 1)] - nab[ji + nab_dim1];
             /* L30: */
         }
-        return 0;
+        return;
     }
     /* Initialize for loop */
     /* KF and KL have the following meaning: */
@@ -514,7 +514,7 @@ int slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer *
                 }
                 if (*info != 0)
                 {
-                    return 0;
+                    return;
                 }
                 kl = klnew;
             }
@@ -617,7 +617,7 @@ int slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer *
                     else
                     {
                         *info = *mmax + 1;
-                        return 0;
+                        return;
                     }
                 }
                 else
@@ -705,7 +705,7 @@ L140: /* Computing MAX */
     i__1 = kl + 1 - kf;
     *info = fla_max(i__1,0);
     *mout = kl;
-    return 0;
+    return;
     /* End of SLAEBZ */
 }
 /* slaebz_ */

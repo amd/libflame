@@ -198,7 +198,7 @@ VT(NL+2:M, NL+2:M)**T contains */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlasd1_(integer *nl, integer *nr, integer *sqre, doublereal *d__, doublereal *alpha, doublereal *beta, doublereal *u, integer *ldu, doublereal *vt, integer *ldvt, integer *idxq, integer * iwork, doublereal *work, integer *info)
+void dlasd1_(integer *nl, integer *nr, integer *sqre, doublereal *d__, doublereal *alpha, doublereal *beta, doublereal *u, integer *ldu, doublereal *vt, integer *ldvt, integer *idxq, integer * iwork, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasd1 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", ldu %" FLA_IS ", ldvt %" FLA_IS "",*nl, *nr, *sqre, *ldu, *ldvt);
@@ -208,7 +208,7 @@ int dlasd1_(integer *nl, integer *nr, integer *sqre, doublereal *d__, doublereal
     /* Local variables */
     integer i__, k, m, n, n1, n2, iq, iz, iu2, ldq, idx, ldu2, ivt2, idxc, idxp, ldvt2;
     extern /* Subroutine */
-    int dlasd2_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, integer *, integer *, integer *), dlasd3_( integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *);
+    void dlasd2_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, integer *, integer *, integer *), dlasd3_( integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *);
     integer isigma;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -263,7 +263,7 @@ int dlasd1_(integer *nl, integer *nr, integer *sqre, doublereal *d__, doublereal
         i__1 = -(*info);
         xerbla_("DLASD1", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     n = *nl + *nr + 1;
     m = n + *sqre;
@@ -309,7 +309,7 @@ int dlasd1_(integer *nl, integer *nr, integer *sqre, doublereal *d__, doublereal
     if (*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Unscale. */
     dlascl_("G", &c__0, &c__0, &c_b7, &orgnrm, &n, &c__1, &d__[1], &n, info);
@@ -318,7 +318,7 @@ int dlasd1_(integer *nl, integer *nr, integer *sqre, doublereal *d__, doublereal
     n2 = n - k;
     dlamrg_(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASD1 */
 }
 /* dlasd1_ */

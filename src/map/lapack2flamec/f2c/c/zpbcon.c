@@ -122,7 +122,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zpbcon_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab, doublereal *anorm, doublereal * rcond, doublecomplex *work, doublereal *rwork, integer *info)
+void zpbcon_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab, doublereal *anorm, doublereal * rcond, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpbcon inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",*uplo, *n, *kd, *ldab);
@@ -139,7 +139,7 @@ int zpbcon_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *lda
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
+    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal scalel, scaleu;
     extern /* Subroutine */
@@ -147,7 +147,7 @@ int zpbcon_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *lda
     doublereal ainvnm;
     extern integer izamax_(integer *, doublecomplex *, integer *);
     extern /* Subroutine */
-    int zlatbs_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *), zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
+    void zlatbs_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *), zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
     char normin[1];
     doublereal smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -211,7 +211,7 @@ int zpbcon_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *lda
         i__1 = -(*info);
         xerbla_("ZPBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.;
@@ -219,12 +219,12 @@ int zpbcon_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *lda
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*anorm == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     smlnum = dlamch_("Safe minimum");
     /* Estimate the 1-norm of the inverse. */
@@ -271,7 +271,7 @@ L10:
     }
 L20:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPBCON */
 }
 /* zpbcon_ */

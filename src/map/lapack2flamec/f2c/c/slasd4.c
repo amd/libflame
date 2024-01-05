@@ -138,7 +138,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *rho, real *sigma, real *work, integer *info)
+void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *rho, real *sigma, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -168,10 +168,10 @@ int slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *r
     logical swtch;
     real dtnsq;
     extern /* Subroutine */
-    int slaed6_(integer *, logical *, real *, real *, real *, real *, real *, integer *);
+    void slaed6_(integer *, logical *, real *, real *, real *, real *, real *, integer *);
     real delsq2;
     extern /* Subroutine */
-    int slasd5_(integer *, real *, real *, real *, real *, real *, real *);
+    void slasd5_(integer *, real *, real *, real *, real *, real *, real *);
     real dtnsq1;
     logical swtch3;
     extern real slamch_(char *);
@@ -217,13 +217,13 @@ int slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *r
         delta[1] = 1.f;
         work[1] = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 2)
     {
         slasd5_(i__, &d__[1], &z__[1], &delta[1], rho, sigma, &work[1]);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute machine epsilon */
     eps = slamch_("Epsilon");
@@ -1220,7 +1220,7 @@ int slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *r
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
 L240:
-    return 0;
+    return;
     /* End of SLASD4 */
 }
 /* slasd4_ */

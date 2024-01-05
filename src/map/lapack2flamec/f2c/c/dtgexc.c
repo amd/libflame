@@ -213,7 +213,7 @@ A Direct Method for Reordering Eigenvalues in the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal * q, integer *ldq, doublereal *z__, integer *ldz, integer *ifst, integer *ilst, doublereal *work, integer *lwork, integer *info)
+void dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal * q, integer *ldq, doublereal *z__, integer *ldz, integer *ifst, integer *ilst, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtgexc inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS ", lwork %" FLA_IS "",*n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst, *lwork);
@@ -222,7 +222,7 @@ int dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer *
     /* Local variables */
     integer nbf, nbl, here, lwmin;
     extern /* Subroutine */
-    int dtgex2_(logical *, logical *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dtgex2_(logical *, logical *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer nbnext;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -310,18 +310,18 @@ int dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer *
         i__1 = -(*info);
         xerbla_("DTGEXC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 1)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine the first row of the specified block and find out */
     /* if it is 1-by-1 or 2-by-2. */
@@ -360,7 +360,7 @@ int dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer *
     if (*ifst == *ilst)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*ifst < *ilst)
     {
@@ -391,7 +391,7 @@ L10: /* Swap with next one below. */
             {
                 *ilst = here;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             here += nbnext;
             /* Test if 2-by-2 block breaks into two 1-by-1 blocks. */
@@ -421,7 +421,7 @@ L10: /* Swap with next one below. */
             {
                 *ilst = here;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             if (nbnext == 1)
             {
@@ -431,7 +431,7 @@ L10: /* Swap with next one below. */
                 {
                     *ilst = here;
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 ++here;
             }
@@ -450,7 +450,7 @@ L10: /* Swap with next one below. */
                     {
                         *ilst = here;
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     here += 2;
                 }
@@ -462,7 +462,7 @@ L10: /* Swap with next one below. */
                     {
                         *ilst = here;
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     ++here;
                     dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, & here, &c__1, &c__1, &work[1], lwork, info);
@@ -470,7 +470,7 @@ L10: /* Swap with next one below. */
                     {
                         *ilst = here;
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     ++here;
                 }
@@ -502,7 +502,7 @@ L20: /* Swap with next one below. */
             {
                 *ilst = here;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             here -= nbnext;
             /* Test if 2-by-2 block breaks into two 1-by-1 blocks. */
@@ -532,7 +532,7 @@ L20: /* Swap with next one below. */
             {
                 *ilst = here;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             if (nbnext == 1)
             {
@@ -542,7 +542,7 @@ L20: /* Swap with next one below. */
                 {
                     *ilst = here;
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 --here;
             }
@@ -562,7 +562,7 @@ L20: /* Swap with next one below. */
                     {
                         *ilst = here;
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     here += -2;
                 }
@@ -574,7 +574,7 @@ L20: /* Swap with next one below. */
                     {
                         *ilst = here;
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     --here;
                     dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, & here, &c__1, &c__1, &work[1], lwork, info);
@@ -582,7 +582,7 @@ L20: /* Swap with next one below. */
                     {
                         *ilst = here;
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     --here;
                 }
@@ -596,7 +596,7 @@ L20: /* Swap with next one below. */
     *ilst = here;
     work[1] = (doublereal) lwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTGEXC */
 }
 /* dtgexc_ */

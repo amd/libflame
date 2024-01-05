@@ -124,7 +124,7 @@ the elements below the diagonal are not used. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgeqrt3_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t, integer *ldt, integer *info)
+void dgeqrt3_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t, integer *ldt, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgeqrt3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS "",*m, *n, *lda, *ldt);
@@ -133,10 +133,10 @@ int dgeqrt3_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t
     /* Local variables */
     integer i__, j, i1, j1, n1, n2;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer iinfo;
     extern /* Subroutine */
-    int dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlarfg_( integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlarfg_( integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -183,7 +183,7 @@ int dgeqrt3_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t
         i__1 = -(*info);
         xerbla_("DGEQRT3", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -265,7 +265,7 @@ int dgeqrt3_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t
         /* [ 0 R2 ] [ 0 T2] */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGEQRT3 */
 }
 /* dgeqrt3_ */

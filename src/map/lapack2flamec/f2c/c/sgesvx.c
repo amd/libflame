@@ -340,7 +340,7 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup realGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, integer *ipiv, char *equed, real *r__, real *c__, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
+void sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, integer *ipiv, char *equed, real *r__, real *c__, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
@@ -356,19 +356,19 @@ int sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, intege
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     logical nofact;
     extern /* Subroutine */
-    int slaqge_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, char *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgecon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
+    void slaqge_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, char *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgecon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
     real bignum;
     integer infequ;
     logical colequ;
     extern /* Subroutine */
-    int sgeequ_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *), sgerfs_( char *, integer *, integer *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), sgetrf_(integer *, integer *, real *, integer *, integer *, integer *);
+    void sgeequ_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *), sgerfs_( char *, integer *, integer *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), sgetrf_(integer *, integer *, real *, integer *, integer *, integer *);
     real rowcnd;
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     logical notran;
     extern real slantr_(char *, char *, char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    void sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     real smlnum;
     logical rowequ;
     real rpvgrw;
@@ -543,7 +543,7 @@ int sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, intege
     {
         i__1 = -(*info);
         xerbla_("SGESVX", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     if (equil)
     {
@@ -618,7 +618,7 @@ int sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, intege
             }
             work[1] = rpvgrw;
             *rcond = 0.f;
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A and the */
@@ -712,7 +712,7 @@ int sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, intege
         *info = *n + 1;
     }
     work[1] = rpvgrw;
-    return 0;
+    return;
     /* End of SGESVX */
 }
 /* sgesvx_ */

@@ -121,7 +121,7 @@ static integer c__1 = 1;
 /* > \ingroup complexHEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda, complex *b, integer *ldb, integer *info)
+void chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda, complex *b, integer *ldb, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
@@ -132,13 +132,13 @@ int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
     complex ct;
     real akk, bkk;
     extern /* Subroutine */
-    int cher2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
+    void cher2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), ctrsv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), clacgv_( integer *, complex *, integer *), csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), ctrsv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), clacgv_( integer *, complex *, integer *), csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -193,7 +193,7 @@ int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
     {
         i__1 = -(*info);
         xerbla_("CHEGS2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     if (*itype == 1)
     {
@@ -369,7 +369,7 @@ int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
             }
         }
     }
-    return 0;
+    return;
     /* End of CHEGS2 */
 }
 /* chegs2_ */

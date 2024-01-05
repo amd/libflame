@@ -160,7 +160,7 @@ the unit diagonal elements of L are not stored. */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *d__, integer *info)
+void slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *d__, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -176,10 +176,10 @@ int slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *d
     /* Local variables */
     integer i__, n1, n2, iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     real sfmin;
     extern /* Subroutine */
-    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * );
+    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * );
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -228,13 +228,13 @@ int slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *d
         i__1 = -(*info);
         xerbla_("SLAORHR_COL_GETRFNP2", &i__1, (ftnlen)20);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*m == 1)
     {
@@ -295,7 +295,7 @@ int slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *d
         slaorhr_col_getrfnp2_(&i__1, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &d__[n1 + 1], &iinfo);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLAORHR_COL_GETRFNP2 */
 }
 /* slaorhr_col_getrfnp2__ */

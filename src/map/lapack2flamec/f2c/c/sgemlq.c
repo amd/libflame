@@ -161,13 +161,13 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *t, integer *tsize, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
+void sgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *t, integer *tsize, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int slamswlq_(char *, char *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
+    void slamswlq_(char *, char *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
     integer mb, nb, mn, lw;
     logical left, tran;
     extern logical lsame_(char *, char *);
@@ -176,7 +176,7 @@ int sgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, real *a
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, lquery;
     extern /* Subroutine */
-    int sgemlqt_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+    void sgemlqt_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -269,18 +269,18 @@ int sgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, real *a
     {
         i__1 = -(*info);
         xerbla_("SGEMLQ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Computing MIN */
     i__1 = fla_min(*m,*n);
     if (fla_min(i__1,*k) == 0)
     {
-        return 0;
+        return;
     }
     /* Computing MAX */
     i__1 = fla_max(*m,*n);
@@ -293,7 +293,7 @@ int sgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, real *a
         slamswlq_(side, trans, m, n, k, &mb, &nb, &a[a_offset], lda, &t[6], & mb, &c__[c_offset], ldc, &work[1], lwork, info);
     }
     work[1] = (real) lw;
-    return 0;
+    return;
     /* End of SGEMLQ */
 }
 /* sgemlq_ */

@@ -131,7 +131,7 @@
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sgeequb_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
+void sgeequb_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -190,7 +190,7 @@ int sgeequb_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__
     {
         i__1 = -(*info);
         xerbla_("SGEEQUB", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*m == 0 || *n == 0)
@@ -198,7 +198,7 @@ int sgeequb_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__
         *rowcnd = 1.f;
         *colcnd = 1.f;
         *amax = 0.f;
-        return 0;
+        return;
     }
     /* Get machine constants. Assume SMLNUM is a power of the radix. */
     smlnum = slamch_("S");
@@ -274,7 +274,7 @@ int sgeequb_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__
             if (r__[i__] == 0.f)
             {
                 *info = i__;
-                return 0;
+                return;
             }
             /* L50: */
         }
@@ -360,7 +360,7 @@ int sgeequb_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__
             if (c__[j] == 0.f)
             {
                 *info = *m + j;
-                return 0;
+                return;
             }
             /* L110: */
         }
@@ -383,7 +383,7 @@ int sgeequb_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__
         /* Compute COLCND = fla_min(C(J)) / fla_max(C(J)). */
         *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
     }
-    return 0;
+    return;
     /* End of SGEEQUB */
 }
 /* sgeequb_ */

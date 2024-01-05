@@ -139,7 +139,7 @@
 /* > \ingroup complexGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cgbequ_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
+void cgbequ_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -221,7 +221,7 @@ int cgbequ_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integ
         i__1 = -(*info);
         xerbla_("CGBEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
@@ -230,7 +230,7 @@ int cgbequ_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integ
         *colcnd = 1.f;
         *amax = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     smlnum = slamch_("S");
@@ -300,7 +300,7 @@ int cgbequ_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integ
             {
                 *info = i__;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L50: */
         }
@@ -388,7 +388,7 @@ int cgbequ_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integ
             {
                 *info = *m + j;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L110: */
         }
@@ -412,7 +412,7 @@ int cgbequ_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integ
         *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGBEQU */
 }
 /* cgbequ_ */

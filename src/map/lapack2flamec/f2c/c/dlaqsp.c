@@ -111,7 +111,7 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlaqsp_(char *uplo, integer *n, doublereal *ap, doublereal *s, doublereal *scond, doublereal *amax, char *equed)
+void dlaqsp_(char *uplo, integer *n, doublereal *ap, doublereal *s, doublereal *scond, doublereal *amax, char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqsp inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
@@ -148,7 +148,7 @@ int dlaqsp_(char *uplo, integer *n, doublereal *ap, doublereal *s, doublereal *s
     {
         *(unsigned char *)equed = 'N';
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize LARGE and SMALL. */
     small_val = dlamch_("Safe minimum") / dlamch_("Precision");
@@ -208,7 +208,7 @@ int dlaqsp_(char *uplo, integer *n, doublereal *ap, doublereal *s, doublereal *s
         *(unsigned char *)equed = 'Y';
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAQSP */
 }
 /* dlaqsp_ */

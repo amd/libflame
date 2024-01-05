@@ -138,7 +138,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlasd4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho, doublereal * sigma, doublereal *work, integer *info)
+void dlasd4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho, doublereal * sigma, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasd4 inputs: n %" FLA_IS ", i__ %" FLA_IS "",*n, *i__);
@@ -164,7 +164,7 @@ int dlasd4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
     logical swtch;
     doublereal dtnsq;
     extern /* Subroutine */
-    int dlaed6_(integer *, logical *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dlasd5_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlaed6_(integer *, logical *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dlasd5_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal delsq2, dtnsq1;
     logical swtch3;
     extern doublereal dlamch_(char *);
@@ -210,13 +210,13 @@ int dlasd4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
         delta[1] = 1.;
         work[1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 2)
     {
         dlasd5_(i__, &d__[1], &z__[1], &delta[1], rho, sigma, &work[1]);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute machine epsilon */
     eps = dlamch_("Epsilon");
@@ -1213,7 +1213,7 @@ int dlasd4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
     }
     AOCL_DTL_TRACE_LOG_EXIT
 L240:
-    return 0;
+    return;
     /* End of DLASD4 */
 }
 /* dlasd4_ */

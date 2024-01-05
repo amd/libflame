@@ -400,7 +400,7 @@ i+1}
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zla_gerfsx_extended_(integer *prec_type__, integer * trans_type__, integer *n, integer *nrhs, doublecomplex *a, integer * lda, doublecomplex *af, integer *ldaf, integer *ipiv, logical *colequ, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *y, integer *ldy, doublereal *berr_out__, integer *n_norms__, doublereal * errs_n__, doublereal *errs_c__, doublecomplex *res, doublereal *ayb, doublecomplex *dy, doublecomplex *y_tail__, doublereal *rcond, integer *ithresh, doublereal *rthresh, doublereal *dz_ub__, logical * ignore_cwise__, integer *info)
+void zla_gerfsx_extended_(integer *prec_type__, integer * trans_type__, integer *n, integer *nrhs, doublecomplex *a, integer * lda, doublecomplex *af, integer *ldaf, integer *ipiv, logical *colequ, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *y, integer *ldy, doublereal *berr_out__, integer *n_norms__, doublereal * errs_n__, doublereal *errs_c__, doublecomplex *res, doublereal *ayb, doublecomplex *dy, doublecomplex *y_tail__, doublereal *rcond, integer *ithresh, doublereal *rthresh, doublereal *dz_ub__, logical * ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_gerfsx_extended inputs: prec_type__ %" FLA_IS ", trans_type__ %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldy %" FLA_IS ", n_norms__ %" FLA_IS ", ithresh %" FLA_IS ", rthresh %lf, dz_ub__ %lf, ignore_cwise__ %" FLA_IS "", *prec_type__, *trans_type__, *n, *nrhs, *lda, *ldaf, *ldb, *ldy, *n_norms__, *ithresh, *rthresh, *dz_ub__, *ignore_cwise__);
@@ -415,29 +415,29 @@ int zla_gerfsx_extended_(integer *prec_type__, integer * trans_type__, integer *
     integer i__, j;
     logical incr_prec__;
     extern /* Subroutine */
-    int zla_geamv_(integer *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *);
+    void zla_geamv_(integer *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *);
     doublereal prev_dz_z__, yk, final_dx_x__, final_dz_z__;
     extern /* Subroutine */
-    int zla_wwaddw_(integer *, doublecomplex *, doublecomplex *, doublecomplex *);
+    void zla_wwaddw_(integer *, doublecomplex *, doublecomplex *, doublecomplex *);
     doublereal prevnormdx;
     integer cnt;
     doublereal dyk, eps, incr_thresh__, dx_x__, dz_z__, ymin;
     extern /* Subroutine */
-    int zla_lin_berr_(integer *, integer *, integer *, doublecomplex *, doublereal *, doublereal *), blas_zgemv_x_( integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
+    void zla_lin_berr_(integer *, integer *, integer *, doublecomplex *, doublereal *, doublereal *), blas_zgemv_x_( integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
     integer y_prec_state__;
     extern /* Subroutine */
     int blas_zgemv2_x_(integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
     doublereal dxrat, dzrat;
     char trans[1];
     extern /* Subroutine */
-    int zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     doublereal normx, normy;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal normdx;
     extern /* Subroutine */
-    int zgetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zgetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
     extern /* Character */
     VOID chla_transtype_(char *, integer *);
     doublereal hugeval;
@@ -494,7 +494,7 @@ int zla_gerfsx_extended_(integer *prec_type__, integer * trans_type__, integer *
     if (*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     chla_transtype_(ch__1, trans_type__);
     *(unsigned char *)trans = *(unsigned char *)&ch__1[0];
@@ -783,7 +783,7 @@ L666: /* Set final_* when cnt hits ithresh */
         /* End of loop for each RHS. */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* zla_gerfsx_extended__ */
 #endif

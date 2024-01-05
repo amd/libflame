@@ -236,7 +236,7 @@ static integer c_n1 = -1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer *curlvl, integer *curpbm, real *d__, complex * q, integer *ldq, real *rho, integer *indxq, real *qstore, integer * qptr, integer *prmptr, integer *perm, integer *givptr, integer * givcol, real *givnum, complex *work, real *rwork, integer *iwork, integer *info)
+void claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer *curlvl, integer *curpbm, real *d__, complex * q, integer *ldq, real *rho, integer *indxq, real *qstore, integer * qptr, integer *prmptr, integer *perm, integer *givptr, integer * givcol, real *givnum, complex *work, real *rwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -255,10 +255,10 @@ int claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer 
     /* Local variables */
     integer i__, k, n1, n2, iq, iw, iz, ptr, indx, curr, indxc, indxp;
     extern /* Subroutine */
-    int claed8_(integer *, integer *, integer *, complex *, integer *, real *, real *, integer *, real *, real *, complex *, integer *, real *, integer *, integer *, integer *, integer *, integer *, integer *, real *, integer *), slaed9_( integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, real *, real *, integer *, integer *), slaeda_(integer *, integer *, integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *);
+    void claed8_(integer *, integer *, integer *, complex *, integer *, real *, real *, integer *, real *, real *, complex *, integer *, real *, integer *, integer *, integer *, integer *, integer *, integer *, real *, integer *), slaed9_( integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, real *, real *, integer *, integer *), slaeda_(integer *, integer *, integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *);
     integer idlmda;
     extern /* Subroutine */
-    int clacrm_(integer *, integer *, complex *, integer *, real *, integer *, complex *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
+    void clacrm_(integer *, integer *, complex *, integer *, real *, integer *, complex *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
     integer coltyp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -319,13 +319,13 @@ int claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer 
         i__1 = -(*info);
         xerbla_("CLAED7", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* The following values are for bookkeeping purposes only. They are */
     /* integer pointers which indicate the portion of the workspace */
@@ -376,7 +376,7 @@ int claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer 
         if (*info != 0)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         /* Prepare the INDXQ sorting premutation. */
         n1 = k;
@@ -396,7 +396,7 @@ int claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer 
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAED7 */
 }
 /* claed7_ */

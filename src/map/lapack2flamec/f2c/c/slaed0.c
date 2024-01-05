@@ -163,7 +163,7 @@ static integer c__1 = 1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int slaed0_(integer *icompq, integer *qsiz, integer *n, real *d__, real *e, real *q, integer *ldq, real *qstore, integer *ldqs, real *work, integer *iwork, integer *info)
+void slaed0_(integer *icompq, integer *qsiz, integer *n, real *d__, real *e, real *q, integer *ldq, real *qstore, integer *ldqs, real *work, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer q_dim1, q_offset, qstore_dim1, qstore_offset, i__1, i__2;
@@ -176,23 +176,23 @@ int slaed0_(integer *icompq, integer *qsiz, integer *n, real *d__, real *e, real
     real temp;
     integer curr;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer iperm, indxq, iwrem;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     integer iqptr, tlvls;
     extern /* Subroutine */
-    int slaed1_(integer *, real *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *), slaed7_(integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, integer *);
+    void slaed1_(integer *, real *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *), slaed7_(integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, integer *);
     integer igivcl;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer igivnm, submat;
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer curprb, subpbs, igivpt, curlvl, matsiz, iprmpt, smlsiz;
     extern /* Subroutine */
-    int ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
+    void ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -258,12 +258,12 @@ int slaed0_(integer *icompq, integer *qsiz, integer *n, real *d__, real *e, real
     {
         i__1 = -(*info);
         xerbla_("SLAED0", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     smlsiz = ilaenv_(&c__9, "SLAED0", " ", &c__0, &c__0, &c__0, &c__0);
     /* Determine the size and placement of the submatrices, and save in */
@@ -501,7 +501,7 @@ L80:
 L130:
     *info = submat * (*n + 1) + submat + matsiz - 1;
 L140:
-    return 0;
+    return;
     /* End of SLAED0 */
 }
 /* slaed0_ */

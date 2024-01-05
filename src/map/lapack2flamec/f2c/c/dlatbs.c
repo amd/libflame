@@ -236,7 +236,7 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *kd, doublereal *ab, integer *ldab, doublereal *x, doublereal *scale, doublereal *cnorm, integer *info)
+void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *kd, doublereal *ab, integer *ldab, doublereal *x, doublereal *scale, doublereal *cnorm, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlatbs inputs: uplo %c, trans %c, diag %c, normin %c, kd %" FLA_IS ", ldab %" FLA_IS "", *uplo, *trans, *diag, *normin, *kd, *ldab);
@@ -252,14 +252,14 @@ int dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, inte
     integer imax;
     doublereal tmax, tjjs, xmax, grow, sumj;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     integer maind;
     extern logical lsame_(char *, char *);
     doublereal tscal, uscal;
     extern doublereal dasum_(integer *, doublereal *, integer *);
     integer jlast;
     extern /* Subroutine */
-    int dtbsv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dtbsv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
@@ -336,13 +336,13 @@ int dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, inte
         i__1 = -(*info);
         xerbla_("DLATBS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine machine dependent parameters to control overflow. */
     smlnum = dlamch_("Safe minimum") / dlamch_("Precision");
@@ -934,7 +934,7 @@ L150:
         dscal_(n, &d__1, &cnorm[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLATBS */
 }
 /* dlatbs_ */

@@ -234,7 +234,7 @@ if INFO = i, i */
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, real *d__, real *e, real *vt, integer *ldvt, real * u, integer *ldu, real *c__, integer *ldc, real *work, integer *info)
+void sbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, real *d__, real *e, real *vt, integer *ldvt, real * u, integer *ldu, real *c__, integer *ldc, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -266,25 +266,25 @@ int sbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, 
     integer isub, iter;
     real unfl, sinl, cosr, smin, smax, sinr;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *), slas2_(real *, real *, real *, real *, real *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *), slas2_(real *, real *, real *, real *, real *);
     extern logical lsame_(char *, char *);
     real oldcs;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     integer oldll;
     real shift, sigmn, oldsn, sminl;
     extern /* Subroutine */
-    int slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
+    void slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
     real sigmx;
     logical lower;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *), slasq1_(integer *, real *, real *, real *, integer *), slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
+    void sswap_(integer *, real *, integer *, real *, integer *), slasq1_(integer *, real *, real *, real *, integer *), slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real sminoa;
     extern /* Subroutine */
-    int slartg_(real *, real *, real *, real *, real * );
+    void slartg_(real *, real *, real *, real *, real * );
     real thresh;
     logical rotate;
     real tolmul;
@@ -362,12 +362,12 @@ int sbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, 
         i__1 = -(*info);
         xerbla_("SBDSQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -383,7 +383,7 @@ int sbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, 
         if (*info != 2)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         *info = 0;
     }
@@ -1007,7 +1007,7 @@ L200:
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
 L220:
-    return 0;
+    return;
     /* End of SBDSQR */
 }
 /* sbdsqr_ */

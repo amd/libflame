@@ -165,7 +165,7 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dorgtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublereal *a, integer *lda, doublereal *t, integer *ldt, doublereal *work, integer *lwork, integer *info)
+void dorgtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublereal *a, integer *lda, doublereal *t, integer *ldt, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dorgtsqr inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *mb, *nb, *lda, *ldt, *lwork);
@@ -173,10 +173,10 @@ int dorgtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublereal *a, 
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2;
     /* Local variables */
     extern /* Subroutine */
-    int dlamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dlamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lworkopt, j, lc, lw, ldc, iinfo;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     integer nblocal;
     /* -- LAPACK computational routine (version 3.9.0) -- */
@@ -271,20 +271,20 @@ int dorgtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublereal *a, 
         i__1 = -(*info);
         xerbla_("DORGTSQR", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         work[1] = (doublereal) lworkopt;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         work[1] = (doublereal) lworkopt;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* (1) Form explicitly the tall-skinny M-by-N left submatrix Q1_in */
     /* of M-by-M orthogonal matrix Q_in, which is implicitly stored in */
@@ -312,7 +312,7 @@ int dorgtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublereal *a, 
     }
     work[1] = (doublereal) lworkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DORGTSQR */
 }
 /* dorgtsqr_ */

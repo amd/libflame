@@ -106,7 +106,7 @@ static doublereal c_b11 = 1.;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dspgst_(integer *itype, char *uplo, integer *n, doublereal *ap, doublereal *bp, integer *info)
+void dspgst_(integer *itype, char *uplo, integer *n, doublereal *ap, doublereal *bp, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dspgst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS "",*itype, *uplo, *n);
@@ -122,13 +122,13 @@ int dspgst_(integer *itype, char *uplo, integer *n, doublereal *ap, doublereal *
     doublereal bjj, bkk;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dspr2_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *), dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dspr2_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *), dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dspmv_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dspmv_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-    int dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *), dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *), dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -171,7 +171,7 @@ int dspgst_(integer *itype, char *uplo, integer *n, doublereal *ap, doublereal *
         i__1 = -(*info);
         xerbla_("DSPGST", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*itype == 1)
     {
@@ -300,7 +300,7 @@ int dspgst_(integer *itype, char *uplo, integer *n, doublereal *ap, doublereal *
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSPGST */
 }
 /* dspgst_ */

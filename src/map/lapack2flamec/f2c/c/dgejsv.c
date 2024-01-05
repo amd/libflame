@@ -470,7 +470,7 @@ Jacobi rotations */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jobp, integer *m, integer *n, doublereal *a, integer *lda, doublereal *sva, doublereal *u, integer *ldu, doublereal *v, integer *ldv, doublereal *work, integer *lwork, integer *iwork, integer *info)
+void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jobp, integer *m, integer *n, doublereal *a, integer *lda, doublereal *sva, doublereal *u, integer *ldu, doublereal *v, integer *ldv, doublereal *work, integer *lwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgejsv inputs: joba %c, jobu %c, jobv %c, jobr %c, jobt %c, jobp %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", lwork %" FLA_IS "",*joba, *jobu, *jobv, *jobr, *jobt, *jobp, *m, *n, *lda, *ldu, *ldv, *lwork);
@@ -491,47 +491,47 @@ int dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
     doublereal temp1;
     logical jracc;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     doublereal small_val, entra, sfmin;
     logical lsvec;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal epsln;
     logical rsvec;
     extern /* Subroutine */
-    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical l2aber;
     extern /* Subroutine */
-    int dgeqp3_(integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *, integer *);
+    void dgeqp3_(integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *, integer *);
     doublereal condr1, condr2, uscal1, uscal2;
     logical l2kill, l2rank, l2tran, l2pert;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dgelqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+    void dgelqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     doublereal scalem;
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     doublereal sconda;
     logical goscal;
     doublereal aatmin;
     extern /* Subroutine */
-    int dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+    void dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
     doublereal aatmax;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical noscal;
     extern /* Subroutine */
-    int dpocon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dgesvj_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *), dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
+    void dpocon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dgesvj_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *), dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
     doublereal entrat;
     logical almort;
     extern /* Subroutine */
-    int dorgqr_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dormlq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dorgqr_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dormlq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     doublereal maxprj;
     logical errest;
     extern /* Subroutine */
-    int dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     logical transp, rowpiv;
     doublereal cond_ok__;
     integer warning, numrank;
@@ -665,7 +665,7 @@ int dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
         i__1 = -(*info);
         xerbla_("DGEJSV", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return for void matrix (Y3K safe) */
     /* #:) */
@@ -686,7 +686,7 @@ int dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
             work[j1] = 0.;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine whether the matrix U should be M x N or M x M */
     if (lsvec)
@@ -725,7 +725,7 @@ int dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
             i__2 = -(*info);
             xerbla_("DGEJSV", &i__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         aaqq = sqrt(aaqq);
         if (aapp < big / aaqq && noscal)
@@ -801,7 +801,7 @@ int dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
         iwork[2] = 0;
         iwork[3] = 0;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Issue warning if denormalized column norms detected. Override the */
     /* high relative accuracy request. Issue licence to kill columns */
@@ -876,7 +876,7 @@ int dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
             work[7] = 0.;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     transp = FALSE_;
     l2tran = l2tran && *m == *n;
@@ -2408,7 +2408,7 @@ L3302:
     iwork[2] = numrank;
     iwork[3] = warning;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* .. */
     /* .. END OF DGEJSV */
     /* .. */

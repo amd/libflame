@@ -83,7 +83,7 @@ the array */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slarnv_(integer *idist, integer *iseed, integer *n, real *x)
+void slarnv_(integer *idist, integer *iseed, integer *n, real *x)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slarnv inputs: idist %" FLA_IS ", iseed %" FLA_IS ", n %" FLA_IS "",*idist, *iseed, *n);
@@ -96,7 +96,7 @@ int slarnv_(integer *idist, integer *iseed, integer *n, real *x)
     real u[128];
     integer il, iv, il2;
     extern /* Subroutine */
-    int slaruv_(integer *, integer *, real *);
+    void slaruv_(integer *, integer *, real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -179,7 +179,7 @@ int slarnv_(integer *idist, integer *iseed, integer *n, real *x)
         /* L40: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SLARNV */
 }
 /* slarnv_ */

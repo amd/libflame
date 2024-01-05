@@ -117,7 +117,7 @@ the routine */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dorghr_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda, doublereal *tau, doublereal *work, integer *lwork, integer *info)
+void dorghr_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda, doublereal *tau, doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -191,17 +191,17 @@ int dorghr_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda,
     {
         i__1 = -(*info);
         xerbla_("DORGHR", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         work[1] = 1.;
-        return 0;
+        return;
     }
     /* Shift the vectors which define the elementary reflectors one */
     /* column to the right, and set the first ilo and the last n-ihi */
@@ -275,7 +275,7 @@ int dorghr_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda,
         lapack_dorgqr(&nh, &nh, &nh, &a[*ilo + 1 + (*ilo + 1) * a_dim1], lda, &tau[* ilo], &work[1], lwork, &iinfo);
     }
     work[1] = (doublereal) lwkopt;
-    return 0;
+    return;
     /* End of DORGHR */
 }
 /* dorghr_ */

@@ -117,7 +117,7 @@
 /* > \ingroup realPOsolve */
 /* ===================================================================== */
 /* Subroutine */
-int sposv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb, integer *info)
+void sposv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -182,7 +182,7 @@ int sposv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *b
         i__1 = -(*info);
         xerbla_("SPOSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the Cholesky factorization A = U**T*U or A = L*L**T. */
     spotrf_(uplo, n, &a[a_offset], lda, info);
@@ -192,7 +192,7 @@ int sposv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *b
         spotrs_(uplo, n, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPOSV */
 }
 /* sposv_ */

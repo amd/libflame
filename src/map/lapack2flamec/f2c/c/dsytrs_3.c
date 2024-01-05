@@ -154,7 +154,7 @@ static doublereal c_b9 = 1.;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dsytrs_3_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *e, integer *ipiv, doublereal *b, integer *ldb, integer *info)
+void dsytrs_3_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *e, integer *ipiv, doublereal *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb);
@@ -167,11 +167,11 @@ int dsytrs_3_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda
     integer kp;
     doublereal akm1, bkm1, akm1k;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     doublereal denom;
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -232,13 +232,13 @@ int dsytrs_3_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda
         i__1 = -(*info);
         xerbla_("DSYTRS_3", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -384,7 +384,7 @@ int dsytrs_3_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda
         /* END Lower */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYTRS_3 */
 }
 /* dsytrs_3__ */

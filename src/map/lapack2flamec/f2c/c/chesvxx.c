@@ -503,7 +503,7 @@ defaults */
 /* > \ingroup complexHEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int chesvxx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer * ipiv, char *equed, real *s, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *rpvgrw, real *berr, integer * n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer * nparams, real *params, complex *work, real *rwork, integer *info)
+void chesvxx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer * ipiv, char *equed, real *s, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *rpvgrw, real *berr, integer * n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer * nparams, real *params, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -526,18 +526,18 @@ int chesvxx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
     real scond;
     logical equil, rcequ;
     extern /* Subroutine */
-    int claqhe_(char *, integer *, complex *, integer *, real *, real *, real *, char *);
+    void claqhe_(char *, integer *, complex *, integer *, real *, real *, real *, char *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int chetrf_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), clacpy_( char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void chetrf_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), clacpy_( char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer infequ;
     extern /* Subroutine */
-    int chetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+    void chetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     real smlnum;
     extern /* Subroutine */
-    int clascl2_(integer *, integer *, real *, complex *, integer *), cheequb_(char *, integer *, complex *, integer *, real *, real *, real *, complex *, integer *), cherfsx_(char *, char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, real *, complex *, integer *, complex *, integer *, real *, real *, integer *, real *, real *, integer *, real *, complex *, real *, integer *);
+    void clascl2_(integer *, integer *, real *, complex *, integer *), cheequb_(char *, integer *, complex *, integer *, real *, real *, real *, complex *, integer *), cherfsx_(char *, char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, real *, complex *, integer *, complex *, integer *, real *, real *, integer *, real *, real *, integer *, real *, complex *, real *, integer *);
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -682,7 +682,7 @@ int chesvxx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
         i__1 = -(*info);
         xerbla_("CHESVXX", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (equil)
     {
@@ -717,7 +717,7 @@ int chesvxx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
                 *rpvgrw = cla_herpvgrw_(uplo, n, info, &a[a_offset], lda, & af[af_offset], ldaf, &ipiv[1], &rwork[1]);
             }
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the reciprocal pivot growth factor RPVGRW. */
@@ -737,7 +737,7 @@ int chesvxx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
         clascl2_(n, nrhs, &s[1], &x[x_offset], ldx);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHESVXX */
 }
 /* chesvxx_ */

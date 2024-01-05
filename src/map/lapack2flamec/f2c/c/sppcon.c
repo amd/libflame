@@ -108,7 +108,7 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sppcon_(char *uplo, integer *n, real *ap, real *anorm, real *rcond, real *work, integer *iwork, integer *info)
+void sppcon_(char *uplo, integer *n, real *ap, real *anorm, real *rcond, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -125,10 +125,10 @@ int sppcon_(char *uplo, integer *n, real *ap, real *anorm, real *rcond, real *wo
     extern logical lsame_(char *, char *);
     integer isave[3];
     extern /* Subroutine */
-    int srscl_(integer *, real *, real *, integer *);
+    void srscl_(integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    int slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+    void slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     real scalel;
     extern real slamch_(char *);
     real scaleu;
@@ -138,7 +138,7 @@ int sppcon_(char *uplo, integer *n, real *ap, real *anorm, real *rcond, real *wo
     real ainvnm;
     char normin[1];
     extern /* Subroutine */
-    int slatps_(char *, char *, char *, char *, integer *, real *, real *, real *, real *, integer *);
+    void slatps_(char *, char *, char *, char *, integer *, real *, real *, real *, real *, integer *);
     real smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -187,7 +187,7 @@ int sppcon_(char *uplo, integer *n, real *ap, real *anorm, real *rcond, real *wo
         i__1 = -(*info);
         xerbla_("SPPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.f;
@@ -195,12 +195,12 @@ int sppcon_(char *uplo, integer *n, real *ap, real *anorm, real *rcond, real *wo
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (*anorm == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     smlnum = slamch_("Safe minimum");
     /* Estimate the 1-norm of the inverse. */
@@ -246,7 +246,7 @@ L10:
     }
 L20:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPPCON */
 }
 /* sppcon_ */

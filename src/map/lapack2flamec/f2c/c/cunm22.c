@@ -158,7 +158,7 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integer *n2, complex *q, integer *ldq, complex *c__, integer *ldc, complex *work, integer *lwork, integer *info)
+void cunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integer *n2, complex *q, integer *ldq, complex *c__, integer *ldc, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -173,10 +173,10 @@ int cunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
     integer i__, nb, nq, nw, len;
     logical left;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     integer ldwork, lwkopt;
     logical lquery;
@@ -278,12 +278,12 @@ int cunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
         i__1 = -(*info);
         xerbla_("CUNM22", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
@@ -291,7 +291,7 @@ int cunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Degenerate cases (N1 = 0 or N2 = 0) are handled using CTRMM. */
     if (*n1 == 0)
@@ -300,7 +300,7 @@ int cunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (*n2 == 0)
     {
@@ -308,7 +308,7 @@ int cunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the largest chunk size available from the workspace. */
     /* Computing MAX */
@@ -434,7 +434,7 @@ int cunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
     work[1].r = q__1.r;
     work[1].i = q__1.i; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CUNM22 */
 }
 /* cunm22_ */

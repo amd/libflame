@@ -127,7 +127,7 @@ static real c_b4 = 1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slasv2_(real *f, real *g, real *h__, real *ssmin, real * ssmax, real *snr, real *csr, real *snl, real *csl)
+void slasv2_(real *f, real *g, real *h__, real *ssmin, real * ssmax, real *snr, real *csr, real *snl, real *csl)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
@@ -305,7 +305,7 @@ int slasv2_(real *f, real *g, real *h__, real *ssmin, real * ssmax, real *snr, r
     r__1 = tsign * r_sign(&c_b4, f) * r_sign(&c_b4, h__);
     *ssmin = r_sign(ssmin, &r__1);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASV2 */
 }
 /* slasv2_ */

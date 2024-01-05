@@ -129,7 +129,7 @@ static real c_b18 = 1.f;
 /* > \ingroup complexHEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int chegst_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda, complex *b, integer *ldb, integer *info)
+void chegst_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda, complex *b, integer *ldb, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
@@ -137,13 +137,13 @@ int chegst_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
     /* Local variables */
     integer k, kb, nb;
     extern /* Subroutine */
-    int chemm_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void chemm_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+    void ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int chegs2_(integer *, char *, integer *, complex *, integer *, complex *, integer *, integer *), cher2k_( char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void chegs2_(integer *, char *, integer *, complex *, integer *, complex *, integer *, integer *), cher2k_( char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -199,12 +199,12 @@ int chegst_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
     {
         i__1 = -(*info);
         xerbla_("CHEGST", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     /* Determine the block size for this environment. */
     nb = ilaenv_(&c__1, "CHEGST", uplo, n, &c_n1, &c_n1, &c_n1);
@@ -349,7 +349,7 @@ int chegst_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
             }
         }
     }
-    return 0;
+    return;
     /* End of CHEGST */
 }
 /* chegst_ */

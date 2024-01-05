@@ -119,7 +119,7 @@ static complex c_b1 =
 /* > \ingroup complexHEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int chetrs2_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, integer *ipiv, complex *b, integer *ldb, complex * work, integer *info)
+void chetrs2_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, integer *ipiv, complex *b, integer *ldb, complex * work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -146,10 +146,10 @@ int chetrs2_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, i
     complex denom;
     integer iinfo;
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), csyconv_(char *, char *, integer *, complex *, integer *, integer *, complex *, integer *);
+    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), csyconv_(char *, char *, integer *, complex *, integer *, integer *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -207,13 +207,13 @@ int chetrs2_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, i
         i__1 = -(*info);
         xerbla_("CHETRS2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Convert A */
     csyconv_(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[1], &iinfo);
@@ -471,7 +471,7 @@ int chetrs2_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, i
     /* Revert A */
     csyconv_(uplo, "R", n, &a[a_offset], lda, &ipiv[1], &work[1], &iinfo);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHETRS2 */
 }
 /* chetrs2_ */

@@ -136,7 +136,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ztbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integer *nrhs, doublecomplex *ab, integer *ldab, doublecomplex *b, integer *ldb, integer *info)
+void ztbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integer *nrhs, doublecomplex *ab, integer *ldab, doublecomplex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztbtrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb);
@@ -147,7 +147,7 @@ int ztbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, intege
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int ztbsv_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ztbsv_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -218,13 +218,13 @@ int ztbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, intege
         i__1 = -(*info);
         xerbla_("ZTBTRS", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check for singularity. */
     if (nounit)
@@ -240,7 +240,7 @@ int ztbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, intege
                 if (ab[i__2].r == 0. && ab[i__2].i == 0.)
                 {
     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 /* L10: */
             }
@@ -256,7 +256,7 @@ int ztbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, intege
                 if (ab[i__2].r == 0. && ab[i__2].i == 0.)
                 {
     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 /* L20: */
             }
@@ -273,7 +273,7 @@ int ztbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, intege
         /* L30: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTBTRS */
 }
 /* ztbtrs_ */

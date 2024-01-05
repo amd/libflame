@@ -299,7 +299,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ztgsyl_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *c__, integer *ldc, doublecomplex *d__, integer *ldd, doublecomplex *e, integer *lde, doublecomplex *f, integer *ldf, doublereal *scale, doublereal *dif, doublecomplex *work, integer * lwork, integer *iwork, integer *info)
+void ztgsyl_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *c__, integer *ldc, doublecomplex *d__, integer *ldd, doublecomplex *e, integer *lde, doublecomplex *f, integer *ldf, doublereal *scale, doublereal *dif, doublecomplex *work, integer * lwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztgsyl inputs: trans %c, ijob %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS ", ldd %" FLA_IS ", lde %" FLA_IS ", ldf %" FLA_IS "",*trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf);
@@ -314,11 +314,11 @@ int ztgsyl_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *
     extern logical lsame_(char *, char *);
     integer ifunc, linfo;
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     integer lwmin;
     doublereal scale2, dscale;
     extern /* Subroutine */
-    int ztgsy2_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+    void ztgsy2_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal scaloc;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -327,7 +327,7 @@ int ztgsyl_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *
     logical notran;
     integer isolve;
     extern /* Subroutine */
-    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -456,12 +456,12 @@ int ztgsyl_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *
         i__1 = -(*info);
         xerbla_("ZTGSYL", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
@@ -475,7 +475,7 @@ int ztgsyl_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *
             }
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine optimal block sizes MB and NB */
     mb = ilaenv_(&c__2, "ZTGSYL", trans, m, n, &c_n1, &c_n1);
@@ -540,7 +540,7 @@ int ztgsyl_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *
             /* L30: */
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine block structure of A */
     p = 0;
@@ -846,7 +846,7 @@ L70:
     work[1].r = (doublereal) lwmin;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTGSYL */
 }
 /* ztgsyl_ */

@@ -221,7 +221,9 @@
  integer i__, j, nb, nx, ws;
  integer nbmin, iinfo, minmn;
  extern /* Subroutine */
- int lapack_dgebd2(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dlabrd_(integer *, integer *, integer * , doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *) , xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+ void dlabrd_(integer *, integer *, integer * , doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *) , xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+ extern /* Subroutine */
+ int lapack_dgebd2(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
  extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
  integer ldwrkx, ldwrky, lwkopt;
  logical lquery;

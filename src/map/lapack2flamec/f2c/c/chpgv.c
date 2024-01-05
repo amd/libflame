@@ -159,7 +159,7 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int chpgv_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, complex *bp, real *w, complex *z__, integer *ldz, complex *work, real *rwork, integer *info)
+void chpgv_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, complex *bp, real *w, complex *z__, integer *ldz, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -177,13 +177,13 @@ int chpgv_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, com
     integer j, neig;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int chpev_(char *, char *, integer *, complex *, real *, complex *, integer *, complex *, real *, integer *);
+    void chpev_(char *, char *, integer *, complex *, real *, complex *, integer *, complex *, real *, integer *);
     char trans[1];
     extern /* Subroutine */
-    int ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+    void ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+    void ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical wantz;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), chpgst_( integer *, char *, integer *, complex *, complex *, integer *), cpptrf_(char *, integer *, complex *, integer *);
@@ -242,13 +242,13 @@ int chpgv_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, com
         i__1 = -(*info);
         xerbla_("CHPGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of B. */
     cpptrf_(uplo, n, &bp[1], info);
@@ -256,7 +256,7 @@ int chpgv_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, com
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     chpgst_(itype, uplo, n, &ap[1], &bp[1], info);
@@ -315,7 +315,7 @@ int chpgv_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, com
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHPGV */
 }
 /* chpgv_ */

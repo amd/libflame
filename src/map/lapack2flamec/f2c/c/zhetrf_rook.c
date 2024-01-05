@@ -202,7 +202,7 @@ the routine */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int zhetrf_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *work, integer *lwork, integer *info)
+void zhetrf_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetrf_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *lda, *lwork);
@@ -211,10 +211,10 @@ int zhetrf_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer
     /* Local variables */
     integer j, k, kb, nb;
     extern /* Subroutine */
-    int zhetf2_rook_(char *, integer *, doublecomplex *, integer *, integer *, integer *);
+    void zhetf2_rook_(char *, integer *, doublecomplex *, integer *, integer *, integer *);
     integer iws;
     extern /* Subroutine */
-    int zlahef_rook_(char *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zlahef_rook_(char *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
     extern logical lsame_(char *, char *);
     integer nbmin, iinfo;
     logical upper;
@@ -284,12 +284,12 @@ int zhetrf_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer
         i__1 = -(*info);
         xerbla_("ZHETRF_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     nbmin = 2;
     ldwork = *n;
@@ -406,7 +406,7 @@ L40:
     work[1].r = (doublereal) lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHETRF_ROOK */
 }
 /* zhetrf_rook__ */

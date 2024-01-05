@@ -183,7 +183,7 @@ k=N/2. IF TRANSR = 'T' then RFP is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
+void spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -193,10 +193,10 @@ int spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
     extern logical lsame_(char *, char *);
     logical lower;
     extern /* Subroutine */
-    int strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     extern /* Subroutine */
-    int slauum_(char *, integer *, real *, integer *, integer *), stftri_(char *, char *, char *, integer *, real *, integer *);
+    void slauum_(char *, integer *, real *, integer *, integer *), stftri_(char *, char *, char *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -236,18 +236,18 @@ int spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
     {
         i__1 = -(*info);
         xerbla_("SPFTRI", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     /* Invert the triangular Cholesky factor U or L. */
     stftri_(transr, uplo, "N", n, a, info);
     if (*info > 0)
     {
-        return 0;
+        return;
     }
     /* If N is odd, set NISODD = .TRUE. */
     /* If N is even, set K = N/2 and NISODD = .FALSE. */
@@ -389,7 +389,7 @@ int spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
             }
         }
     }
-    return 0;
+    return;
     /* End of SPFTRI */
 }
 /* spftri_ */

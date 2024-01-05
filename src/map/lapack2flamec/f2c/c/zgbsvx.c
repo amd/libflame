@@ -363,7 +363,7 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup complex16GBsolve */
 /* ===================================================================== */
 /* Subroutine */
-int zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, doublecomplex *ab, integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv, char *equed, doublereal *r__, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer * info)
+void zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, doublecomplex *ab, integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv, char *equed, doublereal *r__, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgbsvx inputs: fact %c, trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldx);
@@ -382,7 +382,7 @@ int zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integ
     doublereal rcmin, rcmax, anorm;
     logical equil;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal colcnd;
     logical nofact;
@@ -391,19 +391,19 @@ int zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integ
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlaqgb_( integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
     doublereal bignum;
     extern /* Subroutine */
-    int zgbcon_(char *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
+    void zgbcon_(char *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
     integer infequ;
     logical colequ;
     extern doublereal zlantb_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     doublereal rowcnd;
     extern /* Subroutine */
-    int zgbequ_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), zgbrfs_( char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zgbtrf_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, integer *);
+    void zgbequ_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), zgbrfs_( char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zgbtrf_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, integer *);
     logical notran;
     extern /* Subroutine */
-    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal smlnum;
     extern /* Subroutine */
-    int zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
     logical rowequ;
     doublereal rpvgrw;
     /* -- LAPACK driver routine (version 3.4.1) -- */
@@ -589,7 +589,7 @@ int zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integ
         i__1 = -(*info);
         xerbla_("ZGBSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (equil)
     {
@@ -722,7 +722,7 @@ int zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integ
             rwork[1] = rpvgrw;
             *rcond = 0.;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A and the */
@@ -830,7 +830,7 @@ int zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integ
     }
     rwork[1] = rpvgrw;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGBSVX */
 }
 /* zgbsvx_ */

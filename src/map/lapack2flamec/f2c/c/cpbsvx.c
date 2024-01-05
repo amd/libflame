@@ -333,7 +333,7 @@ if EQUED = 'Y', */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, complex *ab, integer *ldab, complex *afb, integer * ldafb, char *equed, real *s, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork, integer *info)
+void cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, complex *ab, integer *ldab, complex *afb, integer * ldafb, char *equed, real *s, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -355,21 +355,21 @@ int cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, comp
     extern logical lsame_(char *, char *);
     real scond, anorm;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
     logical equil, rcequ, upper;
     extern real clanhb_(char *, char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int claqhb_(char *, integer *, integer *, complex *, integer *, real *, real *, real *, char *), cpbcon_(char *, integer *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *);
+    void claqhb_(char *, integer *, integer *, complex *, integer *, real *, real *, real *, char *), cpbcon_(char *, integer *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpbequ_(char *, integer *, integer *, complex *, integer *, real *, real *, real *, integer *), cpbrfs_( char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpbequ_(char *, integer *, integer *, complex *, integer *, real *, real *, real *, integer *), cpbrfs_( char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *);
     real bignum;
     extern /* Subroutine */
-    int cpbtrf_(char *, integer *, integer *, complex *, integer *, integer *);
+    void cpbtrf_(char *, integer *, integer *, complex *, integer *, integer *);
     integer infequ;
     extern /* Subroutine */
-    int cpbtrs_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void cpbtrs_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
     real smlnum;
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -511,7 +511,7 @@ int cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, comp
         i__1 = -(*info);
         xerbla_("CPBSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (equil)
     {
@@ -588,7 +588,7 @@ int cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, comp
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -641,7 +641,7 @@ int cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, comp
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPBSVX */
 }
 /* cpbsvx_ */

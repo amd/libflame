@@ -151,14 +151,14 @@ static integer c_n1 = -1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slaed1_(integer *n, real *d__, real *q, integer *ldq, integer *indxq, real *rho, integer *cutpnt, real *work, integer * iwork, integer *info)
+void slaed1_(integer *n, real *d__, real *q, integer *ldq, integer *indxq, real *rho, integer *cutpnt, real *work, integer * iwork, integer *info)
 {
     /* System generated locals */
     integer q_dim1, q_offset, i__1, i__2;
     /* Local variables */
     integer i__, k, n1, n2, is, iw, iz, iq2, cpp1, indx, indxc, indxp;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), slaed2_(integer *, integer *, integer *, real *, real *, integer *, integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, integer *), slaed3_( integer *, integer *, integer *, real *, real *, integer *, real *, real *, real *, integer *, integer *, real *, real *, integer *) ;
+    void scopy_(integer *, real *, integer *, real *, integer *), slaed2_(integer *, integer *, integer *, real *, real *, integer *, integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, integer *), slaed3_( integer *, integer *, integer *, real *, real *, integer *, real *, real *, real *, integer *, integer *, real *, real *, integer *) ;
     integer idlmda;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slamrg_( integer *, integer *, real *, integer *, integer *, integer *);
@@ -212,12 +212,12 @@ int slaed1_(integer *n, real *d__, real *q, integer *ldq, integer *indxq, real *
     {
         i__1 = -(*info);
         xerbla_("SLAED1", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     /* The following values are integer pointers which indicate */
     /* the portion of the workspace */
@@ -268,7 +268,7 @@ int slaed1_(integer *n, real *d__, real *q, integer *ldq, integer *indxq, real *
         }
     }
 L20:
-    return 0;
+    return;
     /* End of SLAED1 */
 }
 /* slaed1_ */

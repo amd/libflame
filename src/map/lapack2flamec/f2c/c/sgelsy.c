@@ -198,7 +198,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb, integer *jpvt, real *rcond, integer *rank, real *work, integer *lwork, integer *info)
+void sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb, integer *jpvt, real *rcond, integer *rank, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
@@ -210,23 +210,23 @@ int sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *
     real anrm, bnrm, smin, smax;
     integer iascl, ibscl, ismin, ismax;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     real wsize;
     extern /* Subroutine */
-    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), slaic1_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *), sgeqp3_( integer *, integer *, real *, integer *, integer *, real *, real *, integer *, integer *), slabad_(real *, real *);
+    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), slaic1_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *), sgeqp3_( integer *, integer *, real *, integer *, integer *, real *, real *, integer *, integer *), slabad_(real *, real *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     integer lwkmin;
     real sminpr, smaxpr, smlnum;
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), sormrz_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), stzrzf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    void sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), sormrz_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), stzrzf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -327,17 +327,17 @@ int sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *
     {
         i__1 = -(*info);
         xerbla_("SGELSY", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (mn == 0 || *nrhs == 0)
     {
         *rank = 0;
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
@@ -512,7 +512,7 @@ L10:
     }
 L70:
     work[1] = (real) lwkopt;
-    return 0;
+    return;
     /* End of SGELSY */
 }
 /* sgelsy_ */

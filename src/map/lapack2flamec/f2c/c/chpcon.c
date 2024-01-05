@@ -107,7 +107,7 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int chpcon_(char *uplo, integer *n, complex *ap, integer * ipiv, real *anorm, real *rcond, complex *work, integer *info)
+void chpcon_(char *uplo, integer *n, complex *ap, integer * ipiv, real *anorm, real *rcond, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -127,10 +127,10 @@ int chpcon_(char *uplo, integer *n, complex *ap, integer * ipiv, real *anorm, re
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    int clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     extern /* Subroutine */
-    int chptrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void chptrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -176,7 +176,7 @@ int chpcon_(char *uplo, integer *n, complex *ap, integer * ipiv, real *anorm, re
         i__1 = -(*info);
         xerbla_("CHPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.f;
@@ -184,12 +184,12 @@ int chpcon_(char *uplo, integer *n, complex *ap, integer * ipiv, real *anorm, re
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (*anorm <= 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if (upper)
@@ -204,7 +204,7 @@ int chpcon_(char *uplo, integer *n, complex *ap, integer * ipiv, real *anorm, re
             if (ipiv[i__] > 0 && (ap[i__1].r == 0.f && ap[i__1].i == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             ip -= i__;
             /* L10: */
@@ -223,7 +223,7 @@ int chpcon_(char *uplo, integer *n, complex *ap, integer * ipiv, real *anorm, re
             if (ipiv[i__] > 0 && (ap[i__2].r == 0.f && ap[i__2].i == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             ip = ip + *n - i__ + 1;
             /* L20: */
@@ -245,7 +245,7 @@ L30:
         *rcond = 1.f / ainvnm / *anorm;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHPCON */
 }
 /* chpcon_ */

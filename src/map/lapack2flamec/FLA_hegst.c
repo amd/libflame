@@ -16,10 +16,10 @@
 #include "FLA_lapack2flame_return_defs.h"
 #include "FLA_lapack2flame_prototypes.h"
 
-extern int zhegst_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, integer *info);
-extern int chegst_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda, complex *b, integer *ldb, integer *info);
-extern int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda, complex *b, integer *ldb, integer *info);
-extern int zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, integer *info);
+extern void zhegst_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, integer *info);
+extern void chegst_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda, complex *b, integer *ldb, integer *info);
+extern void chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda, complex *b, integer *ldb, integer *info);
+extern void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, integer *info);
 
 /*
   ZHEGST reduces a complex Hermitian-definite generalized
@@ -27,7 +27,7 @@ extern int zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, 
 */
 
 #define LAPACK_hegst(prefix, name)                                      \
-  int F77_ ## prefix ## name ## gst( integer*  itype,                       \
+  void F77_ ## prefix ## name ## gst( integer*  itype,                       \
                                      char* uplo,                        \
                                      integer*  m,                           \
                                      PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
@@ -83,7 +83,7 @@ LAPACK_hegst(s,sy)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_hegst(d,sy)
 {
@@ -104,7 +104,7 @@ LAPACK_hegst(d,sy)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_hegst(c,he)
 {
@@ -126,7 +126,7 @@ LAPACK_hegst(c,he)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
         chegst_fla( itype, uplo,
@@ -135,7 +135,7 @@ LAPACK_hegst(c,he)
                     (complex *) buff_B, ldim_B,
                     info );
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 #endif
 }
@@ -159,7 +159,7 @@ LAPACK_hegst(z,he)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
         zhegst_fla( itype, uplo,
@@ -168,14 +168,14 @@ LAPACK_hegst(z,he)
                     (doublecomplex *) buff_B, ldim_B,
                     info );
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 #endif
 }
 
 
 #define LAPACK_hegs2(prefix, name)                                      \
-  int F77_ ## prefix ## name ## gs2(integer*  itype,                        \
+  void F77_ ## prefix ## name ## gs2(integer*  itype,                        \
                                     char* uplo,                         \
                                     integer*  m,                            \
                                     PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
@@ -201,7 +201,7 @@ LAPACK_hegs2(s,sy)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_hegs2(d,sy)
 {
@@ -222,7 +222,7 @@ LAPACK_hegs2(d,sy)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_hegs2(c,he)
 {
@@ -244,7 +244,7 @@ LAPACK_hegs2(c,he)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
         chegs2_fla( itype, uplo,
@@ -253,7 +253,7 @@ LAPACK_hegs2(c,he)
                     (complex *) buff_B, ldim_B,
                     info );
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 #endif
 }
@@ -277,7 +277,7 @@ LAPACK_hegs2(z,he)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
         zhegs2_fla( itype, uplo,
@@ -286,7 +286,7 @@ LAPACK_hegs2(z,he)
                     (doublecomplex *) buff_B, ldim_B,
                     info );
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 #endif
 }

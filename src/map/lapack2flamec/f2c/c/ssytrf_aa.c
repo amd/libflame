@@ -125,7 +125,7 @@ the routine */
 /* > \ingroup realSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ssytrf_aa_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, real *work, integer *lwork, integer *info)
+void ssytrf_aa_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ssytrf_aa inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -134,15 +134,15 @@ int ssytrf_aa_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, re
     /* Local variables */
     integer j;
     extern /* Subroutine */
-    int slasyf_aa_(char *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, real * );
+    void slasyf_aa_(char *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, real * );
     integer j1, k1, k2, j2, j3, jb, nb, mj, nj;
     real alpha;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkopt;
     logical lquery;
@@ -209,24 +209,24 @@ int ssytrf_aa_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, re
         i__1 = -(*info);
         xerbla_("SSYTRF_AA", &i__1, (ftnlen)9);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     ipiv[1] = 1;
     if (*n == 1)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Adjust block size based on the workspace size */
     if (*lwork < (nb + 1) * *n)
@@ -463,7 +463,7 @@ L11:
 L20:
     work[1] = (real) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SSYTRF_AA */
 }
 /* ssytrf_aa__ */

@@ -117,7 +117,7 @@ for 1<=i<=N, row i of the */
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv, doublereal *b, integer *ldb, integer *info)
+void dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv, doublereal *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgetrs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "", *trans, *n, *nrhs, *lda, *ldb);
@@ -141,7 +141,7 @@ int dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
         int
         dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
 #endif
-    extern int dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *); 
+    extern void dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *); 
     extern int fla_dgetrs_small_notrans(char *trans, integer *n,
                                         integer *nrhs, doublereal *a,
                                         integer *lda, integer *ipiv,
@@ -182,13 +182,13 @@ int dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
         i__1 = -(*info);
         xerbla_("DGETRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 
 #ifdef FLA_ENABLE_AMD_OPT
@@ -197,7 +197,7 @@ int dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
     {
         fla_dgetrs_small_notrans(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 #endif
 
@@ -235,7 +235,7 @@ int dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
         dtrsm_LLNU_small(n, nrhs, &c_b12, &a[a_offset], lda, &b[b_offset], ldb);
         /* Solve U*X = B, overwriting B with X. */
         dtrsm_LUNN_small(n, nrhs, &c_b12, &a[a_offset], lda, &b[b_offset], ldb);
-        return 0;
+        return;
     }
 
     if (notran)
@@ -259,7 +259,7 @@ int dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
         dlaswp_(nrhs, &b[b_offset], ldb, &c__1, n, &ipiv[1], &c_n1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGETRS */
 }
 /* dgetrs_ */

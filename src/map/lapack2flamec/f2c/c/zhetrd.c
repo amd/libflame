@@ -189,7 +189,7 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zhetrd_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *d__, doublereal *e, doublecomplex *tau, doublecomplex *work, integer *lwork, integer *info)
+void zhetrd_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *d__, doublereal *e, doublecomplex *tau, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetrd inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -202,10 +202,10 @@ int zhetrd_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *
     integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
-    int zhetd2_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zher2k_(char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zhetd2_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zher2k_(char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zlatrd_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, doublecomplex *, integer *);
+    void zlatrd_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, doublecomplex *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -270,12 +270,12 @@ int zhetrd_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *
         i__1 = -(*info);
         xerbla_("ZHETRD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
@@ -283,7 +283,7 @@ int zhetrd_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     nx = *n;
     iws = 1;
@@ -412,7 +412,7 @@ int zhetrd_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *
     work[1].r = (doublereal) lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHETRD */
 }
 /* zhetrd_ */

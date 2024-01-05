@@ -265,7 +265,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, complex *afp, integer *ipiv, complex *b, integer * ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork, integer *info)
+void cspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, complex *afp, integer *ipiv, complex *b, integer * ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -283,14 +283,14 @@ int cspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, com
     extern logical lsame_(char *, char *);
     real anorm;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern real clansp_(char *, char *, integer *, complex *, real *);
     extern /* Subroutine */
-    int cspcon_(char *, integer *, complex *, integer *, real *, real *, complex *, integer *), csprfs_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), csptrf_(char *, integer *, complex *, integer *, integer *), csptrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void cspcon_(char *, integer *, complex *, integer *, real *, real *, complex *, integer *), csprfs_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), csptrf_(char *, integer *, complex *, integer *, integer *), csptrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -358,7 +358,7 @@ int cspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, com
         i__1 = -(*info);
         xerbla_("CSPSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (nofact)
     {
@@ -371,7 +371,7 @@ int cspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, com
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -390,7 +390,7 @@ int cspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, com
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSPSVX */
 }
 /* cspsvx_ */

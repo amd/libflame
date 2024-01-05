@@ -102,7 +102,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zung2r_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex * work, integer *info)
+void zung2r_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex * work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -110,7 +110,7 @@ int zung2r_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *ld
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -158,12 +158,12 @@ int zung2r_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *ld
     {
         i__1 = -(*info);
         xerbla_("ZUNG2R", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 0)
     {
-        return 0;
+        return;
     }
     /* Initialise columns k+1:n to columns of the unit matrix */
     i__1 = *n;
@@ -227,7 +227,7 @@ int zung2r_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *ld
         }
         /* L40: */
     }
-    return 0;
+    return;
     /* End of ZUNG2R */
 }
 /* zung2r_ */

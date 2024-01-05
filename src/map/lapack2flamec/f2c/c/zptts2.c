@@ -99,7 +99,7 @@
 /* > \ingroup complex16PTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zptts2_(integer *iuplo, integer *n, integer *nrhs, doublereal *d__, doublecomplex *e, doublecomplex *b, integer *ldb)
+void zptts2_(integer *iuplo, integer *n, integer *nrhs, doublereal *d__, doublecomplex *e, doublecomplex *b, integer *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zptts2 inputs: iuplo %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*iuplo, *n, *nrhs, *ldb);
@@ -113,7 +113,7 @@ int zptts2_(integer *iuplo, integer *n, integer *nrhs, doublereal *d__, doubleco
     /* Local variables */
     integer i__, j;
     extern /* Subroutine */
-    int zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+    void zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -146,7 +146,7 @@ int zptts2_(integer *iuplo, integer *n, integer *nrhs, doublereal *d__, doubleco
             zdscal_(nrhs, &d__1, &b[b_offset], ldb);
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*iuplo == 1)
     {
@@ -385,7 +385,7 @@ L80: /* Solve L * x = b. */
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPTTS2 */
 }
 /* zptts2_ */

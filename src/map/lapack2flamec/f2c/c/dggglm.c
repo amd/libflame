@@ -178,7 +178,7 @@ the least squares solution could not */
 /* > \ingroup doubleOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int dggglm_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, doublereal *b, integer *ldb, doublereal *d__, doublereal *x, doublereal *y, doublereal *work, integer *lwork, integer *info)
+void dggglm_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, doublereal *b, integer *ldb, doublereal *d__, doublereal *x, doublereal *y, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dggglm inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*n, *m, *p, *lda, *ldb, *lwork);
@@ -187,15 +187,15 @@ int dggglm_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, do
     /* Local variables */
     integer i__, nb, np, nb1, nb2, nb3, nb4, lopt;
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dggqrf_( integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dggqrf_( integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkmin;
     extern /* Subroutine */
-    int dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dormrq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dormrq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int dtrtrs_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dtrtrs_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -283,12 +283,12 @@ int dggglm_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, do
         i__1 = -(*info);
         xerbla_("DGGGLM", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
@@ -308,7 +308,7 @@ int dggglm_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, do
             y[i__] = 0.;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the GQR factorization of matrices A and B: */
     /* Q**T*A = ( R11 ) M, Q**T*B*Z**T = ( T11 T12 ) M */
@@ -338,7 +338,7 @@ int dggglm_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, do
         {
             *info = 1;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         i__1 = *n - *m;
         dcopy_(&i__1, &d__[*m + 1], &c__1, &y[*m + *p - *n + 1], &c__1);
@@ -363,7 +363,7 @@ int dggglm_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, do
         {
             *info = 2;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Copy D to X */
         dcopy_(m, &d__[1], &c__1, &x[1], &c__1);
@@ -380,7 +380,7 @@ int dggglm_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, do
     i__2 = (integer) work[*m + np + 1]; // , expr subst
     work[1] = (doublereal) (*m + np + fla_max(i__1,i__2));
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGGGLM */
 }
 /* dggglm_ */

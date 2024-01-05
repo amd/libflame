@@ -158,7 +158,7 @@ static complex c_b1 =
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int chetrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *e, integer *ipiv, complex *b, integer *ldb, integer *info)
+void chetrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *e, integer *ipiv, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -184,10 +184,10 @@ int chetrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, c
     extern logical lsame_(char *, char *);
     complex denom;
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -245,13 +245,13 @@ int chetrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, c
         i__1 = -(*info);
         xerbla_("CHETRS_3", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -461,7 +461,7 @@ int chetrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, c
         /* END Lower */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHETRS_3 */
 }
 /* chetrs_3__ */

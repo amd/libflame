@@ -109,7 +109,7 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, integer *info)
+void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -134,15 +134,15 @@ int chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, i
     integer k1k1;
     real bjj, bkk;
     extern /* Subroutine */
-    int chpr2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *);
+    void chpr2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *);
     extern /* Complex */
     VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int chpmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+    void chpmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *), csscal_( integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *), csscal_( integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -187,7 +187,7 @@ int chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, i
         i__1 = -(*info);
         xerbla_("CHPGST", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*itype == 1)
     {
@@ -355,7 +355,7 @@ int chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, i
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHPGST */
 }
 /* chpgst_ */

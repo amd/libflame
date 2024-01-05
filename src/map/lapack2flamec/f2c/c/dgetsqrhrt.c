@@ -166,7 +166,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2, doublereal *a, integer *lda, doublereal * t, integer *ldt, doublereal *work, integer *lwork, integer *info)
+void dgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2, doublereal *a, integer *lda, doublereal * t, integer *ldt, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgetsqrhrt inputs: m %" FLA_IS ", n %" FLA_IS ", mb1 %" FLA_IS ", nb1 %" FLA_IS ", nb2 %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *mb1, *nb1, *nb2, *lda, *ldt, *lwork);
@@ -176,16 +176,16 @@ int dgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
     /* Local variables */
     integer lworkopt, i__, j;
     extern /* Subroutine */
-    int dorhr_col_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dorhr_col_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     integer lw1, lw2, num_all_row_blocks__, lwt, ldwt;
     extern /* Subroutine */
-    int dorgtsqr_row_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dorgtsqr_row_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer iinfo;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     extern /* Subroutine */
-    int dlatsqr_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dlatsqr_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer nb1local, nb2local;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -303,20 +303,20 @@ int dgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
         i__1 = -(*info);
         xerbla_("DGETSQRHRT", &i__1, (ftnlen)10);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         work[1] = (doublereal) lworkopt;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         work[1] = (doublereal) lworkopt;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     nb2local = fla_min(*nb2,*n);
     /* (1) Perform TSQR-factorization of the M-by-N matrix A. */
@@ -371,7 +371,7 @@ int dgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
     }
     work[1] = (doublereal) lworkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGETSQRHRT */
 }
 /* dgetsqrhrt_ */

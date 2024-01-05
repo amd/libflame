@@ -170,7 +170,7 @@
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, real *alpha, real *ab, integer *ldab, real * x, integer *incx, real *beta, real *y, integer *incy)
+void sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, real *alpha, real *ab, integer *ldab, real * x, integer *incx, real *beta, real *y, integer *incy)
 {
     /* System generated locals */
     integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
@@ -252,12 +252,12 @@ int sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
     if (info != 0)
     {
         xerbla_("SLA_GBAMV ", &info, (ftnlen)10);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*m == 0 || *n == 0 || *alpha == 0.f && *beta == 1.f)
     {
-        return 0;
+        return;
     }
     /* Set LENX and LENY, the lengths of the vectors x and y, and set */
     /* up the start points in X and Y. */
@@ -484,7 +484,7 @@ int sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
             }
         }
     }
-    return 0;
+    return;
     /* End of SLA_GBAMV */
 }
 /* sla_gbamv__ */

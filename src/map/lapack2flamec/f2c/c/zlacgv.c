@@ -60,7 +60,7 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zlacgv_(integer *n, doublecomplex *x, integer *incx)
+void zlacgv_(integer *n, doublecomplex *x, integer *incx)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlacgv inputs: n %" FLA_IS ", incx %%" FLA_IS "",*n, *incx);
@@ -123,7 +123,7 @@ int zlacgv_(integer *n, doublecomplex *x, integer *incx)
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLACGV */
 }
 /* zlacgv_ */

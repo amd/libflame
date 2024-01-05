@@ -171,7 +171,7 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, complex *a, integer *lda, complex *b, integer *ldb, complex *x, integer *ldx, real *ferr, real *berr, complex *work, real *rwork, integer *info)
+void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, complex *a, integer *lda, complex *b, integer *ldb, complex *x, integer *ldx, real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -199,10 +199,10 @@ int ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, comp
     extern logical lsame_(char *, char *);
     integer isave[3];
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), ctrsv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), clacn2_( integer *, complex *, complex *, real *, integer *, integer *);
+    void ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), ctrsv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), clacn2_( integer *, complex *, complex *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
@@ -294,7 +294,7 @@ int ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, comp
         i__1 = -(*info);
         xerbla_("CTRRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
@@ -309,7 +309,7 @@ int ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, comp
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (notran)
     {
@@ -676,7 +676,7 @@ L210:
         /* L250: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTRRFS */
 }
 /* ctrrfs_ */

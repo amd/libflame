@@ -230,7 +230,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dorcsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, integer *q, doublereal *x11, integer *ldx11, doublereal *x21, integer *ldx21, doublereal *theta, doublereal *u1, integer *ldu1, doublereal *u2, integer *ldu2, doublereal *v1t, integer *ldv1t, doublereal *work, integer *lwork, integer *iwork, integer *info)
+void dorcsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, integer *q, doublereal *x11, integer *ldx11, doublereal *x21, integer *ldx21, doublereal *theta, doublereal *u1, integer *ldu1, doublereal *u2, integer *ldu2, doublereal *v1t, integer *ldv1t, doublereal *work, integer *lwork, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, x11_dim1, x11_offset, x21_dim1, x21_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9;
@@ -238,19 +238,19 @@ int dorcsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, 
     integer lworkmin, lworkopt, i__, j, r__, childinfo, lorglqmin, lorgqrmin, lorglqopt, lorgqropt, ib11d, ib11e, ib12d, ib12e, ib21d, ib21e, ib22d, ib22e, iphi;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer itaup1, itaup2, itauq1;
     logical wantu1, wantu2;
     integer ibbcsd, lbbcsd, iorbdb, lorbdb;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlapmr_(logical *, integer *, integer *, doublereal *, integer *, integer *), dlapmt_(logical *, integer *, integer *, doublereal *, integer *, integer *);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlapmr_(logical *, integer *, integer *, doublereal *, integer *, integer *), dlapmt_(logical *, integer *, integer *, doublereal *, integer *, integer *);
     integer iorglq;
     extern int /* Subroutine */
       dorglq_fla(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *),
       lapack_dorgqr(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
     integer lorglq, iorgqr, lorgqr;
     extern /* Subroutine */
-    int dbbcsd_(char *, char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dorbdb1_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dorbdb2_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dorbdb3_( integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dorbdb4_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+    void dbbcsd_(char *, char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dorbdb1_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dorbdb2_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dorbdb3_( integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dorbdb4_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     logical lquery, wantv1t;
     doublereal dumm_a[1] = {0.};
     /* -- LAPACK computational routine (3.5.0) -- */
@@ -569,11 +569,11 @@ int dorcsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, 
     {
         i__1 = -(*info);
         xerbla_("DORCSD2BY1", &i__1, (ftnlen)10);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     lorgqr = *lwork - iorgqr + 1;
     lorglq = *lwork - iorglq + 1;
@@ -859,7 +859,7 @@ int dorcsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, 
             }
         }
     }
-    return 0;
+    return;
     /* End of DORCSD2BY1 */
 }
 /* dorcsd2by1_ */

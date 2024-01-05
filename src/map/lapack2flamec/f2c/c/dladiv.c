@@ -77,7 +77,7 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dladiv_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doublereal *p, doublereal *q)
+void dladiv_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doublereal *p, doublereal *q)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
@@ -87,7 +87,7 @@ int dladiv_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doub
     doublereal s, aa, ab, bb, cc, cd, dd;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dladiv1_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dladiv1_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -164,13 +164,13 @@ int dladiv_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doub
     *p *= s;
     *q *= s;
     AOCL_DTL_TRACE_EXIT_INDENT
-    return 0;
+    return;
     /* End of DLADIV */
 }
 /* dladiv_ */
 /* > \ingroup doubleOTHERauxiliary */
 /* Subroutine */
-int dladiv1_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doublereal *p, doublereal *q)
+void dladiv1_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doublereal *p, doublereal *q)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     doublereal r__, t;
@@ -194,7 +194,7 @@ int dladiv1_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, dou
     *a = -(*a);
     *q = dladiv2_(b, a, c__, d__, &r__, &t);
     AOCL_DTL_TRACE_EXIT_INDENT
-    return 0;
+    return;
     /* End of DLADIV1 */
 }
 /* dladiv1_ */

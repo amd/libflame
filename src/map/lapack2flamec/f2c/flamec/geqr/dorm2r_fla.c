@@ -148,7 +148,7 @@ static integer c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal * c__, integer *ldc, doublereal *work, integer *info)
+void dorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal * c__, integer *ldc, doublereal *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
@@ -157,7 +157,7 @@ int dorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, doub
     doublereal aii;
     logical left;
     extern /* Subroutine */
-    int dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -237,12 +237,12 @@ int dorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, doub
     {
         i__1 = -(*info);
         xerbla_("DORM2R", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0 || *k == 0)
     {
-        return 0;
+        return;
     }
     if (left && ! notran || ! left && notran)
     {
@@ -291,7 +291,7 @@ int dorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, doub
         a[i__ + i__ * a_dim1] = aii;
         /* L10: */
     }
-    return 0;
+    return;
     /* End of DORM2R */
 }
 /* dorm2r_ */

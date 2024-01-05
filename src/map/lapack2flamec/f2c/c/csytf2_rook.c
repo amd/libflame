@@ -185,7 +185,7 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int csytf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, integer *info)
+void csytf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -212,14 +212,14 @@ int csytf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv
     logical done;
     integer imax, jmax;
     extern /* Subroutine */
-    int csyr_(char *, integer *, complex *, complex *, integer *, complex *, integer *);
+    void csyr_(char *, integer *, complex *, complex *, integer *, complex *, integer *);
     real alpha;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     real sfmin;
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
     integer itemp, kstep;
     real stemp;
     logical upper;
@@ -281,7 +281,7 @@ int csytf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv
         i__1 = -(*info);
         xerbla_("CSYTF2_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.f) + 1.f) / 8.f;
@@ -966,7 +966,7 @@ L42: /* Begin pivot search loop body */
     }
 L70:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYTF2_ROOK */
 }
 /* csytf2_rook__ */

@@ -97,7 +97,7 @@
 /* > \endverbatim */
 static real c_b2 = 1.f;
 /* Subroutine */
-int slartg_(real *f, real *g, real *c__, real *s, real *r__)
+void slartg_(real *f, real *g, real *c__, real *s, real *r__)
 {
     AOCL_DTL_TRACE_LOG_INIT
     /* Builtin functions */
@@ -156,6 +156,6 @@ int slartg_(real *f, real *g, real *c__, real *s, real *r__)
         *r__ *= u;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* slartg_ */

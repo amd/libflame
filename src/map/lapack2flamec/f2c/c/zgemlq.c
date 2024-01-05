@@ -161,7 +161,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *t, integer *tsize, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *lwork, integer *info)
+void zgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *t, integer *tsize, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgemlq inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", tsize %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *k, *lda, *tsize, *ldc);
@@ -170,7 +170,7 @@ int zgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, doublec
     integer a_dim1, a_offset, c_dim1, c_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int zlamswlq_(char *, char *, integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zlamswlq_(char *, char *, integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     integer mb, nb, mn, lw;
     logical left, tran;
     extern logical lsame_(char *, char *);
@@ -179,7 +179,7 @@ int zgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, doublec
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, lquery;
     extern /* Subroutine */
-    int zgemlqt_(char *, char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zgemlqt_(char *, char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -274,12 +274,12 @@ int zgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, doublec
         i__1 = -(*info);
         xerbla_("ZGEMLQ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Computing MIN */
@@ -287,7 +287,7 @@ int zgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, doublec
     if (fla_min(i__1,*k) == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Computing MAX */
     i__1 = fla_max(*m,*n);
@@ -302,7 +302,7 @@ int zgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, doublec
     work[1].r = (doublereal) lw;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGEMLQ */
 }
 /* zgemlq_ */

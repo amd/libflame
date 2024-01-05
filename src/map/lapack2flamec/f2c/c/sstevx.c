@@ -210,7 +210,7 @@ if RANGE = 'V', the exact value of M */
 /* > \ingroup realOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int sstevx_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, real *z__, integer *ldz, real *work, integer * iwork, integer *ifail, integer *info)
+void sstevx_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, real *z__, integer *ldz, real *work, integer * iwork, integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -234,10 +234,10 @@ int sstevx_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, r
     real sigma;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     char order[1];
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
+    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
     logical wantz, alleig, indeig;
     integer iscale, indibl;
     logical valeig;
@@ -249,13 +249,13 @@ int sstevx_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, r
     integer indisp, indiwo, indwrk;
     extern real slanst_(char *, integer *, real *, real *);
     extern /* Subroutine */
-    int sstein_(integer *, real *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *), ssterf_(integer *, real *, real *, integer *);
+    void sstein_(integer *, real *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *), ssterf_(integer *, real *, real *, integer *);
     integer nsplit;
     extern /* Subroutine */
-    int sstebz_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    void sstebz_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     real smlnum;
     extern /* Subroutine */
-    int ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
+    void ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -338,14 +338,14 @@ int sstevx_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, r
         i__1 = -(*info);
         xerbla_("SSTEVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = 0;
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -367,7 +367,7 @@ int sstevx_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, r
             z__[z_dim1 + 1] = 1.f;
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -531,7 +531,7 @@ L20:
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSTEVX */
 }
 /* sstevx_ */

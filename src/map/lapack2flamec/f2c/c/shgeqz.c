@@ -301,7 +301,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, real *h__, integer *ldh, real *t, integer *ldt, real *alphar, real *alphai, real *beta, real *q, integer *ldq, real *z__, integer *ldz, real *work, integer *lwork, integer *info)
+void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, real *h__, integer *ldh, real *t, integer *ldt, real *alphar, real *alphai, real *beta, real *q, integer *ldq, real *z__, integer *ldz, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("shgeqz inputs: job %c, compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS "",*job, *compq, *compz, *n, *ilo, *ihi, *ldh, *ldt, *ldq, *ldz);
@@ -327,7 +327,7 @@ int shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integ
     logical ilz;
     real ulp, sqr, szi, szr, ad11l, ad12l, ad21l, ad22l, ad32l, wabs, atol, btol, temp;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *), slag2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *), slag2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *);
     real temp2, s1inv, scale;
     extern logical lsame_(char *, char *);
     integer iiter, ilast, jiter;
@@ -337,12 +337,12 @@ int shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integ
     logical ilazr2;
     extern real slapy2_(real *, real *), slapy3_(real *, real *, real *);
     extern /* Subroutine */
-    int slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
+    void slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
     real ascale, bscale;
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int slarfg_(integer *, real *, real *, integer *, real *);
+    void slarfg_(integer *, real *, real *, integer *, real *);
     real safmax;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -351,10 +351,10 @@ int shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integ
     integer icompq, ilastm;
     extern real slanhs_(char *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int slartg_(real *, real *, real *, real *, real * );
+    void slartg_(real *, real *, real *, real *, real * );
     integer ischur;
     extern /* Subroutine */
-    int slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    void slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     logical ilazro;
     integer icompz, ifirst, ifrstm, istart;
     logical ilpivt, lquery;
@@ -507,19 +507,19 @@ int shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integ
         i__1 = -(*info);
         xerbla_("SHGEQZ", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 0)
     {
         work[1] = 1.f;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize Q and Z */
     if (icompq == 3)
@@ -1583,7 +1583,7 @@ L380: /* Set Eigenvalues 1:ILO-1 */
 L420:
     work[1] = (real) (*n);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SHGEQZ */
 }
 /* shgeqz_ */

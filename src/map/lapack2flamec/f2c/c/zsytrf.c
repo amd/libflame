@@ -174,7 +174,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zsytrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *work, integer *lwork, integer *info)
+void zsytrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsytrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "", *uplo, *n, *lda, *lwork);
@@ -186,11 +186,11 @@ int zsytrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipi
     integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
-    int zsytf2_(char *, integer *, doublecomplex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zsytf2_(char *, integer *, doublecomplex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork;
     extern /* Subroutine */
-    int zlasyf_(char *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zlasyf_(char *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -251,12 +251,12 @@ int zsytrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipi
         i__1 = -(*info);
         xerbla_("ZSYTRF", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     nbmin = 2;
     ldwork = *n;
@@ -372,7 +372,7 @@ L40:
     work[1].r = (doublereal) lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSYTRF */
 }
 /* zsytrf_ */

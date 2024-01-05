@@ -135,7 +135,7 @@ on exit, D */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomplex *z__, integer *ldz, doublereal *work, integer *info)
+void zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomplex *z__, integer *ldz, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
@@ -154,31 +154,31 @@ int zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecompl
     doublereal tst, eps2;
     integer lend, jtot;
     extern /* Subroutine */
-    int dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern logical lsame_(char *, char *);
     doublereal anorm;
     extern /* Subroutine */
-    int zlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void zlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     integer lendm1, lendp1;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
     integer iscale;
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-    int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal safmax;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlasrt_(char *, integer *, doublereal *, integer *);
+    void dlasrt_(char *, integer *, doublereal *, integer *);
     integer lendsv;
     doublereal ssfmin;
     integer nmaxit, icompz;
     doublereal ssfmax;
     extern /* Subroutine */
-    int zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+    void zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -242,13 +242,13 @@ int zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecompl
         i__1 = -(*info);
         xerbla_("ZSTEQR", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -259,7 +259,7 @@ int zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecompl
             z__[i__1].i = 0.; // , expr subst
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine the unit roundoff and over/underflow thresholds. */
     eps = dlamch_("E");
@@ -619,7 +619,7 @@ L140:
             /* L150: */
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     goto L10;
     /* Order eigenvalues and eigenvectors. */
@@ -662,7 +662,7 @@ L160:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSTEQR */
 }
 /* zsteqr_ */

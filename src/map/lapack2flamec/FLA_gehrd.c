@@ -22,7 +22,7 @@
 */
 
 #define LAPACK_gehrd(prefix)                                            \
-  int F77_ ## prefix ## gehrd( integer* m,                                  \
+  void F77_ ## prefix ## gehrd( integer* m,                                  \
                                integer* ilo,                                \
                                integer* ihi,                                \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
@@ -78,7 +78,7 @@ LAPACK_gehrd(s)
         fla_error=0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_gehrd(d)
 {
@@ -100,7 +100,7 @@ LAPACK_gehrd(d)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
 LAPACK_gehrd(c)
@@ -123,7 +123,7 @@ LAPACK_gehrd(c)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_gehrd(z)
 {
@@ -145,12 +145,12 @@ LAPACK_gehrd(z)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 
 #define LAPACK_gehd2(prefix)                                            \
-  int F77_ ## prefix ## gehd2( integer* m,                                  \
+  void F77_ ## prefix ## gehd2( integer* m,                                  \
                                integer* ilo,                                \
                                integer* ihi,                                \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
@@ -178,7 +178,7 @@ LAPACK_gehd2(s)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_gehd2(d)
 {
@@ -200,7 +200,7 @@ LAPACK_gehd2(d)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
@@ -224,7 +224,7 @@ LAPACK_gehd2(c)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_gehd2(z)
 {
@@ -246,7 +246,7 @@ LAPACK_gehd2(z)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 

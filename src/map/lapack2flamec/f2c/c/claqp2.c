@@ -135,7 +135,7 @@ if JPVT(i) = 0, */
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-int claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, integer *jpvt, complex *tau, real *vn1, real *vn2, complex *work)
+void claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, integer *jpvt, complex *tau, real *vn1, real *vn2, complex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -161,14 +161,14 @@ int claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, i
     integer pvt;
     real temp, temp2, tol3z;
     extern /* Subroutine */
-    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
+    void clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
     integer offpi;
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
     integer itemp;
     extern real scnrm2_(integer *, complex *, integer *);
     extern /* Subroutine */
-    int clarfg_(integer *, complex *, complex *, integer *, complex *);
+    void clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern real slamch_(char *);
     extern integer isamax_(integer *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -292,7 +292,7 @@ int claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, i
         /* L20: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAQP2 */
 }
 /* claqp2_ */

@@ -129,7 +129,7 @@ i */
 /* > \ingroup complexOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int chpev_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z__, integer *ldz, complex *work, real *rwork, integer *info)
+void chpev_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z__, integer *ldz, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -155,22 +155,22 @@ int chpev_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z_
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     logical wantz;
     integer iscale;
     extern real clanhp_(char *, char *, integer *, complex *, real *), slamch_(char *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *);
+    void csscal_(integer *, real *, complex *, integer *);
     real safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer indtau;
     extern /* Subroutine */
-    int chptrd_(char *, integer *, complex *, real *, real *, complex *, integer *);
+    void chptrd_(char *, integer *, complex *, real *, real *, complex *, integer *);
     integer indrwk, indwrk;
     extern /* Subroutine */
-    int csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *), cupgtr_(char *, integer *, complex *, complex *, complex *, integer *, complex *, integer *), ssterf_(integer *, real *, real *, integer *);
+    void csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *), cupgtr_(char *, integer *, complex *, complex *, complex *, integer *, complex *, integer *), ssterf_(integer *, real *, real *, integer *);
     real smlnum;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -225,13 +225,13 @@ int chpev_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z_
         i__1 = -(*info);
         xerbla_("CHPEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -244,7 +244,7 @@ int chpev_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z_
             z__[i__1].i = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -303,7 +303,7 @@ int chpev_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z_
         sscal_(&imax, &r__1, &w[1], &c__1);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHPEV */
 }
 /* chpev_ */

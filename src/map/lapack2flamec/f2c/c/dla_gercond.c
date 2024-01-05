@@ -152,10 +152,10 @@ doublereal dla_gercond_(char *trans, integer *n, doublereal *a, integer *lda, do
     extern logical lsame_(char *, char *);
     integer isave[3];
     extern /* Subroutine */
-    int dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern /* Subroutine */
-    int dgetrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dgetrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     logical notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

@@ -210,7 +210,7 @@ k=N/2. IF TRANSR = 'C' then RFP is */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *info)
+void zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpftrf inputs: transr %c, uplo %c, n %" FLA_IS "",*transr, *uplo, *n);
@@ -222,13 +222,13 @@ int zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *inf
     logical normaltransr;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
+    void zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
     logical lower;
     extern /* Subroutine */
-    int ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     extern /* Subroutine */
-    int zpotrf_(char *, integer *, doublecomplex *, integer *, integer *);
+    void zpotrf_(char *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -269,13 +269,13 @@ int zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *inf
         i__1 = -(*info);
         xerbla_("ZPFTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* If N is odd, set NISODD = .TRUE. */
     /* If N is even, set K = N/2 and NISODD = .FALSE. */
@@ -315,7 +315,7 @@ int zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *inf
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 ztrsm_("R", "L", "C", "N", &n2, &n1, &c_b1, a, n, &a[n1], n);
                 zherk_("U", "N", &n2, &n1, &c_b15, &a[n1], n, &c_b16, &a[*n], n);
@@ -334,7 +334,7 @@ int zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *inf
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 ztrsm_("L", "L", "N", "N", &n1, &n2, &c_b1, &a[n2], n, a, n);
                 zherk_("U", "C", &n2, &n1, &c_b15, a, n, &c_b16, &a[n1], n);
@@ -358,7 +358,7 @@ int zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *inf
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 ztrsm_("L", "U", "C", "N", &n1, &n2, &c_b1, a, &n1, &a[n1 * n1], &n1);
                 zherk_("L", "C", &n2, &n1, &c_b15, &a[n1 * n1], &n1, &c_b16, & a[1], &n1);
@@ -378,7 +378,7 @@ int zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *inf
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 ztrsm_("R", "U", "N", "N", &n2, &n1, &c_b1, &a[n2 * n2], &n2, a, &n2);
                 zherk_("L", "N", &n2, &n1, &c_b15, a, &n2, &c_b16, &a[n1 * n2], &n2);
@@ -406,7 +406,7 @@ int zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *inf
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
@@ -431,7 +431,7 @@ int zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *inf
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
@@ -460,7 +460,7 @@ int zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *inf
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 ztrsm_("L", "U", "C", "N", &k, &k, &c_b1, &a[k], &n1, &a[k * ( k + 1)], &k);
                 zherk_("L", "C", &k, &k, &c_b15, &a[k * (k + 1)], &k, &c_b16, a, &k);
@@ -480,7 +480,7 @@ int zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *inf
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 ztrsm_("R", "U", "N", "N", &k, &k, &c_b1, &a[k * (k + 1)], &k, a, &k);
                 zherk_("L", "N", &k, &k, &c_b15, a, &k, &c_b16, &a[k * k], &k);
@@ -493,7 +493,7 @@ int zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *inf
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPFTRF */
 }
 /* zpftrf_ */

@@ -132,7 +132,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sppsv_(char *uplo, integer *n, integer *nrhs, real *ap, real *b, integer *ldb, integer *info)
+void sppsv_(char *uplo, integer *n, integer *nrhs, real *ap, real *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -191,7 +191,7 @@ int sppsv_(char *uplo, integer *n, integer *nrhs, real *ap, real *b, integer *ld
         i__1 = -(*info);
         xerbla_("SPPSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the Cholesky factorization A = U**T*U or A = L*L**T. */
     spptrf_(uplo, n, &ap[1], info);
@@ -201,7 +201,7 @@ int sppsv_(char *uplo, integer *n, integer *nrhs, real *ap, real *b, integer *ld
         spptrs_(uplo, n, nrhs, &ap[1], &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPPSV */
 }
 /* sppsv_ */

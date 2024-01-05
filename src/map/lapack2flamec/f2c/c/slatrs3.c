@@ -218,7 +218,7 @@ the routine */
 /* Angelika Schwarz, Umea University, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-int slatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *nrhs, real *a, integer *lda, real *x, integer *ldx, real *scale, real *cnorm, real *work, integer *lwork, integer *info)
+void slatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *nrhs, real *a, integer *lda, real *x, integer *ldx, real *scale, real *cnorm, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slatrs3 inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldx %" FLA_IS "",*uplo, *trans, *diag, *normin, *n, *nrhs, *lda, *ldx);
@@ -235,7 +235,7 @@ int slatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     extern logical lsame_(char *, char *);
     real rscal;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer lanrm, ilast, jlast;
     logical upper;
     integer lscale;
@@ -251,7 +251,7 @@ int slatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     logical notran;
     integer jfirst;
     extern /* Subroutine */
-    int slatrs_(char *, char *, char *, char *, integer *, real *, integer *, real *, real *, real *, integer *);
+    void slatrs_(char *, char *, char *, char *, integer *, real *, integer *, real *, real *, real *, integer *);
     real smlnum;
     logical nounit, lquery;
     /* .. Scalar Arguments .. */
@@ -363,12 +363,12 @@ int slatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
         i__1 = -(*info);
         xerbla_("SLATRS3", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize scaling factors */
     i__1 = *nrhs;
@@ -382,7 +382,7 @@ int slatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     if (fla_min(*n,*nrhs) == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine machine dependent constant to control overflow. */
     bignum = slamch_("Overflow");
@@ -399,7 +399,7 @@ int slatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
             slatrs_(uplo, trans, diag, "Y", n, &a[a_offset], lda, &x[k * x_dim1 + 1], &scale[k], &cnorm[1], info);
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute norms of blocks of A excluding diagonal blocks and find */
     /* the block with the largest norm TMAX. */
@@ -466,7 +466,7 @@ int slatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
             slatrs_(uplo, trans, diag, "N", n, &a[a_offset], lda, &x[k * x_dim1 + 1], &scale[k], &cnorm[1], info);
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Every right-hand side requires workspace to store NBA local scale */
     /* factors. To save workspace, X is computed successively in block columns */
@@ -800,7 +800,7 @@ int slatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SLATRS3 */
 }
 /* slatrs3_ */

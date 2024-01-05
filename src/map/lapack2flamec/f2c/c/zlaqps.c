@@ -171,7 +171,7 @@ static integer c__1 = 1;
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-int zlaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, doublecomplex *a, integer *lda, integer *jpvt, doublecomplex *tau, doublereal *vn1, doublereal *vn2, doublecomplex * auxv, doublecomplex *f, integer *ldf)
+void zlaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, doublecomplex *a, integer *lda, integer *jpvt, doublecomplex *tau, doublereal *vn1, doublereal *vn2, doublecomplex * auxv, doublecomplex *f, integer *ldf)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqps inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", nb %" FLA_IS ", kb %" FLA_IS ", lda %" FLA_IS ", ldf %" FLA_IS "",*m, *n, *offset, *nb, *kb, *lda, *ldf);
@@ -191,12 +191,12 @@ int zlaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, d
     doublereal temp, temp2, tol3z;
     integer itemp;
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_( char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     integer lsticc;
     extern /* Subroutine */
-    int zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    void zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     integer lastrk;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -418,7 +418,7 @@ L60:
         goto L60;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAQPS */
 }
 /* zlaqps_ */

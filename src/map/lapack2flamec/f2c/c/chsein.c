@@ -244,7 +244,7 @@ here the magnitude of a complex number */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n, complex *h__, integer *ldh, complex *w, complex * vl, integer *ldvl, complex *vr, integer *ldvr, integer *mm, integer * m, complex *work, real *rwork, integer *ifaill, integer *ifailr, integer *info)
+void chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n, complex *h__, integer *ldh, complex *w, complex * vl, integer *ldvl, complex *vr, integer *ldvr, integer *mm, integer * m, complex *work, real *rwork, integer *ifaill, integer *ifailr, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -272,7 +272,7 @@ int chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n,
     logical leftv, bothv;
     real hnorm;
     extern /* Subroutine */
-    int claein_(logical *, logical *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, real *, real *, real *, integer *);
+    void claein_(logical *, logical *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, real *, real *, real *, integer *);
     extern real slamch_(char *), clanhs_(char *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -381,13 +381,13 @@ int chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n,
         i__1 = -(*info);
         xerbla_("CHSEIN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set machine-dependent constants. */
     unfl = slamch_("Safe minimum");
@@ -466,7 +466,7 @@ L50:
                 {
                     *info = -6;
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 else if (hnorm > 0.f)
                 {
@@ -561,7 +561,7 @@ L60:
         /* L100: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHSEIN */
 }
 /* chsein_ */

@@ -150,7 +150,7 @@ static doublereal c_b11 = 1.;
 /* > \ingroup doublePTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *df, doublereal *ef, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal *ferr, doublereal *berr, doublereal *work, integer *info)
+void dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *df, doublereal *ef, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal *ferr, doublereal *berr, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dptrfs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*n, *nrhs, *ldb, *ldx);
@@ -163,7 +163,7 @@ int dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublerea
     integer ix, nz;
     doublereal eps, safe1, safe2;
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     integer count;
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
@@ -172,7 +172,7 @@ int dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublerea
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal lstres;
     extern /* Subroutine */
-    int dpttrs_(integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+    void dpttrs_(integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -231,7 +231,7 @@ int dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublerea
         i__1 = -(*info);
         xerbla_("DPTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
@@ -246,7 +246,7 @@ int dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublerea
             /* L10: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* NZ = maximum number of nonzero elements in each row of A, plus 1 */
     nz = 4;
@@ -419,7 +419,7 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* L90: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPTRFS */
 }
 /* dptrfs_ */

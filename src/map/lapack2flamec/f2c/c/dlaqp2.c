@@ -135,7 +135,7 @@ if JPVT(i) = 0, */
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-int dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *lda, integer *jpvt, doublereal *tau, doublereal *vn1, doublereal *vn2, doublereal *work)
+void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *lda, integer *jpvt, doublereal *tau, doublereal *vn1, doublereal *vn2, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqp2 inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", lda %" FLA_IS "",*m, *n, *offset, *lda);
@@ -152,13 +152,13 @@ int dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *lda
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     doublereal temp2, tol3z;
     extern /* Subroutine */
-    int dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
     integer offpi, itemp;
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern integer fla_idamax(integer *, doublereal *, integer *);
     /* -- LAPACK auxiliary routine (version 3.5.0) -- */
@@ -287,7 +287,7 @@ int dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *lda
         /* L20: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAQP2 */
 }
 /* dlaqp2_ */

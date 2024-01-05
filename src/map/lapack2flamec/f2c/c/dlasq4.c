@@ -136,7 +136,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlasq4_(integer *i0, integer *n0, doublereal *z__, integer *pp, integer *n0in, doublereal *dmin__, doublereal *dmin1, doublereal *dmin2, doublereal *dn, doublereal *dn1, doublereal *dn2, doublereal *tau, integer *ttype, doublereal *g)
+void dlasq4_(integer *i0, integer *n0, doublereal *z__, integer *pp, integer *n0in, doublereal *dmin__, doublereal *dmin1, doublereal *dmin2, doublereal *dn, doublereal *dn1, doublereal *dn2, doublereal *tau, integer *ttype, doublereal *g)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasq4 inputs: i0 %" FLA_IS ", n0 %" FLA_IS ", pp %" FLA_IS ", n0in %" FLA_IS "",*i0, *n0, *pp, *n0in);
@@ -176,7 +176,7 @@ int dlasq4_(integer *i0, integer *n0, doublereal *z__, integer *pp, integer *n0i
         *tau = -(*dmin__);
         *ttype = -1;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     nn = (*n0 << 2) + *pp;
     if (*n0in == *n0)
@@ -240,7 +240,7 @@ int dlasq4_(integer *i0, integer *n0, doublereal *z__, integer *pp, integer *n0i
                     if (z__[nn - 5] > z__[nn - 7])
                     {
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     b2 = z__[nn - 5] / z__[nn - 7];
                     np = nn - 9;
@@ -252,13 +252,13 @@ int dlasq4_(integer *i0, integer *n0, doublereal *z__, integer *pp, integer *n0i
                     if (z__[np - 4] > z__[np - 2])
                     {
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     a2 = z__[np - 4] / z__[np - 2];
                     if (z__[nn - 9] > z__[nn - 11])
                     {
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     b2 = z__[nn - 9] / z__[nn - 11];
                     np = nn - 13;
@@ -278,7 +278,7 @@ int dlasq4_(integer *i0, integer *n0, doublereal *z__, integer *pp, integer *n0i
                     if (z__[i4] > z__[i4 - 2])
                     {
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     b2 *= z__[i4] / z__[i4 - 2];
                     a2 += b2;
@@ -310,7 +310,7 @@ L20:
             if (z__[np - 8] > b2 || z__[np - 4] > b1)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             a2 = z__[np - 8] / b2 * (z__[np - 4] / b1 + 1.);
             /* Approximate contribution to norm squared from I < NN-2. */
@@ -331,7 +331,7 @@ L20:
                     if (z__[i4] > z__[i4 - 2])
                     {
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     b2 *= z__[i4] / z__[i4 - 2];
                     a2 += b2;
@@ -379,7 +379,7 @@ L40:
             if (z__[nn - 5] > z__[nn - 7])
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             b1 = z__[nn - 5] / z__[nn - 7];
             b2 = b1;
@@ -396,7 +396,7 @@ L40:
                 if (z__[i4] > z__[i4 - 2])
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 b1 *= z__[i4] / z__[i4 - 2];
                 b2 += b1;
@@ -450,7 +450,7 @@ L60:
             if (z__[nn - 5] > z__[nn - 7])
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             b1 = z__[nn - 5] / z__[nn - 7];
             b2 = b1;
@@ -466,7 +466,7 @@ L60:
                 if (z__[i4] > z__[i4 - 2])
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 b1 *= z__[i4] / z__[i4 - 2];
                 b2 += b1;
@@ -511,7 +511,7 @@ L80:
     }
     *tau = s;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASQ4 */
 }
 /* dlasq4_ */

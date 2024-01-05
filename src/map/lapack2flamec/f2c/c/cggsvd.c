@@ -328,7 +328,7 @@ LDQ >= 1 otherwise. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer *p, integer *k, integer *l, complex *a, integer * lda, complex *b, integer *ldb, real *alpha, real *beta, complex *u, integer *ldu, complex *v, integer *ldv, complex *q, integer *ldq, complex *work, real *rwork, integer *iwork, integer *info)
+void cggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer *p, integer *k, integer *l, complex *a, integer * lda, complex *b, integer *ldb, real *alpha, real *beta, complex *u, integer *ldu, complex *v, integer *ldv, complex *q, integer *ldq, complex *work, real *rwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -353,11 +353,11 @@ int cggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer 
     real anorm, bnorm;
     logical wantq;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     logical wantu, wantv;
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *), slamch_(char *);
     extern /* Subroutine */
-    int ctgsja_(char *, char *, char *, integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, real *, real *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void ctgsja_(char *, char *, char *, integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, real *, real *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
     integer ncycle;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), cggsvp_( char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, real *, complex *, complex *, integer *);
@@ -455,7 +455,7 @@ int cggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer 
         i__1 = -(*info);
         xerbla_("CGGSVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the Frobenius norm of matrices A and B */
     anorm = clange_("1", m, n, &a[a_offset], lda, &rwork[1]);
@@ -510,7 +510,7 @@ int cggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer 
         /* L20: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGGSVD */
 }
 /* cggsvd_ */

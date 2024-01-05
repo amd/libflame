@@ -121,7 +121,7 @@
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int dlarrc_(char *jobt, integer *n, doublereal *vl, doublereal *vu, doublereal *d__, doublereal *e, doublereal *pivmin, integer *eigcnt, integer *lcnt, integer *rcnt, integer *info)
+void dlarrc_(char *jobt, integer *n, doublereal *vl, doublereal *vu, doublereal *d__, doublereal *e, doublereal *pivmin, integer *eigcnt, integer *lcnt, integer *rcnt, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarrc inputs: jobt %c, n %" FLA_IS "",*jobt, *n);
@@ -159,7 +159,7 @@ int dlarrc_(char *jobt, integer *n, doublereal *vl, doublereal *vu, doublereal *
     if (*n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     *lcnt = 0;
     *rcnt = 0;
@@ -253,7 +253,7 @@ int dlarrc_(char *jobt, integer *n, doublereal *vl, doublereal *vu, doublereal *
     }
     *eigcnt = *rcnt - *lcnt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* end of DLARRC */
 }
 /* dlarrc_ */

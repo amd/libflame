@@ -161,7 +161,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zunbdb6_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *incx1, doublecomplex *x2, integer *incx2, doublecomplex *q1, integer *ldq1, doublecomplex *q2, integer *ldq2, doublecomplex *work, integer *lwork, integer *info)
+void zunbdb6_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *incx1, doublecomplex *x2, integer *incx2, doublecomplex *q1, integer *ldq1, doublecomplex *q2, integer *ldq2, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zunbdb6 inputs: m1 %" FLA_IS ", m2 %" FLA_IS ", n %" FLA_IS ", incx1 %" FLA_IS ", incx2 %" FLA_IS ", ldq1 %" FLA_IS ", ldq2 %" FLA_IS ", lwork %" FLA_IS "", *m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2, *lwork);
@@ -174,7 +174,7 @@ int zunbdb6_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *i
     integer i__, ix;
     doublereal scl, eps, ssq, norm;
     extern /* Subroutine */
-    int zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlassq_( integer *, doublecomplex *, integer *, doublereal *, doublereal *) ;
@@ -247,7 +247,7 @@ int zunbdb6_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *i
         i__1 = -(*info);
         xerbla_("ZUNBDB6", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     eps = dlamch_("Precision");
     /* First, project X onto the orthogonal complement of Q's column */
@@ -287,7 +287,7 @@ int zunbdb6_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *i
     if (norm_new__ >= norm * .01)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (norm_new__ <= *n * eps * norm)
     {
@@ -312,7 +312,7 @@ int zunbdb6_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *i
             x2[i__3].i = 0.; // , expr subst
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     norm = norm_new__;
     i__1 = *n;
@@ -375,7 +375,7 @@ int zunbdb6_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *i
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZUNBDB6 */
 }
 /* zunbdb6_ */

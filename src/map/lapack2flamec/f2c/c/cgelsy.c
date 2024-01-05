@@ -212,7 +212,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgelsy_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, complex *b, integer *ldb, integer *jpvt, real *rcond, integer *rank, complex *work, integer *lwork, real *rwork, integer * info)
+void cgelsy_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, complex *b, integer *ldb, integer *jpvt, real *rcond, integer *rank, complex *work, integer *lwork, real *rwork, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -237,30 +237,30 @@ int cgelsy_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, co
     real anrm, bnrm, smin, smax;
     integer iascl, ibscl;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
     integer ismin, ismax;
     extern /* Subroutine */
-    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), claic1_(integer *, integer *, complex *, real *, complex *, complex *, real *, complex *, complex *);
+    void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), claic1_(integer *, integer *, complex *, real *, complex *, complex *, real *, complex *, complex *);
     real wsize;
     extern /* Subroutine */
-    int cgeqp3_(integer *, integer *, complex *, integer *, integer *, complex *, complex *, integer *, real *, integer *), slabad_(real *, real *);
+    void cgeqp3_(integer *, integer *, complex *, integer *, integer *, complex *, complex *, integer *, real *, integer *), slabad_(real *, real *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
+    void clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
     extern /* Subroutine */
-    int cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     real sminpr, smaxpr, smlnum;
     extern /* Subroutine */
-    int cunmrz_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void cunmrz_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int ctzrzf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+    void ctzrzf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -356,12 +356,12 @@ int cgelsy_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, co
         i__1 = -(*info);
         xerbla_("CGELSY", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Computing MIN */
@@ -370,7 +370,7 @@ int cgelsy_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, co
     {
         *rank = 0;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
@@ -574,7 +574,7 @@ L70:
     work[1].r = q__1.r;
     work[1].i = q__1.i; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGELSY */
 }
 /* cgelsy_ */

@@ -82,7 +82,7 @@ static real c_b6 = 1.f;
 /* > \ingroup OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slartgp_(real *f, real *g, real *cs, real *sn, real *r__)
+void slartgp_(real *f, real *g, real *cs, real *sn, real *r__)
 {
     AOCL_DTL_TRACE_LOG_INIT
     real r__1, r__2;
@@ -226,7 +226,7 @@ L30:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SLARTGP */
 }
 /* slartgp_ */

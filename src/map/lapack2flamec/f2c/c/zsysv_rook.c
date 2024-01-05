@@ -192,7 +192,7 @@ the routine */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int zsysv_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *work, integer *lwork, integer *info)
+void zsysv_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsysv_rook inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb, *lwork);
@@ -200,7 +200,7 @@ int zsysv_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int zsytrf_rook_(char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zsytrs_rook_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zsytrf_rook_(char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zsytrs_rook_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -280,12 +280,12 @@ int zsysv_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer
         i__1 = -(*info);
         xerbla_("ZSYSV_ROOK ", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
     zsytrf_rook_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
@@ -298,7 +298,7 @@ int zsysv_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer
     work[1].r = (doublereal) lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSYSV_ROOK */
 }
 /* zsysv_rook__ */

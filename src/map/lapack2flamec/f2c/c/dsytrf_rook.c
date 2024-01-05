@@ -198,7 +198,7 @@ the routine */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dsytrf_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work, integer *lwork, integer *info)
+void dsytrf_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytrf_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *lda, *lwork);
@@ -207,7 +207,7 @@ int dsytrf_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *i
     /* Local variables */
     integer j, k, kb, nb, iws;
     extern /* Subroutine */
-    int dsytf2_rook_(char *, integer *, doublereal *, integer *, integer *, integer *), dlasyf_rook_(char *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dsytf2_rook_(char *, integer *, doublereal *, integer *, integer *, integer *), dlasyf_rook_(char *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     extern logical lsame_(char *, char *);
     integer nbmin, iinfo;
     logical upper;
@@ -276,12 +276,12 @@ int dsytrf_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *i
         i__1 = -(*info);
         xerbla_("DSYTRF_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     nbmin = 2;
     ldwork = *n;
@@ -397,7 +397,7 @@ L20: /* If K > N, exit from loop */
 L40:
     work[1] = (doublereal) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYTRF_ROOK */
 }
 /* dsytrf_rook__ */

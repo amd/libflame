@@ -135,7 +135,7 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cpstf2_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, integer *rank, real *tol, real *work, integer *info)
+void cpstf2_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, integer *rank, real *tol, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -160,19 +160,19 @@ int cpstf2_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, inte
     integer pvt;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     complex ctemp;
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
     integer itemp;
     real stemp;
     logical upper;
     real sstop;
     extern /* Subroutine */
-    int clacgv_(integer *, complex *, integer *);
+    void clacgv_(integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer smaxloc_(real *, integer *);
     extern logical sisnan_(real *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
@@ -222,13 +222,13 @@ int cpstf2_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, inte
         i__1 = -(*info);
         xerbla_("CPSTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize PIV */
     i__1 = *n;
@@ -501,7 +501,7 @@ L190: /* Rank is number of steps completed. Set INFO = 1 to signal */
     *info = 1;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
 L200:
-    return 0;
+    return;
     /* End of CPSTF2 */
 }
 /* cpstf2_ */

@@ -109,7 +109,7 @@ the matrix is */
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dgetri_(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work, integer *lwork, integer *info)
+void dgetri_(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgetri inputs: n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*n, *lda, *lwork);
@@ -118,14 +118,14 @@ int dgetri_(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *
     /* Local variables */
     integer i__, j, jb, nb, jj, jp, nn, iws;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer nbmin;
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork;
     extern /* Subroutine */
-    int dtrtri_(char *, char *, integer *, doublereal *, integer *, integer *);
+    void dtrtri_(char *, char *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -178,18 +178,18 @@ int dgetri_(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *
         i__1 = -(*info);
         xerbla_("DGETRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Form inv(U). If INFO > 0 from DTRTRI, then U is singular, */
     /* and the inverse is not computed. */
@@ -197,7 +197,7 @@ int dgetri_(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *
     if (*info > 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     nbmin = 2;
     ldwork = *n;
@@ -301,7 +301,7 @@ int dgetri_(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *
     }
     work[1] = (doublereal) iws;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGETRI */
 }
 /* dgetri_ */

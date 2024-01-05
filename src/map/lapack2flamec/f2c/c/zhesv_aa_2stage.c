@@ -176,7 +176,7 @@ the */
 /* > \ingroup complex16HEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int zhesv_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *tb, integer *ltb, integer *ipiv, integer *ipiv2, doublecomplex *b, integer *ldb, doublecomplex *work, integer *lwork, integer *info)
+void zhesv_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *tb, integer *ltb, integer *ipiv, integer *ipiv2, doublecomplex *b, integer *ldb, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhesv_aa_2stage inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ltb %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ltb, *ldb, *lwork);
@@ -184,7 +184,7 @@ int zhesv_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, in
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int zhetrf_aa_2stage_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublecomplex *, integer *, integer *), zhetrs_aa_2stage_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zhetrf_aa_2stage_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublecomplex *, integer *, integer *), zhetrs_aa_2stage_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublecomplex *, integer *, integer *);
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
@@ -265,12 +265,12 @@ int zhesv_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, in
         i__1 = -(*info);
         xerbla_("ZHESV_AA_2STAGE", &i__1, (ftnlen)15);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (wquery || tquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the factorization A = U**H*T*U or A = L*T*L**H. */
     zhetrf_aa_2stage_(uplo, n, &a[a_offset], lda, &tb[1], ltb, &ipiv[1], & ipiv2[1], &work[1], lwork, info);
@@ -282,7 +282,7 @@ int zhesv_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, in
     work[1].r = (doublereal) lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHESV_AA_2STAGE */
 }
 /* zhesv_aa_2stage__ */

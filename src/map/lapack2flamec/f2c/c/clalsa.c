@@ -255,7 +255,7 @@ and if */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-int clalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, complex *b, integer *ldb, complex *bx, integer *ldbx, real *u, integer *ldu, real *vt, integer *k, real *difl, real *difr, real *z__, real *poles, integer *givptr, integer *givcol, integer * ldgcol, integer *perm, real *givnum, real *c__, real *s, real *rwork, integer *iwork, integer *info)
+void clalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, complex *b, integer *ldb, complex *bx, integer *ldbx, real *u, integer *ldu, real *vt, integer *k, real *difl, real *difr, real *z__, real *poles, integer *givptr, integer *givcol, integer * ldgcol, integer *perm, real *givnum, real *c__, real *s, real *rwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -276,10 +276,10 @@ int clalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, complex
     /* Local variables */
     integer i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1, jcol, nlvl, sqre, jrow, jimag, jreal, inode, ndiml;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer ndimr;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), clals0_(integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer * );
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), clals0_(integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer * );
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -378,7 +378,7 @@ int clalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, complex
         i__1 = -(*info);
         xerbla_("CLALSA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Book-keeping and setting up the computation tree. */
     inode = 1;
@@ -805,7 +805,7 @@ L170: /* First now go through the right singular vector matrices of all */
     }
 L330:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLALSA */
 }
 /* clalsa_ */

@@ -108,7 +108,7 @@ higher precision or correctly rounded or */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int claev2_(complex *a, complex *b, complex *c__, real *rt1, real *rt2, real *cs1, complex *sn1)
+void claev2_(complex *a, complex *b, complex *c__, real *rt1, real *rt2, real *cs1, complex *sn1)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
@@ -121,7 +121,7 @@ int claev2_(complex *a, complex *b, complex *c__, real *rt1, real *rt2, real *cs
     real t;
     complex w;
     extern /* Subroutine */
-    int slaev2_(real *, real *, real *, real *, real *, real *, real *);
+    void slaev2_(real *, real *, real *, real *, real *, real *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -160,7 +160,7 @@ int claev2_(complex *a, complex *b, complex *c__, real *rt1, real *rt2, real *cs
     q__1.i = t * w.i; // , expr subst
     sn1->r = q__1.r, sn1->i = q__1.i;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAEV2 */
 }
 /* claev2_ */

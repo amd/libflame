@@ -243,7 +243,7 @@ the */
 /* > Christof Voemel, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-int cstegr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, complex *z__, integer *ldz, integer *isuppz, real *work, integer *lwork, integer *iwork, integer *liwork, integer * info)
+void cstegr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, complex *z__, integer *ldz, integer *isuppz, real *work, integer *lwork, integer *iwork, integer *liwork, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -259,7 +259,7 @@ int cstegr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, r
     integer z_dim1, z_offset;
     /* Local variables */
     extern /* Subroutine */
-    int cstemr_(char *, char *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, real *, complex *, integer *, integer *, integer *, logical *, real *, integer *, integer *, integer *, integer *);
+    void cstemr_(char *, char *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, real *, complex *, integer *, integer *, integer *, logical *, real *, integer *, integer *, integer *, integer *);
     logical tryrac;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -291,6 +291,6 @@ int cstegr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, r
     cstemr_(jobz, range, n, &d__[1], &e[1], vl, vu, il, iu, m, &w[1], &z__[ z_offset], ldz, n, &isuppz[1], &tryrac, &work[1], lwork, &iwork[1], liwork, info);
     /* End of CSTEGR */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* cstegr_ */

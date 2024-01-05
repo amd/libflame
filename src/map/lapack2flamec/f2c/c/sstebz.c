@@ -254,7 +254,7 @@ these eigenvalues are flagged by a */
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *il, integer *iu, real *abstol, real *d__, real *e, integer *m, integer *nsplit, real *w, integer *iblock, integer * isplit, real *work, integer *iwork, integer *info)
+void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *il, integer *iu, real *abstol, real *d__, real *e, integer *m, integer *nsplit, real *w, integer *iblock, integer * isplit, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -295,7 +295,7 @@ int sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *i
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer idiscu;
     extern /* Subroutine */
-    int slaebz_(integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    void slaebz_(integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
     integer iorder;
     logical ncnvrg;
     real pivmin;
@@ -397,7 +397,7 @@ int sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *i
         i__1 = -(*info);
         xerbla_("SSTEBZ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize error flags */
     *info = 0;
@@ -408,7 +408,7 @@ int sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *i
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Simplifications: */
     if (irange == 3 && *il == 1 && *iu == *n)
@@ -442,7 +442,7 @@ int sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *i
             *m = 1;
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute Splitting Points */
     *nsplit = 1;
@@ -559,7 +559,7 @@ int sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *i
         {
             *info = 4;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     else
@@ -902,7 +902,7 @@ L70:
         *info += 2;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSTEBZ */
 }
 /* sstebz_ */

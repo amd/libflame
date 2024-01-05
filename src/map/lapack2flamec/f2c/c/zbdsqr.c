@@ -218,7 +218,7 @@ if INFO = i, i */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, doublereal *d__, doublereal *e, doublecomplex *vt, integer *ldvt, doublecomplex *u, integer *ldu, doublecomplex *c__, integer *ldc, doublereal *rwork, integer *info)
+void zbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, doublereal *d__, doublereal *e, doublecomplex *vt, integer *ldvt, doublecomplex *u, integer *ldu, doublecomplex *c__, integer *ldc, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zbdsqr inputs: uplo %c, n %" FLA_IS ", ncvt %" FLA_IS ", nru %" FLA_IS ", ncc %" FLA_IS ", ldvt %" FLA_IS ", ldu %" FLA_IS ", ldc %" FLA_IS "",*uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
@@ -243,7 +243,7 @@ int zbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, 
     integer isub, iter;
     doublereal unfl, sinl, cosr, smin, smax, sinr;
     extern /* Subroutine */
-    int dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern logical lsame_(char *, char *);
     doublereal oldcs;
     integer oldll;
@@ -252,10 +252,10 @@ int zbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, 
     doublereal sminl, sigmx;
     logical lower;
     extern /* Subroutine */
-    int zlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zdrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlasq1_(integer *, doublereal *, doublereal *, doublereal *, integer *), dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void zlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zdrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlasq1_(integer *, doublereal *, doublereal *, doublereal *, integer *), dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+    void dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal sminoa, thresh;
     logical rotate;
     doublereal tolmul;
@@ -333,12 +333,12 @@ int zbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, 
         i__1 = -(*info);
         xerbla_("ZBDSQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -354,7 +354,7 @@ int zbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, 
         if (*info != 2)
         {
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         *info = 0;
     }
@@ -971,7 +971,7 @@ L200:
     }
 L220:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZBDSQR */
 }
 /* zbdsqr_ */

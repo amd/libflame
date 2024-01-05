@@ -105,7 +105,7 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cppequ_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *amax, integer *info)
+void cppequ_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *amax, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -169,7 +169,7 @@ int cppequ_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *ama
         i__1 = -(*info);
         xerbla_("CPPEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
@@ -177,7 +177,7 @@ int cppequ_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *ama
         *scond = 1.f;
         *amax = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize SMIN and AMAX. */
     s[1] = ap[1].r;
@@ -243,7 +243,7 @@ int cppequ_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *ama
             {
                 *info = i__;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L30: */
         }
@@ -264,7 +264,7 @@ int cppequ_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *ama
         *scond = sqrt(smin) / sqrt(*amax);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPPEQU */
 }
 /* cppequ_ */

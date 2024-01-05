@@ -182,7 +182,7 @@ LDC >= 1 if NCC = 0. */
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integer *ku, real *ab, integer *ldab, real *d__, real * e, real *q, integer *ldq, real *pt, integer *ldpt, real *c__, integer *ldc, real *work, integer *info)
+void sgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integer *ku, real *ab, integer *ldab, real *d__, real * e, real *q, integer *ldq, real *pt, integer *ldpt, real *c__, integer *ldc, real *work, integer *info)
 {
     /* System generated locals */
     integer ab_dim1, ab_offset, c_dim1, c_offset, pt_dim1, pt_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
@@ -193,7 +193,7 @@ int sgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
     real rs;
     integer kb1, ml0, mu0, klm, kun, nrt, klu1, inca;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     extern logical lsame_(char *, char *);
     logical wantb, wantc;
     integer minmn;
@@ -289,7 +289,7 @@ int sgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
     {
         i__1 = -(*info);
         xerbla_("SGBBRD", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Initialize Q and P**T to the unit matrix, if needed */
     if (wantq)
@@ -303,7 +303,7 @@ int sgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
     /* Quick return if possible. */
     if (*m == 0 || *n == 0)
     {
-        return 0;
+        return;
     }
     minmn = fla_min(*m,*n);
     if (*kl + *ku > 1)
@@ -637,7 +637,7 @@ int sgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
             /* L150: */
         }
     }
-    return 0;
+    return;
     /* End of SGBBRD */
 }
 /* sgbbrd_ */

@@ -181,7 +181,7 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integer *info)
+void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -201,15 +201,15 @@ int ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, intege
     real wk, wkm1, wkp1;
     integer imax, jmax;
     extern /* Subroutine */
-    int ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
+    void ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
     real alpha;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     integer kstep;
     logical upper;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *);
+    void sswap_(integer *, real *, integer *, real *, integer *);
     real absakk;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -264,7 +264,7 @@ int ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, intege
         i__1 = -(*info);
         xerbla_("SSYTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.f) + 1.f) / 8.f;
@@ -606,7 +606,7 @@ L40: /* If K > N, exit from loop */
     }
 L70:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTF2 */
 }
 /* ssytf2_ */

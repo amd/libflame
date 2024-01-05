@@ -210,14 +210,14 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slabrd_(integer *m, integer *n, integer *nb, real *a, integer *lda, real *d__, real *e, real *tauq, real *taup, real *x, integer *ldx, real *y, integer *ldy)
+void slabrd_(integer *m, integer *n, integer *nb, real *a, integer *lda, real *d__, real *e, real *tauq, real *taup, real *x, integer *ldx, real *y, integer *ldy)
 {
-    extern int fla_slabrd(integer *m, integer *n, integer *nb, real *a, integer *lda, real *d__, real *e, real *tauq, real *taup, real *x, integer *ldx, real *y, integer *ldy);
+    extern void fla_slabrd(integer *m, integer *n, integer *nb, real *a, integer *lda, real *d__, real *e, real *tauq, real *taup, real *x, integer *ldx, real *y, integer *ldy);
 
-    return fla_slabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
+    fla_slabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
 }
 
-int fla_slabrd(integer *m, integer *n, integer *nb, real *a, integer *lda, real *d__, real *e, real *tauq, real *taup, real *x, integer *ldx, real *y, integer *ldy)
+void fla_slabrd(integer *m, integer *n, integer *nb, real *a, integer *lda, real *d__, real *e, real *tauq, real *taup, real *x, integer *ldx, real *y, integer *ldy)
 {
     /* System generated locals */
     integer a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3, i__4, i__5;
@@ -225,7 +225,7 @@ int fla_slabrd(integer *m, integer *n, integer *nb, real *a, integer *lda, real 
     integer i__;
     int thread_id, actual_num_threads;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), slarfg_( integer *, real *, real *, integer *, real *);
+    void sscal_(integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), slarfg_( integer *, real *, real *, integer *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -272,7 +272,7 @@ int fla_slabrd(integer *m, integer *n, integer *nb, real *a, integer *lda, real 
     /* Function Body */
     if (*m <= 0 || *n <= 0)
     {
-        return 0;
+        return;
     }
     if (*m >= *n)
     {
@@ -498,7 +498,7 @@ int fla_slabrd(integer *m, integer *n, integer *nb, real *a, integer *lda, real 
             }
         }
     }
-    return 0;
+    return;
     /* End of SLABRD */
 }
 /* slabrd_ */

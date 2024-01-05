@@ -223,7 +223,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex *s, integer *lds, doublecomplex *p, integer *ldp, doublecomplex *vl, integer *ldvl, doublecomplex *vr, integer * ldvr, integer *mm, integer *m, doublecomplex *work, doublereal *rwork, integer *info)
+void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex *s, integer *lds, doublecomplex *p, integer *ldp, doublecomplex *vl, integer *ldvl, doublecomplex *vr, integer * ldvr, integer *mm, integer *m, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztgevc inputs: side %c, howmny %c, n %" FLA_IS ", lds %" FLA_IS ", ldp %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", m %" FLA_IS "",*side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm, *m);
@@ -258,7 +258,7 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
     doublereal anorm, bnorm;
     logical compr;
     extern /* Subroutine */
-    int zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
+    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
     logical ilbbad;
     doublereal acoefa, bcoefa, acoeff;
     doublecomplex bcoeff;
@@ -388,7 +388,7 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
         i__1 = -(*info);
         xerbla_("ZTGEVC", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Count the number of eigenvectors */
     if (! ilall)
@@ -444,14 +444,14 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
         i__1 = -(*info);
         xerbla_("ZTGEVC", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = im;
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Machine Constants */
     safmin = dlamch_("Safe minimum");
@@ -1161,7 +1161,7 @@ L250:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTGEVC */
 }
 /* ztgevc_ */

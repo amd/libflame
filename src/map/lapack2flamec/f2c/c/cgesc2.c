@@ -110,7 +110,7 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-int cgesc2_(integer *n, complex *a, integer *lda, complex * rhs, integer *ipiv, integer *jpiv, real *scale)
+void cgesc2_(integer *n, complex *a, integer *lda, complex * rhs, integer *ipiv, integer *jpiv, real *scale)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -134,12 +134,12 @@ int cgesc2_(integer *n, complex *a, integer *lda, complex * rhs, integer *ipiv, 
     real eps;
     complex temp;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *), slabad_(real *, real *);
+    void cscal_(integer *, complex *, complex *, integer *), slabad_(real *, real *);
     extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
     real bignum;
     extern /* Subroutine */
-    int claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
+    void claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
     real smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -254,7 +254,7 @@ int cgesc2_(integer *n, complex *a, integer *lda, complex * rhs, integer *ipiv, 
     i__1 = *n - 1;
     claswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &jpiv[1], &c_n1);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGESC2 */
 }
 /* cgesc2_ */

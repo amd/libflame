@@ -77,7 +77,7 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int clarscl2_(integer *m, integer *n, real *d__, complex *x, integer *ldx)
+void clarscl2_(integer *m, integer *n, real *d__, complex *x, integer *ldx)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -132,6 +132,6 @@ int clarscl2_(integer *m, integer *n, real *d__, complex *x, integer *ldx)
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* clarscl2_ */

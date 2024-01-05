@@ -227,7 +227,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi, integer *nw, real *a, integer *lda, real *b, integer *ldb, real *q, integer *ldq, real *z__, integer *ldz, integer *ns, integer *nd, real *alphar, real *alphai, real *beta, real *qc, integer *ldqc, real *zc, integer *ldzc, real * work, integer *lwork, integer *rec, integer *info)
+void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi, integer *nw, real *a, integer *lda, real *b, integer *ldb, real *q, integer *ldq, real *z__, integer *ldz, integer *ns, integer *nd, real *alphar, real *alphai, real *beta, real *qc, integer *ldqc, real *zc, integer *ldzc, real * work, integer *lwork, integer *rec, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaqz3 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", nw %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", ns %" FLA_IS ", nd %" FLA_IS ", ldqc %" FLA_IS ", ldzc %" FLA_IS ", rec %" FLA_IS "",*n, *ilo, *ihi, *nw, *lda, *ldb, *ldq, *ldz, *ns, *nd, *ldqc, *ldzc, *rec);
@@ -247,21 +247,21 @@ int slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     real temp;
     integer ilst;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *), slag2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *), slag2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *);
     logical bulge;
     real atemp;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer kwbot, kwtop, qz_small_info__;
     extern /* Subroutine */
-    int slaqz0_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *), slaqz2_( logical *, logical *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *, integer *, real *, integer *), slabad_( real *, real *);
+    void slaqz0_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *), slaqz2_( logical *, logical *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *, integer *, real *, integer *), slabad_( real *, real *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real safmax;
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), stgexc_( logical *, logical *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *), slartg_(real *, real *, real *, real *, real *);
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), stgexc_( logical *, logical *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *), slartg_(real *, real *, real *, real *, real *);
     integer istopm;
     real smlnum;
     integer istartm;
@@ -333,7 +333,7 @@ int slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         /* workspace query, quick return */
         work[1] = (real) lworkreq;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*lwork < lworkreq)
     {
@@ -344,7 +344,7 @@ int slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         i__1 = -(*info);
         xerbla_("SLAQZ3", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants */
     safmin = slamch_("SAFE MINIMUM");
@@ -398,7 +398,7 @@ int slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         i__1 = jw;
         slacpy_("ALL", &jw, &jw, &work[i__1 * i__1 + 1], &jw, &b[kwtop + kwtop * b_dim1], ldb);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Deflation detection loop */
     if (kwtop == *ilo || s == 0.f)
@@ -642,6 +642,6 @@ int slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         slacpy_("ALL", n, &jw, &work[1], n, &z__[kwtop * z_dim1 + 1], ldz);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* slaqz3_ */

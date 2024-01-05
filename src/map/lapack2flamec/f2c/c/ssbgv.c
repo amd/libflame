@@ -167,7 +167,7 @@
 /* > \ingroup realOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int ssbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real *ab, integer *ldab, real *bb, integer *ldbb, real * w, real *z__, integer *ldz, real *work, integer *info)
+void ssbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real *ab, integer *ldab, real *bb, integer *ldbb, real * w, real *z__, integer *ldz, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -187,7 +187,7 @@ int ssbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real *a
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer indwrk;
     extern /* Subroutine */
-    int spbstf_(char *, integer *, integer *, real *, integer *, integer *), ssbtrd_(char *, char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *), ssbgst_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), ssterf_(integer *, real *, real *, integer *), ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
+    void spbstf_(char *, integer *, integer *, real *, integer *, integer *), ssbtrd_(char *, char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *), ssbgst_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), ssterf_(integer *, real *, real *, integer *), ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -258,13 +258,13 @@ int ssbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real *a
         i__1 = -(*info);
         xerbla_("SSBGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Form a split Cholesky factorization of B. */
     spbstf_(uplo, n, kb, &bb[bb_offset], ldbb, info);
@@ -272,7 +272,7 @@ int ssbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real *a
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem. */
     inde = 1;
@@ -298,7 +298,7 @@ int ssbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real *a
         ssteqr_(jobz, n, &w[1], &work[inde], &z__[z_offset], ldz, &work[ indwrk], info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSBGV */
 }
 /* ssbgv_ */

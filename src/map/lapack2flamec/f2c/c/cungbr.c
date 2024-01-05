@@ -149,7 +149,7 @@ the routine */
 /* > \ingroup complexGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer *info)
+void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cungbr inputs: vect %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",*vect, *m, *n, *k, *lda);
@@ -265,14 +265,14 @@ int cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer 
         i__1 = -(*info);
         xerbla_("CUNGBR", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         work[1].r = (real) lwkopt;
         work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
@@ -280,7 +280,7 @@ int cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer 
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (wantq)
     {
@@ -401,7 +401,7 @@ int cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer 
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CUNGBR */
 }
 /* cungbr_ */

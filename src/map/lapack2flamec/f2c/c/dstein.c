@@ -163,7 +163,7 @@ IBLOCK(i)=1 if eigenvalue W(i) belongs to */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dstein_(integer *n, doublereal *d__, doublereal *e, integer *m, doublereal *w, integer *iblock, integer *isplit, doublereal *z__, integer *ldz, doublereal *work, integer *iwork, integer *ifail, integer *info)
+void dstein_(integer *n, doublereal *d__, doublereal *e, integer *m, doublereal *w, integer *iblock, integer *isplit, doublereal *z__, integer *ldz, doublereal *work, integer *iwork, integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dstein inputs: n %" FLA_IS ", m %" FLA_IS ", iblock %" FLA_IS ", isplit %" FLA_IS ", ldz %" FLA_IS "",*n, *m, *iblock, *isplit, *ldz);
@@ -182,21 +182,21 @@ int dstein_(integer *n, doublereal *d__, doublereal *e, integer *m, doublereal *
     integer jmax;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     integer iseed[4], gpind, iinfo;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     doublereal ortol;
     integer indrv1, indrv2, indrv3, indrv4, indrv5;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlagtf_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+    void dlagtf_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlagts_( integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer nrmchk;
     extern /* Subroutine */
-    int dlarnv_(integer *, integer *, integer *, doublereal *);
+    void dlarnv_(integer *, integer *, integer *, doublereal *);
     integer blksiz;
     doublereal onenrm, dtpcrt, pertol;
     /* -- LAPACK computational routine (version 3.7.0) -- */
@@ -288,19 +288,19 @@ L30:
         i__1 = -(*info);
         xerbla_("DSTEIN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *m == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*n == 1)
     {
         z__[z_dim1 + 1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     eps = dlamch_("Precision");
@@ -500,7 +500,7 @@ L160:
         ;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSTEIN */
 }
 /* dstein_ */

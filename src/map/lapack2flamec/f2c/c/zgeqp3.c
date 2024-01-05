@@ -155,7 +155,7 @@ v(i+1:m) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jpvt, doublecomplex *tau, doublecomplex *work, integer *lwork, doublereal *rwork, integer *info)
+void zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jpvt, doublecomplex *tau, doublecomplex *work, integer *lwork, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgeqp3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *lda, *lwork);
@@ -165,20 +165,20 @@ int zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jpv
     /* Local variables */
     integer j, jb, na, nb, sm, sn, nx, fjb, iws, nfxd, nbmin, minmn, minws;
     extern /* Subroutine */
-    int zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaqp2_(integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, doublereal *, doublereal *, doublecomplex *);
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaqp2_(integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, doublereal *, doublereal *, doublecomplex *);
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer * );
+    void zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer * );
     integer topbmn, sminmn;
     extern /* Subroutine */
-    int zlaqps_(integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, integer *);
+    void zlaqps_(integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -256,12 +256,12 @@ int zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jpv
         i__1 = -(*info);
         xerbla_("ZGEQP3", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Move initial columns up front. */
     nfxd = 1;
@@ -406,7 +406,7 @@ L30:
     work[1].r = z__1.r;
     work[1].i = z__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGEQP3 */
 }
 /* zgeqp3_ */

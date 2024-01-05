@@ -500,7 +500,7 @@ defaults */
 /* > \ingroup complex16SYsolve */
 /* ===================================================================== */
 /* Subroutine */
-int zsysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *a, integer *lda, doublecomplex *af, integer * ldaf, integer *ipiv, char *equed, doublereal *s, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *rpvgrw, doublereal *berr, integer *n_err_bnds__, doublereal *err_bnds_norm__, doublereal *err_bnds_comp__, integer * nparams, doublereal *params, doublecomplex *work, doublereal *rwork, integer *info)
+void zsysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *a, integer *lda, doublecomplex *af, integer * ldaf, integer *ipiv, char *equed, doublereal *s, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *rpvgrw, doublereal *berr, integer *n_err_bnds__, doublereal *err_bnds_norm__, doublereal *err_bnds_comp__, integer * nparams, doublereal *params, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsysvxx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx, *n_err_bnds__, *nparams);
@@ -509,7 +509,7 @@ int zsysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
     doublereal d__1, d__2;
     /* Local variables */
     extern /* Subroutine */
-    int zsyrfsx_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublecomplex *, doublereal *, integer *);
+    void zsyrfsx_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublecomplex *, doublereal *, integer *);
     integer j;
     doublereal amax, smin, smax;
     extern logical lsame_(char *, char *);
@@ -523,10 +523,10 @@ int zsysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
     doublereal bignum;
     integer infequ;
     extern /* Subroutine */
-    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal smlnum;
     extern /* Subroutine */
-    int zlaqsy_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, char *), zsytrf_(char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zlascl2_(integer *, integer *, doublereal *, doublecomplex *, integer *), zsytrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zsyequb_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublecomplex *, integer *);
+    void zlaqsy_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, char *), zsytrf_(char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zlascl2_(integer *, integer *, doublereal *, doublecomplex *, integer *), zsytrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zsyequb_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublecomplex *, integer *);
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -671,7 +671,7 @@ int zsysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
         i__1 = -(*info);
         xerbla_("ZSYSVXX", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (equil)
     {
@@ -706,7 +706,7 @@ int zsysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
                 *rpvgrw = zla_syrpvgrw_(uplo, n, info, &a[a_offset], lda, & af[af_offset], ldaf, &ipiv[1], &rwork[1]);
             }
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the reciprocal pivot growth factor RPVGRW. */
@@ -726,7 +726,7 @@ int zsysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
         zlascl2_(n, nrhs, &s[1], &x[x_offset], ldx);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSYSVXX */
 }
 /* zsysvxx_ */

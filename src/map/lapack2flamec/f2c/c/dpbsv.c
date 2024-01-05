@@ -152,7 +152,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dpbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, doublereal *ab, integer *ldab, doublereal *b, integer *ldb, integer *info)
+void dpbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, doublereal *ab, integer *ldab, doublereal *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpbsv inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *kd, *nrhs, *ldab, *ldb);
@@ -217,7 +217,7 @@ int dpbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, doublereal *ab, 
         i__1 = -(*info);
         xerbla_("DPBSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the Cholesky factorization A = U**T*U or A = L*L**T. */
     dpbtrf_(uplo, n, kd, &ab[ab_offset], ldab, info);
@@ -227,7 +227,7 @@ int dpbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, doublereal *ab, 
         dpbtrs_(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPBSV */
 }
 /* dpbsv_ */

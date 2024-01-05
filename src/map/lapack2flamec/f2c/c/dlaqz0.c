@@ -305,7 +305,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, integer *ihi, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *alphar, doublereal *alphai, doublereal *beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *rec, integer *info)
+void dlaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, integer *ihi, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *alphar, doublereal *alphai, doublereal *beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *rec, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqz0 inputs: wants %c, wantq %c, wantz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS ", rec %" FLA_IS "",*wants, *wantq, *wantz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz, *lwork, *rec);
@@ -328,7 +328,7 @@ int dlaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     integer nmin;
     doublereal temp;
     extern /* Subroutine */
-    int drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
     doublereal swap;
     integer n_undeflated__;
     extern logical lsame_(char *, char *);
@@ -336,25 +336,25 @@ int dlaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     doublereal bnorm;
     integer maxit, rcost, istop;
     extern /* Subroutine */
-    int dlaqz3_(logical *, logical *, logical *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *);
+    void dlaqz3_(logical *, logical *, logical *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *);
     integer itemp1, itemp2;
     extern /* Subroutine */
-    int dlaqz4_(logical *, logical *, logical *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlabad_(doublereal *, doublereal *);
+    void dlaqz4_(logical *, logical *, logical *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     integer nibble, nblock;
     extern doublereal dlanhs_(char *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+    void dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal safmax;
     extern /* Subroutine */
-    int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     doublereal eshift;
     extern /* Subroutine */
-    int dhgeqz_(char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dhgeqz_(char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     char jbcmpz[3];
     integer iwantq, iwants, istart;
     doublereal smlnum;
@@ -484,14 +484,14 @@ int dlaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
         i__1 = -(*info);
         xerbla_("DLAQZ0", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 0)
     {
         work[1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get the parameters */
     *(unsigned char *)jbcmpz = *(unsigned char *)wants;
@@ -524,7 +524,7 @@ int dlaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     {
         dhgeqz_(wants, wantq, wantz, n, ilo, ihi, &a[a_offset], lda, &b[ b_offset], ldb, &alphar[1], &alphai[1], &beta[1], &q[q_offset], ldq, &z__[z_offset], ldz, &work[1], lwork, info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Find out required workspace */
     /* Workspace query to dlaqz3 */
@@ -546,7 +546,7 @@ int dlaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     {
         work[1] = (doublereal) lworkreq;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*lwork < lworkreq)
     {
@@ -556,7 +556,7 @@ int dlaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     {
         xerbla_("DLAQZ0", info, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize Q and Z */
     if (iwantq == 3)
@@ -853,6 +853,6 @@ L80:
     dhgeqz_(wants, wantq, wantz, n, ilo, ihi, &a[a_offset], lda, &b[b_offset], ldb, &alphar[1], &alphai[1], &beta[1], &q[q_offset], ldq, &z__[ z_offset], ldz, &work[1], lwork, &norm_info__);
     *info = norm_info__;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dlaqz0_ */

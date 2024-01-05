@@ -413,7 +413,7 @@ i+1}
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer *n, integer *kl, integer *ku, integer *nrhs, doublecomplex *ab, integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv, logical *colequ, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *y, integer *ldy, doublereal *berr_out__, integer *n_norms__, doublereal *err_bnds_norm__, doublereal * err_bnds_comp__, doublecomplex *res, doublereal *ayb, doublecomplex * dy, doublecomplex *y_tail__, doublereal *rcond, integer *ithresh, doublereal *rthresh, doublereal *dz_ub__, logical *ignore_cwise__, integer *info)
+void zla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer *n, integer *kl, integer *ku, integer *nrhs, doublecomplex *ab, integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv, logical *colequ, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *y, integer *ldy, doublereal *berr_out__, integer *n_norms__, doublereal *err_bnds_norm__, doublereal * err_bnds_comp__, doublecomplex *res, doublereal *ayb, doublecomplex * dy, doublecomplex *y_tail__, doublereal *rcond, integer *ithresh, doublereal *rthresh, doublereal *dz_ub__, logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_gbrfsx_extended inputs: prec_type__ %" FLA_IS ", trans_type__ %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ",ldb %" FLA_IS ", ldy %" FLA_IS ", n_norms__ %" FLA_IS ", rcond %lf, ithresh %" FLA_IS ", rthresh %lf, dz_ub__ %lf, ignore_cwise__ %" FLA_IS "", *prec_type__, *trans_type__, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldy, *n_norms__, *rcond, *ithresh, *rthresh, *dz_ub__, *ignore_cwise__);
@@ -427,30 +427,30 @@ int zla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer *
     doublereal dxratmax, dzratmax;
     integer i__, j, m;
     extern /* Subroutine */
-    int zla_gbamv_(integer *, integer *, integer *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *) ;
+    void zla_gbamv_(integer *, integer *, integer *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *) ;
     logical incr_prec__;
     doublereal prev_dz_z__, yk, final_dx_x__, final_dz_z__;
     extern /* Subroutine */
-    int zla_wwaddw_(integer *, doublecomplex *, doublecomplex *, doublecomplex *);
+    void zla_wwaddw_(integer *, doublecomplex *, doublecomplex *, doublecomplex *);
     doublereal prevnormdx;
     integer cnt;
     doublereal dyk, eps, incr_thresh__, dx_x__, dz_z__, ymin;
     extern /* Subroutine */
-    int zla_lin_berr_(integer *, integer *, integer *, doublecomplex *, doublereal *, doublereal *), blas_zgbmv_x_( integer *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *) ;
+    void zla_lin_berr_(integer *, integer *, integer *, doublecomplex *, doublereal *, doublereal *), blas_zgbmv_x_( integer *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *) ;
     integer y_prec_state__;
     extern /* Subroutine */
     int blas_zgbmv2_x_(integer *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
     doublereal dxrat, dzrat;
     extern /* Subroutine */
-    int zgbmv_(char *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zgbmv_(char *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     char trans[1];
     doublereal normx, normy;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal normdx;
     extern /* Subroutine */
-    int zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
     extern /* Character */
     VOID chla_transtype_(char *, integer *);
     doublereal hugeval;
@@ -507,7 +507,7 @@ int zla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer *
     if (*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     chla_transtype_(ch__1, trans_type__);
     *(unsigned char *)trans = *(unsigned char *)&ch__1[0];
@@ -797,7 +797,7 @@ L666: /* Set final_* when cnt hits ithresh. */
         /* End of loop for each RHS. */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* zla_gbrfsx_extended__ */
 #endif

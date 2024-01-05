@@ -206,7 +206,7 @@ static real c_b42 = 1.f;
 /* > drmac@math.hr. Thank you. */
 /* ===================================================================== */
 /* Subroutine */
-int sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d__, real *sva, integer *mv, real *v, integer * ldv, real *eps, real *sfmin, real *tol, integer *nsweep, real *work, integer *lwork, integer *info)
+void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d__, real *sva, integer *mv, real *v, integer * ldv, real *eps, real *sfmin, real *tol, integer *nsweep, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5, i__6;
@@ -230,18 +230,18 @@ int sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d__
     real theta, small_val, fastr[5];
     logical applv, rsvec;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     logical rotok;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), srotm_(integer *, real *, integer *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sswap_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), srotm_(integer *, real *, integer *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer ijblsk, swband;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
     extern integer isamax_(integer *, real *, integer *);
     integer blskip;
     real mxaapq, thsign;
     extern /* Subroutine */
-    int slassq_(integer *, real *, integer *, real *, real *);
+    void slassq_(integer *, real *, integer *, real *, real *);
     real mxsinj;
     integer emptsw, notrot, iswrot, lkahead;
     real rootbig, rooteps;
@@ -328,7 +328,7 @@ int sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d__
     {
         i__1 = -(*info);
         xerbla_("SGSVJ0", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     if (rsvec)
     {
@@ -1176,7 +1176,7 @@ L1995: /* Sort the vector D. */
         }
         /* L5991: */
     }
-    return 0;
+    return;
     /* .. */
     /* .. END OF SGSVJ0 */
     /* .. */

@@ -76,7 +76,7 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dlarscl2_(integer *m, integer *n, doublereal *d__, doublereal *x, integer *ldx)
+void dlarscl2_(integer *m, integer *n, doublereal *d__, doublereal *x, integer *ldx)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarscl2 inputs: m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS "",*m, *n, *ldx);
@@ -116,6 +116,6 @@ int dlarscl2_(integer *m, integer *n, doublereal *d__, doublereal *x, integer *l
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dlarscl2_ */

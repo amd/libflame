@@ -159,7 +159,7 @@
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, integer *lda, real *x, integer *incx, real *beta, real *y, integer *incy)
+void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, integer *lda, real *x, integer *incx, real *beta, real *y, integer *incy)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -233,12 +233,12 @@ int sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, int
     if (info != 0)
     {
         xerbla_("SLA_GEAMV ", &info, (ftnlen)10);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*m == 0 || *n == 0 || *alpha == 0.f && *beta == 1.f)
     {
-        return 0;
+        return;
     }
     /* Set LENX and LENY, the lengths of the vectors x and y, and set */
     /* up the start points in X and Y. */
@@ -447,7 +447,7 @@ int sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, int
             }
         }
     }
-    return 0;
+    return;
     /* End of SLA_GEAMV */
 }
 /* sla_geamv__ */

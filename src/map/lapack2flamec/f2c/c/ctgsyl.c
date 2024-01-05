@@ -299,7 +299,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ctgsyl_(char *trans, integer *ijob, integer *m, integer * n, complex *a, integer *lda, complex *b, integer *ldb, complex *c__, integer *ldc, complex *d__, integer *ldd, complex *e, integer *lde, complex *f, integer *ldf, real *scale, real *dif, complex *work, integer *lwork, integer *iwork, integer *info)
+void ctgsyl_(char *trans, integer *ijob, integer *m, integer * n, complex *a, integer *lda, complex *b, integer *ldb, complex *c__, integer *ldc, complex *d__, integer *ldd, complex *e, integer *lde, complex *f, integer *ldf, real *scale, real *dif, complex *work, integer *lwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -320,15 +320,15 @@ int ctgsyl_(char *trans, integer *ijob, integer *m, integer * n, complex *a, int
     integer i__, j, k, p, q, ie, je, mb, nb, is, js, pq;
     real dsum;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     integer ifunc, linfo, lwmin;
     real scale2;
     extern /* Subroutine */
-    int ctgsy2_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, real *, integer *);
+    void ctgsy2_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, real *, integer *);
     real dscale, scaloc;
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer iround;
     logical notran;
@@ -461,12 +461,12 @@ int ctgsyl_(char *trans, integer *ijob, integer *m, integer * n, complex *a, int
         i__1 = -(*info);
         xerbla_("CTGSYL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
@@ -480,7 +480,7 @@ int ctgsyl_(char *trans, integer *ijob, integer *m, integer * n, complex *a, int
             }
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine optimal block sizes MB and NB */
     mb = ilaenv_(&c__2, "CTGSYL", trans, m, n, &c_n1, &c_n1);
@@ -545,7 +545,7 @@ int ctgsyl_(char *trans, integer *ijob, integer *m, integer * n, complex *a, int
             /* L30: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine block structure of A */
     p = 0;
@@ -851,7 +851,7 @@ L70:
     work[1].r = (real) lwmin;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTGSYL */
 }
 /* ctgsyl_ */

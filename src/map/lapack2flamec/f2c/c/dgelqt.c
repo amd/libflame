@@ -126,7 +126,7 @@ the elements above the diagonal */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgelqt_(integer *m, integer *n, integer *mb, doublereal * a, integer *lda, doublereal *t, integer *ldt, doublereal *work, integer *info)
+void dgelqt_(integer *m, integer *n, integer *mb, doublereal * a, integer *lda, doublereal *t, integer *ldt, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgelqt inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS "",*m, *n, *mb, *lda, *ldt);
@@ -135,7 +135,7 @@ int dgelqt_(integer *m, integer *n, integer *mb, doublereal * a, integer *lda, d
     /* Local variables */
     integer i__, k, ib, iinfo;
     extern /* Subroutine */
-    int dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgelqt3_(integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgelqt3_(integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -187,14 +187,14 @@ int dgelqt_(integer *m, integer *n, integer *mb, doublereal * a, integer *lda, d
         i__1 = -(*info);
         xerbla_("DGELQT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     k = fla_min(*m,*n);
     if (k == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Blocked loop of length K */
     i__1 = k;
@@ -219,7 +219,7 @@ int dgelqt_(integer *m, integer *n, integer *mb, doublereal * a, integer *lda, d
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGELQT */
 }
 /* dgelqt_ */

@@ -256,7 +256,7 @@ and if */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-int dlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, doublereal *b, integer *ldb, doublereal *bx, integer * ldbx, doublereal *u, integer *ldu, doublereal *vt, integer *k, doublereal *difl, doublereal *difr, doublereal *z__, doublereal * poles, integer *givptr, integer *givcol, integer *ldgcol, integer * perm, doublereal *givnum, doublereal *c__, doublereal *s, doublereal * work, integer *iwork, integer *info)
+void dlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, doublereal *b, integer *ldb, doublereal *bx, integer * ldbx, doublereal *u, integer *ldu, doublereal *vt, integer *k, doublereal *difl, doublereal *difr, doublereal *z__, doublereal * poles, integer *givptr, integer *givcol, integer *ldgcol, integer * perm, doublereal *givnum, doublereal *c__, doublereal *s, doublereal * work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlalsa inputs: icompq %" FLA_IS ", smlsiz %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldbx %" FLA_IS ", ldu %" FLA_IS ", k %" FLA_IS ", givptr %" FLA_IS ", givcol %" FLA_IS ", ldgcol %" FLA_IS "",*icompq, *smlsiz, *n, *nrhs, *ldb, *ldbx, *ldu, *k, *givptr, *givcol, *ldgcol);
@@ -267,10 +267,10 @@ int dlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, doubler
     /* Local variables */
     integer i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1, nlvl, sqre;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer inode, ndiml, ndimr;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dlals0_(integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dlals0_(integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -367,7 +367,7 @@ int dlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, doubler
         i__1 = -(*info);
         xerbla_("DLALSA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Book-keeping and setting up the computation tree. */
     inode = 1;
@@ -534,7 +534,7 @@ L50: /* First now go through the right singular vector matrices of all */
     }
 L90:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLALSA */
 }
 /* dlalsa_ */

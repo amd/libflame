@@ -142,7 +142,7 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, real *d__, integer *in, integer *info)
+void slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, real *d__, integer *in, integer *info)
 {
     /* System generated locals */
     integer i__1;
@@ -186,11 +186,11 @@ int slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, re
         *info = -1;
         i__1 = -(*info);
         xerbla_("SLAGTF", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     a[1] -= *lambda;
     in[*n] = 0;
@@ -200,7 +200,7 @@ int slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, re
         {
             in[1] = 1;
         }
-        return 0;
+        return;
     }
     eps = slamch_("Epsilon");
     tl = fla_max(*tol,eps);
@@ -274,7 +274,7 @@ int slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, re
     {
         in[*n] = *n;
     }
-    return 0;
+    return;
     /* End of SLAGTF */
 }
 /* slagtf_ */

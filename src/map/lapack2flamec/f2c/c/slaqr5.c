@@ -253,7 +253,7 @@ static integer c__3 = 3;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer *ktop, integer *kbot, integer *nshfts, real *sr, real *si, real *h__, integer *ldh, integer *iloz, integer *ihiz, real *z__, integer *ldz, real *v, integer *ldv, real *u, integer *ldu, integer *nv, real *wv, integer *ldwv, integer *nh, real *wh, integer * ldwh)
+void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer *ktop, integer *kbot, integer *nshfts, real *sr, real *si, real *h__, integer *ldh, integer *iloz, integer *ihiz, real *z__, integer *ldz, real *v, integer *ldv, real *u, integer *ldu, integer *nv, real *wv, integer *ldwv, integer *nh, real *wh, integer * ldwh)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaqr5 inputs: kacc22 %" FLA_IS ", n %" FLA_IS ", ktop %" FLA_IS ", kbot %" FLA_IS ", nshfts %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS ", ldv %" FLA_IS ", ldu %" FLA_IS ", nv %" FLA_IS ", ldwv %" FLA_IS ", nh %" FLA_IS ", ldwh %" FLA_IS "",*kacc22, *n, *ktop, *kbot, *nshfts, *ldh, *iloz, *ihiz, *ldz, *ldv, *ldu, *nv, *ldwv, *nh, *ldwh);
@@ -277,17 +277,17 @@ int slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer
     logical accum;
     integer ndcol, incol;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer krcol, nbmps;
     extern /* Subroutine */
-    int slaqr1_(integer *, real *, integer *, real *, real *, real *, real *, real *), slabad_(real *, real *);
+    void slaqr1_(integer *, real *, integer *, real *, real *, real *, real *, real *), slabad_(real *, real *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int slarfg_(integer *, real *, real *, integer *, real *);
+    void slarfg_(integer *, real *, real *, integer *, real *);
     real safmax;
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     real refsum, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -336,14 +336,14 @@ int slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer
     if (*nshfts < 2)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ==== If the active block is empty or 1-by-1, then there */
     /* . is nothing to do. ==== */
     if (*ktop >= *kbot)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ==== Shuffle shifts into pairs of real shifts and pairs */
     /* . of complex conjugate shifts assuming complex */
@@ -988,6 +988,6 @@ int slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer
     }
     /* ==== End of SLAQR5 ==== */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* slaqr5_ */

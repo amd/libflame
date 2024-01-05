@@ -194,7 +194,7 @@ the least squares solution could not be */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dgelst_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *work, integer *lwork, integer *info)
+void dgelst_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgelst inputs: trans %c, m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*trans, *m, *n, *nrhs, *lda, *ldb);
@@ -211,20 +211,20 @@ int dgelst_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a, 
     doublereal rwork[1];
     integer lwopt;
     extern /* Subroutine */
-    int dlabad_(doublereal *, doublereal *);
+    void dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer scllen;
     doublereal bignum;
     extern /* Subroutine */
-    int dgelqt_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dgeqrt_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dgelqt_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dgeqrt_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     integer mnnrhs;
     doublereal smlnum;
     logical lquery;
     extern /* Subroutine */
-    int dtrtrs_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dgemlqt_(char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dgemqrt_(char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dtrtrs_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dgemlqt_(char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dgemqrt_(char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -319,12 +319,12 @@ int dgelst_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a, 
         i__1 = -(*info);
         xerbla_("DGELST ", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Computing fla_min */
@@ -335,7 +335,7 @@ int dgelst_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a, 
         dlaset_("Full", &i__1, nrhs, &c_b12, &c_b12, &b[b_offset], ldb);
         work[1] = (doublereal) lwopt;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* *GEQRT and *GELQT routines cannot accept NB larger than fla_min(M,N) */
     if (nb > mn)
@@ -384,7 +384,7 @@ int dgelst_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a, 
         dlaset_("Full", &i__1, nrhs, &c_b12, &c_b12, &b[b_offset], ldb);
         work[1] = (doublereal) lwopt;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     brow = *m;
     if (tpsd)
@@ -426,7 +426,7 @@ int dgelst_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a, 
             if (*info > 0)
             {
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             scllen = *n;
         }
@@ -441,7 +441,7 @@ int dgelst_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a, 
             if (*info > 0)
             {
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* Block 2: Zero out all rows below the N-th row in B: */
             /* B(N+1:M,1:NRHS) = ZERO */
@@ -483,7 +483,7 @@ int dgelst_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a, 
             if (*info > 0)
             {
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* Block 2: Zero out all rows below the M-th row in B: */
             /* B(M+1:N,1:NRHS) = ZERO */
@@ -520,7 +520,7 @@ int dgelst_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a, 
             if (*info > 0)
             {
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             scllen = *m;
         }
@@ -544,7 +544,7 @@ int dgelst_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a, 
     }
     work[1] = (doublereal) lwopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGELST */
 }
 /* dgelst_ */

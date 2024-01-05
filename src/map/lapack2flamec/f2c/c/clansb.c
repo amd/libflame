@@ -140,7 +140,7 @@ real clansb_(char *norm, char *uplo, integer *n, integer *k, complex *ab, intege
     extern logical lsame_(char *, char *);
     real value;
     extern /* Subroutine */
-    int classq_(integer *, complex *, integer *, real *, real *);
+    void classq_(integer *, complex *, integer *, real *, real *);
     extern logical sisnan_(real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

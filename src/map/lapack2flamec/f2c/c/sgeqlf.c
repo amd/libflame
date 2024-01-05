@@ -133,17 +133,17 @@ v(1:m-k+i-1) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgeqlf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info)
+void sgeqlf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
     integer i__, k, ib, nb, ki, kk, mu, nu, nx, iws, nbmin, iinfo;
     extern /* Subroutine */
-    int sgeql2_(integer *, integer *, real *, integer *, real *, real *, integer *), slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sgeql2_(integer *, integer *, real *, integer *, real *, real *, integer *), slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
+    void slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -208,16 +208,16 @@ int sgeqlf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *work
     {
         i__1 = -(*info);
         xerbla_("SGEQLF", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (k == 0)
     {
-        return 0;
+        return;
     }
     nbmin = 2;
     nx = 1;
@@ -295,7 +295,7 @@ int sgeqlf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *work
         sgeql2_(&mu, &nu, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
     }
     work[1] = (real) iws;
-    return 0;
+    return;
     /* End of SGEQLF */
 }
 /* sgeqlf_ */

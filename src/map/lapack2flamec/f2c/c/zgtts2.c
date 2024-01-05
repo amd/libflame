@@ -116,7 +116,7 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complex16GTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zgtts2_(integer *itrans, integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, doublecomplex *du, doublecomplex *du2, integer *ipiv, doublecomplex *b, integer *ldb)
+void zgtts2_(integer *itrans, integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, doublecomplex *du, doublecomplex *du2, integer *ipiv, doublecomplex *b, integer *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgtts2 inputs: itrans %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*itrans, *n, *nrhs, *ldb);
@@ -157,7 +157,7 @@ int zgtts2_(integer *itrans, integer *n, integer *nrhs, doublecomplex *dl, doubl
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*itrans == 0)
     {
@@ -723,6 +723,6 @@ L130: /* Solve U**H * x = b. */
     }
     /* End of ZGTTS2 */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* zgtts2_ */

@@ -188,7 +188,7 @@
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int ssyconvf_rook_(char *uplo, char *way, integer *n, real * a, integer *lda, real *e, integer *ipiv, integer *info)
+void ssyconvf_rook_(char *uplo, char *way, integer *n, real * a, integer *lda, real *e, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -203,7 +203,7 @@ int ssyconvf_rook_(char *uplo, char *way, integer *n, real * a, integer *lda, re
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sswap_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical convert;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -252,13 +252,13 @@ int ssyconvf_rook_(char *uplo, char *way, integer *n, real * a, integer *lda, re
         i__1 = -(*info);
         xerbla_("SSYCONVF_ROOK", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -529,7 +529,7 @@ int ssyconvf_rook_(char *uplo, char *way, integer *n, real * a, integer *lda, re
         /* End A is LOWER */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYCONVF_ROOK */
 }
 /* ssyconvf_rook__ */

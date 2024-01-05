@@ -177,7 +177,7 @@ the corresponding */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlarzt_(char *direct, char *storev, integer *n, integer * k, doublereal *v, integer *ldv, doublereal *tau, doublereal *t, integer *ldt)
+void dlarzt_(char *direct, char *storev, integer *n, integer * k, doublereal *v, integer *ldv, doublereal *tau, doublereal *t, integer *ldt)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarzt inputs: direct %c, storev %c, n %" FLA_IS ", k %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS "",*direct, *storev, *n, *k, *ldv, *ldt);
@@ -188,7 +188,7 @@ int dlarzt_(char *direct, char *storev, integer *n, integer * k, doublereal *v, 
     integer i__, j, info;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -231,7 +231,7 @@ int dlarzt_(char *direct, char *storev, integer *n, integer * k, doublereal *v, 
         i__1 = -info;
         xerbla_("DLARZT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     for (i__ = *k;
             i__ >= 1;
@@ -267,7 +267,7 @@ int dlarzt_(char *direct, char *storev, integer *n, integer * k, doublereal *v, 
         /* L20: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARZT */
 }
 /* dlarzt_ */

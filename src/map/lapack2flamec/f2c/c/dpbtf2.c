@@ -132,7 +132,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dpbtf2_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab, integer *info)
+void dpbtf2_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpbtf2 inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",*uplo, *n, *kd, *ldab);
@@ -146,7 +146,7 @@ int dpbtf2_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab,
     doublereal ajj;
     integer kld;
     extern /* Subroutine */
-    int dsyr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dscal_( integer *, doublereal *, doublereal *, integer *);
+    void dsyr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dscal_( integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
@@ -200,13 +200,13 @@ int dpbtf2_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab,
         i__1 = -(*info);
         xerbla_("DPBTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Computing MAX */
     i__1 = 1;
@@ -275,11 +275,11 @@ int dpbtf2_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab,
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 L30:
     *info = j;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPBTF2 */
 }
 /* dpbtf2_ */

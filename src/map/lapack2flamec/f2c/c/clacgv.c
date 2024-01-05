@@ -60,7 +60,7 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int clacgv_(integer *n, complex *x, integer *incx)
+void clacgv_(integer *n, complex *x, integer *incx)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -129,7 +129,7 @@ int clacgv_(integer *n, complex *x, integer *incx)
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLACGV */
 }
 /* clacgv_ */

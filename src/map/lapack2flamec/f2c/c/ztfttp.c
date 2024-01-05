@@ -198,7 +198,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ztfttp_(char *transr, char *uplo, integer *n, doublecomplex *arf, doublecomplex *ap, integer *info)
+void ztfttp_(char *transr, char *uplo, integer *n, doublecomplex *arf, doublecomplex *ap, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztfttp inputs: transr %c, uplo %c, n %" FLA_IS "",*transr, *uplo, *n);
@@ -258,13 +258,13 @@ int ztfttp_(char *transr, char *uplo, integer *n, doublecomplex *arf, doublecomp
         i__1 = -(*info);
         xerbla_("ZTFTTP", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -280,7 +280,7 @@ int ztfttp_(char *transr, char *uplo, integer *n, doublecomplex *arf, doublecomp
             ap[0].i = z__1.i; // , expr subst
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Size of array ARF(0:NT-1) */
     /* Set N1 and N2 depending on LOWER */
@@ -704,7 +704,7 @@ int ztfttp_(char *transr, char *uplo, integer *n, doublecomplex *arf, doublecomp
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTFTTP */
 }
 /* ztfttp_ */

@@ -209,7 +209,7 @@ v(1:p-k+i-1) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dggqrf_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, doublereal *taua, doublereal *b, integer *ldb, doublereal *taub, doublereal *work, integer *lwork, integer *info)
+void dggqrf_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, doublereal *taua, doublereal *b, integer *ldb, doublereal *taub, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dggqrf inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*n, *m, *p, *lda, *ldb, *lwork);
@@ -218,10 +218,10 @@ int dggqrf_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, do
     /* Local variables */
     integer nb, nb1, nb2, nb3, lopt;
     extern /* Subroutine */
-    int dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dgerqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dgerqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -301,12 +301,12 @@ int dggqrf_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, do
         i__1 = -(*info);
         xerbla_("DGGQRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* QR factorization of N-by-M matrix A: A = Q*R */
     dgeqrf_(n, m, &a[a_offset], lda, &taua[1], &work[1], lwork, info);
@@ -325,7 +325,7 @@ int dggqrf_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, do
     i__2 = (integer) work[1]; // , expr subst
     work[1] = (doublereal) fla_max(i__1,i__2);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGGQRF */
 }
 /* dggqrf_ */

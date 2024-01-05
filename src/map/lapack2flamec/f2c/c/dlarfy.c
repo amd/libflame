@@ -99,7 +99,7 @@ static integer c__1 = 1;
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlarfy_(char *uplo, integer *n, doublereal *v, integer * incv, doublereal *tau, doublereal *c__, integer *ldc, doublereal * work)
+void dlarfy_(char *uplo, integer *n, doublereal *v, integer * incv, doublereal *tau, doublereal *c__, integer *ldc, doublereal * work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarfy inputs: uplo %c, n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*uplo, *n, *incv, *ldc);
@@ -109,10 +109,10 @@ int dlarfy_(char *uplo, integer *n, doublereal *v, integer * incv, doublereal *t
     /* Local variables */
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dsyr2_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dsyr2_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal alpha;
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsymv_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsymv_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     /* -- LAPACK test routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -141,7 +141,7 @@ int dlarfy_(char *uplo, integer *n, doublereal *v, integer * incv, doublereal *t
     if (*tau == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Form w:= C * v */
     dsymv_(uplo, n, &c_b2, &c__[c_offset], ldc, &v[1], incv, &c_b3, &work[1], &c__1);
@@ -151,7 +151,7 @@ int dlarfy_(char *uplo, integer *n, doublereal *v, integer * incv, doublereal *t
     d__1 = -(*tau);
     dsyr2_(uplo, n, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARFY */
 }
 /* dlarfy_ */

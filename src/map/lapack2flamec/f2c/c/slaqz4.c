@@ -200,7 +200,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi, integer *nshifts, integer * nblock_desired__, real *sr, real *si, real *ss, real *a, integer *lda, real *b, integer *ldb, real *q, integer *ldq, real *z__, integer * ldz, real *qc, integer *ldqc, real *zc, integer *ldzc, real *work, integer *lwork, integer *info)
+void slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi, integer *nshifts, integer * nblock_desired__, real *sr, real *si, real *ss, real *a, integer *lda, real *b, integer *ldb, real *q, integer *ldq, real *z__, integer * ldz, real *qc, integer *ldqc, real *zc, integer *ldzc, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaqz4 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", nshifts %" FLA_IS ", nblock_desired__ %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", ldqc %" FLA_IS ", ldzc %" FLA_IS "",*n, *ilo, *ihi, *nshifts, *nblock_desired__, *lda, *ldb, *ldq, *ldz, *ldqc, *ldzc);
@@ -213,13 +213,13 @@ int slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     real temp, swap;
     integer npos;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), slaqz1_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *), slaqz2_(logical *, logical *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *, integer *, real *, integer *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), slaqz1_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *), slaqz2_(logical *, logical *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *, integer *, real *, integer *);
     integer nblock;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer ishift;
     extern /* Subroutine */
-    int slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer istopb, swidth, istopm, sheight, istartb, istartm;
     /* Function arguments */
     /* Parameters */
@@ -259,7 +259,7 @@ int slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         /* workspace query, quick return */
         work[1] = (real) (*n * *nblock_desired__);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*lwork < *n * *nblock_desired__)
     {
@@ -270,18 +270,18 @@ int slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         i__1 = -(*info);
         xerbla_("SLAQZ4", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Executable statements */
     if (*nshifts < 2)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*ilo >= *ihi)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*ilschur)
     {
@@ -535,6 +535,6 @@ int slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         slacpy_("ALL", n, &i__1, &work[1], n, &z__[(*ihi - ns) * z_dim1 + 1], ldz);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* slaqz4_ */

@@ -174,7 +174,7 @@ for 1<=i<=N, row i of the */
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sgerfs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, real *af, integer *ldaf, integer *ipiv, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real * work, integer *iwork, integer *info)
+void sgerfs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, real *af, integer *ldaf, integer *ipiv, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real * work, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3;
@@ -189,17 +189,17 @@ int sgerfs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, real 
     extern logical lsame_(char *, char *);
     integer isave[3];
     extern /* Subroutine */
-    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer count;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     extern /* Subroutine */
-    int sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    void sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     char transt[1];
     real lstres;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -278,7 +278,7 @@ int sgerfs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, real 
     {
         i__1 = -(*info);
         xerbla_("SGERFS", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
@@ -292,7 +292,7 @@ int sgerfs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, real 
             berr[j] = 0.f;
             /* L10: */
         }
-        return 0;
+        return;
     }
     if (notran)
     {
@@ -496,7 +496,7 @@ L100:
         }
         /* L140: */
     }
-    return 0;
+    return;
     /* End of SGERFS */
 }
 /* sgerfs_ */

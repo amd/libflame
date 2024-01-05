@@ -215,7 +215,7 @@ is largest */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int dlar1v_(integer *n, integer *b1, integer *bn, doublereal *lambda, doublereal *d__, doublereal *l, doublereal *ld, doublereal * lld, doublereal *pivmin, doublereal *gaptol, doublereal *z__, logical *wantnc, integer *negcnt, doublereal *ztz, doublereal *mingma, integer *r__, integer *isuppz, doublereal *nrminv, doublereal *resid, doublereal *rqcorr, doublereal *work)
+void dlar1v_(integer *n, integer *b1, integer *bn, doublereal *lambda, doublereal *d__, doublereal *l, doublereal *ld, doublereal * lld, doublereal *pivmin, doublereal *gaptol, doublereal *z__, logical *wantnc, integer *negcnt, doublereal *ztz, doublereal *mingma, integer *r__, integer *isuppz, doublereal *nrminv, doublereal *resid, doublereal *rqcorr, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlar1v inputs: n %" FLA_IS ", b1 %" FLA_IS ", bn %" FLA_IS ", r__ %" FLA_IS "",*n, *b1, *bn, *r__);
@@ -570,7 +570,7 @@ L280:
     *resid = f2c_dabs(*mingma) * *nrminv;
     *rqcorr = *mingma * tmp;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAR1V */
 }
 /* dlar1v_ */

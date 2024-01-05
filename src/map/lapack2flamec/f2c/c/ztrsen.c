@@ -260,7 +260,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex *t, integer *ldt, doublecomplex *q, integer *ldq, doublecomplex *w, integer *m, doublereal *s, doublereal *sep, doublecomplex *work, integer *lwork, integer *info)
+void ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex *t, integer *ldt, doublecomplex *q, integer *ldq, doublecomplex *w, integer *m, doublereal *s, doublereal *sep, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztrsen inputs: job %c, compq %c, n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", m %" FLA_IS "",*job, *compq, *n, *ldt, *ldq, *m);
@@ -278,17 +278,17 @@ int ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex *
     logical wantq, wants;
     doublereal rnorm, rwork[1];
     extern /* Subroutine */
-    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     logical wantbh;
     extern /* Subroutine */
-    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     logical wantsp;
     extern /* Subroutine */
-    int ztrexc_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, integer *);
+    void ztrexc_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, integer *);
     logical lquery;
     extern /* Subroutine */
-    int ztrsyl_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *);
+    void ztrsyl_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -395,12 +395,12 @@ int ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex *
         i__1 = -(*info);
         xerbla_("ZTRSEN", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == *n || *m == 0)
@@ -489,7 +489,7 @@ L40: /* Copy reordered eigenvalues to W. */
     work[1].r = (doublereal) lwmin;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTRSEN */
 }
 /* ztrsen_ */

@@ -245,7 +245,7 @@ the routine */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zuncsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, integer *q, doublecomplex *x11, integer * ldx11, doublecomplex *x21, integer *ldx21, doublereal *theta, doublecomplex *u1, integer *ldu1, doublecomplex *u2, integer *ldu2, doublecomplex *v1t, integer *ldv1t, doublecomplex *work, integer * lwork, doublereal *rwork, integer *lrwork, integer *iwork, integer * info)
+void zuncsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, integer *q, doublecomplex *x11, integer * ldx11, doublecomplex *x21, integer *ldx21, doublereal *theta, doublecomplex *u1, integer *ldu1, doublecomplex *u2, integer *ldu2, doublecomplex *v1t, integer *ldv1t, doublecomplex *work, integer * lwork, doublereal *rwork, integer *lrwork, integer *iwork, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zuncsd2by1 inputs: jobu1 %c, jobu2 %c, jobv1t %c, m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldx11 %" FLA_IS ", ldx21 %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS ", lwork %" FLA_IS ", lrwork %" FLA_IS "", *jobu1, *jobu2, *jobv1t, *m, *p, *q, *ldx11, *ldx21, *ldu1, *ldu2, *ldv1t, *lwork, *lrwork);
@@ -260,24 +260,24 @@ int zuncsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, 
     integer iphi;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer itaup1, itaup2, itauq1;
     logical wantu1, wantu2;
     integer ibbcsd, lbbcsd, iorbdb, lorbdb;
     extern /* Subroutine */
-    int zbbcsd_(char *, char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zbbcsd_(char *, char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer iorglq, lorglq;
     extern /* Subroutine */
-    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer iorgqr;
     extern /* Subroutine */
-    int zlapmr_(logical *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zlapmr_(logical *, integer *, integer *, doublecomplex *, integer *, integer *);
     integer lorgqr;
     extern /* Subroutine */
-    int zlapmt_(logical *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zlapmt_(logical *, integer *, integer *, doublecomplex *, integer *, integer *);
     logical lquery;
     extern /* Subroutine */
-    int zunglq_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *), zungqr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *), zunbdb1_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *), zunbdb2_( integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *), zunbdb3_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *), zunbdb4_( integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *);
+    void zunglq_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *), zungqr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *), zunbdb1_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *), zunbdb2_( integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *), zunbdb3_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *), zunbdb4_( integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *);
     logical wantv1t;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -651,12 +651,12 @@ int zuncsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, 
         i__1 = -(*info);
         xerbla_("ZUNCSD2BY1", &i__1, (ftnlen)10);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     lorgqr = *lwork - iorgqr + 1;
     lorglq = *lwork - iorglq + 1;
@@ -969,7 +969,7 @@ int zuncsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZUNCSD2BY1 */
 }
 /* zuncsd2by1_ */

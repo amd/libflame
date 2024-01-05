@@ -173,7 +173,7 @@
 /* > \ingroup complexOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, complex *ab, integer *ldab, complex *bb, integer *ldbb, real *w, complex *z__, integer *ldz, complex *work, real *rwork, integer *info)
+void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, complex *ab, integer *ldab, complex *bb, integer *ldbb, real *w, complex *z__, integer *ldz, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -194,10 +194,10 @@ int chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, complex
     integer iinfo;
     logical upper, wantz;
     extern /* Subroutine */
-    int chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *, complex *, integer *, complex *, integer *), chbgst_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpbstf_(char *, integer *, integer *, complex *, integer *, integer *);
+    void chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *, complex *, integer *, complex *, integer *), chbgst_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpbstf_(char *, integer *, integer *, complex *, integer *, integer *);
     integer indwrk;
     extern /* Subroutine */
-    int csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *), ssterf_(integer *, real *, real *, integer *);
+    void csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *), ssterf_(integer *, real *, real *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -269,13 +269,13 @@ int chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, complex
         i__1 = -(*info);
         xerbla_("CHBGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Form a split Cholesky factorization of B. */
     cpbstf_(uplo, n, kb, &bb[bb_offset], ldbb, info);
@@ -283,7 +283,7 @@ int chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, complex
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem. */
     inde = 1;
@@ -309,7 +309,7 @@ int chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, complex
         csteqr_(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[ indwrk], info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHBGV */
 }
 /* chbgv_ */

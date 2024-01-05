@@ -185,7 +185,7 @@ only the remaining */
 /* > \ingroup complex16GEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int zgelsx_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, integer *jpvt, doublereal *rcond, integer *rank, doublecomplex *work, doublereal *rwork, integer *info)
+void zgelsx_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, integer *jpvt, doublereal *rcond, integer *rank, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgelsx inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", rank %" FLA_IS "",*m, *n, *nrhs, *lda, *ldb, *rank);
@@ -202,17 +202,17 @@ int zgelsx_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *ld
     doublereal anrm, bnrm, smin, smax;
     integer iascl, ibscl, ismin, ismax;
     extern /* Subroutine */
-    int ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlaic1_(integer *, integer *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *), dlabad_(doublereal *, doublereal *);
+    void ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlaic1_(integer *, integer *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *), dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int zunm2r_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zunm2r_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     doublereal bignum;
     extern /* Subroutine */
-    int zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *), zgeqpf_(integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, doublecomplex *, doublereal *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+    void zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *), zgeqpf_(integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, doublecomplex *, doublereal *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
     doublereal sminpr, smaxpr, smlnum;
     extern /* Subroutine */
-    int zlatzm_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), ztzrqf_( integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zlatzm_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), ztzrqf_( integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -279,7 +279,7 @@ int zgelsx_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *ld
         i__1 = -(*info);
         xerbla_("ZGELSX", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Computing MIN */
@@ -288,7 +288,7 @@ int zgelsx_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *ld
     {
         *rank = 0;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = dlamch_("S") / dlamch_("P");
@@ -524,7 +524,7 @@ L70:
     }
 L100:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGELSX */
 }
 /* zgelsx_ */

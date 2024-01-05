@@ -205,7 +205,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ztrttf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *arf, integer *info)
+void ztrttf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *arf, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztrttf inputs: transr %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*transr, *uplo, *n, *lda);
@@ -272,7 +272,7 @@ int ztrttf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *lda
         i__1 = -(*info);
         xerbla_("ZTRTTF", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 1)
@@ -292,7 +292,7 @@ int ztrttf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *lda
             }
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Size of array ARF(1:2,0:nt-1) */
     nt = *n * (*n + 1) / 2;
@@ -734,7 +734,7 @@ int ztrttf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *lda
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTRTTF */
 }
 /* ztrttf_ */

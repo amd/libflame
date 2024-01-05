@@ -197,7 +197,7 @@ If UPLO = 'L' the RFP A contains the nt */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, integer *info)
+void dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtftri inputs: transr %c, uplo %c, diag %c, n %" FLA_IS "",*transr, *uplo, *diag, *n);
@@ -208,13 +208,13 @@ int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, int
     logical normaltransr;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical lower;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     extern /* Subroutine */
-    int dtrtri_(char *, char *, integer *, doublereal *, integer *, integer *);
+    void dtrtri_(char *, char *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -260,13 +260,13 @@ int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, int
         i__1 = -(*info);
         xerbla_("DTFTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* If N is odd, set NISODD = .TRUE. */
     /* If N is even, set K = N/2 and NISODD = .FALSE. */
@@ -306,7 +306,7 @@ int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, int
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dtrmm_("R", "L", "N", diag, &n2, &n1, &c_b13, a, n, &a[n1], n);
                 dtrtri_("U", diag, &n2, &a[*n], n, info) ;
@@ -317,7 +317,7 @@ int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, int
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dtrmm_("L", "U", "T", diag, &n2, &n1, &c_b18, &a[*n], n, &a[ n1], n);
             }
@@ -330,7 +330,7 @@ int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, int
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dtrmm_("L", "L", "T", diag, &n1, &n2, &c_b13, &a[n2], n, a, n);
                 dtrtri_("U", diag, &n2, &a[n1], n, info) ;
@@ -341,7 +341,7 @@ int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, int
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dtrmm_("R", "U", "N", diag, &n1, &n2, &c_b18, &a[n1], n, a, n);
             }
@@ -357,7 +357,7 @@ int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, int
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dtrmm_("L", "U", "N", diag, &n1, &n2, &c_b13, a, &n1, &a[n1 * n1], &n1);
                 dtrtri_("L", diag, &n2, &a[1], &n1, info);
@@ -368,7 +368,7 @@ int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, int
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dtrmm_("R", "L", "T", diag, &n1, &n2, &c_b18, &a[1], &n1, &a[ n1 * n1], &n1);
             }
@@ -380,7 +380,7 @@ int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, int
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dtrmm_("R", "U", "T", diag, &n2, &n1, &c_b13, &a[n2 * n2], & n2, a, &n2);
                 dtrtri_("L", diag, &n2, &a[n1 * n2], &n2, info);
@@ -391,7 +391,7 @@ int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, int
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dtrmm_("L", "L", "N", diag, &n2, &n1, &c_b18, &a[n1 * n2], & n2, a, &n2);
             }
@@ -413,7 +413,7 @@ int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, int
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
@@ -427,7 +427,7 @@ int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, int
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
@@ -443,7 +443,7 @@ int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, int
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
@@ -457,7 +457,7 @@ int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, int
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
@@ -477,7 +477,7 @@ int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, int
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dtrmm_("L", "U", "N", diag, &k, &k, &c_b13, &a[k], &k, &a[k * (k + 1)], &k);
                 dtrtri_("L", diag, &k, a, &k, info);
@@ -488,7 +488,7 @@ int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, int
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dtrmm_("R", "L", "T", diag, &k, &k, &c_b18, a, &k, &a[k * (k + 1)], &k) ;
             }
@@ -502,7 +502,7 @@ int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, int
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dtrmm_("R", "U", "T", diag, &k, &k, &c_b13, &a[k * (k + 1)], & k, a, &k);
                 dtrtri_("L", diag, &k, &a[k * k], &k, info);
@@ -513,14 +513,14 @@ int dtftri_(char *transr, char *uplo, char *diag, integer *n, doublereal *a, int
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dtrmm_("L", "L", "N", diag, &k, &k, &c_b18, &a[k * k], &k, a, &k);
             }
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTFTRI */
 }
 /* dtftri_ */

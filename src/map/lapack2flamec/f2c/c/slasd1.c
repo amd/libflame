@@ -198,7 +198,7 @@ VT(NL+2:M, NL+2:M)**T contains */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slasd1_(integer *nl, integer *nr, integer *sqre, real * d__, real *alpha, real *beta, real *u, integer *ldu, real *vt, integer *ldvt, integer *idxq, integer *iwork, real *work, integer * info)
+void slasd1_(integer *nl, integer *nr, integer *sqre, real * d__, real *alpha, real *beta, real *u, integer *ldu, real *vt, integer *ldvt, integer *idxq, integer *iwork, real *work, integer * info)
 {
     /* System generated locals */
     integer u_dim1, u_offset, vt_dim1, vt_offset, i__1;
@@ -206,7 +206,7 @@ int slasd1_(integer *nl, integer *nr, integer *sqre, real * d__, real *alpha, re
     /* Local variables */
     integer i__, k, m, n, n1, n2, iq, iz, iu2, ldq, idx, ldu2, ivt2, idxc, idxp, ldvt2;
     extern /* Subroutine */
-    int slasd2_(integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, integer *, integer *), slasd3_(integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *);
+    void slasd2_(integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, integer *, integer *), slasd3_(integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *);
     integer isigma;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slascl_( char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
@@ -260,7 +260,7 @@ int slasd1_(integer *nl, integer *nr, integer *sqre, real * d__, real *alpha, re
     {
         i__1 = -(*info);
         xerbla_("SLASD1", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     n = *nl + *nr + 1;
     m = n + *sqre;
@@ -305,7 +305,7 @@ int slasd1_(integer *nl, integer *nr, integer *sqre, real * d__, real *alpha, re
     slasd3_(nl, nr, sqre, &k, &d__[1], &work[iq], &ldq, &work[isigma], &u[ u_offset], ldu, &work[iu2], &ldu2, &vt[vt_offset], ldvt, &work[ ivt2], &ldvt2, &iwork[idxc], &iwork[coltyp], &work[iz], info);
     if (*info != 0)
     {
-        return 0;
+        return;
     }
     /* Unscale. */
     slascl_("G", &c__0, &c__0, &c_b7, &orgnrm, &n, &c__1, &d__[1], &n, info);
@@ -313,7 +313,7 @@ int slasd1_(integer *nl, integer *nr, integer *sqre, real * d__, real *alpha, re
     n1 = k;
     n2 = n - k;
     slamrg_(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
-    return 0;
+    return;
     /* End of SLASD1 */
 }
 /* slasd1_ */

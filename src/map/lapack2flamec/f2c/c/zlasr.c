@@ -186,7 +186,7 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doublereal *c__, doublereal *s, doublecomplex *a, integer *lda)
+void zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doublereal *c__, doublereal *s, doublecomplex *a, integer *lda)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlasr inputs: side %c, pivot %c, direct %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*side, *pivot, *direct, *m, *n, *lda);
@@ -258,13 +258,13 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
     {
         xerbla_("ZLASR ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (lsame_(side, "L"))
     {
@@ -827,7 +827,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLASR */
 }
 /* zlasr_ */

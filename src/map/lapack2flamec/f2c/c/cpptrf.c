@@ -110,7 +110,7 @@ static real c_b16 = -1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cpptrf_(char *uplo, integer *n, complex *ap, integer * info)
+void cpptrf_(char *uplo, integer *n, complex *ap, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -132,13 +132,13 @@ int cpptrf_(char *uplo, integer *n, complex *ap, integer * info)
     integer j, jc, jj;
     real ajj;
     extern /* Subroutine */
-    int chpr_(char *, integer *, real *, complex *, integer *, complex *);
+    void chpr_(char *, integer *, real *, complex *, integer *, complex *);
     extern /* Complex */
     VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *), csscal_( integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *), csscal_( integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -178,13 +178,13 @@ int cpptrf_(char *uplo, integer *n, complex *ap, integer * info)
         i__1 = -(*info);
         xerbla_("CPPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -267,7 +267,7 @@ L30:
     *info = j;
 L40:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPPTRF */
 }
 /* cpptrf_ */

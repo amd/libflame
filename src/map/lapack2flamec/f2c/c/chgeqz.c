@@ -287,7 +287,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, complex *h__, integer *ldh, complex *t, integer *ldt, complex *alpha, complex *beta, complex *q, integer *ldq, complex *z__, integer *ldz, complex *work, integer *lwork, real * rwork, integer *info)
+void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, complex *h__, integer *ldh, complex *t, integer *ldt, complex *alpha, complex *beta, complex *q, integer *ldq, complex *z__, integer *ldz, complex *work, integer *lwork, real * rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("chgeqz inputs: job %c, compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",*job, *compq, *compz, *n, *ilo, *ihi, *ldh, *ldt, *ldq, *ldz, *lwork);
@@ -314,10 +314,10 @@ int chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integ
     complex abi12, abi22;
     real absb, atol, btol, temp;
     extern /* Subroutine */
-    int crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
+    void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
     real temp2;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     complex ctemp;
     integer iiter, ilast, jiter;
@@ -333,7 +333,7 @@ int chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integ
     complex signbc;
     extern real slamch_(char *), clanhs_(char *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clartg_(complex *, complex *, real *, complex *, complex *);
+    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clartg_(complex *, complex *, real *, complex *, complex *);
     real safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -495,12 +495,12 @@ int chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integ
         i__1 = -(*info);
         AOCL_DTL_TRACE_LOG_EXIT
         xerbla_("CHGEQZ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* WORK( 1 ) = CMPLX( 1 ) */
@@ -509,7 +509,7 @@ int chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integ
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize Q and Z */
     if (icompq == 3)
@@ -1431,7 +1431,7 @@ L210:
     work[1].r = q__1.r;
     work[1].i = q__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CHGEQZ */
 }
 /* chgeqz_ */

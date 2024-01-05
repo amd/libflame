@@ -158,7 +158,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zhb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, integer *ed, integer *sweep, integer *n, integer * nb, integer *ib, doublecomplex *a, integer *lda, doublecomplex *v, doublecomplex *tau, integer *ldvt, doublecomplex *work)
+void zhb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, integer *ed, integer *sweep, integer *n, integer * nb, integer *ib, doublecomplex *a, integer *lda, doublecomplex *v, doublecomplex *tau, integer *ldvt, doublecomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhb2st_kernels inputs: uplo %c, ttype %" FLA_IS ", st %" FLA_IS ", ed %" FLA_IS ", sweep %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", ib %" FLA_IS ", lda %" FLA_IS ", ldvt %" FLA_IS "", *uplo, *ttype, *st, *ed, *sweep, *n, *nb, *ib, *lda, *ldvt);
@@ -174,10 +174,10 @@ int zhb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    void zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     integer ofdpos;
     extern /* Subroutine */
-    int zlarfx_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zlarfy_(char *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    void zlarfx_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zlarfy_(char *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     integer taupos;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -417,7 +417,7 @@ int zhb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* END OF ZHB2ST_KERNELS */
 }
 /* zhb2st_kernels__ */

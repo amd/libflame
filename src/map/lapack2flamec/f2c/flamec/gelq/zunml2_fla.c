@@ -145,7 +145,7 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *info)
+void zunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3;
@@ -159,7 +159,7 @@ int zunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, doub
     doublecomplex taui;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_(integer *, doublecomplex *, integer *);
+    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_(integer *, doublecomplex *, integer *);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -236,12 +236,12 @@ int zunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, doub
     {
         i__1 = -(*info);
         xerbla_("ZUNML2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0 || *k == 0)
     {
-        return 0;
+        return;
     }
     if (left && notran || ! left && ! notran)
     {
@@ -318,7 +318,7 @@ int zunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, doub
         }
         /* L10: */
     }
-    return 0;
+    return;
     /* End of ZUNML2 */
 }
 /* zunml2_ */

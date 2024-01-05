@@ -262,7 +262,7 @@ and entries in the second half */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__, doublereal *z__, doublereal *alpha, doublereal * beta, doublereal *u, integer *ldu, doublereal *vt, integer *ldvt, doublereal *dsigma, doublereal *u2, integer *ldu2, doublereal *vt2, integer *ldvt2, integer *idxp, integer *idx, integer *idxc, integer * idxq, integer *coltyp, integer *info)
+void dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__, doublereal *z__, doublereal *alpha, doublereal * beta, doublereal *u, integer *ldu, doublereal *vt, integer *ldvt, doublereal *dsigma, doublereal *u2, integer *ldu2, doublereal *vt2, integer *ldvt2, integer *idxp, integer *idx, integer *idxc, integer * idxq, integer *coltyp, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasd2 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", ldu %" FLA_IS ", ldvt %" FLA_IS ", ldu2 %" FLA_IS ", ldvt2 %" FLA_IS ", idxq %" FLA_IS "",*nl, *nr, *sqre, *ldu, *ldvt, *ldu2, *ldvt2, *idxq);
@@ -279,14 +279,14 @@ int dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__
     doublereal eps, tau, tol;
     integer psm[4], nlp1, nlp2, idxi, idxj;
     extern /* Subroutine */
-    int drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
     integer ctot[4], idxjp;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer jprev;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
     extern /* Subroutine */
-    int dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal hlftol;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -372,7 +372,7 @@ int dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__
         i__1 = -(*info);
         xerbla_("DLASD2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     nlp1 = *nl + 1;
     nlp2 = *nl + 2;
@@ -717,7 +717,7 @@ L120: /* Count up the total number of the various types of columns, then */
         /* L190: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASD2 */
 }
 /* dlasd2_ */

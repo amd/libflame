@@ -164,7 +164,7 @@ static const integer c__0 = 0;
 /* > \ingroup doubleSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlasy2_(logical *ltranl, logical *ltranr, integer *isgn, integer *n1, integer *n2, doublereal *tl, integer *ldtl, doublereal * tr, integer *ldtr, doublereal *b, integer *ldb, doublereal *scale, doublereal *x, integer *ldx, doublereal *xnorm, integer *info)
+void dlasy2_(logical *ltranl, logical *ltranr, integer *isgn, integer *n1, integer *n2, doublereal *tl, integer *ldtl, doublereal * tr, integer *ldtr, doublereal *b, integer *ldb, doublereal *scale, doublereal *x, integer *ldx, doublereal *xnorm, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasy2 inputs: isgn %" FLA_IS ", n1 %" FLA_IS ", n2 %" FLA_IS ", ldtl %" FLA_IS ", ldtr %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*isgn, *n1, *n2, *ldtl, *ldtr, *ldb, *ldx);
@@ -210,7 +210,7 @@ int dlasy2_(logical *ltranl, logical *ltranr, integer *isgn, integer *n1, intege
     integer ipsv, jpsv;
     logical bswap;
     extern /* Subroutine */
-    int dcopy_(const integer *, doublereal *, const integer *, doublereal *, const integer *), dswap_(const integer *, doublereal *, const integer *, doublereal *, const integer *);
+    void dcopy_(const integer *, doublereal *, const integer *, doublereal *, const integer *), dswap_(const integer *, doublereal *, const integer *, doublereal *, const integer *);
     logical xswap;
     extern doublereal dlamch_(char *);
     extern integer idamax_(const integer *, doublereal *, const integer *);
@@ -261,7 +261,7 @@ int dlasy2_(logical *ltranl, logical *ltranr, integer *isgn, integer *n1, intege
     if (*n1 == 0 || *n2 == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set constants to control overflow */
     eps = dlamch_("P");
@@ -298,7 +298,7 @@ L10:
     x[x_dim1 + 1] = b[b_dim1 + 1] * *scale / tau1;
     *xnorm = (d__1 = x[x_dim1 + 1], f2c_abs(d__1));
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* 1 by 2: */
     /* TL11*[X11 X12] + ISGN*[X11 X12]*op[TR11 TR12] = [B11 B12] */
     /* [TR21 TR22] */
@@ -410,7 +410,7 @@ L40: /* Solve 2 by 2 system using complete pivoting. */
         *xnorm = fla_max(d__3,d__4);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* 2 by 2: */
     /* op[TL11 TL12]*[X11 X12] +ISGN* [X11 X12]*op[TR11 TR12] = [B11 B12] */
     /* [TL21 TL22] [X21 X22] [X21 X22] [TR21 TR22] [B21 B22] */
@@ -580,7 +580,7 @@ L50: /* Computing MAX */
     d__2 = f2c_abs(tmp[1]) + f2c_abs(tmp[3]); // , expr subst
     *xnorm = fla_max(d__1,d__2);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASY2 */
 }
 /* dlasy2_ */

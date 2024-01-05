@@ -112,17 +112,17 @@ for 1<=i<=N, row i of the */
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sgetrs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real *b, integer *ldb, integer *info)
+void sgetrs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real *b, integer *ldb, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     extern /* Subroutine */
-    int slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
+    void slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -179,12 +179,12 @@ int sgetrs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, integ
     {
         i__1 = -(*info);
         xerbla_("SGETRS", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
-        return 0;
+        return;
     }
     if (notran)
     {
@@ -206,7 +206,7 @@ int sgetrs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, integ
         /* Apply row interchanges to the solution vectors. */
         slaswp_(nrhs, &b[b_offset], ldb, &c__1, n, &ipiv[1], &c_n1);
     }
-    return 0;
+    return;
     /* End of SGETRS */
 }
 /* sgetrs_ */

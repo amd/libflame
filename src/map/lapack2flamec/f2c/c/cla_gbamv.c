@@ -171,7 +171,7 @@
 /* > \ingroup complexGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, real *alpha, complex *ab, integer *ldab, complex *x, integer *incx, real *beta, real *y, integer *incy)
+void cla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, real *alpha, complex *ab, integer *ldab, complex *x, integer *incx, real *beta, real *y, integer *incy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -268,13 +268,13 @@ int cla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
     {
         xerbla_("CLA_GBAMV ", &info, (ftnlen)10);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*m == 0 || *n == 0 || *alpha == 0.f && *beta == 1.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set LENX and LENY, the lengths of the vectors x and y, and set */
     /* up the start points in X and Y. */
@@ -514,7 +514,7 @@ int cla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLA_GBAMV */
 }
 /* cla_gbamv__ */

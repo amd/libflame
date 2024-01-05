@@ -91,7 +91,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slasdt_(integer *n, integer *lvl, integer *nd, integer * inode, integer *ndiml, integer *ndimr, integer *msub)
+void slasdt_(integer *n, integer *lvl, integer *nd, integer * inode, integer *ndiml, integer *ndimr, integer *msub)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -167,7 +167,7 @@ int slasdt_(integer *n, integer *lvl, integer *nd, integer * inode, integer *ndi
     }
     *nd = (llst << 1) - 1;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASDT */
 }
 /* slasdt_ */

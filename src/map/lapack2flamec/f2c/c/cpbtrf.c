@@ -139,7 +139,7 @@ static integer c__33 = 33;
 /* > Peter Mayes and Giuseppe Radicati, IBM ECSEC, Rome, March 23, 1989 */
 /* ===================================================================== */
 /* Subroutine */
-int cpbtrf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, integer *info)
+void cpbtrf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -159,10 +159,10 @@ int cpbtrf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, int
     complex work[1056] /* was [33][32] */
     ;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), cpbtf2_(char *, integer *, integer *, complex *, integer *, integer *), cpotf2_(char *, integer *, complex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), cpbtf2_(char *, integer *, integer *, complex *, integer *, integer *), cpotf2_(char *, integer *, complex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -214,13 +214,13 @@ int cpbtrf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, int
         i__1 = -(*info);
         xerbla_("CPBTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine the block size for this environment */
     nb = ilaenv_(&c__1, "CPBTRF", uplo, n, kd, &c_n1, &c_n1);
@@ -505,10 +505,10 @@ int cpbtrf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, int
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 L150:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPBTRF */
 }
 /* cpbtrf_ */

@@ -207,7 +207,7 @@ v(i+1:p) is stored on exit in B(i+1:p,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cggrqf_(integer *m, integer *p, integer *n, complex *a, integer *lda, complex *taua, complex *b, integer *ldb, complex *taub, complex *work, integer *lwork, integer *info)
+void cggrqf_(integer *m, integer *p, integer *n, complex *a, integer *lda, complex *taua, complex *b, integer *ldb, complex *taub, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cggrqf inputs: m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*m, *p, *n, *lda, *ldb);
@@ -216,10 +216,10 @@ int cggrqf_(integer *m, integer *p, integer *n, complex *a, integer *lda, comple
     /* Local variables */
     integer nb, nb1, nb2, nb3, lopt;
     extern /* Subroutine */
-    int cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), cgerqf_( integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), cgerqf_( integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int cunmrq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void cunmrq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -299,12 +299,12 @@ int cggrqf_(integer *m, integer *p, integer *n, complex *a, integer *lda, comple
         i__1 = -(*info);
         xerbla_("CGGRQF", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* RQ factorization of M-by-N matrix A: A = R*Q */
     cgerqf_(m, n, &a[a_offset], lda, &taua[1], &work[1], lwork, info);
@@ -328,7 +328,7 @@ int cggrqf_(integer *m, integer *p, integer *n, complex *a, integer *lda, comple
     work[1].r = (real) i__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CGGRQF */
 }
 /* cggrqf_ */

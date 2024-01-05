@@ -143,7 +143,7 @@ the unit diagonal elements of L are not stored. */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int zlaunhr_col_getrfnp_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *d__, integer *info)
+void zlaunhr_col_getrfnp_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *d__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaunhr_col_getrfnp inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
@@ -153,10 +153,10 @@ int zlaunhr_col_getrfnp_(integer *m, integer *n, doublecomplex *a, integer *lda,
     /* Local variables */
     integer j, jb, nb;
     extern /* Subroutine */
-    int zlaunhr_col_getrfnp2_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zlaunhr_col_getrfnp2_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer iinfo;
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -203,13 +203,13 @@ int zlaunhr_col_getrfnp_(integer *m, integer *n, doublecomplex *a, integer *lda,
         i__1 = -(*info);
         xerbla_("ZLAUNHR_COL_GETRFNP", &i__1, (ftnlen)19);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine the block size for this environment. */
     nb = ilaenv_(&c__1, "ZLAUNHR_COL_GETRFNP", " ", m, n, &c_n1, &c_n1);
@@ -251,7 +251,7 @@ int zlaunhr_col_getrfnp_(integer *m, integer *n, doublecomplex *a, integer *lda,
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAUNHR_COL_GETRFNP */
 }
 /* zlaunhr_col_getrfnp__ */

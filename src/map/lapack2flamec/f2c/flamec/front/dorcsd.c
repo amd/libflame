@@ -291,7 +291,7 @@ the routine */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, char *signs, integer *m, integer *p, integer *q, doublereal *x11, integer *ldx11, doublereal *x12, integer *ldx12, doublereal *x21, integer *ldx21, doublereal *x22, integer *ldx22, doublereal *theta, doublereal *u1, integer *ldu1, doublereal *u2, integer *ldu2, doublereal *v1t, integer *ldv1t, doublereal *v2t, integer *ldv2t, doublereal *work, integer *lwork, integer *iwork, integer *info)
+void dorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, char *signs, integer *m, integer *p, integer *q, doublereal *x11, integer *ldx11, doublereal *x12, integer *ldx12, doublereal *x21, integer *ldx21, doublereal *x22, integer *ldx22, doublereal *theta, doublereal *u1, integer *ldu1, doublereal *u2, integer *ldu2, doublereal *v1t, integer *ldv1t, doublereal *v2t, integer *ldv2t, doublereal *work, integer *lwork, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset, x11_dim1, x11_offset, x12_dim1, x12_offset, x21_dim1, x21_offset, x22_dim1, x22_offset, i__1, i__2, i__3, i__4, i__5, i__6;
@@ -303,16 +303,16 @@ int dorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
     integer lbbcsdworkmin, itaup1, itaup2, itauq1, itauq2, lbbcsdworkopt;
     logical wantu1, wantu2;
     extern /* Subroutine */
-    int dbbcsd_(char *, char *, char *, char *, char * , integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+    void dbbcsd_(char *, char *, char *, char *, char * , integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     integer ibbcsd, lorbdbworkopt;
     extern /* Subroutine */
-    int dorbdb_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+    void dorbdb_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     integer iorbdb, lorglqworkmin, lorgqrworkmin;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlapmr_(logical *, integer *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlapmt_(logical *, integer *, integer *, doublereal *, integer *, integer *);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlapmr_(logical *, integer *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlapmt_(logical *, integer *, integer *, doublereal *, integer *, integer *);
     integer lorglqworkopt;
     extern /* Subroutine */
-    int dorglq_fla(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+    void dorglq_fla(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
     integer lorgqrworkopt, iorglq;
     extern /* Subroutine */
     int lapack_dorgqr(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
@@ -504,7 +504,7 @@ int dorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
             *(unsigned char *)signst = 'D';
         }
         dorcsd_(jobv1t, jobv2t, jobu1, jobu2, transt, signst, m, q, p, &x11[ x11_offset], ldx11, &x21[x21_offset], ldx21, &x12[x12_offset], ldx12, &x22[x22_offset], ldx22, &theta[1], &v1t[v1t_offset], ldv1t, &v2t[v2t_offset], ldv2t, &u1[u1_offset], ldu1, &u2[ u2_offset], ldu2, &work[1], lwork, &iwork[1], info);
-        return 0;
+        return;
     }
     /* Work with permutation [ 0 I;
     I 0 ] * X * [ 0 I;
@@ -523,7 +523,7 @@ int dorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
         i__1 = *m - *p;
         i__2 = *m - *q;
         dorcsd_(jobu2, jobu1, jobv2t, jobv1t, trans, signst, m, &i__1, &i__2, &x22[x22_offset], ldx22, &x21[x21_offset], ldx21, &x12[ x12_offset], ldx12, &x11[x11_offset], ldx11, &theta[1], &u2[ u2_offset], ldu2, &u1[u1_offset], ldu1, &v2t[v2t_offset], ldv2t, &v1t[v1t_offset], ldv1t, &work[1], lwork, &iwork[1], info);
-        return 0;
+        return;
     }
     /* Compute workspace */
     if (*info == 0)
@@ -634,11 +634,11 @@ int dorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
     {
         i__1 = -(*info);
         xerbla_("DORCSD", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Transform to bidiagonal block form */
     dorbdb_(trans, signs, m, p, q, &x11[x11_offset], ldx11, &x12[x12_offset], ldx12, &x21[x21_offset], ldx21, &x22[x22_offset], ldx22, &theta[1] , &work[iphi], &work[itaup1], &work[itaup2], &work[itauq1], &work[ itauq2], &work[iorbdb], &lorbdbwork, &childinfo);
@@ -807,7 +807,7 @@ int dorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
             dlapmr_(&c_false, &i__1, &i__2, &v2t[v2t_offset], ldv2t, &iwork[1] );
         }
     }
-    return 0;
+    return;
     /* End DORCSD */
 }
 /* dorcsd_ */

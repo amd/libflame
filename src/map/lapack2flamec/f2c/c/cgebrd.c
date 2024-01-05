@@ -213,7 +213,7 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgebrd_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tauq, complex *taup, complex *work, integer *lwork, integer *info)
+void cgebrd_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tauq, complex *taup, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -232,10 +232,10 @@ int cgebrd_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *e
     /* Local variables */
     integer i__, j, nb, nx, ws;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     integer nbmin, iinfo, minmn;
     extern /* Subroutine */
-    int cgebd2_(integer *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, integer *), clabrd_(integer *, integer *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void cgebd2_(integer *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, integer *), clabrd_(integer *, integer *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwrkx, ldwrky, lwkopt;
     logical lquery;
@@ -306,12 +306,12 @@ int cgebrd_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *e
         i__1 = -(*info);
         xerbla_("CGEBRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     minmn = fla_min(*m,*n);
@@ -320,7 +320,7 @@ int cgebrd_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *e
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     ws = fla_max(*m,*n);
     ldwrkx = *m;
@@ -427,7 +427,7 @@ int cgebrd_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *e
     work[1].r = (real) ws;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGEBRD */
 }
 /* cgebrd_ */

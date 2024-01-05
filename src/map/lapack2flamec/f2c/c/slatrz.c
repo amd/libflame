@@ -125,14 +125,14 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slatrz_(integer *m, integer *n, integer *l, real *a, integer *lda, real *tau, real *work)
+void slatrz_(integer *m, integer *n, integer *l, real *a, integer *lda, real *tau, real *work)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     integer i__;
     extern /* Subroutine */
-    int slarz_(char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), slarfg_(integer *, real *, real *, integer *, real *);
+    void slarz_(char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -160,7 +160,7 @@ int slatrz_(integer *m, integer *n, integer *l, real *a, integer *lda, real *tau
     /* Function Body */
     if (*m == 0)
     {
-        return 0;
+        return;
     }
     else if (*m == *n)
     {
@@ -172,7 +172,7 @@ int slatrz_(integer *m, integer *n, integer *l, real *a, integer *lda, real *tau
             tau[i__] = 0.f;
             /* L10: */
         }
-        return 0;
+        return;
     }
     for (i__ = *m;
             i__ >= 1;
@@ -188,7 +188,7 @@ int slatrz_(integer *m, integer *n, integer *l, real *a, integer *lda, real *tau
         slarz_("Right", &i__1, &i__2, l, &a[i__ + (*n - *l + 1) * a_dim1], lda, &tau[i__], &a[i__ * a_dim1 + 1], lda, &work[1]);
         /* L20: */
     }
-    return 0;
+    return;
     /* End of SLATRZ */
 }
 /* slatrz_ */

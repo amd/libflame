@@ -94,7 +94,7 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlartv_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *incy, doublereal *c__, doublereal *s, integer *incc)
+void dlartv_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *incy, doublereal *c__, doublereal *s, integer *incc)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlartv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incy, *incc);
@@ -139,7 +139,7 @@ int dlartv_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *in
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARTV */
 }
 /* dlartv_ */

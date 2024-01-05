@@ -126,7 +126,7 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int clarf_(char *side, integer *m, integer *n, complex *v, integer *incv, complex *tau, complex *c__, integer *ldc, complex * work)
+void clarf_(char *side, integer *m, integer *n, complex *v, integer *incv, complex *tau, complex *c__, integer *ldc, complex * work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -145,7 +145,7 @@ int clarf_(char *side, integer *m, integer *n, complex *v, integer *incv, comple
     integer i__;
     logical applyleft;
     extern /* Subroutine */
-    int cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     integer lastc, lastv;
     extern integer ilaclc_(integer *, integer *, complex *, integer *), ilaclr_(integer *, integer *, complex *, integer *);
@@ -249,7 +249,7 @@ int clarf_(char *side, integer *m, integer *n, complex *v, integer *incv, comple
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLARF */
 }
 /* clarf_ */

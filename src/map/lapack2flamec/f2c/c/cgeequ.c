@@ -125,7 +125,7 @@
 /* > \ingroup complexGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cgeequ_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
+void cgeequ_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -199,7 +199,7 @@ int cgeequ_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c
         i__1 = -(*info);
         xerbla_("CGEEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
@@ -208,7 +208,7 @@ int cgeequ_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c
         *colcnd = 1.f;
         *amax = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     smlnum = slamch_("S");
@@ -273,7 +273,7 @@ int cgeequ_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c
             {
                 *info = i__;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L50: */
         }
@@ -356,7 +356,7 @@ int cgeequ_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c
             {
                 *info = *m + j;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L110: */
         }
@@ -380,7 +380,7 @@ int cgeequ_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c
         *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGEEQU */
 }
 /* cgeequ_ */

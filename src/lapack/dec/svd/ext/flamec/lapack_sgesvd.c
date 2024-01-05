@@ -234,7 +234,7 @@ int lapack_sgesvd(char *jobu, char *jobvt, integer *m, integer *n, real *a, inte
     extern logical lsame_(char *, char *);
     integer chunk;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer minmn, wrkbl, itaup, itauq, mnthr, iwork;
     logical wntua, wntva, wntun, wntuo, wntvn, wntvo, wntus, wntvs;
     integer ie, ir, bdspac, iu;

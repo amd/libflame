@@ -381,7 +381,7 @@ static doublereal c_b21 = -1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublereal *t, integer *ldt, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *work, integer *ldwork)
+void dlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublereal *t, integer *ldt, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *work, integer *ldwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarfb_gett inputs: ident %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", ldt %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldwork %" FLA_IS "",*ident, *m, *n, *k, *ldt, *lda, *ldb, *ldwork);
@@ -391,10 +391,10 @@ int dlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublereal *t,
     integer i__, j;
     logical lnotident;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -430,7 +430,7 @@ int dlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublereal *t,
     if (*m < 0 || *n <= 0 || *k == 0 || *k > *n)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     lnotident = ! lsame_(ident, "I");
     /* ------------------------------------------------------------------ */
@@ -590,7 +590,7 @@ int dlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublereal *t,
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARFB_GETT */
 }
 /* dlarfb_gett__ */

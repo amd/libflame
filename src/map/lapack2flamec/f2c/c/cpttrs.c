@@ -110,7 +110,7 @@ static integer c_n1 = -1;
 /* > \ingroup complexPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cpttrs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, complex *b, integer *ldb, integer *info)
+void cpttrs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -128,7 +128,7 @@ int cpttrs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, comple
     integer j, jb, nb, iuplo;
     logical upper;
     extern /* Subroutine */
-    int cptts2_(integer *, integer *, integer *, real *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void cptts2_(integer *, integer *, integer *, real *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -179,13 +179,13 @@ int cpttrs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, comple
         i__1 = -(*info);
         xerbla_("CPTTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine the number of right-hand sides to solve at a time. */
     if (*nrhs == 1)
@@ -228,7 +228,7 @@ int cpttrs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, comple
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPTTRS */
 }
 /* cpttrs_ */

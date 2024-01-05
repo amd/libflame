@@ -170,7 +170,7 @@ and second, applying a diagonal similarity */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zggbal_(char *job, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, integer *ilo, integer *ihi, doublereal *lscale, doublereal *rscale, doublereal *work, integer * info)
+void zggbal_(char *job, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, integer *ilo, integer *ihi, doublereal *lscale, doublereal *rscale, doublereal *work, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zggbal inputs: job %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS "",*job, *n, *lda, *ldb, *ilo, *ihi);
@@ -195,15 +195,15 @@ int zggbal_(char *job, integer *n, doublecomplex *a, integer *lda, doublecomplex
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal coef2, coef5, gamma, alpha;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     doublereal sfmin, sfmax;
     integer iflow;
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     integer kount;
     extern /* Subroutine */
-    int zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal pgamma;
     extern /* Subroutine */
@@ -269,7 +269,7 @@ int zggbal_(char *job, integer *n, doublecomplex *a, integer *lda, doublecomplex
         i__1 = -(*info);
         xerbla_("ZGGBAL", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
@@ -277,7 +277,7 @@ int zggbal_(char *job, integer *n, doublecomplex *a, integer *lda, doublecomplex
         *ilo = 1;
         *ihi = *n;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -286,7 +286,7 @@ int zggbal_(char *job, integer *n, doublecomplex *a, integer *lda, doublecomplex
         lscale[1] = 1.;
         rscale[1] = 1.;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (lsame_(job, "N"))
     {
@@ -302,7 +302,7 @@ int zggbal_(char *job, integer *n, doublecomplex *a, integer *lda, doublecomplex
             /* L10: */
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     k = 1;
     l = *n;
@@ -458,12 +458,12 @@ L190:
             /* L195: */
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*ilo == *ihi)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Balance the submatrix in rows ILO to IHI. */
     nr = *ihi - *ilo + 1;
@@ -744,7 +744,7 @@ L350:
         /* L380: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGGBAL */
 }
 /* zggbal_ */

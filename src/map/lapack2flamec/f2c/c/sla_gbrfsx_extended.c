@@ -404,7 +404,7 @@ i+1}
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer *n, integer *kl, integer *ku, integer *nrhs, real *ab, integer *ldab, real *afb, integer *ldafb, integer *ipiv, logical *colequ, real *c__, real *b, integer *ldb, real *y, integer * ldy, real *berr_out__, integer *n_norms__, real *err_bnds_norm__, real *err_bnds_comp__, real *res, real *ayb, real *dy, real *y_tail__, real *rcond, integer *ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__, integer *info)
+void sla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer *n, integer *kl, integer *ku, integer *nrhs, real *ab, integer *ldab, real *afb, integer *ldafb, integer *ipiv, logical *colequ, real *c__, real *b, integer *ldb, real *y, integer * ldy, real *berr_out__, integer *n_norms__, real *err_bnds_norm__, real *err_bnds_comp__, real *res, real *ayb, real *dy, real *y_tail__, real *rcond, integer *ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__, integer *info)
 {
     /* System generated locals */
     integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, y_dim1, y_offset, err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1, i__2, i__3;
@@ -414,29 +414,29 @@ int sla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer *
     real dxratmax, dzratmax;
     integer i__, j, m;
     extern /* Subroutine */
-    int sla_gbamv_(integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sla_gbamv_(integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     logical incr_prec__;
     real prev_dz_z__, yk, final_dx_x__, final_dz_z__;
     extern /* Subroutine */
-    int sla_wwaddw_(integer *, real *, real *, real * );
+    void sla_wwaddw_(integer *, real *, real *, real * );
     real prevnormdx;
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__, ymin;
     extern /* Subroutine */
-    int sla_lin_berr_(integer *, integer *, integer *, real *, real *, real *), blas_sgbmv_x_(integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    void sla_lin_berr_(integer *, integer *, integer *, real *, real *, real *), blas_sgbmv_x_(integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, integer *);
     integer y_prec_state__;
     extern /* Subroutine */
     int blas_sgbmv2_x_(integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *), sgbmv_(char *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     real dxrat, dzrat;
     char trans[1];
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     real normx, normy;
     extern /* Subroutine */
-    int saxpy_(integer *, real *, real *, integer *, real *, integer *);
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    void sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     real normdx;
     extern /* Character */
     VOID chla_transtype_(char *, integer *);
@@ -489,7 +489,7 @@ int sla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer *
     /* Function Body */
     if (*info != 0)
     {
-        return 0;
+        return;
     }
     chla_transtype_(ch__1, trans_type__);
     *(unsigned char *)trans = *(unsigned char *)&ch__1[0];
@@ -771,7 +771,7 @@ L666: /* Set final_* when cnt hits ithresh. */
         sla_lin_berr_(n, n, &c__1, &res[1], &ayb[1], &berr_out__[j]);
         /* End of loop for each RHS */
     }
-    return 0;
+    return;
 }
 /* sla_gbrfsx_extended__ */
 #endif

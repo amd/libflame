@@ -91,7 +91,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlasdt_(integer *n, integer *lvl, integer *nd, integer * inode, integer *ndiml, integer *ndimr, integer *msub)
+void dlasdt_(integer *n, integer *lvl, integer *nd, integer * inode, integer *ndiml, integer *ndimr, integer *msub)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasdt inputs: n %" FLA_IS ", msub %" FLA_IS "",*n, *msub);
@@ -163,7 +163,7 @@ int dlasdt_(integer *n, integer *lvl, integer *nd, integer * inode, integer *ndi
     }
     *nd = (llst << 1) - 1;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASDT */
 }
 /* dlasdt_ */

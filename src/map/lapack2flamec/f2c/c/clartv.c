@@ -93,7 +93,7 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int clartv_(integer *n, complex *x, integer *incx, complex * y, integer *incy, real *c__, complex *s, integer *incc)
+void clartv_(integer *n, complex *x, integer *incx, complex * y, integer *incy, real *c__, complex *s, integer *incc)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -175,7 +175,7 @@ int clartv_(integer *n, complex *x, integer *incx, complex * y, integer *incy, r
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLARTV */
 }
 /* clartv_ */

@@ -539,7 +539,7 @@ defaults */
 /* > \ingroup realGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int sgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, integer *ipiv, char *equed, real *r__, real *c__, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *rpvgrw, real *berr, integer * n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer * nparams, real *params, real *work, integer *iwork, integer *info)
+void sgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, integer *ipiv, char *equed, real *r__, real *c__, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *rpvgrw, real *berr, integer * n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer * nparams, real *params, real *work, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1;
@@ -555,20 +555,20 @@ int sgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, integ
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int slaqge_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, char *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void slaqge_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, char *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer infequ;
     logical colequ;
     extern /* Subroutine */
-    int sgetrf_(integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void sgetrf_(integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     real rowcnd;
     logical notran;
     extern /* Subroutine */
-    int sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    void sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     real smlnum;
     logical rowequ;
     extern /* Subroutine */
-    int slascl2_(integer *, integer *, real *, real *, integer *), sgeequb_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *), sgerfsx_(char *, char *, integer *, integer *, real *, integer *, real *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *);
+    void slascl2_(integer *, integer *, real *, real *, integer *), sgeequb_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *), sgerfsx_(char *, char *, integer *, integer *, real *, integer *, real *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -748,7 +748,7 @@ int sgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, integ
     {
         i__1 = -(*info);
         xerbla_("SGESVXX", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     if (equil)
     {
@@ -810,7 +810,7 @@ int sgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, integ
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
             *rpvgrw = sla_gerpvgrw_(n, info, &a[a_offset], lda, &af[ af_offset], ldaf);
-            return 0;
+            return;
         }
     }
     /* Compute the reciprocal pivot growth factor RPVGRW. */
@@ -830,7 +830,7 @@ int sgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, integ
     {
         slascl2_(n, nrhs, &r__[1], &x[x_offset], ldx);
     }
-    return 0;
+    return;
     /* End of SGESVXX */
 }
 /* sgesvxx_ */

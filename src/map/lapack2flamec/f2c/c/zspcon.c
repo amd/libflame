@@ -107,7 +107,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zspcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublereal *anorm, doublereal *rcond, doublecomplex * work, integer *info)
+void zspcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublereal *anorm, doublereal *rcond, doublecomplex * work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zspcon inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
@@ -120,10 +120,10 @@ int zspcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublereal
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern /* Subroutine */
-    int zsptrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zsptrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -169,7 +169,7 @@ int zspcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublereal
         i__1 = -(*info);
         xerbla_("ZSPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.;
@@ -177,12 +177,12 @@ int zspcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublereal
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*anorm <= 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if (upper)
@@ -197,7 +197,7 @@ int zspcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublereal
             if (ipiv[i__] > 0 && (ap[i__1].r == 0. && ap[i__1].i == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             ip -= i__;
             /* L10: */
@@ -216,7 +216,7 @@ int zspcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublereal
             if (ipiv[i__] > 0 && (ap[i__2].r == 0. && ap[i__2].i == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             ip = ip + *n - i__ + 1;
             /* L20: */
@@ -238,7 +238,7 @@ L30:
         *rcond = 1. / ainvnm / *anorm;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSPCON */
 }
 /* zspcon_ */

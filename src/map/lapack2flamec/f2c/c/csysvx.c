@@ -273,7 +273,7 @@ the routine */
 /* > \ingroup complexSYsolve */
 /* ===================================================================== */
 /* Subroutine */
-int csysvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer * ipiv, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, integer *lwork, real *rwork, integer *info)
+void csysvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer * ipiv, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, integer *lwork, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -294,15 +294,15 @@ int csysvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, inte
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern real clansy_(char *, char *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int csycon_(char *, integer *, complex *, integer *, integer *, real *, real *, complex *, integer *), csyrfs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), csytrf_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+    void csycon_(char *, integer *, complex *, integer *, integer *, real *, real *, complex *, integer *), csyrfs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), csytrf_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int csytrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+    void csytrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -410,12 +410,12 @@ int csysvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, inte
         i__1 = -(*info);
         xerbla_("CSYSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (nofact)
     {
@@ -427,7 +427,7 @@ int csysvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, inte
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -448,7 +448,7 @@ int csysvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, inte
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYSVX */
 }
 /* csysvx_ */

@@ -138,7 +138,7 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgbtrf_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer *ldab, integer *ipiv, integer *info)
+void sgbtrf_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer *ldab, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -152,18 +152,18 @@ int sgbtrf_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer 
     /* Local variables */
     integer i__, j, i2, i3, j2, j3, k2, jb, nb, ii, jj, jm, ip, jp, km, ju, kv, nw;
     extern /* Subroutine */
-    int sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
+    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
     real temp;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     real work13[4160] /* was [65][64] */
     , work31[4160] /* was [65][ 64] */
     ;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), sgbtf2_(integer *, integer *, integer *, integer *, real *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), sgbtf2_(integer *, integer *, integer *, integer *, real *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *), isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
+    void slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -226,13 +226,13 @@ int sgbtrf_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer 
         i__1 = -(*info);
         xerbla_("SGBTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     #if AOCL_FLA_PROGRESS_H
         progress_step_count =0;
@@ -615,7 +615,7 @@ int sgbtrf_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer 
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SGBTRF */
 }
 /* sgbtrf_ */

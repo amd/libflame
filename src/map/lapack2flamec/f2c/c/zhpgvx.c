@@ -273,7 +273,7 @@ if RANGE = 'V', the exact value of M */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-int zhpgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, doublecomplex *ap, doublecomplex *bp, doublereal * vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *work, doublereal *rwork, integer *iwork, integer * ifail, integer *info)
+void zhpgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, doublecomplex *ap, doublecomplex *bp, doublereal * vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *work, doublereal *rwork, integer *iwork, integer * ifail, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhpgvx inputs: itype %" FLA_IS ", jobz %c, range %c, uplo %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", m %" FLA_IS ", ldz %" FLA_IS "",*itype, *jobz, *range, *uplo, *n, *il, *iu, *m, *ldz);
@@ -285,7 +285,7 @@ int zhpgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, do
     char trans[1];
     logical upper, wantz;
     extern /* Subroutine */
-    int ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical alleig, indeig, valeig;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zhpgst_( integer *, char *, integer *, doublecomplex *, doublecomplex *, integer *), zhpevx_(char *, char *, char *, integer *, doublecomplex *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, doublereal *, integer *, integer *, integer *), zpptrf_(char *, integer *, doublecomplex *, integer *);
@@ -379,13 +379,13 @@ int zhpgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, do
         i__1 = -(*info);
         xerbla_("ZHPGVX", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of B. */
     zpptrf_(uplo, n, &bp[1], info);
@@ -393,7 +393,7 @@ int zhpgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, do
     {
         *info = *n + *info;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     zhpgst_(itype, uplo, n, &ap[1], &bp[1], info);
@@ -451,7 +451,7 @@ int zhpgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, do
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHPGVX */
 }
 /* zhpgvx_ */

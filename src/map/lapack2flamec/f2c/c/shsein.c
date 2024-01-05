@@ -265,7 +265,7 @@ here the magnitude of a complex number */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int shsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n, real *h__, integer *ldh, real *wr, real *wi, real *vl, integer *ldvl, real *vr, integer *ldvr, integer *mm, integer *m, real *work, integer *ifaill, integer *ifailr, integer *info)
+void shsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n, real *h__, integer *ldh, real *wr, real *wi, real *vl, integer *ldvl, real *vr, integer *ldvr, integer *mm, integer *m, real *work, integer *ifaill, integer *ifailr, integer *info)
 {
     /* System generated locals */
     integer h_dim1, h_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2;
@@ -283,7 +283,7 @@ int shsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n,
     real hnorm;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int slaein_(logical *, logical *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *, real *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void slaein_(logical *, logical *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *, real *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern real slanhs_(char *, integer *, real *, integer *, real *);
     extern logical sisnan_(real *);
@@ -406,12 +406,12 @@ int shsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n,
     {
         i__1 = -(*info);
         xerbla_("SHSEIN", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     /* Set machine-dependent constants. */
     unfl = slamch_("Safe minimum");
@@ -488,7 +488,7 @@ L50:
                 if (sisnan_(&hnorm))
                 {
                     *info = -6;
-                    return 0;
+                    return;
                 }
                 else if (hnorm > 0.f)
                 {
@@ -623,7 +623,7 @@ L60:
         }
         /* L120: */
     }
-    return 0;
+    return;
     /* End of SHSEIN */
 }
 /* shsein_ */

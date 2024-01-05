@@ -169,7 +169,7 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgeqr_(integer *m, integer *n, complex *a, integer *lda, complex *t, integer *tsize, complex *work, integer *lwork, integer * info)
+void cgeqr_(integer *m, integer *n, complex *a, integer *lda, complex *t, integer *tsize, complex *work, integer *lwork, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -191,11 +191,11 @@ int cgeqr_(integer *m, integer *n, complex *a, integer *lda, complex *t, integer
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int cgeqrt_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
+    void cgeqrt_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
     logical lminws, lquery;
     integer mintsz;
     extern /* Subroutine */
-    int clatsqr_(integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void clatsqr_(integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. -- */
@@ -367,18 +367,18 @@ int cgeqr_(integer *m, integer *n, complex *a, integer *lda, complex *t, integer
         i__1 = -(*info);
         xerbla_("CGEQR", &i__1, (ftnlen)5);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* The QR Decomposition */
     if (*m <= *n || mb <= *n || mb >= *m)
@@ -396,7 +396,7 @@ int cgeqr_(integer *m, integer *n, complex *a, integer *lda, complex *t, integer
     work[1].r = (real) i__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGEQR */
 }
 /* cgeqr_ */

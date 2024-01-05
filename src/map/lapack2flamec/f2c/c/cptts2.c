@@ -99,7 +99,7 @@
 /* > \ingroup complexPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cptts2_(integer *iuplo, integer *n, integer *nrhs, real * d__, complex *e, complex *b, integer *ldb)
+void cptts2_(integer *iuplo, integer *n, integer *nrhs, real * d__, complex *e, complex *b, integer *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -120,7 +120,7 @@ int cptts2_(integer *iuplo, integer *n, integer *nrhs, real * d__, complex *e, c
     /* Local variables */
     integer i__, j;
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *);
+    void csscal_(integer *, real *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -153,7 +153,7 @@ int cptts2_(integer *iuplo, integer *n, integer *nrhs, real * d__, complex *e, c
             csscal_(nrhs, &r__1, &b[b_offset], ldb);
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*iuplo == 1)
     {
@@ -392,7 +392,7 @@ L65: /* Solve L * x = b. */
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPTTS2 */
 }
 /* cptts2_ */

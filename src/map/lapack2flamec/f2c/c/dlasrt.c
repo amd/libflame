@@ -75,7 +75,7 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dlasrt_(char *id, integer *n, doublereal *d__, integer * info)
+void dlasrt_(char *id, integer *n, doublereal *d__, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasrt inputs: id %c, n %" FLA_IS "",*id, *n);
@@ -142,13 +142,13 @@ int dlasrt_(char *id, integer *n, doublereal *d__, integer * info)
         i__1 = -(*info);
         xerbla_("DLASRT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 1)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     stkpnt = 1;
     stack[0] = 1;
@@ -351,7 +351,7 @@ L110:
         goto L10;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASRT */
 }
 /* dlasrt_ */

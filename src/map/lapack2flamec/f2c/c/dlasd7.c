@@ -268,7 +268,7 @@ and entries in the second half */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__, doublereal *z__, doublereal *zw, doublereal *vf, doublereal *vfw, doublereal *vl, doublereal *vlw, doublereal *alpha, doublereal *beta, doublereal * dsigma, integer *idx, integer *idxp, integer *idxq, integer *perm, integer *givptr, integer *givcol, integer *ldgcol, doublereal *givnum, integer *ldgnum, doublereal *c__, doublereal *s, integer *info)
+void dlasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__, doublereal *z__, doublereal *zw, doublereal *vf, doublereal *vfw, doublereal *vl, doublereal *vlw, doublereal *alpha, doublereal *beta, doublereal * dsigma, integer *idx, integer *idxp, integer *idxq, integer *perm, integer *givptr, integer *givcol, integer *ldgcol, doublereal *givnum, integer *ldgnum, doublereal *c__, doublereal *s, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasd7 inputs: icompq %" FLA_IS ", nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", idxq %" FLA_IS ", ldgcol %" FLA_IS ", ldgnum %" FLA_IS "",*icompq, *nl, *nr, *sqre, *idxq, *ldgcol, *ldgnum);
@@ -282,14 +282,14 @@ int dlasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k
     doublereal eps, tau, tol;
     integer nlp1, nlp2, idxi, idxj;
     extern /* Subroutine */
-    int drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
     integer idxjp;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer jprev;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
     extern /* Subroutine */
-    int dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal hlftol;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -365,7 +365,7 @@ int dlasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k
         i__1 = -(*info);
         xerbla_("DLASD7", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     nlp1 = *nl + 1;
     nlp2 = *nl + 2;
@@ -629,7 +629,7 @@ L100: /* Sort the singular values into DSIGMA. The singular values which */
     i__1 = n - 1;
     dcopy_(&i__1, &vlw[2], &c__1, &vl[2], &c__1);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASD7 */
 }
 /* dlasd7_ */

@@ -146,7 +146,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16PTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomplex *z__, integer *ldz, doublereal *work, integer *info)
+void zpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomplex *z__, integer *ldz, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
@@ -166,7 +166,7 @@ int zpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecompl
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icompz;
     extern /* Subroutine */
-    int zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), dpttrf_(integer *, doublereal *, doublereal *, integer *), zbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *);
+    void zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), dpttrf_(integer *, doublereal *, doublereal *, integer *), zbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -232,13 +232,13 @@ int zpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecompl
         i__1 = -(*info);
         xerbla_("ZPTEQR", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -249,7 +249,7 @@ int zpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecompl
             z__[i__1].i = 0.; // , expr subst
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (icompz == 2)
     {
@@ -260,7 +260,7 @@ int zpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecompl
     if (*info != 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *n;
     for (i__ = 1;
@@ -306,7 +306,7 @@ int zpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecompl
         *info = *n + *info;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPTEQR */
 }
 /* zpteqr_ */

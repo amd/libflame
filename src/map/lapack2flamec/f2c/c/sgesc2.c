@@ -104,7 +104,7 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-int sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, integer *jpiv, real *scale)
+void sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, integer *jpiv, real *scale)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -113,12 +113,12 @@ int sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, integer
     integer i__, j;
     real eps, temp;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), slabad_(real *, real *);
+    void sscal_(integer *, real *, real *, integer *), slabad_(real *, real *);
     extern real slamch_(char *);
     real bignum;
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
+    void slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
     real smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -201,7 +201,7 @@ int sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, integer
     /* Apply permutations JPIV to the solution (RHS) */
     i__1 = *n - 1;
     slaswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &jpiv[1], &c_n1);
-    return 0;
+    return;
     /* End of SGESC2 */
 }
 /* sgesc2_ */

@@ -125,7 +125,7 @@ the routine */
 /* > \ingroup doubleSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dsytrf_aa_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work, integer *lwork, integer *info)
+void dsytrf_aa_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytrf_aa inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *lda, *lwork);
@@ -134,14 +134,14 @@ int dsytrf_aa_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipi
     /* Local variables */
     integer j;
     extern /* Subroutine */
-    int dlasyf_aa_(char *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *);
+    void dlasyf_aa_(char *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *);
     integer k1, k2, j1, j2, j3, jb, nb, mj, nj;
     doublereal alpha;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -211,24 +211,24 @@ int dsytrf_aa_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipi
         i__1 = -(*info);
         xerbla_("DSYTRF_AA", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     ipiv[1] = 1;
     if (*n == 1)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Adjust block size based on the workspace size */
     if (*lwork < (nb + 1) * *n)
@@ -465,7 +465,7 @@ L11:
 L20:
     work[1] = (doublereal) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYTRF_AA */
 }
 /* dsytrf_aa__ */

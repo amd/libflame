@@ -222,7 +222,7 @@ the routine */
 /* Angelika Schwarz, Umea University, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-int clatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *nrhs, complex *a, integer *lda, complex * x, integer *ldx, real *scale, real *cnorm, real *work, integer *lwork, integer *info)
+void clatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *nrhs, complex *a, integer *lda, complex * x, integer *ldx, real *scale, real *cnorm, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("clatrs3 inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldx %" FLA_IS "",*uplo, *trans, *diag, *normin, *n, *nrhs, *lda, *ldx);
@@ -238,7 +238,7 @@ int clatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     integer awrk;
     real tmax, xnrm[32];
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     real rscal;
     integer lanrm, ilast, jlast;
@@ -248,14 +248,14 @@ int clatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     real scaloc;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *);
+    void csscal_(integer *, real *, complex *, integer *);
     real scamin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
     extern /* Subroutine */
-    int clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *, real *, integer *);
+    void clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *, real *, integer *);
     extern real slarmm_(real *, real *, real *);
     integer ifirst;
     logical notran;
@@ -371,12 +371,12 @@ int clatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
         i__1 = -(*info);
         xerbla_("CLATRS3", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize scaling factors */
     i__1 = *nrhs;
@@ -390,7 +390,7 @@ int clatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     if (fla_min(*n,*nrhs) == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine machine dependent constant to control overflow. */
     bignum = slamch_("Overflow");
@@ -407,7 +407,7 @@ int clatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
             clatrs_(uplo, trans, diag, "Y", n, &a[a_offset], lda, &x[k * x_dim1 + 1], &scale[k], &cnorm[1], info);
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute norms of blocks of A excluding diagonal blocks and find */
     /* the block with the largest norm TMAX. */
@@ -474,7 +474,7 @@ int clatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
             clatrs_(uplo, trans, diag, "N", n, &a[a_offset], lda, &x[k * x_dim1 + 1], &scale[k], &cnorm[1], info);
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Every right-hand side requires workspace to store NBA local scale */
     /* factors. To save workspace, X is computed successively in block columns */
@@ -827,7 +827,7 @@ int clatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CLATRS3 */
 }
 /* clatrs3_ */

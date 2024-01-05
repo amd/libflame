@@ -399,7 +399,7 @@ i+1}
 /* > \ingroup complexHEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cla_herfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer *ipiv, logical *colequ, real *c__, complex *b, integer *ldb, complex *y, integer *ldy, real *berr_out__, integer * n_norms__, real *err_bnds_norm__, real *err_bnds_comp__, complex *res, real *ayb, complex *dy, complex *y_tail__, real *rcond, integer * ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__, integer *info)
+void cla_herfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer *ipiv, logical *colequ, real *c__, complex *b, integer *ldb, complex *y, integer *ldy, real *berr_out__, integer * n_norms__, real *err_bnds_norm__, real *err_bnds_comp__, complex *res, real *ayb, complex *dy, complex *y_tail__, real *rcond, integer * ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -420,16 +420,16 @@ int cla_herfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *
     real dxratmax, dzratmax;
     integer i__, j;
     extern /* Subroutine */
-    int cla_heamv_(integer *, integer *, real *, complex *, integer *, complex *, integer *, real *, real *, integer *);
+    void cla_heamv_(integer *, integer *, real *, complex *, integer *, complex *, integer *, real *, real *, integer *);
     logical incr_prec__;
     real prev_dz_z__, yk, final_dx_x__;
     extern /* Subroutine */
-    int cla_wwaddw_(integer *, complex *, complex *, complex *);
+    void cla_wwaddw_(integer *, complex *, complex *, complex *);
     real final_dz_z__, prevnormdx;
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__;
     extern /* Subroutine */
-    int cla_lin_berr_(integer *, integer *, integer *, complex *, real *, real *);
+    void cla_lin_berr_(integer *, integer *, integer *, complex *, real *, real *);
     real ymin;
     extern /* Subroutine */
     int blas_chemv_x_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
@@ -438,10 +438,10 @@ int cla_herfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *
     int blas_chemv2_x_(integer *, integer *, complex *, complex *, integer *, complex *, complex *, integer *, complex *, complex *, integer *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * ), ccopy_(integer *, complex *, integer *, complex *, integer *);
+    void chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * ), ccopy_(integer *, complex *, integer *, complex *, integer *);
     real dxrat, dzrat;
     extern /* Subroutine */
-    int caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     real normx, normy;
     extern real slamch_(char *);
@@ -536,7 +536,7 @@ int cla_herfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *
         i__1 = -(*info);
         xerbla_("CLA_HERFSX_EXTENDED", &i__1, (ftnlen)19);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     eps = slamch_("Epsilon");
     hugeval = slamch_("Overflow");
@@ -817,7 +817,7 @@ L666: /* Set final_* when cnt hits ithresh. */
         /* End of loop for each RHS. */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* cla_herfsx_extended__ */
 #endif

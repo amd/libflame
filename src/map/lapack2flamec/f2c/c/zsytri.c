@@ -115,7 +115,7 @@ the matrix is singular and its */
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zsytri_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *work, integer *info)
+void zsytri_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsytri inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -134,11 +134,11 @@ int zsytri_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipi
     integer kstep;
     logical upper;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern /* Double Complex */
     VOID zdotu_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern /* Subroutine */
-    int zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zsymv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zsymv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -186,13 +186,13 @@ int zsytri_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipi
         i__1 = -(*info);
         xerbla_("ZSYTRI", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if (upper)
@@ -206,7 +206,7 @@ int zsytri_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipi
             if (ipiv[*info] > 0 && (a[i__1].r == 0. && a[i__1].i == 0.))
             {
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L10: */
         }
@@ -223,7 +223,7 @@ int zsytri_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipi
             if (ipiv[*info] > 0 && (a[i__2].r == 0. && a[i__2].i == 0.))
             {
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L20: */
         }
@@ -547,7 +547,7 @@ L60:
         ;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSYTRI */
 }
 /* zsytri_ */

@@ -160,7 +160,7 @@ the matrix is singular and its */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int zhetri_3x_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *e, integer *ipiv, doublecomplex *work, integer *nb, integer *info)
+void zhetri_3x_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *e, integer *ipiv, doublecomplex *work, integer *nb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetri_3x inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", nb %" FLA_IS "",*uplo, *n, *lda, *nb);
@@ -173,7 +173,7 @@ int zhetri_3x_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecom
     void z_div(doublecomplex *, doublecomplex *, doublecomplex *), d_cnjg( doublecomplex *, doublecomplex *);
     /* Local variables */
     extern /* Subroutine */
-    int zheswapr_(char *, integer *, doublecomplex *, integer *, integer *, integer *);
+    void zheswapr_(char *, integer *, doublecomplex *, integer *, integer *, integer *);
     doublecomplex d__;
     integer i__, j, k;
     doublereal t, ak;
@@ -183,16 +183,16 @@ int zhetri_3x_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecom
     doublecomplex akkp1;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublecomplex u01_i_j__, u11_i_j__;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icount;
     extern /* Subroutine */
-    int ztrtri_(char *, char *, integer *, doublecomplex *, integer *, integer *);
+    void ztrtri_(char *, char *, integer *, doublecomplex *, integer *, integer *);
     doublecomplex u01_ip1_j__, u11_ip1_j__;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -245,12 +245,12 @@ int zhetri_3x_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecom
         i__1 = -(*info);
         xerbla_("ZHETRI_3X", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Workspace got Non-diag elements of D */
     i__1 = *n;
@@ -275,7 +275,7 @@ int zhetri_3x_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecom
             if (ipiv[*info] > 0 && (a[i__1].r == 0. && a[i__1].i == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
     }
@@ -291,7 +291,7 @@ int zhetri_3x_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecom
             if (ipiv[*info] > 0 && (a[i__2].r == 0. && a[i__2].i == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
     }
@@ -1047,7 +1047,7 @@ int zhetri_3x_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecom
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHETRI_3X */
 }
 /* zhetri_3x__ */

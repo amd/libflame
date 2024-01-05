@@ -192,7 +192,7 @@ the routine */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dsysv_rook_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv, doublereal *b, integer * ldb, doublereal *work, integer *lwork, integer *info)
+void dsysv_rook_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv, doublereal *b, integer * ldb, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsysv_rook inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb, *lwork);
@@ -200,7 +200,7 @@ int dsysv_rook_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *l
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int dsytrf_rook_(char *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dsytrs_rook_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dsytrf_rook_(char *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dsytrs_rook_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -279,12 +279,12 @@ int dsysv_rook_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *l
         i__1 = -(*info);
         xerbla_("DSYSV_ROOK ", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
     dsytrf_rook_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
@@ -296,7 +296,7 @@ int dsysv_rook_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *l
     }
     work[1] = (doublereal) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYSV_ROOK */
 }
 /* dsysv_rook__ */

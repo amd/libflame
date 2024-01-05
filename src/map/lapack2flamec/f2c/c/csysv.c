@@ -159,7 +159,7 @@ the routine */
 /* > \ingroup complexSYsolve */
 /* ===================================================================== */
 /* Subroutine */
-int csysv_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv, complex *b, integer *ldb, complex *work, integer *lwork, integer *info)
+void csysv_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv, complex *b, integer *ldb, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("csysv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb);
@@ -172,7 +172,7 @@ int csysv_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, inte
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int csytrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), csytrs2_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *);
+    void csytrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), csytrs2_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -246,12 +246,12 @@ int csysv_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, inte
         i__1 = -(*info);
         xerbla_("CSYSV ", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
     csytrf_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
@@ -272,7 +272,7 @@ int csysv_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, inte
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CSYSV */
 }
 /* csysv_ */

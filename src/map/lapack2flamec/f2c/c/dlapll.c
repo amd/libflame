@@ -88,7 +88,7 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlapll_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *incy, doublereal *ssmin)
+void dlapll_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *incy, doublereal *ssmin)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlapll inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*n, *incx, *incy);
@@ -98,10 +98,10 @@ int dlapll_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *in
     doublereal c__, a11, a12, a22, tau;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     doublereal ssmax;
     extern /* Subroutine */
-    int dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -129,7 +129,7 @@ int dlapll_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *in
     {
         *ssmin = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the QR factorization of the N-by-2 matrix ( X Y ) */
     dlarfg_(n, &x[1], &x[*incx + 1], incx, &tau);
@@ -144,7 +144,7 @@ int dlapll_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *in
     /* Compute the SVD of 2-by-2 Upper triangular matrix. */
     dlas2_(&a11, &a12, &a22, ssmin, &ssmax);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAPLL */
 }
 /* dlapll_ */

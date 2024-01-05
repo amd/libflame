@@ -162,7 +162,7 @@ for 1 <= j <= N, column j of the */
 /* > 1995. */
 /* ===================================================================== */
 /* Subroutine */
-int clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs, real *rdsum, real *rdscal, integer *ipiv, integer *jpiv)
+void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs, real *rdsum, real *rdscal, integer *ipiv, integer *jpiv)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -187,18 +187,18 @@ int clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs,
     integer info;
     complex temp, work[8];
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *);
     real scale;
     extern /* Complex */
     VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
     complex pmone;
     extern /* Subroutine */
-    int caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     real rtemp, sminu, rwork[2], splus;
     extern /* Subroutine */
-    int cgesc2_(integer *, complex *, integer *, complex *, integer *, integer *, real *), cgecon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), classq_(integer *, complex *, integer *, real *, real *), claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
+    void cgesc2_(integer *, complex *, integer *, complex *, integer *, integer *, real *), cgecon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), classq_(integer *, complex *, integer *, real *, real *), claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
     extern real scasum_(integer *, complex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -388,7 +388,7 @@ int clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs,
         /* Compute the sum of squares */
         classq_(n, &rhs[1], &c__1, rdscal, rdsum);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* ENTRY IJOB = 2 */
     /* Compute approximate nullvector XM of Z */
@@ -417,7 +417,7 @@ int clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs,
     /* Compute the sum of squares */
     classq_(n, &rhs[1], &c__1, rdscal, rdsum);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLATDF */
 }
 /* clatdf_ */

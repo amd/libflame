@@ -223,7 +223,7 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slatps_(char *uplo, char *trans, char *diag, char * normin, integer *n, real *ap, real *x, real *scale, real *cnorm, integer *info)
+void slatps_(char *uplo, char *trans, char *diag, char * normin, integer *n, real *ap, real *x, real *scale, real *cnorm, integer *info)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -239,13 +239,13 @@ int slatps_(char *uplo, char *trans, char *diag, char * normin, integer *n, real
     real xmax, grow, sumj;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     real tscal, uscal;
     integer jlast;
     extern real sasum_(integer *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    int saxpy_(integer *, real *, real *, integer *, real *, integer *), stpsv_(char *, char *, char *, integer *, real *, real *, integer *);
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *), stpsv_(char *, char *, char *, integer *, real *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -310,12 +310,12 @@ int slatps_(char *uplo, char *trans, char *diag, char * normin, integer *n, real
     {
         i__1 = -(*info);
         xerbla_("SLATPS", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     /* Determine machine dependent parameters to control overflow. */
     smlnum = slamch_("Safe minimum") / slamch_("Precision");
@@ -884,7 +884,7 @@ L135:
         r__1 = 1.f / tscal;
         sscal_(n, &r__1, &cnorm[1], &c__1);
     }
-    return 0;
+    return;
     /* End of SLATPS */
 }
 /* slatps_ */

@@ -135,7 +135,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zlaed0_(integer *qsiz, integer *n, doublereal *d__, doublereal *e, doublecomplex *q, integer *ldq, doublecomplex *qstore, integer *ldqs, doublereal *rwork, integer *iwork, integer *info)
+void zlaed0_(integer *qsiz, integer *n, doublereal *d__, doublereal *e, doublecomplex *q, integer *ldq, doublecomplex *qstore, integer *ldqs, doublereal *rwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaed0 inputs: qsiz %" FLA_IS ", n %" FLA_IS ", ldq %" FLA_IS ", ldqs %" FLA_IS "",*qsiz, *n, *ldq, *ldqs);
@@ -150,19 +150,19 @@ int zlaed0_(integer *qsiz, integer *n, doublereal *d__, doublereal *e, doublecom
     doublereal temp;
     integer curr, iperm;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer indxq, iwrem, iqptr, tlvls;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaed7_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublecomplex *, doublereal *, integer *, integer *) ;
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaed7_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublecomplex *, doublereal *, integer *, integer *) ;
     integer igivcl;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zlacrm_(integer *, integer *, doublecomplex *, integer *, doublereal *, integer *, doublecomplex *, integer *, doublereal *);
+    void zlacrm_(integer *, integer *, doublecomplex *, integer *, doublereal *, integer *, doublecomplex *, integer *, doublereal *);
     integer igivnm, submat, curprb, subpbs, igivpt;
     extern /* Subroutine */
-    int dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     integer curlvl, matsiz, iprmpt, smlsiz;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -224,13 +224,13 @@ int zlaed0_(integer *qsiz, integer *n, doublereal *d__, doublereal *e, doublecom
         i__1 = -(*info);
         xerbla_("ZLAED0", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     smlsiz = ilaenv_(&c__9, "ZLAED0", " ", &c__0, &c__0, &c__0, &c__0);
     /* Determine the size and placement of the submatrices, and save in */
@@ -338,7 +338,7 @@ L10:
         {
             *info = submat * (*n + 1) + submat + matsiz - 1;
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         k = 1;
         i__2 = iwork[i__ + 1];
@@ -389,7 +389,7 @@ L80:
             {
                 *info = submat * (*n + 1) + submat + matsiz - 1;
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             iwork[i__ / 2 + 1] = iwork[i__ + 2];
             /* L90: */
@@ -413,7 +413,7 @@ L80:
     }
     dcopy_(n, &rwork[1], &c__1, &d__[1], &c__1);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAED0 */
 }
 /* zlaed0_ */

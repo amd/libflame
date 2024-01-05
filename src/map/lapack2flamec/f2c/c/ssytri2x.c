@@ -112,7 +112,7 @@ the matrix is singular and its */
 /* > \ingroup realSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ssytri2x_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real *work, integer *nb, integer *info)
+void ssytri2x_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real *work, integer *nb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -126,7 +126,7 @@ int ssytri2x_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real
     real d__;
     integer i__, j, k;
     extern /* Subroutine */
-    int ssyswapr_(char *, integer *, real *, integer *, integer *, integer *);
+    void ssyswapr_(char *, integer *, real *, integer *, integer *, integer *);
     real t, ak;
     integer u11, ip, nnb, cut;
     real akp1;
@@ -135,17 +135,17 @@ int ssytri2x_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer count;
     logical upper;
     extern /* Subroutine */
-    int strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * );
+    void strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * );
     real u01_i_j__, u11_i_j__;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), strtri_( char *, char *, integer *, real *, integer *, integer *);
     real u01_ip1_j__, u11_ip1_j__;
     extern /* Subroutine */
-    int ssyconv_(char *, char *, integer *, real *, integer *, integer *, real *, integer *);
+    void ssyconv_(char *, char *, integer *, real *, integer *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -196,12 +196,12 @@ int ssytri2x_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real
         i__1 = -(*info);
         xerbla_("SSYTRI2X", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Convert A */
     /* Workspace got Non-diag elements of D */
@@ -217,7 +217,7 @@ int ssytri2x_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real
             if (ipiv[*info] > 0 && a[*info + *info * a_dim1] == 0.f)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
         }
     }
@@ -232,7 +232,7 @@ int ssytri2x_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real
             if (ipiv[*info] > 0 && a[*info + *info * a_dim1] == 0.f)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
         }
     }
@@ -756,7 +756,7 @@ int ssytri2x_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTRI2X */
 }
 /* ssytri2x_ */

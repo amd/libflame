@@ -98,7 +98,7 @@ static integer c_n1 = -1;
 /* > \ingroup doublePTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dpttrs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *b, integer *ldb, integer *info)
+void dpttrs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpttrs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
@@ -107,7 +107,7 @@ int dpttrs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublerea
     /* Local variables */
     integer j, jb, nb;
     extern /* Subroutine */
-    int dptts2_(integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dptts2_(integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -153,13 +153,13 @@ int dpttrs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublerea
         i__1 = -(*info);
         xerbla_("DPTTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine the number of right-hand sides to solve at a time. */
     if (*nrhs == 1)
@@ -193,7 +193,7 @@ int dpttrs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublerea
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPTTRS */
 }
 /* dpttrs_ */

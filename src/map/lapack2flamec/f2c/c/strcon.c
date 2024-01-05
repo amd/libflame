@@ -127,7 +127,7 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int strcon_(char *norm, char *uplo, char *diag, integer *n, real *a, integer *lda, real *rcond, real *work, integer *iwork, integer *info)
+void strcon_(char *norm, char *uplo, char *diag, integer *n, real *a, integer *lda, real *rcond, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -145,11 +145,11 @@ int strcon_(char *norm, char *uplo, char *diag, integer *n, real *a, integer *ld
     integer isave[3];
     real anorm;
     extern /* Subroutine */
-    int srscl_(integer *, real *, real *, integer *);
+    void srscl_(integer *, real *, real *, integer *);
     logical upper;
     real xnorm;
     extern /* Subroutine */
-    int slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+    void slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -159,7 +159,7 @@ int strcon_(char *norm, char *uplo, char *diag, integer *n, real *a, integer *ld
     char normin[1];
     extern real slantr_(char *, char *, char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int slatrs_(char *, char *, char *, char *, integer *, real *, integer *, real *, real *, real *, integer *);
+    void slatrs_(char *, char *, char *, char *, integer *, real *, integer *, real *, real *, real *, integer *);
     real smlnum;
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -221,14 +221,14 @@ int strcon_(char *norm, char *uplo, char *diag, integer *n, real *a, integer *ld
         i__1 = -(*info);
         xerbla_("STRCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     *rcond = 0.f;
     smlnum = slamch_("Safe minimum") * (real) fla_max(1,*n);
@@ -285,7 +285,7 @@ L10:
     }
 L20:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of STRCON */
 }
 /* strcon_ */

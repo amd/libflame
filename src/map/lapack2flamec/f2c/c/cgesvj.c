@@ -360,7 +360,7 @@ kappa(A*D), where kappa(.) is the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex *a, integer *lda, real *sva, integer *mv, complex *v, integer *ldv, complex *cwork, integer *lwork, real *rwork, integer *lrwork, integer *info)
+void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex *a, integer *lda, real *sva, integer *mv, complex *v, integer *ldv, complex *cwork, integer *lwork, real *rwork, integer *lrwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -398,7 +398,7 @@ int cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex 
     real aaqq, ctol;
     integer ierr;
     extern /* Subroutine */
-    int crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
+    void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
     complex ompq;
     real aapp0, aapq1, temp1;
     extern /* Complex */
@@ -408,27 +408,27 @@ int cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex 
     real theta, small_val, sfmin;
     logical lsvec;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
     real epsln;
     logical applv, rsvec, uctol;
     extern /* Subroutine */
-    int caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical lower, upper, rotok;
     extern /* Subroutine */
-    int cgsvj0_(char *, integer *, integer *, complex *, integer *, complex *, real *, integer *, complex *, integer *, real *, real *, real *, integer *, complex *, integer *, integer * ), cgsvj1_(char *, integer *, integer *, integer *, complex *, integer *, complex *, real *, integer *, complex *, integer *, real *, real *, real *, integer *, complex *, integer *, integer *);
+    void cgsvj0_(char *, integer *, integer *, complex *, integer *, complex *, real *, integer *, complex *, integer *, real *, real *, real *, integer *, complex *, integer *, integer * ), cgsvj1_(char *, integer *, integer *, integer *, complex *, integer *, complex *, real *, integer *, complex *, integer *, real *, real *, real *, integer *, complex *, integer *, integer *);
     extern real scnrm2_(integer *, complex *, integer *);
     extern /* Subroutine */
-    int clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
+    void clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void csscal_(integer *, real *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer ijblsk, swband;
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
     integer blskip;
     extern /* Subroutine */
-    int classq_(integer *, complex *, integer *, real *, real *);
+    void classq_(integer *, complex *, integer *, real *, real *);
     real mxaapq, thsign, mxsinj;
     integer emptsw;
     logical lquery;
@@ -537,7 +537,7 @@ int cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex 
         i__1 = -(*info);
         xerbla_("CGESVJ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
@@ -546,13 +546,13 @@ int cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex 
         cwork[1].i = 0.f; // , expr subst
         rwork[1] = (real) fla_max(*n,6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* #:) Quick return for void matrix */
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set numerical parameters */
     /* The stopping criterion for Jacobi rotations is */
@@ -597,7 +597,7 @@ int cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex 
         i__1 = -(*info);
         xerbla_("CGESVJ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize the right singular vector matrix. */
     if (rsvec)
@@ -639,7 +639,7 @@ int cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex 
                 i__2 = -(*info);
                 xerbla_("CGESVJ", &i__2, (ftnlen)6);
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             aaqq = sqrt(aaqq);
             if (aapp < big / aaqq && noscale)
@@ -683,7 +683,7 @@ int cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex 
                 i__2 = -(*info);
                 xerbla_("CGESVJ", &i__2, (ftnlen)6);
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             aaqq = sqrt(aaqq);
             if (aapp < big / aaqq && noscale)
@@ -727,7 +727,7 @@ int cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex 
                 i__2 = -(*info);
                 xerbla_("CGESVJ", &i__2, (ftnlen)6);
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             aaqq = sqrt(aaqq);
             if (aapp < big / aaqq && noscale)
@@ -795,7 +795,7 @@ int cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex 
         rwork[5] = 0.f;
         rwork[6] = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* #:) Quick return for one-column matrix */
     if (*n == 1)
@@ -818,7 +818,7 @@ int cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex 
         rwork[5] = 0.f;
         rwork[6] = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Protect small singular values from underflow, and try to */
     /* avoid underflows/overflows in computing Jacobi rotations. */
@@ -1799,7 +1799,7 @@ L1995: /* Sort the singular values and find how many are above */
     /* MXSINJ is the largest absolute value of the sines of Jacobi angles */
     /* in the last sweep */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* .. */
     /* .. END OF CGESVJ */
     /* .. */

@@ -159,7 +159,7 @@
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dla_geamv_(integer *trans, integer *m, integer *n, doublereal *alpha, doublereal *a, integer *lda, doublereal *x, integer *incx, doublereal *beta, doublereal *y, integer *incy)
+void dla_geamv_(integer *trans, integer *m, integer *n, doublereal *alpha, doublereal *a, integer *lda, doublereal *x, integer *incx, doublereal *beta, doublereal *y, integer *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dla_geamv inputs: trans %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*trans, *m, *n, *lda, *incx, *incy);
@@ -236,13 +236,13 @@ int dla_geamv_(integer *trans, integer *m, integer *n, doublereal *alpha, double
     {
         xerbla_("DLA_GEAMV ", &info, (ftnlen)10);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*m == 0 || *n == 0 || *alpha == 0. && *beta == 1.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set LENX and LENY, the lengths of the vectors x and y, and set */
     /* up the start points in X and Y. */
@@ -452,7 +452,7 @@ int dla_geamv_(integer *trans, integer *m, integer *n, doublereal *alpha, double
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLA_GEAMV */
 }
 /* dla_geamv__ */

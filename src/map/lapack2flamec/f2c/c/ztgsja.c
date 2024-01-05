@@ -392,7 +392,7 @@ V1**H *B13*Q1 = S1*R1, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ztgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, integer *k, integer *l, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublereal *tola, doublereal *tolb, doublereal *alpha, doublereal *beta, doublecomplex * u, integer *ldu, doublecomplex *v, integer *ldv, doublecomplex *q, integer *ldq, doublecomplex *work, integer *ncycle, integer *info)
+void ztgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, integer *k, integer *l, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublereal *tola, doublereal *tolb, doublereal *alpha, doublereal *beta, doublecomplex * u, integer *ldu, doublecomplex *v, integer *ldv, doublecomplex *q, integer *ldq, doublecomplex *work, integer *ncycle, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztgsja inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS "",*jobu, *jobv, *jobq, *m, *p, *n, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq);
@@ -410,17 +410,17 @@ int ztgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer 
     doublereal rwk;
     doublecomplex snu, snv;
     extern /* Subroutine */
-    int zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
+    void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
     doublereal gamma;
     extern logical lsame_(char *, char *);
     logical initq, initu, initv, wantq, upper;
     doublereal error, ssmin;
     logical wantu, wantv;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlags2_(logical *, doublereal *, doublecomplex *, doublereal *, doublereal *, doublecomplex *, doublereal *, doublereal *, doublecomplex *, doublereal *, doublecomplex *, doublereal *, doublecomplex *);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlags2_(logical *, doublereal *, doublecomplex *, doublereal *, doublereal *, doublecomplex *, doublereal *, doublereal *, doublecomplex *, doublereal *, doublecomplex *, doublereal *, doublecomplex *);
     integer kcycle;
     extern /* Subroutine */
-    int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *), zlapll_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *), zlaset_( char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+    void dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *), zlapll_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *), zlaset_( char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
     doublereal hugenum;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -519,7 +519,7 @@ int ztgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer 
         i__1 = -(*info);
         xerbla_("ZTGSJA", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize U, V and Q, if necessary */
     if (initu)
@@ -800,7 +800,7 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
 L100:
     *ncycle = kcycle;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTGSJA */
 }
 /* ztgsja_ */

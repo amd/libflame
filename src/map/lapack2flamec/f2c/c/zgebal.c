@@ -154,7 +154,7 @@ and second, applying a diagonal similarity transformation */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zgebal_(char *job, integer *n, doublecomplex *a, integer *lda, integer *ilo, integer *ihi, doublereal *scale, integer *info)
+void zgebal_(char *job, integer *n, doublecomplex *a, integer *lda, integer *ilo, integer *ihi, doublereal *scale, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgebal inputs: job %c, n %" FLA_IS ", lda %" FLA_IS "",*job, *n, *lda);
@@ -170,7 +170,7 @@ int zgebal_(char *job, integer *n, doublecomplex *a, integer *lda, integer *ilo,
     integer ica, ira, iexc;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal sfmin1, sfmin2, sfmax1, sfmax2;
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_( char *);
     extern logical disnan_(doublereal *);
@@ -221,7 +221,7 @@ int zgebal_(char *job, integer *n, doublecomplex *a, integer *lda, integer *ilo,
         i__1 = -(*info);
         xerbla_("ZGEBAL", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     k = 1;
     l = *n;
@@ -392,7 +392,7 @@ L160: /* Computing MAX */
             i__2 = -(*info);
             xerbla_("ZGEBAL", &i__2, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         f *= 2.;
         c__ *= 2.;
@@ -454,7 +454,7 @@ L210:
     *ilo = k;
     *ihi = l;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGEBAL */
 }
 /* zgebal_ */

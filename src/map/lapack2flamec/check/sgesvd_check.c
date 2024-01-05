@@ -15,7 +15,7 @@ int sgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, float *a, inte
     integer minmn, wrkbl, mnthr;
     logical wntua, wntva, wntun, wntuo, wntvn, wntvo, wntus, wntvs;
     integer bdspac;
-    extern int 
+    extern void 
       sgebrd_(integer *, integer *, float *, integer *, float *, float *, float *, float *, float *, integer *, integer *),
       sgelqf_(integer *, integer *, float *, integer *, float *, float *, integer *, integer *), 
       sgeqrf_(integer *, integer *, float *, integer *, float *, float *, integer *, integer *), 

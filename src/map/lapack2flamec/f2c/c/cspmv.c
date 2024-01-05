@@ -137,7 +137,7 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int cspmv_(char *uplo, integer *n, complex *alpha, complex * ap, complex *x, integer *incx, complex *beta, complex *y, integer * incy)
+void cspmv_(char *uplo, integer *n, complex *alpha, complex * ap, complex *x, integer *incx, complex *beta, complex *y, integer * incy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -203,13 +203,13 @@ int cspmv_(char *uplo, integer *n, complex *alpha, complex * ap, complex *x, int
     {
         xerbla_("CSPMV ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || alpha->r == 0.f && alpha->i == 0.f && (beta->r == 1.f && beta->i == 0.f))
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set up the start points in X and Y. */
     if (*incx > 0)
@@ -304,7 +304,7 @@ int cspmv_(char *uplo, integer *n, complex *alpha, complex * ap, complex *x, int
     if (alpha->r == 0.f && alpha->i == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     kk = 1;
     if (lsame_(uplo, "U"))
@@ -564,7 +564,7 @@ int cspmv_(char *uplo, integer *n, complex *alpha, complex * ap, complex *x, int
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSPMV */
 }
 /* cspmv_ */

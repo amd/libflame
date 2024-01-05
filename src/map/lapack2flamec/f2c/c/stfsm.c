@@ -267,7 +267,7 @@ K=N/2. If */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integer *m, integer *n, real *alpha, real *a, real *b, integer *ldb)
+void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integer *m, integer *n, real *alpha, real *a, real *b, integer *ldb)
 {
     /* System generated locals */
     integer b_dim1, b_offset, i__1, i__2;
@@ -276,10 +276,10 @@ int stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
     logical normaltransr, lside;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     logical lower;
     extern /* Subroutine */
-    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical misodd, nisodd, notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -349,12 +349,12 @@ int stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
     {
         i__1 = -info;
         xerbla_("STFSM ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return when ( (N.EQ.0).OR.(M.EQ.0) ) */
     if (*m == 0 || *n == 0)
     {
-        return 0;
+        return;
     }
     /* Quick return when ALPHA.EQ.(0D+0) */
     if (*alpha == 0.f)
@@ -374,7 +374,7 @@ int stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
             }
             /* L20: */
         }
-        return 0;
+        return;
     }
     if (lside)
     {
@@ -848,7 +848,7 @@ int stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
             }
         }
     }
-    return 0;
+    return;
     /* End of STFSM */
 }
 /* stfsm_ */

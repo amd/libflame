@@ -153,10 +153,10 @@ real cla_hercond_c_(char *uplo, integer *n, complex *a, integer *lda, complex *a
     real anorm;
     logical upper;
     extern /* Subroutine */
-    int clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     extern /* Subroutine */
-    int chetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+    void chetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

@@ -180,7 +180,7 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, integer *info)
+void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -201,17 +201,17 @@ int ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, 
     logical done;
     integer imax, jmax;
     extern /* Subroutine */
-    int ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
+    void ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
     real alpha;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     real sfmin;
     integer itemp, kstep;
     real stemp;
     logical upper;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *);
+    void sswap_(integer *, real *, integer *, real *, integer *);
     real absakk;
     extern real slamch_(char *);
     extern /* Subroutine */
@@ -266,7 +266,7 @@ int ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, 
         i__1 = -(*info);
         xerbla_("SSYTF2_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.f) + 1.f) / 8.f;
@@ -781,7 +781,7 @@ L42: /* Begin pivot search loop body */
     }
 L70:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTF2_ROOK */
 }
 /* ssytf2_rook__ */

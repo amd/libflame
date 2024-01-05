@@ -229,7 +229,7 @@ static integer c__1 = 1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, real *q, integer *ldq, integer *indxq, real *rho, integer *cutpnt, real *z__, real *dlamda, real *q2, integer *ldq2, real *w, integer *perm, integer *givptr, integer *givcol, real * givnum, integer *indxp, integer *indx, integer *info)
+void slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, real *q, integer *ldq, integer *indxq, real *rho, integer *cutpnt, real *z__, real *dlamda, real *q2, integer *ldq2, real *w, integer *perm, integer *givptr, integer *givcol, real * givnum, integer *indxp, integer *indx, integer *info)
 {
     /* System generated locals */
     integer q_dim1, q_offset, q2_dim1, q2_offset, i__1;
@@ -244,13 +244,13 @@ int slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, r
     real eps, tau, tol;
     integer jlam, imax, jmax;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *), sscal_(integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer * );
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *), sscal_(integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer * );
     extern real slapy2_(real *, real *), slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int slamrg_(integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void slamrg_(integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -320,7 +320,7 @@ int slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, r
     {
         i__1 = -(*info);
         xerbla_("SLAED8", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Need to initialize GIVPTR to O here in case of quick exit */
     /* to prevent an unspecified code behavior (usually sigfault) */
@@ -330,7 +330,7 @@ int slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, r
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     n1 = *cutpnt;
     n2 = *n - n1;
@@ -416,7 +416,7 @@ int slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, r
             }
             slacpy_("A", qsiz, n, &q2[q2_dim1 + 1], ldq2, &q[q_dim1 + 1], ldq);
         }
-        return 0;
+        return;
     }
     /* If there are multiple eigenvalues then the problem deflates. Here */
     /* the number of equal eigenvalues are found. As each equal */
@@ -574,7 +574,7 @@ L110: /* Sort the eigenvalues and corresponding eigenvectors into DLAMDA */
             slacpy_("A", qsiz, &i__1, &q2[(*k + 1) * q2_dim1 + 1], ldq2, &q[(* k + 1) * q_dim1 + 1], ldq);
         }
     }
-    return 0;
+    return;
     /* End of SLAED8 */
 }
 /* slaed8_ */

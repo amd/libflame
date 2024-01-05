@@ -189,7 +189,7 @@
  /* > \ingroup doubleOTHERcomputational */
  /* ===================================================================== */
  /* Subroutine */
- int dormbr_fla(char *vect, char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work, integer *lwork, integer *info) {
+ void dormbr_fla(char *vect, char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work, integer *lwork, integer *info) {
  /* System generated locals */
  integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
  char ch__1[2];
@@ -204,10 +204,10 @@
  int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
  extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
  extern /* Subroutine */
- int dormlq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+ void dormlq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
  logical notran;
  extern /* Subroutine */
- int dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+ void dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
  logical applyq;
  char transt[1];
  integer lwkopt;
@@ -317,15 +317,15 @@
  if (*info != 0) {
  i__1 = -(*info);
  xerbla_("DORMBR", &i__1, (ftnlen)6);
- return 0;
+ return;
  }
  else if (lquery) {
- return 0;
+ return;
  }
  /* Quick return if possible */
  work[1] = 1.;
  if (*m == 0 || *n == 0) {
- return 0;
+ return;
  }
  if (applyq) {
  /* Apply Q */
@@ -382,7 +382,7 @@
  }
  }
  work[1] = (doublereal) lwkopt;
- return 0;
+ return;
  /* End of DORMBR */
  }
  /* dormbr_ */

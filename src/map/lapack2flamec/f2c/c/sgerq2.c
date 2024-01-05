@@ -112,7 +112,7 @@ v(1:n-k+i-1) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgerq2_(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *info)
+void sgerq2_(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -120,7 +120,7 @@ int sgerq2_(integer *m, integer *n, real *a, integer *lda, real *tau, real *work
     integer i__, k;
     real aii;
     extern /* Subroutine */
-    int slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
+    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -164,7 +164,7 @@ int sgerq2_(integer *m, integer *n, real *a, integer *lda, real *tau, real *work
     {
         i__1 = -(*info);
         xerbla_("SGERQ2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     k = fla_min(*m,*n);
     for (i__ = k;
@@ -184,7 +184,7 @@ int sgerq2_(integer *m, integer *n, real *a, integer *lda, real *tau, real *work
         a[*m - k + i__ + (*n - k + i__) * a_dim1] = aii;
         /* L10: */
     }
-    return 0;
+    return;
     /* End of SGERQ2 */
 }
 /* sgerq2_ */

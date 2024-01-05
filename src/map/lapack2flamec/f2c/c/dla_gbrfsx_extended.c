@@ -406,7 +406,7 @@ i+1}
 /* > \ingroup doubleGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer *n, integer *kl, integer *ku, integer *nrhs, doublereal *ab, integer *ldab, doublereal *afb, integer *ldafb, integer *ipiv, logical *colequ, doublereal *c__, doublereal *b, integer *ldb, doublereal *y, integer *ldy, doublereal *berr_out__, integer *n_norms__, doublereal *err_bnds_norm__, doublereal * err_bnds_comp__, doublereal *res, doublereal *ayb, doublereal *dy, doublereal *y_tail__, doublereal *rcond, integer *ithresh, doublereal *rthresh, doublereal *dz_ub__, logical *ignore_cwise__, integer *info)
+void dla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer *n, integer *kl, integer *ku, integer *nrhs, doublereal *ab, integer *ldab, doublereal *afb, integer *ldafb, integer *ipiv, logical *colequ, doublereal *c__, doublereal *b, integer *ldb, doublereal *y, integer *ldy, doublereal *berr_out__, integer *n_norms__, doublereal *err_bnds_norm__, doublereal * err_bnds_comp__, doublereal *res, doublereal *ayb, doublereal *dy, doublereal *y_tail__, doublereal *rcond, integer *ithresh, doublereal *rthresh, doublereal *dz_ub__, logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dla_gbrfsx_extended inputs: prec_type__ %" FLA_IS ", trans_type__ %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ldb %" FLA_IS ", ldy %" FLA_IS ", n_norms__ %" FLA_IS ", ithresh %" FLA_IS "",*prec_type__, *trans_type__, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldy, *n_norms__, *ithresh);
@@ -418,16 +418,16 @@ int dla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer *
     doublereal dxratmax, dzratmax;
     integer i__, j, m;
     extern /* Subroutine */
-    int dla_gbamv_(integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dla_gbamv_(integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     logical incr_prec__;
     doublereal prev_dz_z__, yk, final_dx_x__;
     extern /* Subroutine */
-    int dla_wwaddw_(integer *, doublereal *, doublereal *, doublereal *);
+    void dla_wwaddw_(integer *, doublereal *, doublereal *, doublereal *);
     doublereal final_dz_z__, prevnormdx;
     integer cnt;
     doublereal dyk, eps, incr_thresh__, dx_x__, dz_z__;
     extern /* Subroutine */
-    int dla_lin_berr_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *);
+    void dla_lin_berr_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *);
     doublereal ymin;
     extern /* Subroutine */
     int blas_dgbmv_x_(integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
@@ -436,12 +436,12 @@ int dla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer *
     int blas_dgbmv2_x_(integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dgbmv_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal dxrat, dzrat;
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     char trans[1];
     doublereal normx, normy;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dgbtrs_(char *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dgbtrs_(char *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     doublereal normdx;
     extern /* Character */
     VOID chla_transtype_(char *, integer *);
@@ -495,7 +495,7 @@ int dla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer *
     if (*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     chla_transtype_(ch__1, trans_type__);
     *(unsigned char *)trans = *(unsigned char *)&ch__1[0];
@@ -778,7 +778,7 @@ L666: /* Set final_* when cnt hits ithresh. */
         /* End of loop for each RHS */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dla_gbrfsx_extended__ */
 #endif

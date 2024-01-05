@@ -130,7 +130,7 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dlasq5_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *tau, doublereal *sigma, doublereal *dmin__, doublereal *dmin1, doublereal *dmin2, doublereal *dn, doublereal * dnm1, doublereal *dnm2, logical *ieee, doublereal *eps)
+void dlasq5_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *tau, doublereal *sigma, doublereal *dmin__, doublereal *dmin1, doublereal *dmin2, doublereal *dn, doublereal * dnm1, doublereal *dnm2, logical *ieee, doublereal *eps)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasq5 inputs: i0 %" FLA_IS ", n0 %" FLA_IS ", pp %" FLA_IS "",*i0, *n0, *pp);
@@ -163,7 +163,7 @@ int dlasq5_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *
     if (*n0 - *i0 - 1 <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     dthresh = *eps * (*sigma + *tau);
     if (*tau < dthresh * .5)
@@ -247,7 +247,7 @@ int dlasq5_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *
                     if (d__ < 0.)
                     {
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     else
                     {
@@ -273,7 +273,7 @@ int dlasq5_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *
                     if (d__ < 0.)
                     {
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     else
                     {
@@ -297,7 +297,7 @@ int dlasq5_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *
             if (*dnm2 < 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             else
             {
@@ -312,7 +312,7 @@ int dlasq5_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *
             if (*dnm1 < 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             else
             {
@@ -408,7 +408,7 @@ int dlasq5_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *
                     if (d__ < 0.)
                     {
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     else
                     {
@@ -438,7 +438,7 @@ int dlasq5_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *
                     if (d__ < 0.)
                     {
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     else
                     {
@@ -466,7 +466,7 @@ int dlasq5_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *
             if (*dnm2 < 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             else
             {
@@ -481,7 +481,7 @@ int dlasq5_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *
             if (*dnm1 < 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             else
             {
@@ -494,7 +494,7 @@ int dlasq5_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *
     z__[j4 + 2] = *dn;
     z__[(*n0 << 2) - *pp] = emin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASQ5 */
 }
 /* dlasq5_ */

@@ -110,7 +110,7 @@ the unit diagonal elements of L are not stored. */
 /* > \ingroup doubleGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int dgesv_(integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv, doublereal *b, integer *ldb, integer *info)
+void dgesv_(integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv, doublereal *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgesv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *lda, *ldb);
@@ -118,7 +118,7 @@ int dgesv_(integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int dgetrf_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgetrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dgetrf_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgetrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -165,7 +165,7 @@ int dgesv_(integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv
         i__1 = -(*info);
         xerbla_("DGESV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the LU factorization of A. */
     dgetrf_(n, n, &a[a_offset], lda, &ipiv[1], info);
@@ -175,7 +175,7 @@ int dgesv_(integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv
         dgetrs_("No transpose", n, nrhs, &a[a_offset], lda, &ipiv[1], &b[ b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGESV */
 }
 /* dgesv_ */

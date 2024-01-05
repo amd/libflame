@@ -119,7 +119,7 @@
 /* > \ingroup complexSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int claqsy_(char *uplo, integer *n, complex *a, integer *lda, real *s, real *scond, real *amax, char *equed)
+void claqsy_(char *uplo, integer *n, complex *a, integer *lda, real *s, real *scond, real *amax, char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -168,7 +168,7 @@ int claqsy_(char *uplo, integer *n, complex *a, integer *lda, real *s, real *sco
     {
         *(unsigned char *)equed = 'N';
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize LARGE and SMALL. */
     small_val = slamch_("Safe minimum") / slamch_("Precision");
@@ -236,7 +236,7 @@ int claqsy_(char *uplo, integer *n, complex *a, integer *lda, real *s, real *sco
         *(unsigned char *)equed = 'Y';
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAQSY */
 }
 /* claqsy_ */

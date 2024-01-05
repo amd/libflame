@@ -184,7 +184,7 @@ the least squares solution could not be */
 /* > \ingroup realGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int sgels_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integer *lda, real *b, integer *ldb, real *work, integer *lwork, integer *info)
+void sgels_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integer *lda, real *b, integer *ldb, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
@@ -198,7 +198,7 @@ int sgels_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integer
     integer wsize;
     real rwork[1];
     extern /* Subroutine */
-    int slabad_(real *, real *);
+    void slabad_(real *, real *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -206,13 +206,13 @@ int sgels_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integer
     integer scllen;
     real bignum;
     extern /* Subroutine */
-    int sgelqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    void sgelqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     real smlnum;
     extern /* Subroutine */
-    int sormlq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+    void sormlq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     logical lquery;
     extern /* Subroutine */
-    int sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), strtrs_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+    void sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), strtrs_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -341,11 +341,11 @@ int sgels_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integer
     {
         i__1 = -(*info);
         xerbla_("SGELS ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Computing MIN */
@@ -354,7 +354,7 @@ int sgels_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integer
     {
         i__1 = fla_max(*m,*n);
         slaset_("Full", &i__1, nrhs, &c_b33, &c_b33, &b[b_offset], ldb);
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
@@ -418,7 +418,7 @@ int sgels_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integer
             strtrs_("Upper", "No transpose", "Non-unit", n, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
             if (*info > 0)
             {
-                return 0;
+                return;
             }
             scllen = *n;
         }
@@ -429,7 +429,7 @@ int sgels_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integer
             strtrs_("Upper", "Transpose", "Non-unit", n, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
             if (*info > 0)
             {
-                return 0;
+                return;
             }
             /* B(N+1:M,1:NRHS) = ZERO */
             i__1 = *nrhs;
@@ -467,7 +467,7 @@ int sgels_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integer
             strtrs_("Lower", "No transpose", "Non-unit", m, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
             if (*info > 0)
             {
-                return 0;
+                return;
             }
             /* B(M+1:N,1:NRHS) = 0 */
             i__1 = *nrhs;
@@ -502,7 +502,7 @@ int sgels_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integer
             strtrs_("Lower", "Transpose", "Non-unit", m, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
             if (*info > 0)
             {
-                return 0;
+                return;
             }
             scllen = *m;
         }
@@ -526,7 +526,7 @@ int sgels_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integer
     }
 L50:
     work[1] = (real) wsize;
-    return 0;
+    return;
     /* End of SGELS */
 }
 /* sgels_ */

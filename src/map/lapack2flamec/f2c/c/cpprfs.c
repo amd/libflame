@@ -164,7 +164,7 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cpprfs_(char *uplo, integer *n, integer *nrhs, complex * ap, complex *afp, complex *b, integer *ldb, complex *x, integer *ldx, real *ferr, real *berr, complex *work, real *rwork, integer *info)
+void cpprfs_(char *uplo, integer *n, integer *nrhs, complex * ap, complex *afp, complex *b, integer *ldb, complex *x, integer *ldx, real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -194,11 +194,11 @@ int cpprfs_(char *uplo, integer *n, integer *nrhs, complex * ap, complex *afp, c
     extern logical lsame_(char *, char *);
     integer isave[3];
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), chpmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), chpmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     integer count;
     logical upper;
     extern /* Subroutine */
-    int clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
+    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
@@ -272,7 +272,7 @@ int cpprfs_(char *uplo, integer *n, integer *nrhs, complex * ap, complex *afp, c
         i__1 = -(*info);
         xerbla_("CPPRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
@@ -287,7 +287,7 @@ int cpprfs_(char *uplo, integer *n, integer *nrhs, complex * ap, complex *afp, c
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* NZ = maximum number of nonzero elements in each row of A, plus 1 */
     nz = *n + 1;
@@ -526,7 +526,7 @@ L100:
         /* L140: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPPRFS */
 }
 /* cpprfs_ */

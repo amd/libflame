@@ -111,7 +111,7 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, complex *ab, integer *ldab, complex *b, integer *ldb, integer * info)
+void cpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, complex *ab, integer *ldab, complex *b, integer *ldb, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -129,7 +129,7 @@ int cpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, complex *ab, in
     integer j;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *);
+    void ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -191,13 +191,13 @@ int cpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, complex *ab, in
         i__1 = -(*info);
         xerbla_("CPBTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -230,7 +230,7 @@ int cpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, complex *ab, in
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPBTRS */
 }
 /* cpbtrs_ */

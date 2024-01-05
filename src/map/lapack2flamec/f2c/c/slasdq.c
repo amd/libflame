@@ -198,7 +198,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru, integer *ncc, real *d__, real *e, real *vt, integer *ldvt, real *u, integer *ldu, real *c__, integer *ldc, real * work, integer *info)
+void slasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru, integer *ncc, real *d__, real *e, real *vt, integer *ldvt, real *u, integer *ldu, real *c__, integer *ldc, real * work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -216,13 +216,13 @@ int slasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru,
     integer sqre1;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
+    void slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
     integer iuplo;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slartg_(real *, real *, real *, real *, real *);
+    void sswap_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slartg_(real *, real *, real *, real *, real *);
     logical rotate;
     extern /* Subroutine */
-    int sbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+    void sbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -309,12 +309,12 @@ int slasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru,
         i__1 = -(*info);
         xerbla_("SLASDQ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* ROTATE is true if any singular vectors desired, false otherwise */
     rotate = *ncvt > 0 || *nru > 0 || *ncc > 0;
@@ -458,7 +458,7 @@ int slasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru,
         /* L40: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASDQ */
 }
 /* slasdq_ */

@@ -194,7 +194,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slamtsqr_(char *side, char *trans, integer *m, integer * n, integer *k, integer *mb, integer *nb, real *a, integer *lda, real * t, integer *ldt, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
+void slamtsqr_(char *side, char *trans, integer *m, integer * n, integer *k, integer *mb, integer *nb, real *a, integer *lda, real * t, integer *ldt, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slamtsqr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "",*side, *trans, *m, *n, *k, *mb, *nb, *lda, *ldt, *ldc, *lwork);
@@ -209,7 +209,7 @@ int slamtsqr_(char *side, char *trans, integer *m, integer * n, integer *k, inte
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, lquery;
     extern /* Subroutine */
-    int sgemqrt_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), stpmqrt_(char *, char *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+    void sgemqrt_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), stpmqrt_(char *, char *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -304,12 +304,12 @@ int slamtsqr_(char *side, char *trans, integer *m, integer * n, integer *k, inte
         i__1 = -(*info);
         xerbla_("SLAMTSQR", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Computing MIN */
@@ -317,7 +317,7 @@ int slamtsqr_(char *side, char *trans, integer *m, integer * n, integer *k, inte
     if (fla_min(i__1,*k) == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Computing MAX */
     i__1 = fla_max(*m,*n);
@@ -325,7 +325,7 @@ int slamtsqr_(char *side, char *trans, integer *m, integer * n, integer *k, inte
     {
         sgemqrt_(side, trans, m, n, k, nb, &a[a_offset], lda, &t[t_offset], ldt, &c__[c_offset], ldc, &work[1], info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (left && notran)
     {
@@ -433,7 +433,7 @@ int slamtsqr_(char *side, char *trans, integer *m, integer * n, integer *k, inte
     }
     work[1] = (real) lw;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SLAMTSQR */
 }
 /* slamtsqr_ */

@@ -176,7 +176,7 @@ the */
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int chesv_aa_2stage_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *tb, integer *ltb, integer *ipiv, integer *ipiv2, complex *b, integer *ldb, complex *work, integer * lwork, integer *info)
+void chesv_aa_2stage_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *tb, integer *ltb, integer *ipiv, integer *ipiv2, complex *b, integer *ldb, complex *work, integer * lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -192,7 +192,7 @@ int chesv_aa_2stage_(char *uplo, integer *n, integer *nrhs, complex *a, integer 
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int chetrs_aa_2stage_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, complex *, integer *, integer *);
+    void chetrs_aa_2stage_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, complex *, integer *, integer *);
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
@@ -200,7 +200,7 @@ int chesv_aa_2stage_(char *uplo, integer *n, integer *nrhs, complex *a, integer 
     integer lwkopt;
     logical tquery, wquery;
     extern /* Subroutine */
-    int chetrf_aa_2stage_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, complex *, integer *, integer *);
+    void chetrf_aa_2stage_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -274,12 +274,12 @@ int chesv_aa_2stage_(char *uplo, integer *n, integer *nrhs, complex *a, integer 
         i__1 = -(*info);
         xerbla_("CHESV_AA_2STAGE", &i__1, (ftnlen)15);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (wquery || tquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the factorization A = U**H*T*U or A = L*T*L**H. */
     chetrf_aa_2stage_(uplo, n, &a[a_offset], lda, &tb[1], ltb, &ipiv[1], & ipiv2[1], &work[1], lwork, info);
@@ -291,7 +291,7 @@ int chesv_aa_2stage_(char *uplo, integer *n, integer *nrhs, complex *a, integer 
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHESV_AA_2STAGE */
 }
 /* chesv_aa_2stage__ */

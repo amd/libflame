@@ -180,7 +180,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sormrz_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
+void sormrz_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sormrz inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *k, *l, *lda, *ldc);
@@ -196,15 +196,15 @@ int sormrz_(char *side, char *trans, integer *m, integer *n, integer *k, integer
     extern logical lsame_(char *, char *);
     integer nbmin, iinfo;
     extern /* Subroutine */
-    int sormr3_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sormr3_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int slarzb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+    void slarzb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
     logical notran;
     integer ldwork;
     char transt[1];
     extern /* Subroutine */
-    int slarzt_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
+    void slarzt_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -311,18 +311,18 @@ int sormrz_(char *side, char *trans, integer *m, integer *n, integer *k, integer
         i__1 = -(*info);
         xerbla_("SORMRZ", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     nbmin = 2;
     ldwork = nw;
@@ -410,7 +410,7 @@ int sormrz_(char *side, char *trans, integer *m, integer *n, integer *k, integer
     }
     work[1] = (real) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SORMRZ */
 }
 /* sormrz_ */

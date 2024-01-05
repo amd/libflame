@@ -191,7 +191,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zlamswlq_(char *side, char *trans, integer *m, integer * n, integer *k, integer *mb, integer *nb, doublecomplex *a, integer * lda, doublecomplex *t, integer *ldt, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *lwork, integer *info)
+void zlamswlq_(char *side, char *trans, integer *m, integer * n, integer *k, integer *mb, integer *nb, doublecomplex *a, integer * lda, doublecomplex *t, integer *ldt, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlamswlq inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "",*side, *trans, *m, *n, *k, *mb, *nb, *lda, *ldt, *ldc, *lwork);
@@ -206,7 +206,7 @@ int zlamswlq_(char *side, char *trans, integer *m, integer * n, integer *k, inte
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, lquery;
     extern /* Subroutine */
-    int zgemlqt_(char *, char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztpmlqt_(char *, char *, integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zgemlqt_(char *, char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztpmlqt_(char *, char *, integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -296,14 +296,14 @@ int zlamswlq_(char *side, char *trans, integer *m, integer * n, integer *k, inte
         work[1].r = (doublereal) lw;
         work[1].i = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         work[1].r = (doublereal) lw;
         work[1].i = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Computing MIN */
@@ -311,7 +311,7 @@ int zlamswlq_(char *side, char *trans, integer *m, integer * n, integer *k, inte
     if (fla_min(i__1,*k) == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Computing MAX */
     i__1 = fla_max(*m,*n);
@@ -319,7 +319,7 @@ int zlamswlq_(char *side, char *trans, integer *m, integer * n, integer *k, inte
     {
         zgemlqt_(side, trans, m, n, k, mb, &a[a_offset], lda, &t[t_offset], ldt, &c__[c_offset], ldc, &work[1], info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (left && tran)
     {
@@ -428,7 +428,7 @@ int zlamswlq_(char *side, char *trans, integer *m, integer * n, integer *k, inte
     work[1].r = (doublereal) lw;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAMSWLQ */
 }
 /* zlamswlq_ */

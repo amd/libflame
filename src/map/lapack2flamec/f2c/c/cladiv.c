@@ -59,7 +59,7 @@ VOID cladiv_(complex * ret_val, complex *x, complex *y)
     /* Local variables */
     real zi, zr;
     extern /* Subroutine */
-    int sladiv_(real *, real *, real *, real *, real *, real *);
+    void sladiv_(real *, real *, real *, real *, real *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -96,7 +96,7 @@ complex cladiv_(complex *x, complex *y)
     /* Local variables */
     real zi, zr;
     extern /* Subroutine */
-    int sladiv_(real *, real *, real *, real *, real *, real *);
+    void sladiv_(real *, real *, real *, real *, real *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

@@ -175,7 +175,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *info)
+void stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *info)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -226,12 +226,12 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
     {
         i__1 = -(*info);
         xerbla_("STPTTF", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -243,7 +243,7 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
         {
             arf[0] = ap[0];
         }
-        return 0;
+        return;
     }
     /* Size of array ARF(0:NT-1) */
     /* Set N1 and N2 depending on LOWER */
@@ -597,7 +597,7 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
             }
         }
     }
-    return 0;
+    return;
     /* End of STPTTF */
 }
 /* stpttf_ */

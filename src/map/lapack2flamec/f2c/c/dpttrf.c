@@ -78,7 +78,7 @@ if k < N, the factorization could not */
 /* > \ingroup doublePTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dpttrf_(integer *n, doublereal *d__, doublereal *e, integer *info)
+void dpttrf_(integer *n, doublereal *d__, doublereal *e, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpttrf inputs: n %" FLA_IS "",*n);
@@ -119,13 +119,13 @@ int dpttrf_(integer *n, doublereal *d__, doublereal *e, integer *info)
         i__1 = -(*info);
         xerbla_("DPTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the L*D*L**T (or U**T*D*U) factorization of A. */
     i4 = (*n - 1) % 4;
@@ -196,7 +196,7 @@ int dpttrf_(integer *n, doublereal *d__, doublereal *e, integer *info)
     }
 L30:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPTTRF */
 }
 /* dpttrf_ */

@@ -98,7 +98,7 @@ static integer c__0 = 0;
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dlasq1_(integer *n, doublereal *d__, doublereal *e, doublereal *work, integer *info)
+void dlasq1_(integer *n, doublereal *d__, doublereal *e, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasq1 inputs: n %" FLA_IS "",*n);
@@ -111,18 +111,18 @@ int dlasq1_(integer *n, doublereal *d__, doublereal *e, doublereal *work, intege
     integer i__;
     doublereal eps;
     extern /* Subroutine */
-    int dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal scale;
     integer iinfo;
     doublereal sigmn;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal sigmx;
     extern /* Subroutine */
-    int dlasq2_(integer *, doublereal *, integer *);
+    void dlasq2_(integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     doublereal safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlasrt_( char *, integer *, doublereal *, integer *);
@@ -158,18 +158,18 @@ int dlasq1_(integer *n, doublereal *d__, doublereal *e, doublereal *work, intege
         i__1 = -(*info);
         xerbla_("DLASQ1", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*n == 1)
     {
         d__[1] = f2c_abs(d__[1]);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*n == 2)
     {
@@ -177,7 +177,7 @@ int dlasq1_(integer *n, doublereal *d__, doublereal *e, doublereal *work, intege
         d__[1] = sigmx;
         d__[2] = sigmn;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Estimate the largest singular value. */
     sigmx = 0.;
@@ -199,7 +199,7 @@ int dlasq1_(integer *n, doublereal *d__, doublereal *e, doublereal *work, intege
     {
         dlasrt_("D", n, &d__[1], &iinfo);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *n;
     for (i__ = 1;
@@ -264,7 +264,7 @@ int dlasq1_(integer *n, doublereal *d__, doublereal *e, doublereal *work, intege
         dlascl_("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &e[1], n, &iinfo);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASQ1 */
 }
 /* dlasq1_ */

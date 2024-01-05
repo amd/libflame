@@ -266,7 +266,7 @@ CLAQR3 */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int claqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, complex *h__, integer *ldh, integer *iloz, integer *ihiz, complex *z__, integer *ldz, integer * ns, integer *nd, complex *sh, complex *v, integer *ldv, integer *nh, complex *t, integer *ldt, integer *nv, complex *wv, integer *ldwv, complex *work, integer *lwork)
+void claqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, complex *h__, integer *ldh, integer *iloz, integer *ihiz, complex *z__, integer *ldz, integer * ns, integer *nd, complex *sh, complex *v, integer *ldv, integer *nh, complex *t, integer *ldt, integer *nv, complex *wv, integer *ldwv, complex *work, integer *lwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -295,18 +295,18 @@ int claqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *
     complex beta;
     integer kcol, info, nmin, ifst, ilst, ltop, krow;
     extern /* Subroutine */
-    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *);
+    void clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *);
     integer infqr, kwtop;
     extern /* Subroutine */
-    int claqr4_(logical *, logical *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, integer *), slabad_(real *, real *), cgehrd_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *);
+    void claqr4_(logical *, logical *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, integer *), slabad_(real *, real *), cgehrd_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int clahqr_(logical *, logical *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
+    void clahqr_(logical *, logical *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
     real safmin;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real safmax;
     extern /* Subroutine */
-    int ctrexc_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, integer *), cunmhr_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void ctrexc_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, integer *), cunmhr_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     real smlnum;
     integer lwkopt;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -388,7 +388,7 @@ int claqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *
         work[1].r = q__1.r;
         work[1].i = q__1.i; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* ==== Nothing to do ... */
     /* ... for an empty active block ... ==== */
@@ -399,13 +399,13 @@ int claqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *
     if (*ktop > *kbot)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* ... nor for an empty deflation window. ==== */
     if (*nw < 1)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* ==== Machine constants ==== */
     safmin = slamch_("SAFE MINIMUM");
@@ -457,7 +457,7 @@ int claqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* ==== Convert to spike-triangular form. (In case of a */
     /* . rare QR failure, this routine continues to do */
@@ -696,6 +696,6 @@ int claqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *
     work[1].i = q__1.i; // , expr subst
     /* ==== End of CLAQR3 ==== */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* claqr3_ */

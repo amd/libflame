@@ -89,7 +89,7 @@ if UPLO = 'L', the interchanges are applied to */
 /* > \ingroup doubleSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dsyswapr_(char *uplo, integer *n, doublereal *a, integer *lda, integer *i1, integer *i2)
+void dsyswapr_(char *uplo, integer *n, doublereal *a, integer *lda, integer *i1, integer *i2)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsyswapr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", i1 %" FLA_IS ", i2 %" FLA_IS "",*uplo, *n, *lda, *i1, *i2);
@@ -99,7 +99,7 @@ int dsyswapr_(char *uplo, integer *n, doublereal *a, integer *lda, integer *i1, 
     doublereal tmp;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -168,6 +168,6 @@ int dsyswapr_(char *uplo, integer *n, doublereal *a, integer *lda, integer *i1, 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dsyswapr_ */

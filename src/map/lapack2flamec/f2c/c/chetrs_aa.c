@@ -124,7 +124,7 @@ static integer c__1 = 1;
 /* > \ingroup complexHEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int chetrs_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv, complex *b, integer *ldb, complex *work, integer *lwork, integer *info)
+void chetrs_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv, complex *b, integer *ldb, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -142,10 +142,10 @@ int chetrs_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, 
     integer k, kp;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *), cgtsv_(integer *, integer *, complex *, complex *, complex *, complex *, integer *, integer *), ctrsm_( char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *), cgtsv_(integer *, integer *, complex *, complex *, complex *, complex *, integer *, integer *), ctrsm_( char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int clacgv_(integer *, complex *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacgv_(integer *, complex *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
@@ -215,7 +215,7 @@ int chetrs_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, 
         i__1 = -(*info);
         xerbla_("CHETRS_AA", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
@@ -223,13 +223,13 @@ int chetrs_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, 
         work[1].r = (real) lwkopt;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -344,7 +344,7 @@ int chetrs_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, 
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHETRS_AA */
 }
 /* chetrs_aa__ */

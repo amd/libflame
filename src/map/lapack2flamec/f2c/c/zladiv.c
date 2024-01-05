@@ -54,7 +54,7 @@
 /* ===================================================================== */
 /* Double Complex */
 #ifdef FLA_ENABLE_VOID_RETURN_COMPLEX_FUNCTION
-VOID zladiv_(doublecomplex * ret_val, doublecomplex *x, doublecomplex *y)
+void zladiv_(doublecomplex * ret_val, doublecomplex *x, doublecomplex *y)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
@@ -63,7 +63,7 @@ VOID zladiv_(doublecomplex * ret_val, doublecomplex *x, doublecomplex *y)
     /* Local variables */
     doublereal zi, zr;
     extern /* Subroutine */
-    int dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -100,7 +100,7 @@ doublecomplex zladiv_(doublecomplex *x, doublecomplex *y)
     /* Local variables */
     doublereal zi, zr;
     extern /* Subroutine */
-    int dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

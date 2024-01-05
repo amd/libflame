@@ -15,7 +15,7 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
     integer minmn, wrkbl, mnthr;
     logical wntua, wntva, wntun, wntuo, wntvn, wntvo, wntus, wntvs;
     integer bdspac;
-    extern int 
+    extern void
       dgebrd_(integer *, integer *, double *, integer *, double *, double *, double *, double *, double *, integer *, integer *),
       dgelqf_(integer *, integer *, double *, integer *, double *, double *, integer *, integer *), 
       dgeqrf_(integer *, integer *, double *, integer *, double *, double *, integer *, integer *), 

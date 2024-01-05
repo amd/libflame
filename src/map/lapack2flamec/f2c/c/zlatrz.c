@@ -125,7 +125,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zlatrz_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex * work)
+void zlatrz_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex * work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlatrz inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS "",*m, *n, *l, *lda);
@@ -139,7 +139,7 @@ int zlatrz_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda, 
     integer i__;
     doublecomplex alpha;
     extern /* Subroutine */
-    int zlarz_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zlacgv_(integer *, doublecomplex *, integer *);
+    void zlarz_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -169,7 +169,7 @@ int zlatrz_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda, 
     if (*m == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*m == *n)
     {
@@ -184,7 +184,7 @@ int zlatrz_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda, 
             /* L10: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     for (i__ = *m;
             i__ >= 1;
@@ -214,7 +214,7 @@ int zlatrz_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda, 
         /* L20: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLATRZ */
 }
 /* zlatrz_ */

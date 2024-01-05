@@ -144,7 +144,7 @@ static integer c__1 = 1;
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-int dlagv2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *csl, doublereal *snl, doublereal *csr, doublereal * snr)
+void dlagv2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *csl, doublereal *snl, doublereal *csr, doublereal * snr)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlagv2 inputs: lda %" FLA_IS ", ldb %" FLA_IS "",*lda, *ldb);
@@ -154,16 +154,16 @@ int dlagv2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal
     /* Local variables */
     doublereal r__, t, h1, h2, h3, wi, qq, rr, wr1, wr2, ulp;
     extern /* Subroutine */
-    int drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *), dlag2_( doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *), dlag2_( doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal anorm, bnorm, scale1, scale2;
     extern /* Subroutine */
-    int dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern doublereal dlapy2_(doublereal *, doublereal *);
     doublereal ascale, bscale;
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
-    int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -351,7 +351,7 @@ int dlagv2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal
         beta[2] = 1.;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAGV2 */
 }
 /* dlagv2_ */

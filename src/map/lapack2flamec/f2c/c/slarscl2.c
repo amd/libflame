@@ -76,7 +76,7 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int slarscl2_(integer *m, integer *n, real *d__, real *x, integer *ldx)
+void slarscl2_(integer *m, integer *n, real *d__, real *x, integer *ldx)
 {
     /* System generated locals */
     integer x_dim1, x_offset, i__1, i__2;
@@ -113,6 +113,6 @@ int slarscl2_(integer *m, integer *n, real *d__, real *x, integer *ldx)
             x[i__ + j * x_dim1] /= d__[i__];
         }
     }
-    return 0;
+    return;
 }
 /* slarscl2_ */

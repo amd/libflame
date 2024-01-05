@@ -304,7 +304,7 @@ and VL(NL+2:M) */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, real *d__, real *vf, real *vl, real *alpha, real *beta, integer *idxq, integer *perm, integer *givptr, integer *givcol, integer *ldgcol, real *givnum, integer *ldgnum, real *poles, real * difl, real *difr, real *z__, integer *k, real *c__, real *s, real * work, integer *iwork, integer *info)
+void slasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, real *d__, real *vf, real *vl, real *alpha, real *beta, integer *idxq, integer *perm, integer *givptr, integer *givcol, integer *ldgcol, real *givnum, integer *ldgnum, real *poles, real * difl, real *difr, real *z__, integer *k, real *c__, real *s, real * work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -318,7 +318,7 @@ int slasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, real *d__,
     /* Local variables */
     integer i__, m, n, n1, n2, iw, idx, idxc, idxp, ivfw, ivlw;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), slasd7_(integer *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *), slasd8_(integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, real *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *), slasd7_(integer *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *), slasd8_(integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, real *, real *, integer *);
     integer isigma;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slascl_( char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
@@ -395,7 +395,7 @@ int slasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, real *d__,
         i__1 = -(*info);
         xerbla_("SLASD6", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* The following values are for bookkeeping purposes only. They are */
     /* integer pointers which indicate the portion of the workspace */
@@ -435,7 +435,7 @@ int slasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, real *d__,
     if (*info != 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Save the poles if ICOMPQ = 1. */
     if (*icompq == 1)
@@ -450,7 +450,7 @@ int slasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, real *d__,
     n2 = n - *k;
     slamrg_(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASD6 */
 }
 /* slasd6_ */

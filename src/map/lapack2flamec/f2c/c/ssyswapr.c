@@ -89,7 +89,7 @@ if UPLO = 'L', the interchanges are applied to */
 /* > \ingroup realSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int ssyswapr_(char *uplo, integer *n, real *a, integer *lda, integer *i1, integer *i2)
+void ssyswapr_(char *uplo, integer *n, real *a, integer *lda, integer *i1, integer *i2)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ssyswapr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", i1 %" FLA_IS ", i2 %" FLA_IS "",*uplo, *n, *lda, *i1, *i2);
@@ -100,7 +100,7 @@ int ssyswapr_(char *uplo, integer *n, real *a, integer *lda, integer *i1, intege
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *);
+    void sswap_(integer *, real *, integer *, real *, integer *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -168,6 +168,6 @@ int ssyswapr_(char *uplo, integer *n, real *a, integer *lda, integer *i1, intege
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* ssyswapr_ */

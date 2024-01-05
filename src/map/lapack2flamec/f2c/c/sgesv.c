@@ -110,7 +110,7 @@ the unit diagonal elements of L are not stored. */
 /* > \ingroup realGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int sgesv_(integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real *b, integer *ldb, integer *info)
+void sgesv_(integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real *b, integer *ldb, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
@@ -162,7 +162,7 @@ int sgesv_(integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real
     {
         i__1 = -(*info);
         xerbla_("SGESV ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Compute the LU factorization of A. */
     sgetrf_(n, n, &a[a_offset], lda, &ipiv[1], info);
@@ -171,7 +171,7 @@ int sgesv_(integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real
         /* Solve the system A*X = B, overwriting B with X. */
         sgetrs_("No transpose", n, nrhs, &a[a_offset], lda, &ipiv[1], &b[ b_offset], ldb, info);
     }
-    return 0;
+    return;
     /* End of SGESV */
 }
 /* sgesv_ */

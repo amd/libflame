@@ -197,7 +197,7 @@ If UPLO = 'L' the RFP A contains the nt */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *info)
+void stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *info)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -207,10 +207,10 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
     extern logical lsame_(char *, char *);
     logical lower;
     extern /* Subroutine */
-    int strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     extern /* Subroutine */
-    int strtri_(char *, char *, integer *, real *, integer *, integer *);
+    void strtri_(char *, char *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -255,12 +255,12 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
     {
         i__1 = -(*info);
         xerbla_("STFTRI", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     /* If N is odd, set NISODD = .TRUE. */
     /* If N is even, set K = N/2 and NISODD = .FALSE. */
@@ -299,7 +299,7 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
                 strtri_("L", diag, &n1, a, n, info);
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strmm_("R", "L", "N", diag, &n2, &n1, &c_b13, a, n, &a[n1], n);
                 strtri_("U", diag, &n2, &a[*n], n, info) ;
@@ -309,7 +309,7 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
                 }
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strmm_("L", "U", "T", diag, &n2, &n1, &c_b18, &a[*n], n, &a[ n1], n);
             }
@@ -321,7 +321,7 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
                 strtri_("L", diag, &n1, &a[n2], n, info) ;
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strmm_("L", "L", "T", diag, &n1, &n2, &c_b13, &a[n2], n, a, n);
                 strtri_("U", diag, &n2, &a[n1], n, info) ;
@@ -331,7 +331,7 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
                 }
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strmm_("R", "U", "N", diag, &n1, &n2, &c_b18, &a[n1], n, a, n);
             }
@@ -346,7 +346,7 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
                 strtri_("U", diag, &n1, a, &n1, info);
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strmm_("L", "U", "N", diag, &n1, &n2, &c_b13, a, &n1, &a[n1 * n1], &n1);
                 strtri_("L", diag, &n2, &a[1], &n1, info);
@@ -356,7 +356,7 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
                 }
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strmm_("R", "L", "T", diag, &n1, &n2, &c_b18, &a[1], &n1, &a[ n1 * n1], &n1);
             }
@@ -367,7 +367,7 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
                 strtri_("U", diag, &n1, &a[n2 * n2], &n2, info);
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strmm_("R", "U", "T", diag, &n2, &n1, &c_b13, &a[n2 * n2], & n2, a, &n2);
                 strtri_("L", diag, &n2, &a[n1 * n2], &n2, info);
@@ -377,7 +377,7 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
                 }
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strmm_("L", "L", "N", diag, &n2, &n1, &c_b18, &a[n1 * n2], & n2, a, &n2);
             }
@@ -398,7 +398,7 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
                 strtri_("L", diag, &k, &a[1], &i__1, info);
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
@@ -411,7 +411,7 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
                 }
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
@@ -426,7 +426,7 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
                 strtri_("L", diag, &k, &a[k + 1], &i__1, info);
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
@@ -439,7 +439,7 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
                 }
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
@@ -458,7 +458,7 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
                 strtri_("U", diag, &k, &a[k], &k, info);
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strmm_("L", "U", "N", diag, &k, &k, &c_b13, &a[k], &k, &a[k * (k + 1)], &k);
                 strtri_("L", diag, &k, a, &k, info);
@@ -468,7 +468,7 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
                 }
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strmm_("R", "L", "T", diag, &k, &k, &c_b18, a, &k, &a[k * (k + 1)], &k) ;
             }
@@ -481,7 +481,7 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
                 strtri_("U", diag, &k, &a[k * (k + 1)], &k, info);
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strmm_("R", "U", "T", diag, &k, &k, &c_b13, &a[k * (k + 1)], & k, a, &k);
                 strtri_("L", diag, &k, &a[k * k], &k, info);
@@ -491,13 +491,13 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
                 }
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strmm_("L", "L", "N", diag, &k, &k, &c_b18, &a[k * k], &k, a, &k);
             }
         }
     }
-    return 0;
+    return;
     /* End of STFTRI */
 }
 /* stftri_ */

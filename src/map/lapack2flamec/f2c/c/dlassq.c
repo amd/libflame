@@ -112,7 +112,7 @@
 
 /* la_isnan__ */
 /* Subroutine */
-int dlassq_(integer *n, doublereal *x, integer *incx, doublereal *scl, doublereal *sumsq) {
+void dlassq_(integer *n, doublereal *x, integer *incx, doublereal *scl, doublereal *sumsq) {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlassq inputs: n %" FLA_IS ", incx %" FLA_IS "",*n, *incx);
     /* System generated locals */
@@ -142,7 +142,7 @@ int dlassq_(integer *n, doublereal *x, integer *incx, doublereal *scl, doublerea
     /* .. */
     /* Quick return if possible */
     if (*scl != *scl || *sumsq != *sumsq) {
-        return 0;
+        return;
     }
     if (*sumsq == 0.) {
         *scl = 1.;
@@ -152,7 +152,7 @@ int dlassq_(integer *n, doublereal *x, integer *incx, doublereal *scl, doublerea
         *sumsq = 0.;
     }
     if (*n <= 0) {
-        return 0;
+        return;
     }
     /* Compute the sum of squares in 3 accumulators: */
     /* abig -- sums of squares scaled down to avoid overflow */
@@ -256,6 +256,6 @@ int dlassq_(integer *n, doublereal *x, integer *incx, doublereal *scl, doublerea
         *sumsq = amed;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dlassq_ */

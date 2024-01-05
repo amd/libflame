@@ -230,7 +230,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *d__, real *e, real *hous, integer *lhous, real *work, integer *lwork, integer *info)
+void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *d__, real *e, real *hous, integer *lhous, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -346,12 +346,12 @@ int ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd,
         i__1 = -(*info);
         xerbla_("SSYTRD_SB2ST", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
@@ -359,7 +359,7 @@ int ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd,
         hous[1] = 1.f;
         work[1] = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine pointer position */
     ldv = *kd + ib;
@@ -415,7 +415,7 @@ int ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd,
         hous[1] = 1.f;
         work[1] = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Case KD=1: */
     /* The matrix is already Tridiagonal. We have to make diagonal */
@@ -461,7 +461,7 @@ int ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd,
         hous[1] = 1.f;
         work[1] = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Main code start here. */
     /* Reduce the symmetric band of A to a tridiagonal matrix. */
@@ -652,7 +652,7 @@ int ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd,
     hous[1] = (real)lhmin;
     work[1] = (real)lwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTRD_SB2ST */
 }
 /* ssytrd_sb2st__ */

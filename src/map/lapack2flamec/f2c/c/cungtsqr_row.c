@@ -188,7 +188,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, complex *a, integer *lda, complex *t, integer *ldt, complex *work, integer *lwork, integer *info)
+void cungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, complex *a, integer *lda, complex *t, integer *ldt, complex *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
@@ -196,12 +196,12 @@ int cungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, complex *a, 
     /* Local variables */
     integer lworkopt, ib_bottom__, ib, kb, mb1, mb2, m_plus_one__, num_all_row_blocks__, imb, knb;
     extern /* Subroutine */
-    int clarfb_gett_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
+    void clarfb_gett_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
     integer jb_t__, itmp;
     complex dummy[1] /* was [1][1] */
     ;
     extern /* Subroutine */
-    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     integer nblocal, kb_last__;
     /* -- LAPACK computational routine -- */
@@ -283,7 +283,7 @@ int cungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, complex *a, 
     {
         i__1 = -(*info);
         xerbla_("CUNGTSQR_ROW", &i__1, (ftnlen)12);
-        return 0;
+        return;
     }
     else if (lquery)
     {
@@ -291,7 +291,7 @@ int cungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, complex *a, 
         q__1.i = 0.f; // , expr subst
         work[1].r = q__1.r;
         work[1].i = q__1.i; // , expr subst
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
@@ -300,7 +300,7 @@ int cungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, complex *a, 
         q__1.i = 0.f; // , expr subst
         work[1].r = q__1.r;
         work[1].i = q__1.i; // , expr subst
-        return 0;
+        return;
     }
     /* (0) Set the upper-triangular part of the matrix A to zero and */
     /* its diagonal elements to one. */
@@ -397,7 +397,7 @@ int cungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, complex *a, 
     q__1.i = 0.f; // , expr subst
     work[1].r = q__1.r;
     work[1].i = q__1.i; // , expr subst
-    return 0;
+    return;
     /* End of CUNGTSQR_ROW */
 }
 /* cungtsqr_row__ */

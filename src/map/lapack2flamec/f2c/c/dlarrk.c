@@ -129,7 +129,7 @@
 /* > \ingroup OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlarrk_(integer *n, integer *iw, doublereal *gl, doublereal *gu, doublereal *d__, doublereal *e2, doublereal *pivmin, doublereal *reltol, doublereal *w, doublereal *werr, integer *info)
+void dlarrk_(integer *n, integer *iw, doublereal *gl, doublereal *gu, doublereal *d__, doublereal *e2, doublereal *pivmin, doublereal *reltol, doublereal *w, doublereal *werr, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarrk inputs: n %" FLA_IS ", iw %" FLA_IS "",*n, *iw);
@@ -172,7 +172,7 @@ int dlarrk_(integer *n, integer *iw, doublereal *gl, doublereal *gu, doublereal 
     {
         *info = 0;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = dlamch_("P");
@@ -247,7 +247,7 @@ L30: /* Converged or maximum number of iterations reached */
     *w = (left + right) * .5;
     *werr = (d__1 = right - left, f2c_abs(d__1)) * .5;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARRK */
 }
 /* dlarrk_ */

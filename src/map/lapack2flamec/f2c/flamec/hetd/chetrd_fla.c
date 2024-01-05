@@ -189,7 +189,7 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tau, complex *work, integer *lwork, integer *info)
+void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tau, complex *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
@@ -200,7 +200,7 @@ int chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, real
     integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
-    int chetd2_fla(char *, integer *, complex *, integer *, real *, real *, complex *, integer *), cher2k_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, real *, complex *, integer *), clatrd_(char *, integer *, integer *, complex *, integer *, real *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void chetd2_fla(char *, integer *, complex *, integer *, real *, real *, complex *, integer *), cher2k_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, real *, complex *, integer *), clatrd_(char *, integer *, integer *, complex *, integer *, real *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
@@ -265,18 +265,18 @@ int chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, real
     {
         i__1 = -(*info);
         xerbla_("CHETRD", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
-        return 0;
+        return;
     }
     nx = *n;
     iws = 1;
@@ -404,7 +404,7 @@ int chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, real
     }
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
-    return 0;
+    return;
     /* End of CHETRD */
 }
 /* chetrd_ */

@@ -44,7 +44,7 @@ extern void DTL_Trace(
 		    const int8 *pi8Message);
 
 #define LAPACK_getrf(prefix)                                                           \
-  int F77_ ## prefix ## getrf( integer* m,                                             \
+  void F77_ ## prefix ## getrf( integer* m,                                             \
                                integer* n,                                             \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
                                integer* buff_p,                                        \
@@ -301,7 +301,7 @@ LAPACK_getrf(s)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_getrf(d)
 {
@@ -321,7 +321,7 @@ LAPACK_getrf(d)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_getrf(c)
 {
@@ -342,7 +342,7 @@ LAPACK_getrf(c)
     }
 
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_getrf(z)
 {
@@ -372,12 +372,12 @@ LAPACK_getrf(z)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 
 #define LAPACK_getf2(prefix)                                            \
-  int F77_ ## prefix ## getf2( integer* m,                                  \
+  void F77_ ## prefix ## getf2( integer* m,                                  \
                                integer* n,                                  \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
                                integer* buff_p,                             \
@@ -401,7 +401,7 @@ LAPACK_getf2(s)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_getf2(d)
 {
@@ -421,7 +421,7 @@ LAPACK_getf2(d)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_getf2(c)
 {
@@ -441,7 +441,7 @@ LAPACK_getf2(c)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_getf2(z)
 {
@@ -461,7 +461,7 @@ LAPACK_getf2(z)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 #endif

@@ -140,17 +140,17 @@ static real c_b5 = 1.f;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int slatzm_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c1, real *c2, integer *ldc, real * work)
+void slatzm_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c1, real *c2, integer *ldc, real * work)
 {
     /* System generated locals */
     integer c1_dim1, c1_offset, c2_dim1, c2_offset, i__1;
     real r__1;
     /* Local variables */
     extern /* Subroutine */
-    int sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
+    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -181,7 +181,7 @@ int slatzm_(char *side, integer *m, integer *n, real *v, integer *incv, real *ta
     /* Function Body */
     if (fla_min(*m,*n) == 0 || *tau == 0.f)
     {
-        return 0;
+        return;
     }
     if (lsame_(side, "L"))
     {
@@ -210,7 +210,7 @@ int slatzm_(char *side, integer *m, integer *n, real *v, integer *incv, real *ta
         r__1 = -(*tau);
         sger_(m, &i__1, &r__1, &work[1], &c__1, &v[1], incv, &c2[c2_offset], ldc);
     }
-    return 0;
+    return;
     /* End of SLATZM */
 }
 /* slatzm_ */

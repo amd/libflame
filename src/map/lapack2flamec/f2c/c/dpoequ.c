@@ -98,7 +98,7 @@
 /* > \ingroup doublePOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dpoequ_(integer *n, doublereal *a, integer *lda, doublereal *s, doublereal *scond, doublereal *amax, integer *info)
+void dpoequ_(integer *n, doublereal *a, integer *lda, doublereal *s, doublereal *scond, doublereal *amax, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpoequ inputs: n %" FLA_IS ", lda %" FLA_IS "",*n, *lda);
@@ -151,7 +151,7 @@ int dpoequ_(integer *n, doublereal *a, integer *lda, doublereal *s, doublereal *
         i__1 = -(*info);
         xerbla_("DPOEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
@@ -159,7 +159,7 @@ int dpoequ_(integer *n, doublereal *a, integer *lda, doublereal *s, doublereal *
         *scond = 1.;
         *amax = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Find the minimum and maximum diagonal elements. */
     s[1] = a[a_dim1 + 1];
@@ -193,7 +193,7 @@ int dpoequ_(integer *n, doublereal *a, integer *lda, doublereal *s, doublereal *
             {
                 *info = i__;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L20: */
         }
@@ -214,7 +214,7 @@ int dpoequ_(integer *n, doublereal *a, integer *lda, doublereal *s, doublereal *
         *scond = sqrt(smin) / sqrt(*amax);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPOEQU */
 }
 /* dpoequ_ */

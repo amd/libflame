@@ -107,7 +107,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zlarfy_(char *uplo, integer *n, doublecomplex *v, integer *incv, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work)
+void zlarfy_(char *uplo, integer *n, doublecomplex *v, integer *incv, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarfy inputs: uplo %c, n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*uplo, *n, *incv, *ldc);
@@ -116,12 +116,12 @@ int zlarfy_(char *uplo, integer *n, doublecomplex *v, integer *incv, doublecompl
     doublecomplex z__1, z__2, z__3, z__4;
     /* Local variables */
     extern /* Subroutine */
-    int zher2_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zher2_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublecomplex alpha;
     extern /* Double Complex */
     VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern /* Subroutine */
-    int zhemv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_( integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zhemv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_( integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     /* -- LAPACK test routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -150,7 +150,7 @@ int zlarfy_(char *uplo, integer *n, doublecomplex *v, integer *incv, doublecompl
     if (tau->r == 0. && tau->i == 0.)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Form w:= C * v */
     zhemv_(uplo, n, &c_b1, &c__[c_offset], ldc, &v[1], incv, &c_b2, &work[1], &c__1);
@@ -169,7 +169,7 @@ int zlarfy_(char *uplo, integer *n, doublecomplex *v, integer *incv, doublecompl
     z__1.i = -tau->i; // , expr subst
     zher2_(uplo, n, &z__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLARFY */
 }
 /* zlarfy_ */

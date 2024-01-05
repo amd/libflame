@@ -112,7 +112,7 @@ the matrix is */
 /* > \ingroup complexGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cgetri_(integer *n, complex *a, integer *lda, integer * ipiv, complex *work, integer *lwork, integer *info)
+void cgetri_(integer *n, complex *a, integer *lda, integer * ipiv, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -130,16 +130,16 @@ int cgetri_(integer *n, complex *a, integer *lda, integer * ipiv, complex *work,
     /* Local variables */
     integer i__, j, jb, nb, jj, jp, nn, iws;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     integer nbmin;
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer ldwork;
     extern /* Subroutine */
-    int ctrtri_(char *, char *, integer *, complex *, integer *, integer *);
+    void ctrtri_(char *, char *, integer *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -193,18 +193,18 @@ int cgetri_(integer *n, complex *a, integer *lda, integer * ipiv, complex *work,
         i__1 = -(*info);
         xerbla_("CGETRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Form inv(U). If INFO > 0 from CTRTRI, then U is singular, */
     /* and the inverse is not computed. */
@@ -212,7 +212,7 @@ int cgetri_(integer *n, complex *a, integer *lda, integer * ipiv, complex *work,
     if (*info > 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     nbmin = 2;
     ldwork = *n;
@@ -331,7 +331,7 @@ int cgetri_(integer *n, complex *a, integer *lda, integer * ipiv, complex *work,
     work[1].r = (real) iws;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGETRI */
 }
 /* cgetri_ */

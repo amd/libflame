@@ -163,7 +163,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cla_heamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda, complex *x, integer *incx, real *beta, real *y, integer *incy)
+void cla_heamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda, complex *x, integer *incx, real *beta, real *y, integer *incy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -246,13 +246,13 @@ int cla_heamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda,
     {
         xerbla_("CHEMV ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || *alpha == 0.f && *beta == 1.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set up the start points in X and Y. */
     if (*incx > 0)
@@ -513,7 +513,7 @@ int cla_heamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda,
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLA_HEAMV */
 }
 /* cla_heamv__ */

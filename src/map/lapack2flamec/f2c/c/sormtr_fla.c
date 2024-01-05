@@ -167,7 +167,7 @@ the routine */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
+void sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
@@ -185,11 +185,11 @@ int sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, real
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int sormql_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+    void sormql_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int sormqr_fla(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+    void sormqr_fla(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -305,17 +305,17 @@ int sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, real
     {
         i__2 = -(*info);
         xerbla_("SORMTR", &i__2, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0 || nq == 1)
     {
         work[1] = 1.f;
-        return 0;
+        return;
     }
     if (left)
     {
@@ -350,7 +350,7 @@ int sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, real
         sormqr_fla(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1], & c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     }
     work[1] = (real) lwkopt;
-    return 0;
+    return;
     /* End of SORMTR */
 }
 /* sormtr_ */

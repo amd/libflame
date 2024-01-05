@@ -322,7 +322,7 @@ kappa(A*D), where kappa(.) is the */
 /* > drmac@math.hr. Thank you. */
 /* ===================================================================== */
 /* Subroutine */
-int sgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, real *a, integer *lda, real *sva, integer *mv, real *v, integer *ldv, real *work, integer *lwork, integer *info)
+void sgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, real *a, integer *lda, real *sva, integer *mv, real *v, integer *ldv, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5;
@@ -351,30 +351,30 @@ int sgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, real *a,
     extern logical lsame_(char *, char *);
     real theta;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     real small_val, sfmin;
     logical lsvec;
     real fastr[5], epsln;
     logical applv, rsvec, uctol, lower, upper;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     logical rotok;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), srotm_(integer *, real *, integer *, real *, integer *, real *), sgsvj0_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *, integer *), sgsvj1_( char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *, integer *);
+    void sswap_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), srotm_(integer *, real *, integer *, real *, integer *, real *), sgsvj0_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *, integer *), sgsvj1_( char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer ijblsk, swband;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
     extern integer isamax_(integer *, real *, integer *);
     integer blskip;
     real mxaapq;
     extern /* Subroutine */
-    int slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    void slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     real thsign;
     extern /* Subroutine */
-    int slassq_(integer *, real *, integer *, real *, real *);
+    void slassq_(integer *, real *, integer *, real *, real *);
     real mxsinj;
     integer emptsw, notrot, iswrot, lkahead;
     logical goscale, noscale;
@@ -480,12 +480,12 @@ int sgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, real *a,
     {
         i__1 = -(*info);
         xerbla_("SGESVJ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* #:) Quick return for void matrix */
     if (*m == 0 || *n == 0)
     {
-        return 0;
+        return;
     }
     /* Set numerical parameters */
     /* The stopping criterion for Jacobi rotations is */
@@ -528,7 +528,7 @@ int sgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, real *a,
         *info = -4;
         i__1 = -(*info);
         xerbla_("SGESVJ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Initialize the right singular vector matrix. */
     if (rsvec)
@@ -569,7 +569,7 @@ int sgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, real *a,
                 *info = -6;
                 i__2 = -(*info);
                 xerbla_("SGESVJ", &i__2, (ftnlen)6);
-                return 0;
+                return;
             }
             aaqq = sqrt(aaqq);
             if (aapp < big / aaqq && noscale)
@@ -612,7 +612,7 @@ int sgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, real *a,
                 *info = -6;
                 i__2 = -(*info);
                 xerbla_("SGESVJ", &i__2, (ftnlen)6);
-                return 0;
+                return;
             }
             aaqq = sqrt(aaqq);
             if (aapp < big / aaqq && noscale)
@@ -655,7 +655,7 @@ int sgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, real *a,
                 *info = -6;
                 i__2 = -(*info);
                 xerbla_("SGESVJ", &i__2, (ftnlen)6);
-                return 0;
+                return;
             }
             aaqq = sqrt(aaqq);
             if (aapp < big / aaqq && noscale)
@@ -722,7 +722,7 @@ int sgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, real *a,
         work[4] = 0.f;
         work[5] = 0.f;
         work[6] = 0.f;
-        return 0;
+        return;
     }
     /* #:) Quick return for one-column matrix */
     if (*n == 1)
@@ -744,7 +744,7 @@ int sgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, real *a,
         work[4] = 0.f;
         work[5] = 0.f;
         work[6] = 0.f;
-        return 0;
+        return;
     }
     /* Protect small singular values from underflow, and try to */
     /* avoid underflows/overflows in computing Jacobi rotations. */
@@ -1801,7 +1801,7 @@ L1995: /* Sort the singular values and find how many are above */
     work[6] = mxsinj;
     /* MXSINJ is the largest absolute value of the sines of Jacobi angles */
     /* in the last sweep */
-    return 0;
+    return;
     /* .. */
     /* .. END OF SGESVJ */
     /* .. */

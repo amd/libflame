@@ -155,10 +155,7 @@ perturbed */
 /* > \ingroup trsyl */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ztrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int_t *n,
-             dcomplex *a, aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb,
-             dcomplex *c__, aocl_int_t *ldc, doublereal *scale, aocl_int_t *info)
+void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *c__, integer *ldc, doublereal *scale, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztrsyl inputs: trana %c, tranb %c, isgn %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS "",*trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
@@ -177,14 +174,20 @@ void ztrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
     doublereal da11;
     dcomplex vec;
     doublereal dum[1], eps, sgn, smin;
-    dcomplex suml, sumr;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    doublecomplex suml, sumr;
+    extern logical lsame_(char *, char *);
+    extern /* Double Complex */
+    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zdotu_f2c_( doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    extern /* Subroutine */
+    void dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     doublereal scaloc;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     doublereal bignum;
+    extern /* Subroutine */
+    void zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     extern /* Double Complex */
     void zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
     logical notrna, notrnb;
@@ -262,14 +265,14 @@ void ztrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
         i__1 = -(*info);
         xerbla_("ZTRSYL", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *scale = 1.;
     if(*m == 0 || *n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set constants to control overflow */
     eps = dlamch_("P");
@@ -634,7 +637,7 @@ void ztrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTRSYL */
 }
 /* ztrsyl_ */

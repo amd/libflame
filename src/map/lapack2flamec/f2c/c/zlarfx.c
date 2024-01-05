@@ -117,9 +117,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlarfx_(char *side, aocl_int_t *m, aocl_int_t *n, dcomplex *v, dcomplex *tau,
-             dcomplex *c__, aocl_int_t *ldc, dcomplex *work)
+void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex *tau, doublecomplex *c__, integer * ldc, doublecomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarfx inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *ldc);
@@ -131,10 +129,11 @@ void zlarfx_(char *side, aocl_int_t *m, aocl_int_t *n, dcomplex *v, dcomplex *ta
     /* Builtin functions */
     void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    aocl_int64_t j;
-    dcomplex t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10,
-        sum;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer j;
+    doublecomplex t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10, sum;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -165,7 +164,7 @@ void zlarfx_(char *side, aocl_int_t *m, aocl_int_t *n, dcomplex *v, dcomplex *ta
     if(tau->real == 0. && tau->imag == 0.)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(lsame_(side, "L", 1, 1))
     {
@@ -2613,7 +2612,7 @@ void zlarfx_(char *side, aocl_int_t *m, aocl_int_t *n, dcomplex *v, dcomplex *ta
     }
 L410:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLARFX */
 }
 /* zlarfx_ */

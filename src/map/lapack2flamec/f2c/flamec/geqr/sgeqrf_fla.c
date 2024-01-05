@@ -139,19 +139,19 @@
  /* > */
  /* ===================================================================== */
  /* Subroutine */
- int sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info) {
+ void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info) {
  /* System generated locals */
  integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
  /* Local variables */
  integer i__, k, nbmin, iinfo;
  extern /* Subroutine */
- int sgeqr2_fla(integer *, integer *, real *, integer *, real *, real *, integer *);
+ void sgeqr2_fla(integer *, integer *, real *, integer *, real *, real *, integer *);
  integer ib, nb, nx;
  extern /* Subroutine */
- int slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+ void slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
  extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
  extern /* Subroutine */
- int slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
+ void slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
  integer ldwork, lwkopt;
  logical lquery;
  integer iws;
@@ -204,16 +204,16 @@
  if (*info != 0) {
  i__1 = -(*info);
  xerbla_("SGEQRF", &i__1, (ftnlen)6);
- return 0;
+ return;
  }
  else if (lquery) {
- return 0;
+ return;
  }
  /* Quick return if possible */
  k = fla_min(*m,*n);
  if (k == 0) {
  work[1] = 1.f;
- return 0;
+ return;
  }
  nbmin = 2;
  nx = 0;
@@ -302,7 +302,7 @@
  sgeqr2_fla(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1] , &iinfo);
  }
  work[1] = (real) iws;
- return 0;
+ return;
  /* End of SGEQRF */
  }
  /* sgeqrf_ */

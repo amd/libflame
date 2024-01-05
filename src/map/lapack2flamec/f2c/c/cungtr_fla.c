@@ -114,7 +114,7 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer *info)
+void cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
@@ -127,7 +127,7 @@ int cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau, c
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int cungql_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), cungqr_fla(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+    void cungql_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), cungqr_fla(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -210,18 +210,18 @@ int cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau, c
     {
         i__1 = -(*info);
         xerbla_("CUNGTR", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -319,7 +319,7 @@ int cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau, c
     }
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
-    return 0;
+    return;
     /* End of CUNGTR */
 }
 /* cungtr_ */

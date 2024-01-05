@@ -166,7 +166,7 @@ the routine */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau, doublereal * c__, integer *ldc, doublereal *work, integer *lwork, integer *info)
+void dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau, doublereal * c__, integer *ldc, doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
@@ -184,7 +184,7 @@ int dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, doub
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int dormql_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dormql_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -302,17 +302,17 @@ int dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, doub
     {
         i__2 = -(*info);
         xerbla_("DORMTR", &i__2, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0 || nq == 1)
     {
         work[1] = 1.;
-        return 0;
+        return;
     }
     if (left)
     {
@@ -347,7 +347,7 @@ int dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, doub
         dormqr_fla(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1], & c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     }
     work[1] = (doublereal) lwkopt;
-    return 0;
+    return;
     /* End of DORMTR */
 }
 /* dormtr_ */

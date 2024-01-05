@@ -173,7 +173,7 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int cungtsqr_(integer *m, integer *n, integer *mb, integer * nb, complex *a, integer *lda, complex *t, integer *ldt, complex *work, integer *lwork, integer *info)
+void cungtsqr_(integer *m, integer *n, integer *mb, integer * nb, complex *a, integer *lda, complex *t, integer *ldt, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -186,10 +186,10 @@ int cungtsqr_(integer *m, integer *n, integer *mb, integer * nb, complex *a, int
     complex q__1;
     /* Local variables */
     extern /* Subroutine */
-    int clamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer * );
+    void clamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer * );
     integer lworkopt, j, lc, lw, ldc, iinfo;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     integer nblocal;
     /* -- LAPACK computational routine (version 3.9.0) -- */
@@ -284,7 +284,7 @@ int cungtsqr_(integer *m, integer *n, integer *mb, integer * nb, complex *a, int
         i__1 = -(*info);
         xerbla_("CUNGTSQR", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
@@ -293,7 +293,7 @@ int cungtsqr_(integer *m, integer *n, integer *mb, integer * nb, complex *a, int
         work[1].r = q__1.r;
         work[1].i = q__1.i; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
@@ -303,7 +303,7 @@ int cungtsqr_(integer *m, integer *n, integer *mb, integer * nb, complex *a, int
         work[1].r = q__1.r;
         work[1].i = q__1.i; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* (1) Form explicitly the tall-skinny M-by-N left submatrix Q1_in */
     /* of M-by-M orthogonal matrix Q_in, which is implicitly stored in */
@@ -334,7 +334,7 @@ int cungtsqr_(integer *m, integer *n, integer *mb, integer * nb, complex *a, int
     work[1].r = q__1.r;
     work[1].i = q__1.i; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CUNGTSQR */
 }
 /* cungtsqr_ */

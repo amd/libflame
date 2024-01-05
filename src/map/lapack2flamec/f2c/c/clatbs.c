@@ -242,9 +242,7 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, aocl_int_t *kd,
-             scomplex *ab, aocl_int_t *ldab, scomplex *x, real *scale, real *cnorm, aocl_int_t *info)
+void clatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *kd, complex *ab, integer *ldab, complex * x, real *scale, real *cnorm, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -272,8 +270,12 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
     real tmax;
     scomplex tjjs;
     real xmax, grow;
-    aocl_int64_t maind;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer maind;
+    extern /* Complex */
+    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
     real tscal;
     complex uscal;
     integer jlast;
@@ -281,14 +283,14 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
     VOID cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     complex csumj;
     extern /* Subroutine */
-    int ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    void ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern integer icamax_(integer *, complex *, integer *);
     extern /* Complex */
     void cladiv_f2c_(complex *, complex *, complex *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical notran;
     aocl_int64_t jfirst;
@@ -365,14 +367,14 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
         i__1 = -(*info);
         xerbla_("CLATBS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *scale = 1.f;
     if (*n == 0)
     {
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine machine dependent parameters to control overflow. */
     smlnum = slamch_("Safe minimum") / slamch_("Precision");
@@ -1296,7 +1298,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, a
         aocl_blas_sscal(n, &r__1, &cnorm[1], &c__1);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLATBS */
 }
 /* clatbs_ */

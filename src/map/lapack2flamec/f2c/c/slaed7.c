@@ -248,7 +248,7 @@ static integer c_n1 = -1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int slaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer *curlvl, integer *curpbm, real *d__, real *q, integer *ldq, integer *indxq, real *rho, integer *cutpnt, real * qstore, integer *qptr, integer *prmptr, integer *perm, integer * givptr, integer *givcol, real *givnum, real *work, integer *iwork, integer *info)
+void slaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer *curlvl, integer *curpbm, real *d__, real *q, integer *ldq, integer *indxq, real *rho, integer *cutpnt, real * qstore, integer *qptr, integer *prmptr, integer *perm, integer * givptr, integer *givcol, real *givnum, real *work, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer q_dim1, q_offset, i__1, i__2;
@@ -257,10 +257,10 @@ int slaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer 
     /* Local variables */
     integer i__, k, n1, n2, is, iw, iz, iq2, ptr, ldq2, indx, curr, indxc;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer indxp;
     extern /* Subroutine */
-    int slaed8_(integer *, integer *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *, integer *), slaed9_( integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, real *, real *, integer *, integer *), slaeda_(integer *, integer *, integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *);
+    void slaed8_(integer *, integer *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *, integer *), slaed9_( integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, real *, real *, integer *, integer *), slaeda_(integer *, integer *, integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *);
     integer idlmda;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slamrg_( integer *, integer *, real *, integer *, integer *, integer *);
@@ -325,12 +325,12 @@ int slaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer 
     {
         i__1 = -(*info);
         xerbla_("SLAED7", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     /* The following values are for bookkeeping purposes only. They are */
     /* integer pointers which indicate the portion of the workspace */
@@ -412,7 +412,7 @@ int slaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer 
         }
     }
 L30:
-    return 0;
+    return;
     /* End of SLAED7 */
 }
 /* slaed7_ */

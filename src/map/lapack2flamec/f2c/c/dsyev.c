@@ -137,26 +137,7 @@ i */
 /* > \ingroup doubleSYeigen */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dsyev_(char *jobz, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *w,
-            doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dsyev(jobz, uplo, n, a, lda, w, work, lwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dsyev(jobz, uplo, &n_64, a, &lda_64, w, work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_dsyev(char *jobz, char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
-                       doublereal *w, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
+void dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *w, doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
@@ -170,20 +151,29 @@ void aocl_lapack_dsyev(char *jobz, char *uplo, aocl_int64_t *n, doublereal *a, a
     doublereal anrm;
     aocl_int64_t imax;
     doublereal rmin, rmax;
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     logical lower, wantz;
     extern doublereal dlamch_(char *);
-    aocl_int64_t iscale;
+    integer iscale;
+    extern /* Subroutine */
+    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     doublereal safmin;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
-    aocl_int64_t indtau;
-    aocl_int64_t indwrk;
-    aocl_int64_t llwork;
+    integer indtau;
+    extern /* Subroutine */
+    void dsterf_(integer *, doublereal *, doublereal *, integer *);
+    extern doublereal dlansy_(char *, char *, integer *, doublereal *, integer *, doublereal *);
+    integer indwrk;
+    extern /* Subroutine */
+    void dorgtr_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsytrd_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+    integer llwork;
     doublereal smlnum;
     aocl_int64_t lwkopt;
     logical lquery;
@@ -260,18 +250,18 @@ void aocl_lapack_dsyev(char *jobz, char *uplo, aocl_int64_t *n, doublereal *a, a
         i__1 = -(*info);
         xerbla_("DSYEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -282,7 +272,7 @@ void aocl_lapack_dsyev(char *jobz, char *uplo, aocl_int64_t *n, doublereal *a, a
             a[a_dim1 + 1] = 1.;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -344,7 +334,7 @@ void aocl_lapack_dsyev(char *jobz, char *uplo, aocl_int64_t *n, doublereal *a, a
     /* Set WORK(1) to optimal workspace size. */
     work[1] = (doublereal) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYEV */
 }
 /* dsyev_ */

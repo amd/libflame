@@ -395,7 +395,7 @@ defaults */
 /* > \ingroup complexHEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cherfsx_(char *uplo, char *equed, integer *n, integer * nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer * ipiv, real *s, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *berr, integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real *params, complex *work, real *rwork, integer *info)
+void cherfsx_(char *uplo, char *equed, integer *n, integer * nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer * ipiv, real *s, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *berr, integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real *params, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -419,7 +419,7 @@ int cherfsx_(char *uplo, char *equed, integer *n, integer * nrhs, complex *a, in
     integer prec_type__;
     real cwise_wrong__;
     extern /* Subroutine */
-    int cla_herfsx_extended_(integer *, char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, logical *, real *, complex *, integer *, complex *, integer *, real *, integer *, real *, real *, complex *, real *, complex *, real *, real *, integer *, real *, real *, logical *, integer *);
+    void cla_herfsx_extended_(integer *, char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, logical *, real *, complex *, integer *, complex *, integer *, real *, integer *, real *, real *, complex *, real *, complex *, real *, real *, integer *, real *, real *, logical *, integer *);
     char norm[1];
     logical ignore_cwise__;
     extern logical lsame_(char *, char *);
@@ -428,7 +428,7 @@ int cherfsx_(char *uplo, char *equed, integer *n, integer * nrhs, complex *a, in
     logical rcequ;
     extern real cla_hercond_x_(char *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, real *), clanhe_(char *, char *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int checon_(char *, integer *, complex *, integer *, integer *, real *, real *, complex *, integer *);
+    void checon_(char *, integer *, complex *, integer *, integer *, real *, real *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -580,7 +580,7 @@ int cherfsx_(char *uplo, char *equed, integer *n, integer * nrhs, complex *a, in
         i__1 = -(*info);
         xerbla_("CHERFSX", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || *nrhs == 0)
@@ -609,7 +609,7 @@ int cherfsx_(char *uplo, char *equed, integer *n, integer * nrhs, complex *a, in
             }
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Default to failure. */
     *rcond = 0.f;
@@ -744,7 +744,7 @@ int cherfsx_(char *uplo, char *equed, integer *n, integer * nrhs, complex *a, in
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHERFSX */
 }
 /* cherfsx_ */

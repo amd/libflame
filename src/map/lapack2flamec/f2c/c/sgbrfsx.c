@@ -437,7 +437,7 @@ defaults */
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, integer *nrhs, real *ab, integer *ldab, real *afb, integer *ldafb, integer *ipiv, real *r__, real *c__, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *berr, integer * n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer * nparams, real *params, real *work, integer *iwork, integer *info)
+void sgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, integer *nrhs, real *ab, integer *ldab, real *afb, integer *ldafb, integer *ipiv, real *r__, real *c__, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *berr, integer * n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer * nparams, real *params, real *work, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1;
@@ -454,14 +454,14 @@ int sgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
     extern real sla_gbrcond_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, real *, integer *);
     real cwise_wrong__;
     extern /* Subroutine */
-    int sla_gbrfsx_extended_(integer *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, logical *, real *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *, real *, integer *, real *, real *, logical *, integer *);
+    void sla_gbrfsx_extended_(integer *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, logical *, real *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *, real *, integer *, real *, real *, logical *, integer *);
     char norm[1];
     logical ignore_cwise__;
     extern logical lsame_(char *, char *);
     real anorm;
     extern real slangb_(char *, integer *, integer *, integer *, real *, integer *, real *), slamch_(char *);
     extern /* Subroutine */
-    int sgbcon_(char *, integer *, integer *, integer *, real *, integer *, integer *, real *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sgbcon_(char *, integer *, integer *, integer *, real *, integer *, integer *, real *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical colequ, notran, rowequ;
     extern integer ilaprec_(char *);
     integer ithresh, n_norms__;
@@ -623,7 +623,7 @@ int sgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
     {
         i__1 = -(*info);
         xerbla_("SGBRFSX", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || *nrhs == 0)
@@ -651,7 +651,7 @@ int sgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
                 err_bnds_comp__[j + err_bnds_comp_dim1 * 3] = 1.f;
             }
         }
-        return 0;
+        return;
     }
     /* Default to failure. */
     *rcond = 0.f;
@@ -803,7 +803,7 @@ int sgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
             }
         }
     }
-    return 0;
+    return;
     /* End of SGBRFSX */
 }
 /* sgbrfsx_ */

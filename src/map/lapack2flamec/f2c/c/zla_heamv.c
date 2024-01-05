@@ -172,10 +172,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zla_heamv_(aocl_int_t *uplo, aocl_int_t *n, doublereal *alpha, dcomplex *a,
-                aocl_int_t *lda, dcomplex *x, aocl_int_t *incx, doublereal *beta,
-                doublereal *y, aocl_int_t *incy)
+void zla_heamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, integer *lda, doublecomplex *x, integer *incx, doublereal *beta, doublereal *y, integer *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_heamv inputs: uplo %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *uplo, *n, *lda, *incx, *incy);
@@ -250,13 +247,13 @@ void zla_heamv_(aocl_int_t *uplo, aocl_int_t *n, doublereal *alpha, dcomplex *a,
     {
         xerbla_("ZHEMV ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if(*n == 0 || *alpha == 0. && *beta == 1.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set up the start points in X and Y. */
     if(*incx > 0)
@@ -501,7 +498,7 @@ void zla_heamv_(aocl_int_t *uplo, aocl_int_t *n, doublereal *alpha, dcomplex *a,
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLA_HEAMV */
 }
 /* zla_heamv__ */

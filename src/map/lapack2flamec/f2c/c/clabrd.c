@@ -226,54 +226,7 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clabrd_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nb, scomplex *a, aocl_int_t *lda, real *d__,
-             real *e, scomplex *tauq, scomplex *taup, scomplex *x, aocl_int_t *ldx, scomplex *y,
-             aocl_int_t *ldy)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_clabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nb_64 = *nb;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t ldy_64 = *ldy;
-
-    aocl_lapack_clabrd(&m_64, &n_64, &nb_64, a, &lda_64, d__, e, tauq, taup, x, &ldx_64, y,
-                       &ldy_64);
-#endif
-}
-
-void aocl_lapack_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
-                        aocl_int64_t *lda, real *d__, real *e, scomplex *tauq, scomplex *taup,
-                        scomplex *x, aocl_int64_t *ldx, scomplex *y, aocl_int64_t *ldy)
-{
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clabrd inputs: m %lld, n %lld, nb %lld, lda %lld, ldx %lld, ldy %lld",
-             *m, *n, *nb, *lda, *ldx, *ldy);
-#else
-    snprintf(buffer, 256, "clabrd inputs: m %d, n %d, nb %d, lda %d, ldx %d, ldy %d", *m, *n, *nb,
-             *lda, *ldx, *ldy);
-#endif
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
-    extern void fla_clabrd(aocl_int64_t * m, aocl_int64_t * n, aocl_int64_t * nb, scomplex * a,
-                           aocl_int64_t * lda, real * d__, real * e, scomplex * tauq, scomplex * taup,
-                           scomplex * x, aocl_int64_t * ldx, scomplex * y, aocl_int64_t * ldy);
-
-    fla_clabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
-}
-
-void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a, aocl_int64_t *lda,
-                real *d__, real *e, scomplex *tauq, scomplex *taup, scomplex *x, aocl_int64_t *ldx,
-                scomplex *y, aocl_int64_t *ldy)
+void clabrd_(integer *m, integer *n, integer *nb, complex *a, integer *lda, real *d__, real *e, complex *tauq, complex *taup, complex *x, integer *ldx, complex *y, integer *ldy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -285,14 +238,14 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-    extern int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, real *d__, real *e, complex *tauq, complex *taup, complex *x, integer *ldx, complex *y, integer *ldy);
+    extern void fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, real *d__, real *e, complex *tauq, complex *taup, complex *x, integer *ldx, complex *y, integer *ldy);
 
-    int ret_val = fla_clabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
+    fla_clabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return ret_val;
+    return;
 }
 
-int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, real *d__, real *e, complex *tauq, complex *taup, complex *x, integer *ldx, complex *y, integer *ldy)
+void fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, real *d__, real *e, complex *tauq, complex *taup, complex *x, integer *ldx, complex *y, integer *ldy)
 {
     /* System generated locals */
     integer a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3, i__4, i__5;
@@ -302,7 +255,7 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
     complex alpha;
     int thread_id, actual_num_threads;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -344,7 +297,7 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
     /* Function Body */
     if(*m <= 0 || *n <= 0)
     {
-        return 0;
+        return;
     }
 
 #ifdef FLA_OPENMP_MULTITHREADING
@@ -670,7 +623,7 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
             }
         }
     }
-    return 0;
+    return;
     /* End of CLABRD */
 }
 /* clabrd_ */

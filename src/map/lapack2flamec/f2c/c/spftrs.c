@@ -198,9 +198,7 @@ static real c_b10 = 1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void spftrs_(char *transr, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, real *b,
-             aocl_int_t *ldb, aocl_int_t *info)
+void spftrs_(char *transr, char *uplo, integer *n, integer * nrhs, real *a, real *b, integer *ldb, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_spftrs(transr, uplo, n, nrhs, a, b, ldb, info);
@@ -230,7 +228,7 @@ void aocl_lapack_spftrs(char *transr, char *uplo, aocl_int64_t *n, aocl_int64_t 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
     extern /* Subroutine */
-    int stfsm_(char *, char *, char *, char *, char *, integer *, integer *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void stfsm_(char *, char *, char *, char *, char *, integer *, integer *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -284,12 +282,11 @@ void aocl_lapack_spftrs(char *transr, char *uplo, aocl_int64_t *n, aocl_int64_t 
     {
         i__1 = -(*info);
         xerbla_("SPFTRS", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* start execution: there are two triangular solves */
@@ -303,7 +300,6 @@ void aocl_lapack_spftrs(char *transr, char *uplo, aocl_int64_t *n, aocl_int64_t 
         aocl_lapack_stfsm(transr, "L", uplo, "T", "N", n, nrhs, &c_b10, a, &b[b_offset], ldb);
         aocl_lapack_stfsm(transr, "L", uplo, "N", "N", n, nrhs, &c_b10, a, &b[b_offset], ldb);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SPFTRS */
 }

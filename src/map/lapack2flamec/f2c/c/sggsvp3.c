@@ -270,7 +270,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, real *a, integer *lda, real *b, integer *ldb, real *tola, real *tolb, integer *k, integer *l, real *u, integer *ldu, real *v, integer *ldv, real *q, integer *ldq, integer *iwork, real * tau, real *work, integer *lwork, integer *info)
+void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, real *a, integer *lda, real *b, integer *ldb, real *tola, real *tolb, integer *k, integer *l, real *u, integer *ldu, real *v, integer *ldv, real *q, integer *ldq, integer *iwork, real * tau, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, i__3;
@@ -280,7 +280,7 @@ int sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     extern logical lsame_(char *, char *);
     logical wantq, wantu, wantv;
     extern /* Subroutine */
-    int sgeqp3_(integer *, integer *, real *, integer *, integer *, real *, real *, integer *, integer *), sgeqr2_( integer *, integer *, real *, integer *, real *, real *, integer * ), sgerq2_(integer *, integer *, real *, integer *, real *, real *, integer *), sorg2r_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *), sorm2r_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), sormr2_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slapmt_(logical *, integer *, integer *, real *, integer *, integer *);
+    void sgeqp3_(integer *, integer *, real *, integer *, integer *, real *, real *, integer *, integer *), sgeqr2_( integer *, integer *, real *, integer *, real *, real *, integer * ), sgerq2_(integer *, integer *, real *, integer *, real *, real *, integer *), sorg2r_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *), sorm2r_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), sormr2_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slapmt_(logical *, integer *, integer *, real *, integer *, integer *);
     logical forwrd;
     integer lwkopt;
     logical lquery;
@@ -411,11 +411,11 @@ int sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     {
         i__1 = -(*info);
         xerbla_("SGGSVP3", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     if (lquery)
     {
-        return 0;
+        return;
     }
     /* QR with column pivoting of B: B*P = V*( S11 S12 ) */
     /* ( 0 0 ) */
@@ -656,7 +656,7 @@ int sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
         }
     }
     work[1] = (real) lwkopt;
-    return 0;
+    return;
     /* End of SGGSVP3 */
 }
 /* sggsvp3_ */

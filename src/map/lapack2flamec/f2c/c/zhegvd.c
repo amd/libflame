@@ -253,11 +253,7 @@ i off-diagonal elements of an */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zhegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, dcomplex *a,
-             aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb, doublereal *w, dcomplex *work,
-             aocl_int_t *lwork, doublereal *rwork, aocl_int_t *lrwork, aocl_int_t *iwork,
-             aocl_int_t *liwork, aocl_int_t *info)
+void zhegvd_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublereal *w, doublecomplex *work, integer *lwork, doublereal *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhegvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork " FLA_IS ", lrwork " FLA_IS ", liwork " FLA_IS "", *itype, *jobz, *uplo, *n, *lda, *ldb, *lwork, *lrwork, *liwork);
@@ -274,12 +270,14 @@ void zhegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, dcomplex 
     aocl_int64_t lropt;
     logical wantz;
     extern /* Subroutine */
-    int ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zheevd_(char *, char *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *, integer *);
+    void ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zheevd_(char *, char *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *, integer *);
     integer liwmin;
     extern /* Subroutine */
-    int zhegst_(integer *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zhegst_(integer *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     integer lrwmin;
     logical lquery;
+    extern /* Subroutine */
+    void zpotrf_(char *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -386,18 +384,18 @@ void zhegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, dcomplex 
         i__1 = -(*info);
         xerbla_("ZHEGVD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of B. */
     aocl_lapack_zpotrf(uplo, n, &b[b_offset], ldb, info);
@@ -405,7 +403,7 @@ void zhegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, dcomplex 
     {
         *info = *n + *info;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     aocl_lapack_zhegst(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
@@ -463,7 +461,7 @@ void zhegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, dcomplex 
     rwork[1] = (doublereal) lropt;
     iwork[1] = liopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHEGVD */
 }
 /* zhegvd_ */

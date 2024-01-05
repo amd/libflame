@@ -190,7 +190,7 @@
  /* > \ingroup realOTHERcomputational */
  /* ===================================================================== */
  /* Subroutine */
- int sormbr_fla(char *vect, char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *lwork, integer *info) {
+ void sormbr_fla(char *vect, char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *lwork, integer *info) {
  /* System generated locals */
  integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
  char ch__1[2];
@@ -207,11 +207,11 @@
  logical notran, applyq;
  char transt[1];
  extern /* Subroutine */
- int sormlq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+ void sormlq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
  integer lwkopt;
  logical lquery;
  extern /* Subroutine */
- int sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+ void sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
  /* -- LAPACK computational routine -- */
  /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
  /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -317,15 +317,15 @@
  if (*info != 0) {
  i__1 = -(*info);
  xerbla_("SORMBR", &i__1, (ftnlen)6);
- return 0;
+ return;
  }
  else if (lquery) {
- return 0;
+ return;
  }
  /* Quick return if possible */
  work[1] = 1.f;
  if (*m == 0 || *n == 0) {
- return 0;
+ return;
  }
  if (applyq) {
  /* Apply Q */
@@ -382,7 +382,7 @@
  }
  }
  work[1] = (real) lwkopt;
- return 0;
+ return;
  /* End of SORMBR */
  }
  /* sormbr_ */

@@ -236,10 +236,7 @@ if INFO = i, i */
 /* > \ingroup bdsqr */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_int_t *ncc,
-             real *d__, real *e, scomplex *vt, aocl_int_t *ldvt, scomplex *u, aocl_int_t *ldu,
-             scomplex *c__, aocl_int_t *ldc, real *rwork, aocl_int_t *info)
+void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, real *d__, real *e, complex *vt, integer *ldvt, complex *u, integer *ldu, complex *c__, integer *ldc, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -275,23 +272,26 @@ void cbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
     aocl_int64_t isub, iter;
     real unfl, sinl, cosr, smin, smax, sinr;
     extern /* Subroutine */
-        void
-        slas2_(real *, real *, real *, real *, real *);
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    void slas2_(real *, real *, real *, real *, real *) ;
+    extern logical lsame_(char *, char *);
     real oldcs;
-    aocl_int64_t oldll;
+    extern /* Subroutine */
+    void clasr_(char *, char *, char *, integer *, integer *, real *, real *, complex *, integer *);
+    integer oldll;
     real shift, sigmn, oldsn;
-    real sigmx;
+    extern /* Subroutine */
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
+    integer maxit;
+    real sminl, sigmx;
     logical lower;
     extern /* Subroutine */
-    int csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *), slasq1_(integer *, real *, real *, real *, integer *), slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
+    void csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *), slasq1_(integer *, real *, real *, real *, integer *), slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real sminoa;
     extern /* Subroutine */
-        void
-        slartg_(real *, real *, real *, real *, real *);
+    void slartg_(real *, real *, real *, real *, real * );
     real thresh;
     logical rotate;
     real tolmul;
@@ -368,12 +368,12 @@ void cbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
         i__1 = -(*info);
         xerbla_("CBDSQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -389,7 +389,7 @@ void cbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_
         if(*info != 2)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         *info = 0;
     }
@@ -998,7 +998,7 @@ L200:
     }
 L220:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CBDSQR */
 }
 /* cbdsqr_ */

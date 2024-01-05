@@ -181,10 +181,7 @@ static real c_b14 = 1.f;
 /* > \ingroup realPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sporfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *lda, real *af,
-             aocl_int_t *ldaf, real *b, aocl_int_t *ldb, real *x, aocl_int_t *ldx, real *ferr,
-             real *berr, real *work, aocl_int_t *iwork, aocl_int_t *info)
+void sporfs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *af, integer *ldaf, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -207,11 +204,15 @@ void sporfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *l
     aocl_int_t isave[3];
     aocl_int64_t count;
     logical upper;
+    extern /* Subroutine */
+    void scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), slacn2_( integer *, real *, real *, integer *, real *, integer *, integer * );
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real lstres;
+    extern /* Subroutine */
+    void spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -288,7 +289,7 @@ void sporfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *l
         i__1 = -(*info);
         xerbla_("SPORFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -301,7 +302,7 @@ void sporfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *l
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* NZ = maximum number of nonzero elements in each row of A, plus 1 */
     nz = *n + 1;
@@ -483,7 +484,7 @@ void sporfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *l
         /* L140: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPORFS */
 }
 /* sporfs_ */

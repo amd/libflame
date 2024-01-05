@@ -161,8 +161,7 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ssptrf_(char *uplo, aocl_int_t *n, real *ap, aocl_int_t *ipiv, aocl_int_t *info)
+void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -182,11 +181,17 @@ void ssptrf_(char *uplo, aocl_int_t *n, real *ap, aocl_int_t *ipiv, aocl_int_t *
     real wk;
     aocl_int64_t kx, knc, kpc, npp;
     real wkm1, wkp1;
-    aocl_int64_t imax, jmax;
+    integer imax, jmax;
+    extern /* Subroutine */
+    void sspr_(char *, integer *, real *, real *, integer *, real *);
     real alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t kstep;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
+    integer kstep;
     logical upper;
+    extern /* Subroutine */
+    void sswap_(integer *, real *, integer *, real *, integer *);
     real absakk;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -233,7 +238,7 @@ void ssptrf_(char *uplo, aocl_int_t *n, real *ap, aocl_int_t *ipiv, aocl_int_t *
         i__1 = -(*info);
         xerbla_("SSPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.f) + 1.f) / 8.f;
@@ -630,7 +635,7 @@ void ssptrf_(char *uplo, aocl_int_t *n, real *ap, aocl_int_t *ipiv, aocl_int_t *
     }
 L110:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSPTRF */
 }
 /* ssptrf_ */

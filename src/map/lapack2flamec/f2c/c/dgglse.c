@@ -182,10 +182,7 @@ the least squares solution could not */
 /* > \ingroup doubleOTHERsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, doublereal *a, aocl_int_t *lda,
-             doublereal *b, aocl_int_t *ldb, doublereal *c__, doublereal *d__, doublereal *x,
-             doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
+void dgglse_(integer *m, integer *n, integer *p, doublereal * a, integer *lda, doublereal *b, integer *ldb, doublereal *c__, doublereal *d__, doublereal *x, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgglse inputs: m %" FLA_IS ", n %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *p, *lda, *ldb, *lwork);
@@ -194,13 +191,15 @@ void dgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, doublereal *a, aocl_in
     /* Local variables */
     integer nb, mn, nr, nb1, nb2, nb3, nb4, lopt;
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *), dggrqf_( integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *), dggrqf_( integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkmin;
     extern /* Subroutine */
-    int dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dormrq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dormrq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
+    extern /* Subroutine */
+    void dtrtrs_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -289,18 +288,18 @@ void dgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, doublereal *a, aocl_in
         i__1 = -(*info);
         xerbla_("DGGLSE", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the GRQ factorization of matrices B and A: */
     /* B*Q**T = ( 0 T12 ) P Z**T*A*Q**T = ( R11 R12 ) N-P */
@@ -331,7 +330,7 @@ void dgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, doublereal *a, aocl_in
         {
             *info = 1;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Put the solution in X */
         aocl_blas_dcopy(p, &d__[1], &c__1, &x[*n - *p + 1], &c__1);
@@ -351,7 +350,7 @@ void dgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, doublereal *a, aocl_in
         {
             *info = 2;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Put the solutions in X */
         i__1 = *n - *p;
@@ -387,7 +386,7 @@ void dgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, doublereal *a, aocl_in
     i__2 = (integer) work[*p + mn + 1]; // , expr subst
     work[1] = (doublereal) (*p + mn + fla_max(i__1,i__2));
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGGLSE */
 }
 /* dgglse_ */

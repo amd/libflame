@@ -114,25 +114,7 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dopgtr_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *tau, doublereal *q,
-             aocl_int_t *ldq, doublereal *work, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dopgtr(uplo, n, ap, tau, q, ldq, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dopgtr(uplo, &n_64, ap, tau, q, &ldq_64, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_dopgtr(char *uplo, aocl_int64_t *n, doublereal *ap, doublereal *tau, doublereal *q,
-                        aocl_int64_t *ldq, doublereal *work, aocl_int64_t *info)
+void dopgtr_(char *uplo, integer *n, doublereal *ap, doublereal *tau, doublereal *q, integer *ldq, doublereal *work, integer *info)
 {
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, i__1, i__2, i__3;
@@ -142,7 +124,7 @@ void aocl_lapack_dopgtr(char *uplo, aocl_int64_t *n, doublereal *ap, doublereal 
     aocl_int64_t iinfo;
     logical upper;
     extern /* Subroutine */
-    int dorg2l_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dorg2r_fla(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dorg2l_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dorg2r_fla(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -190,7 +172,7 @@ void aocl_lapack_dopgtr(char *uplo, aocl_int64_t *n, doublereal *ap, doublereal 
     {
         i__1 = -(*info);
         xerbla_("DOPGTR", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)

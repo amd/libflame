@@ -137,9 +137,7 @@
 /* > \ingroup OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slascl_(char *type__, aocl_int_t *kl, aocl_int_t *ku, real *cfrom, real *cto, aocl_int_t *m,
-             aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *info)
+void slascl_(char *type__, integer *kl, integer *ku, real * cfrom, real *cto, integer *m, integer *n, real *a, integer *lda, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slascl inputs: type__ %c, kl %" FLA_IS ", ku %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*type__, *kl, *ku, *m, *n, *lda);
@@ -270,13 +268,13 @@ void slascl_(char *type__, aocl_int_t *kl, aocl_int_t *ku, real *cfrom, real *ct
         i__1 = -(*info);
         xerbla_("SLASCL", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *m == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = slamch_("S");
@@ -323,7 +321,7 @@ L10:
             if (mul == 1.f)
             {
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
     }
@@ -467,7 +465,7 @@ L10:
         goto L10;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SLASCL */
 }
 /* slascl_ */

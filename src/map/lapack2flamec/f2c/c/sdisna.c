@@ -114,8 +114,7 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sdisna_(char *job, aocl_int_t *m, aocl_int_t *n, real *d__, real *sep, aocl_int_t *info)
+void sdisna_(char *job, integer *m, integer *n, real *d__, real *sep, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sdisna(job, m, n, d__, sep, info);
@@ -238,12 +237,11 @@ void aocl_lapack_sdisna(char *job, aocl_int64_t *m, aocl_int64_t *n, real *d__, 
     {
         i__1 = -(*info);
         xerbla_("SDISNA", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(k == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute reciprocal condition numbers */
@@ -308,7 +306,6 @@ void aocl_lapack_sdisna(char *job, aocl_int64_t *m, aocl_int64_t *n, real *d__, 
         sep[i__] = fla_max(r__1,thresh);
         /* L30: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SDISNA */
 }

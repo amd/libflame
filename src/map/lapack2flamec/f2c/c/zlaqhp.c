@@ -121,9 +121,7 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlaqhp_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *s, doublereal *scond,
-             doublereal *amax, char *equed)
+void zlaqhp_(char *uplo, integer *n, doublecomplex *ap, doublereal *s, doublereal *scond, doublereal *amax, char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqhp inputs: uplo %c, n %" FLA_IS ", scond %lf, amax %lf",*uplo, *n, *scond, *amax);
@@ -164,7 +162,7 @@ void zlaqhp_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *s, doublereal 
     {
         *(unsigned char *)equed = 'N';
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize LARGE and SMALL. */
     small_val = dlamch_("Safe minimum") / dlamch_("Precision");
@@ -238,7 +236,7 @@ void zlaqhp_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *s, doublereal 
         *(unsigned char *)equed = 'Y';
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAQHP */
 }
 /* zlaqhp_ */

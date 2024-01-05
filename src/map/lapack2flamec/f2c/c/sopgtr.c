@@ -114,25 +114,7 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sopgtr_(char *uplo, aocl_int_t *n, real *ap, real *tau, real *q, aocl_int_t *ldq, real *work,
-             aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sopgtr(uplo, n, ap, tau, q, ldq, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sopgtr(uplo, &n_64, ap, tau, q, &ldq_64, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sopgtr(char *uplo, aocl_int64_t *n, real *ap, real *tau, real *q,
-                        aocl_int64_t *ldq, real *work, aocl_int64_t *info)
+void sopgtr_(char *uplo, integer *n, real *ap, real *tau, real *q, integer *ldq, real *work, integer *info)
 {
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, i__1, i__2, i__3;
@@ -142,7 +124,7 @@ void aocl_lapack_sopgtr(char *uplo, aocl_int64_t *n, real *ap, real *tau, real *
     aocl_int64_t iinfo;
     logical upper;
     extern /* Subroutine */
-    int sorg2l_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *), sorg2r_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sorg2l_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *), sorg2r_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -190,7 +172,7 @@ void aocl_lapack_sopgtr(char *uplo, aocl_int64_t *n, real *ap, real *tau, real *
     {
         i__1 = -(*info);
         xerbla_("SOPGTR", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)

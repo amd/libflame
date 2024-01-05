@@ -247,10 +247,7 @@ i off-diagonal elements of an */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void chegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda,
-             scomplex *b, aocl_int_t *ldb, real *w, scomplex *work, aocl_int_t *lwork, real *rwork,
-             aocl_int_t *lrwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
+void chegvd_(integer *itype, char *jobz, char *uplo, integer * n, complex *a, integer *lda, complex *b, integer *ldb, real *w, complex *work, integer *lwork, real *rwork, integer *lrwork, integer * iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("chegvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*itype, *jobz, *uplo, *n, *lda, *ldb);
@@ -258,16 +255,20 @@ void chegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex 
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     real r__1, r__2;
     /* Local variables */
-    aocl_int64_t lopt;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t lwmin;
+    integer lopt;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+    integer lwmin;
     char trans[1];
-    aocl_int64_t liopt;
+    integer liopt;
+    extern /* Subroutine */
+    void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     aocl_int64_t lropt;
     logical wantz;
     extern /* Subroutine */
-    int cheevd_(char *, char *, integer *, complex *, integer *, real *, complex *, integer *, real *, integer *, integer *, integer *, integer *), chegst_(integer *, char *, integer *, complex *, integer *, complex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpotrf_( char *, integer *, complex *, integer *, integer *);
+    void cheevd_(char *, char *, integer *, complex *, integer *, real *, complex *, integer *, real *, integer *, integer *, integer *, integer *), chegst_(integer *, char *, integer *, complex *, integer *, complex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpotrf_( char *, integer *, complex *, integer *, integer *);
     integer liwmin, lrwmin;
     logical lquery;
     /* -- LAPACK driver routine -- */
@@ -375,18 +376,18 @@ void chegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex 
         i__1 = -(*info);
         xerbla_("CHEGVD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of B. */
     aocl_lapack_cpotrf(uplo, n, &b[b_offset], ldb, info);
@@ -394,7 +395,7 @@ void chegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex 
     {
         *info = *n + *info;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     aocl_lapack_chegst(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
@@ -452,7 +453,7 @@ void chegvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex 
     rwork[1] = (real) lropt;
     iwork[1] = liopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CHEGVD */
 }
 /* chegvd_ */

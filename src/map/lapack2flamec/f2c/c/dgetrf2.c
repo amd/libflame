@@ -108,7 +108,7 @@ for 1 <= i <= fla_min(M,N), row i of the */
 /* ===================================================================== */
 /* Subroutine */
 
-int dgetrf2_(integer *m, integer *n, doublereal *a, integer * lda, integer *ipiv, integer *info)
+void dgetrf2_(integer *m, integer *n, doublereal *a, integer * lda, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgetrf2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
@@ -119,11 +119,11 @@ int dgetrf2_(integer *m, integer *n, doublereal *a, integer * lda, integer *ipiv
     integer i__, n1, n2;
     doublereal temp;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer iinfo;
     doublereal sfmin;
     extern /* Subroutine */
-    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
@@ -178,14 +178,14 @@ int dgetrf2_(integer *m, integer *n, doublereal *a, integer * lda, integer *ipiv
         i__1 = -(*info);
         xerbla_("DGETRF2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*m == 1)
     {
@@ -301,7 +301,7 @@ int dgetrf2_(integer *m, integer *n, doublereal *a, integer * lda, integer *ipiv
         dlaswp_(&n1, &a[a_dim1 + 1], lda, &i__1, &i__2, &ipiv[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGETRF2 */
 }
 /* dgetrf2_ */

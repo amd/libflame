@@ -166,7 +166,7 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dlasq3_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *dmin__, doublereal *sigma, doublereal *desig, doublereal *qmax, integer *nfail, integer *iter, integer *ndiv, logical *ieee, integer *ttype, doublereal *dmin1, doublereal *dmin2, doublereal *dn, doublereal *dn1, doublereal *dn2, doublereal *g, doublereal *tau)
+void dlasq3_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *dmin__, doublereal *sigma, doublereal *desig, doublereal *qmax, integer *nfail, integer *iter, integer *ndiv, logical *ieee, integer *ttype, doublereal *dmin1, doublereal *dmin2, doublereal *dn, doublereal *dn1, doublereal *dn2, doublereal *g, doublereal *tau)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasq3 inputs: i0 %" FLA_IS ", n0 %" FLA_IS ", pp %" FLA_IS ", nfail %" FLA_IS ", iter %" FLA_IS ", ndiv %" FLA_IS ", ttype %" FLA_IS "",*i0, *n0, *pp, *nfail, *iter, *ndiv, *ttype);
@@ -182,7 +182,7 @@ int dlasq3_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *
     integer n0in, ipn4;
     doublereal tol2, temp;
     extern /* Subroutine */
-    int dlasq4_(integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *), dlasq5_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, logical *, doublereal *), dlasq6_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlasq4_(integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *), dlasq5_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, logical *, doublereal *), dlasq6_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern logical disnan_(doublereal *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
@@ -219,7 +219,7 @@ L10:
     if (*n0 < *i0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n0 == *i0)
     {
@@ -410,7 +410,7 @@ L90:
     }
     *sigma = t;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASQ3 */
 }
 /* dlasq3_ */

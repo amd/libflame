@@ -276,9 +276,7 @@ K=N/2. If */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_int_t *m,
-            aocl_int_t *n, real *alpha, real *a, real *b, aocl_int_t *ldb)
+void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integer *m, integer *n, real *alpha, real *a, real *b, integer *ldb)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_stfsm(transr, side, uplo, trans, diag, m, n, alpha, a, b, ldb);
@@ -304,10 +302,12 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
     /* Local variables */
     aocl_int64_t i__, j, k, m1, m2, n1, n2, info;
     logical normaltransr, lside;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     logical lower;
     extern /* Subroutine */
-    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical misodd, nisodd, notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -377,12 +377,11 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
     {
         i__1 = -info;
         xerbla_("STFSM ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return when ( (N.EQ.0).OR.(M.EQ.0) ) */
     if(*m == 0 || *n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return when ALPHA.EQ.(0D+0) */
@@ -399,7 +398,6 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
             }
             /* L20: */
         }
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lside)
@@ -942,7 +940,6 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STFSM */
 }

@@ -192,8 +192,7 @@ k=N/2. IF TRANSR = 'T' then RFP is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dpftri_(char *transr, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *info)
+void dpftri_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpftri inputs: transr %c, uplo %c, n %" FLA_IS "",*transr, *uplo, *n);
@@ -202,11 +201,15 @@ void dpftri_(char *transr, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t 
     /* Local variables */
     aocl_int64_t k, n1, n2;
     logical normaltransr;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical lower;
     extern /* Subroutine */
-    int dsyrk_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dsyrk_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
+    extern /* Subroutine */
+    void dlauum_(char *, integer *, doublereal *, integer *, integer *), dtftri_(char *, char *, char *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -247,20 +250,20 @@ void dpftri_(char *transr, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t 
         i__1 = -(*info);
         xerbla_("DPFTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Invert the triangular Cholesky factor U or L. */
     aocl_lapack_dtftri(transr, uplo, "N", n, a, info);
     if(*info > 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* If N is odd, set NISODD = .TRUE. */
     /* If N is even, set K = N/2 and NISODD = .FALSE. */
@@ -403,7 +406,7 @@ void dpftri_(char *transr, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPFTRI */
 }
 /* dpftri_ */

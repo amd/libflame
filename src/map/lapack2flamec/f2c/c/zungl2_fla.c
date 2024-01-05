@@ -99,7 +99,7 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zungl2_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex * work, integer *info)
+void zungl2_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex * work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -109,7 +109,7 @@ int zungl2_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *ld
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_(integer *, doublecomplex *, integer *);
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -157,12 +157,12 @@ int zungl2_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *ld
     {
         i__1 = -(*info);
         xerbla_("ZUNGL2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m <= 0)
     {
-        return 0;
+        return;
     }
     if (*k < *m)
     {
@@ -237,7 +237,7 @@ int zungl2_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *ld
         }
         /* L40: */
     }
-    return 0;
+    return;
     /* End of ZUNGL2 */
 }
 /* zungl2_ */

@@ -50,7 +50,7 @@
 */
 
 #define LAPACK_hetrd(prefix, name)                                      \
-  int F77_ ## prefix ## name ## trd( char* uplo,                        \
+  void F77_ ## prefix ## name ## trd( char* uplo,                        \
                                      integer*  m,                           \
                                      PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
                                      PREFIX2LAPACK_REALDEF(prefix)* buff_d, \
@@ -277,25 +277,15 @@ void dsytd2_(char *uplo, aocl_int_t *m, doublereal *buff_A, aocl_int_t *ldim_A, 
 // Original lapack implementation for upper triangular versions.
 // Upper triangular versions are not yet implemented in libflame.
 // Thus, those routines should be isolated from others.
-extern void chetd2_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *d__, real *e,
-                       scomplex *tau, aocl_int64_t *info);
-extern void dsytd2_fla(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *d__,
-                       doublereal *e, doublereal *tau, aocl_int64_t *info);
-extern void ssytd2_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *d__, real *e, real *tau,
-                       aocl_int64_t *info);
-extern void zhetd2_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, doublereal *d__,
-                       doublereal *e, dcomplex *tau, aocl_int64_t *info);
+extern void chetd2_fla(char *uplo, integer *n, complex       *a, integer *lda, real       *d__, real       *e, complex       *tau, integer *info);
+extern void dsytd2_fla(char *uplo, integer *n, doublereal    *a, integer *lda, doublereal *d__, doublereal *e, doublereal    *tau, integer *info);
+extern void ssytd2_fla(char *uplo, integer *n, real          *a, integer *lda, real       *d__, real       *e, real          *tau, integer *info);
+extern void zhetd2_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *d__, doublereal *e, doublecomplex *tau, integer *info);
 
-extern void chetrd_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *d__, real *e,
-                       scomplex *tau, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info);
-extern void dsytrd_fla(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *d__,
-                       doublereal *e, doublereal *tau, doublereal *work, aocl_int64_t *lwork,
-                       aocl_int64_t *info);
-extern void ssytrd_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *d__, real *e, real *tau,
-                       real *work, aocl_int64_t *lwork, aocl_int64_t *info);
-extern void zhetrd_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, doublereal *d__,
-                       doublereal *e, dcomplex *tau, dcomplex *work, aocl_int64_t *lwork,
-                       aocl_int64_t *info);
+extern void chetrd_fla(char *uplo, integer *n, complex       *a, integer *lda, real       *d__, real       *e, complex       *tau, complex       *work, integer *lwork, integer *info);
+extern void dsytrd_fla(char *uplo, integer *n, doublereal    *a, integer *lda, doublereal *d__, doublereal *e, doublereal    *tau, doublereal    *work, integer *lwork, integer *info);
+extern void ssytrd_fla(char *uplo, integer *n, real          *a, integer *lda, real       *d__, real       *e, real          *tau, real          *work, integer *lwork, integer *info);
+extern void zhetrd_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *d__, doublereal *e, doublecomplex *tau, doublecomplex *work, integer *lwork, integer *info);
 
 LAPACK_hetrd(s, sy)
 {
@@ -312,7 +302,7 @@ LAPACK_hetrd(s, sy)
                        buff_w, lwork,
                        info);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else
         {
@@ -337,7 +327,7 @@ LAPACK_hetrd(s, sy)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_hetrd(d, sy)
 {
@@ -356,7 +346,7 @@ LAPACK_hetrd(d, sy)
                      buff_w, lwork,
                      info);
           AOCL_DTL_TRACE_LOG_EXIT
-          return 0;
+          return;
       }
     }
     {
@@ -374,7 +364,7 @@ LAPACK_hetrd(d, sy)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
@@ -393,7 +383,7 @@ LAPACK_hetrd(c, he)
                         (complex*)buff_w, lwork,
                         info );
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     {
@@ -411,7 +401,7 @@ LAPACK_hetrd(c, he)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_hetrd(z, he)
 {
@@ -428,7 +418,7 @@ LAPACK_hetrd(z, he)
                         (doublecomplex*)buff_w, lwork,
                         info );
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     {
@@ -446,12 +436,12 @@ LAPACK_hetrd(z, he)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 
 #define LAPACK_hetd2(prefix, name)                                      \
-  int F77_ ## prefix ## name ## td2( char* uplo,                        \
+  void F77_ ## prefix ## name ## td2( char* uplo,                        \
                                      integer*  m,                           \
                                      PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
                                      PREFIX2LAPACK_REALDEF(prefix)* buff_d, \
@@ -473,7 +463,7 @@ LAPACK_hetd2(s, sy)
                         buff_t,
                         info );
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     {
@@ -490,7 +480,7 @@ LAPACK_hetd2(s, sy)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_hetd2(d, sy)
 {
@@ -506,7 +496,7 @@ LAPACK_hetd2(d, sy)
                         buff_t,
                         info );
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     {
@@ -523,7 +513,7 @@ LAPACK_hetd2(d, sy)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
@@ -541,7 +531,7 @@ LAPACK_hetd2(c, he)
                         (complex*)buff_t,
                         info );
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     {
@@ -558,7 +548,7 @@ LAPACK_hetd2(c, he)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_hetd2(z, he)
 {
@@ -574,7 +564,7 @@ LAPACK_hetd2(z, he)
                         (doublecomplex*)buff_t,
                         info );
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     {
@@ -591,7 +581,7 @@ LAPACK_hetd2(z, he)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 

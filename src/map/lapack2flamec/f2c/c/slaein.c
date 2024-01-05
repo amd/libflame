@@ -175,10 +175,7 @@ VR is set to the */
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slaein_(logical *rightv, logical *noinit, aocl_int_t *n, real *h__, aocl_int_t *ldh, real *wr,
-             real *wi, real *vr, real *vi, real *b, aocl_int_t *ldb, real *work, real *eps3,
-             real *smlnum, real *bignum, aocl_int_t *info)
+void slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ldh, real *wr, real *wi, real *vr, real *vi, real *b, integer *ldb, real *work, real *eps3, real *smlnum, real *bignum, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slaein(rightv, noinit, n, h__, ldh, wr, wi, vr, vi, b, ldb, work, eps3, smlnum,
@@ -217,15 +214,19 @@ void aocl_lapack_slaein(logical *rightv, logical *noinit, aocl_int64_t *n, real 
     aocl_int64_t its, ierr;
     real temp, norm, vmax;
     real scale;
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
     char trans[1];
     real vcrit;
     real rootn, vnorm;
     extern real slapy2_(real *, real *);
     real absbii, absbjj;
     extern /* Subroutine */
-    int sladiv_(real *, real *, real *, real *, real *, real *);
+    void sladiv_(real *, real *, real *, real *, real *, real *);
     char normin[1];
     real nrmsml;
+    extern /* Subroutine */
+    void slatrs_(char *, char *, char *, char *, integer *, real *, integer *, real *, real *, real *, integer *);
     real growto;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -735,7 +736,6 @@ L120: /* Normalize eigenvector. */
         r__1 = 1.f / vnorm;
         aocl_blas_sscal(n, &r__1, &vi[1], &c__1);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAEIN */
 }

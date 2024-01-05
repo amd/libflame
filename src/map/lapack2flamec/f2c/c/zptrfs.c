@@ -180,11 +180,7 @@ static dcomplex c_b16 = {1., 0.};
 /* > \ingroup complex16PTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomplex *e,
-             doublereal *df, dcomplex *ef, dcomplex *b, aocl_int_t *ldb, dcomplex *x,
-             aocl_int_t *ldx, doublereal *ferr, doublereal *berr, dcomplex *work,
-             doublereal *rwork, aocl_int_t *info)
+void zptrfs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecomplex *e, doublereal *df, doublecomplex *ef, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal * rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zptrfs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *n, *nrhs, *ldb, *ldx);
@@ -206,11 +202,15 @@ void zptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomp
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t count;
     logical upper;
+    extern /* Subroutine */
+    void zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal lstres;
+    extern /* Subroutine */
+    void zpttrs_(char *, integer *, integer *, doublereal *, doublecomplex *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -279,7 +279,7 @@ void zptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomp
         i__1 = -(*info);
         xerbla_("ZPTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -292,7 +292,7 @@ void zptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomp
             /* L10: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* NZ = maximum number of nonzero elements in each row of A, plus 1 */
     nz = 4;
@@ -641,7 +641,7 @@ void zptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomp
         /* L100: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPTRFS */
 }
 /* zptrfs_ */

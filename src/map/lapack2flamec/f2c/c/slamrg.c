@@ -94,9 +94,7 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slamrg_(aocl_int_t *n1, aocl_int_t *n2, real *a, aocl_int_t *strd1, aocl_int_t *strd2,
-             aocl_int_t *index)
+void slamrg_(integer *n1, integer *n2, real *a, integer * strd1, integer *strd2, integer *index)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -188,7 +186,7 @@ L10:
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLAMRG */
 }
 /* slamrg_ */

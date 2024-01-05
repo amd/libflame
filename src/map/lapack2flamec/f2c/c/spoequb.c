@@ -107,9 +107,7 @@
 /* > \ingroup realPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void spoequb_(aocl_int_t *n, real *a, aocl_int_t *lda, real *s, real *scond, real *amax,
-              aocl_int_t *info)
+void spoequb_(integer *n, real *a, integer *lda, real *s, real *scond, real *amax, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_spoequb(n, a, lda, s, scond, amax, info);
@@ -181,14 +179,13 @@ void aocl_lapack_spoequb(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *s, r
     {
         i__1 = -(*info);
         xerbla_("SPOEQUB", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if(*n == 0)
     {
         *scond = 1.f;
         *amax = 0.f;
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     base = slamch_("B");
@@ -220,7 +217,6 @@ void aocl_lapack_spoequb(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *s, r
             if(s[i__] <= 0.f)
             {
                 *info = i__;
-                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L20: */
@@ -240,7 +236,6 @@ void aocl_lapack_spoequb(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *s, r
         /* Compute SCOND = fla_min(S(I)) / fla_max(S(I)). */
         *scond = sqrt(smin) / sqrt(*amax);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SPOEQUB */
 }

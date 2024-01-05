@@ -215,8 +215,7 @@ k=N/2. IF TRANSR = 'C' then RFP is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zpftri_(char *transr, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *info)
+void zpftri_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpftri inputs: transr %c, uplo %c, n %" FLA_IS "",*transr, *uplo, *n);
@@ -226,11 +225,15 @@ void zpftri_(char *transr, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *i
     /* Local variables */
     aocl_int64_t k, n1, n2;
     logical normaltransr;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
     logical lower;
     extern /* Subroutine */
-    int ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
+    extern /* Subroutine */
+    void zlauum_(char *, integer *, doublecomplex *, integer *, integer *), ztftri_(char *, char *, char *, integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -271,20 +274,20 @@ void zpftri_(char *transr, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *i
         i__1 = -(*info);
         xerbla_("ZPFTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Invert the triangular Cholesky factor U or L. */
     aocl_lapack_ztftri(transr, uplo, "N", n, a, info);
     if(*info > 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* If N is odd, set NISODD = .TRUE. */
     /* If N is even, set K = N/2 and NISODD = .FALSE. */
@@ -427,7 +430,7 @@ void zpftri_(char *transr, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *i
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPFTRI */
 }
 /* zpftri_ */

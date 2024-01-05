@@ -120,7 +120,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *s, doublereal *scond, doublereal *amax, doublecomplex *work, integer *info)
+void zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *s, doublereal *scond, doublereal *amax, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zheequb inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -145,7 +145,7 @@ int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, smlnum;
     extern /* Subroutine */
-    int zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
+    void zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -195,7 +195,7 @@ int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
         i__1 = -(*info);
         xerbla_("ZHEEQUB", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     up = lsame_(uplo, "U");
     *amax = 0.;
@@ -204,7 +204,7 @@ int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
     {
         *scond = 1.;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *n;
     for (i__ = 1;
@@ -450,7 +450,7 @@ int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
             {
                 *info = -1;
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             si = c0 * -2 / (c1 + sqrt(d__));
             d__ = si - s[i__];
@@ -556,6 +556,6 @@ L999:
     }
     *scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* zheequb_ */

@@ -156,9 +156,7 @@
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlagts_(aocl_int_t *job, aocl_int_t *n, doublereal *a, doublereal *b, doublereal *c__,
-             doublereal *d__, aocl_int_t *in, doublereal *y, doublereal *tol, aocl_int_t *info)
+void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, integer *in, doublereal *y, doublereal *tol, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlagts inputs: job %" FLA_IS ", n %" FLA_IS ", in %" FLA_IS "",*job, *n, *in);
@@ -216,12 +214,12 @@ void dlagts_(aocl_int_t *job, aocl_int_t *n, doublereal *a, doublereal *b, doubl
         i__1 = -(*info);
         xerbla_("DLAGTS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     eps = dlamch_("Epsilon");
     sfmin = dlamch_("Safe minimum");
@@ -299,7 +297,7 @@ void dlagts_(aocl_int_t *job, aocl_int_t *n, doublereal *a, doublereal *b, doubl
                         {
                             *info = k;
                             AOCL_DTL_TRACE_LOG_EXIT
-                            return 0;
+                            return;
                         }
                         else
                         {
@@ -311,7 +309,7 @@ void dlagts_(aocl_int_t *job, aocl_int_t *n, doublereal *a, doublereal *b, doubl
                     {
                         *info = k;
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                 }
                 y[k] = temp / ak;
@@ -396,7 +394,7 @@ L40:
                         {
                             *info = k;
                             AOCL_DTL_TRACE_LOG_EXIT
-                            return 0;
+                            return;
                         }
                         else
                         {
@@ -408,7 +406,7 @@ L40:
                     {
                         *info = k;
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                 }
                 y[k] = temp / ak;
@@ -480,6 +478,6 @@ L70:
     }
     /* End of DLAGTS */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dlagts_ */

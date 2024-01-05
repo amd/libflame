@@ -197,12 +197,7 @@ LDC >= 1 if NCC = 0. */
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int_t *kl,
-             aocl_int_t *ku, dcomplex *ab, aocl_int_t *ldab, doublereal *d__, doublereal *e,
-             dcomplex *q, aocl_int_t *ldq, dcomplex *pt, aocl_int_t *ldpt,
-             dcomplex *c__, aocl_int_t *ldc, dcomplex *work, doublereal *rwork,
-             aocl_int_t *info)
+void zgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integer *ku, doublecomplex *ab, integer *ldab, doublereal *d__, doublereal *e, doublecomplex *q, integer *ldq, doublecomplex *pt, integer *ldpt, doublecomplex *c__, integer *ldc, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgbbrd inputs: vect %c, m %" FLA_IS ", n %" FLA_IS ", ncc %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", ldq %" FLA_IS ", ldpt %" FLA_IS ", ldc %" FLA_IS "",*vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
@@ -223,13 +218,19 @@ void zgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
     dcomplex rs;
     aocl_int64_t kb1, ml0, mu0, klm, kun, nrt, klu1, inca;
     doublereal abst;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
+    extern logical lsame_(char *, char *);
     logical wantb, wantc;
-    aocl_int64_t minmn;
+    extern /* Subroutine */
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+    integer minmn;
     logical wantq;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlaset_( char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *), zlargv_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *);
     logical wantpt;
+    extern /* Subroutine */
+    void zlartv_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -320,7 +321,7 @@ void zgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
         i__1 = -(*info);
         xerbla_("ZGBBRD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize Q and P**H to the unit matrix, if needed */
     if(wantq)
@@ -335,7 +336,7 @@ void zgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
     if(*m == 0 || *n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     minmn = fla_min(*m,*n);
     if (*kl + *ku > 1)
@@ -768,7 +769,7 @@ void zgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int
         /* L120: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGBBRD */
 }
 /* zgbbrd_ */

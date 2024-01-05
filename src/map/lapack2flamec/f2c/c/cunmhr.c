@@ -177,10 +177,7 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ilo,
-             aocl_int_t *ihi, scomplex *a, aocl_int_t *lda, scomplex *tau, scomplex *c__,
-             aocl_int_t *ldc, scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+void cunmhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *lwork, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cunmhr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *ilo, *ihi, *lda, *ldc);
@@ -199,7 +196,7 @@ void cunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -300,12 +297,12 @@ void cunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
         i__2 = -(*info);
         xerbla_("CUNMHR", &i__2, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || nh == 0)
@@ -313,7 +310,7 @@ void cunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(left)
     {
@@ -333,7 +330,7 @@ void cunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CUNMHR */
 }
 /* cunmhr_ */

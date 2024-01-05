@@ -199,7 +199,7 @@ elements i+1:ihi of WR and WI */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *wr, doublereal *wi, integer *iloz, integer *ihiz, doublereal *z__, integer *ldz, integer *info)
+void dlahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *wr, doublereal *wi, integer *iloz, integer *ihiz, doublereal *z__, integer *ldz, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlahqr inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS "",*n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz);
@@ -222,16 +222,16 @@ int dlahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *i
     integer its;
     doublereal ulp, sum, tst, rt1i, rt2i, rt1r, rt2r;
     extern /* Subroutine */
-    int drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
     integer kdefl;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer itmax;
     extern /* Subroutine */
-    int dlanv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlabad_( doublereal *, doublereal *);
+    void dlanv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlabad_( doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     doublereal safmin, safmax, rtdisc, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -270,14 +270,14 @@ int dlahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *i
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*ilo == *ihi)
     {
         wr[*ilo] = h__[*ilo + *ilo * h_dim1];
         wi[*ilo] = 0.;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ==== clear out the trash ==== */
     i__1 = *ihi - 3;
@@ -647,7 +647,7 @@ L60: /* Double-shift QR step */
     /* Failure to converge in remaining number of iterations */
     *info = i__;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 L150:
     if (l == i__)
     {
@@ -685,7 +685,7 @@ L150:
     goto L20;
 L160:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAHQR */
 }
 /* dlahqr_ */

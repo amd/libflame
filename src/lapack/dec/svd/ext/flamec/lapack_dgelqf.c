@@ -3,7 +3,7 @@
  #include "FLAME.h"
  #include "FLA_f2c.h" /* Table of constant values */
 #ifdef FLA_ENABLE_AMD_OPT
-extern int dgeqrf_fla(integer *m, integer *n,
+extern void dgeqrf_fla(integer *m, integer *n,
                       doublereal *a, integer * lda,
                       doublereal *tau,
                       doublereal *work, integer *lwork,
@@ -213,7 +213,9 @@ static void fla_dtranspose(integer *m, integer *n,
  /* Local variables */
  integer i__, k, ib, nb, nx, iws, nbmin, iinfo;
  extern /* Subroutine */
- int lapack_dgelq2(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+ void dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+ extern /* Subroutine */
+ int lapack_dgelq2(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
  extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
  integer ldwork, lwkopt;
  logical lquery;

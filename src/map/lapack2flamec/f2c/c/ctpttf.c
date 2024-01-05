@@ -205,8 +205,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ctpttf_(char *transr, char *uplo, aocl_int_t *n, scomplex *ap, scomplex *arf, aocl_int_t *info)
+void ctpttf_(char *transr, char *uplo, integer *n, complex * ap, complex *arf, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -271,13 +270,13 @@ void ctpttf_(char *transr, char *uplo, aocl_int_t *n, scomplex *ap, scomplex *ar
         i__1 = -(*info);
         xerbla_("CTPTTF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -293,7 +292,7 @@ void ctpttf_(char *transr, char *uplo, aocl_int_t *n, scomplex *ap, scomplex *ar
             arf[0].imag = q__1.imag; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set N1 and N2 depending on LOWER */
     if(lower)
@@ -652,7 +651,7 @@ void ctpttf_(char *transr, char *uplo, aocl_int_t *n, scomplex *ap, scomplex *ar
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTPTTF */
 }
 /* ctpttf_ */

@@ -159,10 +159,7 @@ static doublereal c_b11 = 1.;
 /* > \ingroup doublePTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dptrfs_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, doublereal *df,
-             doublereal *ef, doublereal *b, aocl_int_t *ldb, doublereal *x, aocl_int_t *ldx,
-             doublereal *ferr, doublereal *berr, doublereal *work, aocl_int_t *info)
+void dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *df, doublereal *ef, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal *ferr, doublereal *berr, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dptrfs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*n, *nrhs, *ldb, *ldx);
@@ -174,12 +171,16 @@ void dptrfs_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, do
     doublereal s, bi, cx, dx, ex;
     aocl_int64_t ix, nz;
     doublereal eps, safe1, safe2;
-    aocl_int64_t count;
+    extern /* Subroutine */
+    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    integer count;
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal lstres;
+    extern /* Subroutine */
+    void dpttrs_(integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -238,7 +239,7 @@ void dptrfs_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, do
         i__1 = -(*info);
         xerbla_("DPTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -251,7 +252,7 @@ void dptrfs_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, do
             /* L10: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* NZ = maximum number of nonzero elements in each row of A, plus 1 */
     nz = 4;
@@ -410,7 +411,7 @@ void dptrfs_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, do
         /* L90: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPTRFS */
 }
 /* dptrfs_ */

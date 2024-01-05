@@ -184,34 +184,7 @@ the routine */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dormhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ilo,
-             aocl_int_t *ihi, doublereal *a, aocl_int_t *lda, doublereal *tau, doublereal *c__,
-             aocl_int_t *ldc, doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dormhr(side, trans, m, n, ilo, ihi, a, lda, tau, c__, ldc, work, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dormhr(side, trans, &m_64, &n_64, &ilo_64, &ihi_64, a, &lda_64, tau, c__, &ldc_64,
-                       work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_dormhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n,
-                        aocl_int64_t *ilo, aocl_int64_t *ihi, doublereal *a, aocl_int64_t *lda,
-                        doublereal *tau, doublereal *c__, aocl_int64_t *ldc, doublereal *work,
-                        aocl_int64_t *lwork, aocl_int64_t *info)
+void dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda, doublereal * tau, doublereal *c__, integer *ldc, doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2;
@@ -228,7 +201,7 @@ void aocl_lapack_dormhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -328,7 +301,7 @@ void aocl_lapack_dormhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     {
         i__2 = -(*info);
         xerbla_("DORMHR", &i__2, (ftnlen)6);
-        return 0;
+        return;
     }
     else if(lquery)
     {
@@ -354,9 +327,8 @@ void aocl_lapack_dormhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         i1 = 1;
         i2 = *ilo + 1;
     }
-    lapack_dormqr(side, trans, &mi, &ni, &nh, &a[*ilo + 1 + *ilo * a_dim1], lda, &tau[*ilo],
-               &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
-    work[1] = (doublereal)lwkopt;
+    dormqr_fla(side, trans, &mi, &ni, &nh, &a[*ilo + 1 + *ilo * a_dim1], lda, & tau[*ilo], &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
+    work[1] = (doublereal) lwkopt;
     return;
     /* End of DORMHR */
 }

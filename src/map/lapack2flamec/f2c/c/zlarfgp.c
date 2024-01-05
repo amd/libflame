@@ -96,7 +96,7 @@ static doublecomplex c_b5 =
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx, doublecomplex *tau)
+void zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx, doublecomplex *tau)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarfgp inputs: n %" FLA_IS ", incx %" FLA_IS "",*n, *incx);
@@ -113,11 +113,11 @@ int zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx, 
     integer knt;
     doublereal beta, alphi, alphr;
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     doublereal xnorm;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlapy3_(doublereal *, doublereal *, doublereal *), dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
     extern /* Subroutine */
-    int zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+    void zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal bignum;
     extern /* Double Complex */
     void zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
@@ -149,7 +149,7 @@ int zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx, 
     {
         tau->r = 0., tau->i = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *n - 1;
     xnorm = dznrm2_(&i__1, &x[1], incx);
@@ -340,7 +340,7 @@ L10:
         alpha->r = beta, alpha->i = 0.;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLARFGP */
 }
 /* zlarfgp_ */

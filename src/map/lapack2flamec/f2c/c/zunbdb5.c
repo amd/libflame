@@ -149,7 +149,7 @@
 /* > \ingroup unbdb5 */
 /* ===================================================================== */
 /* Subroutine */
-int zunbdb5_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *incx1, doublecomplex *x2, integer *incx2, doublecomplex *q1, integer *ldq1, doublecomplex *q2, integer *ldq2, doublecomplex *work, integer *lwork, integer *info)
+void zunbdb5_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *incx1, doublecomplex *x2, integer *incx2, doublecomplex *q1, integer *ldq1, doublecomplex *q2, integer *ldq2, doublecomplex *work, integer *lwork, integer *info)
 {   
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zunbdb5 inputs: m1 %" FLA_IS ", m2 %" FLA_IS ", n %" FLA_IS ", incx1 %" FLA_IS ", incx2 %" FLA_IS ", ldq1 %" FLA_IS ", ldq2 %" FLA_IS ", lwork %" FLA_IS "", *m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2, *lwork);
@@ -232,7 +232,7 @@ int zunbdb5_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *i
         i__1 = -(*info);
         xerbla_("ZUNBDB5", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     eps = dlamch_("Precision");
     /* Project X onto the orthogonal complement of Q if X is nonzero */
@@ -244,7 +244,7 @@ int zunbdb5_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *i
     if(norm > *n * eps)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Project each standard basis vector e_1,...,e_M1 in turn, stopping */
     /* when a nonzero projection is found */
@@ -273,7 +273,7 @@ int zunbdb5_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *i
         if(aocl_blas_dznrm2(m1, &x1[1], incx1) != 0. || aocl_blas_dznrm2(m2, &x2[1], incx2) != 0.)
         {
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Project each standard basis vector e_(M1+1),...,e_(M1+M2) in turn, */
@@ -303,11 +303,11 @@ int zunbdb5_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *i
         if(aocl_blas_dznrm2(m1, &x1[1], incx1) != 0. || aocl_blas_dznrm2(m2, &x2[1], incx2) != 0.)
         {
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZUNBDB5 */
 }
 /* zunbdb5_ */

@@ -195,9 +195,7 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clasr_(char *side, char *pivot, char *direct, aocl_int_t *m, aocl_int_t *n, real *c__, real *s,
-            scomplex *a, aocl_int_t *lda)
+void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *c__, real *s, complex *a, integer *lda)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -276,13 +274,13 @@ void clasr_(char *side, char *pivot, char *direct, aocl_int_t *m, aocl_int_t *n,
     {
         xerbla_("CLASR ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(lsame_(side, "L", 1, 1))
     {
@@ -797,7 +795,7 @@ void clasr_(char *side, char *pivot, char *direct, aocl_int_t *m, aocl_int_t *n,
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLASR */
 }
 /* clasr_ */

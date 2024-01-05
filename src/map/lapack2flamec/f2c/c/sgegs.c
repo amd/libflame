@@ -230,8 +230,7 @@ the routine */
 /* > \ingroup realGEeigen */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgegs_(char *jobvsl, char *jobvsr, aocl_int_t *n, real *a, aocl_int_t *lda, real *b, aocl_int_t *ldb, real *alphar, real *alphai, real *beta, real *vsl, aocl_int_t *ldvsl, real *vsr, aocl_int_t *ldvsr, real *work, aocl_int_t *lwork, aocl_int_t *info)
+void sgegs_(char *jobvsl, char *jobvsr, integer *n, real *a, integer *lda, real *b, integer *ldb, real *alphar, real *alphai, real *beta, real *vsl, integer *ldvsl, real *vsr, integer *ldvsr, real * work, integer *lwork, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgegs(jobvsl, jobvsr, n, a, lda, b, ldb, alphar, alphai, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, info);
@@ -271,23 +270,35 @@ void aocl_lapack_sgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, real *a, aoc
     logical ilvsl;
     aocl_int64_t iwork;
     logical ilvsr;
-    aocl_int64_t irows;
+    integer irows;
+    extern /* Subroutine */
+    void sggbak_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, integer * ), sggbal_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, real *, real *, integer *);
     logical ilascl, ilbscl;
     real safmin;
     extern /* Subroutine */
-    int sgghrd_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sgghrd_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
-    aocl_int64_t ijobvl, iright;
-    aocl_int64_t ijobvr;
+    extern /* Subroutine */
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    integer ijobvl, iright;
+    extern /* Subroutine */
+    void sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    integer ijobvr;
+    extern /* Subroutine */
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     real anrmto;
     aocl_int64_t lwkmin;
     real bnrmto;
     extern /* Subroutine */
-    int shgeqz_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, integer *);
+    void shgeqz_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, integer *);
     real smlnum;
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    void sorgqr_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
+    extern /* Subroutine */
+    void sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -412,17 +423,15 @@ void aocl_lapack_sgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, real *a, aoc
     {
         i__1 = -(*info);
         xerbla_("SGEGS ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants */
@@ -449,7 +458,6 @@ void aocl_lapack_sgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, real *a, aoc
         if(iinfo != 0)
         {
             *info = *n + 9;
-            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -472,7 +480,6 @@ void aocl_lapack_sgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, real *a, aoc
         if(iinfo != 0)
         {
             *info = *n + 9;
-            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -618,21 +625,18 @@ void aocl_lapack_sgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, real *a, aoc
         if(iinfo != 0)
         {
             *info = *n + 9;
-            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         aocl_lapack_slascl("G", &c_n1, &c_n1, &anrmto, &anrm, n, &c__1, &alphar[1], n, &iinfo);
         if(iinfo != 0)
         {
             *info = *n + 9;
-            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         aocl_lapack_slascl("G", &c_n1, &c_n1, &anrmto, &anrm, n, &c__1, &alphai[1], n, &iinfo);
         if(iinfo != 0)
         {
             *info = *n + 9;
-            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -642,20 +646,17 @@ void aocl_lapack_sgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, real *a, aoc
         if(iinfo != 0)
         {
             *info = *n + 9;
-            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         aocl_lapack_slascl("G", &c_n1, &c_n1, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &iinfo);
         if(iinfo != 0)
         {
             *info = *n + 9;
-            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
 L10:
-    work[1] = (real)lwkopt;
-    AOCL_DTL_TRACE_LOG_EXIT
+    work[1] = (real) lwkopt;
     return;
     /* End of SGEGS */
 }

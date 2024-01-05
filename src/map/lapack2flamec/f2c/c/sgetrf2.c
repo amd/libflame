@@ -106,7 +106,7 @@ for 1 <= i <= fla_min(M,N), row i of the */
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sgetrf2_(integer *m, integer *n, real *a, integer *lda, integer *ipiv, integer *info)
+void sgetrf2_(integer *m, integer *n, real *a, integer *lda, integer *ipiv, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -116,16 +116,16 @@ int sgetrf2_(integer *m, integer *n, real *a, integer *lda, integer *ipiv, integ
     real temp;
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     real sfmin;
     extern /* Subroutine */
-    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * );
+    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * );
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
+    void slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -174,12 +174,12 @@ int sgetrf2_(integer *m, integer *n, real *a, integer *lda, integer *ipiv, integ
     {
         i__1 = -(*info);
         xerbla_("SGETRF2", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
-        return 0;
+        return;
     }
     if (*m == 1)
     {
@@ -299,7 +299,7 @@ int sgetrf2_(integer *m, integer *n, real *a, integer *lda, integer *ipiv, integ
         i__2 = fla_min(*m,*n);
         slaswp_(&n1, &a[a_dim1 + 1], lda, &i__1, &i__2, &ipiv[1], &c__1);
     }
-    return 0;
+    return;
     /* End of SGETRF2 */
 }
 /* sgetrf2_ */

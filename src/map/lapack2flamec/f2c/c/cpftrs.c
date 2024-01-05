@@ -220,9 +220,7 @@ static scomplex c_b1 = {1.f, 0.f};
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cpftrs_(char *transr, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, scomplex *b,
-             aocl_int_t *ldb, aocl_int_t *info)
+void cpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, complex *a, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -238,7 +236,9 @@ void cpftrs_(char *transr, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
     logical normaltransr;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void ctfsm_(char *, char *, char *, char *, char *, integer *, integer *, complex *, complex *, complex *, integer *);
     logical lower;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -296,13 +296,13 @@ void cpftrs_(char *transr, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex
         i__1 = -(*info);
         xerbla_("CPFTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* start execution: there are two triangular solves */
     if(lower)
@@ -316,7 +316,7 @@ void cpftrs_(char *transr, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex
         aocl_lapack_ctfsm(transr, "L", uplo, "N", "N", n, nrhs, &c_b1, a, &b[b_offset], ldb);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPFTRS */
 }
 /* cpftrs_ */

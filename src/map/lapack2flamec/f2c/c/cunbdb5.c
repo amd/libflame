@@ -149,10 +149,7 @@
 /* > \ingroup unbdb5 */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cunbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_int_t *incx1,
-              scomplex *x2, aocl_int_t *incx2, scomplex *q1, aocl_int_t *ldq1, scomplex *q2,
-              aocl_int_t *ldq2, scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+void cunbdb5_(integer *m1, integer *m2, integer *n, complex * x1, integer *incx1, complex *x2, integer *incx2, complex *q1, integer *ldq1, complex *q2, integer *ldq2, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -243,7 +240,7 @@ void cunbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
         i__1 = -(*info);
         xerbla_("CUNBDB5", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     eps = slamch_("Precision");
     /* Project X onto the orthogonal complement of Q if X is nonzero */
@@ -255,7 +252,7 @@ void cunbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
     if(norm > *n * eps)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Project each standard basis vector e_1,...,e_M1 in turn, stopping */
     /* when a nonzero projection is found */
@@ -284,7 +281,7 @@ void cunbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
         if(aocl_blas_scnrm2(m1, &x1[1], incx1) != 0.f || aocl_blas_scnrm2(m2, &x2[1], incx2) != 0.f)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Project each standard basis vector e_(M1+1),...,e_(M1+M2) in turn, */
@@ -314,11 +311,11 @@ void cunbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
         if(aocl_blas_scnrm2(m1, &x1[1], incx1) != 0.f || aocl_blas_scnrm2(m2, &x2[1], incx2) != 0.f)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CUNBDB5 */
 }
 /* cunbdb5_ */

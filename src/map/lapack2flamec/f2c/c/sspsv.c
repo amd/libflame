@@ -159,9 +159,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sspsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *ap, aocl_int_t *ipiv, real *b,
-            aocl_int_t *ldb, aocl_int_t *info)
+void sspsv_(char *uplo, integer *n, integer *nrhs, real *ap, integer *ipiv, real *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -221,7 +219,7 @@ void sspsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *ap, aocl_int_t *i
         i__1 = -(*info);
         xerbla_("SSPSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
     aocl_lapack_ssptrf(uplo, n, &ap[1], &ipiv[1], info);
@@ -231,7 +229,7 @@ void sspsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *ap, aocl_int_t *i
         aocl_lapack_ssptrs(uplo, n, nrhs, &ap[1], &ipiv[1], &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSPSV */
 }
 /* sspsv_ */

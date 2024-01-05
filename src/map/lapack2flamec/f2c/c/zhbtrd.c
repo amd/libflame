@@ -171,10 +171,7 @@ if VECT = 'N' or 'V', then Q need not be set. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zhbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab,
-             aocl_int_t *ldab, doublereal *d__, doublereal *e, dcomplex *q, aocl_int_t *ldq,
-             dcomplex *work, aocl_int_t *info)
+void zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab, doublereal *d__, doublereal *e, doublecomplex *q, integer *ldq, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhbtrd inputs: vect %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", ldq %" FLA_IS "",*vect, *uplo, *n, *kd, *ldab, *ldq);
@@ -190,13 +187,17 @@ void zhbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab
     dcomplex t;
     aocl_int64_t i2, j1, j2, nq, nr, kd1, ibl, iqb, kdn, jin, nrt, kdm1, inca, jend, lend, jinc;
     doublereal abst;
-    aocl_int64_t incx, last;
-    dcomplex temp;
-    aocl_int64_t j1end, j1inc, iqend;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer incx, last;
+    doublecomplex temp;
+    extern /* Subroutine */
+    void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
+    integer j1end, j1inc, iqend;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     logical initq, wantq, upper;
     extern /* Subroutine */
-    int zlar2v_(integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
+    void zlar2v_(integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
     integer iqaend;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_( integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *), zlargv_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *), zlartv_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
@@ -269,13 +270,13 @@ void zhbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab
         i__1 = -(*info);
         xerbla_("ZHBTRD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize Q to the unit matrix, if needed */
     if(initq)
@@ -865,7 +866,7 @@ void zhbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHBTRD */
 }
 /* zhbtrd_ */

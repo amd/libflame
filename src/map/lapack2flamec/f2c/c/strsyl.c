@@ -168,10 +168,7 @@ perturbed */
 /* > \ingroup trsyl */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void strsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int_t *n, real *a,
-             aocl_int_t *lda, real *b, aocl_int_t *ldb, real *c__, aocl_int_t *ldc, real *scale,
-             aocl_int_t *info)
+void strsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, real *a, integer *lda, real *b, integer *ldb, real * c__, integer *ldc, real *scale, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -193,9 +190,13 @@ void strsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
     aocl_int64_t ierr;
     real smin;
     real suml, sumr;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t knext, lnext;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
+    integer knext, lnext;
     real xnorm;
+    extern /* Subroutine */
+    void slaln2_(logical *, integer *, integer *, real *, real *, real *, integer *, real *, real *, real *, integer *, real *, real *, real *, integer *, real *, real *, integer *), slasy2_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), slabad_(real *, real *);
     real scaloc;
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
@@ -276,14 +277,14 @@ void strsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
         i__1 = -(*info);
         xerbla_("STRSYL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *scale = 1.f;
     if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set constants to control overflow */
     eps = slamch_("P");
@@ -1362,7 +1363,7 @@ void strsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of STRSYL */
 }
 /* strsyl_ */

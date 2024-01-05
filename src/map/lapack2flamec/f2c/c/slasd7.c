@@ -278,12 +278,7 @@ and entries in the second half */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slasd7_(aocl_int_t *icompq, aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k,
-             real *d__, real *z__, real *zw, real *vf, real *vfw, real *vl, real *vlw, real *alpha,
-             real *beta, real *dsigma, aocl_int_t *idx, aocl_int_t *idxp, aocl_int_t *idxq,
-             aocl_int_t *perm, aocl_int_t *givptr, aocl_int_t *givcol, aocl_int_t *ldgcol,
-             real *givnum, aocl_int_t *ldgnum, real *c__, real *s, aocl_int_t *info)
+void slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k, real *d__, real *z__, real *zw, real *vf, real *vfw, real *vl, real *vlw, real *alpha, real *beta, real *dsigma, integer *idx, integer *idxp, integer *idxq, integer *perm, integer * givptr, integer *givcol, integer *ldgcol, real *givnum, integer * ldgnum, real *c__, real *s, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -299,8 +294,12 @@ void slasd7_(aocl_int_t *icompq, aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqr
     real z1;
     aocl_int64_t jp;
     real eps, tau, tol;
-    aocl_int64_t nlp1, nlp2, idxi, idxj;
-    aocl_int64_t idxjp, jprev;
+    integer nlp1, nlp2, idxi, idxj;
+    extern /* Subroutine */
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    integer idxjp, jprev;
+    extern /* Subroutine */
+    void scopy_(integer *, real *, integer *, real *, integer *);
     extern real slapy2_(real *, real *), slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slamrg_( integer *, integer *, real *, integer *, integer *, integer *);
@@ -379,7 +378,7 @@ void slasd7_(aocl_int_t *icompq, aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqr
         i__1 = -(*info);
         xerbla_("SLASD7", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     nlp1 = *nl + 1;
     nlp2 = *nl + 2;
@@ -627,7 +626,7 @@ L100: /* Sort the singular values into DSIGMA. The singular values which */
     i__1 = n - 1;
     scopy_(&i__1, &vlw[2], &c__1, &vl[2], &c__1);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASD7 */
 }
 /* slasd7_ */

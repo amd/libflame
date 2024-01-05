@@ -180,10 +180,7 @@ static scomplex c_b16 = {1.f, 0.f};
 /* > \ingroup complexPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e, real *df,
-             scomplex *ef, scomplex *b, aocl_int_t *ldb, scomplex *x, aocl_int_t *ldx, real *ferr,
-             real *berr, scomplex *work, real *rwork, aocl_int_t *info)
+void cptrfs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, real *df, complex *ef, complex *b, integer *ldb, complex *x, integer *ldx, real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -209,8 +206,10 @@ void cptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e
     scomplex bi, cx, dx, ex;
     aocl_int64_t ix, nz;
     real eps, safe1, safe2;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t count;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    integer count;
     logical upper;
     extern real slamch_(char *);
     real safmin;
@@ -218,6 +217,8 @@ void cptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real lstres;
+    extern /* Subroutine */
+    void cpttrs_(char *, integer *, integer *, real *, complex *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -286,7 +287,7 @@ void cptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e
         i__1 = -(*info);
         xerbla_("CPTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -299,7 +300,7 @@ void cptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* NZ = maximum number of nonzero elements in each row of A, plus 1 */
     nz = 4;
@@ -648,7 +649,7 @@ void cptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e
         /* L100: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPTRFS */
 }
 /* cptrfs_ */

@@ -127,9 +127,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clarf_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, aocl_int_t *incv, scomplex *tau,
-            scomplex *c__, aocl_int_t *ldc, scomplex *work)
+void clarf_(char *side, integer *m, integer *n, complex *v, integer *incv, complex *tau, complex *c__, integer *ldc, complex * work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -147,8 +145,11 @@ void clarf_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, aocl_int_t *i
     /* Local variables */
     aocl_int64_t i__;
     logical applyleft;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t lastc, lastv;
+    extern /* Subroutine */
+    void cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    integer lastc, lastv;
+    extern integer ilaclc_(integer *, integer *, complex *, integer *), ilaclr_(integer *, integer *, complex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -252,7 +253,7 @@ void clarf_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, aocl_int_t *i
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLARF */
 }
 /* clarf_ */

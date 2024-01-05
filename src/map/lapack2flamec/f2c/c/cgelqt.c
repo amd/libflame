@@ -114,7 +114,7 @@ the elements above the diagonal */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgelqt_(integer *m, integer *n, integer *mb, complex *a, integer *lda, complex *t, integer *ldt, complex *work, integer *info)
+void cgelqt_(integer *m, integer *n, integer *mb, complex *a, integer *lda, complex *t, integer *ldt, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -131,7 +131,7 @@ int cgelqt_(integer *m, integer *n, integer *mb, complex *a, integer *lda, compl
     /* Local variables */
     integer i__, k, ib, iinfo;
     extern /* Subroutine */
-    int clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgelqt3_(integer *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgelqt3_(integer *, integer *, complex *, integer *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -183,14 +183,14 @@ int cgelqt_(integer *m, integer *n, integer *mb, complex *a, integer *lda, compl
         i__1 = -(*info);
         xerbla_("CGELQT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     k = fla_min(*m,*n);
     if (k == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Blocked loop of length K */
     i__1 = k;
@@ -215,7 +215,7 @@ int cgelqt_(integer *m, integer *n, integer *mb, complex *a, integer *lda, compl
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGELQT */
 }
 /* cgelqt_ */

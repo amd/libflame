@@ -280,7 +280,7 @@ IBLOCK(i)=1 if eigenvalue */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int slarrv_(integer *n, real *vl, real *vu, real *d__, real * l, real *pivmin, integer *isplit, integer *m, integer *dol, integer * dou, real *minrgp, real *rtol1, real *rtol2, real *w, real *werr, real *wgap, integer *iblock, integer *indexw, real *gers, real *z__, integer *ldz, integer *isuppz, real *work, integer *iwork, integer * info)
+void slarrv_(integer *n, real *vl, real *vu, real *d__, real * l, real *pivmin, integer *isplit, integer *m, integer *dol, integer * dou, real *minrgp, real *rtol1, real *rtol2, real *w, real *werr, real *wgap, integer *iblock, integer *indexw, real *gers, real *z__, integer *ldz, integer *isuppz, real *work, integer *iwork, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slarrv inputs: n %" FLA_IS ", isplit %" FLA_IS ", m %" FLA_IS ", dol %" FLA_IS ", dou %" FLA_IS ", iblock %" FLA_IS ", indexw %" FLA_IS ", ldz %" FLA_IS "",*n, *isplit, *m, *dol, *dou, *iblock, *indexw, *ldz);
@@ -309,16 +309,16 @@ int slarrv_(integer *n, real *vl, real *vu, real *d__, real * l, real *pivmin, i
     integer iinfo, iindr;
     real resid;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     logical eskip;
     real right;
     integer nclus, zfrom;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     real rqtol;
     integer iindc1, iindc2;
     extern /* Subroutine */
-    int slar1v_(integer *, integer *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, logical *, integer *, real *, real *, integer *, integer *, real *, real *, real *, real *);
+    void slar1v_(integer *, integer *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, logical *, integer *, real *, real *, integer *, integer *, real *, real *, real *, real *);
     logical stp2ii;
     real lambda;
     integer ibegin, indeig;
@@ -336,7 +336,7 @@ int slarrv_(integer *n, real *vl, real *vu, real *d__, real * l, real *pivmin, i
     integer iindwk, offset;
     real gaptol;
     extern /* Subroutine */
-    int slarrb_(integer *, real *, real *, integer *, integer *, real *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, integer *, integer *), slarrf_( integer *, real *, real *, real *, integer *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, real *, real *, real *, integer *);
+    void slarrb_(integer *, real *, real *, integer *, integer *, real *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, integer *, integer *), slarrf_( integer *, real *, real *, real *, integer *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, real *, real *, real *, integer *);
     integer newcls, oldfst, indwrk, windex, oldlst;
     logical usedrq;
     integer newfst, newftt, parity, windmn, isupmn, newlst, windpl, zusedl, newsiz, zusedu, zusedw;
@@ -345,7 +345,7 @@ int slarrv_(integer *n, real *vl, real *vu, real *d__, real * l, real *pivmin, i
     integer isupmx;
     real rqcorr;
     extern /* Subroutine */
-    int slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    void slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -391,7 +391,7 @@ int slarrv_(integer *n, real *vl, real *vu, real *d__, real * l, real *pivmin, i
        if (*m > *n)
            *info = -4;
        AOCL_DTL_TRACE_LOG_EXIT
-       return 0;
+       return;
     }
     /* The first N entries of WORK are reserved for the eigenvalues */
     indld = *n + 1;
@@ -565,7 +565,7 @@ L40:
             {
                 *info = -2;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* breadth first processing of the current level of the representation */
             /* tree: OLDNCL = number of clusters on current level */
@@ -659,7 +659,7 @@ L40:
                     {
                         *info = -1;
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     /* We also recompute the extremal gaps. W holds all eigenvalues */
                     /* of the unshifted matrix and must be used for computation */
@@ -840,7 +840,7 @@ L40:
                         {
                             *info = -2;
                             AOCL_DTL_TRACE_LOG_EXIT
-                            return 0;
+                            return;
                         }
                     }
                     else
@@ -953,7 +953,7 @@ L120: /* Check if bisection should be used to refine eigenvalue */
                             {
                                 *info = -3;
                                 AOCL_DTL_TRACE_LOG_EXIT
-                                return 0;
+                                return;
                             }
                             lambda = work[windex];
                             /* Reset twist index from inaccurate LAMBDA to */
@@ -1061,7 +1061,7 @@ L120: /* Check if bisection should be used to refine eigenvalue */
                             {
                                 *info = 5;
                                 AOCL_DTL_TRACE_LOG_EXIT
-                                return 0;
+                                return;
                             }
                         }
                         else
@@ -1156,7 +1156,7 @@ L170:
         ;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SLARRV */
 }
 /* slarrv_ */

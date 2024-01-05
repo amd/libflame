@@ -126,9 +126,7 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dpbequ_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int_t *ldab,
-             doublereal *s, doublereal *scond, doublereal *amax, aocl_int_t *info)
+void dpbequ_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab, doublereal *s, doublereal *scond, doublereal *amax, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpbequ inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",*uplo, *n, *kd, *ldab);
@@ -194,7 +192,7 @@ void dpbequ_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int
         i__1 = -(*info);
         xerbla_("DPBEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
@@ -202,7 +200,7 @@ void dpbequ_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int
         *scond = 1.;
         *amax = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(upper)
     {
@@ -241,7 +239,7 @@ void dpbequ_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int
             {
                 *info = i__;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L20: */
         }
@@ -260,7 +258,7 @@ void dpbequ_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int
         *scond = sqrt(smin) / sqrt(*amax);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPBEQU */
 }
 /* dpbequ_ */

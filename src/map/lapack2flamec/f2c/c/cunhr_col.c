@@ -263,7 +263,7 @@ INB-by-M}
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, complex *t, integer *ldt, complex *d__, integer * info)
+void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, complex *t, integer *ldt, complex *d__, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -277,10 +277,10 @@ int cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, co
     /* Local variables */
     integer nplusone, i__, j, jb, jnb;
     extern /* Subroutine */
-    int claunhr_col_getrfnp_(integer *, integer *, complex *, integer *, complex *, integer *), cscal_(integer *, complex *, complex *, integer *);
+    void claunhr_col_getrfnp_(integer *, integer *, complex *, integer *, complex *, integer *), cscal_(integer *, complex *, complex *, integer *);
     integer iinfo;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer jbtemp1, jbtemp2;
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -343,13 +343,13 @@ int cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, co
         i__1 = -(*info);
         xerbla_("CUNHR_COL", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* On input, the M-by-N matrix A contains the unitary */
     /* M-by-N matrix Q_in. */
@@ -470,7 +470,7 @@ int cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, co
         ctrsm_("R", "L", "C", "U", &jnb, &jnb, &c_b1, &a[jb + jb * a_dim1], lda, &t[jb * t_dim1 + 1], ldt);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CUNHR_COL */
 }
 /* cunhr_col__ */

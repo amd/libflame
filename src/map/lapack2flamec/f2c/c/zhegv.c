@@ -185,27 +185,28 @@ the routine */
 /* > \ingroup complex16HEeigen */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zhegv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, dcomplex *a,
-            aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb, doublereal *w, dcomplex *work,
-            aocl_int_t *lwork, doublereal *rwork, aocl_int_t *info)
+void zhegv_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublereal *w, doublecomplex *work, integer *lwork, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhegv inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*itype, *jobz, *uplo, *n, *lda, *ldb, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
-    aocl_int64_t nb, neig;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer nb, neig;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void zheev_(char *, char *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, integer *);
     char trans[1];
     logical upper, wantz;
     extern /* Subroutine */
-    int ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zhegst_(integer *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zhegst_(integer *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
+    extern /* Subroutine */
+    void zpotrf_(char *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -288,18 +289,18 @@ void zhegv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, dcomplex *
         i__1 = -(*info);
         xerbla_("ZHEGV ", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of B. */
     aocl_lapack_zpotrf(uplo, n, &b[b_offset], ldb, info);
@@ -307,7 +308,7 @@ void zhegv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, dcomplex *
     {
         *info = *n + *info;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     zhegst_(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
@@ -356,7 +357,7 @@ void zhegv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, dcomplex *
     work[1].r = (doublereal) lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHEGV */
 }
 /* zhegv_ */

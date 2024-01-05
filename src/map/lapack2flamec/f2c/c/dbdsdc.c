@@ -198,7 +198,7 @@ static doublereal c_b29 = 0.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *e, doublereal *u, integer *ldu, doublereal *vt, integer *ldvt, doublereal *q, integer *iq, doublereal *work, integer * iwork, integer *info)
+void dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *e, doublereal *u, integer *ldu, doublereal *vt, integer *ldvt, doublereal *q, integer *iq, doublereal *work, integer * iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dbdsdc inputs: uplo %c, compq %c, n %" FLA_IS ", ldu %" FLA_IS ", ldvt %" FLA_IS "",*uplo, *compq, *n, *ldu, *ldvt);
@@ -219,13 +219,13 @@ int dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *e
     integer ivt, difl, difr, ierr, perm, mlvl, sqre;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer poles, iuplo, nsize, start;
     extern /* Subroutine */
-    int dlasd0_(integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *);
+    void dlasd0_(integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlasda_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlasdq_(char *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlasda_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlasdq_(char *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -332,13 +332,13 @@ int dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *e
         i__1 = -(*info);
         xerbla_("DBDSDC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     smlsiz = ilaenv_(&c__9, "DBDSDC", " ", &c__0, &c__0, &c__0, &c__0);
     if (*n == 1)
@@ -355,7 +355,7 @@ int dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *e
         }
         d__[1] = f2c_abs(d__[1]);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     nm1 = *n - 1;
     /* If matrix lower bidiagonal, rotate to be upper bidiagonal */
@@ -436,7 +436,7 @@ int dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *e
     if (orgnrm == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     dlascl_("G", &c__0, &c__0, &orgnrm, &c_b15, n, &c__1, &d__[1], n, &ierr);
     dlascl_("G", &c__0, &c__0, &orgnrm, &c_b15, &nm1, &c__1, &e[1], &nm1, & ierr);
@@ -520,7 +520,7 @@ int dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *e
             if (*info != 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             start = i__ + 1;
         }
@@ -588,7 +588,7 @@ L40: /* Use Selection Sort to minimize swaps of singular vectors */
         dlasr_("L", "V", "B", n, n, &work[1], &work[*n], &u[u_offset], ldu);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DBDSDC */
 }
 /* dbdsdc_ */

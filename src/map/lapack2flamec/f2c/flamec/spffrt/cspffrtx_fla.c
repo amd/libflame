@@ -5,7 +5,7 @@
 
 #include "FLA_f2c.h"
 
-extern int cspr_(char *, integer *, complex *, complex *, integer *, complex *);
+extern void cspr_(char *, integer *, complex *, complex *, integer *, complex *);
 extern void cscal_(integer *, complex *, complex *, integer *);
 extern void c_div(complex *, complex *, complex *);
 

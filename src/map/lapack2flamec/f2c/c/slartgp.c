@@ -229,7 +229,7 @@ void slartgp_(real *f, real *g, real *cs, real *sn, real *r__)
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SLARTGP */
 }
 /* slartgp_ */

@@ -118,7 +118,7 @@ the elements below the diagonal are not used. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgeqrt2_(integer *m, integer *n, real *a, integer *lda, real *t, integer *ldt, integer *info)
+void sgeqrt2_(integer *m, integer *n, real *a, integer *lda, real *t, integer *ldt, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgeqrt2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS "",*m, *n, *lda, *ldt);
@@ -128,10 +128,10 @@ int sgeqrt2_(integer *m, integer *n, real *a, integer *lda, real *t, integer *ld
     integer i__, k;
     real aii;
     extern /* Subroutine */
-    int sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
+    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
     real alpha;
     extern /* Subroutine */
-    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -178,7 +178,7 @@ int sgeqrt2_(integer *m, integer *n, real *a, integer *lda, real *t, integer *ld
         i__1 = -(*info);
         xerbla_("SGEQRT2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     k = fla_min(*m,*n);
     i__1 = k;
@@ -230,6 +230,6 @@ int sgeqrt2_(integer *m, integer *n, real *a, integer *lda, real *t, integer *ld
     }
     /* End of SGEQRT2 */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* sgeqrt2_ */

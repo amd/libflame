@@ -192,9 +192,7 @@ the least squares solution could not be */
 /* > \ingroup gels */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *lda,
-            real *b, aocl_int_t *ldb, real *work, aocl_int_t *lwork, aocl_int_t *info)
+void sgels_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integer *lda, real *b, integer *ldb, real *work, integer *lwork, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgels(trans, m, n, nrhs, a, lda, b, ldb, work, lwork, info);
@@ -234,17 +232,21 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     aocl_int64_t wsize;
     real rwork[1];
     extern /* Subroutine */
-    int slabad_(real *, real *);
+    void slabad_(real *, real *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer scllen;
     real bignum;
+    extern /* Subroutine */
+    void sgelqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     real smlnum;
+    extern /* Subroutine */
+    void sormlq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     logical lquery;
     extern /* Subroutine */
-    int sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), strtrs_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+    void sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), strtrs_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -372,11 +374,10 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     {
         i__1 = -(*info);
         xerbla_("SGELS ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -386,7 +387,7 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     {
         i__1 = fla_max(*m,*n);
         slaset_("Full", &i__1, nrhs, &c_b33, &c_b33, &b[b_offset], ldb);
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
@@ -450,7 +451,6 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
             strtrs_("Upper", "No transpose", "Non-unit", n, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
             if (*info > 0)
             {
-                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             scllen = *n;
@@ -463,7 +463,6 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                                &b[b_offset], ldb, info);
             if(*info > 0)
             {
-                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* B(N+1:M,1:NRHS) = ZERO */
@@ -499,7 +498,6 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
             strtrs_("Lower", "No transpose", "Non-unit", m, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
             if (*info > 0)
             {
-                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* B(M+1:N,1:NRHS) = 0 */
@@ -534,7 +532,6 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                                &b[b_offset], ldb, info);
             if(*info > 0)
             {
-                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             scllen = *m;
@@ -558,8 +555,7 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
         slascl_("G", &c__0, &c__0, &bignum, &bnrm, &scllen, nrhs, &b[b_offset], ldb, info);
     }
 L50:
-    work[1] = aocl_lapack_sroundup_lwork(&wsize);
-    AOCL_DTL_TRACE_LOG_EXIT
+    work[1] = (real) wsize;
     return;
     /* End of SGELS */
 }

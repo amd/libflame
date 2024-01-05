@@ -140,9 +140,7 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complexGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cgtcon_(char *norm, aocl_int_t *n, scomplex *dl, scomplex *d__, scomplex *du, scomplex *du2,
-             aocl_int_t *ipiv, real *anorm, real *rcond, scomplex *work, aocl_int_t *info)
+void cgtcon_(char *norm, integer *n, complex *dl, complex * d__, complex *du, complex *du2, integer *ipiv, real *anorm, real * rcond, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -161,9 +159,11 @@ void cgtcon_(char *norm, aocl_int_t *n, scomplex *dl, scomplex *d__, scomplex *d
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     extern /* Subroutine */
-    int clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     logical onenrm;
+    extern /* Subroutine */
+    void cgttrs_(char *, integer *, integer *, complex *, complex *, complex *, complex *, integer *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -214,7 +214,7 @@ void cgtcon_(char *norm, aocl_int_t *n, scomplex *dl, scomplex *d__, scomplex *d
         i__1 = -(*info);
         xerbla_("CGTCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.f;
@@ -222,12 +222,12 @@ void cgtcon_(char *norm, aocl_int_t *n, scomplex *dl, scomplex *d__, scomplex *d
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if(*anorm == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check that D(1:N) is non-zero. */
     i__1 = *n;
@@ -237,7 +237,7 @@ void cgtcon_(char *norm, aocl_int_t *n, scomplex *dl, scomplex *d__, scomplex *d
         if(d__[i__2].real == 0.f && d__[i__2].imag == 0.f)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         /* L10: */
     }
@@ -274,7 +274,7 @@ L20:
         *rcond = 1.f / ainvnm / *anorm;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGTCON */
 }
 /* cgtcon_ */

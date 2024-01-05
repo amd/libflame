@@ -129,9 +129,7 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlacn2_(aocl_int_t *n, dcomplex *v, dcomplex *x, doublereal *est, aocl_int_t *kase,
-             aocl_int_t *isave)
+void zlacn2_(integer *n, doublecomplex *v, doublecomplex *x, doublereal *est, integer *kase, integer *isave)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlacn2 inputs: n %" FLA_IS ", est %lf, kase %" FLA_IS "", *n, *est, *kase);
@@ -144,8 +142,11 @@ void zlacn2_(aocl_int_t *n, dcomplex *v, dcomplex *x, doublereal *est, aocl_int_
     /* Local variables */
     aocl_int64_t i__;
     doublereal temp, absxi;
-    aocl_int64_t jlast;
-    extern doublereal dlamch_(char *);
+    integer jlast;
+    extern /* Subroutine */
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    extern integer izmax1_(integer *, doublecomplex *, integer *);
+    extern doublereal dzsum1_(integer *, doublecomplex *, integer *), dlamch_( char *);
     doublereal safmin, altsgn, estold;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -189,7 +190,7 @@ void zlacn2_(aocl_int_t *n, dcomplex *v, dcomplex *x, doublereal *est, aocl_int_
         *kase = 1;
         isave[1] = 1;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     switch(isave[1])
     {
@@ -242,7 +243,7 @@ L20:
     *kase = 2;
     isave[1] = 2;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 2) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L40:
@@ -264,7 +265,7 @@ L50:
     *kase = 1;
     isave[1] = 3;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 3) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L70:
@@ -302,7 +303,7 @@ L70:
     *kase = 2;
     isave[1] = 4;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 4) */
     /* X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L90:
@@ -331,7 +332,7 @@ L100:
     *kase = 1;
     isave[1] = 5;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L120:
@@ -344,7 +345,7 @@ L120:
 L130:
     *kase = 0;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLACN2 */
 }
 /* zlacn2_ */

@@ -155,7 +155,7 @@ the */
 /* > \ingroup doubleSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dsytrf_aa_2stage_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *tb, integer *ltb, integer *ipiv, integer * ipiv2, doublereal *work, integer *lwork, integer *info)
+void dsytrf_aa_2stage_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *tb, integer *ltb, integer *ipiv, integer * ipiv2, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytrf_aa_2stage inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ltb %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *lda, *ltb, *lwork);
@@ -166,17 +166,17 @@ int dsytrf_aa_2stage_(char *uplo, integer *n, doublereal *a, integer *lda, doubl
     doublereal piv;
     integer ldtb;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-    int dgbtrf_(integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, integer *), dgetrf_(integer *, integer *, doublereal *, integer *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dgbtrf_(integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, integer *), dgetrf_(integer *, integer *, doublereal *, integer *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dsygst_(integer *, char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dsygst_(integer *, char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     logical tquery, wquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -236,7 +236,7 @@ int dsytrf_aa_2stage_(char *uplo, integer *n, doublereal *a, integer *lda, doubl
         i__1 = -(*info);
         xerbla_("DSYTRF_AA_2STAGE", &i__1, (ftnlen)16);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Answer the query */
     nb = ilaenv_(&c__1, "DSYTRF_AA_2STAGE", uplo, n, &c_n1, &c_n1, &c_n1);
@@ -254,13 +254,13 @@ int dsytrf_aa_2stage_(char *uplo, integer *n, doublereal *a, integer *lda, doubl
     if (tquery || wquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine the number of the block size */
     ldtb = *ltb / *n;
@@ -674,7 +674,7 @@ int dsytrf_aa_2stage_(char *uplo, integer *n, doublereal *a, integer *lda, doubl
     /* Factor the band matrix */
     dgbtrf_(n, n, &nb, &nb, &tb[1], &ldtb, &ipiv2[1], info);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYTRF_AA_2STAGE */
 }
 /* dsytrf_aa_2stage__ */

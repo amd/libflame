@@ -198,7 +198,7 @@ the routine */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int csytrf_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work, integer *lwork, integer * info)
+void csytrf_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work, integer *lwork, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -215,7 +215,7 @@ int csytrf_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv
     /* Local variables */
     integer j, k, kb, nb, iws;
     extern /* Subroutine */
-    int csytf2_rook_(char *, integer *, complex *, integer *, integer *, integer *), clasyf_rook_(char *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+    void csytf2_rook_(char *, integer *, complex *, integer *, integer *, integer *), clasyf_rook_(char *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     extern logical lsame_(char *, char *);
     integer nbmin, iinfo;
     logical upper;
@@ -285,12 +285,12 @@ int csytrf_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv
         i__1 = -(*info);
         xerbla_("CSYTRF_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     nbmin = 2;
     ldwork = *n;
@@ -407,7 +407,7 @@ L40:
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYTRF_ROOK */
 }
 /* csytrf_rook__ */

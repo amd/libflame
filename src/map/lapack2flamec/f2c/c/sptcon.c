@@ -115,9 +115,7 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sptcon_(aocl_int_t *n, real *d__, real *e, real *anorm, real *rcond, real *work,
-             aocl_int_t *info)
+void sptcon_(integer *n, real *d__, real *e, real *anorm, real *rcond, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -174,7 +172,7 @@ void sptcon_(aocl_int_t *n, real *d__, real *e, real *anorm, real *rcond, real *
         i__1 = -(*info);
         xerbla_("SPTCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.f;
@@ -182,12 +180,12 @@ void sptcon_(aocl_int_t *n, real *d__, real *e, real *anorm, real *rcond, real *
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if(*anorm == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check that D(1:N) is positive. */
     i__1 = *n;
@@ -196,7 +194,7 @@ void sptcon_(aocl_int_t *n, real *d__, real *e, real *anorm, real *rcond, real *
         if(d__[i__] <= 0.f)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         /* L10: */
     }
@@ -228,7 +226,7 @@ void sptcon_(aocl_int_t *n, real *d__, real *e, real *anorm, real *rcond, real *
         *rcond = 1.f / ainvnm / *anorm;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPTCON */
 }
 /* sptcon_ */

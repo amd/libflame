@@ -200,10 +200,7 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ctgexc_(logical *wantq, logical *wantz, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b,
-             aocl_int_t *ldb, scomplex *q, aocl_int_t *ldq, scomplex *z__, aocl_int_t *ldz,
-             aocl_int_t *ifst, aocl_int_t *ilst, aocl_int_t *info)
+void ctgexc_(logical *wantq, logical *wantz, integer *n, complex *a, integer *lda, complex *b, integer *ldb, complex *q, integer *ldq, complex *z__, integer *ldz, integer *ifst, integer * ilst, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -220,7 +217,7 @@ void ctgexc_(logical *wantq, logical *wantz, aocl_int_t *n, scomplex *a, aocl_in
     /* Local variables */
     integer here;
     extern /* Subroutine */
-    int ctgex2_(logical *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ctgex2_(logical *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -286,18 +283,18 @@ void ctgexc_(logical *wantq, logical *wantz, aocl_int_t *n, scomplex *a, aocl_in
         i__1 = -(*info);
         xerbla_("CTGEXC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n <= 1)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(*ifst == *ilst)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(*ifst < *ilst)
     {
@@ -309,7 +306,7 @@ void ctgexc_(logical *wantq, logical *wantz, aocl_int_t *n, scomplex *a, aocl_in
         {
             *ilst = here;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         ++here;
         if(here < *ilst)
@@ -328,7 +325,7 @@ void ctgexc_(logical *wantq, logical *wantz, aocl_int_t *n, scomplex *a, aocl_in
         {
             *ilst = here;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         --here;
         if(here >= *ilst)
@@ -339,7 +336,7 @@ void ctgexc_(logical *wantq, logical *wantz, aocl_int_t *n, scomplex *a, aocl_in
     }
     *ilst = here;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTGEXC */
 }
 /* ctgexc_ */

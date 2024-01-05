@@ -248,7 +248,7 @@ static integer c_n1 = -1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int dlaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer *curlvl, integer *curpbm, doublereal *d__, doublereal *q, integer *ldq, integer *indxq, doublereal *rho, integer *cutpnt, doublereal *qstore, integer *qptr, integer *prmptr, integer * perm, integer *givptr, integer *givcol, doublereal *givnum, doublereal *work, integer *iwork, integer *info)
+void dlaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer *curlvl, integer *curpbm, doublereal *d__, doublereal *q, integer *ldq, integer *indxq, doublereal *rho, integer *cutpnt, doublereal *qstore, integer *qptr, integer *prmptr, integer * perm, integer *givptr, integer *givcol, doublereal *givnum, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaed7 inputs: icompq %" FLA_IS ", n %" FLA_IS ", qsiz %" FLA_IS ", tlvls %" FLA_IS ", curlvl %" FLA_IS ", curpbm %" FLA_IS ", ldq %" FLA_IS ", cutpnt %" FLA_IS ", qptr %" FLA_IS ", prmptr %" FLA_IS ", perm %" FLA_IS ", givptr %" FLA_IS ", givcol %" FLA_IS "",*icompq, *n, *qsiz, *tlvls, *curlvl, *curpbm, *ldq, *cutpnt, *qptr, *prmptr, *perm, *givptr, *givcol);
@@ -259,13 +259,13 @@ int dlaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer 
     /* Local variables */
     integer i__, k, n1, n2, is, iw, iz, iq2, ptr, ldq2, indx, curr;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer indxc, indxp;
     extern /* Subroutine */
-    int dlaed8_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *, integer *, integer *), dlaed9_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlaeda_(integer *, integer *, integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *) ;
+    void dlaed8_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *, integer *, integer *), dlaed9_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlaeda_(integer *, integer *, integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *) ;
     integer idlmda;
     extern /* Subroutine */
-    int dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer coltyp;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -328,13 +328,13 @@ int dlaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer 
         i__1 = -(*info);
         xerbla_("DLAED7", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* The following values are for bookkeeping purposes only. They are */
     /* integer pointers which indicate the portion of the workspace */
@@ -417,7 +417,7 @@ int dlaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer 
     }
     AOCL_DTL_TRACE_LOG_EXIT
 L30:
-    return 0;
+    return;
     /* End of DLAED7 */
 }
 /* dlaed7_ */

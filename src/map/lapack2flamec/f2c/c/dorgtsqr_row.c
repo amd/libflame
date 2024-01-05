@@ -179,7 +179,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, doublereal *a, integer *lda, doublereal *t, integer *ldt, doublereal *work, integer *lwork, integer *info)
+void dorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, doublereal *a, integer *lda, doublereal *t, integer *ldt, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dorgtsqr_row inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork  %" FLA_IS "",*m, *n, *mb, *nb, *lda, *ldt, *lwork);
@@ -188,12 +188,12 @@ int dorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, doublereal *
     /* Local variables */
     integer lworkopt, ib_bottom__, ib, kb, mb1, mb2, m_plus_one__, num_all_row_blocks__, imb, knb;
     extern /* Subroutine */
-    int dlarfb_gett_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dlarfb_gett_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     integer jb_t__, itmp;
     doublereal dummy[1] /* was [1][1] */
     ;
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     integer nblocal, kb_last__;
     /* -- LAPACK computational routine -- */
@@ -276,20 +276,20 @@ int dorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, doublereal *
         i__1 = -(*info);
         xerbla_("DORGTSQR_ROW", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         work[1] = (doublereal) lworkopt;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         work[1] = (doublereal) lworkopt;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* (0) Set the upper-triangular part of the matrix A to zero and */
     /* its diagonal elements to one. */
@@ -384,7 +384,7 @@ int dorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, doublereal *
     }
     work[1] = (doublereal) lworkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DORGTSQR_ROW */
 }
 /* dorgtsqr_row__ */

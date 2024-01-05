@@ -223,7 +223,7 @@ if */
 /* > \ingroup gees */
 /* ===================================================================== */
 /* Subroutine */
-int dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, integer *lda, integer *sdim, doublereal *wr, doublereal *wi, doublereal *vs, integer *ldvs, doublereal *work, integer *lwork, logical *bwork, integer *info)
+void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, integer *lda, integer *sdim, doublereal *wr, doublereal *wi, doublereal *vs, integer *ldvs, doublereal *work, integer *lwork, logical *bwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgees inputs: jobvs %c, sort %c, n %" FLA_IS ", lda %" FLA_IS ", ldvs %" FLA_IS ", lwork %" FLA_IS "",*jobvs, *sort, *n, *lda, *ldvs, *lwork);
@@ -238,18 +238,23 @@ int dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, in
     doublereal dum[1], eps, sep;
     aocl_int64_t ibal;
     doublereal anrm;
-    aocl_int64_t ierr, itau, iwrk, inxt, icond, ieval;
-    aocl_int_t idum[1];
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer idum[1], ierr, itau, iwrk, inxt, icond, ieval;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical cursl;
+    extern /* Subroutine */
+    void dlabad_(doublereal *, doublereal *), dgebak_( char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dgebal_(char *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *);
     logical lst2sl, scalea;
     extern doublereal dlamch_(char *);
     doublereal cscale;
     extern doublereal dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    int dgehrd_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dgehrd_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     doublereal bignum;
+    extern /* Subroutine */
+    void dorghr_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dhseqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dtrsen_(char *, char *, logical *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *);
     logical lastsl;
     aocl_int64_t minwrk, maxwrk;
     doublereal smlnum;
@@ -367,19 +372,19 @@ int dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, in
         i__1 = -(*info);
         xerbla_("DGEES ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *sdim = 0;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = dlamch_("P");
@@ -604,7 +609,7 @@ int dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, in
     }
     work[1] = (doublereal) maxwrk;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGEES */
 }
 /* dgees_ */

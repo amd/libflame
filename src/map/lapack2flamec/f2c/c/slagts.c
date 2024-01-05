@@ -156,9 +156,7 @@
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slagts_(aocl_int_t *job, aocl_int_t *n, real *a, real *b, real *c__, real *d__, aocl_int_t *in,
-             real *y, real *tol, aocl_int_t *info)
+void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, integer *in, real *y, real *tol, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slagts(job, n, a, b, c__, d__, in, y, tol, info);
@@ -231,11 +229,10 @@ void aocl_lapack_slagts(aocl_int64_t *job, aocl_int64_t *n, real *a, real *b, re
     {
         i__1 = -(*info);
         xerbla_("SLAGTS", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     eps = slamch_("Epsilon");
@@ -313,7 +310,6 @@ void aocl_lapack_slagts(aocl_int64_t *job, aocl_int64_t *n, real *a, real *b, re
                         if (absak == 0.f || f2c_abs(temp) * sfmin > absak)
                         {
                             *info = k;
-                            AOCL_DTL_TRACE_LOG_EXIT
                             return;
                         }
                         else
@@ -325,7 +321,6 @@ void aocl_lapack_slagts(aocl_int64_t *job, aocl_int64_t *n, real *a, real *b, re
                     else if (f2c_abs(temp) > absak * bignum)
                     {
                         *info = k;
-                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                 }
@@ -410,7 +405,6 @@ L40:
                         if (absak == 0.f || f2c_abs(temp) * sfmin > absak)
                         {
                             *info = k;
-                            AOCL_DTL_TRACE_LOG_EXIT
                             return;
                         }
                         else
@@ -422,7 +416,6 @@ L40:
                     else if (f2c_abs(temp) > absak * bignum)
                     {
                         *info = k;
-                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                 }
@@ -494,7 +487,6 @@ L70:
         }
     }
     /* End of SLAGTS */
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* slagts_ */

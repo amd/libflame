@@ -167,9 +167,7 @@ static logical c_true = TRUE_;
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slaqtr_(logical *ltran, logical *lreal, aocl_int_t *n, real *t, aocl_int_t *ldt, real *b,
-             real *w, real *scale, real *x, real *work, aocl_int_t *info)
+void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, real *b, real *w, real *scale, real *x, real *work, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slaqtr(ltran, lreal, n, t, ldt, b, w, scale, x, work, info);
@@ -204,12 +202,17 @@ void aocl_lapack_slaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, real *t
     aocl_int64_t ierr;
     real smin;
     real xmax;
-    aocl_int64_t jnext;
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
+    integer jnext;
+    extern real sasum_(integer *, real *, integer *);
     real sminw, xnorm;
+    extern /* Subroutine */
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *), slaln2_(logical *, integer *, integer *, real *, real *, real *, integer *, real *, real *, real *, integer *, real *, real *, real *, integer *, real *, real *, integer *);
     real scaloc;
     real bignum;
     extern /* Subroutine */
-    int sladiv_(real *, real *, real *, real *, real *, real *);
+    void sladiv_(real *, real *, real *, real *, real *, real *);
     logical notran;
     real smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -248,7 +251,6 @@ void aocl_lapack_slaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, real *t
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set constants to control overflow */
@@ -867,7 +869,6 @@ void aocl_lapack_slaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, real *t
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAQTR */
 }

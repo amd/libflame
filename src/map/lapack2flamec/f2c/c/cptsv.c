@@ -110,9 +110,7 @@
 /* > \ingroup complexPTsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cptsv_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e, scomplex *b, aocl_int_t *ldb,
-            aocl_int_t *info)
+void cptsv_(integer *n, integer *nrhs, real *d__, complex *e, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -169,7 +167,7 @@ void cptsv_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e, scomplex *b
         i__1 = -(*info);
         xerbla_("CPTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the L*D*L**H (or U**H*D*U) factorization of A. */
     aocl_lapack_cpttrf(n, &d__[1], &e[1], info);
@@ -179,7 +177,7 @@ void cptsv_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e, scomplex *b
         aocl_lapack_cpttrs("Lower", n, nrhs, &d__[1], &e[1], &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPTSV */
 }
 /* cptsv_ */

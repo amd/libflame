@@ -149,9 +149,7 @@ v(i+2:ihi) is stored on */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, doublereal *a, aocl_int_t *lda,
-             doublereal *tau, doublereal *work, aocl_int_t *info)
+void dgehd2_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda, doublereal *tau, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgehd2 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS "",*n, *ilo, *ihi, *lda);
@@ -161,7 +159,7 @@ void dgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, doublereal *a, aoc
     aocl_int64_t i__;
     doublereal aii;
     extern /* Subroutine */
-    int dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -210,7 +208,7 @@ void dgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, doublereal *a, aoc
         i__1 = -(*info);
         xerbla_("DGEHD2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *ihi - 1;
     for(i__ = *ilo; i__ <= i__1; ++i__)
@@ -235,7 +233,7 @@ void dgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, doublereal *a, aoc
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGEHD2 */
 }
 /* dgehd2_ */

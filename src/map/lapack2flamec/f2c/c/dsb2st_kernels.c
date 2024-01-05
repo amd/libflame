@@ -158,7 +158,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dsb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, integer *ed, integer *sweep, integer *n, integer * nb, integer *ib, doublereal *a, integer *lda, doublereal *v, doublereal *tau, integer *ldvt, doublereal *work)
+void dsb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, integer *ed, integer *sweep, integer *n, integer * nb, integer *ib, doublereal *a, integer *lda, doublereal *v, doublereal *tau, integer *ldvt, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsb2st_kernels inputs: uplo %c, ttype %" FLA_IS ", st %" FLA_IS ", ed %" FLA_IS ", sweep %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", ib %" FLA_IS ", lda %" FLA_IS ", ldvt %" FLA_IS "",*uplo, *ttype, *st, *ed, *sweep, *n, *nb, *ib, *lda, *ldvt);
@@ -172,9 +172,9 @@ int dsb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    int dlarfx_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *), dlarfy_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dlarfx_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *), dlarfy_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
     integer ofdpos, taupos;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -378,7 +378,7 @@ int dsb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* END OF DSB2ST_KERNELS */
 }
 /* dsb2st_kernels__ */

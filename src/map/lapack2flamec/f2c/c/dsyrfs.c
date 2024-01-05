@@ -189,11 +189,7 @@ static doublereal c_b14 = 1.;
 /* > \ingroup doubleSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dsyrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_int_t *lda,
-             doublereal *af, aocl_int_t *ldaf, aocl_int_t *ipiv, doublereal *b, aocl_int_t *ldb,
-             doublereal *x, aocl_int_t *ldx, doublereal *ferr, doublereal *berr, doublereal *work,
-             aocl_int_t *iwork, aocl_int_t *info)
+void dsyrfs_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *af, integer *ldaf, integer * ipiv, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal *ferr, doublereal *berr, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsyrfs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
@@ -210,13 +206,19 @@ void dsyrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_in
     doublereal safe1, safe2;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    aocl_int64_t count;
+    extern /* Subroutine */
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    integer count;
     logical upper;
+    extern /* Subroutine */
+    void dsymv_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal lstres;
+    extern /* Subroutine */
+    void dsytrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -294,7 +296,7 @@ void dsyrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_in
         i__1 = -(*info);
         xerbla_("DSYRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -307,7 +309,7 @@ void dsyrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_in
             /* L10: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* NZ = maximum number of nonzero elements in each row of A, plus 1 */
     nz = *n + 1;
@@ -492,7 +494,7 @@ void dsyrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_in
         /* L140: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYRFS */
 }
 /* dsyrfs_ */

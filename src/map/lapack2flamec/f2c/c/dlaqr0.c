@@ -259,11 +259,7 @@ IHI <= IHIZ <= N. */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlaqr0_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
-             doublereal *h__, aocl_int_t *ldh, doublereal *wr, doublereal *wi, aocl_int_t *iloz,
-             aocl_int_t *ihiz, doublereal *z__, aocl_int_t *ldz, doublereal *work,
-             aocl_int_t *lwork, aocl_int_t *info)
+void dlaqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *wr, doublereal *wi, integer *iloz, integer *ihiz, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqr0 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",*n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz, *lwork);
@@ -283,9 +279,14 @@ void dlaqr0_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
     doublereal swap;
     aocl_int64_t ktop;
     doublereal zdum[1] /* was [1][1] */
-        ;
-    aocl_int64_t kacc22, itmax, nsmax, nwmax, kwtop;
-    aocl_int64_t nibble;
+    ;
+    integer kacc22, itmax, nsmax, nwmax, kwtop;
+    extern /* Subroutine */
+    void dlanv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlaqr3_( logical *, logical *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaqr4_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlaqr5_(logical *, logical *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *);
+    integer nibble;
+    extern /* Subroutine */
+    void dlahqr_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     char jbcmpz[2];
     aocl_int64_t nwupbd;
     logical sorted;
@@ -340,7 +341,7 @@ void dlaqr0_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
     {
         work[1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n <= 15)
     {
@@ -417,7 +418,7 @@ void dlaqr0_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
         {
             work[1] = (doublereal) lwkopt;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* ==== DLAHQR/DLAQR0 crossover point ==== */
         nmin = ilaenv_(&c__12, "DLAQR0", jbcmpz, n, ilo, ihi, lwork);
@@ -770,6 +771,6 @@ void dlaqr0_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
     work[1] = (doublereal)lwkopt;
     /* ==== End of DLAQR0 ==== */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dlaqr0_ */

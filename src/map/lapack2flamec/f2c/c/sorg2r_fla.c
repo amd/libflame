@@ -102,7 +102,7 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sorg2r_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work, integer *info)
+void sorg2r_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -110,7 +110,7 @@ int sorg2r_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sscal_(integer *, real *, real *, integer *), slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -158,12 +158,12 @@ int sorg2r_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *
     {
         i__1 = -(*info);
         xerbla_("SORG2R", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 0)
     {
-        return 0;
+        return;
     }
     /* Initialise columns k+1:n to columns of the unit matrix */
     i__1 = *n;
@@ -212,7 +212,7 @@ int sorg2r_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *
         }
         /* L40: */
     }
-    return 0;
+    return;
     /* End of SORG2R */
 }
 /* sorg2r_ */

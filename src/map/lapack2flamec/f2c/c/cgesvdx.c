@@ -275,7 +275,7 @@ the routine */
 /* > \ingroup complexGEsing */
 /* ===================================================================== */
 /* Subroutine */
-int cgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, complex *a, integer *lda, real *vl, real *vu, integer * il, integer *iu, integer *ns, real *s, complex *u, integer *ldu, complex *vt, integer *ldvt, complex *work, integer *lwork, real * rwork, integer *iwork, integer *info)
+void cgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, complex *a, integer *lda, real *vl, real *vu, integer * il, integer *iu, integer *ns, real *s, complex *u, integer *ldu, complex *vt, integer *ldvt, complex *work, integer *lwork, real * rwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -310,30 +310,30 @@ int cgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, comp
     integer iltgk, itemp, minmn, itaup, itauq, iutgk, itgkz, mnthr;
     logical wantu;
     extern /* Subroutine */
-    int cgebrd_(integer *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, integer *, integer *);
+    void cgebrd_(integer *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, integer *, integer *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clascl_( char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *), cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+    void cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clascl_( char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *), cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
     extern /* Subroutine */
-    int cunmbr_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void cunmbr_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     char rngtgk[1];
     extern /* Subroutine */
-    int cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     integer itempr;
     extern /* Subroutine */
-    int cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     integer minwrk, maxwrk;
     real smlnum;
     logical lquery, wantvt;
     extern /* Subroutine */
-    int sbdsvdx_(char *, char *, char *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, integer *);
+    void sbdsvdx_(char *, char *, char *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -558,18 +558,18 @@ int cgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, comp
         i__2 = -(*info);
         xerbla_("CGESVDX", &i__2, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set singular values indices accord to RANGE='A'. */
     if (alls)
@@ -999,7 +999,7 @@ int cgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, comp
     work[1].r = q__1.r;
     work[1].i = q__1.i; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGESVDX */
 }
 /* cgesvdx_ */

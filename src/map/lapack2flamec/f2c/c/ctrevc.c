@@ -224,10 +224,7 @@ here the magnitude of a scomplex number */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ctrevc_(char *side, char *howmny, logical *select, aocl_int_t *n, scomplex *t, aocl_int_t *ldt,
-             scomplex *vl, aocl_int_t *ldvl, scomplex *vr, aocl_int_t *ldvr, aocl_int_t *mm,
-             aocl_int_t *m, scomplex *work, real *rwork, aocl_int_t *info)
+void ctrevc_(char *side, char *howmny, logical *select, integer *n, complex *t, integer *ldt, complex *vl, integer *ldvl, complex *vr, integer *ldvr, integer *mm, integer *m, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -256,12 +253,17 @@ void ctrevc_(char *side, char *howmny, logical *select, aocl_int_t *n, scomplex 
     real scale;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     real remax;
+    extern /* Subroutine */
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
     logical leftv, bothv, somev;
+    extern /* Subroutine */
+    void slabad_(real *, real *);
+    extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *, real *, integer *);
+    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *, real *, integer *);
     extern real scasum_(integer *, complex *, integer *);
     logical rightv;
     real smlnum;
@@ -362,13 +364,13 @@ void ctrevc_(char *side, char *howmny, logical *select, aocl_int_t *n, scomplex 
         i__1 = -(*info);
         xerbla_("CTREVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set the constants to control overflow. */
     unfl = slamch_("Safe minimum");
@@ -615,7 +617,7 @@ void ctrevc_(char *side, char *howmny, logical *select, aocl_int_t *n, scomplex 
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTREVC */
 }
 /* ctrevc_ */

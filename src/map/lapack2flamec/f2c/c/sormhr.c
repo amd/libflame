@@ -185,34 +185,7 @@ the routine */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sormhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ilo,
-             aocl_int_t *ihi, real *a, aocl_int_t *lda, real *tau, real *c__, aocl_int_t *ldc,
-             real *work, aocl_int_t *lwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sormhr(side, trans, m, n, ilo, ihi, a, lda, tau, c__, ldc, work, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sormhr(side, trans, &m_64, &n_64, &ilo_64, &ihi_64, a, &lda_64, tau, c__, &ldc_64,
-                       work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sormhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n,
-                        aocl_int64_t *ilo, aocl_int64_t *ihi, real *a, aocl_int64_t *lda, real *tau,
-                        real *c__, aocl_int64_t *ldc, real *work, aocl_int64_t *lwork,
-                        aocl_int64_t *info)
+void sormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real *tau, real * c__, integer *ldc, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2;
@@ -231,10 +204,7 @@ void aocl_lapack_sormhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-        int
-        lapack_sormqr(char *, char *, aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, real *,
-                   aocl_int64_t *, real *, real *, aocl_int64_t *, real *, aocl_int64_t *,
-                   aocl_int64_t *);
+    void sormqr_fla(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -332,7 +302,7 @@ void aocl_lapack_sormhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     {
         i__2 = -(*info);
         xerbla_("SORMHR", &i__2, (ftnlen)6);
-        return 0;
+        return;
     }
     else if(lquery)
     {
@@ -358,9 +328,8 @@ void aocl_lapack_sormhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         i1 = 1;
         i2 = *ilo + 1;
     }
-    lapack_sormqr(side, trans, &mi, &ni, &nh, &a[*ilo + 1 + *ilo * a_dim1], lda, &tau[*ilo],
-               &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
-    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
+    sormqr_fla(side, trans, &mi, &ni, &nh, &a[*ilo + 1 + *ilo * a_dim1], lda, & tau[*ilo], &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
+    work[1] = (real) lwkopt;
     return;
     /* End of SORMHR */
 }

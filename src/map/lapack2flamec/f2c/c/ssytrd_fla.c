@@ -190,7 +190,7 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ssytrd_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *e, real *tau, real *work, integer *lwork, integer * info)
+void ssytrd_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *e, real *tau, real *work, integer *lwork, integer * info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -200,10 +200,10 @@ int ssytrd_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *e
     integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
-    int ssytd2_fla(char *, integer *, real *, integer *, real *, real *, real *, integer *), ssyr2k_(char *, char * , integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ssytd2_fla(char *, integer *, real *, integer *, real *, real *, real *, integer *), ssyr2k_(char *, char * , integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int slatrd_(char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *);
+    void slatrd_(char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -266,17 +266,17 @@ int ssytrd_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *e
     {
         i__1 = -(*info);
         xerbla_("SSYTRD", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         work[1] = 1.f;
-        return 0;
+        return;
     }
     nx = *n;
     iws = 1;
@@ -389,7 +389,7 @@ int ssytrd_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *e
         ssytd2_fla(uplo, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], &tau[i__], &iinfo);
     }
     work[1] = (real) lwkopt;
-    return 0;
+    return;
     /* End of SSYTRD */
 }
 /* ssytrd_ */

@@ -108,9 +108,7 @@ the elements of y are assumed to be real. */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlar2v_(aocl_int_t *n, dcomplex *x, dcomplex *y, dcomplex *z__,
-             aocl_int_t *incx, doublereal *c__, dcomplex *s, aocl_int_t *incc)
+void zlar2v_(integer *n, doublecomplex *x, doublecomplex *y, doublecomplex *z__, integer *incx, doublereal *c__, doublecomplex *s, integer *incc)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlar2v inputs: n %" FLA_IS ", incx %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incc);
@@ -220,7 +218,7 @@ void zlar2v_(aocl_int_t *n, dcomplex *x, dcomplex *y, dcomplex *z__,
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAR2V */
 }
 /* zlar2v_ */

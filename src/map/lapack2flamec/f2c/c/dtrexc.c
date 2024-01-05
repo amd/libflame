@@ -141,7 +141,7 @@ T may have been partially */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dtrexc_(char *compq, integer *n, doublereal *t, integer * ldt, doublereal *q, integer *ldq, integer *ifst, integer *ilst, doublereal *work, integer *info)
+void dtrexc_(char *compq, integer *n, doublereal *t, integer * ldt, doublereal *q, integer *ldq, integer *ifst, integer *ilst, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtrexc inputs: compq %c, n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS "",*compq, *n, *ldt, *ldq, *ifst, *ilst);
@@ -152,7 +152,7 @@ int dtrexc_(char *compq, integer *n, doublereal *t, integer * ldt, doublereal *q
     extern logical lsame_(char *, char *);
     logical wantq;
     extern /* Subroutine */
-    int dlaexc_(logical *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlaexc_(logical *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer nbnext;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -215,13 +215,13 @@ int dtrexc_(char *compq, integer *n, doublereal *t, integer * ldt, doublereal *q
         i__1 = -(*info);
         xerbla_("DTREXC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 1)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine the first row of specified block */
     /* and find out it is 1 by 1 or 2 by 2. */
@@ -260,7 +260,7 @@ int dtrexc_(char *compq, integer *n, doublereal *t, integer * ldt, doublereal *q
     if (*ifst == *ilst)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*ifst < *ilst)
     {
@@ -291,7 +291,7 @@ L10: /* Swap block with next one below */
             {
                 *ilst = here;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             here += nbnext;
             /* Test if 2 by 2 block breaks into two 1 by 1 blocks */
@@ -321,7 +321,7 @@ L10: /* Swap block with next one below */
             {
                 *ilst = here;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             if (nbnext == 1)
             {
@@ -344,7 +344,7 @@ L10: /* Swap block with next one below */
                     {
                         *ilst = here;
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     here += 2;
                 }
@@ -384,7 +384,7 @@ L20: /* Swap block with next one above */
             {
                 *ilst = here;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             here -= nbnext;
             /* Test if 2 by 2 block breaks into two 1 by 1 blocks */
@@ -414,7 +414,7 @@ L20: /* Swap block with next one above */
             {
                 *ilst = here;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             if (nbnext == 1)
             {
@@ -438,7 +438,7 @@ L20: /* Swap block with next one above */
                     {
                         *ilst = here;
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     here += -2;
                 }
@@ -459,7 +459,7 @@ L20: /* Swap block with next one above */
     }
     *ilst = here;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTREXC */
 }
 /* dtrexc_ */

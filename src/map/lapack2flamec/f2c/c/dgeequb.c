@@ -140,10 +140,7 @@
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dgeequb_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *r__,
-              doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax,
-              aocl_int_t *info)
+void dgeequb_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgeequb inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
@@ -205,7 +202,7 @@ void dgeequb_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doub
         i__1 = -(*info);
         xerbla_("DGEEQUB", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if(*m == 0 || *n == 0)
@@ -214,7 +211,7 @@ void dgeequb_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doub
         *colcnd = 1.;
         *amax = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. Assume SMLNUM is a power of the radix. */
     smlnum = dlamch_("S");
@@ -279,7 +276,7 @@ void dgeequb_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doub
             {
                 *info = i__;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L50: */
         }
@@ -354,7 +351,7 @@ void dgeequb_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doub
             {
                 *info = *m + j;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L110: */
         }
@@ -376,7 +373,7 @@ void dgeequb_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doub
         *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGEEQUB */
 }
 /* dgeequb_ */

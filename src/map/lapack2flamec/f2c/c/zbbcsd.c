@@ -340,14 +340,7 @@ the */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, aocl_int_t *m,
-             aocl_int_t *p, aocl_int_t *q, doublereal *theta, doublereal *phi, dcomplex *u1,
-             aocl_int_t *ldu1, dcomplex *u2, aocl_int_t *ldu2, dcomplex *v1t,
-             aocl_int_t *ldv1t, dcomplex *v2t, aocl_int_t *ldv2t, doublereal *b11d,
-             doublereal *b11e, doublereal *b12d, doublereal *b12e, doublereal *b21d,
-             doublereal *b21e, doublereal *b22d, doublereal *b22e, doublereal *rwork,
-             aocl_int_t *lrwork, aocl_int_t *info)
+void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, integer *m, integer *p, integer *q, doublereal * theta, doublereal *phi, doublecomplex *u1, integer *ldu1, doublecomplex *u2, integer *ldu2, doublecomplex *v1t, integer *ldv1t, doublecomplex *v2t, integer *ldv2t, doublereal *b11d, doublereal * b11e, doublereal *b12d, doublereal *b12e, doublereal *b21d, doublereal *b21e, doublereal *b22d, doublereal *b22e, doublereal * rwork, integer *lrwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS ", ldv2t %" FLA_IS "",*jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t);
@@ -369,13 +362,16 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     aocl_int64_t imin, mini, imax, iter;
     doublereal unfl, temp;
     extern /* Subroutine */
-        void
-        dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
-    aocl_int64_t iu1cs, iu2cs, iu1sn, iu2sn;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t maxit;
+    void dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    integer iu1cs, iu2cs, iu1sn, iu2sn;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+    integer maxit;
     doublereal dummy;
-    aocl_int64_t iv1tcs, iv2tcs;
+    extern /* Subroutine */
+    void zlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    integer iv1tcs, iv2tcs;
     logical wantu1, wantu2;
     aocl_int64_t iv1tsn, iv2tsn;
     extern doublereal dlamch_(char *);
@@ -388,7 +384,7 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     logical wantv1t, wantv2t;
     doublereal b21bulge, b22bulge;
     extern /* Subroutine */
-    int dlartgp_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlartgs_( doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlartgp_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlartgs_( doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -477,7 +473,7 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         lrworkmin = 1;
         rwork[1] = (doublereal) lrworkmin;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute workspace */
     if(*info == 0)
@@ -503,12 +499,12 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         i__1 = -(*info);
         xerbla_("ZBBCSD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = dlamch_("Epsilon");
@@ -609,7 +605,7 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
                 }
             }
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         iter = iter + imax - imin;
         /* Compute shifts */
@@ -1342,7 +1338,7 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZBBCSD */
 }
 /* zbbcsd_ */

@@ -144,10 +144,7 @@ the blocks are not swapped and T and Q are */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlaexc_(logical *wantq, aocl_int_t *n, doublereal *t, aocl_int_t *ldt, doublereal *q,
-             aocl_int_t *ldq, aocl_int_t *j1, aocl_int_t *n1, aocl_int_t *n2, doublereal *work,
-             aocl_int_t *info)
+void dlaexc_(logical *wantq, integer *n, doublereal *t, integer *ldt, doublereal *q, integer *ldq, integer *j1, integer *n1, integer *n2, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaexc inputs: n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", j1 %" FLA_IS ", n1 %" FLA_IS ", n2 %" FLA_IS "",*n, *ldt, *ldq, *j1, *n1, *n2);
@@ -166,7 +163,14 @@ void dlaexc_(logical *wantq, aocl_int_t *n, doublereal *t, aocl_int_t *ldt, doub
     doublereal cs, t11, t22, t33, sn, wi1, wi2, wr1, wr2, eps, tau, tau1, tau2;
     aocl_int64_t ierr;
     doublereal temp;
+    extern /* Subroutine */
+    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
     doublereal scale, dnorm, xnorm;
+    extern /* Subroutine */
+    void dlanv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlasy2_( logical *, logical *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */
+    void dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlarfx_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *);
     doublereal thresh, smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -204,12 +208,12 @@ void dlaexc_(logical *wantq, aocl_int_t *n, doublereal *t, aocl_int_t *ldt, doub
     if(*n == 0 || *n1 == 0 || *n2 == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*j1 + *n1 > *n)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     j2 = *j1 + 1;
     j3 = *j1 + 2;
@@ -424,12 +428,12 @@ void dlaexc_(logical *wantq, aocl_int_t *n, doublereal *t, aocl_int_t *ldt, doub
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* Exit with INFO = 1 if swap was rejected. */
 L50:
     *info = 1;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAEXC */
 }
 /* dlaexc_ */

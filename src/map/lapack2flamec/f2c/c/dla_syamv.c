@@ -162,7 +162,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dla_syamv_(integer *uplo, integer *n, doublereal *alpha, doublereal *a, integer *lda, doublereal *x, integer *incx, doublereal *beta, doublereal *y, integer *incy)
+void dla_syamv_(integer *uplo, integer *n, doublereal *alpha, doublereal *a, integer *lda, doublereal *x, integer *incx, doublereal *beta, doublereal *y, integer *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dla_syamv inputs: uplo %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*uplo, *n, *lda, *incx, *incy);
@@ -233,13 +233,13 @@ int dla_syamv_(integer *uplo, integer *n, doublereal *alpha, doublereal *a, inte
     {
         xerbla_("DLA_SYAMV", &info, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || *alpha == 0. && *beta == 1.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set up the start points in X and Y. */
     if (*incx > 0)
@@ -476,7 +476,7 @@ int dla_syamv_(integer *uplo, integer *n, doublereal *alpha, doublereal *a, inte
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLA_SYAMV */
 }
 /* dla_syamv__ */

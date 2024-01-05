@@ -142,9 +142,7 @@ static real c_b5 = 1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slarz_(char *side, aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, real *v, aocl_int_t *incv,
-            real *tau, real *c__, aocl_int_t *ldc, real *work)
+void slarz_(char *side, integer *m, integer *n, integer *l, real *v, integer *incv, real *tau, real *c__, integer *ldc, real * work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -156,7 +154,11 @@ void slarz_(char *side, aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, real *v, ao
     aocl_int64_t c_dim1, c_offset;
     real r__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -221,7 +223,7 @@ void slarz_(char *side, aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, real *v, ao
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLARZ */
 }
 /* slarz_ */

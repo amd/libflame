@@ -154,9 +154,7 @@ static aocl_int64_t c__1 = 1;
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slagv2_(real *a, aocl_int_t *lda, real *b, aocl_int_t *ldb, real *alphar, real *alphai,
-             real *beta, real *csl, real *snl, real *csr, real *snr)
+void slagv2_(real *a, integer *lda, real *b, integer *ldb, real *alphar, real *alphai, real *beta, real *csl, real *snl, real * csr, real *snr)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slagv2(a, lda, b, ldb, alphar, alphai, beta, csl, snl, csr, snr);
@@ -178,16 +176,17 @@ void aocl_lapack_slagv2(real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, 
     real r__1, r__2, r__3, r__4, r__5, r__6;
     /* Local variables */
     real r__, t, h1, h2, h3, wi, qq, rr, wr1, wr2, ulp;
+    extern /* Subroutine */
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *), slag2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *);
     real anorm, bnorm, scale1, scale2;
     extern /* Subroutine */
-    int slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
+    void slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
     extern real slapy2_(real *, real *);
     real ascale, bscale;
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        void
-        slartg_(real *, real *, real *, real *, real *);
+    void slartg_(real *, real *, real *, real *, real * );
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -376,7 +375,6 @@ void aocl_lapack_slagv2(real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, 
         beta[1] = 1.f;
         beta[2] = 1.f;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAGV2 */
 }

@@ -128,7 +128,7 @@ the routine */
 /* > \ingroup complexHEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int chetrf_aa_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, complex *work, integer *lwork, integer *info)
+void chetrf_aa_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("chetrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -140,14 +140,14 @@ int chetrf_aa_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv,
     void r_cnjg(complex *, complex *);
     /* Local variables */
     extern /* Subroutine */
-    int clahef_aa_(char *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, complex *);
+    void clahef_aa_(char *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, complex *);
     integer j, j1, k1, k2, j2, j3, jb, nb, mj, nj;
     complex alpha;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -212,18 +212,18 @@ int chetrf_aa_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv,
         i__1 = -(*info);
         xerbla_("CHETRF_AA", &i__1, (ftnlen)9);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     ipiv[1] = 1;
     if (*n == 1)
@@ -234,7 +234,7 @@ int chetrf_aa_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv,
         a[i__1].r = r__1;
         a[i__1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Adjust block size based on the workspace size */
     if (*lwork < (nb + 1) * *n)
@@ -494,7 +494,7 @@ L20:
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CHETRF_AA */
 }
 /* chetrf_aa__ */

@@ -130,10 +130,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dpbcon_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int_t *ldab,
-             doublereal *anorm, doublereal *rcond, doublereal *work, aocl_int_t *iwork,
-             aocl_int_t *info)
+void dpbcon_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab, doublereal *anorm, doublereal *rcond, doublereal * work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpbcon inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",*uplo, *n, *kd, *ldab);
@@ -145,9 +142,16 @@ void dpbcon_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int
     doublereal scale;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
+    extern /* Subroutine */
+    void drscl_(integer *, doublereal *, doublereal *, integer *);
     logical upper;
+    extern /* Subroutine */
+    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal scalel;
+    extern integer idamax_(integer *, doublereal *, integer *);
+    extern /* Subroutine */
+    void dlatbs_(char *, char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal scaleu;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -211,7 +215,7 @@ void dpbcon_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int
         i__1 = -(*info);
         xerbla_("DPBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.;
@@ -219,12 +223,12 @@ void dpbcon_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(*anorm == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     smlnum = dlamch_("Safe minimum");
     /* Estimate the 1-norm of the inverse. */
@@ -274,7 +278,7 @@ L10:
     }
 L20:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPBCON */
 }
 /* dpbcon_ */

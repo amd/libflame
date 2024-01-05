@@ -217,51 +217,14 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slabrd_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nb, real *a, aocl_int_t *lda, real *d__,
-             real *e, real *tauq, real *taup, real *x, aocl_int_t *ldx, real *y, aocl_int_t *ldy)
+void slabrd_(integer *m, integer *n, integer *nb, real *a, integer *lda, real *d__, real *e, real *tauq, real *taup, real *x, integer *ldx, real *y, integer *ldy)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nb_64 = *nb;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t ldy_64 = *ldy;
-
-    aocl_lapack_slabrd(&m_64, &n_64, &nb_64, a, &lda_64, d__, e, tauq, taup, x, &ldx_64, y,
-                       &ldy_64);
-#endif
-}
-
-void aocl_lapack_slabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, real *a,
-                        aocl_int64_t *lda, real *d__, real *e, real *tauq, real *taup, real *x,
-                        aocl_int64_t *ldx, real *y, aocl_int64_t *ldy)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slabrd inputs: m %" FLA_IS ",n %" FLA_IS ",nb %" FLA_IS ",lda %" FLA_IS
-                      ",ldx %" FLA_IS ",ldy %" FLA_IS "",
-                      *m, *n, *nb, *lda, *ldx, *ldy);
-    extern void fla_slabrd(aocl_int64_t * m, aocl_int64_t * n, aocl_int64_t * nb, real * a,
-                           aocl_int64_t * lda, real * d__, real * e, real * tauq, real * taup,
-                           real * x, aocl_int64_t * ldx, real * y, aocl_int64_t * ldy);
+    extern void fla_slabrd(integer *m, integer *n, integer *nb, real *a, integer *lda, real *d__, real *e, real *tauq, real *taup, real *x, integer *ldx, real *y, integer *ldy);
 
     fla_slabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
-    AOCL_DTL_TRACE_LOG_EXIT
 }
 
-void fla_slabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, real *a, aocl_int64_t *lda,
-                real *d__, real *e, real *tauq, real *taup, real *x, aocl_int64_t *ldx, real *y,
-                aocl_int64_t *ldy)
-{
-    extern int fla_slabrd(integer *m, integer *n, integer *nb, real *a, integer *lda, real *d__, real *e, real *tauq, real *taup, real *x, integer *ldx, real *y, integer *ldy);
-
-    return fla_slabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
-}
-
-int fla_slabrd(integer *m, integer *n, integer *nb, real *a, integer *lda, real *d__, real *e, real *tauq, real *taup, real *x, integer *ldx, real *y, integer *ldy)
+void fla_slabrd(integer *m, integer *n, integer *nb, real *a, integer *lda, real *d__, real *e, real *tauq, real *taup, real *x, integer *ldx, real *y, integer *ldy)
 {
     /* System generated locals */
     integer a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3, i__4, i__5;
@@ -269,7 +232,7 @@ int fla_slabrd(integer *m, integer *n, integer *nb, real *a, integer *lda, real 
     integer i__;
     int thread_id, actual_num_threads;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), slarfg_( integer *, real *, real *, integer *, real *);
+    void sscal_(integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), slarfg_( integer *, real *, real *, integer *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

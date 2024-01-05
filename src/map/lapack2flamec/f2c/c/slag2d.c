@@ -99,9 +99,7 @@
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slag2d_(aocl_int_t *m, aocl_int_t *n, real *sa, aocl_int_t *ldsa, doublereal *a,
-             aocl_int_t *lda, aocl_int_t *info)
+void slag2d_(integer *m, integer *n, real *sa, integer *ldsa, doublereal *a, integer *lda, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -146,7 +144,7 @@ void slag2d_(aocl_int_t *m, aocl_int_t *n, real *sa, aocl_int_t *ldsa, doublerea
         /* L20: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLAG2D */
 }
 /* slag2d_ */

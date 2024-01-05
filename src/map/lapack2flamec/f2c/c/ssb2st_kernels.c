@@ -161,7 +161,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ssb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, integer *ed, integer *sweep, integer *n, integer * nb, integer *ib, real *a, integer *lda, real *v, real *tau, integer * ldvt, real *work)
+void ssb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, integer *ed, integer *sweep, integer *n, integer * nb, integer *ib, real *a, integer *lda, real *v, real *tau, integer * ldvt, real *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -179,10 +179,10 @@ int ssb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int slarfg_(integer *, real *, real *, integer *, real *);
+    void slarfg_(integer *, real *, real *, integer *, real *);
     integer ofdpos;
     extern /* Subroutine */
-    int slarfx_(char *, integer *, integer *, real *, real *, real *, integer *, real *), slarfy_(char *, integer *, real *, integer *, real *, real *, integer *, real *);
+    void slarfx_(char *, integer *, integer *, real *, real *, real *, integer *, real *), slarfy_(char *, integer *, real *, integer *, real *, real *, integer *, real *);
     integer taupos;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -386,7 +386,7 @@ int ssb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* END OF SSB2ST_KERNELS */
 }
 /* ssb2st_kernels__ */

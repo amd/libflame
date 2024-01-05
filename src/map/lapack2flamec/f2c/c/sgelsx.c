@@ -180,8 +180,7 @@ only the remaining */
 /* > \ingroup realGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgelsx_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *lda, real *b, aocl_int_t *ldb, aocl_int_t *jpvt, real *rcond, aocl_int_t *rank, real *work, aocl_int_t *info)
+void sgelsx_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb, integer *jpvt, real *rcond, integer *rank, real *work, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgelsx(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, info);
@@ -219,12 +218,16 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     real anrm, bnrm, smin, smax;
     integer iascl, ibscl, ismin, ismax;
     extern /* Subroutine */
-    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), slaic1_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *), sorm2r_( char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), slabad_(real *, real *);
+    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), slaic1_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *), sorm2r_( char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), slabad_(real *, real *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
+    extern /* Subroutine */
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), sgeqpf_(integer *, integer *, real *, integer *, integer *, real *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     real sminpr, smaxpr, smlnum;
+    extern /* Subroutine */
+    void slatzm_(char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *), stzrqf_(integer *, integer *, real *, integer *, real *, integer * );
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -289,7 +292,7 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     {
         i__1 = -(*info);
         xerbla_("SGELSX", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Computing MIN */
@@ -297,7 +300,6 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     if (fla_min(i__1,*nrhs) == 0)
     {
         *rank = 0;
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine parameters */
@@ -484,7 +486,6 @@ L10:
         aocl_lapack_slascl("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L100:
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGELSX */
 }

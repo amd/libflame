@@ -236,9 +236,7 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, real *a,
-             aocl_int_t *lda, real *x, real *scale, real *cnorm, aocl_int_t *info)
+void slatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, real *a, integer *lda, real *x, real *scale, real *cnorm, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slatrs(uplo, trans, diag, normin, n, a, lda, x, scale, cnorm, info);
@@ -270,13 +268,16 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
     real xbnd;
     aocl_int64_t imax;
     real tmax, tjjs;
-    real xmax, grow, sumj, work[1];
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern real sdot_(integer *, real *, integer *, real *, integer *);
+    real xmax, grow, sumj;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
     real tscal, uscal;
     aocl_int64_t jlast;
     logical upper;
     extern /* Subroutine */
-    int saxpy_(integer *, real *, real *, integer *, real *, integer *), strsv_(char *, char *, char *, integer *, real *, integer *, real *, integer *);
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *), strsv_(char *, char *, char *, integer *, real *, integer *, real *, integer *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -347,13 +348,13 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
     {
         i__1 = -(*info);
         xerbla_("SLATRS", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *scale = 1.f;
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     /* Determine machine dependent parameters to control overflow. */
     smlnum = slamch_("Safe minimum") / slamch_("Precision");
@@ -483,7 +484,7 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 /* At least one entry of A is not a valid floating-point entry. */
                 /* Rely on TRSV to propagate Inf and NaN. */
                 strsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
-                return 0;
+                return;
             }
         }
     }
@@ -966,7 +967,7 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
         r__1 = 1.f / tscal;
         aocl_blas_sscal(n, &r__1, &cnorm[1], &c__1);
     }
-    return 0;
+    return;
     /* End of SLATRS */
 }
 /* slatrs_ */

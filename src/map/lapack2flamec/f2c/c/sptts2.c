@@ -97,8 +97,7 @@
 /* > \ingroup realPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sptts2_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *b, aocl_int_t *ldb)
+void sptts2_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -110,7 +109,9 @@ void sptts2_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *b, aocl_
     aocl_int64_t b_dim1, b_offset, i__1, i__2;
     real r__1;
     /* Local variables */
-    aocl_int64_t i__, j;
+    integer i__, j;
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -141,7 +142,7 @@ void sptts2_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *b, aocl_
             aocl_blas_sscal(nrhs, &r__1, &b[b_offset], ldb);
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Solve A * X = B using the factorization A = L*D*L**T, */
     /* overwriting each right hand side vector with its solution. */
@@ -165,7 +166,7 @@ void sptts2_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *b, aocl_
         /* L30: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPTTS2 */
 }
 /* sptts2_ */

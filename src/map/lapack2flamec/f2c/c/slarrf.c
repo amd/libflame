@@ -177,7 +177,7 @@ static integer c__1 = 1;
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int slarrf_(integer *n, real *d__, real *l, real *ld, integer *clstrt, integer *clend, real *w, real *wgap, real *werr, real *spdiam, real *clgapl, real *clgapr, real *pivmin, real *sigma, real *dplus, real *lplus, real *work, integer *info)
+void slarrf_(integer *n, real *d__, real *l, real *ld, integer *clstrt, integer *clend, real *w, real *wgap, real *werr, real *spdiam, real *clgapl, real *clgapr, real *pivmin, real *sigma, real *dplus, real *lplus, real *work, integer *info)
 {
     /* System generated locals */
     integer i__1;
@@ -193,7 +193,7 @@ int slarrf_(integer *n, real *d__, real *l, real *ld, integer *clstrt, integer *
     real fail2, avgap, ldmax, rdmax;
     integer shift;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     logical dorrr1;
     real ldelta;
     extern real slamch_(char *);
@@ -239,7 +239,7 @@ int slarrf_(integer *n, real *d__, real *l, real *ld, integer *clstrt, integer *
     /* Quick return if possible */
     if (*n <= 0)
     {
-        return 0;
+        return;
     }
     fact = 2.f;
     eps = slamch_("Precision");
@@ -532,7 +532,7 @@ L50:
         else
         {
             *info = 1;
-            return 0;
+            return;
         }
     }
 L100:
@@ -546,7 +546,7 @@ L100:
         i__1 = *n - 1;
         scopy_(&i__1, &work[*n + 1], &c__1, &lplus[1], &c__1);
     }
-    return 0;
+    return;
     /* End of SLARRF */
 }
 /* slarrf_ */

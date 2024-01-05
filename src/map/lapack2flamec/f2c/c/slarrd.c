@@ -321,7 +321,7 @@ these eigenvalues are flagged by a */
 /* > \ingroup OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *il, integer *iu, real *gers, real *reltol, real * d__, real *e, real *e2, real *pivmin, integer *nsplit, integer * isplit, integer *m, real *w, real *werr, real *wl, real *wu, integer * iblock, integer *indexw, real *work, integer *iwork, integer *info)
+void slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *il, integer *iu, real *gers, real *reltol, real * d__, real *e, real *e2, real *pivmin, integer *nsplit, integer * isplit, integer *m, real *w, real *werr, real *wl, real *wu, integer * iblock, integer *indexw, real *work, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -351,7 +351,7 @@ int slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *i
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer idiscu;
     extern /* Subroutine */
-    int slaebz_(integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    void slaebz_(integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
     logical ncnvrg, toofew;
     /* -- LAPACK auxiliary routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -394,7 +394,7 @@ int slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *i
     /* Quick return if possible */
     if (*n <= 0)
     {
-        return 0;
+        return;
     }
     /* Decode RANGE */
     if (lsame_(range, "A"))
@@ -443,7 +443,7 @@ int slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *i
     }
     if (*info != 0)
     {
-        return 0;
+        return;
     }
     /* Initialize error flags */
     *info = 0;
@@ -453,7 +453,7 @@ int slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *i
     *m = 0;
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     /* Simplification: */
     if (irange == 3 && *il == 1 && *iu == *n)
@@ -476,7 +476,7 @@ int slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *i
             iblock[1] = 1;
             indexw[1] = 1;
         }
-        return 0;
+        return;
     }
     /* NB is the minimum vector length for vector bisection, or 0 */
     /* if only scalar is to be done. */
@@ -545,7 +545,7 @@ int slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *i
         if (iinfo != 0)
         {
             *info = iinfo;
-            return 0;
+            return;
         }
         /* On exit, output intervals may not be ordered by ascending negcount */
         if (iwork[6] == *iu)
@@ -571,7 +571,7 @@ int slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *i
         if (nwl < 0 || nwl >= *n || nwu < 1 || nwu > *n)
         {
             *info = 4;
-            return 0;
+            return;
         }
     }
     else if (irange == 2)
@@ -725,7 +725,7 @@ int slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *i
             if (iinfo != 0)
             {
                 *info = iinfo;
-                return 0;
+                return;
             }
             nwl += iwork[1];
             nwu += iwork[in + 1];
@@ -736,7 +736,7 @@ int slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *i
             if (iinfo != 0)
             {
                 *info = iinfo;
-                return 0;
+                return;
             }
             /* Copy eigenvalues into W and IBLOCK */
             /* Use -JBLK for block number for unconverged eigenvalues. */
@@ -984,7 +984,7 @@ L70:
     {
         *info += 2;
     }
-    return 0;
+    return;
     /* End of SLARRD */
 }
 /* slarrd_ */

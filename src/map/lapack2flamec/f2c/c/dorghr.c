@@ -130,29 +130,7 @@ the routine */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dorghr_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, doublereal *a, aocl_int_t *lda,
-             doublereal *tau, doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dorghr(n, ilo, ihi, a, lda, tau, work, lwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dorghr(&n_64, &ilo_64, &ihi_64, a, &lda_64, tau, work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_dorghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, doublereal *a,
-                        aocl_int64_t *lda, doublereal *tau, doublereal *work, aocl_int64_t *lwork,
-                        aocl_int64_t *info)
+void dorghr_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda, doublereal *tau, doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
@@ -226,7 +204,7 @@ void aocl_lapack_dorghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
     {
         i__1 = -(*info);
         xerbla_("DORGHR", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if(lquery)
     {
@@ -293,7 +271,7 @@ void aocl_lapack_dorghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
         /* Generate Q(ilo+1:ihi,ilo+1:ihi) */
         lapack_dorgqr(&nh, &nh, &nh, &a[*ilo + 1 + (*ilo + 1) * a_dim1], lda, &tau[* ilo], &work[1], lwork, &iinfo);
     }
-    work[1] = (doublereal)lwkopt;
+    work[1] = (doublereal) lwkopt;
     return;
     /* End of DORGHR */
 }

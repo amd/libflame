@@ -216,7 +216,7 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, real *b, integer *ldb, real *q, integer *ldq, real * z__, integer *ldz, integer *j1, integer *n1, integer *n2, real *work, integer *lwork, integer *info)
+void stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, real *b, integer *ldb, real *q, integer *ldq, real * z__, integer *ldz, integer *j1, integer *n1, integer *n2, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("stgex2 inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", j1 %" FLA_IS ", n1 %" FLA_IS ", n2 %" FLA_IS "",*n, *lda, *ldb, *ldq, *ldz, *j1, *n1, *n2);
@@ -240,27 +240,27 @@ int stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, r
     , tcpy[16] /* was [4][4] */
     ;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     real scale, bqra21, brqa21;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     real licop[16] /* was [4][4] */
     ;
     integer linfo;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     real ircop[16] /* was [4][4] */
     ;
     integer iwork[4];
     extern /* Subroutine */
-    int slagv2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *, real *), sgeqr2_( integer *, integer *, real *, integer *, real *, real *, integer * ), sgerq2_(integer *, integer *, real *, integer *, real *, real *, integer *), sorg2r_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *), sorgr2_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *), sorm2r_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), sormr2_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *);
+    void slagv2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *, real *), sgeqr2_( integer *, integer *, real *, integer *, real *, real *, integer * ), sgerq2_(integer *, integer *, real *, integer *, real *, real *, integer *), sorg2r_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *), sorgr2_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *), sorm2r_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), sormr2_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *);
     real dscale;
     extern /* Subroutine */
-    int stgsy2_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *, integer *);
+    void stgsy2_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *, integer *);
     extern real slamch_(char *);
     real dnorma, dnormb;
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slartg_(real *, real *, real *, real *, real *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slassq_(integer *, real *, integer *, real *, real *);
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slartg_(real *, real *, real *, real *, real *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slassq_(integer *, real *, integer *, real *, real *);
     real smlnum;
     logical strong;
     real thresha, threshb;
@@ -307,12 +307,12 @@ int stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, r
     if (*n <= 1 || *n1 <= 0 || *n2 <= 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n1 > *n || *j1 + *n1 > *n)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     m = *n1 + *n2;
     /* Computing MAX */
@@ -326,7 +326,7 @@ int stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, r
         i__2 = m * m << 1; // , expr subst
         work[1] = (real) fla_max(i__1,i__2);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     weak = FALSE_;
     strong = FALSE_;
@@ -448,7 +448,7 @@ int stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, r
         }
         /* Exit with INFO = 0 if swap was successfully performed. */
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else
     {
@@ -697,13 +697,13 @@ int stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, r
         }
         /* Exit with INFO = 0 if swap was successfully performed. */
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Exit with INFO = 1 if swap was rejected. */
 L70:
     *info = 1;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of STGEX2 */
 }
 /* stgex2_ */

@@ -470,7 +470,7 @@ Jacobi rotations */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jobp, integer *m, integer *n, real *a, integer *lda, real *sva, real *u, integer *ldu, real *v, integer *ldv, real *work, integer *lwork, integer *iwork, integer *info)
+void sgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jobp, integer *m, integer *n, real *a, integer *lda, real *sva, real *u, integer *ldu, real *v, integer *ldv, real *work, integer *lwork, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10, i__11, i__12;
@@ -490,20 +490,20 @@ int sgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
     logical jracc;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     real small_val, entra, sfmin;
     logical lsvec;
     real epsln;
     logical rsvec;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
+    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
     logical l2aber;
     extern /* Subroutine */
-    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * );
+    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * );
     real condr1, condr2, uscal1, uscal2;
     logical l2kill, l2rank, l2tran;
     extern /* Subroutine */
-    int sgeqp3_(integer *, integer *, real *, integer *, integer *, real *, real *, integer *, integer *);
+    void sgeqp3_(integer *, integer *, real *, integer *, integer *, real *, real *, integer *, integer *);
     logical l2pert;
     real scalem, sconda;
     logical goscal;
@@ -514,21 +514,21 @@ int sgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical noscal;
     extern /* Subroutine */
-    int sgelqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    void sgelqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     real entrat;
     logical almort;
     real maxprj;
     extern /* Subroutine */
-    int spocon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
+    void spocon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
     logical errest;
     extern /* Subroutine */
-    int sgesvj_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), slassq_( integer *, real *, integer *, real *, real *);
+    void sgesvj_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), slassq_( integer *, real *, integer *, real *, real *);
     logical transp;
     extern /* Subroutine */
-    int slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *), sorgqr_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), sormlq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+    void slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *), sorgqr_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), sormlq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     logical rowpiv;
     real cond_ok__;
     integer warning, numrank;
@@ -661,7 +661,7 @@ int sgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
         /* #:( */
         i__1 = -(*info);
         xerbla_("SGEJSV", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return for void matrix (Y3K safe) */
     /* #:) */
@@ -681,7 +681,7 @@ int sgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
         {
             work[j1] = 0.f;
         }
-        return 0;
+        return;
     }
     /* Determine whether the matrix U should be M x N or M x M */
     if (lsvec)
@@ -719,7 +719,7 @@ int sgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
             *info = -9;
             i__2 = -(*info);
             xerbla_("SGEJSV", &i__2, (ftnlen)6);
-            return 0;
+            return;
         }
         aaqq = sqrt(aaqq);
         if (aapp < big / aaqq && noscal)
@@ -794,7 +794,7 @@ int sgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
         iwork[1] = 0;
         iwork[2] = 0;
         iwork[3] = 0;
-        return 0;
+        return;
     }
     /* Issue warning if denormalized column norms detected. Override the */
     /* high relative accuracy request. Issue licence to kill columns */
@@ -868,7 +868,7 @@ int sgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
             work[6] = 0.f;
             work[7] = 0.f;
         }
-        return 0;
+        return;
     }
     transp = FALSE_;
     l2tran = l2tran && *m == *n;
@@ -2400,7 +2400,7 @@ L3302:
     iwork[1] = nr;
     iwork[2] = numrank;
     iwork[3] = warning;
-    return 0;
+    return;
     /* .. */
     /* .. END OF SGEJSV */
     /* .. */

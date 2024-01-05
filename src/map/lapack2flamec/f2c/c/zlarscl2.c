@@ -86,8 +86,7 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlarscl2_(aocl_int_t *m, aocl_int_t *n, doublereal *d__, dcomplex *x, aocl_int_t *ldx)
+void zlarscl2_(integer *m, integer *n, doublereal *d__, doublecomplex *x, integer *ldx)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarscl2 inputs: m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS "",*m, *n, *ldx);
@@ -130,6 +129,6 @@ void zlarscl2_(aocl_int_t *m, aocl_int_t *n, doublereal *d__, dcomplex *x, aocl_
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* zlarscl2_ */

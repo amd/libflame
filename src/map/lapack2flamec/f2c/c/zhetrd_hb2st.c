@@ -232,7 +232,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zhetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab, doublereal *d__, doublereal *e, doublecomplex *hous, integer *lhous, doublecomplex *work, integer *lwork, integer *info)
+void zhetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab, doublereal *d__, doublereal *e, doublecomplex *hous, integer *lhous, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetrd_hb2st inputs: stage1 %c, vect %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", lhous %" FLA_IS "", *stage1, *vect, *uplo, *n, *kd, *ldab, *lhous);
@@ -352,12 +352,12 @@ int zhetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd,
         i__1 = -(*info);
         xerbla_("ZHETRD_HB2ST", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
@@ -367,7 +367,7 @@ int zhetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd,
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine pointer position */
     ldv = *kd + ib;
@@ -426,7 +426,7 @@ int zhetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd,
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Case KD=1: */
     /* The matrix is already Tridiagonal. We have to make diagonal */
@@ -538,7 +538,7 @@ int zhetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd,
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Main code start here. */
     /* Reduce the hermitian band of A to a tridiagonal matrix. */
@@ -734,7 +734,7 @@ int zhetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd,
     work[1].r = (doublereal)lwmin;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHETRD_HB2ST */
 }
 /* zhetrd_hb2st__ */

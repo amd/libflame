@@ -154,9 +154,7 @@ v(i+2:n) is stored on exit in AP, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zhptrd_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *d__, doublereal *e,
-             dcomplex *tau, aocl_int_t *info)
+void zhptrd_(char *uplo, integer *n, doublecomplex *ap, doublereal *d__, doublereal *e, doublecomplex *tau, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhptrd inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
@@ -165,13 +163,17 @@ void zhptrd_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *d__, doublerea
     doublereal d__1;
     dcomplex z__1, z__2, z__3, z__4;
     /* Local variables */
-    aocl_int64_t i__, i1, ii, i1i1;
-    dcomplex taui;
-    dcomplex alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, i1, ii, i1i1;
+    doublecomplex taui;
+    extern /* Subroutine */
+    void zhpr2_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *);
+    doublecomplex alpha;
+    extern logical lsame_(char *, char *);
+    extern /* Double Complex */
+    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int zhpmv_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    void zhpmv_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -214,13 +216,13 @@ void zhptrd_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *d__, doublerea
         i__1 = -(*info);
         xerbla_("ZHPTRD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n <= 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(upper)
     {
@@ -352,7 +354,7 @@ void zhptrd_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *d__, doublerea
         d__[i__1] = ap[i__2].real;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHPTRD */
 }
 /* zhptrd_ */

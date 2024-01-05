@@ -235,7 +235,7 @@ if INFO = i, i */
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, doublereal *d__, doublereal *e, doublereal *vt, integer *ldvt, doublereal *u, integer *ldu, doublereal *c__, integer * ldc, doublereal *work, integer *info)
+void dbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, doublereal *d__, doublereal *e, doublereal *vt, integer *ldvt, doublereal *u, integer *ldu, doublereal *c__, integer * ldc, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dbdsqr inputs: uplo %c, n %" FLA_IS ", ncvt %" FLA_IS ", nru %" FLA_IS ", ncc %" FLA_IS ", ldvt %" FLA_IS ", ldu %" FLA_IS ", ldc %" FLA_IS "",*uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
@@ -262,22 +262,22 @@ int dbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, 
     integer isub, iter;
     doublereal unfl, sinl, cosr, smin, smax, sinr;
     extern /* Subroutine */
-    int drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *), dlas2_( doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dscal_(integer *, doublereal *, doublereal *, integer *);
+    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *), dlas2_( doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     doublereal oldcs;
     extern /* Subroutine */
-    int dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+    void dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     integer oldll;
     doublereal shift, sigmn, oldsn;
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal sminl, sigmx;
     logical lower;
     extern /* Subroutine */
-    int dlasq1_(integer *, doublereal *, doublereal *, doublereal *, integer *), dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlasq1_(integer *, doublereal *, doublereal *, doublereal *, integer *), dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal sminoa, thresh;
     logical rotate;
     doublereal tolmul;
@@ -355,12 +355,12 @@ int dbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, 
         i__1 = -(*info);
         xerbla_("DBDSQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -376,7 +376,7 @@ int dbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, 
         if (*info != 2)
         {
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         *info = 0;
     }
@@ -1000,7 +1000,7 @@ L200:
     }
     AOCL_DTL_TRACE_LOG_EXIT
 L220:
-    return 0;
+    return;
     /* End of DBDSQR */
 }
 /* dbdsqr_ */

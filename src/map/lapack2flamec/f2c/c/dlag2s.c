@@ -100,9 +100,7 @@ if */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlag2s_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, real *sa,
-             aocl_int_t *ldsa, aocl_int_t *info)
+void dlag2s_(integer *m, integer *n, doublereal *a, integer * lda, real *sa, integer *ldsa, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlag2s inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS "",*m, *n, *lda, *ldsa);
@@ -155,7 +153,7 @@ void dlag2s_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, real 
     *info = 0;
 L30:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAG2S */
 }
 /* dlag2s_ */

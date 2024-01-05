@@ -176,7 +176,7 @@ that is, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ztplqt_(integer *m, integer *n, integer *l, integer *mb, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *t, integer *ldt, doublecomplex *work, integer *info)
+void ztplqt_(integer *m, integer *n, integer *l, integer *mb, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *t, integer *ldt, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztplqt inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", mb %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldt %" FLA_IS "",*m, *n, *l, *mb, *lda, *ldb, *ldt);
@@ -248,13 +248,13 @@ int ztplqt_(integer *m, integer *n, integer *l, integer *mb, doublecomplex *a, i
         i__1 = -(*info);
         xerbla_("ZTPLQT", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *m;
     i__2 = *mb;
@@ -287,7 +287,7 @@ int ztplqt_(integer *m, integer *n, integer *l, integer *mb, doublecomplex *a, i
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTPLQT */
 }
 /* ztplqt_ */

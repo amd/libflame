@@ -212,13 +212,13 @@ int lapack_sgebrd(integer *m, integer *n, real *a, integer *lda, real *d__, real
     /* Local variables */
     integer i__, nbmin, iinfo;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer minmn;
     extern /* Subroutine */
     int lapack_sgebd2(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *);
     integer nb, nx;
     extern /* Subroutine */
-    int slabrd_(integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *, real *, integer *);
+    void slabrd_(integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *, real *, integer *);
     integer ws;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);

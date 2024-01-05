@@ -94,9 +94,7 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlamrg_(aocl_int_t *n1, aocl_int_t *n2, doublereal *a, aocl_int_t *dtrd1, aocl_int_t *dtrd2,
-             aocl_int_t *index)
+void dlamrg_(integer *n1, integer *n2, doublereal *a, integer *dtrd1, integer *dtrd2, integer *index)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlamrg inputs: n1 %" FLA_IS ", n2 %" FLA_IS ", dtrd1 %" FLA_IS ", dtrd2 %" FLA_IS "",*n1, *n2, *dtrd1, *dtrd2);
@@ -184,7 +182,7 @@ L10:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAMRG */
 }
 /* dlamrg_ */

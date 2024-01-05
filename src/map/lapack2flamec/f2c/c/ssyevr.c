@@ -343,11 +343,7 @@ the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ssyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, real *vl,
-             real *vu, aocl_int_t *il, aocl_int_t *iu, real *abstol, aocl_int_t *m, real *w,
-             real *z__, aocl_int_t *ldz, aocl_int_t *isuppz, real *work, aocl_int_t *lwork,
-             aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
+void ssyevr_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *lda, real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, real *z__, integer *ldz, integer * isuppz, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -370,11 +366,15 @@ void ssyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *a, aocl_i
     logical test;
     aocl_int64_t inddd, indee;
     real sigma;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    extern logical lsame_(char *, char *);
+    integer iinfo;
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
     char order[1];
     aocl_int64_t indwk, lwmin;
     logical lower;
+    extern /* Subroutine */
+    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
     logical wantz, alleig, indeig;
     aocl_int64_t iscale, ieeeok, indibl, indifl;
     logical valeig;
@@ -387,15 +387,17 @@ void ssyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *a, aocl_i
     aocl_int64_t indtau, indisp, indiwo, indwkn, liwmin;
     logical tryrac;
     extern /* Subroutine */
-    int sstein_(integer *, real *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *), ssterf_(integer *, real *, real *, integer *);
+    void sstein_(integer *, real *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *), ssterf_(integer *, real *, real *, integer *);
     integer llwrkn, llwork, nsplit;
     real smlnum;
     extern real slansy_(char *, char *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int sstebz_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *), sstemr_(char *, char *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, real *, real *, integer *, integer *, integer *, logical *, real *, integer *, integer *, integer *, integer *);
+    void sstebz_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *), sstemr_(char *, char *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, real *, real *, integer *, integer *, integer *, logical *, real *, integer *, integer *, integer *, integer *);
     integer lwkopt;
     logical lquery;
-    /* -- LAPACK driver routine -- */
+    extern /* Subroutine */
+    void sormtr_(char *, char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), ssytrd_(char *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *);
+    /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -517,12 +519,12 @@ void ssyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *a, aocl_i
         i__1 = -(*info);
         xerbla_("SSYEVR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = 0;
@@ -530,7 +532,7 @@ void ssyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *a, aocl_i
     {
         work[1] = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -555,7 +557,7 @@ void ssyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *a, aocl_i
             isuppz[2] = 1;
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -781,7 +783,7 @@ L30:
     work[1] = (real) lwkopt;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYEVR */
 }
 /* ssyevr_ */

@@ -260,7 +260,7 @@ INB-by-M}
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int sorhr_col_(integer *m, integer *n, integer *nb, real *a, integer *lda, real *t, integer *ldt, real *d__, integer *info)
+void sorhr_col_(integer *m, integer *n, integer *nb, real *a, integer *lda, real *t, integer *ldt, real *d__, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -273,10 +273,10 @@ int sorhr_col_(integer *m, integer *n, integer *nb, real *a, integer *lda, real 
     /* Local variables */
     integer nplusone, i__, j, jb, jnb;
     extern /* Subroutine */
-    int slaorhr_col_getrfnp_(integer *, integer *, real *, integer *, real *, integer *);
+    void slaorhr_col_getrfnp_(integer *, integer *, real *, integer *, real *, integer *);
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), strsm_( char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sscal_(integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), strsm_( char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer jbtemp1, jbtemp2;
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -339,13 +339,13 @@ int sorhr_col_(integer *m, integer *n, integer *nb, real *a, integer *lda, real 
         i__1 = -(*info);
         xerbla_("SORHR_COL", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* On input, the M-by-N matrix A contains the orthogonal */
     /* M-by-N matrix Q_in. */
@@ -461,7 +461,7 @@ int sorhr_col_(integer *m, integer *n, integer *nb, real *a, integer *lda, real 
         strsm_("R", "L", "T", "U", &jnb, &jnb, &c_b7, &a[jb + jb * a_dim1], lda, &t[jb * t_dim1 + 1], ldt);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SORHR_COL */
 }
 /* sorhr_col__ */

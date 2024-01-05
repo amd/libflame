@@ -30,7 +30,7 @@
 */
 
 #define LAPACK_orgtr(prefix, name)                                      \
-  int F77_ ## prefix ## name ## tr( char* uplo,                         \
+  void F77_ ## prefix ## name ## tr( char* uplo,                         \
                                     integer*  m,                            \
                                     PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer *ldim_A, \
                                     PREFIX2LAPACK_TYPEDEF(prefix)* buff_t, \
@@ -113,116 +113,10 @@
 
 
 
-    aocl_lapack_sorgtr(uplo, &m_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-/** Generated wrapper function */
-void dorgtr_(char *uplo, aocl_int_t *m, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dorgtr(uplo, m, buff_A, ldim_A, buff_t, buff_w, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t ldim_A_64 = *ldim_A;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dorgtr(uplo, &m_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-#define LAPACK_orgtr(prefix, name)                                                              \
-    void aocl_lapack_##prefix##name##tr(char *uplo, aocl_int64_t *m, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                                aocl_int64_t * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,       \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork,        \
-                                aocl_int64_t * info)
-
-#define LAPACK_orgtr_body(prefix)                                     \
-    FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);            \
-    FLA_Obj A, ATL, ATR, ABL, ABR;                                    \
-    FLA_Obj t, T, TL, TR;                                             \
-    FLA_Error init_result;                                            \
-    FLA_Uplo uplo_fla;                                                \
-    fla_dim_t m_d = *m, m_e = (m_d - 1);                              \
-                                                                      \
-    FLA_Init_safe(&init_result);                                      \
-    FLA_Param_map_netlib_to_flame_uplo(uplo, &uplo_fla);              \
-                                                                      \
-    FLA_Obj_create_without_buffer(datatype, *m, *m, &A);              \
-    FLA_Obj_attach_buffer(buff_A, 1, *ldim_A, &A);                    \
-                                                                      \
-    if(m_e > 0)                                                       \
-    {                                                                 \
-        FLA_Obj_create_without_buffer(datatype, m_e, 1, &t);          \
-        FLA_Obj_attach_buffer(buff_t, 1, m_e, &t);                    \
-        PREFIX2FLAME_INVERT_TAU(prefix, t);                           \
-                                                                      \
-        FLA_Tridiag_UT_create_T(A, &T);                               \
-        FLA_Set(FLA_ZERO, T);                                         \
-        FLA_Part_1x2(T, &TL, &TR, m_e, FLA_LEFT);                     \
-                                                                      \
-        /* Accumulate house-holder vectors */                         \
-        if(uplo_fla == FLA_UPPER_TRIANGULAR)                          \
-        {                                                             \
-            FLA_Part_2x2(A, &ATL, &ATR, &ABL, &ABR, 1, 1, FLA_BL);    \
-            FLA_Accum_T_UT(FLA_BACKWARD, FLA_COLUMNWISE, ATR, t, TL); \
-        }                                                             \
-        else                                                          \
-        {                                                             \
-            FLA_Part_2x2(A, &ATL, &ATR, &ABL, &ABR, 1, 1, FLA_TR);    \
-            FLA_Accum_T_UT(FLA_FORWARD, FLA_COLUMNWISE, ABL, t, TL);  \
-            ;                                                         \
-        }                                                             \
-                                                                      \
-        if(FLA_Obj_is_complex(A) == TRUE)                             \
-        {                                                             \
-            FLA_Obj d2, e2, r;                                        \
-                                                                      \
-            /* Temporary vectors to store diagonal and subdiagonal */ \
-            FLA_Obj_create(datatype, m_d, 1, 0, 0, &d2);              \
-            FLA_Obj_create(datatype, m_e, 1, 0, 0, &e2);              \
-                                                                      \
-            /* Temporary vector to store realifying transformation */ \
-            FLA_Obj_create(datatype, m_d, 1, 0, 0, &r);               \
-                                                                      \
-            /* Extract diagonals and realify the subdiagonal */       \
-            FLA_Tridiag_UT_extract_diagonals(uplo_fla, A, d2, e2);    \
-            FLA_Tridiag_UT_realify_subdiagonal(e2, r);                \
-                                                                      \
-            /* Overwrite A to compute Q */                            \
-            FLA_Tridiag_UT_form_Q(uplo_fla, A, T, A);                 \
-                                                                      \
-            /* Applying r */                                          \
-            FLA_Apply_diag_matrix(FLA_RIGHT, FLA_CONJUGATE, r, A);    \
-                                                                      \
-            /* Clean up */                                            \
-            FLA_Obj_free(&r);                                         \
-            FLA_Obj_free(&e2);                                        \
-            FLA_Obj_free(&d2);                                        \
-        }                                                             \
-        else                                                          \
-        {                                                             \
-            FLA_Tridiag_UT_form_Q(uplo_fla, A, T, A);                 \
-        }                                                             \
-        FLA_Obj_free(&T);                                             \
-                                                                      \
-        PREFIX2FLAME_INVERT_TAU(prefix, t);                           \
-        FLA_Obj_free_without_buffer(&t);                              \
-    }                                                                 \
-    else                                                              \
-    {                                                                 \
-        FLA_Set_to_identity(A);                                       \
-    }                                                                 \
-    FLA_Obj_free_without_buffer(&A);                                  \
-                                                                      \
-    FLA_Finalize_safe(init_result);                                   \
-                                                                      \
-    *info = 0;
+extern void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info);
+extern void dorgtr_fla(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info);
+extern void cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer *info);
+extern void zungtr_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *work, integer *lwork, integer *info);
 
 LAPACK_orgtr(s, org)
 {
@@ -238,7 +132,7 @@ LAPACK_orgtr(s, org)
                         buff_w, lwork,
                         info );
             AOCL_DTL_TRACE_LOG_EXIT            
-            return 0;
+            return;
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -258,7 +152,7 @@ LAPACK_orgtr(s, org)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error; 
+    return; 
 }
 
 LAPACK_orgtr(d, org)
@@ -277,7 +171,7 @@ LAPACK_orgtr(d, org)
                         buff_w, lwork,
                         info );
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -296,7 +190,7 @@ LAPACK_orgtr(d, org)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
@@ -314,7 +208,7 @@ LAPACK_orgtr(c, ung)
                         (complex*)buff_w, lwork,
                         info );
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     {
@@ -331,7 +225,7 @@ LAPACK_orgtr(c, ung)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_orgtr(z, ung)
 {
@@ -347,7 +241,7 @@ LAPACK_orgtr(z, ung)
                         (doublecomplex*)buff_w, lwork,
                         info );
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     {
@@ -364,7 +258,7 @@ LAPACK_orgtr(z, ung)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 

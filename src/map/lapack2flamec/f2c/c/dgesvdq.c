@@ -420,7 +420,7 @@ the routine */
 /* > \ingroup doubleGEsing */
 /* ===================================================================== */
 /* Subroutine */
-int dgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer *m, integer *n, doublereal *a, integer *lda, doublereal *s, doublereal *u, integer *ldu, doublereal *v, integer * ldv, integer *numrank, integer *iwork, integer *liwork, doublereal * work, integer *lwork, doublereal *rwork, integer *lrwork, integer * info)
+void dgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer *m, integer *n, doublereal *a, integer *lda, doublereal *s, doublereal *u, integer *ldu, doublereal *v, integer * ldv, integer *numrank, integer *iwork, integer *liwork, doublereal * work, integer *lwork, doublereal *rwork, integer *lrwork, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgesvdq inputs: joba %c, jobp %c, jobr %c, jobu %c, jobv %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", lwork %" FLA_IS ", lrwork %" FLA_IS "",*joba, *jobp, *jobr, *jobu, *jobv, *m, *n, *lda, *ldu, *ldv, *lwork, *lrwork);
@@ -439,7 +439,7 @@ int dgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
     integer lwqp3;
     logical acclh, acclm, conda;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     integer iwoff;
     logical lsvec;
@@ -451,15 +451,15 @@ int dgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
     integer lworq;
     logical wntva, wntur, wntus, wntvr;
     extern /* Subroutine */
-    int dgeqp3_(integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *, integer *);
+    void dgeqp3_(integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *, integer *);
     integer lwsvd2, lworq2;
     extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    int dgelqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dgelqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     doublereal sconda;
     extern /* Subroutine */
-    int dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dgesvd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlapmt_(logical *, integer *, integer *, doublereal *, integer *, integer *), dpocon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *), dormlq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dgesvd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlapmt_(logical *, integer *, integer *, doublereal *, integer *, integer *), dpocon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *), dormlq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer minwrk;
     logical rtrans;
     doublereal rdummy[1];
@@ -930,7 +930,7 @@ int dgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
         i__1 = -(*info);
         xerbla_("DGESVDQ", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
@@ -940,14 +940,14 @@ int dgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
         work[2] = (doublereal) minwrk;
         rwork[1] = (doublereal) rminwrk;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if the matrix is void. */
     if (*m == 0 || *n == 0)
     {
         /* .. all output is void. */
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     big = dlamch_("O");
     ascaled = FALSE_;
@@ -973,7 +973,7 @@ int dgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
                 i__2 = -(*info);
                 xerbla_("DGESVDQ", &i__2, (ftnlen)7);
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L1904: */
         }
@@ -1040,7 +1040,7 @@ int dgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
             }
             rwork[2] = -1.;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         if (rwork[1] > big / sqrt((doublereal) (*m)))
         {
@@ -1066,7 +1066,7 @@ int dgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
             i__1 = -(*info);
             xerbla_("DGESVDQ", &i__1, (ftnlen)7);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         if (rtmp > big / sqrt((doublereal) (*m)))
         {
@@ -1952,7 +1952,7 @@ L4002: /* .. if numerical rank deficiency is detected, the truncated */
     /* full row rank triangular (trapezoidal) factor of A. */
     *numrank = nr;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGESVDQ */
 }
 /* dgesvdq_ */

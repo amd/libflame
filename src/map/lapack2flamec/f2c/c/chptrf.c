@@ -162,8 +162,7 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void chptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, aocl_int_t *info)
+void chptrf_(char *uplo, integer *n, complex *ap, integer * ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -194,18 +193,22 @@ void chptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, aocl_int
     scomplex wk;
     aocl_int64_t kx;
     real tt;
-    aocl_int64_t knc, kpc, npp;
-    scomplex wkm1, wkp1;
-    aocl_int64_t imax, jmax;
+    integer knc, kpc, npp;
+    complex wkm1, wkp1;
+    extern /* Subroutine */
+    void chpr_(char *, integer *, real *, complex *, integer *, complex *);
+    integer imax, jmax;
     real alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t kstep;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
+    integer kstep;
     logical upper;
     extern real slapy2_(real *, real *);
     real absakk;
     extern integer icamax_(integer *, complex *, integer *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -253,7 +256,7 @@ void chptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, aocl_int
         i__1 = -(*info);
         xerbla_("CHPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.f) + 1.f) / 8.f;
@@ -883,7 +886,7 @@ L10:
     }
 L110:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHPTRF */
 }
 /* chptrf_ */

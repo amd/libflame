@@ -153,7 +153,7 @@ and second, applying a diagonal similarity transformation */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgebal_(char *job, integer *n, complex *a, integer *lda, integer *ilo, integer *ihi, real *scale, integer *info)
+void cgebal_(char *job, integer *n, complex *a, integer *lda, integer *ilo, integer *ihi, real *scale, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -177,13 +177,13 @@ int cgebal_(char *job, integer *n, complex *a, integer *lda, integer *ilo, integ
     integer ica, ira, iexc;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
     real sfmin1, sfmin2, sfmax1, sfmax2;
     extern real scnrm2_(integer *, complex *, integer *);
     extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern logical sisnan_(real *);
     logical noconv;
     /* -- LAPACK computational routine (version 3.7.0) -- */
@@ -229,7 +229,7 @@ int cgebal_(char *job, integer *n, complex *a, integer *lda, integer *ilo, integ
         i__1 = -(*info);
         xerbla_("CGEBAL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     k = 1;
     l = *n;
@@ -400,7 +400,7 @@ L160: /* Computing MAX */
             i__2 = -(*info);
             xerbla_("CGEBAL", &i__2, (ftnlen)6);
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         f *= 2.f;
         c__ *= 2.f;
@@ -462,7 +462,7 @@ L210:
     *ilo = k;
     *ihi = l;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGEBAL */
 }
 /* cgebal_ */

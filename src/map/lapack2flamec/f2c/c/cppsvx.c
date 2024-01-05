@@ -313,10 +313,7 @@ if EQUED = 'Y', */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cppsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, scomplex *afp,
-             char *equed, real *s, scomplex *b, aocl_int_t *ldb, scomplex *x, aocl_int_t *ldx,
-             real *rcond, real *ferr, real *berr, scomplex *work, real *rwork, aocl_int_t *info)
+void cppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, complex *afp, char *equed, real *s, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -337,14 +334,24 @@ void cppsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *
     real amax, smin, smax;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real scond, anorm;
+    extern /* Subroutine */
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
     logical equil, rcequ;
-    extern real slamch_(char *);
+    extern real clanhp_(char *, char *, integer *, complex *, real *), slamch_(char *);
+    extern /* Subroutine */
+    void claqhp_(char *, integer *, complex *, real *, real *, real *, char *);
     logical nofact;
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    aocl_int64_t infequ;
+    extern /* Subroutine */
+    void cppcon_(char *, integer *, complex *, real *, real *, complex *, real *, integer *);
+    integer infequ;
+    extern /* Subroutine */
+    void cppequ_(char *, integer *, complex *, real *, real *, real *, integer *), cpprfs_(char *, integer *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), cpptrf_(char *, integer *, complex *, integer *);
     real smlnum;
+    extern /* Subroutine */
+    void cpptrs_(char *, integer *, integer *, complex *, complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -466,7 +473,7 @@ void cppsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *
         i__1 = -(*info);
         xerbla_("CPPSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(equil)
     {
@@ -511,7 +518,7 @@ void cppsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -559,7 +566,7 @@ void cppsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPPSVX */
 }
 /* cppsvx_ */

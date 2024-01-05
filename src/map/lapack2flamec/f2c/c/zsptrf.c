@@ -163,8 +163,7 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zsptrf_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, aocl_int_t *info)
+void zsptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsptrf inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
@@ -177,17 +176,23 @@ void zsptrf_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, aocl_int
     double sqrt(doublereal), d_imag(dcomplex *);
     void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    aocl_int64_t i__, j, k;
-    dcomplex t, r1, d11, d12, d21, d22;
-    aocl_int64_t kc, kk, kp;
-    dcomplex wk;
-    aocl_int64_t kx, knc, kpc, npp;
-    dcomplex wkm1, wkp1;
-    aocl_int64_t imax, jmax;
+    integer i__, j, k;
+    doublecomplex t, r1, d11, d12, d21, d22;
+    integer kc, kk, kp;
+    doublecomplex wk;
+    integer kx, knc, kpc, npp;
+    doublecomplex wkm1, wkp1;
+    integer imax, jmax;
+    extern /* Subroutine */
+    void zspr_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     doublereal alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t kstep;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+    integer kstep;
     logical upper;
+    extern /* Subroutine */
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal absakk;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -238,7 +243,7 @@ void zsptrf_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, aocl_int
         i__1 = -(*info);
         xerbla_("ZSPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.) + 1.) / 8.;
@@ -789,7 +794,7 @@ void zsptrf_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, aocl_int
     }
 L110:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSPTRF */
 }
 /* zsptrf_ */

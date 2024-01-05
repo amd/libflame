@@ -110,9 +110,7 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cupgtr_(char *uplo, aocl_int_t *n, scomplex *ap, scomplex *tau, scomplex *q, aocl_int_t *ldq,
-             scomplex *work, aocl_int_t *info)
+void cupgtr_(char *uplo, integer *n, complex *ap, complex * tau, complex *q, integer *ldq, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -128,7 +126,7 @@ void cupgtr_(char *uplo, aocl_int_t *n, scomplex *ap, scomplex *tau, scomplex *q
     aocl_int64_t iinfo;
     logical upper;
     extern /* Subroutine */
-    int cung2l_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), cung2r_( integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void cung2l_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), cung2r_( integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -177,13 +175,13 @@ void cupgtr_(char *uplo, aocl_int_t *n, scomplex *ap, scomplex *tau, scomplex *q
         i__1 = -(*info);
         xerbla_("CUPGTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(upper)
     {
@@ -276,7 +274,7 @@ void cupgtr_(char *uplo, aocl_int_t *n, scomplex *ap, scomplex *tau, scomplex *q
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CUPGTR */
 }
 /* cupgtr_ */

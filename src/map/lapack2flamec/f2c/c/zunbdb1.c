@@ -190,7 +190,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zunbdb1_(integer *m, integer *p, integer *q, doublecomplex *x11, integer *ldx11, doublecomplex *x21, integer * ldx21, doublereal *theta, doublereal *phi, doublecomplex *taup1, doublecomplex *taup2, doublecomplex *tauq1, doublecomplex *work, integer *lwork, integer *info)
+void zunbdb1_(integer *m, integer *p, integer *q, doublecomplex *x11, integer *ldx11, doublecomplex *x21, integer * ldx21, doublereal *theta, doublereal *phi, doublecomplex *taup1, doublecomplex *taup2, doublecomplex *tauq1, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zunbdb1 inputs: m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldx11 %" FLA_IS ", ldx21 %" FLA_IS ", lwork %" FLA_IS "", *m, *p, *q, *ldx11, *ldx21, *lwork);
@@ -209,14 +209,14 @@ int zunbdb1_(integer *m, integer *p, integer *q, doublecomplex *x11, integer *ld
     doublereal s;
     integer childinfo, ilarf, llarf;
     extern /* Subroutine */
-    int zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zdrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *);
+    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zdrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_( integer *, doublecomplex *, integer *);
     logical lquery;
     integer iorbdb5, lorbdb5;
     extern /* Subroutine */
-    int zunbdb5_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zlarfgp_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    void zunbdb5_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zlarfgp_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -308,12 +308,12 @@ int zunbdb1_(integer *m, integer *p, integer *q, doublecomplex *x11, integer *ld
         i__1 = -(*info);
         xerbla_("ZUNBDB1", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Reduce columns 1, ..., Q of X11 and X21 */
     i__1 = *q;
@@ -378,7 +378,7 @@ int zunbdb1_(integer *m, integer *p, integer *q, doublecomplex *x11, integer *ld
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZUNBDB1 */
 }
 /* zunbdb1_ */

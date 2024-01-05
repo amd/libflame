@@ -204,7 +204,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cunbdb4_(integer *m, integer *p, integer *q, complex * x11, integer *ldx11, complex *x21, integer *ldx21, real *theta, real * phi, complex *taup1, complex *taup2, complex *tauq1, complex *phantom, complex *work, integer *lwork, integer *info)
+void cunbdb4_(integer *m, integer *p, integer *q, complex * x11, integer *ldx11, complex *x21, integer *ldx21, real *theta, real * phi, complex *taup1, complex *taup2, complex *tauq1, complex *phantom, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -231,19 +231,19 @@ int cunbdb4_(integer *m, integer *p, integer *q, complex * x11, integer *ldx11, 
     real s;
     integer childinfo;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *), clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
+    void cscal_(integer *, complex *, complex *, integer *), clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
     integer ilarf, llarf;
     extern /* Subroutine */
-    int csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *);
+    void csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *);
     extern real scnrm2_(integer *, complex *, integer *);
     extern /* Subroutine */
-    int clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     extern /* Subroutine */
-    int cunbdb5_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void cunbdb5_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
     integer iorbdb5, lorbdb5;
     extern /* Subroutine */
-    int clarfgp_(integer *, complex *, complex *, integer *, complex *);
+    void clarfgp_(integer *, complex *, complex *, integer *, complex *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -337,12 +337,12 @@ int cunbdb4_(integer *m, integer *p, integer *q, complex * x11, integer *ldx11, 
         i__1 = -(*info);
         xerbla_("CUNBDB4", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Reduce columns 1, ..., M-Q of X11 and X21 */
     i__1 = *m - *q;
@@ -485,7 +485,7 @@ int cunbdb4_(integer *m, integer *p, integer *q, complex * x11, integer *ldx11, 
         clacgv_(&i__2, &x21[*m - *q + i__ - *p + i__ * x21_dim1], ldx21);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CUNBDB4 */
 }
 /* cunbdb4_ */

@@ -145,10 +145,7 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup doubleGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dgtcon_(char *norm, aocl_int_t *n, doublereal *dl, doublereal *d__, doublereal *du,
-             doublereal *du2, aocl_int_t *ipiv, doublereal *anorm, doublereal *rcond,
-             doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
+void dgtcon_(char *norm, integer *n, doublereal *dl, doublereal *d__, doublereal *du, doublereal *du2, integer *ipiv, doublereal *anorm, doublereal *rcond, doublereal *work, integer * iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgtcon inputs: norm %c, n %" FLA_IS "",*norm, *n);
@@ -159,9 +156,11 @@ void dgtcon_(char *norm, aocl_int_t *n, doublereal *dl, doublereal *d__, doubler
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     extern /* Subroutine */
-    int dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
+    extern /* Subroutine */
+    void dgttrs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -211,7 +210,7 @@ void dgtcon_(char *norm, aocl_int_t *n, doublereal *dl, doublereal *d__, doubler
         i__1 = -(*info);
         xerbla_("DGTCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.;
@@ -219,12 +218,12 @@ void dgtcon_(char *norm, aocl_int_t *n, doublereal *dl, doublereal *d__, doubler
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(*anorm == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check that D(1:N) is non-zero. */
     i__1 = *n;
@@ -233,7 +232,7 @@ void dgtcon_(char *norm, aocl_int_t *n, doublereal *dl, doublereal *d__, doubler
         if(d__[i__] == 0.)
         {
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* L10: */
     }
@@ -270,7 +269,7 @@ L20:
         *rcond = 1. / ainvnm / *anorm;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGTCON */
 }
 /* dgtcon_ */

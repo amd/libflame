@@ -143,9 +143,7 @@ static aocl_int64_t c__33 = 33;
 /* > Peter Mayes and Giuseppe Radicati, IBM ECSEC, Rome, March 23, 1989 */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void spbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ldab,
-             aocl_int_t *info)
+void spbtrf_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -161,7 +159,7 @@ void spbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ld
     ;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer *), spbtf2_(char *, integer *, integer *, real *, integer *, integer *), spotf2_(char *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer *), spbtf2_(char *, integer *, integer *, real *, integer *, integer *), spotf2_(char *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -213,13 +211,13 @@ void spbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ld
         i__1 = -(*info);
         xerbla_("SPBTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine the block size for this environment */
     nb = aocl_lapack_ilaenv(&c__1, "SPBTRF", uplo, n, kd, &c_n1, &c_n1);
@@ -480,10 +478,10 @@ void spbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ld
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 L150:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPBTRF */
 }
 /* spbtrf_ */

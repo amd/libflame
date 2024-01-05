@@ -99,9 +99,7 @@ if UPLO = 'L', only the lower trapezium is */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlacpy_(char *uplo, aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
-             dcomplex *b, aocl_int_t *ldb)
+void zlacpy_(char *uplo, integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlacpy inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %%" FLA_IS ", ldb %" FLA_IS "",*uplo, *m, *n, *lda, *ldb);
@@ -188,7 +186,7 @@ void zlacpy_(char *uplo, aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLACPY */
 }
 /* zlacpy_ */

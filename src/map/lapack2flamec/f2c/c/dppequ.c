@@ -113,9 +113,7 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dppequ_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *s, doublereal *scond,
-             doublereal *amax, aocl_int_t *info)
+void dppequ_(char *uplo, integer *n, doublereal *ap, doublereal *s, doublereal *scond, doublereal *amax, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dppequ inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
@@ -171,7 +169,7 @@ void dppequ_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *s, doublerea
         i__1 = -(*info);
         xerbla_("DPPEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
@@ -179,7 +177,7 @@ void dppequ_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *s, doublerea
         *scond = 1.;
         *amax = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize SMIN and AMAX. */
     s[1] = ap[1];
@@ -237,7 +235,7 @@ void dppequ_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *s, doublerea
             {
                 *info = i__;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L30: */
         }
@@ -256,7 +254,7 @@ void dppequ_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *s, doublerea
         *scond = sqrt(smin) / sqrt(*amax);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPPEQU */
 }
 /* dppequ_ */

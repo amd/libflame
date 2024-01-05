@@ -269,10 +269,7 @@ IHI <= IHIZ <= N. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slaqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
-             real *h__, aocl_int_t *ldh, real *wr, real *wi, aocl_int_t *iloz, aocl_int_t *ihiz,
-             real *z__, aocl_int_t *ldz, real *work, aocl_int_t *lwork, aocl_int_t *info)
+void slaqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, real *h__, integer *ldh, real *wr, real * wi, integer *iloz, integer *ihiz, real *z__, integer *ldz, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaqr4 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS "",*n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz);
@@ -295,12 +292,12 @@ void slaqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
     ;
     integer kacc22, itmax, nsmax, nwmax, kwtop;
     extern /* Subroutine */
-    int slaqr2_(logical *, logical *, integer *, integer *, integer *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *), slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *), slaqr5_(logical *, logical *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *);
+    void slaqr2_(logical *, logical *, integer *, integer *, integer *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *), slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *), slaqr5_(logical *, logical *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *);
     integer nibble;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     char jbcmpz[2];
     extern /* Subroutine */
-    int slahqr_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void slahqr_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer nwupbd;
     logical sorted;
     integer lwkopt;
@@ -354,7 +351,7 @@ void slaqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
     {
         work[1] = 1.f;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n <= 15)
     {
@@ -431,7 +428,7 @@ void slaqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
         {
             work[1] = (real) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* ==== SLAHQR/SLAQR0 crossover point ==== */
         nmin = ilaenv_(&c__12, "SLAQR4", jbcmpz, n, ilo, ihi, lwork);
@@ -774,6 +771,6 @@ void slaqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
     work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     /* ==== End of SLAQR4 ==== */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* slaqr4_ */

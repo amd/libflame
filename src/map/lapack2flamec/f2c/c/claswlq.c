@@ -157,7 +157,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int claswlq_(integer *m, integer *n, integer *mb, integer * nb, complex *a, integer *lda, complex *t, integer *ldt, complex *work, integer *lwork, integer *info)
+void claswlq_(integer *m, integer *n, integer *mb, integer * nb, complex *a, integer *lda, complex *t, integer *ldt, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -245,25 +245,25 @@ int claswlq_(integer *m, integer *n, integer *mb, integer * nb, complex *a, inte
         i__1 = -(*info);
         xerbla_("CLASWLQ", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* The LQ Decomposition */
     if (*m >= *n || *nb <= *m || *nb >= *n)
     {
         cgelqt_(m, n, mb, &a[a_offset], lda, &t[t_offset], ldt, &work[1], info);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     kk = (*n - *m) % (*nb - *m);
     ii = *n - kk + 1;
@@ -290,7 +290,7 @@ int claswlq_(integer *m, integer *n, integer *mb, integer * nb, complex *a, inte
     work[1].r = (real) i__2;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLASWLQ */
 }
 /* claswlq_ */

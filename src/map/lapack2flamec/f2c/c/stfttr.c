@@ -192,9 +192,7 @@
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void stfttr_(char *transr, char *uplo, aocl_int_t *n, real *arf, real *a, aocl_int_t *lda,
-             aocl_int_t *info)
+void stfttr_(char *transr, char *uplo, integer *n, real *arf, real *a, integer *lda, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_stfttr(transr, uplo, n, arf, a, lda, info);
@@ -273,7 +271,7 @@ void aocl_lapack_stfttr(char *transr, char *uplo, aocl_int64_t *n, real *arf, re
     {
         i__1 = -(*info);
         xerbla_("STFTTR", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n <= 1)
@@ -282,7 +280,6 @@ void aocl_lapack_stfttr(char *transr, char *uplo, aocl_int64_t *n, real *arf, re
         {
             a[0] = arf[0];
         }
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Size of array ARF(0:nt-1) */
@@ -566,7 +563,6 @@ void aocl_lapack_stfttr(char *transr, char *uplo, aocl_int64_t *n, real *arf, re
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STFTTR */
 }

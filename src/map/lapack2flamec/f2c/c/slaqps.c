@@ -175,10 +175,7 @@ static real c_b16 = 0.f;
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slaqps_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, aocl_int_t *nb, aocl_int_t *kb,
-             real *a, aocl_int_t *lda, aocl_int_t *jpvt, real *tau, real *vn1, real *vn2,
-             real *auxv, real *f, aocl_int_t *ldf)
+void slaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, real *a, integer *lda, integer *jpvt, real *tau, real *vn1, real *vn2, real *auxv, real *f, integer *ldf)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slaqps(m, n, offset, nb, kb, a, lda, jpvt, tau, vn1, vn2, auxv, f, ldf);
@@ -218,10 +215,17 @@ void aocl_lapack_slaqps(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, 
     aocl_int64_t pvt;
     real temp, temp2;
     real tol3z;
-    aocl_int64_t itemp;
+    extern /* Subroutine */
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    integer itemp;
+    extern /* Subroutine */
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
-    aocl_int64_t lsticc;
-    aocl_int64_t lastrk;
+    extern /* Subroutine */
+    void slarfg_(integer *, real *, real *, integer *, real *);
+    integer lsticc;
+    extern integer isamax_(integer *, real *, integer *);
+    integer lastrk;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -406,7 +410,6 @@ L40:
         lsticc = itemp;
         goto L40;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAQPS */
 }

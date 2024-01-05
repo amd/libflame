@@ -135,9 +135,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlaed4_(aocl_int_t *n, aocl_int_t *i__, doublereal *d__, doublereal *z__, doublereal *delta,
-             doublereal *rho, doublereal *dlam, aocl_int_t *info)
+void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho, doublereal *dlam, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaed4 inputs: n %" FLA_IS ", i__ %" FLA_IS "",*n, *i__);
@@ -160,6 +158,8 @@ void dlaed4_(aocl_int_t *n, aocl_int_t *i__, doublereal *d__, doublereal *z__, d
     doublereal temp, prew, temp1, dltlb, dltub, midpt;
     aocl_int64_t niter;
     logical swtch;
+    extern /* Subroutine */
+    void dlaed5_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlaed6_(integer *, logical *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
     logical swtch3;
     extern doublereal dlamch_(char *);
     logical orgati;
@@ -200,13 +200,13 @@ void dlaed4_(aocl_int_t *n, aocl_int_t *i__, doublereal *d__, doublereal *z__, d
         *dlam = d__[1] + *rho * z__[1] * z__[1];
         delta[1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*n == 2)
     {
         dlaed5_(i__, &d__[1], &z__[1], &delta[1], rho, dlam);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute machine epsilon */
     if(r_once)
@@ -1001,7 +1001,7 @@ void dlaed4_(aocl_int_t *n, aocl_int_t *i__, doublereal *d__, doublereal *z__, d
     }
 L250:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAED4 */
 }
 /* dlaed4_ */

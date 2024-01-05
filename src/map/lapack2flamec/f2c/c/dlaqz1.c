@@ -109,7 +109,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlaqz1_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *sr1, doublereal *sr2, doublereal *si, doublereal *beta1, doublereal *beta2, doublereal *v)
+void dlaqz1_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *sr1, doublereal *sr2, doublereal *si, doublereal *beta1, doublereal *beta2, doublereal *v)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqz1 inputs: lda %" FLA_IS ", ldb %" FLA_IS "",*lda, *ldb);
@@ -170,6 +170,6 @@ int dlaqz1_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal
     }
     /* End of DLAQZ1 */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dlaqz1_ */

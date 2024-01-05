@@ -46,7 +46,7 @@
 /* > \ingroup OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dcombssq_(doublereal *v1, doublereal *v2)
+void dcombssq_(doublereal *v1, doublereal *v2)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
@@ -82,7 +82,7 @@ int dcombssq_(doublereal *v1, doublereal *v2)
         v1[1] = v2[1];
     }
     AOCL_DTL_TRACE_EXIT_INDENT
-    return 0;
+    return;
     /* End of DCOMBSSQ */
 }
 /* dcombssq_ */

@@ -186,9 +186,7 @@ the corresponding */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clarzt_(char *direct, char *storev, aocl_int_t *n, aocl_int_t *k, scomplex *v, aocl_int_t *ldv,
-             scomplex *tau, scomplex *t, aocl_int_t *ldt)
+void clarzt_(char *direct, char *storev, integer *n, integer * k, complex *v, integer *ldv, complex *tau, complex *t, integer *ldt)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -206,10 +204,10 @@ void clarzt_(char *direct, char *storev, aocl_int_t *n, aocl_int_t *k, scomplex 
     /* Local variables */
     integer i__, j, info;
     extern /* Subroutine */
-    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -252,7 +250,7 @@ void clarzt_(char *direct, char *storev, aocl_int_t *n, aocl_int_t *k, scomplex 
         i__1 = -info;
         xerbla_("CLARZT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     for(i__ = *k; i__ >= 1; --i__)
     {
@@ -295,7 +293,7 @@ void clarzt_(char *direct, char *storev, aocl_int_t *n, aocl_int_t *k, scomplex 
         /* L20: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLARZT */
 }
 /* clarzt_ */

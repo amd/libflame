@@ -117,9 +117,7 @@ the matrix is */
 /* > \ingroup getri */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgetri_(aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ipiv, real *work,
-             aocl_int_t *lwork, aocl_int_t *info)
+void sgetri_(integer *n, real *a, integer *lda, integer *ipiv, real *work, integer *lwork, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgetri(n, a, lda, ipiv, work, lwork, info);
@@ -146,11 +144,13 @@ void aocl_lapack_sgetri(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t 
     /* Local variables */
     integer i__, j, jb, nb, jj, jp, nn, iws, nbmin;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *), strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *), strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
-    /* -- LAPACK computational routine -- */
+    extern /* Subroutine */
+    void strtri_(char *, char *, integer *, real *, integer *, integer *);
+    /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -198,17 +198,15 @@ void aocl_lapack_sgetri(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t 
     {
         i__1 = -(*info);
         xerbla_("SGETRI", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Form inv(U). If INFO > 0 from STRTRI, then U is singular, */
@@ -216,7 +214,6 @@ void aocl_lapack_sgetri(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t 
     aocl_lapack_strtri("Upper", "Non-unit", n, &a[a_offset], lda, info);
     if(*info > 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     nbmin = 2;
@@ -311,8 +308,7 @@ void aocl_lapack_sgetri(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t 
         }
         /* L60: */
     }
-    work[1] = aocl_lapack_sroundup_lwork(&iws);
-    AOCL_DTL_TRACE_LOG_EXIT
+    work[1] = (real) iws;
     return;
     /* End of SGETRI */
 }

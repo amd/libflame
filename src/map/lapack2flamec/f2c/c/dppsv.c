@@ -141,9 +141,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dppsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *ap, doublereal *b,
-            aocl_int_t *ldb, aocl_int_t *info)
+void dppsv_(char *uplo, integer *n, integer *nrhs, doublereal *ap, doublereal *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dppsv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *ldb);
@@ -198,7 +196,7 @@ void dppsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *ap, doubler
         i__1 = -(*info);
         xerbla_("DPPSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the Cholesky factorization A = U**T*U or A = L*L**T. */
     aocl_lapack_dpptrf(uplo, n, &ap[1], info);
@@ -208,7 +206,7 @@ void dppsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *ap, doubler
         aocl_lapack_dpptrs(uplo, n, nrhs, &ap[1], &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPPSV */
 }
 /* dppsv_ */

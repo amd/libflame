@@ -333,8 +333,7 @@ LDQ >= 1 otherwise. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sggsvd_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, aocl_int_t *k, aocl_int_t *l, real *a, aocl_int_t *lda, real *b, aocl_int_t *ldb, real *alpha, real *beta, real *u, aocl_int_t *ldu, real *v, aocl_int_t *ldv, real *q, aocl_int_t *ldq, real *work, aocl_int_t *iwork, aocl_int_t *info)
+void sggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer *p, integer *k, integer *l, real *a, integer *lda, real *b, integer *ldb, real *alpha, real *beta, real *u, integer * ldu, real *v, integer *ldv, real *q, integer *ldq, real *work, integer *iwork, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sggsvd(jobu, jobv, jobq, m, n, p, k, l, a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q, ldq, work, iwork, info);
@@ -383,6 +382,8 @@ void aocl_lapack_sggsvd(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real anorm, bnorm;
     logical wantq;
+    extern /* Subroutine */
+    void scopy_(integer *, real *, integer *, real *, integer *);
     logical wantu, wantv;
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     integer ncycle;
@@ -480,7 +481,7 @@ void aocl_lapack_sggsvd(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     {
         i__1 = -(*info);
         xerbla_("SGGSVD", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Compute the Frobenius norm of matrices A and B */
     anorm = aocl_lapack_slange("1", m, n, &a[a_offset], lda, &work[1]);
@@ -535,7 +536,6 @@ void aocl_lapack_sggsvd(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
         }
         /* L20: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGGSVD */
 }

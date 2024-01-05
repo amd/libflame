@@ -154,10 +154,7 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zunmr2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, dcomplex *a,
-             aocl_int_t *lda, dcomplex *tau, dcomplex *c__, aocl_int_t *ldc,
-             dcomplex *work, aocl_int_t *info)
+void zunmr2_(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zunmr2 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *k, *lda, *ldc);
@@ -173,7 +170,7 @@ void zunmr2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     doublecomplex taui;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_(integer *, doublecomplex *, integer *);
+    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_(integer *, doublecomplex *, integer *);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -251,13 +248,13 @@ void zunmr2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
         i__1 = -(*info);
         xerbla_("ZUNMR2", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || *k == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(left && !notran || !left && notran)
     {
@@ -324,7 +321,7 @@ void zunmr2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZUNMR2 */
 }
 /* zunmr2_ */

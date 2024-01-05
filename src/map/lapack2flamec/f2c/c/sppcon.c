@@ -117,9 +117,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sppcon_(char *uplo, aocl_int_t *n, real *ap, real *anorm, real *rcond, real *work,
-             aocl_int_t *iwork, aocl_int_t *info)
+void sppcon_(char *uplo, integer *n, real *ap, real *anorm, real *rcond, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -135,7 +133,11 @@ void sppcon_(char *uplo, aocl_int_t *n, real *ap, real *anorm, real *rcond, real
     real scale;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
+    extern /* Subroutine */
+    void srscl_(integer *, real *, real *, integer *);
     logical upper;
+    extern /* Subroutine */
+    void slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     real scalel;
     extern real slamch_(char *);
     real scaleu;
@@ -144,6 +146,8 @@ void sppcon_(char *uplo, aocl_int_t *n, real *ap, real *anorm, real *rcond, real
     extern integer isamax_(integer *, real *, integer *);
     real ainvnm;
     char normin[1];
+    extern /* Subroutine */
+    void slatps_(char *, char *, char *, char *, integer *, real *, real *, real *, real *, integer *);
     real smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -192,7 +196,7 @@ void sppcon_(char *uplo, aocl_int_t *n, real *ap, real *anorm, real *rcond, real
         i__1 = -(*info);
         xerbla_("SPPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.f;
@@ -200,12 +204,12 @@ void sppcon_(char *uplo, aocl_int_t *n, real *ap, real *anorm, real *rcond, real
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if(*anorm == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     smlnum = slamch_("Safe minimum");
     /* Estimate the 1-norm of the inverse. */
@@ -255,7 +259,7 @@ L10:
     }
 L20:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPPCON */
 }
 /* sppcon_ */

@@ -97,7 +97,7 @@ static doublereal c_b11 = -1.;
 /* > \ingroup doublePOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dpotrf2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *info)
+void dpotrf2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpotrf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -110,10 +110,10 @@ int dpotrf2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *info
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-    int dsyrk_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dsyrk_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -162,13 +162,13 @@ int dpotrf2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *info
         i__1 = -(*info);
         xerbla_("DPOTRF2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* N=1 case */
     if (*n == 1)
@@ -178,7 +178,7 @@ int dpotrf2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *info
         {
             *info = 1;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Factor */
         a[a_dim1 + 1] = sqrt(a[a_dim1 + 1]);
@@ -194,7 +194,7 @@ int dpotrf2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *info
         {
             *info = iinfo;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Compute the Cholesky factorization A = U**T*U */
         if (upper)
@@ -208,7 +208,7 @@ int dpotrf2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *info
             {
                 *info = iinfo + n1;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* Compute the Cholesky factorization A = L*L**T */
         }
@@ -223,12 +223,12 @@ int dpotrf2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *info
             {
                 *info = iinfo + n1;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPOTRF2 */
 }
 /* dpotrf2_ */

@@ -311,7 +311,7 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cuncsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, char *signs, integer *m, integer *p, integer *q, complex *x11, integer *ldx11, complex *x12, integer *ldx12, complex * x21, integer *ldx21, complex *x22, integer *ldx22, real *theta, complex *u1, integer *ldu1, complex *u2, integer *ldu2, complex *v1t, integer *ldv1t, complex *v2t, integer *ldv2t, complex *work, integer * lwork, real *rwork, integer *lrwork, integer *iwork, integer *info)
+void cuncsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, char *signs, integer *m, integer *p, integer *q, complex *x11, integer *ldx11, complex *x12, integer *ldx12, complex * x21, integer *ldx21, complex *x22, integer *ldx22, real *theta, complex *u1, integer *ldu1, complex *u2, integer *ldu2, complex *v1t, integer *ldv1t, complex *v2t, integer *ldv2t, complex *work, integer * lwork, real *rwork, integer *lrwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -333,19 +333,19 @@ int cuncsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
     integer lbbcsdworkmin, itaup1, itaup2, itauq1, itauq2, lorbdbworkmin, lbbcsdworkopt;
     logical wantu1, wantu2;
     extern /* Subroutine */
-    int cbbcsd_(char *, char *, char *, char *, char *, integer *, integer *, integer *, real *, real *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, real *, integer *, integer *);
+    void cbbcsd_(char *, char *, char *, char *, char *, integer *, integer *, integer *, real *, real *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, real *, integer *, integer *);
     integer ibbcsd, lorbdbworkopt;
     extern /* Subroutine */
-    int cunbdb_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, complex *, complex *, integer *, integer *);
+    void cunbdb_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, complex *, complex *, integer *, integer *);
     integer iorbdb, lorglqworkmin, lorgqrworkmin;
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clapmr_(logical *, integer *, integer *, complex *, integer *, integer *), clapmt_(logical *, integer *, integer *, complex *, integer *, integer *);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clapmr_(logical *, integer *, integer *, complex *, integer *, integer *), clapmt_(logical *, integer *, integer *, complex *, integer *, integer *);
     integer lorglqworkopt;
     extern /* Subroutine */
-    int cunglq_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+    void cunglq_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     integer lorgqrworkopt, iorglq;
     extern /* Subroutine */
-    int cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+    void cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     integer iorgqr;
     char signst[1], transt[1];
     logical lquery, wantv1t, wantv2t, lrquery;
@@ -535,7 +535,7 @@ int cuncsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
         }
         cuncsd_(jobv1t, jobv2t, jobu1, jobu2, transt, signst, m, q, p, &x11[ x11_offset], ldx11, &x21[x21_offset], ldx21, &x12[x12_offset], ldx12, &x22[x22_offset], ldx22, &theta[1], &v1t[v1t_offset], ldv1t, &v2t[v2t_offset], ldv2t, &u1[u1_offset], ldu1, &u2[ u2_offset], ldu2, &work[1], lwork, &rwork[1], lrwork, &iwork[ 1], info);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Work with permutation [ 0 I;
     I 0 ] * X * [ 0 I;
@@ -555,7 +555,7 @@ int cuncsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
         i__2 = *m - *q;
         cuncsd_(jobu2, jobu1, jobv2t, jobv1t, trans, signst, m, &i__1, &i__2, &x22[x22_offset], ldx22, &x21[x21_offset], ldx21, &x12[ x12_offset], ldx12, &x11[x11_offset], ldx11, &theta[1], &u2[ u2_offset], ldu2, &u1[u1_offset], ldu1, &v2t[v2t_offset], ldv2t, &v1t[v1t_offset], ldv1t, &work[1], lwork, &rwork[1], lrwork, &iwork[1], info);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute workspace */
     if (*info == 0)
@@ -676,12 +676,12 @@ int cuncsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
         i__1 = -(*info);
         xerbla_("CUNCSD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery || lrquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Transform to bidiagonal block form */
     cunbdb_(trans, signs, m, p, q, &x11[x11_offset], ldx11, &x12[x12_offset], ldx12, &x21[x21_offset], ldx21, &x22[x22_offset], ldx22, &theta[1], &rwork[iphi], &work[itaup1], &work[itaup2], &work[itauq1], & work[itauq2], &work[iorbdb], &lorbdbwork, &childinfo);
@@ -872,7 +872,7 @@ int cuncsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End CUNCSD */
 }
 /* cuncsd_ */

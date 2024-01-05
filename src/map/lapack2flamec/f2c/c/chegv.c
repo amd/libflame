@@ -184,10 +184,7 @@ the routine */
 /* > \ingroup hegv */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void chegv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda,
-            scomplex *b, aocl_int_t *ldb, real *w, scomplex *work, aocl_int_t *lwork, real *rwork,
-            aocl_int_t *info)
+void chegv_(integer *itype, char *jobz, char *uplo, integer * n, complex *a, integer *lda, complex *b, integer *ldb, real *w, complex *work, integer *lwork, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -203,12 +200,18 @@ void chegv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex *
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     real r__1;
     /* Local variables */
-    aocl_int64_t nb, neig;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer nb, neig;
+    extern /* Subroutine */
+    void cheev_(char *, char *, integer *, complex *, integer *, real *, complex *, integer *, real *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     char trans[1];
+    extern /* Subroutine */
+    void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper, wantz;
     extern /* Subroutine */
-    int chegst_(integer *, char *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void chegst_(integer *, char *, integer *, complex *, integer *, complex *, integer *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpotrf_( char *, integer *, complex *, integer *, integer *);
@@ -295,18 +298,18 @@ void chegv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex *
         i__1 = -(*info);
         xerbla_("CHEGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of B. */
     aocl_lapack_cpotrf(uplo, n, &b[b_offset], ldb, info);
@@ -314,7 +317,7 @@ void chegv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex *
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     chegst_(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
@@ -363,7 +366,7 @@ void chegv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex *
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHEGV */
 }
 /* chegv_ */

@@ -177,7 +177,7 @@ static integer c__1 = 1;
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int dlarrf_(integer *n, doublereal *d__, doublereal *l, doublereal *ld, integer *clstrt, integer *clend, doublereal *w, doublereal *wgap, doublereal *werr, doublereal *spdiam, doublereal * clgapl, doublereal *clgapr, doublereal *pivmin, doublereal *sigma, doublereal *dplus, doublereal *lplus, doublereal *work, integer *info)
+void dlarrf_(integer *n, doublereal *d__, doublereal *l, doublereal *ld, integer *clstrt, integer *clend, doublereal *w, doublereal *wgap, doublereal *werr, doublereal *spdiam, doublereal * clgapl, doublereal *clgapr, doublereal *pivmin, doublereal *sigma, doublereal *dplus, doublereal *lplus, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarrf inputs: n %" FLA_IS ", clstrt %" FLA_IS ", clend %" FLA_IS "",*n, *clstrt, *clend);
@@ -195,7 +195,7 @@ int dlarrf_(integer *n, doublereal *d__, doublereal *l, doublereal *ld, integer 
     doublereal fail2, avgap, ldmax, rdmax;
     integer shift;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical dorrr1;
     extern doublereal dlamch_(char *);
     doublereal ldelta;
@@ -242,7 +242,7 @@ int dlarrf_(integer *n, doublereal *d__, doublereal *l, doublereal *ld, integer 
     if (*n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     fact = 2.;
     eps = dlamch_("Precision");
@@ -536,7 +536,7 @@ L50:
         {
             *info = 1;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
 L100:
@@ -551,7 +551,7 @@ L100:
         dcopy_(&i__1, &work[*n + 1], &c__1, &lplus[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARRF */
 }
 /* dlarrf_ */

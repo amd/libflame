@@ -187,7 +187,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, doublecomplex *a, integer *lda, doublecomplex *t, integer *ldt, doublecomplex *work, integer *lwork, integer *info)
+void zungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, doublecomplex *a, integer *lda, doublecomplex *t, integer *ldt, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zungtsqr_row inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork %" FLA_IS "", *m, *n, *mb, *nb, *lda, *ldt, *lwork);
@@ -197,7 +197,7 @@ int zungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, doublecomple
     /* Local variables */
     integer lworkopt, ib_bottom__, ib, kb, mb1, mb2, m_plus_one__, num_all_row_blocks__, imb, knb;
     extern /* Subroutine */
-    int zlarfb_gett_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zlarfb_gett_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer jb_t__, itmp;
     doublecomplex dummy[1] /* was [1][1] */
     ;
@@ -285,7 +285,7 @@ int zungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, doublecomple
         i__1 = -(*info);
         xerbla_("ZUNGTSQR_ROW", &i__1, (ftnlen)12);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
@@ -294,7 +294,7 @@ int zungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, doublecomple
         work[1].r = z__1.r;
         work[1].i = z__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
@@ -304,7 +304,7 @@ int zungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, doublecomple
         work[1].r = z__1.r;
         work[1].i = z__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* (0) Set the upper-triangular part of the matrix A to zero and */
     /* its diagonal elements to one. */
@@ -402,7 +402,7 @@ int zungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, doublecomple
     work[1].r = z__1.r;
     work[1].i = z__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZUNGTSQR_ROW */
 }
 /* zungtsqr_row__ */

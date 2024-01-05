@@ -237,10 +237,7 @@ if RANGE = 'V', the exact value of M */
 /* > \ingroup hpevx */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sspevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *ap, real *vl, real *vu,
-             aocl_int_t *il, aocl_int_t *iu, real *abstol, aocl_int_t *m, real *w, real *z__,
-             aocl_int_t *ldz, real *work, aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
+void sspevx_(char *jobz, char *range, char *uplo, integer *n, real *ap, real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, real *z__, integer *ldz, real *work, integer * iwork, integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -263,9 +260,13 @@ void sspevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *ap, real 
     logical test;
     aocl_int64_t itmp1, indee;
     real sigma;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    extern logical lsame_(char *, char *);
+    integer iinfo;
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
     char order[1];
+    extern /* Subroutine */
+    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
     logical wantz, alleig, indeig;
     aocl_int64_t iscale;
     logical valeig;
@@ -277,12 +278,14 @@ void sspevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *ap, real 
     integer indtau, indisp, indiwo, indwrk;
     extern real slansp_(char *, char *, integer *, real *, real *);
     extern /* Subroutine */
-    int sstein_(integer *, real *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *), ssterf_(integer *, real *, real *, integer *);
+    void sstein_(integer *, real *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *), ssterf_(integer *, real *, real *, integer *);
     integer nsplit;
     extern /* Subroutine */
-    int sstebz_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    void sstebz_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     real smlnum;
-    /* -- LAPACK driver routine -- */
+    extern /* Subroutine */
+    void sopgtr_(char *, integer *, real *, real *, real *, integer *, real *, integer *), ssptrd_(char *, integer *, real *, real *, real *, real *, integer *), ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *), sopmtr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *, real *, integer *);
+    /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -366,14 +369,14 @@ void sspevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *ap, real 
         i__1 = -(*info);
         xerbla_("SSPEVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -395,7 +398,7 @@ void sspevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, real *ap, real 
             z__[z_dim1 + 1] = 1.f;
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -574,7 +577,7 @@ L20:
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSPEVX */
 }
 /* sspevx_ */

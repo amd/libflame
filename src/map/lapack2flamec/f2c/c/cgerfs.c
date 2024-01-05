@@ -183,10 +183,7 @@ for 1<=i<=N, row i of the */
 /* > \ingroup complexGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda, scomplex *af,
-             aocl_int_t *ldaf, aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, scomplex *x,
-             aocl_int_t *ldx, real *ferr, real *berr, scomplex *work, real *rwork, aocl_int_t *info)
+void cgerfs_(char *trans, integer *n, integer *nrhs, complex * a, integer *lda, complex *af, integer *ldaf, integer *ipiv, complex * b, integer *ldb, complex *x, integer *ldx, real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -214,9 +211,13 @@ void cgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int
     real safe1, safe2;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     integer isave[3];
-    aocl_int64_t count;
+    extern /* Subroutine */
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    integer count;
+    extern /* Subroutine */
+    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
@@ -305,7 +306,7 @@ void cgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int
         i__1 = -(*info);
         xerbla_("CGERFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -318,7 +319,7 @@ void cgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(notran)
     {
@@ -530,7 +531,7 @@ void cgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int
         /* L140: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGERFS */
 }
 /* cgerfs_ */

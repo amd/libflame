@@ -173,8 +173,7 @@ v(i+k+1:n) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, doublereal *a, aocl_int_t *lda, doublereal *tau, doublereal *t, aocl_int_t *ldt, doublereal *y, aocl_int_t *ldy)
+void dlahrd_(integer *n, integer *k, integer *nb, doublereal * a, integer *lda, doublereal *tau, doublereal *t, integer *ldt, doublereal *y, integer *ldy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlahrd inputs: n %" FLA_IS ", k %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", ldy %" FLA_IS "",*n, *k, *nb, *lda, *ldt, *ldy);
@@ -184,6 +183,8 @@ void dlahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, doublereal *a, aocl_i
     /* Local variables */
     aocl_int64_t i__;
     doublereal ei;
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -219,7 +220,7 @@ void dlahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, doublereal *a, aocl_i
     if (*n <= 1)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *nb;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -296,7 +297,7 @@ void dlahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, doublereal *a, aocl_i
     }
     a[*k + *nb + *nb * a_dim1] = ei;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAHRD */
 }
 /* dlahrd_ */

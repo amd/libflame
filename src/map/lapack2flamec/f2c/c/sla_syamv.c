@@ -162,7 +162,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sla_syamv_(integer *uplo, integer *n, real *alpha, real *a, integer *lda, real *x, integer *incx, real *beta, real *y, integer *incy)
+void sla_syamv_(integer *uplo, integer *n, real *alpha, real *a, integer *lda, real *x, integer *incx, real *beta, real *y, integer *incy)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -230,12 +230,12 @@ int sla_syamv_(integer *uplo, integer *n, real *alpha, real *a, integer *lda, re
     if (info != 0)
     {
         xerbla_("SLA_SYAMV", &info, (ftnlen)9);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || *alpha == 0.f && *beta == 1.f)
     {
-        return 0;
+        return;
     }
     /* Set up the start points in X and Y. */
     if (*incx > 0)
@@ -471,7 +471,7 @@ int sla_syamv_(integer *uplo, integer *n, real *alpha, real *a, integer *lda, re
             }
         }
     }
-    return 0;
+    return;
     /* End of SLA_SYAMV */
 }
 /* sla_syamv__ */

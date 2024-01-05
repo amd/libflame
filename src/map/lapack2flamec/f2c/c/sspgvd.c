@@ -207,10 +207,7 @@ the */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sspgvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *ap, real *bp, real *w,
-             real *z__, aocl_int_t *ldz, real *work, aocl_int_t *lwork, aocl_int_t *iwork,
-             aocl_int_t *liwork, aocl_int_t *info)
+void sspgvd_(integer *itype, char *jobz, char *uplo, integer * n, real *ap, real *bp, real *w, real *z__, integer *ldz, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -228,12 +225,14 @@ void sspgvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *ap,
     char trans[1];
     logical upper, wantz;
     extern /* Subroutine */
-    int stpmv_(char *, char *, char *, integer *, real *, real *, integer *), stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void stpmv_(char *, char *, char *, integer *, real *, real *, integer *), stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer liwmin;
     extern /* Subroutine */
-    int sspevd_(char *, char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *), spptrf_(char *, integer *, real *, integer *);
+    void sspevd_(char *, char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *), spptrf_(char *, integer *, real *, integer *);
     logical lquery;
-    /* -- LAPACK driver routine -- */
+    extern /* Subroutine */
+    void sspgst_(integer *, char *, integer *, real *, real *, integer *);
+    /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -323,18 +322,18 @@ void sspgvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *ap,
         i__1 = -(*info);
         xerbla_("SSPGVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of BP. */
     aocl_lapack_spptrf(uplo, n, &bp[1], info);
@@ -342,7 +341,7 @@ void sspgvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *ap,
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     aocl_lapack_sspgst(itype, uplo, n, &ap[1], &bp[1], info);
@@ -407,7 +406,7 @@ void sspgvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *ap,
     work[1] = (real) lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSPGVD */
 }
 /* sspgvd_ */

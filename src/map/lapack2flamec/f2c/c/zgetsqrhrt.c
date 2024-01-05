@@ -166,7 +166,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2, doublecomplex *a, integer *lda, doublecomplex *t, integer *ldt, doublecomplex *work, integer *lwork, integer *info)
+void zgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2, doublecomplex *a, integer *lda, doublecomplex *t, integer *ldt, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgetsqrhrt inputs: m %" FLA_IS ", n %" FLA_IS ", mb1 %" FLA_IS ", nb1 %" FLA_IS ", nb2 %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS "",*m, *n, *mb1, *nb1, *nb2, *lda, *ldt);
@@ -177,14 +177,14 @@ int zgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
     /* Local variables */
     integer lworkopt, i__, j;
     extern /* Subroutine */
-    int zunhr_col_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zunhr_col_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer lw1, lw2, num_all_row_blocks__, lwt, ldwt, iinfo;
     extern /* Subroutine */
-    int zungtsqr_row_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zungtsqr_row_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     integer nb1local, nb2local;
     extern /* Subroutine */
-    int zlatsqr_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zlatsqr_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -301,7 +301,7 @@ int zgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
         i__1 = -(*info);
         xerbla_("ZGETSQRHRT", &i__1, (ftnlen)10);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
@@ -310,7 +310,7 @@ int zgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
         work[1].r = z__1.r;
         work[1].i = z__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
@@ -320,7 +320,7 @@ int zgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
         work[1].r = z__1.r;
         work[1].i = z__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     nb2local = fla_min(*nb2,*n);
     /* (1) Perform TSQR-factorization of the M-by-N matrix A. */
@@ -388,7 +388,7 @@ int zgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
     work[1].r = z__1.r;
     work[1].i = z__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGETSQRHRT */
 }
 /* zgetsqrhrt_ */

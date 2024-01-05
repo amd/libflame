@@ -99,7 +99,7 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dorgl2_fla(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info)
+void dorgl2_fla(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -107,7 +107,7 @@ int dorgl2_fla(integer *m, integer *n, integer *k, doublereal * a, integer *lda,
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -155,12 +155,12 @@ int dorgl2_fla(integer *m, integer *n, integer *k, doublereal * a, integer *lda,
     {
         i__1 = -(*info);
         xerbla_("DORGL2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m <= 0)
     {
-        return 0;
+        return;
     }
     if (*k < *m)
     {
@@ -215,7 +215,7 @@ int dorgl2_fla(integer *m, integer *n, integer *k, doublereal * a, integer *lda,
         }
         /* L40: */
     }
-    return 0;
+    return;
     /* End of DORGL2 */
 }
 /* dorgl2_ */

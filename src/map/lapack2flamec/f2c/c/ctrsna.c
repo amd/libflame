@@ -250,11 +250,7 @@ v**H denotes the conjugate transpose of v, and norm(u) */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ctrsna_(char *job, char *howmny, logical *select, aocl_int_t *n, scomplex *t, aocl_int_t *ldt,
-             scomplex *vl, aocl_int_t *ldvl, scomplex *vr, aocl_int_t *ldvr, real *s, real *sep,
-             aocl_int_t *mm, aocl_int_t *m, scomplex *work, aocl_int_t *ldwork, real *rwork,
-             aocl_int_t *info)
+void ctrsna_(char *job, char *howmny, logical *select, integer *n, complex *t, integer *ldt, complex *vl, integer *ldvl, complex *vr, integer *ldvr, real *s, real *sep, integer *mm, integer * m, complex *work, integer *ldwork, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -283,12 +279,20 @@ void ctrsna_(char *job, char *howmny, logical *select, aocl_int_t *n, scomplex *
     integer isave[3];
     scomplex dummy[1];
     logical wants;
+    extern /* Subroutine */
+    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     real xnorm;
+    extern real scnrm2_(integer *, complex *, integer *);
+    extern /* Subroutine */
+    void slabad_(real *, real *);
+    extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical wantbh;
+    extern /* Subroutine */
+    void clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *, real *, integer *), csrscl_(integer *, real *, complex *, integer *), ctrexc_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, integer *);
     logical somcon;
     char normin[1];
     real smlnum;
@@ -398,13 +402,13 @@ void ctrsna_(char *job, char *howmny, logical *select, aocl_int_t *n, scomplex *
         i__1 = -(*info);
         xerbla_("CTRSNA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -413,7 +417,7 @@ void ctrsna_(char *job, char *howmny, logical *select, aocl_int_t *n, scomplex *
             if(!select[1])
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
         }
         if(wants)
@@ -425,7 +429,7 @@ void ctrsna_(char *job, char *howmny, logical *select, aocl_int_t *n, scomplex *
             sep[1] = c_abs(&t[t_dim1 + 1]);
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = slamch_("P");
@@ -525,7 +529,7 @@ void ctrsna_(char *job, char *howmny, logical *select, aocl_int_t *n, scomplex *
     L50:;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTRSNA */
 }
 /* ctrsna_ */

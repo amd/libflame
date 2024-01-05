@@ -200,11 +200,7 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ztgexc_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
-             dcomplex *b, aocl_int_t *ldb, dcomplex *q, aocl_int_t *ldq,
-             dcomplex *z__, aocl_int_t *ldz, aocl_int_t *ifst, aocl_int_t *ilst,
-             aocl_int_t *info)
+void ztgexc_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *q, integer *ldq, doublecomplex *z__, integer *ldz, integer *ifst, integer *ilst, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztgexc inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS "",*n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
@@ -213,7 +209,7 @@ void ztgexc_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
     /* Local variables */
     integer here;
     extern /* Subroutine */
-    int ztgex2_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ztgex2_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -279,18 +275,18 @@ void ztgexc_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
         i__1 = -(*info);
         xerbla_("ZTGEXC", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n <= 1)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*ifst == *ilst)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*ifst < *ilst)
     {
@@ -302,7 +298,7 @@ void ztgexc_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
         {
             *ilst = here;
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         ++here;
         if(here < *ilst)
@@ -321,7 +317,7 @@ void ztgexc_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
         {
             *ilst = here;
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         --here;
         if(here >= *ilst)
@@ -332,7 +328,7 @@ void ztgexc_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
     }
     *ilst = here;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTGEXC */
 }
 /* ztgexc_ */

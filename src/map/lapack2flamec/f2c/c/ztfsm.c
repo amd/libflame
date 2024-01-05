@@ -297,10 +297,7 @@ K=N/2. If */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ztfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_int_t *m,
-            aocl_int_t *n, dcomplex *alpha, dcomplex *a, dcomplex *b,
-            aocl_int_t *ldb)
+void ztfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integer *m, integer *n, doublecomplex *alpha, doublecomplex *a, doublecomplex *b, integer *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztfsm inputs: transr %c, side %c, uplo %c, trans %c, diag %c, m %" FLA_IS ", n %" FLA_IS ", ldb %" FLA_IS "",*transr, *side, *uplo, *trans, *diag, *m, *n, *ldb);
@@ -310,10 +307,12 @@ void ztfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
     /* Local variables */
     aocl_int64_t i__, j, k, m1, m2, n1, n2, info;
     logical normaltransr, lside;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical lower;
     extern /* Subroutine */
-    int ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical misodd, nisodd, notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -384,13 +383,13 @@ void ztfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
         i__1 = -info;
         xerbla_("ZTFSM ", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return when ( (N.EQ.0).OR.(M.EQ.0) ) */
     if(*m == 0 || *n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return when ALPHA.EQ.(0D+0,0D+0) */
     if(alpha->real == 0. && alpha->imag == 0.)
@@ -409,7 +408,7 @@ void ztfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
             /* L20: */
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(lside)
     {
@@ -1013,7 +1012,7 @@ void ztfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTFSM */
 }
 /* ztfsm_ */

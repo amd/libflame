@@ -26,7 +26,7 @@ extern int cspffrtx_check(scomplex *ap, integer *n, integer * ncolm, scomplex *w
 extern int zspffrtx_check(dcomplex *ap, integer *n, integer * ncolm, dcomplex *work, dcomplex *work2);
 
 #define LAPACK_spffrtx(prefix)                                           \
-  int F77_ ## prefix ## spffrtx( PREFIX2LAPACK_TYPEDEF(prefix)* buff_AP, \
+  void F77_ ## prefix ## spffrtx( PREFIX2LAPACK_TYPEDEF(prefix)* buff_AP, \
                                  integer* n,                                 \
                                  integer* ncolm,                             \
                                  PREFIX2LAPACK_TYPEDEF(prefix)* work,    \
@@ -56,7 +56,7 @@ LAPACK_spffrtx(s)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_spffrtx(d)
 {
@@ -75,7 +75,7 @@ LAPACK_spffrtx(d)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_spffrtx(c)
 {
@@ -94,7 +94,7 @@ LAPACK_spffrtx(c)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_spffrtx(z)
 {
@@ -113,7 +113,7 @@ LAPACK_spffrtx(z)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
  
 #endif

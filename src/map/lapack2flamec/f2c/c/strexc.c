@@ -141,7 +141,7 @@ T may have been partially */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *ldq, integer *ifst, integer *ilst, real *work, integer *info)
+void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *ldq, integer *ifst, integer *ilst, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -219,13 +219,13 @@ int strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *ld
         i__1 = -(*info);
         xerbla_("STREXC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 1)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine the first row of specified block */
     /* and find out it is 1 by 1 or 2 by 2. */
@@ -264,7 +264,7 @@ int strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *ld
     if (*ifst == *ilst)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*ifst < *ilst)
     {
@@ -295,7 +295,7 @@ L10: /* Swap block with next one below */
             {
                 *ilst = here;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             here += nbnext;
             /* Test if 2 by 2 block breaks into two 1 by 1 blocks */
@@ -325,7 +325,7 @@ L10: /* Swap block with next one below */
             {
                 *ilst = here;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             if (nbnext == 1)
             {
@@ -348,7 +348,7 @@ L10: /* Swap block with next one below */
                     {
                         *ilst = here;
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                        return 0;
+                        return;
                     }
                     here += 2;
                 }
@@ -388,7 +388,7 @@ L20: /* Swap block with next one above */
             {
                 *ilst = here;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             here -= nbnext;
             /* Test if 2 by 2 block breaks into two 1 by 1 blocks */
@@ -418,7 +418,7 @@ L20: /* Swap block with next one above */
             {
                 *ilst = here;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             if (nbnext == 1)
             {
@@ -442,7 +442,7 @@ L20: /* Swap block with next one above */
                     {
                         *ilst = here;
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                        return 0;
+                        return;
                     }
                     here += -2;
                 }
@@ -463,7 +463,7 @@ L20: /* Swap block with next one above */
     }
     *ilst = here;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of STREXC */
 }
 /* strexc_ */

@@ -110,7 +110,7 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-int zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, integer *ipiv, integer *jpiv, doublereal *scale)
+void zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, integer *ipiv, integer *jpiv, doublereal *scale)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgesc2 inputs: n %" FLA_IS ", lda %" FLA_IS "",*n, *lda);
@@ -126,13 +126,13 @@ int zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, inte
     doublereal eps;
     doublecomplex temp;
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     doublereal bignum;
     extern integer izamax_(integer *, doublecomplex *, integer *);
     doublereal smlnum;
     extern /* Subroutine */
-    int zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
+    void zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -246,7 +246,7 @@ int zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, inte
     i__1 = *n - 1;
     zlaswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &jpiv[1], &c_n1);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGESC2 */
 }
 /* zgesc2_ */

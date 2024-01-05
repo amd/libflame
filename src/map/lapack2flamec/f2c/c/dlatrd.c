@@ -206,9 +206,7 @@ v(i+1:n) is stored on exit in A(i+1:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, doublereal *a, aocl_int_t *lda,
-             doublereal *e, doublereal *tau, doublereal *w, aocl_int_t *ldw)
+void dlatrd_(char *uplo, integer *n, integer *nb, doublereal * a, integer *lda, doublereal *e, doublereal *tau, doublereal *w, integer *ldw)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlatrd inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldw %" FLA_IS "",*uplo, *n, *nb, *lda, *ldw);
@@ -217,7 +215,11 @@ void dlatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, doublereal *a, aocl_int_
     /* Local variables */
     aocl_int64_t i__, iw;
     doublereal alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsymv_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -252,7 +254,7 @@ void dlatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, doublereal *a, aocl_int_
     if(*n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(lsame_(uplo, "U", 1, 1))
     {
@@ -384,7 +386,7 @@ void dlatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, doublereal *a, aocl_int_
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLATRD */
 }
 /* dlatrd_ */

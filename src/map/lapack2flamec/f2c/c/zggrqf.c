@@ -217,10 +217,7 @@ v(i+1:p) is stored on exit in B(i+1:p,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zggrqf_(aocl_int_t *m, aocl_int_t *p, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
-             dcomplex *taua, dcomplex *b, aocl_int_t *ldb, dcomplex *taub,
-             dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+void zggrqf_(integer *m, integer *p, integer *n, doublecomplex *a, integer *lda, doublecomplex *taua, doublecomplex *b, integer *ldb, doublecomplex *taub, doublecomplex *work, integer * lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zggrqf inputs: m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*m, *p, *n, *lda, *ldb);
@@ -232,9 +229,11 @@ void zggrqf_(aocl_int_t *m, aocl_int_t *p, aocl_int_t *n, dcomplex *a, aocl_int_
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer * ), zgerqf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
+    void zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer * ), zgerqf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
+    extern /* Subroutine */
+    void zunmrq_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -313,12 +312,12 @@ void zggrqf_(aocl_int_t *m, aocl_int_t *p, aocl_int_t *n, dcomplex *a, aocl_int_
         i__1 = -(*info);
         xerbla_("ZGGRQF", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* RQ factorization of M-by-N matrix A: A = R*Q */
     aocl_lapack_zgerqf(m, n, &a[a_offset], lda, &taua[1], &work[1], lwork, info);
@@ -342,7 +341,7 @@ void zggrqf_(aocl_int_t *m, aocl_int_t *p, aocl_int_t *n, dcomplex *a, aocl_int_
     work[1].r = (doublereal) i__1;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGGRQF */
 }
 /* zggrqf_ */

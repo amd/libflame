@@ -150,9 +150,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cupmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, scomplex *ap,
-             scomplex *tau, scomplex *c__, aocl_int_t *ldc, scomplex *work, aocl_int_t *info)
+void cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex *ap, complex *tau, complex *c__, integer *ldc, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -171,7 +169,7 @@ void cupmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
     logical left;
     complex taui;
     extern /* Subroutine */
-    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
+    void clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
@@ -248,13 +246,13 @@ void cupmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
         i__1 = -(*info);
         xerbla_("CUPMTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(upper)
     {
@@ -411,7 +409,7 @@ void cupmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CUPMTR */
 }
 /* cupmtr_ */

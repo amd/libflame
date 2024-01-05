@@ -157,10 +157,7 @@ static real c_b13 = -1.f;
 /* > \ingroup unbdb6 */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sorbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, real *x1, aocl_int_t *incx1, real *x2,
-              aocl_int_t *incx2, real *q1, aocl_int_t *ldq1, real *q2, aocl_int_t *ldq2, real *work,
-              aocl_int_t *lwork, aocl_int_t *info)
+void sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, real *x2, integer *incx2, real *q1, integer *ldq1, real *q2, integer *ldq2, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -176,7 +173,7 @@ void sorbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, real *x1, aocl_int_
     integer i__;
     real scl1, scl2, ssq1, ssq2;
     extern /* Subroutine */
-    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slassq_(integer *, real *, integer *, real *, real *);
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slassq_(integer *, real *, integer *, real *, real *);
     real normsq1, normsq2;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -247,7 +244,7 @@ void sorbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, real *x1, aocl_int_
         i__1 = -(*info);
         xerbla_("SORBDB6", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     eps = slamch_("Precision");
     /* Compute the Euclidean norm of X */
@@ -287,12 +284,12 @@ void sorbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, real *x1, aocl_int_
     if(norm_new__ >= norm * .83f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(norm_new__ <= (*n * eps * norm))
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     norm = norm_new__;
     i__1 = *n;
@@ -342,7 +339,7 @@ void sorbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, real *x1, aocl_int_
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SORBDB6 */
 }
 /* sorbdb6_ */

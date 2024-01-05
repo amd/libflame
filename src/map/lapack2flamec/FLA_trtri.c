@@ -33,7 +33,7 @@
 */
 
 #define LAPACK_trtri(prefix)                                    \
-  int F77_ ## prefix ## trtri( char* uplo,                      \
+  void F77_ ## prefix ## trtri( char* uplo,                      \
                                char* diag,                      \
                                integer* n,                          \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, \
@@ -82,7 +82,7 @@ LAPACK_trtri(s)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_trtri(d)
 {
@@ -102,7 +102,7 @@ LAPACK_trtri(d)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_trtri(c)
 {
@@ -122,7 +122,7 @@ LAPACK_trtri(c)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_trtri(z)
 {
@@ -141,11 +141,11 @@ LAPACK_trtri(z)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 #define LAPACK_trti2(prefix)                                    \
-  int F77_ ## prefix ## trti2( char* uplo,                      \
+  void F77_ ## prefix ## trti2( char* uplo,                      \
                                char* diag,                      \
                                integer* n,                          \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, \
@@ -169,7 +169,7 @@ LAPACK_trti2(s)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_trti2(d)
 {
@@ -189,7 +189,7 @@ LAPACK_trti2(d)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_trti2(c)
 {
@@ -209,7 +209,7 @@ LAPACK_trti2(c)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_trti2(z)
 {
@@ -229,7 +229,7 @@ LAPACK_trti2(z)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 #endif

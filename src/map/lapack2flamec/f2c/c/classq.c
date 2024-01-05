@@ -110,7 +110,7 @@
 /* > \ingroup OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int classq_(integer *n, complex *x, integer *incx, real *scl, real *sumsq) {
+void classq_(integer *n, complex *x, integer *incx, real *scl, real *sumsq) {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
@@ -154,7 +154,7 @@ int classq_(integer *n, complex *x, integer *incx, real *scl, real *sumsq) {
     /* Quick return if possible */
     if (*scl != *scl || *sumsq != *sumsq) {
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*sumsq == 0.f) {
         *scl = 1.f;
@@ -165,7 +165,7 @@ int classq_(integer *n, complex *x, integer *incx, real *scl, real *sumsq) {
     }
     if (*n <= 0) {
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the sum of squares in 3 accumulators: */
     /* abig -- sums of squares scaled down to avoid overflow */
@@ -289,7 +289,7 @@ int classq_(integer *n, complex *x, integer *incx, real *scl, real *sumsq) {
         *sumsq = amed;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* classq_ */
 

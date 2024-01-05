@@ -122,9 +122,7 @@
 /* > \ingroup doubleGTsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dgtsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doublereal *d__, doublereal *du,
-            doublereal *b, aocl_int_t *ldb, aocl_int_t *info)
+void dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublereal *du, doublereal *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgtsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
@@ -180,12 +178,12 @@ void dgtsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doublereal *d__, do
         i__1 = -(*info);
         xerbla_("DGTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*nrhs == 1)
     {
@@ -205,7 +203,7 @@ void dgtsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doublereal *d__, do
                 {
                     *info = i__;
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dl[i__] = 0.;
             }
@@ -240,7 +238,7 @@ void dgtsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doublereal *d__, do
                 {
                     *info = i__;
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
             }
             else
@@ -259,7 +257,7 @@ void dgtsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doublereal *d__, do
         {
             *info = *n;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     else
@@ -285,7 +283,7 @@ void dgtsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doublereal *d__, do
                 {
                     *info = i__;
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dl[i__] = 0.;
             }
@@ -330,7 +328,7 @@ void dgtsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doublereal *d__, do
                 {
                     *info = i__;
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
             }
             else
@@ -354,7 +352,7 @@ void dgtsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doublereal *d__, do
         {
             *info = *n;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Back solve with the matrix U from the factorization. */
@@ -403,7 +401,7 @@ void dgtsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doublereal *d__, do
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGTSV */
 }
 /* dgtsv_ */

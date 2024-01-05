@@ -76,8 +76,7 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sla_wwaddw_(aocl_int_t *n, real *x, real *y, real *w)
+void sla_wwaddw_(integer *n, real *x, real *y, real *w)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sla_wwaddw(n, x, y, w);
@@ -123,7 +122,6 @@ void aocl_lapack_sla_wwaddw(aocl_int64_t *n, real *x, real *y, real *w)
         x[i__] = s;
         /* L10: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* sla_wwaddw__ */

@@ -92,7 +92,7 @@ if UPLO = 'L' the lower triangular part of the */
 /* > \ingroup complexHEauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int cheswapr_(char *uplo, integer *n, complex *a, integer * lda, integer *i1, integer *i2)
+void cheswapr_(char *uplo, integer *n, complex *a, integer * lda, integer *i1, integer *i2)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -114,7 +114,7 @@ int cheswapr_(char *uplo, integer *n, complex *a, integer * lda, integer *i1, in
     complex tmp;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
     logical upper;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -260,6 +260,6 @@ int cheswapr_(char *uplo, integer *n, complex *a, integer * lda, integer *i1, in
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* cheswapr_ */

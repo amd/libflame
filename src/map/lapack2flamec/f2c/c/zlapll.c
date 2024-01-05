@@ -95,9 +95,7 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlapll_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx, dcomplex *y, aocl_int_t *incy,
-             doublereal *ssmin)
+void zlapll_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, integer *incy, doublereal *ssmin)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlapll inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *n, *incx, *incy);
@@ -111,9 +109,12 @@ void zlapll_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx, dcomplex *y, aocl_int
     /* Local variables */
     dcomplex c__, a11, a12, a22, tau;
     extern /* Subroutine */
-        void
-        dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Double Complex */
+    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal ssmax;
+    extern /* Subroutine */
+    void zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlarfg_( integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -143,7 +144,7 @@ void zlapll_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx, dcomplex *y, aocl_int
     {
         *ssmin = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the QR factorization of the N-by-2 matrix ( X Y ) */
     aocl_lapack_zlarfg(n, &x[1], &x[*incx + 1], incx, &tau);
@@ -173,7 +174,7 @@ void zlapll_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx, dcomplex *y, aocl_int
     d__3 = z_abs(&a22);
     dlas2_(&d__1, &d__2, &d__3, ssmin, &ssmax);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAPLL */
 }
 /* zlapll_ */

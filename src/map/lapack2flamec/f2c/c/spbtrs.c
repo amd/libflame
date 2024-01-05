@@ -120,9 +120,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void spbtrs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, real *ab,
-             aocl_int_t *ldab, real *b, aocl_int_t *ldb, aocl_int_t *info)
+void spbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, real *ab, integer *ldab, real *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -137,7 +135,7 @@ void spbtrs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, real *
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
     extern /* Subroutine */
-    int stbsv_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void stbsv_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -196,13 +194,13 @@ void spbtrs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, real *
         i__1 = -(*info);
         xerbla_("SPBTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(upper)
     {
@@ -235,7 +233,7 @@ void spbtrs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, real *
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPBTRS */
 }
 /* spbtrs_ */

@@ -101,7 +101,7 @@ static doublecomplex c_b5 =
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zlarfg_(integer *n, doublecomplex *alpha, doublecomplex * x, integer *incx, doublecomplex *tau)
+void zlarfg_(integer *n, doublecomplex *alpha, doublecomplex * x, integer *incx, doublecomplex *tau)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarfg inputs: n %" FLA_IS ", incx %" FLA_IS "",*n, *incx);
@@ -119,11 +119,11 @@ int zlarfg_(integer *n, doublecomplex *alpha, doublecomplex * x, integer *incx, 
     extern doublereal dlapy3_(doublereal *, doublereal *, doublereal *), dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
-    int zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+    void zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal rsafmn;
     extern /* Double Complex */
     void zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
-    extern int zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+    extern void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     extern int fla_zscal(integer *, doublecomplex *, doublecomplex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -156,7 +156,7 @@ int zlarfg_(integer *n, doublecomplex *alpha, doublecomplex * x, integer *incx, 
     {
         tau->r = 0., tau->i = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *n - 1;
     xnorm = dznrm2_(&i__1, &x[1], incx);
@@ -228,7 +228,7 @@ L10:
         alpha->r = beta, alpha->i = 0.;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLARFG */
 }
 /* zlarfg_ */

@@ -218,10 +218,7 @@ v(1:p-k+i-1) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zggqrf_(aocl_int_t *n, aocl_int_t *m, aocl_int_t *p, dcomplex *a, aocl_int_t *lda,
-             dcomplex *taua, dcomplex *b, aocl_int_t *ldb, dcomplex *taub,
-             dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+void zggqrf_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda, doublecomplex *taua, doublecomplex *b, integer *ldb, doublecomplex *taub, doublecomplex *work, integer * lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zggqrf inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*n, *m, *p, *lda, *ldb);
@@ -233,9 +230,11 @@ void zggqrf_(aocl_int_t *n, aocl_int_t *m, aocl_int_t *p, dcomplex *a, aocl_int_
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer * ), zgerqf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
+    void zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer * ), zgerqf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
+    extern /* Subroutine */
+    void zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -314,12 +313,12 @@ void zggqrf_(aocl_int_t *n, aocl_int_t *m, aocl_int_t *p, dcomplex *a, aocl_int_
         i__1 = -(*info);
         xerbla_("ZGGQRF", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* QR factorization of N-by-M matrix A: A = Q*R */
     aocl_lapack_zgeqrf(n, m, &a[a_offset], lda, &taua[1], &work[1], lwork, info);
@@ -340,7 +339,7 @@ void zggqrf_(aocl_int_t *n, aocl_int_t *m, aocl_int_t *p, dcomplex *a, aocl_int_
     work[1].r = (doublereal) i__1;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGGQRF */
 }
 /* zggqrf_ */

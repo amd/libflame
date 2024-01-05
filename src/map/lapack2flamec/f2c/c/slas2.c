@@ -102,7 +102,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slas2_(real *f, real *g, real *h__, real *ssmin, real *ssmax)
+void slas2_(real *f, real *g, real *h__, real *ssmin, real * ssmax)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
@@ -184,7 +184,7 @@ void slas2_(real *f, real *g, real *h__, real *ssmin, real *ssmax)
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLAS2 */
 }
 /* slas2_ */

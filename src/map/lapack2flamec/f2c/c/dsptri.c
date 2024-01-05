@@ -111,9 +111,7 @@ the matrix is singular and its */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dsptri_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, doublereal *work,
-             aocl_int_t *info)
+void dsptri_(char *uplo, integer *n, doublereal *ap, integer * ipiv, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsptri inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
@@ -127,8 +125,12 @@ void dsptri_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, double
     aocl_int64_t kc, kp, kx, kpc, npp;
     doublereal akp1;
     doublereal temp, akkp1;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t kstep;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    integer kstep;
+    extern /* Subroutine */
+    void dspmv_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -174,13 +176,13 @@ void dsptri_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, double
         i__1 = -(*info);
         xerbla_("DSPTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if(upper)
@@ -192,7 +194,7 @@ void dsptri_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, double
             if(ipiv[*info] > 0 && ap[kp] == 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             kp -= *info;
             /* L10: */
@@ -208,7 +210,7 @@ void dsptri_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, double
             if(ipiv[*info] > 0 && ap[kp] == 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             kp = kp + *n - *info + 1;
             /* L20: */
@@ -418,7 +420,7 @@ void dsptri_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, double
     L80:;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSPTRI */
 }
 /* dsptri_ */

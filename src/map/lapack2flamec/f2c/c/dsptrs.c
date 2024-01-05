@@ -115,9 +115,7 @@ static doublereal c_b19 = 1.;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dsptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *ap, aocl_int_t *ipiv,
-             doublereal *b, aocl_int_t *ldb, aocl_int_t *info)
+void dsptrs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, integer *ipiv, doublereal *b, integer *ldb, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsptrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *ldb);
@@ -129,9 +127,15 @@ void dsptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *ap, aocl_i
     doublereal ak, bk;
     aocl_int64_t kc, kp;
     doublereal akm1, bkm1;
+    extern /* Subroutine */
+    void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal akm1k;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *);
     doublereal denom;
+    extern /* Subroutine */
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -185,13 +189,13 @@ void dsptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *ap, aocl_i
         i__1 = -(*info);
         xerbla_("DSPTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(upper)
     {
@@ -440,7 +444,7 @@ void dsptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *ap, aocl_i
     L100:;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSPTRS */
 }
 /* dsptrs_ */

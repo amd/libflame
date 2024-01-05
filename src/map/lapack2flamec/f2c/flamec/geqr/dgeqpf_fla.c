@@ -132,7 +132,7 @@ v(i+1:m) is stored on exit in A(i+1:m,i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgeqpf_fla(integer *m, integer *n, doublereal *a, integer * lda, integer *jpvt, doublereal *tau, doublereal *work, integer *info)
+void dgeqpf_fla(integer *m, integer *n, doublereal *a, integer * lda, integer *jpvt, doublereal *tau, doublereal *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -147,13 +147,13 @@ int dgeqpf_fla(integer *m, integer *n, doublereal *a, integer * lda, integer *jp
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     doublereal temp2, tol3z;
     extern /* Subroutine */
-    int dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
     integer itemp;
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dgeqr2_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dorm2r_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dgeqr2_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dorm2r_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -202,7 +202,7 @@ int dgeqpf_fla(integer *m, integer *n, doublereal *a, integer * lda, integer *jp
     {
         i__1 = -(*info);
         xerbla_("DGEQPF", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     mn = fla_min(*m,*n);
     tol3z = sqrt(dlamch_("Epsilon"));
@@ -339,7 +339,7 @@ int dgeqpf_fla(integer *m, integer *n, doublereal *a, integer * lda, integer *jp
             /* L40: */
         }
     }
-    return 0;
+    return;
     /* End of DGEQPF */
 }
 /* dgeqpf_ */

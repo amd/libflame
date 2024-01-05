@@ -92,7 +92,7 @@ if UPLO = 'L' the lower triangular part of the */
 /* > \ingroup complex16HEauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zheswapr_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i1, integer *i2)
+void zheswapr_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i1, integer *i2)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zheswapr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", i1 %" FLA_IS ", i2 %" FLA_IS "",*uplo, *n, *lda, *i1, *i2);
@@ -108,7 +108,7 @@ int zheswapr_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -253,7 +253,7 @@ int zheswapr_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* zheswapr_ */
 

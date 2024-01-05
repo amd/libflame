@@ -137,9 +137,7 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup realGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *dl, real *d__, real *du, real *du2,
-             aocl_int_t *ipiv, real *b, aocl_int_t *ldb, aocl_int_t *info)
+void sgttrs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *du, real *du2, integer *ipiv, real *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -152,7 +150,7 @@ void sgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *dl, real *d__, 
     /* Local variables */
     integer j, jb, nb;
     extern /* Subroutine */
-    int sgtts2_(integer *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sgtts2_(integer *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer itrans;
     logical notran;
@@ -208,13 +206,13 @@ void sgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *dl, real *d__, 
         i__1 = -(*info);
         xerbla_("SGTTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Decode TRANS */
     if(notran)
@@ -257,6 +255,6 @@ void sgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *dl, real *d__, 
     }
     /* End of SGTTRS */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* sgttrs_ */

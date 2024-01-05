@@ -209,11 +209,7 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complexGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__, scomplex *du,
-             scomplex *dlf, scomplex *df, scomplex *duf, scomplex *du2, aocl_int_t *ipiv, scomplex *b,
-             aocl_int_t *ldb, scomplex *x, aocl_int_t *ldx, real *ferr, real *berr, scomplex *work,
-             real *rwork, aocl_int_t *info)
+void cgtrfs_(char *trans, integer *n, integer *nrhs, complex * dl, complex *d__, complex *du, complex *dlf, complex *df, complex * duf, complex *du2, integer *ipiv, complex *b, integer *ldb, complex * x, integer *ldx, real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -241,13 +237,19 @@ void cgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomple
     real safe1, safe2;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    aocl_int64_t count;
+    extern /* Subroutine */
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    integer count;
+    extern /* Subroutine */
+    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *), clagtm_(char *, integer *, integer *, real *, complex *, complex *, complex *, complex *, integer *, real *, complex *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transn[1];
+    extern /* Subroutine */
+    void cgttrs_(char *, integer *, integer *, complex *, complex *, complex *, complex *, integer *, complex *, integer *, integer *);
     char transt[1];
     real lstres;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -324,7 +326,7 @@ void cgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomple
         i__1 = -(*info);
         xerbla_("CGTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -337,7 +339,7 @@ void cgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomple
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(notran)
     {
@@ -576,7 +578,7 @@ void cgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomple
         /* L110: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGTRFS */
 }
 /* cgtrfs_ */

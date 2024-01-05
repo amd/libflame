@@ -173,9 +173,7 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void chetd2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d__, real *e,
-             scomplex *tau, aocl_int_t *info)
+void chetd2_(char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tau, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("chetd2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -187,16 +185,16 @@ void chetd2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d__,
     integer i__;
     complex taui;
     extern /* Subroutine */
-    int cher2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
+    void cher2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
     complex alpha;
     extern /* Complex */
     VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * ), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    void chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * ), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -244,13 +242,13 @@ void chetd2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d__,
         i__1 = -(*info);
         xerbla_("CHETD2", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n <= 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(upper)
     {
@@ -393,7 +391,7 @@ void chetd2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d__,
         d__[*n] = a[i__1].r;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CHETD2 */
 }
 /* chetd2_ */

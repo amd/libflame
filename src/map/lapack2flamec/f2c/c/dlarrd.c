@@ -321,7 +321,7 @@ these eigenvalues are flagged by a */
 /* > \ingroup OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *gers, doublereal *reltol, doublereal *d__, doublereal *e, doublereal *e2, doublereal *pivmin, integer *nsplit, integer *isplit, integer *m, doublereal *w, doublereal *werr, doublereal *wl, doublereal *wu, integer *iblock, integer *indexw, doublereal *work, integer *iwork, integer *info)
+void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *gers, doublereal *reltol, doublereal *d__, doublereal *e, doublereal *e2, doublereal *pivmin, integer *nsplit, integer *isplit, integer *m, doublereal *w, doublereal *werr, doublereal *wl, doublereal *wu, integer *iblock, integer *indexw, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarrd inputs: range %c, order %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", nsplit %" FLA_IS ", isplit %" FLA_IS "",*range, *order, *n, *il, *iu, *nsplit, *isplit);
@@ -350,7 +350,7 @@ int dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu
     extern doublereal dlamch_(char *);
     integer ibegin;
     extern /* Subroutine */
-    int dlaebz_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dlaebz_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     integer irange, idiscl, idumma[1] = {0};
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer idiscu;
@@ -397,7 +397,7 @@ int dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu
     if (*n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Decode RANGE */
     if (lsame_(range, "A"))
@@ -447,7 +447,7 @@ int dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu
     if (*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize error flags */
     *info = 0;
@@ -458,7 +458,7 @@ int dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Simplification: */
     if (irange == 3 && *il == 1 && *iu == *n)
@@ -482,7 +482,7 @@ int dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu
             indexw[1] = 1;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* NB is the minimum vector length for vector bisection, or 0 */
     /* if only scalar is to be done. */
@@ -552,7 +552,7 @@ int dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu
         {
             *info = iinfo;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* On exit, output intervals may not be ordered by ascending negcount */
         if (iwork[6] == *iu)
@@ -579,7 +579,7 @@ int dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu
         {
             *info = 4;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     else if (irange == 2)
@@ -734,7 +734,7 @@ int dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu
             {
                 *info = iinfo;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             nwl += iwork[1];
             nwu += iwork[in + 1];
@@ -746,7 +746,7 @@ int dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu
             {
                 *info = iinfo;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* Copy eigenvalues into W and IBLOCK */
             /* Use -JBLK for block number for unconverged eigenvalues. */
@@ -995,7 +995,7 @@ L70:
         *info += 2;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARRD */
 }
 /* dlarrd_ */

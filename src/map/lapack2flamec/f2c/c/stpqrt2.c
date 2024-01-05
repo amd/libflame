@@ -165,7 +165,7 @@ that is, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int stpqrt2_(integer *m, integer *n, integer *l, real *a, integer *lda, real *b, integer *ldb, real *t, integer *ldt, integer * info)
+void stpqrt2_(integer *m, integer *n, integer *l, real *a, integer *lda, real *b, integer *ldb, real *t, integer *ldt, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -178,10 +178,10 @@ int stpqrt2_(integer *m, integer *n, integer *l, real *a, integer *lda, real *b,
     /* Local variables */
     integer i__, j, p, mp, np;
     extern /* Subroutine */
-    int sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
+    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
     real alpha;
     extern /* Subroutine */
-    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -242,13 +242,13 @@ int stpqrt2_(integer *m, integer *n, integer *l, real *a, integer *lda, real *b,
         i__1 = -(*info);
         xerbla_("STPQRT2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *m == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *n;
     for (i__ = 1;
@@ -332,7 +332,7 @@ int stpqrt2_(integer *m, integer *n, integer *l, real *a, integer *lda, real *b,
     }
     /* End of STPQRT2 */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* stpqrt2_ */
 

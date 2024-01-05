@@ -180,9 +180,7 @@ static real c_b9 = 1.f;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, real *a, aocl_int_t *lda,
-             aocl_int_t *ipiv, real *w, aocl_int_t *ldw, aocl_int_t *info)
+void slasyf_(char *uplo, integer *n, integer *nb, integer *kb, real *a, integer *lda, integer *ipiv, real *w, integer *ldw, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -200,8 +198,12 @@ void slasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, real *a,
     real t, r1, d11, d21, d22;
     aocl_int64_t jb, jj, kk, jp, kp, kw, kkw, imax, jmax;
     real alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t kstep;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    integer kstep;
+    extern /* Subroutine */
+    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
     real absakk;
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
@@ -803,7 +805,7 @@ void slasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, real *a,
         *kb = k - 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASYF */
 }
 /* slasyf_ */

@@ -253,7 +253,7 @@ static real c_b10 = 1.f;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int slasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, real *a, integer *lda, real *e, integer *ipiv, real *w, integer * ldw, integer *info)
+void slasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, real *a, integer *lda, real *e, integer *ipiv, real *w, integer * ldw, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3, i__4, i__5;
@@ -269,15 +269,15 @@ int slasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, real *a, intege
     real alpha;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     real sfmin;
     integer itemp;
     extern /* Subroutine */
-    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer kstep;
     real stemp;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
+    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
     real absakk;
     extern real slamch_(char *);
     extern integer isamax_(integer *, real *, integer *);
@@ -894,7 +894,7 @@ L90: /* Update the lower triangle of A22 (= A(k:n,k:n)) as */
         /* Set KB to the number of columns factorized */
         *kb = k - 1;
     }
-    return 0;
+    return;
     /* End of SLASYF_RK */
 }
 /* slasyf_rk__ */

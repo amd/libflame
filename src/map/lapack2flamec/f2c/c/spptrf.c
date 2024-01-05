@@ -119,8 +119,7 @@ static real c_b16 = -1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void spptrf_(char *uplo, aocl_int_t *n, real *ap, aocl_int_t *info)
+void spptrf_(char *uplo, integer *n, real *ap, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -136,10 +135,15 @@ void spptrf_(char *uplo, aocl_int_t *n, real *ap, aocl_int_t *info)
     /* Local variables */
     aocl_int64_t j, jc, jj;
     real ajj;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern real sdot_(integer *, real *, integer *, real *, integer *);
+    extern /* Subroutine */
+    void sspr_(char *, integer *, real *, real *, integer *, real *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    int stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -179,13 +183,13 @@ void spptrf_(char *uplo, aocl_int_t *n, real *ap, aocl_int_t *info)
         i__1 = -(*info);
         xerbla_("SPPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(upper)
     {
@@ -249,7 +253,7 @@ L30:
     *info = j;
 L40:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPPTRF */
 }
 /* spptrf_ */

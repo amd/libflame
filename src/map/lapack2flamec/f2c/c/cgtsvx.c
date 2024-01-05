@@ -292,11 +292,7 @@ IPIV(i) = i indicates */
 /* > \ingroup complexGTsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__,
-             scomplex *du, scomplex *dlf, scomplex *df, scomplex *duf, scomplex *du2, aocl_int_t *ipiv,
-             scomplex *b, aocl_int_t *ldb, scomplex *x, aocl_int_t *ldx, real *rcond, real *ferr,
-             real *berr, scomplex *work, real *rwork, aocl_int_t *info)
+void cgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, complex *dl, complex *d__, complex *du, complex *dlf, complex * df, complex *duf, complex *du2, integer *ipiv, complex *b, integer * ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -314,10 +310,15 @@ void cgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex 
     char norm[1];
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real anorm;
+    extern /* Subroutine */
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
+    extern real slamch_(char *), clangt_(char *, integer *, complex *, complex *, complex *);
     logical nofact;
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), cgtcon_(char *, integer *, complex *, complex *, complex *, complex *, integer *, real *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgtrfs_(char *, integer *, integer *, complex *, complex *, complex *, complex *, complex *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), cgttrf_(integer *, complex *, complex *, complex *, complex *, integer *, integer *);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), cgtcon_(char *, integer *, complex *, complex *, complex *, complex *, integer *, real *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgtrfs_(char *, integer *, integer *, complex *, complex *, complex *, complex *, complex *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), cgttrf_(integer *, complex *, complex *, complex *, complex *, integer *, integer *);
     logical notran;
+    extern /* Subroutine */
+    void cgttrs_(char *, integer *, integer *, complex *, complex *, complex *, complex *, integer *, complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -390,7 +391,7 @@ void cgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex 
         i__1 = -(*info);
         xerbla_("CGTSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(nofact)
     {
@@ -409,7 +410,7 @@ void cgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex 
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -438,7 +439,7 @@ void cgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex 
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGTSVX */
 }
 /* cgtsvx_ */

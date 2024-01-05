@@ -120,7 +120,7 @@ the matrix is singular and its */
 /* > \ingroup complex16HEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zhetri2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *work, integer *lwork, integer *info)
+void zhetri2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetri2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -129,7 +129,7 @@ int zhetri2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     integer a_dim1, a_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int zhetri2x_(char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zhetri2x_(char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
     extern logical lsame_(char *, char *);
     integer nbmax;
     logical upper;
@@ -137,7 +137,7 @@ int zhetri2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zhetri_(char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *);
+    void zhetri_(char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *);
     logical lquery;
     integer minsize;
     /* -- LAPACK computational routine (version 3.8.0) -- */
@@ -199,19 +199,19 @@ int zhetri2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
         i__1 = -(*info);
         xerbla_("ZHETRI2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         work[1].r = (doublereal) minsize;
         work[1].i = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (nbmax >= *n)
     {
@@ -222,7 +222,7 @@ int zhetri2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
         zhetri2x_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], &nbmax, info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHETRI2 */
 }
 /* zhetri2_ */

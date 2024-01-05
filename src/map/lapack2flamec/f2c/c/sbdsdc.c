@@ -198,7 +198,7 @@ static real c_b29 = 0.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, integer *ldu, real *vt, integer *ldvt, real *q, integer *iq, real *work, integer *iwork, integer *info)
+void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, integer *ldu, real *vt, integer *ldvt, real *q, integer *iq, real *work, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
@@ -218,22 +218,22 @@ int sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, in
     extern logical lsame_(char *, char *);
     integer poles;
     extern /* Subroutine */
-    int slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
+    void slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
     integer iuplo, nsize, start;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), slasd0_(integer *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), slasd0_(integer *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int slasda_(integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void slasda_(integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
     integer givcol;
     extern /* Subroutine */
-    int slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+    void slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
     integer icompq;
     extern /* Subroutine */
-    int slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *);
+    void slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *);
     real orgnrm;
     integer givnum;
     extern real slanst_(char *, integer *, real *, real *);
@@ -335,12 +335,12 @@ int sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, in
     {
         i__1 = -(*info);
         xerbla_("SBDSDC", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     smlsiz = ilaenv_(&c__9, "SBDSDC", " ", &c__0, &c__0, &c__0, &c__0);
     if (*n == 1)
@@ -356,7 +356,7 @@ int sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, in
             vt[vt_dim1 + 1] = 1.f;
         }
         d__[1] = f2c_abs(d__[1]);
-        return 0;
+        return;
     }
     nm1 = *n - 1;
     /* If matrix lower bidiagonal, rotate to be upper bidiagonal */
@@ -436,7 +436,7 @@ int sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, in
     orgnrm = slanst_("M", n, &d__[1], &e[1]);
     if (orgnrm == 0.f)
     {
-        return 0;
+        return;
     }
     slascl_("G", &c__0, &c__0, &orgnrm, &c_b15, n, &c__1, &d__[1], n, &ierr);
     slascl_("G", &c__0, &c__0, &orgnrm, &c_b15, &nm1, &c__1, &e[1], &nm1, & ierr);
@@ -519,7 +519,7 @@ int sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, in
             }
             if (*info != 0)
             {
-                return 0;
+                return;
             }
             start = i__ + 1;
         }
@@ -586,7 +586,7 @@ L40: /* Use Selection Sort to minimize swaps of singular vectors */
     {
         slasr_("L", "V", "B", n, n, &work[1], &work[*n], &u[u_offset], ldu);
     }
-    return 0;
+    return;
     /* End of SBDSDC */
 }
 /* sbdsdc_ */

@@ -436,7 +436,7 @@ defaults */
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, integer *nrhs, doublecomplex *ab, integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv, doublereal *r__, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *berr, integer * n_err_bnds__, doublereal *err_bnds_norm__, doublereal * err_bnds_comp__, integer *nparams, doublereal *params, doublecomplex * work, doublereal *rwork, integer *info)
+void zgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, integer *nrhs, doublecomplex *ab, integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv, doublereal *r__, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *berr, integer * n_err_bnds__, doublereal *err_bnds_norm__, doublereal * err_bnds_comp__, integer *nparams, doublereal *params, doublecomplex * work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgbrfsx inputs: trans %c, equed %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",*trans, *equed, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldx, *n_err_bnds__, *nparams);
@@ -454,7 +454,7 @@ int zgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
     integer prec_type__, trans_type__;
     doublereal cwise_wrong__;
     extern /* Subroutine */
-    int zla_gbrfsx_extended_(integer *, integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, logical *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, doublecomplex *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, logical *, integer *);
+    void zla_gbrfsx_extended_(integer *, integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, logical *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, doublecomplex *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, logical *, integer *);
     char norm[1];
     logical ignore_cwise__;
     extern logical lsame_(char *, char *);
@@ -464,7 +464,7 @@ int zgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlangb_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     extern /* Subroutine */
-    int zgbcon_(char *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
+    void zgbcon_(char *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
     logical colequ, notran, rowequ;
     extern integer ilaprec_(char *);
     integer ithresh, n_norms__;
@@ -627,7 +627,7 @@ int zgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
         i__1 = -(*info);
         xerbla_("ZGBRFSX", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || *nrhs == 0)
@@ -656,7 +656,7 @@ int zgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
             }
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Default to failure. */
     *rcond = 0.;
@@ -809,7 +809,7 @@ int zgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGBRFSX */
 }
 /* zgbrfsx_ */

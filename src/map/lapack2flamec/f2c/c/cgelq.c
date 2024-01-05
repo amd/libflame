@@ -167,7 +167,7 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgelq_(integer *m, integer *n, complex *a, integer *lda, complex *t, integer *tsize, complex *work, integer *lwork, integer * info)
+void cgelq_(integer *m, integer *n, complex *a, integer *lda, complex *t, integer *tsize, complex *work, integer *lwork, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cgelq inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", tsize %" FLA_IS "",*m, *n, *lda, *tsize);
@@ -181,11 +181,11 @@ int cgelq_(integer *m, integer *n, complex *a, integer *lda, complex *t, integer
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int cgelqt_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
+    void cgelqt_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
     logical lminws, lquery;
     integer mintsz;
     extern /* Subroutine */
-    int claswlq_(integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void claswlq_(integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. -- */
@@ -375,18 +375,18 @@ int cgelq_(integer *m, integer *n, complex *a, integer *lda, complex *t, integer
         i__1 = -(*info);
         xerbla_("CGELQ", &i__1, (ftnlen)5);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* The LQ Decomposition */
     if (*n <= *m || nb <= *m || nb >= *n)
@@ -400,7 +400,7 @@ int cgelq_(integer *m, integer *n, complex *a, integer *lda, complex *t, integer
     work[1].r = (real) lwreq;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CGELQ */
 }
 /* cgelq_ */

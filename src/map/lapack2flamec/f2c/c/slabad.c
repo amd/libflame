@@ -62,7 +62,7 @@
 /* > \ingroup labad */
 /* ===================================================================== */
 /* Subroutine */
-int slabad_(real *small_val, real *large)
+void slabad_(real *small_val, real *large)
 {
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -80,7 +80,7 @@ int slabad_(real *small_val, real *large)
         *small_val = sqrt(*small_val);
         *large = sqrt(*large);
     }
-    return 0;
+    return;
     /* End of SLABAD */
 }
 /* slabad_ */

@@ -166,7 +166,7 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int slasq3_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, real *sigma, real *desig, real *qmax, integer *nfail, integer *iter, integer *ndiv, logical *ieee, integer *ttype, real * dmin1, real *dmin2, real *dn, real *dn1, real *dn2, real *g, real * tau)
+void slasq3_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, real *sigma, real *desig, real *qmax, integer *nfail, integer *iter, integer *ndiv, logical *ieee, integer *ttype, real * dmin1, real *dmin2, real *dn, real *dn1, real *dn2, real *g, real * tau)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -186,7 +186,7 @@ int slasq3_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, real
     integer n0in, ipn4;
     real tol2, temp;
     extern /* Subroutine */
-    int slasq4_(integer *, integer *, real *, integer *, integer *, real *, real *, real *, real *, real *, real *, real *, integer *, real *), slasq5_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, logical *, real *), slasq6_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *);
+    void slasq4_(integer *, integer *, real *, integer *, integer *, real *, real *, real *, real *, real *, real *, real *, integer *, real *), slasq5_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, logical *, real *), slasq6_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *);
     extern real slamch_(char *);
     extern logical sisnan_(real *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
@@ -223,7 +223,7 @@ L10:
     if (*n0 < *i0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n0 == *i0)
     {
@@ -414,7 +414,7 @@ L90:
     }
     *sigma = t;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASQ3 */
 }
 /* slasq3_ */

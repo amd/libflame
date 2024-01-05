@@ -187,9 +187,7 @@ static aocl_int64_t c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zhetf2_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
-             aocl_int_t *info)
+void zhetf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -211,12 +209,16 @@ void zhetf2_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t
     aocl_int64_t kk, kp;
     dcomplex wk;
     doublereal tt;
-    dcomplex wkm1, wkp1;
-    aocl_int64_t imax, jmax;
+    doublecomplex wkm1, wkp1;
+    integer imax, jmax;
+    extern /* Subroutine */
+    void zher_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal alpha;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t kstep;
     logical upper;
+    extern /* Subroutine */
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlapy2_(doublereal *, doublereal *);
     doublereal absakk;
     extern logical disnan_(doublereal *);
@@ -275,7 +277,7 @@ void zhetf2_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t
         i__1 = -(*info);
         xerbla_("ZHETF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.) + 1.) / 8.;
@@ -870,7 +872,7 @@ void zhetf2_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t
     }
 L90:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHETF2 */
 }
 /* zhetf2_ */

@@ -274,11 +274,7 @@ here the magnitude of a scomplex number */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void shsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t *n, real *h__,
-             aocl_int_t *ldh, real *wr, real *wi, real *vl, aocl_int_t *ldvl, real *vr,
-             aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m, real *work, aocl_int_t *ifaill,
-             aocl_int_t *ifailr, aocl_int_t *info)
+void shsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n, real *h__, integer *ldh, real *wr, real *wi, real *vl, integer *ldvl, real *vr, integer *ldvr, integer *mm, integer *m, real *work, integer *ifaill, integer *ifailr, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_shsein(side, eigsrc, initv, select, n, h__, ldh, wr, wi, vl, ldvl, vr, ldvr, mm, m,
@@ -326,7 +322,7 @@ void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, 
     real hnorm;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int slaein_(logical *, logical *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *, real *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void slaein_(logical *, logical *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *, real *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern logical sisnan_(real *);
     logical noinit;
@@ -446,12 +442,11 @@ void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, 
     {
         i__1 = -(*info);
         xerbla_("SHSEIN", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set machine-dependent constants. */
@@ -523,7 +518,6 @@ void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, 
                 if(sisnan_(&hnorm))
                 {
                     *info = -6;
-                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 else if(hnorm > 0.f)
@@ -655,7 +649,6 @@ void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, 
         }
         /* L120: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SHSEIN */
 }

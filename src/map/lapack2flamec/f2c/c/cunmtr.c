@@ -172,10 +172,7 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cunmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, scomplex *a,
-             aocl_int_t *lda, scomplex *tau, scomplex *c__, aocl_int_t *ldc, scomplex *work,
-             aocl_int_t *lwork, aocl_int_t *info)
+void cunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     integer a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
@@ -193,7 +190,7 @@ void cunmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int cunmql_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void cunmql_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -312,12 +309,12 @@ void cunmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
         i__2 = -(*info);
         xerbla_("CUNMTR", &i__2, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || nq == 1)
@@ -325,7 +322,7 @@ void cunmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(left)
     {
@@ -364,7 +361,7 @@ void cunmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CUNMTR */
 }
 /* cunmtr_ */

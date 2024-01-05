@@ -192,10 +192,7 @@ the least squares solution could not be */
 /* > \ingroup gels */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a,
-            aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, doublereal *work, aocl_int_t *lwork,
-            aocl_int_t *info)
+void dgels_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgels inputs: trans %c, m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*trans, *m, *n, *nrhs, *lda, *ldb, *lwork);
@@ -211,16 +208,20 @@ void dgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doubler
     aocl_int64_t wsize;
     doublereal rwork[1];
     extern /* Subroutine */
-    int dlabad_(doublereal *, doublereal *);
+    void dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    int dgelqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dgelqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer scllen;
     doublereal bignum;
+    extern /* Subroutine */
+    void dormlq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     doublereal smlnum;
     logical lquery;
-    /* -- LAPACK driver routine -- */
+    extern /* Subroutine */
+    void dtrtrs_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -348,12 +349,12 @@ void dgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doubler
         i__1 = -(*info);
         xerbla_("DGELS ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Computing MIN */
@@ -363,7 +364,7 @@ void dgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doubler
         i__1 = fla_max(*m,*n);
         dlaset_("Full", &i__1, nrhs, &c_b33, &c_b33, &b[b_offset], ldb);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = dlamch_("S") / dlamch_("P");
@@ -428,7 +429,7 @@ void dgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doubler
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             scllen = *n;
         }
@@ -441,7 +442,7 @@ void dgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doubler
             if(*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* B(N+1:M,1:NRHS) = ZERO */
             i__1 = *nrhs;
@@ -477,7 +478,7 @@ void dgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doubler
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* B(M+1:N,1:NRHS) = 0 */
             i__1 = *nrhs;
@@ -512,7 +513,7 @@ void dgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doubler
             if(*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             scllen = *m;
         }
@@ -537,7 +538,7 @@ void dgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doubler
 L50:
     work[1] = (doublereal) wsize;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGELS */
 }
 /* dgels_ */

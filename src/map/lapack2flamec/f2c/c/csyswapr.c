@@ -95,9 +95,7 @@ if UPLO = 'L', the interchanges are applied to */
 /* > \ingroup complexSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void csyswapr_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *i1,
-               aocl_int_t *i2)
+void csyswapr_(char *uplo, integer *n, complex *a, integer * lda, integer *i1, integer *i2)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("csyswapr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", i1 %" FLA_IS ", i2 %" FLA_IS "",*uplo, *n, *lda, *i1, *i2);
@@ -107,7 +105,7 @@ void csyswapr_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int
     complex tmp;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
     logical upper;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -190,6 +188,6 @@ void csyswapr_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* csyswapr_ */

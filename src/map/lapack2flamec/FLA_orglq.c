@@ -16,8 +16,8 @@
 #include "FLA_lapack2flame_return_defs.h"
 #include "FLA_lapack2flame_util_defs.h"
 
-extern int sorglq_fla(integer* m, integer* n, integer* k, real* a, integer* lda, real* tau, real* work, integer* lwork, integer* info);
-extern int dorglq_fla(integer* m, integer* n, integer* k, doublereal* a, integer* lda, doublereal* tau, doublereal* work, integer* lwork, integer* info);
+extern void sorglq_fla(integer* m, integer* n, integer* k, real* a, integer* lda, real* tau, real* work, integer* lwork, integer* info);
+extern void dorglq_fla(integer* m, integer* n, integer* k, doublereal* a, integer* lda, doublereal* tau, doublereal* work, integer* lwork, integer* info);
 /*
   SORGLQ generates an M-by-N real matrix Q with orthonormal rows,
   which is defined as the first M rows of a product of K elementary
@@ -29,7 +29,7 @@ extern int dorglq_fla(integer* m, integer* n, integer* k, doublereal* a, integer
 */
 
 #define LAPACK_orglq(prefix, name)                                      \
-  int F77_ ## prefix ## name ## lq( integer* m,                             \
+  void F77_ ## prefix ## name ## lq( integer* m,                             \
                                     integer* n,                             \
                                     integer* k,                             \
                                     PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, \
@@ -198,7 +198,7 @@ LAPACK_orglq(s, org)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
         sorglq_fla(m, n, k,
@@ -207,7 +207,7 @@ LAPACK_orglq(s, org)
             buff_w, lwork,
             info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 #endif
 }
@@ -231,7 +231,7 @@ LAPACK_orglq(d, org)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
         dorglq_fla(m, n, k,
@@ -240,7 +240,7 @@ LAPACK_orglq(d, org)
             buff_w, lwork,
             info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 #endif
 }
@@ -265,7 +265,7 @@ LAPACK_orglq(c, ung)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_orglq(z, ung)
 {
@@ -286,12 +286,12 @@ LAPACK_orglq(z, ung)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 
 #define LAPACK_orgl2(prefix, name)                                      \
-  int F77_ ## prefix ## name ## l2( integer* m,                                  \
+  void F77_ ## prefix ## name ## l2( integer* m,                                  \
                                     integer* n,                             \
                                     integer* k,                             \
                                     PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, \
@@ -319,7 +319,7 @@ LAPACK_orgl2(s, org)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_orgl2(d, org)
 {
@@ -340,7 +340,7 @@ LAPACK_orgl2(d, org)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
@@ -363,7 +363,7 @@ LAPACK_orgl2(c, ung)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_orgl2(z, ung)
 {
@@ -384,7 +384,7 @@ LAPACK_orgl2(z, ung)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 

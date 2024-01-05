@@ -201,8 +201,7 @@ k=N/2. IF TRANSR = 'T' then RFP is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void spftrf_(char *transr, char *uplo, aocl_int_t *n, real *a, aocl_int_t *info)
+void spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_spftrf(transr, uplo, n, a, info);
@@ -228,8 +227,10 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
     extern /* Subroutine */
-    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
+    extern /* Subroutine */
+    void spotrf_(char *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -269,12 +270,11 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
     {
         i__1 = -(*info);
         xerbla_("SPFTRF", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* If N is odd, set NISODD = .TRUE. */
@@ -314,7 +314,6 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 aocl_lapack_spotrf("L", &n1, a, n, info);
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 aocl_blas_strsm("R", "L", "T", "N", &n2, &n1, &c_b12, a, n, &a[n1], n);
@@ -333,7 +332,6 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 aocl_lapack_spotrf("L", &n1, &a[n2], n, info);
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 aocl_blas_strsm("L", "L", "N", "N", &n1, &n2, &c_b12, &a[n2], n, a, n);
@@ -357,7 +355,6 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 aocl_lapack_spotrf("U", &n1, a, &n1, info);
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 aocl_blas_strsm("L", "U", "T", "N", &n1, &n2, &c_b12, a, &n1, &a[n1 * n1], &n1);
@@ -377,7 +374,6 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 aocl_lapack_spotrf("U", &n1, &a[n2 * n2], &n2, info);
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 strsm_("R", "U", "N", "N", &n2, &n1, &c_b12, &a[n2 * n2], &n2, a, &n2);
@@ -405,7 +401,6 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 aocl_lapack_spotrf("L", &k, &a[1], &i__1, info);
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 i__1 = *n + 1;
@@ -430,7 +425,6 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 aocl_lapack_spotrf("L", &k, &a[k + 1], &i__1, info);
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 i__1 = *n + 1;
@@ -459,7 +453,6 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 aocl_lapack_spotrf("U", &k, &a[k], &k, info);
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 aocl_blas_strsm("L", "U", "T", "N", &k, &k, &c_b12, &a[k], &n1, &a[k * (k + 1)],
@@ -480,7 +473,6 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 aocl_lapack_spotrf("U", &k, &a[k * (k + 1)], &k, info);
                 if(*info > 0)
                 {
-                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 aocl_blas_strsm("R", "U", "N", "N", &k, &k, &c_b12, &a[k * (k + 1)], &k, a, &k);
@@ -493,7 +485,6 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SPFTRF */
 }

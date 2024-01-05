@@ -182,9 +182,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dsytrf_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *ipiv,
-             doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
+void dsytrf_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *lda, *lwork);
@@ -196,10 +194,10 @@ void dsytrf_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
     aocl_int64_t nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
-    int dsytf2_(char *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dsytf2_(char *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int dlasyf_(char *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dlasyf_(char *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -261,12 +259,12 @@ void dsytrf_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
         i__1 = -(*info);
         xerbla_("DSYTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     nbmin = 2;
     ldwork = *n;
@@ -381,7 +379,7 @@ void dsytrf_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
 L40:
     work[1] = (doublereal) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYTRF */
 }
 /* dsytrf_ */

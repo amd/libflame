@@ -122,9 +122,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dspcon_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, doublereal *anorm,
-             doublereal *rcond, doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
+void dspcon_(char *uplo, integer *n, doublereal *ap, integer * ipiv, doublereal *anorm, doublereal *rcond, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dspcon inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
@@ -136,8 +134,10 @@ void dspcon_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, double
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    int dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
+    extern /* Subroutine */
+    void dsptrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -184,7 +184,7 @@ void dspcon_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, double
         i__1 = -(*info);
         xerbla_("DSPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.;
@@ -192,12 +192,12 @@ void dspcon_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, double
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(*anorm <= 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if(upper)
@@ -209,7 +209,7 @@ void dspcon_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, double
             if(ipiv[i__] > 0 && ap[ip] == 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             ip -= i__;
             /* L10: */
@@ -225,7 +225,7 @@ void dspcon_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, double
             if(ipiv[i__] > 0 && ap[ip] == 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             ip = ip + *n - i__ + 1;
             /* L20: */
@@ -247,7 +247,7 @@ L30:
         *rcond = 1. / ainvnm / *anorm;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSPCON */
 }
 /* dspcon_ */

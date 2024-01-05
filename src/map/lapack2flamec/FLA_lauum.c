@@ -27,7 +27,7 @@
 */
 
 #define LAPACK_lauum(prefix)                                            \
-  int F77_ ## prefix ## lauum( char* uplo,                              \
+  void F77_ ## prefix ## lauum( char* uplo,                              \
                                integer* n,                                  \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
                                integer* info )
@@ -72,7 +72,7 @@ LAPACK_lauum(s)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_lauum(d)
 {
@@ -93,7 +93,7 @@ LAPACK_lauum(d)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_lauum(c)
 {
@@ -114,7 +114,7 @@ LAPACK_lauum(c)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_lauum(z)
 {
@@ -135,11 +135,11 @@ LAPACK_lauum(z)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 #define LAPACK_lauu2(prefix)                                            \
-  int F77_ ## prefix ## lauu2( char* uplo,                              \
+  void F77_ ## prefix ## lauu2( char* uplo,                              \
                                integer* n,                                  \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
                                integer* info )
@@ -162,7 +162,7 @@ LAPACK_lauu2(s)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_lauu2(d)
 {
@@ -182,7 +182,7 @@ LAPACK_lauu2(d)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_lauu2(c)
 {
@@ -202,7 +202,7 @@ LAPACK_lauu2(c)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_lauu2(z)
 {
@@ -222,7 +222,7 @@ LAPACK_lauu2(z)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 #endif

@@ -100,8 +100,7 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ctpttr_(char *uplo, aocl_int_t *n, scomplex *ap, scomplex *a, aocl_int_t *lda, aocl_int_t *info)
+void ctpttr_(char *uplo, integer *n, complex *ap, complex *a, integer *lda, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -165,7 +164,7 @@ void ctpttr_(char *uplo, aocl_int_t *n, scomplex *ap, scomplex *a, aocl_int_t *l
         i__1 = -(*info);
         xerbla_("CTPTTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(lower)
     {
@@ -202,7 +201,7 @@ void ctpttr_(char *uplo, aocl_int_t *n, scomplex *ap, scomplex *a, aocl_int_t *l
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTPTTR */
 }
 /* ctpttr_ */

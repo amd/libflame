@@ -165,10 +165,7 @@ static real c_b26 = 0.f;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slaeda_(aocl_int_t *n, aocl_int_t *tlvls, aocl_int_t *curlvl, aocl_int_t *curpbm,
-             aocl_int_t *prmptr, aocl_int_t *perm, aocl_int_t *givptr, aocl_int_t *givcol,
-             real *givnum, real *q, aocl_int_t *qptr, real *z__, real *ztemp, aocl_int_t *info)
+void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integer *prmptr, integer *perm, integer *givptr, integer *givcol, real *givnum, real *q, integer *qptr, real *z__, real *ztemp, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slaeda(n, tlvls, curlvl, curpbm, prmptr, perm, givptr, givcol, givnum, q, qptr, z__,
@@ -205,10 +202,10 @@ void aocl_lapack_slaeda(aocl_int64_t *n, aocl_int64_t *tlvls, aocl_int64_t *curl
     /* Local variables */
     integer i__, k, mid, ptr, curr;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     integer bsiz1, bsiz2, psiz1, psiz2, zptr1;
     extern /* Subroutine */
-    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -248,12 +245,11 @@ void aocl_lapack_slaeda(aocl_int64_t *n, aocl_int64_t *tlvls, aocl_int64_t *curl
     {
         i__1 = -(*info);
         xerbla_("SLAEDA", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine location of first number in second half. */
@@ -351,7 +347,6 @@ void aocl_lapack_slaeda(aocl_int64_t *n, aocl_int64_t *tlvls, aocl_int64_t *curl
         ptr += pow_ii(&c__2, &i__2);
         /* L70: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAEDA */
 }

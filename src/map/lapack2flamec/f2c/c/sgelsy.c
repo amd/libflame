@@ -208,10 +208,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgelsy_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *lda, real *b,
-             aocl_int_t *ldb, aocl_int_t *jpvt, real *rcond, aocl_int_t *rank, real *work,
-             aocl_int_t *lwork, aocl_int_t *info)
+void sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb, integer *jpvt, real *rcond, integer *rank, real *work, integer *lwork, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgelsy(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, lwork, info);
@@ -250,20 +247,26 @@ void aocl_lapack_sgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     real c1, c2, s1, s2;
     aocl_int64_t nb, mn, nb1, nb2, nb3, nb4;
     real anrm, bnrm, smin, smax;
-    aocl_int64_t iascl, ibscl, ismin, ismax;
+    integer iascl, ibscl, ismin, ismax;
+    extern /* Subroutine */
+    void scopy_(integer *, real *, integer *, real *, integer *);
     real wsize;
     extern /* Subroutine */
-    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), slaic1_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *), sgeqp3_( integer *, integer *, real *, integer *, integer *, real *, real *, integer *, integer *), slabad_(real *, real *);
+    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), slaic1_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *), sgeqp3_( integer *, integer *, real *, integer *, integer *, real *, real *, integer *, integer *), slabad_(real *, real *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
-    aocl_int64_t lwkmin;
+    extern /* Subroutine */
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    integer lwkmin;
     real sminpr, smaxpr, smlnum;
     aocl_int64_t lwkopt;
     logical lquery;
-    /* -- LAPACK driver routine -- */
+    extern /* Subroutine */
+    void sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), sormrz_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), stzrzf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -362,18 +365,16 @@ void aocl_lapack_sgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     {
         i__1 = -(*info);
         xerbla_("SGELSY", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(mn == 0 || *nrhs == 0)
     {
         *rank = 0;
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine parameters */
@@ -543,8 +544,7 @@ L10:
         aocl_lapack_slascl("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L70:
-    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
-    AOCL_DTL_TRACE_LOG_EXIT
+    work[1] = (real) lwkopt;
     return;
     /* End of SGELSY */
 }

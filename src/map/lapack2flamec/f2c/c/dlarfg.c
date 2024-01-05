@@ -97,7 +97,7 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, doublereal *tau)
+void dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, doublereal *tau)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarfg inputs: n %" FLA_IS ", incx %" FLA_IS "",*n, *incx);
@@ -111,7 +111,7 @@ int dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, doubler
     doublereal beta;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal xnorm;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
 #if FLA_ENABLE_AMD_OPT
@@ -150,7 +150,7 @@ int dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, doubler
     {
         *tau = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 
     i__1 = *n - 1;
@@ -214,7 +214,7 @@ L10:
         *alpha = beta;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARFG */
 }
 /* dlarfg_ */

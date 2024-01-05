@@ -229,7 +229,7 @@ if RANGE = 'V', the exact value of */
 /* > \ingroup doubleOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, doublereal *e, doublereal *vl, doublereal *vu, integer *il, integer *iu, integer *ns, doublereal *s, doublereal *z__, integer *ldz, doublereal *work, integer *iwork, integer *info)
+void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, doublereal *e, doublereal *vl, doublereal *vu, integer *il, integer *iu, integer *ns, doublereal *s, doublereal *z__, integer *ldz, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dbdsvdx inputs: uplo %c, jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",*uplo, *jobz, *range, *n, *il, *iu, *ldz);
@@ -256,19 +256,19 @@ int dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, d
     doublereal sqrt2;
     integer idend;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     integer isbeg;
     extern logical lsame_(char *, char *);
     integer idtgk, ietgk, iltgk, itemp;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer icolz;
     logical allsv;
     integer idptr;
     logical indsv;
     integer ieptr, iutgk;
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical lower;
     doublereal vltgk;
     doublereal zjtji;
@@ -282,11 +282,11 @@ int dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, d
     integer iifail;
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal abstol, thresh;
     integer iiwork;
     extern /* Subroutine */
-    int dstevx_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *iwork, integer *ifail, integer *info);
+    void dstevx_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *iwork, integer *ifail, integer *info);
     doublereal *ev, *ev_arr;
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -378,14 +378,14 @@ int dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, d
         i__1 = -(*info);
         xerbla_("DBDSVDX", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible (N.LE.1) */
     *ns = 0;
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -408,7 +408,7 @@ int dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, d
             z__[z_dim1 + 2] = 1.;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Temporary Eigen Value buffer Allocation */
     ev_arr = NULL;
@@ -417,7 +417,7 @@ int dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, d
     {
         *info = (*n << 1) + 1;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     ev = &ev_arr[-1];
 
@@ -540,7 +540,7 @@ L2:
             /* De-allocate temporary Eigen Value buffer and return */
             free(ev_arr);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else
         {
@@ -754,7 +754,7 @@ L2:
                         free(ev_arr);
                         /* Exit with the error code from DSTEVX. */
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     /* EMIN = ABS( MAXVAL( S( ISBEG:ISBEG+NSL-1 ) ) ) */
                     d1 = ev[isbeg];
@@ -815,7 +815,7 @@ L2:
                                 free(ev_arr);
                                 *info = (*n << 1) + 1;
                                 AOCL_DTL_TRACE_LOG_EXIT
-                                return 0;
+                                return;
                             }
                             d__1 = 1. / nrmu;
                             dscal_(&nru, &d__1, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
@@ -849,7 +849,7 @@ L2:
                                 free(ev_arr);
                                 *info = (*n << 1) + 1;
                                 AOCL_DTL_TRACE_LOG_EXIT
-                                return 0;
+                                return;
                             }
                             d__1 = -1. / nrmv;
                             dscal_(&nrv, &d__1, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
@@ -1047,7 +1047,7 @@ L2:
     /* De-allocate temporary Eigen Value buffer */
     free(ev_arr);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DBDSVDX */
 }
 /* dbdsvdx_ */

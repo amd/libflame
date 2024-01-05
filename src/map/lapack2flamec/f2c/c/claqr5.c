@@ -259,12 +259,7 @@ static integer c__3 = 3;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void claqr5_(logical *wantt, logical *wantz, aocl_int_t *kacc22, aocl_int_t *n, aocl_int_t *ktop,
-             aocl_int_t *kbot, aocl_int_t *nshfts, scomplex *s, scomplex *h__, aocl_int_t *ldh,
-             aocl_int_t *iloz, aocl_int_t *ihiz, scomplex *z__, aocl_int_t *ldz, scomplex *v,
-             aocl_int_t *ldv, scomplex *u, aocl_int_t *ldu, aocl_int_t *nv, scomplex *wv,
-             aocl_int_t *ldwv, aocl_int_t *nh, scomplex *wh, aocl_int_t *ldwh)
+void claqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer *ktop, integer *kbot, integer *nshfts, complex *s, complex *h__, integer *ldh, integer *iloz, integer *ihiz, complex * z__, integer *ldz, complex *v, integer *ldv, complex *u, integer *ldu, integer *nv, complex *wv, integer *ldwv, integer *nh, complex *wh, integer *ldwh)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -296,13 +291,13 @@ void claqr5_(logical *wantt, logical *wantz, aocl_int_t *kacc22, aocl_int_t *n, 
     complex alpha;
     logical accum;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     integer ndcol, incol, krcol, nbmps;
     extern /* Subroutine */
-    int claqr1_(integer *, complex *, integer *, complex *, complex *, complex *), slabad_(real *, real *), clarfg_(integer *, complex *, complex *, integer *, complex *);
+    void claqr1_(integer *, complex *, integer *, complex *, complex *, complex *), slabad_(real *, real *), clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
     real safmin, safmax;
     complex refsum;
     real smlnum;
@@ -358,14 +353,14 @@ void claqr5_(logical *wantt, logical *wantz, aocl_int_t *kacc22, aocl_int_t *n, 
     if (*nshfts < 2)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* ==== If the active block is empty or 1-by-1, then there */
     /* . is nothing to do. ==== */
     if(*ktop >= *kbot)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }    
     /* ==== NSHFTS is supposed to be even, but if it is odd, */
     /* . then simply reduce it by one. ==== */
@@ -1462,7 +1457,7 @@ void claqr5_(logical *wantt, logical *wantz, aocl_int_t *kacc22, aocl_int_t *n, 
     }
     /* ==== End of CLAQR5 ==== */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* claqr5_ */
 

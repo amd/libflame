@@ -113,9 +113,7 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sppequ_(char *uplo, aocl_int_t *n, real *ap, real *s, real *scond, real *amax,
-             aocl_int_t *info)
+void sppequ_(char *uplo, integer *n, real *ap, real *s, real * scond, real *amax, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -175,7 +173,7 @@ void sppequ_(char *uplo, aocl_int_t *n, real *ap, real *s, real *scond, real *am
         i__1 = -(*info);
         xerbla_("SPPEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
@@ -183,7 +181,7 @@ void sppequ_(char *uplo, aocl_int_t *n, real *ap, real *s, real *scond, real *am
         *scond = 1.f;
         *amax = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize SMIN and AMAX. */
     s[1] = ap[1];
@@ -241,7 +239,7 @@ void sppequ_(char *uplo, aocl_int_t *n, real *ap, real *s, real *scond, real *am
             {
                 *info = i__;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L30: */
         }
@@ -260,7 +258,7 @@ void sppequ_(char *uplo, aocl_int_t *n, real *ap, real *s, real *scond, real *am
         *scond = sqrt(smin) / sqrt(*amax);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPPEQU */
 }
 /* sppequ_ */

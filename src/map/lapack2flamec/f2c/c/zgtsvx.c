@@ -292,13 +292,7 @@ IPIV(i) = i indicates */
 /* > \ingroup complex16GTsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl,
-             dcomplex *d__, dcomplex *du, dcomplex *dlf, dcomplex *df,
-             dcomplex *duf, dcomplex *du2, aocl_int_t *ipiv, dcomplex *b,
-             aocl_int_t *ldb, dcomplex *x, aocl_int_t *ldx, doublereal *rcond,
-             doublereal *ferr, doublereal *berr, dcomplex *work, doublereal *rwork,
-             aocl_int_t *info)
+void zgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex *dl, doublecomplex *d__, doublecomplex *du, doublecomplex *dlf, doublecomplex *df, doublecomplex *duf, doublecomplex *du2, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgtsvx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *trans, *n, *nrhs, *ldb, *ldx);
@@ -309,6 +303,8 @@ void zgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex 
     char norm[1];
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal anorm;
+    extern /* Subroutine */
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
@@ -316,7 +312,7 @@ void zgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex 
     extern doublereal zlangt_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *);
     logical notran;
     extern /* Subroutine */
-    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgtcon_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zgtrfs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zgttrf_( integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *), zgttrs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgtcon_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zgtrfs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zgttrf_( integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *), zgttrs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -389,7 +385,7 @@ void zgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex 
         i__1 = -(*info);
         xerbla_("ZGTSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(nofact)
     {
@@ -408,7 +404,7 @@ void zgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex 
         {
             *rcond = 0.;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -437,7 +433,7 @@ void zgtsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex 
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGTSVX */
 }
 /* zgtsvx_ */

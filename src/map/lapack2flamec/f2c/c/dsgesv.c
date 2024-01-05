@@ -186,7 +186,7 @@ the unit diagonal elements of L are not stored. */
 /* > \ingroup doubleGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int dsgesv_(integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv, doublereal *b, integer *ldb, doublereal * x, integer *ldx, doublereal *work, real *swork, integer *iter, integer *info)
+void dsgesv_(integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv, doublereal *b, integer *ldb, doublereal * x, integer *ldx, doublereal *work, real *swork, integer *iter, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsgesv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*n, *nrhs, *lda, *ldb, *ldx);
@@ -202,14 +202,14 @@ int dsgesv_(integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipi
     doublereal rnrm, xnrm;
     integer ptsx;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer iiter;
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlag2s_(integer *, integer *, doublereal *, integer *, real *, integer *, integer *), slag2d_( integer *, integer *, real *, integer *, doublereal *, integer *, integer *);
+    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlag2s_(integer *, integer *, doublereal *, integer *, real *, integer *, integer *), slag2d_( integer *, integer *, real *, integer *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dgetrf_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgetrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), sgetrf_(integer *, integer *, real *, integer *, integer *, integer *), sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dgetrf_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgetrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), sgetrf_(integer *, integer *, real *, integer *, integer *, integer *), sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -272,13 +272,13 @@ int dsgesv_(integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipi
         i__1 = -(*info);
         xerbla_("DSGESV", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if (N.EQ.0). */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Skip single precision iterative refinement if a priori slower */
     /* than double precision factorization. */
@@ -342,7 +342,7 @@ int dsgesv_(integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipi
     /* stopping criterion. We are good to exit. */
     *iter = 0;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 L10:
     for (iiter = 1;
             iiter <= 30;
@@ -389,7 +389,7 @@ L10:
         /* stopping criterion, we are good to exit. */
         *iter = iiter;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
 L20: /* L30: */
         ;
     }
@@ -404,12 +404,12 @@ L40: /* Single-precision iterative refinement failed to converge to a */
     if (*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     dlacpy_("All", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
     dgetrs_("No transpose", n, nrhs, &a[a_offset], lda, &ipiv[1], &x[x_offset], ldx, info);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSGESV. */
 }
 /* dsgesv_ */

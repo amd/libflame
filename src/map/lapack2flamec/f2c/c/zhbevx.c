@@ -266,12 +266,7 @@ if RANGE = 'V', the exact value of M */
 /* > \ingroup complex16OTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zhbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab,
-             aocl_int_t *ldab, dcomplex *q, aocl_int_t *ldq, doublereal *vl, doublereal *vu,
-             aocl_int_t *il, aocl_int_t *iu, doublereal *abstol, aocl_int_t *m, doublereal *w,
-             dcomplex *z__, aocl_int_t *ldz, dcomplex *work, doublereal *rwork,
-             aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
+void zhbevx_(char *jobz, char *range, char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab, doublecomplex *q, integer *ldq, doublereal *vl, doublereal *vu, integer *il, integer * iu, doublereal *abstol, integer *m, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *work, doublereal *rwork, integer *iwork, integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhbevx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", ldq %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", m %" FLA_IS ", ldz %" FLA_IS ", ifail %" FLA_IS "",*jobz, *range, *uplo, *n, *kd, *ldab, *ldq, *il, *iu, *m, *ldz, *ifail);
@@ -288,14 +283,22 @@ void zhbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
     aocl_int64_t imax;
     doublereal rmin, rmax;
     logical test;
-    dcomplex ctmp1;
-    aocl_int64_t itmp1, indee;
+    doublecomplex ctmp1;
+    integer itmp1, indee;
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     char order[1];
+    extern /* Subroutine */
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical lower;
+    extern /* Subroutine */
+    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical wantz;
+    extern /* Subroutine */
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     logical alleig, indeig;
     aocl_int64_t iscale, indibl;
@@ -305,10 +308,16 @@ void zhbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal abstll, bignum;
-    aocl_int64_t indiwk, indisp;
-    aocl_int64_t indrwk, indwrk;
-    aocl_int64_t nsplit;
+    integer indiwk, indisp;
+    extern /* Subroutine */
+    void dsterf_(integer *, doublereal *, doublereal *, integer *), zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *), dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), zhbtrd_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *);
+    integer indrwk, indwrk;
+    extern /* Subroutine */
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    integer nsplit;
     doublereal smlnum;
+    extern /* Subroutine */
+    void zstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *), zsteqr_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublereal *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -413,14 +422,14 @@ void zhbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
         i__1 = -(*info);
         xerbla_("ZHBEVX", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -456,7 +465,7 @@ void zhbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
             }
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -647,7 +656,7 @@ L30:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHBEVX */
 }
 /* zhbevx_ */

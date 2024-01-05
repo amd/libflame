@@ -343,11 +343,7 @@ if EQUED = 'Y', */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, scomplex *ab,
-             aocl_int_t *ldab, scomplex *afb, aocl_int_t *ldafb, char *equed, real *s, scomplex *b,
-             aocl_int_t *ldb, scomplex *x, aocl_int_t *ldx, real *rcond, real *ferr, real *berr,
-             scomplex *work, real *rwork, aocl_int_t *info)
+void cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, complex *ab, integer *ldab, complex *afb, integer * ldafb, char *equed, real *s, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -369,16 +365,22 @@ void cpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
     real amax, smin, smax;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real scond, anorm;
+    extern /* Subroutine */
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
     logical equil, rcequ, upper;
     extern real clanhb_(char *, char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int claqhb_(char *, integer *, integer *, complex *, integer *, real *, real *, real *, char *), cpbcon_(char *, integer *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *);
+    void claqhb_(char *, integer *, integer *, complex *, integer *, real *, real *, real *, char *), cpbcon_(char *, integer *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpbequ_(char *, integer *, integer *, complex *, integer *, real *, real *, real *, integer *), cpbrfs_( char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpbequ_(char *, integer *, integer *, complex *, integer *, real *, real *, real *, integer *), cpbrfs_( char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *);
     real bignum;
-    aocl_int64_t infequ;
+    extern /* Subroutine */
+    void cpbtrf_(char *, integer *, integer *, complex *, integer *, integer *);
+    integer infequ;
+    extern /* Subroutine */
+    void cpbtrs_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
     real smlnum;
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -518,7 +520,7 @@ void cpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
         i__1 = -(*info);
         xerbla_("CPBSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(equil)
     {
@@ -588,7 +590,7 @@ void cpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -636,7 +638,7 @@ void cpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPBSVX */
 }
 /* cpbsvx_ */

@@ -190,9 +190,7 @@ static aocl_int64_t c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void chetf2_rook_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
-                  aocl_int_t *info)
+void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -222,20 +220,24 @@ void chetf2_rook_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_
     aocl_int64_t ii, kk, kp;
     scomplex wk;
     real tt;
-    scomplex wkm1, wkp1;
+    complex wkm1, wkp1;
+    extern /* Subroutine */
+    void cher_(char *, integer *, real *, complex *, integer *, complex *, integer *);
     logical done;
     aocl_int64_t imax, jmax;
     real alpha;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real sfmin;
-    aocl_int64_t itemp, kstep;
+    extern /* Subroutine */
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
+    integer itemp, kstep;
     real stemp;
     logical upper;
     extern real slapy2_(real *, real *);
     real absakk;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -289,7 +291,7 @@ void chetf2_rook_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_
         i__1 = -(*info);
         xerbla_("CHETF2_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.f) + 1.f) / 8.f;
@@ -1152,7 +1154,7 @@ void chetf2_rook_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_
     }
 L70:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHETF2_ROOK */
 }
 /* chetf2_rook__ */

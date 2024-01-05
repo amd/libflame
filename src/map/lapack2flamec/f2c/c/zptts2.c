@@ -108,9 +108,7 @@
 /* > \ingroup complex16PTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zptts2_(aocl_int_t *iuplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomplex *e,
-             dcomplex *b, aocl_int_t *ldb)
+void zptts2_(integer *iuplo, integer *n, integer *nrhs, doublereal *d__, doublecomplex *e, doublecomplex *b, integer *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zptts2 inputs: iuplo %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*iuplo, *n, *nrhs, *ldb);
@@ -122,7 +120,9 @@ void zptts2_(aocl_int_t *iuplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__
     /* Builtin functions */
     void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    aocl_int64_t i__, j;
+    integer i__, j;
+    extern /* Subroutine */
+    void zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -155,7 +155,7 @@ void zptts2_(aocl_int_t *iuplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__
             aocl_blas_zdscal(nrhs, &d__1, &b[b_offset], ldb);
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*iuplo == 1)
     {
@@ -370,7 +370,7 @@ void zptts2_(aocl_int_t *iuplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPTTS2 */
 }
 /* zptts2_ */

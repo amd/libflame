@@ -149,8 +149,7 @@ static doublereal c_b5 = 1.;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlatzm_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, aocl_int_t *incv, doublereal *tau, doublereal *c1, doublereal *c2, aocl_int_t *ldc, doublereal *work)
+void dlatzm_(char *side, integer *m, integer *n, doublereal * v, integer *incv, doublereal *tau, doublereal *c1, doublereal *c2, integer *ldc, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlatzm inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *incv, *ldc);
@@ -158,7 +157,11 @@ void dlatzm_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, aocl_int_t
     aocl_int64_t c1_dim1, c1_offset, c2_dim1, c2_offset, i__1;
     doublereal d__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *) ;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -190,7 +193,7 @@ void dlatzm_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, aocl_int_t
     if (fla_min(*m,*n) == 0 || *tau == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(lsame_(side, "L", 1, 1))
     {
@@ -222,7 +225,7 @@ void dlatzm_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, aocl_int_t
         aocl_blas_dger(m, &i__1, &d__1, &work[1], &c__1, &v[1], incv, &c2[c2_offset], ldc);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLATZM */
 }
 /* dlatzm_ */

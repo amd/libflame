@@ -264,7 +264,7 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
     extern logical lsame_(char *, char *);
     real value;
     extern /* Subroutine */
-    int classq_(integer *, complex *, integer *, real *, real *);
+    void classq_(integer *, complex *, integer *, real *, real *);
     extern logical sisnan_(real *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

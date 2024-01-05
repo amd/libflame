@@ -219,7 +219,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dsytrd_2stage_(char *vect, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *d__, doublereal *e, doublereal *tau, doublereal *hous2, integer *lhous2, doublereal *work, integer *lwork, integer *info)
+void dsytrd_2stage_(char *vect, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *d__, doublereal *e, doublereal *tau, doublereal *hous2, integer *lhous2, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytrd_2stage inputs: vect %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lhous2 %" FLA_IS ", lwork %" FLA_IS "",*vect, *uplo, *n, *lda, *lhous2, *lwork);
@@ -230,10 +230,10 @@ int dsytrd_2stage_(char *vect, char *uplo, integer *n, doublereal *a, integer *l
     extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwrk;
     extern /* Subroutine */
-    int dsytrd_sb2st_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dsytrd_sb2st_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer wpos;
     extern /* Subroutine */
-    int dsytrd_sy2sb_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+    void dsytrd_sy2sb_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
     extern logical lsame_(char *, char *);
     integer abpos, lhmin, lwmin;
     logical upper;
@@ -312,19 +312,19 @@ int dsytrd_2stage_(char *vect, char *uplo, integer *n, doublereal *a, integer *l
         i__1 = -(*info);
         xerbla_("DSYTRD_2STAGE", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         work[1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine pointer position */
     ldab = kd + 1;
@@ -337,7 +337,7 @@ int dsytrd_2stage_(char *vect, char *uplo, integer *n, doublereal *a, integer *l
         i__1 = -(*info);
         xerbla_("DSYTRD_SY2SB", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     dsytrd_sb2st_("Y", vect, uplo, n, &kd, &work[abpos], &ldab, &d__[1], &e[ 1], &hous2[1], lhous2, &work[wpos], &lwrk, info);
     if (*info != 0)
@@ -345,12 +345,12 @@ int dsytrd_2stage_(char *vect, char *uplo, integer *n, doublereal *a, integer *l
         i__1 = -(*info);
         xerbla_("DSYTRD_SB2ST", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     hous2[1] = (doublereal) lhmin;
     work[1] = (doublereal) lwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYTRD_2STAGE */
 }
 /* dsytrd_2stage__ */

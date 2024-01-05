@@ -356,12 +356,7 @@ the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zheevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
-             doublereal *vl, doublereal *vu, aocl_int_t *il, aocl_int_t *iu, doublereal *abstol,
-             aocl_int_t *m, doublereal *w, dcomplex *z__, aocl_int_t *ldz, aocl_int_t *isuppz,
-             dcomplex *work, aocl_int_t *lwork, doublereal *rwork, aocl_int_t *lrwork,
-             aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
+void zheevr_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m, doublereal * w, doublecomplex *z__, integer *ldz, integer *isuppz, doublecomplex * work, integer *lwork, doublereal *rwork, integer *lrwork, integer * iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zheevr inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", vl %lf, vu %lf, abstol %lf, ldz %" FLA_IS ", lwork %" FLA_IS ", lrwork %" FLA_IS ", liwork %" FLA_IS "", *jobz, *range, *uplo, *n, *lda, *il, *iu, *vl, *vu, *abstol, *ldz, *lwork, *lrwork, liwork);
@@ -376,15 +371,21 @@ void zheevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *a, ao
     aocl_int64_t imax;
     doublereal rmin, rmax;
     logical test;
-    aocl_int64_t itmp1;
-    aocl_int64_t indrd, indre;
+    integer itmp1;
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
+    integer indrd, indre;
     doublereal sigma;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     char order[1];
-    aocl_int64_t indwk;
-    aocl_int64_t lwmin;
+    integer indwk;
+    extern /* Subroutine */
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    integer lwmin;
     logical lower, wantz;
+    extern /* Subroutine */
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     logical alleig, indeig;
     aocl_int64_t iscale, ieeeok, indibl, indrdd, indifl, indree;
@@ -394,15 +395,26 @@ void zheevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *a, ao
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_( integer *, doublereal *, doublecomplex *, integer *);
     doublereal abstll, bignum;
-    aocl_int64_t indtau, indisp;
-    aocl_int64_t indiwo, indwkn;
-    aocl_int64_t indrwk, liwmin;
+    integer indtau, indisp;
+    extern /* Subroutine */
+    void dsterf_(integer *, doublereal *, doublereal *, integer *);
+    integer indiwo, indwkn;
+    extern /* Subroutine */
+    void dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    integer indrwk, liwmin;
+    extern /* Subroutine */
+    void zhetrd_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, integer *, integer *);
     logical tryrac;
     aocl_int64_t lrwmin, llwrkn, llwork, nsplit;
     doublereal smlnum;
+    extern /* Subroutine */
+    void zstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *);
     logical lquery;
-    aocl_int64_t lwkopt;
-    aocl_int64_t llrwork;
+    integer lwkopt;
+    extern doublereal zlansy_(char *, char *, integer *, doublecomplex *, integer *, doublereal *);
+    extern /* Subroutine */
+    void zstemr_(char *, char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, doublereal *, doublecomplex *, integer *, integer *, integer *, logical *, doublereal *, integer *, integer *, integer *, integer *), zunmtr_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer * );
+    integer llrwork;
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -537,12 +549,12 @@ void zheevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *a, ao
         i__1 = -(*info);
         xerbla_("ZHEEVR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = 0;
@@ -551,7 +563,7 @@ void zheevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *a, ao
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -583,7 +595,7 @@ void zheevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *a, ao
             isuppz[2] = 1;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -815,7 +827,7 @@ L30:
     rwork[1] = (doublereal) lrwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHEEVR */
 }
 /* zheevr_ */

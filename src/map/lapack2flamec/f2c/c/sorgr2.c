@@ -109,9 +109,7 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sorgr2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *a, aocl_int_t *lda, real *tau,
-             real *work, aocl_int_t *info)
+void sorgr2_(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -125,7 +123,7 @@ void sorgr2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *a, aocl_int_t *l
     /* Local variables */
     integer i__, j, l, ii;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sscal_(integer *, real *, real *, integer *), slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -174,13 +172,13 @@ void sorgr2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *a, aocl_int_t *l
         i__1 = -(*info);
         xerbla_("SORGR2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*m <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(*k < *m)
     {
@@ -225,7 +223,7 @@ void sorgr2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *a, aocl_int_t *l
         /* L40: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SORGR2 */
 }
 /* sorgr2_ */

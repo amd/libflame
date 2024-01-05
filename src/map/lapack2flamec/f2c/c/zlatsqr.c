@@ -159,7 +159,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zlatsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex *a, integer *lda, doublecomplex *t, integer *ldt, doublecomplex *work, integer *lwork, integer *info)
+void zlatsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex *a, integer *lda, doublecomplex *t, integer *ldt, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlatsqr inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS "",*m, *n, *mb, *nb, *lda, *ldt);
@@ -171,7 +171,7 @@ int zlatsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex *a
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zgeqrt_( integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     logical lquery;
     extern /* Subroutine */
-    int ztpqrt_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void ztpqrt_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. -- */
@@ -239,25 +239,25 @@ int zlatsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex *a
         i__1 = -(*info);
         xerbla_("ZLATSQR", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* The QR Decomposition */
     if (*mb <= *n || *mb >= *m)
     {
         zgeqrt_(m, n, nb, &a[a_offset], lda, &t[t_offset], ldt, &work[1], info);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     kk = (*m - *n) % (*mb - *n);
     ii = *m - kk + 1;
@@ -284,7 +284,7 @@ int zlatsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex *a
     work[1].r = (doublereal) i__2;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLATSQR */
 }
 /* zlatsqr_ */

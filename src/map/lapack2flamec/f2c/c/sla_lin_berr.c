@@ -96,9 +96,7 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sla_lin_berr_(aocl_int_t *n, aocl_int_t *nz, aocl_int_t *nrhs, real *res, real *ayb,
-                   real *berr)
+void sla_lin_berr_(integer *n, integer *nz, integer *nrhs, real *res, real *ayb, real *berr)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sla_lin_berr(n, nz, nrhs, res, ayb, berr);
@@ -172,7 +170,6 @@ void aocl_lapack_sla_lin_berr(aocl_int64_t *n, aocl_int64_t *nz, aocl_int64_t *n
             /* the true residual also must be exactly 0.0. */
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* sla_lin_berr__ */

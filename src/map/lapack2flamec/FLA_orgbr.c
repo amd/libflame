@@ -36,7 +36,7 @@
 */
 
 #define LAPACK_orgbr(prefix, name)                                                     \
-  int F77_##prefix##name##br(char *vect,                                               \
+  void F77_##prefix##name##br(char *vect,                                               \
                              integer *m,                                               \
                              integer *n,                                               \
                              integer *k,                                               \
@@ -213,7 +213,7 @@ LAPACK_orgbr(s, org)
         fla_error = 0;
   }
   AOCL_DTL_TRACE_LOG_EXIT
-  return fla_error;
+  return;
 }
 LAPACK_orgbr(d, org)
 {
@@ -236,7 +236,7 @@ LAPACK_orgbr(d, org)
         fla_error = 0;
   }
   AOCL_DTL_TRACE_LOG_EXIT
-  return fla_error;
+  return;
 }
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
 LAPACK_orgbr(c, ung)
@@ -260,7 +260,7 @@ LAPACK_orgbr(c, ung)
         fla_error = 0;
   }
   AOCL_DTL_TRACE_LOG_EXIT
-  return fla_error;
+  return;
 }
 LAPACK_orgbr(z, ung)
 {
@@ -283,7 +283,7 @@ LAPACK_orgbr(z, ung)
         fla_error = 0;
   }
   AOCL_DTL_TRACE_LOG_EXIT
-  return fla_error;
+  return;
 }
 #endif
 

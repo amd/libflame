@@ -151,7 +151,7 @@ the routine */
 /* > \ingroup complexSYsolve */
 /* ===================================================================== */
 /* Subroutine */
-int csysv_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv, complex *b, integer *ldb, complex *work, integer *lwork, integer *info)
+void csysv_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv, complex *b, integer *ldb, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -167,7 +167,7 @@ int csysv_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
     extern /* Subroutine */
-    int csytrf_aa_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), csytrs_aa_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void csytrf_aa_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), csytrs_aa_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
     extern logical lsame_(char *, char *);
     integer lwkopt_sytrf__, lwkopt_sytrs__;
     extern /* Subroutine */
@@ -250,12 +250,12 @@ int csysv_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
         i__1 = -(*info);
         xerbla_("CSYSV_AA ", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the factorization A = U**T*T*U or A = L*T*L**T. */
     csytrf_aa_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
@@ -267,7 +267,7 @@ int csysv_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYSV_AA */
 }
 /* csysv_aa__ */

@@ -300,11 +300,7 @@ the routine */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ssygvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t *n, real *a,
-             aocl_int_t *lda, real *b, aocl_int_t *ldb, real *vl, real *vu, aocl_int_t *il,
-             aocl_int_t *iu, real *abstol, aocl_int_t *m, real *w, real *z__, aocl_int_t *ldz,
-             real *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
+void ssygvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, real *a, integer *lda, real *b, integer *ldb, real * vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, real *z__, integer *ldz, real *work, integer *lwork, integer *iwork, integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -319,18 +315,22 @@ void ssygvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     char trans[1];
     logical upper;
+    extern /* Subroutine */
+    void strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * );
     logical wantz;
+    extern /* Subroutine */
+    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * );
     logical alleig, indeig, valeig;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkmin;
     extern /* Subroutine */
-    int spotrf_(char *, integer *, real *, integer *, integer *);
+    void spotrf_(char *, integer *, real *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int ssygst_(integer *, char *, integer *, real *, integer *, real *, integer *, integer *), ssyevx_(char *, char *, char *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *);
+    void ssygst_(integer *, char *, integer *, real *, integer *, real *, integer *, integer *), ssyevx_(char *, char *, char *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -451,19 +451,19 @@ void ssygvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
         i__1 = -(*info);
         xerbla_("SSYGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of B. */
     aocl_lapack_spotrf(uplo, n, &b[b_offset], ldb, info);
@@ -471,7 +471,7 @@ void ssygvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     aocl_lapack_ssygst(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
@@ -518,7 +518,7 @@ void ssygvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     /* Set WORK(1) to optimal workspace size. */
     work[1] = (real) lwkopt;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYGVX */
 }
 /* ssygvx_ */

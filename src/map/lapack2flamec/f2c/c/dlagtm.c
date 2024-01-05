@@ -141,10 +141,7 @@ otherwise, */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlagtm_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *alpha, doublereal *dl,
-             doublereal *d__, doublereal *du, doublereal *x, aocl_int_t *ldx, doublereal *beta,
-             doublereal *b, aocl_int_t *ldb)
+void dlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublereal *dl, doublereal *d__, doublereal *du, doublereal *x, integer *ldx, doublereal *beta, doublereal *b, integer *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlagtm inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldx %" FLA_IS ", ldb %" FLA_IS "",*trans, *n, *nrhs, *ldx, *ldb);
@@ -183,7 +180,7 @@ void dlagtm_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *alpha, do
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Multiply B by BETA if BETA.NE.1. */
     if(*beta == 0.)
@@ -333,7 +330,7 @@ void dlagtm_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *alpha, do
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAGTM */
 }
 /* dlagtm_ */

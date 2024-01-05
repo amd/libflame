@@ -207,7 +207,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16POsolve */
 /* ===================================================================== */
 /* Subroutine */
-int zcposv_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublecomplex *work, complex *swork, doublereal *rwork, integer *iter, integer *info)
+void zcposv_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublecomplex *work, complex *swork, doublereal *rwork, integer *iter, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zcposv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS ", iter %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb, *ldx, *iter);
@@ -225,14 +225,14 @@ int zcposv_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *ld
     extern logical lsame_(char *, char *);
     integer iiter;
     extern /* Subroutine */
-    int zhemm_(char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlag2c_(integer *, integer *, doublecomplex *, integer *, complex *, integer *, integer *), clag2z_(integer *, integer *, complex *, integer *, doublecomplex *, integer *, integer *), zlat2c_(char *, integer *, doublecomplex *, integer *, complex *, integer *, integer *);
+    void zhemm_(char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlag2c_(integer *, integer *, doublecomplex *, integer *, complex *, integer *, integer *), clag2z_(integer *, integer *, complex *, integer *, doublecomplex *, integer *, integer *), zlat2c_(char *, integer *, doublecomplex *, integer *, complex *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlanhe_(char *, char *, integer *, doublecomplex *, integer *, doublereal *);
     extern integer izamax_(integer *, doublecomplex *, integer *);
     extern /* Subroutine */
-    int cpotrf_(char *, integer *, complex *, integer *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), cpotrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *), zpotrf_(char *, integer *, doublecomplex *, integer *, integer *), zpotrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void cpotrf_(char *, integer *, complex *, integer *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), cpotrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *), zpotrf_(char *, integer *, doublecomplex *, integer *, integer *), zpotrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -302,13 +302,13 @@ int zcposv_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *ld
         i__1 = -(*info);
         xerbla_("ZCPOSV", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if (N.EQ.0). */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Skip single precision iterative refinement if a priori slower */
     /* than double precision factorization. */
@@ -374,7 +374,7 @@ int zcposv_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *ld
     /* stopping criterion. We are good to exit. */
     *iter = 0;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 L10:
     for (iiter = 1;
             iiter <= 30;
@@ -423,7 +423,7 @@ L10:
         /* stopping criterion, we are good to exit. */
         *iter = iiter;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
 L20: /* L30: */
         ;
     }
@@ -438,12 +438,12 @@ L40: /* Single-precision iterative refinement failed to converge to a */
     if (*info != 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     zlacpy_("All", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
     zpotrs_(uplo, n, nrhs, &a[a_offset], lda, &x[x_offset], ldx, info);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZCPOSV. */
 }
 /* zcposv_ */

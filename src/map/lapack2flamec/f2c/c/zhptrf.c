@@ -161,8 +161,7 @@ static aocl_int64_t c__1 = 1;
 /* > J. Lewis, Boeing Computer Services Company */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zhptrf_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, aocl_int_t *info)
+void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhptrf inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
@@ -185,13 +184,17 @@ void zhptrf_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, aocl_int
     dcomplex wk;
     aocl_int64_t kx;
     doublereal tt;
-    aocl_int64_t knc, kpc, npp;
-    dcomplex wkm1, wkp1;
-    aocl_int64_t imax, jmax;
+    integer knc, kpc, npp;
+    doublecomplex wkm1, wkp1;
+    integer imax, jmax;
+    extern /* Subroutine */
+    void zhpr_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *);
     doublereal alpha;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t kstep;
     logical upper;
+    extern /* Subroutine */
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlapy2_(doublereal *, doublereal *);
     doublereal absakk;
     extern /* Subroutine */
@@ -244,7 +247,7 @@ void zhptrf_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, aocl_int
         i__1 = -(*info);
         xerbla_("ZHPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.) + 1.) / 8.;
@@ -873,7 +876,7 @@ void zhptrf_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, aocl_int
     }
 L110:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHPTRF */
 }
 /* zhptrf_ */

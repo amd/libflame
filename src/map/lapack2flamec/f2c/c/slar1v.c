@@ -224,11 +224,7 @@ is largest */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slar1v_(aocl_int_t *n, aocl_int_t *b1, aocl_int_t *bn, real *lambda, real *d__, real *l,
-             real *ld, real *lld, real *pivmin, real *gaptol, real *z__, logical *wantnc,
-             aocl_int_t *negcnt, real *ztz, real *mingma, aocl_int_t *r__, aocl_int_t *isuppz,
-             real *nrminv, real *resid, real *rqcorr, real *work)
+void slar1v_(integer *n, integer *b1, integer *bn, real * lambda, real *d__, real *l, real *ld, real *lld, real *pivmin, real * gaptol, real *z__, logical *wantnc, integer *negcnt, real *ztz, real * mingma, integer *r__, integer *isuppz, real *nrminv, real *resid, real *rqcorr, real *work)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slar1v(n, b1, bn, lambda, d__, l, ld, lld, pivmin, gaptol, z__, wantnc, negcnt, ztz,
@@ -580,7 +576,6 @@ L60:
     *nrminv = sqrt(tmp);
     *resid = f2c_abs(*mingma) * *nrminv;
     *rqcorr = *mingma * tmp;
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAR1V */
 }

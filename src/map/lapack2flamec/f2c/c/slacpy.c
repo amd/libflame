@@ -99,9 +99,7 @@ if UPLO = 'L', only the lower */
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slacpy_(char *uplo, aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *b,
-             aocl_int_t *ldb)
+void slacpy_(char *uplo, integer *m, integer *n, real *a, integer *lda, real *b, integer *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -183,7 +181,7 @@ void slacpy_(char *uplo, aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda,
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLACPY */
 }
 /* slacpy_ */

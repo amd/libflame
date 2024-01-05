@@ -179,10 +179,7 @@
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sla_gbamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku,
-                real *alpha, real *ab, aocl_int_t *ldab, real *x, aocl_int_t *incx, real *beta,
-                real *y, aocl_int_t *incy)
+void sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, real *alpha, real *ab, integer *ldab, real * x, integer *incx, real *beta, real *y, integer *incy)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sla_gbamv(trans, m, n, kl, ku, alpha, ab, ldab, x, incx, beta, y, incy);
@@ -289,12 +286,11 @@ void aocl_lapack_sla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
     if(info != 0)
     {
         xerbla_("SLA_GBAMV ", &info, (ftnlen)10);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if(*m == 0 || *n == 0 || *alpha == 0.f && *beta == 1.f)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set LENX and LENY, the lengths of the vectors x and y, and set */
@@ -514,7 +510,6 @@ void aocl_lapack_sla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLA_GBAMV */
 }

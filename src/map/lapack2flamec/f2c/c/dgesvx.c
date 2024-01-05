@@ -349,12 +349,7 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup doubleGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a,
-             aocl_int_t *lda, doublereal *af, aocl_int_t *ldaf, aocl_int_t *ipiv, char *equed,
-             doublereal *r__, doublereal *c__, doublereal *b, aocl_int_t *ldb, doublereal *x,
-             aocl_int_t *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr,
-             doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
+void dgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a, integer *lda, doublereal *af, integer *ldaf, integer *ipiv, char *equed, doublereal *r__, doublereal *c__, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal * rcond, doublereal *ferr, doublereal *berr, doublereal *work, integer * iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgesvx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *trans, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx);
@@ -369,13 +364,18 @@ void dgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublerea
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal rcmin, rcmax, anorm;
     logical equil;
+    extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */
+    void dlaqge_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *), dgecon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     doublereal colcnd;
     logical nofact;
     extern /* Subroutine */
-    int dgeequ_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dgerfs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dgetrf_(integer *, integer *, doublereal *, integer *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dgeequ_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dgerfs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dgetrf_(integer *, integer *, doublereal *, integer *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     aocl_int64_t infequ;
     logical colequ;
+    extern /* Subroutine */
+    void dgetrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     doublereal rowcnd;
     logical notran;
     doublereal smlnum;
@@ -549,7 +549,7 @@ void dgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublerea
         i__1 = -(*info);
         xerbla_("DGESVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(equil)
     {
@@ -619,7 +619,7 @@ void dgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublerea
             work[1] = rpvgrw;
             *rcond = 0.;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A and the */
@@ -704,7 +704,7 @@ void dgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublerea
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGESVX */
 }
 /* dgesvx_ */

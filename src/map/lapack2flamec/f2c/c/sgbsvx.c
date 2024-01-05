@@ -371,12 +371,7 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup realGBsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku,
-             aocl_int_t *nrhs, real *ab, aocl_int_t *ldab, real *afb, aocl_int_t *ldafb,
-             aocl_int_t *ipiv, char *equed, real *r__, real *c__, real *b, aocl_int_t *ldb, real *x,
-             aocl_int_t *ldx, real *rcond, real *ferr, real *berr, real *work, aocl_int_t *iwork,
-             aocl_int_t *info)
+void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, real *ab, integer *ldab, real *afb, integer *ldafb, integer *ipiv, char *equed, real *r__, real *c__, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -395,16 +390,27 @@ void sgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real rcmin, rcmax, anorm;
     logical equil;
+    extern /* Subroutine */
+    void scopy_(integer *, real *, integer *, real *, integer *);
     real colcnd;
-    extern real slamch_(char *);
+    extern real slangb_(char *, integer *, integer *, integer *, real *, integer *, real *), slamch_(char *);
+    extern /* Subroutine */
+    void slaqgb_(integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, char *);
     logical nofact;
     extern /* Subroutine */
-    int sgbcon_(char *, integer *, integer *, integer *, real *, integer *, integer *, real *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sgbcon_(char *, integer *, integer *, integer *, real *, integer *, integer *, real *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    aocl_int64_t infequ;
+    extern real slantb_(char *, char *, char *, integer *, integer *, real *, integer *, real *);
+    extern /* Subroutine */
+    void sgbequ_(integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *);
+    integer infequ;
     logical colequ;
+    extern /* Subroutine */
+    void sgbrfs_(char *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), sgbtrf_(integer *, integer *, integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     real rowcnd;
     logical notran;
+    extern /* Subroutine */
+    void sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     real smlnum;
     logical rowequ;
     real rpvgrw;
@@ -587,7 +593,7 @@ void sgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
         i__1 = -(*info);
         xerbla_("SGBSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(equil)
     {
@@ -699,7 +705,7 @@ void sgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
             work[1] = rpvgrw;
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A and the */
@@ -787,7 +793,7 @@ void sgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
     }
     work[1] = rpvgrw;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SGBSVX */
 }
 /* sgbsvx_ */

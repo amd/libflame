@@ -121,9 +121,7 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complexGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cgttrf_(aocl_int_t *n, scomplex *dl, scomplex *d__, scomplex *du, scomplex *du2, aocl_int_t *ipiv,
-             aocl_int_t *info)
+void cgttrf_(integer *n, complex *dl, complex *d__, complex * du, complex *du2, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -183,13 +181,13 @@ void cgttrf_(aocl_int_t *n, scomplex *dl, scomplex *d__, scomplex *du, scomplex 
         i__1 = -(*info);
         xerbla_("CGTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize IPIV(i) = i and DU2(i) = 0 */
     i__1 = *n;
@@ -349,7 +347,7 @@ void cgttrf_(aocl_int_t *n, scomplex *dl, scomplex *d__, scomplex *du, scomplex 
     }
 L50:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGTTRF */
 }
 /* cgttrf_ */

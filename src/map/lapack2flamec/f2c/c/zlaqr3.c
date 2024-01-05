@@ -269,13 +269,7 @@ ZLAQR3 */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlaqr3_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, aocl_int_t *kbot,
-             aocl_int_t *nw, dcomplex *h__, aocl_int_t *ldh, aocl_int_t *iloz,
-             aocl_int_t *ihiz, dcomplex *z__, aocl_int_t *ldz, aocl_int_t *ns, aocl_int_t *nd,
-             dcomplex *sh, dcomplex *v, aocl_int_t *ldv, aocl_int_t *nh, dcomplex *t,
-             aocl_int_t *ldt, aocl_int_t *nv, dcomplex *wv, aocl_int_t *ldwv,
-             dcomplex *work, aocl_int_t *lwork)
+void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, doublecomplex *h__, integer *ldh, integer *iloz, integer *ihiz, doublecomplex *z__, integer *ldz, integer *ns, integer *nd, doublecomplex *sh, doublecomplex *v, integer *ldv, integer *nh, doublecomplex *t, integer *ldt, integer *nv, doublecomplex *wv, integer *ldwv, doublecomplex *work, integer *lwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqr3 inputs: n %" FLA_IS ", ktop %" FLA_IS ", kbot %" FLA_IS ", nw %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS ", ldv %" FLA_IS ", nh %" FLA_IS ", ldt %" FLA_IS ", nv %" FLA_IS ", ldwv %" FLA_IS "",*n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ldv, *nh, *ldt, *nv, *ldwv);
@@ -296,16 +290,30 @@ void zlaqr3_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
     dcomplex tau;
     aocl_int64_t knt;
     doublereal ulp;
-    aocl_int64_t lwk1, lwk2, lwk3;
-    dcomplex beta;
-    aocl_int64_t kcol, info, nmin, ifst, ilst, ltop, krow;
-    aocl_int64_t infqr;
-    aocl_int64_t kwtop;
+    integer lwk1, lwk2, lwk3;
+    doublecomplex beta;
+    integer kcol, info, nmin, ifst, ilst, ltop, krow;
+    extern /* Subroutine */
+    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    integer infqr;
+    extern /* Subroutine */
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    integer kwtop;
+    extern /* Subroutine */
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *), zlaqr4_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer * );
     extern doublereal dlamch_(char *);
     doublereal safmin;
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    doublereal safmax;
+    extern /* Subroutine */
+    void zgehrd_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zlahqr_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
     doublereal smlnum;
-    aocl_int64_t lwkopt;
-    /* -- LAPACK auxiliary routine -- */
+    extern /* Subroutine */
+    void ztrexc_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, integer *);
+    integer lwkopt;
+    extern /* Subroutine */
+    void zunmhr_(char *, char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer * );
+    /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -385,7 +393,7 @@ void zlaqr3_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
         work[1].r = z__1.r;
         work[1].i = z__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ==== Nothing to do ... */
     /* ... for an empty active block ... ==== */
@@ -396,13 +404,13 @@ void zlaqr3_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
     if(*ktop > *kbot)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ... nor for an empty deflation window. ==== */
     if(*nw < 1)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ==== Machine constants ==== */
     safmin = dlamch_("SAFE MINIMUM");
@@ -452,7 +460,7 @@ void zlaqr3_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ==== Convert to spike-triangular form. (In case of a */
     /* . rare QR failure, this routine continues to do */
@@ -677,6 +685,6 @@ void zlaqr3_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, ao
     work[1].imag = z__1.imag; // , expr subst
     /* ==== End of ZLAQR3 ==== */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* zlaqr3_ */

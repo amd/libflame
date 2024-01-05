@@ -173,8 +173,7 @@ v(i+k+1:n) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, real *a, aocl_int_t *lda, real *tau, real *t, aocl_int_t *ldt, real *y, aocl_int_t *ldy)
+void slahrd_(integer *n, integer *k, integer *nb, real *a, integer *lda, real *tau, real *t, integer *ldt, real *y, integer *ldy)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slahrd(n, k, nb, a, lda, tau, t, ldt, y, ldy);
@@ -204,7 +203,7 @@ void aocl_lapack_slahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, real
     aocl_int64_t i__;
     real ei;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_( integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *), slarfg_(integer *, real *, real *, integer *, real *);
+    void sscal_(integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_( integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -239,7 +238,6 @@ void aocl_lapack_slahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, real
     ei = 0.f;
     if (*n <= 1)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *nb;
@@ -316,7 +314,6 @@ void aocl_lapack_slahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, real
         /* L10: */
     }
     a[*k + *nb + *nb * a_dim1] = ei;
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAHRD */
 }

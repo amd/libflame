@@ -230,7 +230,7 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int chetf2_rk_(char *uplo, integer *n, complex *a, integer * lda, complex *e, integer *ipiv, integer *info)
+void chetf2_rk_(char *uplo, integer *n, complex *a, integer * lda, complex *e, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -262,14 +262,14 @@ int chetf2_rk_(char *uplo, integer *n, complex *a, integer * lda, complex *e, in
     real tt;
     complex wkm1, wkp1;
     extern /* Subroutine */
-    int cher_(char *, integer *, real *, complex *, integer *, complex *, integer *);
+    void cher_(char *, integer *, real *, complex *, integer *, complex *, integer *);
     logical done;
     integer imax, jmax;
     real alpha;
     extern logical lsame_(char *, char *);
     real sfmin;
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
     integer itemp, kstep;
     real stemp;
     logical upper;
@@ -278,7 +278,7 @@ int chetf2_rk_(char *uplo, integer *n, complex *a, integer * lda, complex *e, in
     extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -333,7 +333,7 @@ int chetf2_rk_(char *uplo, integer *n, complex *a, integer * lda, complex *e, in
         i__1 = -(*info);
         xerbla_("CHETF2_RK", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.f) + 1.f) / 8.f;
@@ -1297,7 +1297,7 @@ L64:
         ;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHETF2_RK */
 }
 /* chetf2_rk__ */

@@ -181,10 +181,7 @@ the least squares solution could not */
 /* > \ingroup complex16OTHERsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, dcomplex *a, aocl_int_t *lda,
-             dcomplex *b, aocl_int_t *ldb, dcomplex *c__, dcomplex *d__,
-             dcomplex *x, dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+void zgglse_(integer *m, integer *n, integer *p, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *c__, doublecomplex *d__, doublecomplex *x, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgglse inputs: m %" FLA_IS ", n %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*m, *n, *p, *lda, *ldb);
@@ -194,12 +191,14 @@ void zgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, dcomplex *a, aocl_int_
     /* Local variables */
     integer nb, mn, nr, nb1, nb2, nb3, nb4, lopt;
     extern /* Subroutine */
-    int zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zggrqf_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *) ;
+    void zggrqf_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *) ;
     integer lwkmin, lwkopt;
     logical lquery;
+    extern /* Subroutine */
+    void zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zunmrq_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), ztrtrs_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -289,18 +288,18 @@ void zgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, dcomplex *a, aocl_int_
         i__1 = -(*info);
         xerbla_("ZGGLSE", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the GRQ factorization of matrices B and A: */
     /* B*Q**H = ( 0 T12 ) P Z**H*A*Q**H = ( R11 R12 ) N-P */
@@ -333,7 +332,7 @@ void zgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, dcomplex *a, aocl_int_
         {
             *info = 1;
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Put the solution in X */
         aocl_blas_zcopy(p, &d__[1], &c__1, &x[*n - *p + 1], &c__1);
@@ -354,7 +353,7 @@ void zgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, dcomplex *a, aocl_int_
         {
             *info = 2;
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Put the solutions in X */
         i__1 = *n - *p;
@@ -397,7 +396,7 @@ void zgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, dcomplex *a, aocl_int_
     work[1].r = (doublereal) i__1;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGGLSE */
 }
 /* zgglse_ */

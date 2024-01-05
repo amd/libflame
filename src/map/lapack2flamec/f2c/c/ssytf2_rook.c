@@ -190,9 +190,7 @@ static aocl_int64_t c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ssytf2_rook_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ipiv,
-                  aocl_int_t *info)
+void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -211,13 +209,19 @@ void ssytf2_rook_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_
     aocl_int64_t ii, kk, kp;
     real wk, wkm1, wkp1;
     logical done;
-    aocl_int64_t imax, jmax;
+    integer imax, jmax;
+    extern /* Subroutine */
+    void ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
     real alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
     real sfmin;
     aocl_int64_t itemp, kstep;
     real stemp;
     logical upper;
+    extern /* Subroutine */
+    void sswap_(integer *, real *, integer *, real *, integer *);
     real absakk;
     extern real slamch_(char *);
     extern /* Subroutine */
@@ -272,7 +276,7 @@ void ssytf2_rook_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_
         i__1 = -(*info);
         xerbla_("SSYTF2_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.f) + 1.f) / 8.f;
@@ -789,7 +793,7 @@ void ssytf2_rook_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_
     }
 L70:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTF2_ROOK */
 }
 /* ssytf2_rook__ */

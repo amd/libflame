@@ -168,9 +168,7 @@ for 1 <= j <= N, column j of the */
 /* > 1995. */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clatdf_(aocl_int_t *ijob, aocl_int_t *n, scomplex *z__, aocl_int_t *ldz, scomplex *rhs,
-             real *rdsum, real *rdscal, aocl_int_t *ipiv, aocl_int_t *jpiv)
+void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs, real *rdsum, real *rdscal, integer *ipiv, integer *jpiv)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -190,13 +188,24 @@ void clatdf_(aocl_int_t *ijob, aocl_int_t *n, scomplex *z__, aocl_int_t *ldz, sc
     double c_abs(complex *);
     void c_sqrt(complex *, complex *);
     /* Local variables */
-    aocl_int64_t i__, j, k;
-    scomplex bm, bp, xm[2], xp[2];
-    aocl_int64_t info;
-    scomplex temp, work[8];
+    integer i__, j, k;
+    complex bm, bp, xm[2], xp[2];
+    integer info;
+    complex temp, work[8];
+    extern /* Subroutine */
+    void cscal_(integer *, complex *, complex *, integer *);
     real scale;
-    scomplex pmone;
+    extern /* Complex */
+    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+    extern /* Subroutine */
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
+    complex pmone;
+    extern /* Subroutine */
+    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     real rtemp, sminu, rwork[2], splus;
+    extern /* Subroutine */
+    void cgesc2_(integer *, complex *, integer *, complex *, integer *, integer *, real *), cgecon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), classq_(integer *, complex *, integer *, real *, real *), claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
+    extern real scasum_(integer *, complex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -380,7 +389,7 @@ void clatdf_(aocl_int_t *ijob, aocl_int_t *n, scomplex *z__, aocl_int_t *ldz, sc
         /* Compute the sum of squares */
         classq_(n, &rhs[1], &c__1, rdscal, rdsum);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* ENTRY IJOB = 2 */
     /* Compute approximate nullvector XM of Z */
@@ -409,7 +418,7 @@ void clatdf_(aocl_int_t *ijob, aocl_int_t *n, scomplex *z__, aocl_int_t *ldz, sc
     /* Compute the sum of squares */
     classq_(n, &rhs[1], &c__1, rdscal, rdsum);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLATDF */
 }
 /* clatdf_ */

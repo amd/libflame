@@ -137,9 +137,7 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complexGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__, scomplex *du,
-             scomplex *du2, aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, aocl_int_t *info)
+void cgttrs_(char *trans, integer *n, integer *nrhs, complex * dl, complex *d__, complex *du, complex *du2, integer *ipiv, complex * b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -156,7 +154,7 @@ void cgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomple
     /* Local variables */
     integer j, jb, nb;
     extern /* Subroutine */
-    int cgtts2_(integer *, integer *, integer *, complex *, complex *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void cgtts2_(integer *, integer *, integer *, complex *, complex *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer itrans;
     logical notran;
@@ -212,13 +210,13 @@ void cgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomple
         i__1 = -(*info);
         xerbla_("CGTTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Decode TRANS */
     if(notran)
@@ -265,6 +263,6 @@ void cgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomple
     }
     /* End of CGTTRS */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* cgttrs_ */

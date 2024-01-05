@@ -421,14 +421,7 @@ i+1}
 /* > \ingroup complexGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *n, integer *kl,
-                          integer *ku, integer *nrhs, scomplex *ab, integer *ldab, scomplex *afb,
-                          integer *ldafb, integer *ipiv, logical *colequ, real *c__, scomplex *b,
-                          integer *ldb, scomplex *y, integer *ldy, real *berr_out__,
-                          integer *n_norms__, real *err_bnds_norm__, real *err_bnds_comp__,
-                          scomplex *res, real *ayb, scomplex *dy, scomplex *y_tail__, real *rcond,
-                          integer *ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__,
-                          integer *info)
+void cla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer *n, integer *kl, integer *ku, integer *nrhs, complex *ab, integer *ldab, complex *afb, integer *ldafb, integer * ipiv, logical *colequ, real *c__, complex *b, integer *ldb, complex * y, integer *ldy, real *berr_out__, integer *n_norms__, real * err_bnds_norm__, real *err_bnds_comp__, complex *res, real *ayb, complex *dy, complex *y_tail__, real *rcond, integer *ithresh, real * rthresh, real *dz_ub__, logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -452,19 +445,16 @@ void cla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
     real dxratmax, dzratmax;
     integer i__, j, m;
     extern /* Subroutine */
-        void
-        cla_gbamv_(integer *, integer *, integer *, integer *, integer *, real *, scomplex *,
-                   integer *, scomplex *, integer *, real *, real *, integer *);
+    void cla_gbamv_(integer *, integer *, integer *, integer *, integer *, real *, complex *, integer *, complex *, integer *, real *, real *, integer *);
     logical incr_prec__;
     real prev_dz_z__, yk, final_dx_x__;
     extern /* Subroutine */
-        void
-        cla_wwaddw_(integer *, scomplex *, scomplex *, scomplex *);
+    void cla_wwaddw_(integer *, complex *, complex *, complex *);
     real final_dz_z__, prevnormdx;
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__;
     extern /* Subroutine */
-    int cla_lin_berr_(integer *, integer *, integer *, complex *, real *, real *);
+    void cla_lin_berr_(integer *, integer *, integer *, complex *, real *, real *);
     real ymin;
     extern /* Subroutine */
     int blas_cgbmv_x_(integer *, integer *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
@@ -479,15 +469,12 @@ void cla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
         ccopy_(integer *, scomplex *, integer *, scomplex *, integer *);
     real dxrat, dzrat;
     extern /* Subroutine */
-        void
-        caxpy_(integer *, scomplex *, scomplex *, integer *, scomplex *, integer *);
+    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     char trans[1];
     real normx, normy;
     extern real slamch_(char *);
     extern /* Subroutine */
-        void
-        cgbtrs_(char *, integer *, integer *, integer *, integer *, scomplex *, integer *, integer *,
-                scomplex *, integer *, integer *);
+    void cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     real normdx;
     extern /* Character */
         void
@@ -546,7 +533,7 @@ void cla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
     if(*info != 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     chla_transtype_(ch__1, trans_type__);
     *(unsigned char *)trans = *(unsigned char *)&ch__1[0];
@@ -829,7 +816,7 @@ void cla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
         /* End of loop for each RHS. */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* cla_gbrfsx_extended__ */
 #endif

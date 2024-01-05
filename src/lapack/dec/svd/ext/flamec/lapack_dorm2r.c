@@ -156,7 +156,7 @@
  doublereal aii;
  logical left;
  extern /* Subroutine */
- int dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+ void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
  extern logical lsame_(char *, char *);
  extern /* Subroutine */
  int xerbla_(const char *srname, const integer *info, ftnlen srname_len);

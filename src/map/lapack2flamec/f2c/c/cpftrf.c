@@ -215,8 +215,7 @@ k=N/2. IF TRANSR = 'C' then RFP is */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cpftrf_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *info)
+void cpftrf_(char *transr, char *uplo, integer *n, complex *a, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -233,11 +232,15 @@ void cpftrf_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *i
     /* Local variables */
     aocl_int64_t k, n1, n2;
     logical normaltransr;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    void cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *, complex *, integer *);
+    extern logical lsame_(char *, char *);
     logical lower;
     extern /* Subroutine */
-    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
+    extern /* Subroutine */
+    void cpotrf_(char *, integer *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -278,13 +281,13 @@ void cpftrf_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *i
         i__1 = -(*info);
         xerbla_("CPFTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* If N is odd, set NISODD = .TRUE. */
     /* If N is even, set K = N/2 and NISODD = .FALSE. */
@@ -324,7 +327,7 @@ void cpftrf_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *i
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 aocl_blas_ctrsm("R", "L", "C", "N", &n2, &n1, &c_b1, a, n, &a[n1], n);
                 aocl_blas_cherk("U", "N", &n2, &n1, &c_b15, &a[n1], n, &c_b16, &a[*n], n);
@@ -343,7 +346,7 @@ void cpftrf_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *i
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 aocl_blas_ctrsm("L", "L", "N", "N", &n1, &n2, &c_b1, &a[n2], n, a, n);
                 aocl_blas_cherk("U", "C", &n2, &n1, &c_b15, a, n, &c_b16, &a[n1], n);
@@ -367,7 +370,7 @@ void cpftrf_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *i
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 aocl_blas_ctrsm("L", "U", "C", "N", &n1, &n2, &c_b1, a, &n1, &a[n1 * n1], &n1);
                 aocl_blas_cherk("L", "C", &n2, &n1, &c_b15, &a[n1 * n1], &n1, &c_b16, &a[1], &n1);
@@ -387,7 +390,7 @@ void cpftrf_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *i
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 ctrsm_("R", "U", "N", "N", &n2, &n1, &c_b1, &a[n2 * n2], &n2, a, &n2);
                 cherk_("L", "N", &n2, &n1, &c_b15, a, &n2, &c_b16, &a[n1 * n2], &n2);
@@ -415,7 +418,7 @@ void cpftrf_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *i
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
@@ -440,7 +443,7 @@ void cpftrf_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *i
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
@@ -469,7 +472,7 @@ void cpftrf_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *i
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 aocl_blas_ctrsm("L", "U", "C", "N", &k, &k, &c_b1, &a[k], &n1, &a[k * (k + 1)], &k);
                 aocl_blas_cherk("L", "C", &k, &k, &c_b15, &a[k * (k + 1)], &k, &c_b16, a, &k);
@@ -489,7 +492,7 @@ void cpftrf_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *i
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 aocl_blas_ctrsm("R", "U", "N", "N", &k, &k, &c_b1, &a[k * (k + 1)], &k, a, &k);
                 aocl_blas_cherk("L", "N", &k, &k, &c_b15, a, &k, &c_b16, &a[k * k], &k);
@@ -502,7 +505,7 @@ void cpftrf_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *i
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPFTRF */
 }
 /* cpftrf_ */

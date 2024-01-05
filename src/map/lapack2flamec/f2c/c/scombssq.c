@@ -46,7 +46,7 @@
 /* > \ingroup OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int scombssq_(real *v1, real *v2)
+void scombssq_(real *v1, real *v2)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
@@ -82,7 +82,7 @@ int scombssq_(real *v1, real *v2)
         v1[1] = v2[1];
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SCOMBSSQ */
 }
 /* scombssq_ */

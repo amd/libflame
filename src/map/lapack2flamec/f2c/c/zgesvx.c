@@ -350,12 +350,7 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup complex16GEsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a,
-             aocl_int_t *lda, dcomplex *af, aocl_int_t *ldaf, aocl_int_t *ipiv, char *equed,
-             doublereal *r__, doublereal *c__, dcomplex *b, aocl_int_t *ldb, dcomplex *x,
-             aocl_int_t *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr,
-             dcomplex *work, doublereal *rwork, aocl_int_t *info)
+void zgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex *a, integer *lda, doublecomplex *af, integer * ldaf, integer *ipiv, char *equed, doublereal *r__, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr, doublecomplex * work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgesvx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
@@ -380,14 +375,19 @@ void zgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex 
     extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     doublereal bignum;
     extern /* Subroutine */
-    int zlaqge_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *), zgecon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
+    void zlaqge_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *), zgecon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
     integer infequ;
     logical colequ;
     doublereal rowcnd;
     extern /* Subroutine */
-    int zgeequ_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
+    void zgeequ_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
     logical notran;
+    extern /* Subroutine */
+    void zgerfs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zgetrf_(integer *, integer *, doublecomplex *, integer *, integer *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    extern doublereal zlantr_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     doublereal smlnum;
+    extern /* Subroutine */
+    void zgetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
     logical rowequ;
     doublereal rpvgrw;
     /* -- LAPACK driver routine (version 3.4.1) -- */
@@ -558,7 +558,7 @@ void zgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex 
         i__1 = -(*info);
         xerbla_("ZGESVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(equil)
     {
@@ -640,7 +640,7 @@ void zgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex 
             rwork[1] = rpvgrw;
             *rcond = 0.;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A and the */
@@ -737,7 +737,7 @@ void zgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex 
     }
     rwork[1] = rpvgrw;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGESVX */
 }
 /* zgesvx_ */

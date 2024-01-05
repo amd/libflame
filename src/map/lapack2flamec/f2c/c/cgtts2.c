@@ -125,9 +125,7 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complexGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cgtts2_(aocl_int_t *itrans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__,
-             scomplex *du, scomplex *du2, aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb)
+void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d__, complex *du, complex *du2, integer *ipiv, complex *b, integer *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -175,7 +173,7 @@ void cgtts2_(aocl_int_t *itrans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, 
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(*itrans == 0)
     {
@@ -711,6 +709,6 @@ void cgtts2_(aocl_int_t *itrans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, 
     }
     /* End of CGTTS2 */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* cgtts2_ */

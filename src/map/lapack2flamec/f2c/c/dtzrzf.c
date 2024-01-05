@@ -151,27 +151,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dtzrzf_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *tau,
-             doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dtzrzf(m, n, a, lda, tau, work, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dtzrzf(&m_64, &n_64, a, &lda_64, tau, work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_dtzrzf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
-                        doublereal *tau, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
+void dtzrzf_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
@@ -181,10 +161,10 @@ void aocl_lapack_dtzrzf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlarzb_( char *, char *, char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int dlarzt_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dlarzt_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer lwkmin, ldwork;
     extern /* Subroutine */
-    int dlatrz_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+    void dlatrz_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.1) -- */
@@ -254,7 +234,7 @@ void aocl_lapack_dtzrzf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
     {
         i__1 = -(*info);
         xerbla_("DTZRZF", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if(lquery)
     {
@@ -355,7 +335,7 @@ void aocl_lapack_dtzrzf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
         i__2 = *n - *m;
         aocl_lapack_dlatrz(&mu, n, &i__2, &a[a_offset], lda, &tau[1], &work[1]);
     }
-    work[1] = (doublereal)lwkopt;
+    work[1] = (doublereal) lwkopt;
     return;
     /* End of DTZRZF */
 }

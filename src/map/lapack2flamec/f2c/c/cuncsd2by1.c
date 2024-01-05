@@ -246,7 +246,7 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cuncsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, integer *q, complex *x11, integer *ldx11, complex *x21, integer *ldx21, real *theta, complex *u1, integer *ldu1, complex *u2, integer *ldu2, complex *v1t, integer *ldv1t, complex * work, integer *lwork, real *rwork, integer *lrwork, integer *iwork, integer *info)
+void cuncsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, integer *q, complex *x11, integer *ldx11, complex *x21, integer *ldx21, real *theta, complex *u1, integer *ldu1, complex *u2, integer *ldu2, complex *v1t, integer *ldv1t, complex * work, integer *lwork, real *rwork, integer *lrwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cuncsd2by1 inputs: jobu1 %c, jobu2 %c, jobv1t %c, m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldx11 %" FLA_IS ", ldx21 %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS "",*jobu1, *jobu2, *jobv1t, *m, *p, *q, *ldx11, *ldx21, *ldu1, *ldu2, *ldv1t);
@@ -261,23 +261,23 @@ int cuncsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, 
     integer iphi;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
     integer itaup1, itaup2, itauq1;
     logical wantu1, wantu2;
     extern /* Subroutine */
-    int cbbcsd_(char *, char *, char *, char *, char *, integer *, integer *, integer *, real *, real *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, real *, integer *, integer *);
+    void cbbcsd_(char *, char *, char *, char *, char *, integer *, integer *, integer *, real *, real *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, real *, integer *, integer *);
     integer ibbcsd, lbbcsd, iorbdb, lorbdb;
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clapmr_(logical *, integer *, integer *, complex *, integer *, integer *), clapmt_(logical *, integer *, integer *, complex *, integer *, integer *), cunglq_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clapmr_(logical *, integer *, integer *, complex *, integer *, integer *), clapmt_(logical *, integer *, integer *, complex *, integer *, integer *), cunglq_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     integer iorglq;
     extern /* Subroutine */
-    int cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+    void cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     integer lorglq, iorgqr, lorgqr;
     extern /* Subroutine */
-    int cunbdb1_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, complex *, integer *, integer *), cunbdb2_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, complex *, integer *, integer *);
+    void cunbdb1_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, complex *, integer *, integer *), cunbdb2_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, complex *, integer *, integer *);
     logical lquery;
     extern /* Subroutine */
-    int cunbdb3_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, complex *, integer *, integer *), cunbdb4_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, complex *, complex *, integer *, integer *);
+    void cunbdb3_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, complex *, integer *, integer *), cunbdb4_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, complex *, complex *, integer *, integer *);
     logical wantv1t;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -651,12 +651,12 @@ int cuncsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, 
         i__1 = -(*info);
         xerbla_("CUNCSD2BY1", &i__1, (ftnlen)10);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     lorgqr = *lwork - iorgqr + 1;
     lorglq = *lwork - iorglq + 1;
@@ -969,7 +969,7 @@ int cuncsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CUNCSD2BY1 */
 }
 /* cuncsd2by1_ */

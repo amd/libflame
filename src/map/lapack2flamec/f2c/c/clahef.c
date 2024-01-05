@@ -175,9 +175,7 @@ static aocl_int64_t c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clahef_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, scomplex *a, aocl_int_t *lda,
-             aocl_int_t *ipiv, scomplex *w, aocl_int_t *ldw, aocl_int_t *info)
+void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integer *lda, integer *ipiv, complex *w, integer *ldw, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -203,12 +201,17 @@ void clahef_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, scomplex
     aocl_int64_t jb, jj, kk, jp, kp, kw, kkw, imax, jmax;
     real alpha;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
+    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
     integer kstep;
     real absakk;
+    extern /* Subroutine */
+    void clacgv_(integer *, complex *, integer *);
+    extern integer icamax_(integer *, complex *, integer *);
+    extern /* Subroutine */
+    void csscal_(integer *, real *, complex *, integer *);
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -1103,7 +1106,7 @@ void clahef_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, scomplex
         *kb = k - 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAHEF */
 }
 /* clahef_ */

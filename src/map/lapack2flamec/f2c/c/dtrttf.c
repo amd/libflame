@@ -190,9 +190,7 @@
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dtrttf_(char *transr, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda,
-             doublereal *arf, aocl_int_t *info)
+void dtrttf_(char *transr, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *arf, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtrttf inputs: transr %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*transr, *uplo, *n, *lda);
@@ -255,7 +253,7 @@ void dtrttf_(char *transr, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t 
         i__1 = -(*info);
         xerbla_("DTRTTF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n <= 1)
@@ -265,7 +263,7 @@ void dtrttf_(char *transr, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t 
             arf[0] = a[0];
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Size of array ARF(0:nt-1) */
     nt = *n * (*n + 1) / 2;
@@ -549,7 +547,7 @@ void dtrttf_(char *transr, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTRTTF */
 }
 /* dtrttf_ */

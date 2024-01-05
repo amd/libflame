@@ -144,10 +144,7 @@ if JPVT(i) = 0, */
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlaqp2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, dcomplex *a, aocl_int_t *lda,
-             aocl_int_t *jpvt, dcomplex *tau, doublereal *vn1, doublereal *vn2,
-             dcomplex *work)
+void zlaqp2_(integer *m, integer *n, integer *offset, doublecomplex *a, integer *lda, integer *jpvt, doublecomplex *tau, doublereal *vn1, doublereal *vn2, doublecomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqp2 inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", lda %" FLA_IS "",*m, *n, *offset, *lda);
@@ -164,8 +161,13 @@ void zlaqp2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, dcomplex *a, aocl
     dcomplex aii;
     aocl_int64_t pvt;
     doublereal temp, temp2, tol3z;
-    aocl_int64_t offpi, itemp;
-    extern doublereal dlamch_(char *);
+    integer offpi, itemp;
+    extern /* Subroutine */
+    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_( char *);
+    extern integer idamax_(integer *, doublereal *, integer *);
+    extern /* Subroutine */
+    void zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -286,7 +288,7 @@ void zlaqp2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, dcomplex *a, aocl
         /* L20: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAQP2 */
 }
 /* zlaqp2_ */

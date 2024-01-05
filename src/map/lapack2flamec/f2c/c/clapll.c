@@ -95,8 +95,7 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clapll_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, scomplex *y, aocl_int_t *incy, real *ssmin)
+void clapll_(integer *n, complex *x, integer *incx, complex * y, integer *incy, real *ssmin)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -118,9 +117,14 @@ void clapll_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, scomplex *y, aocl_int
     /* Local variables */
     scomplex c__, a11, a12, a22, tau;
     extern /* Subroutine */
-        void
-        slas2_(real *, real *, real *, real *, real *);
+    void slas2_(real *, real *, real *, real *, real *) ;
+    extern /* Complex */
+    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+    extern /* Subroutine */
+    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     real ssmax;
+    extern /* Subroutine */
+    void clarfg_(integer *, complex *, complex *, integer *, complex *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -150,7 +154,7 @@ void clapll_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, scomplex *y, aocl_int
     {
         *ssmin = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the QR factorization of the N-by-2 matrix ( X Y ) */
     aocl_lapack_clarfg(n, &x[1], &x[*incx + 1], incx, &tau);
@@ -180,7 +184,7 @@ void clapll_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, scomplex *y, aocl_int
     r__3 = c_abs(&a22);
     slas2_(&r__1, &r__2, &r__3, ssmin, &ssmax);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAPLL */
 }
 /* clapll_ */

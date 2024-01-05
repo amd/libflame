@@ -229,7 +229,7 @@ if RANGE = 'V', the exact value of */
 /* > \ingroup realOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *e, real *vl, real *vu, integer *il, integer *iu, integer *ns, real *s, real *z__, integer *ldz, real *work, integer * iwork, integer *info)
+void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *e, real *vl, real *vu, integer *il, integer *iu, integer *ns, real *s, real *z__, integer *ldz, real *work, integer * iwork, integer *info)
 {
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
@@ -258,7 +258,7 @@ int sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *e
     extern logical lsame_(char *, char *);
     integer idtgk, ietgk;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     integer iltgk, itemp, icolz;
     logical allsv;
     integer idptr;
@@ -271,12 +271,12 @@ int sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *e
     integer isplt;
     real ortol, vutgk;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
+    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
     logical wantz;
     char rngvx[1];
     integer irowu, irowv;
     extern /* Subroutine */
-    int saxpy_(integer *, real *, real *, integer *, real *, integer *);
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *);
     integer irowz, iifail;
     extern real slamch_(char *);
     extern /* Subroutine */
@@ -284,11 +284,11 @@ int sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *e
     extern integer isamax_(integer *, real *, integer *);
     real abstol;
     extern /* Subroutine */
-    int slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    void slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     real thresh;
     integer iiwork;
     extern /* Subroutine */
-    int sstevx_(char *, char *, integer *, real *, real *, real *, real *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *, integer * );
+    void sstevx_(char *, char *, integer *, real *, real *, real *, real *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *, integer * );
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -378,13 +378,13 @@ int sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *e
     {
         i__1 = -(*info);
         xerbla_("SBDSVDX", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     /* Quick return if possible (N.LE.1) */
     *ns = 0;
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -406,7 +406,7 @@ int sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *e
             z__[z_dim1 + 1] = r_sign(&c_b10, &d__[1]);
             z__[z_dim1 + 2] = 1.f;
         }
-        return 0;
+        return;
     }
     abstol = slamch_("Safe Minimum") * 2;
     ulp = slamch_("Precision");
@@ -525,7 +525,7 @@ L2:
         sstevx_("N", "V", &i__1, &work[idtgk], &work[ietgk], &vltgk, &vutgk, & iltgk, &iltgk, &abstol, ns, &s[1], &z__[z_offset], ldz, &work[ itemp], &iwork[iiwork], &iwork[iifail], info);
         if (*ns == 0)
         {
-            return 0;
+            return;
         }
         else
         {
@@ -726,7 +726,7 @@ L2:
                     if (*info != 0)
                     {
                         /* Exit with the error code from SSTEVX. */
-                        return 0;
+                        return;
                     }
                     /* EMIN = ABS( MAXVAL( S( ISBEG:ISBEG+NSL-1 ) ) ) */
                     i__3 = nsl;
@@ -787,7 +787,7 @@ L2:
                             if (nrmu == 0.f)
                             {
                                 *info = (*n << 1) + 1;
-                                return 0;
+                                return;
                             }
                             r__1 = 1.f / nrmu;
                             sscal_(&nru, &r__1, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
@@ -818,7 +818,7 @@ L2:
                             if (nrmv == 0.f)
                             {
                                 *info = (*n << 1) + 1;
-                                return 0;
+                                return;
                             }
                             r__1 = -1.f / nrmv;
                             sscal_(&nrv, &r__1, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
@@ -1008,7 +1008,7 @@ L2:
             }
         }
     }
-    return 0;
+    return;
     /* End of SBDSVDX */
 }
 /* sbdsvdx_ */

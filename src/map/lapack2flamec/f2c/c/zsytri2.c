@@ -120,7 +120,7 @@ the matrix is singular and its */
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zsytri2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *work, integer *lwork, integer *info)
+void zsytri2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsytri2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "", *uplo, *n, *lda, *lwork);
@@ -128,7 +128,7 @@ int zsytri2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     integer a_dim1, a_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int zsytri2x_(char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zsytri2x_(char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
     extern logical lsame_(char *, char *);
     integer nbmax;
     logical upper;
@@ -137,7 +137,7 @@ int zsytri2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical lquery;
     extern /* Subroutine */
-    int zsytri_(char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *);
+    void zsytri_(char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *);
     integer minsize;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -198,19 +198,19 @@ int zsytri2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
         i__1 = -(*info);
         xerbla_("ZSYTRI2", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         work[1].r = (doublereal) minsize;
         work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (nbmax >= *n)
     {
@@ -221,7 +221,7 @@ int zsytri2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
         zsytri2x_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], &nbmax, info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSYTRI2 */
 }
 /* zsytri2_ */

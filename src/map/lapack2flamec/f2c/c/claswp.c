@@ -101,7 +101,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int claswp_(integer *n, complex *a, integer *lda, integer * k1, integer *k2, integer *ipiv, integer *incx)
+void claswp_(integer *n, complex *a, integer *lda, integer * k1, integer *k2, integer *ipiv, integer *incx)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -155,7 +155,7 @@ int claswp_(integer *n, complex *a, integer *lda, integer * k1, integer *k2, int
     else
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     n32 = *n / 32 << 5;
     if (n32 != 0)
@@ -235,7 +235,7 @@ int claswp_(integer *n, complex *a, integer *lda, integer * k1, integer *k2, int
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLASWP */
 }
 /* claswp_ */

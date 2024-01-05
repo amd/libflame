@@ -216,7 +216,7 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dtgex2_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal * q, integer *ldq, doublereal *z__, integer *ldz, integer *j1, integer * n1, integer *n2, doublereal *work, integer *lwork, integer *info)
+void dtgex2_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal * q, integer *ldq, doublereal *z__, integer *ldz, integer *j1, integer * n1, integer *n2, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtgex2 inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", j1 %" FLA_IS ", n1 %" FLA_IS ", n2 %" FLA_IS ", lwork %" FLA_IS "",*n, *lda, *ldb, *ldq, *ldz, *j1, *n1, *n2, *lwork);
@@ -238,15 +238,15 @@ int dtgex2_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer *
     integer idum;
     doublereal taul[4], dsum;
     extern /* Subroutine */
-    int drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
     doublereal taur[4], scpy[16] /* was [4][4] */
     , tcpy[16] /* was [4][4] */
     ;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal scale, bqra21, brqa21;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     doublereal licop[16] /* was [4][4] */
     ;
     integer linfo;
@@ -254,14 +254,14 @@ int dtgex2_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer *
     ;
     integer iwork[4];
     extern /* Subroutine */
-    int dlagv2_(doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dgeqr2_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dgerq2_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dorg2r_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dorgr2_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dorm2r_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dormr2_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dtgsy2_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *);
+    void dlagv2_(doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dgeqr2_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dgerq2_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dorg2r_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dorgr2_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dorm2r_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dormr2_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dtgsy2_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal dscale;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal dnorma, dnormb;
     extern /* Subroutine */
-    int dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
+    void dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     doublereal smlnum;
     logical strong;
     doublereal thresha, threshb;
@@ -308,12 +308,12 @@ int dtgex2_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer *
     if (*n <= 1 || *n1 <= 0 || *n2 <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n1 > *n || *j1 + *n1 > *n)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     m = *n1 + *n2;
     /* Computing MAX */
@@ -329,7 +329,7 @@ int dtgex2_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer *
         i__2 = m * m << 1; // ; expr subst
         work[1] = (doublereal) fla_max(i__1,i__2);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     weak = FALSE_;
     strong = FALSE_;
@@ -451,7 +451,7 @@ int dtgex2_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer *
         }
         /* Exit with INFO = 0 if swap was successfully performed. */
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else
     {
@@ -700,13 +700,13 @@ int dtgex2_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer *
         }
         /* Exit with INFO = 0 if swap was successfully performed. */
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Exit with INFO = 1 if swap was rejected. */
 L70:
     *info = 1;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTGEX2 */
 }
 /* dtgex2_ */

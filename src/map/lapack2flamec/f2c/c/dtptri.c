@@ -117,8 +117,7 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dtptri_(char *uplo, char *diag, aocl_int_t *n, doublereal *ap, aocl_int_t *info)
+void dtptri_(char *uplo, char *diag, integer *n, doublereal * ap, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtptri inputs: uplo %c, diag %c, n %" FLA_IS "",*uplo, *diag, *n);
@@ -127,7 +126,11 @@ void dtptri_(char *uplo, char *diag, aocl_int_t *n, doublereal *ap, aocl_int_t *
     /* Local variables */
     aocl_int64_t j, jc, jj;
     doublereal ajj;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -176,7 +179,7 @@ void dtptri_(char *uplo, char *diag, aocl_int_t *n, doublereal *ap, aocl_int_t *
         i__1 = -(*info);
         xerbla_("DTPTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check for singularity if non-unit. */
     if(nounit)
@@ -191,7 +194,7 @@ void dtptri_(char *uplo, char *diag, aocl_int_t *n, doublereal *ap, aocl_int_t *
                 if(ap[jj] == 0.)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 /* L10: */
             }
@@ -205,7 +208,7 @@ void dtptri_(char *uplo, char *diag, aocl_int_t *n, doublereal *ap, aocl_int_t *
                 if(ap[jj] == 0.)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 jj = jj + *n - *info + 1;
                 /* L20: */
@@ -268,7 +271,7 @@ void dtptri_(char *uplo, char *diag, aocl_int_t *n, doublereal *ap, aocl_int_t *
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTPTRI */
 }
 /* dtptri_ */

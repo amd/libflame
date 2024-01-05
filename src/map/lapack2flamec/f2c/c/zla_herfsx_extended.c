@@ -407,15 +407,7 @@ i+1}
 /* > \ingroup complex16HEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zla_herfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs,
-                          dcomplex *a, integer *lda, dcomplex *af, integer *ldaf,
-                          integer *ipiv, logical *colequ, doublereal *c__, dcomplex *b,
-                          integer *ldb, dcomplex *y, integer *ldy, doublereal *berr_out__,
-                          integer *n_norms__, doublereal *err_bnds_norm__,
-                          doublereal *err_bnds_comp__, dcomplex *res, doublereal *ayb,
-                          dcomplex *dy, dcomplex *y_tail__, doublereal *rcond,
-                          integer *ithresh, doublereal *rthresh, doublereal *dz_ub__,
-                          logical *ignore_cwise__, integer *info)
+void zla_herfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *af, integer *ldaf, integer *ipiv, logical *colequ, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *y, integer *ldy, doublereal *berr_out__, integer *n_norms__, doublereal * err_bnds_norm__, doublereal *err_bnds_comp__, doublecomplex *res, doublereal *ayb, doublecomplex *dy, doublecomplex *y_tail__, doublereal *rcond, integer *ithresh, doublereal *rthresh, doublereal * dz_ub__, logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
 AOCL_DTL_SNPRINTF("zla_herfsx_extended inputs: prec_type__ %" FLA_IS ", uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldy %" FLA_IS ", n_norms__ %" FLA_IS ", rcond %lf, ithresh %" FLA_IS ", rthresh %lf", *prec_type__, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldy, *n_norms__, *rcond, *ithresh, *rthresh);
@@ -431,16 +423,15 @@ AOCL_DTL_SNPRINTF("zla_herfsx_extended inputs: prec_type__ %" FLA_IS ", uplo %c,
     integer i__, j;
     logical incr_prec__;
     extern /* Subroutine */
-    int zla_heamv_(integer *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *);
+    void zla_heamv_(integer *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *);
     doublereal prev_dz_z__, yk, final_dx_x__, final_dz_z__;
     extern /* Subroutine */
-        void
-        zla_wwaddw_(integer *, dcomplex *, dcomplex *, dcomplex *);
+    void zla_wwaddw_(integer *, doublecomplex *, doublecomplex *, doublecomplex *);
     doublereal prevnormdx;
     integer cnt;
     doublereal dyk, eps, incr_thresh__, dx_x__, dz_z__, ymin;
     extern /* Subroutine */
-    int zla_lin_berr_(integer *, integer *, integer *, doublecomplex *, doublereal *, doublereal *);
+    void zla_lin_berr_(integer *, integer *, integer *, doublecomplex *, doublereal *, doublereal *);
     integer y_prec_state__;
     extern /* Subroutine */
         int
@@ -456,23 +447,17 @@ AOCL_DTL_SNPRINTF("zla_herfsx_extended inputs: prec_type__ %" FLA_IS ", uplo %c,
                        dcomplex *, integer *, integer *);
     doublereal dxrat, dzrat;
     extern /* Subroutine */
-        void
-        zhemv_(char *, integer *, dcomplex *, dcomplex *, integer *, dcomplex *,
-               integer *, dcomplex *, dcomplex *, integer *);
+    void zhemv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical upper;
     doublereal normx, normy;
     extern /* Subroutine */
-        void
-        zcopy_(integer *, dcomplex *, integer *, dcomplex *, integer *),
-        zaxpy_(integer *, dcomplex *, dcomplex *, integer *, dcomplex *, integer *);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal normdx;
     extern /* Subroutine */
-        void
-        zhetrs_(char *, integer *, integer *, dcomplex *, integer *, integer *,
-                dcomplex *, integer *, integer *);
+    void zhetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
     doublereal hugeval;
     extern integer ilauplo_(char *);
     integer x_state__, z_state__;
@@ -562,7 +547,7 @@ AOCL_DTL_SNPRINTF("zla_herfsx_extended inputs: prec_type__ %" FLA_IS ", uplo %c,
         i__1 = -(*info);
         xerbla_("ZLA_HERFSX_EXTENDED", &i__1, (ftnlen)19);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     eps = dlamch_("Epsilon");
     hugeval = dlamch_("Overflow");
@@ -835,7 +820,7 @@ AOCL_DTL_SNPRINTF("zla_herfsx_extended inputs: prec_type__ %" FLA_IS ", uplo %c,
         /* End of loop for each RHS. */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* zla_herfsx_extended__ */
 #endif

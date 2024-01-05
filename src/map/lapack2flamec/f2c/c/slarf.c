@@ -123,9 +123,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slarf_(char *side, aocl_int_t *m, aocl_int_t *n, real *v, aocl_int_t *incv, real *tau,
-            real *c__, aocl_int_t *ldc, real *work)
+void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c__, integer *ldc, real *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -139,9 +137,14 @@ void slarf_(char *side, aocl_int_t *m, aocl_int_t *n, real *v, aocl_int_t *incv,
     /* Local variables */
     aocl_int64_t i__;
     logical applyleft;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t lastc;
-    aocl_int64_t lastv;
+    extern /* Subroutine */
+    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
+    extern logical lsame_(char *, char *);
+    integer lastc;
+    extern /* Subroutine */
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    integer lastv;
+    extern integer ilaslc_(integer *, integer *, real *, integer *), ilaslr_( integer *, integer *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -239,7 +242,7 @@ void slarf_(char *side, aocl_int_t *m, aocl_int_t *n, real *v, aocl_int_t *incv,
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLARF */
 }
 /* slarf_ */

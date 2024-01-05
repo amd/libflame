@@ -151,10 +151,7 @@ static aocl_int64_t c__1 = 1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slaed9_(aocl_int_t *k, aocl_int_t *kstart, aocl_int_t *kstop, aocl_int_t *n, real *d__,
-             real *q, aocl_int_t *ldq, real *rho, real *dlambda, real *w, real *s, aocl_int_t *lds,
-             aocl_int_t *info)
+void slaed9_(integer *k, integer *kstart, integer *kstop, integer *n, real *d__, real *q, integer *ldq, real *rho, real *dlamda, real *w, real *s, integer *lds, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slaed9(k, kstart, kstop, n, d__, q, ldq, rho, dlambda, w, s, lds, info);
@@ -192,7 +189,7 @@ void aocl_lapack_slaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kst
     real temp;
     extern real snrm2_(integer *, real *, integer *);
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), slaed4_(integer *, integer *, real *, real *, real *, real *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *), slaed4_(integer *, integer *, real *, real *, real *, real *, real *, integer *);
     extern real slamc3_(real *, real *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -254,13 +251,37 @@ void aocl_lapack_slaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kst
     {
         i__1 = -(*info);
         xerbla_("SLAED9", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*k == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
+    }
+    /* Modify values DLAMDA(i) to make sure all DLAMDA(i)-DLAMDA(j) can */
+    /* be computed with high relative accuracy (barring over/underflow). */
+    /* This is a problem on machines without a guard digit in */
+    /* add/subtract (Cray XMP, Cray YMP, Cray C 90 and Cray 2). */
+    /* The following code replaces DLAMDA(I) by 2*DLAMDA(I)-DLAMDA(I), */
+    /* which on any of these machines zeros out the bottommost */
+    /* bit of DLAMDA(I) if it is 1;
+    this makes the subsequent */
+    /* subtractions DLAMDA(I)-DLAMDA(J) unproblematic when cancellation */
+    /* occurs. On binary machines with a guard digit (almost all */
+    /* machines) it does not change DLAMDA(I) at all. On hexadecimal */
+    /* and decimal machines with a guard digit, it slightly */
+    /* changes the bottommost bits of DLAMDA(I). It does not account */
+    /* for hexadecimal or decimal machines without guard digits */
+    /* (we know of none). We use a subroutine call to compute */
+    /* 2*DLAMBDA(I) to prevent optimizing compilers from eliminating */
+    /* this code. */
+    i__1 = *n;
+    for (i__ = 1;
+            i__ <= i__1;
+            ++i__)
+    {
+        dlamda[i__] = slamc3_(&dlamda[i__], &dlamda[i__]) - dlamda[i__];
+        /* L10: */
     }
     i__1 = *kstop;
     for(j = *kstart; j <= i__1; ++j)
@@ -337,7 +358,6 @@ void aocl_lapack_slaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kst
         /* L110: */
     }
 L120:
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAED9 */
 }

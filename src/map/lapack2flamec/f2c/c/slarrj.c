@@ -151,7 +151,7 @@
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int slarrj_(integer *n, real *d__, real *e2, integer *ifirst, integer *ilast, real *rtol, integer *offset, real *w, real *werr, real *work, integer *iwork, real *pivmin, real *spdiam, integer *info)
+void slarrj_(integer *n, real *d__, real *e2, integer *ifirst, integer *ilast, real *rtol, integer *offset, real *w, real *werr, real *work, integer *iwork, real *pivmin, real *spdiam, integer *info)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -196,7 +196,7 @@ int slarrj_(integer *n, real *d__, real *e2, integer *ifirst, integer *ilast, re
     /* Quick return if possible */
     if (*n <= 0)
     {
-        return 0;
+        return;
     }
     maxitr = (integer) ((log(*spdiam + *pivmin) - log(*pivmin)) / log(2.f)) + 2;
     /* Initialize unconverged intervals in [ WORK(2*I-1), WORK(2*I) ]. */
@@ -416,7 +416,7 @@ L100:
         }
         /* L110: */
     }
-    return 0;
+    return;
     /* End of SLARRJ */
 }
 /* slarrj_ */

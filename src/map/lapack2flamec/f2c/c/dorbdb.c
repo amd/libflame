@@ -282,7 +282,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doublereal *x11, integer *ldx11, doublereal *x12, integer *ldx12, doublereal *x21, integer *ldx21, doublereal *x22, integer *ldx22, doublereal *theta, doublereal *phi, doublereal *taup1, doublereal *taup2, doublereal *tauq1, doublereal *tauq2, doublereal * work, integer *lwork, integer *info)
+void dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doublereal *x11, integer *ldx11, doublereal *x12, integer *ldx12, doublereal *x21, integer *ldx21, doublereal *x22, integer *ldx22, doublereal *theta, doublereal *phi, doublereal *taup1, doublereal *taup2, doublereal *tauq1, doublereal *tauq2, doublereal * work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dorbdb inputs: trans %c, signs %c, m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldx11 %" FLA_IS ", ldx12 %" FLA_IS ", ldx21 %" FLA_IS ", ldx22 %" FLA_IS ", lwork %" FLA_IS "",*trans, *signs, *m, *p, *q, *ldx11, *ldx12, *ldx21, *ldx22, *lwork);
@@ -297,13 +297,13 @@ int dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, double
     doublereal z1, z2, z3, z4;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     extern /* Subroutine */
-    int dlarfgp_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dlarfgp_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -447,12 +447,12 @@ int dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, double
         i__1 = -(*info);
         xerbla_("xORBDB", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Handle column-major and row-major separately */
     if (colmajor)
@@ -865,7 +865,7 @@ int dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, double
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DORBDB */
 }
 /* dorbdb_ */

@@ -103,9 +103,7 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slartv_(aocl_int_t *n, real *x, aocl_int_t *incx, real *y, aocl_int_t *incy, real *c__,
-             real *s, aocl_int_t *incc)
+void slartv_(integer *n, real *x, integer *incx, real *y, integer *incy, real *c__, real *s, integer *incc)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slartv(n, x, incx, y, incy, c__, s, incc);
@@ -164,7 +162,6 @@ void aocl_lapack_slartv(aocl_int64_t *n, real *x, aocl_int64_t *incx, real *y, a
         ic += *incc;
         /* L10: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARTV */
 }

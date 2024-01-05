@@ -312,11 +312,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slaebz_(aocl_int_t *ijob, aocl_int_t *nitmax, aocl_int_t *n, aocl_int_t *mmax,
-             aocl_int_t *minp, aocl_int_t *nbmin, real *abstol, real *reltol, real *pivmin,
-             real *d__, real *e, real *e2, aocl_int_t *nval, real *ab, real *c__, aocl_int_t *mout,
-             aocl_int_t *nab, real *work, aocl_int_t *iwork, aocl_int_t *info)
+void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer *minp, integer *nbmin, real *abstol, real * reltol, real *pivmin, real *d__, real *e, real *e2, integer *nval, real *ab, real *c__, integer *mout, integer *nab, real *work, integer *iwork, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slaebz(ijob, nitmax, n, mmax, minp, nbmin, abstol, reltol, pivmin, d__, e, e2, nval,
@@ -392,7 +388,6 @@ void aocl_lapack_slaebz(aocl_int64_t *ijob, aocl_int64_t *nitmax, aocl_int64_t *
     if(*ijob < 1 || *ijob > 3)
     {
         *info = -1;
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize NAB */
@@ -434,7 +429,6 @@ void aocl_lapack_slaebz(aocl_int64_t *ijob, aocl_int64_t *nitmax, aocl_int64_t *
             *mout = *mout + nab[ji + (nab_dim1 << 1)] - nab[ji + nab_dim1];
             /* L30: */
         }
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize for loop */
@@ -544,7 +538,6 @@ void aocl_lapack_slaebz(aocl_int64_t *ijob, aocl_int64_t *nitmax, aocl_int64_t *
                 }
                 if(*info != 0)
                 {
-                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 kl = klnew;
@@ -642,7 +635,6 @@ void aocl_lapack_slaebz(aocl_int64_t *ijob, aocl_int64_t *nitmax, aocl_int64_t *
                     else
                     {
                         *info = *mmax + 1;
-                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                 }
@@ -727,7 +719,6 @@ L140: /* Computing MAX */
     i__1 = kl + 1 - kf;
     *info = fla_max(i__1,0);
     *mout = kl;
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAEBZ */
 }

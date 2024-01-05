@@ -242,7 +242,7 @@ v**H denotes the conjugate transpose of v, and norm(u) */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ztrsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex *t, integer *ldt, doublecomplex *vl, integer *ldvl, doublecomplex *vr, integer *ldvr, doublereal *s, doublereal *sep, integer *mm, integer *m, doublecomplex *work, integer *ldwork, doublereal *rwork, integer *info)
+void ztrsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex *t, integer *ldt, doublecomplex *vl, integer *ldvl, doublecomplex *vr, integer *ldvr, doublereal *s, doublereal *sep, integer *mm, integer *m, doublecomplex *work, integer *ldwork, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztrsna inputs: job %c, howmny %c, n %" FLA_IS ", ldt %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", m %" FLA_IS "",*job, *howmny, *n, *ldt, *ldvl, *ldvr, *mm, *m);
@@ -266,7 +266,7 @@ int ztrsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex 
     logical wants;
     doublereal xnorm;
     extern /* Subroutine */
-    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), dlabad_( doublereal *, doublereal *);
+    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), dlabad_( doublereal *, doublereal *);
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_( char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -275,14 +275,14 @@ int ztrsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex 
     extern integer izamax_(integer *, doublecomplex *, integer *);
     logical somcon;
     extern /* Subroutine */
-    int zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
+    void zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
     char normin[1];
     extern /* Subroutine */
-    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal smlnum;
     logical wantsp;
     extern /* Subroutine */
-    int zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *), ztrexc_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, integer *);
+    void zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *), ztrexc_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -391,13 +391,13 @@ int ztrsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex 
         i__1 = -(*info);
         xerbla_("ZTRSNA", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -406,7 +406,7 @@ int ztrsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex 
             if (! select[1])
             {
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
         if (wants)
@@ -418,7 +418,7 @@ int ztrsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex 
             sep[1] = z_abs(&t[t_dim1 + 1]);
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = dlamch_("P");
@@ -520,7 +520,7 @@ L50:
         ;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTRSNA */
 }
 /* ztrsna_ */

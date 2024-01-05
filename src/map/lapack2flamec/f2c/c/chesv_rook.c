@@ -203,10 +203,7 @@ the routine */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void chesv_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda,
-                 aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, scomplex *work, aocl_int_t *lwork,
-                 aocl_int_t *info)
+void chesv_rook_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv, complex *b, integer *ldb, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -224,7 +221,7 @@ void chesv_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_
     /* Local variables */
     integer nb;
     extern /* Subroutine */
-    int chetrf_rook_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), chetrs_rook_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+    void chetrf_rook_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), chetrs_rook_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -305,12 +302,12 @@ void chesv_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_
         i__1 = -(*info);
         xerbla_("CHESV_ROOK ", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the factorization A = U*D*U**H or A = L*D*L**H. */
     aocl_lapack_chetrf_rook(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
@@ -323,7 +320,7 @@ void chesv_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHESV_ROOK */
 }
 /* chesv_rook__ */

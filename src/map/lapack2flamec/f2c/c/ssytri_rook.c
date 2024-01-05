@@ -121,7 +121,7 @@ the matrix is singular and its */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int ssytri_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, real *work, integer *info)
+void ssytri_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -144,7 +144,7 @@ int ssytri_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, 
     integer kstep;
     logical upper;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -192,13 +192,13 @@ int ssytri_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, 
         i__1 = -(*info);
         xerbla_("SSYTRI_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if (upper)
@@ -211,7 +211,7 @@ int ssytri_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, 
             if (ipiv[*info] > 0 && a[*info + *info * a_dim1] == 0.f)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L10: */
         }
@@ -227,7 +227,7 @@ int ssytri_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, 
             if (ipiv[*info] > 0 && a[*info + *info * a_dim1] == 0.f)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L20: */
         }
@@ -476,7 +476,7 @@ L60:
         ;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTRI_ROOK */
 }
 /* ssytri_rook__ */

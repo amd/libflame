@@ -279,12 +279,7 @@ SLAQR2 */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slaqr2_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, aocl_int_t *kbot,
-             aocl_int_t *nw, real *h__, aocl_int_t *ldh, aocl_int_t *iloz, aocl_int_t *ihiz,
-             real *z__, aocl_int_t *ldz, aocl_int_t *ns, aocl_int_t *nd, real *sr, real *si,
-             real *v, aocl_int_t *ldv, aocl_int_t *nh, real *t, aocl_int_t *ldt, aocl_int_t *nv,
-             real *wv, aocl_int_t *ldwv, real *work, aocl_int_t *lwork)
+void slaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, real *h__, integer *ldh, integer *iloz, integer *ihiz, real *z__, integer *ldz, integer *ns, integer *nd, real *sr, real *si, real *v, integer *ldv, integer *nh, real *t, integer *ldt, integer *nv, real *wv, integer *ldwv, real * work, integer *lwork)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slaqr2(wantt, wantz, n, ktop, kbot, nw, h__, ldh, iloz, ihiz, z__, ldz, ns, nd, sr,
@@ -350,21 +345,25 @@ void aocl_lapack_slaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     aocl_int64_t infqr;
     aocl_int64_t kwtop;
     extern /* Subroutine */
-    int slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), sgemm_( char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), sgemm_( char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer infqr;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     integer kwtop;
     extern /* Subroutine */
-    int slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *), slabad_(real *, real *) ;
+    void slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *), slabad_(real *, real *) ;
     extern real slamch_(char *);
+    extern /* Subroutine */
+    void sgehrd_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
     real safmin;
     extern /* Subroutine */
-    int slarfg_(integer *, real *, real *, integer *, real *);
+    void slarfg_(integer *, real *, real *, integer *, real *);
     real safmax;
     extern /* Subroutine */
-    int slahqr_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    void slahqr_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     logical sorted;
+    extern /* Subroutine */
+    void strexc_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *), sormhr_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     real smlnum;
     aocl_int64_t lwkopt;
     /* -- LAPACK auxiliary routine -- */
@@ -432,8 +431,7 @@ void aocl_lapack_slaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     /* ==== Quick return in case of workspace query. ==== */
     if(*lwork == -1)
     {
-        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
-        AOCL_DTL_TRACE_LOG_EXIT
+        work[1] = (real) lwkopt;
         return;
     }
     /* ==== Nothing to do ... */
@@ -443,13 +441,11 @@ void aocl_lapack_slaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     work[1] = 1.f;
     if(*ktop > *kbot)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* ... nor for an empty deflation window. ==== */
     if(*nw < 1)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* ==== Machine constants ==== */
@@ -490,7 +486,6 @@ void aocl_lapack_slaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
             }
         }
         work[1] = 1.f;
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* ==== Convert to spike-triangular form. (In case of a */
@@ -816,7 +811,6 @@ L60:
     /* ==== Return optimal workspace. ==== */
     work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     /* ==== End of SLAQR2 ==== */
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* slaqr2_ */

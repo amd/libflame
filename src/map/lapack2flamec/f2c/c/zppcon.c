@@ -117,9 +117,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zppcon_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *anorm, doublereal *rcond,
-             dcomplex *work, doublereal *rwork, aocl_int_t *info)
+void zppcon_(char *uplo, integer *n, doublecomplex *ap, doublereal *anorm, doublereal *rcond, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zppcon inputs: uplo %c, n %" FLA_IS ", anorm %lf",*uplo, *n, *anorm);
@@ -135,13 +133,20 @@ void zppcon_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *anorm, doubler
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     logical upper;
+    extern /* Subroutine */
+    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal scalel, scaleu;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
+    extern integer izamax_(integer *, doublecomplex *, integer *);
+    extern /* Subroutine */
+    void zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
     char normin[1];
     doublereal smlnum;
+    extern /* Subroutine */
+    void zlatps_(char *, char *, char *, char *, integer *, doublecomplex *, doublecomplex *, doublereal *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -193,7 +198,7 @@ void zppcon_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *anorm, doubler
         i__1 = -(*info);
         xerbla_("ZPPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.;
@@ -201,12 +206,12 @@ void zppcon_(char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *anorm, doubler
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(*anorm == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     smlnum = dlamch_("Safe minimum");
     /* Estimate the 1-norm of the inverse. */
@@ -257,7 +262,7 @@ L10:
     }
 L20:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPPCON */
 }
 /* zppcon_ */

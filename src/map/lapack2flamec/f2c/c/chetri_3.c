@@ -163,7 +163,7 @@ the matrix is singular and its */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int chetri_3_(char *uplo, integer *n, complex *a, integer * lda, complex *e, integer *ipiv, complex *work, integer *lwork, integer *info)
+void chetri_3_(char *uplo, integer *n, complex *a, integer * lda, complex *e, integer *ipiv, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -179,7 +179,7 @@ int chetri_3_(char *uplo, integer *n, complex *a, integer * lda, complex *e, int
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     extern /* Subroutine */
-    int chetri_3x_(char *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void chetri_3x_(char *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
     integer nb;
     extern logical lsame_(char *, char *);
     logical upper;
@@ -245,26 +245,26 @@ int chetri_3_(char *uplo, integer *n, complex *a, integer * lda, complex *e, int
         i__1 = -(*info);
         xerbla_("CHETRI_3", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         work[1].r = (real) lwkopt;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     chetri_3x_(uplo, n, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], &nb, info);
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHETRI_3 */
 }
 /* chetri_3__ */

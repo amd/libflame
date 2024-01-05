@@ -192,9 +192,7 @@
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dtfttr_(char *transr, char *uplo, aocl_int_t *n, doublereal *arf, doublereal *a,
-             aocl_int_t *lda, aocl_int_t *info)
+void dtfttr_(char *transr, char *uplo, integer *n, doublereal *arf, doublereal *a, integer *lda, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtfttr inputs: transr %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*transr, *uplo, *n, *lda);
@@ -257,7 +255,7 @@ void dtfttr_(char *transr, char *uplo, aocl_int_t *n, doublereal *arf, doublerea
         i__1 = -(*info);
         xerbla_("DTFTTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n <= 1)
@@ -267,7 +265,7 @@ void dtfttr_(char *transr, char *uplo, aocl_int_t *n, doublereal *arf, doublerea
             a[0] = arf[0];
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Size of array ARF(0:nt-1) */
     nt = *n * (*n + 1) / 2;
@@ -551,7 +549,7 @@ void dtfttr_(char *transr, char *uplo, aocl_int_t *n, doublereal *arf, doublerea
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTFTTR */
 }
 /* dtfttr_ */

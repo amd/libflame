@@ -174,10 +174,7 @@ static aocl_int64_t c__1 = 1;
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void claqps_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, aocl_int_t *nb, aocl_int_t *kb,
-             scomplex *a, aocl_int_t *lda, aocl_int_t *jpvt, scomplex *tau, real *vn1, real *vn2,
-             scomplex *auxv, scomplex *f, aocl_int_t *ldf)
+void claqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, complex *a, integer *lda, integer *jpvt, complex * tau, real *vn1, real *vn2, complex *auxv, complex *f, integer *ldf)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -203,7 +200,12 @@ void claqps_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, aocl_int_t *nb, a
     scomplex akk;
     aocl_int64_t pvt;
     real temp, temp2, tol3z;
-    aocl_int64_t itemp;
+    extern /* Subroutine */
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cswap_( integer *, complex *, integer *, complex *, integer *);
+    integer itemp;
+    extern real scnrm2_(integer *, complex *, integer *);
+    extern /* Subroutine */
+    void clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern real slamch_(char *);
     aocl_int64_t lsticc;
     aocl_int64_t lastrk;
@@ -426,7 +428,7 @@ L60:
         goto L60;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAQPS */
 }
 /* claqps_ */

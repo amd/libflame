@@ -219,63 +219,20 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlabrd_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nb, doublereal *a, aocl_int_t *lda,
-             doublereal *d__, doublereal *e, doublereal *tauq, doublereal *taup, doublereal *x,
-             aocl_int_t *ldx, doublereal *y, aocl_int_t *ldy)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dlabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nb_64 = *nb;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t ldy_64 = *ldy;
-
-    aocl_lapack_dlabrd(&m_64, &n_64, &nb_64, a, &lda_64, d__, e, tauq, taup, x, &ldx_64, y,
-                       &ldy_64);
-#endif
-}
-
-void aocl_lapack_dlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *a,
-                        aocl_int64_t *lda, doublereal *d__, doublereal *e, doublereal *tauq,
-                        doublereal *taup, doublereal *x, aocl_int64_t *ldx, doublereal *y,
-                        aocl_int64_t *ldy)
-{
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlabrd inputs: m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
-                      ", ldx %" FLA_IS ", ldy %" FLA_IS "",
-                      *m, *n, *nb, *lda, *ldx, *ldy);
-
-    extern void fla_dlabrd(aocl_int64_t * m, aocl_int64_t * n, aocl_int64_t * nb, doublereal * a,
-                           aocl_int64_t * lda, doublereal * d__, doublereal * e, doublereal * tauq,
-                           doublereal * taup, doublereal * x, aocl_int64_t * ldx, doublereal * y,
-                           aocl_int64_t * ldy);
-
-    fla_dlabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
-}
-
-void fla_dlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *a,
-                aocl_int64_t *lda, doublereal *d__, doublereal *e, doublereal *tauq,
-                doublereal *taup, doublereal *x, aocl_int64_t *ldx, doublereal *y,
-                aocl_int64_t *ldy)
+void dlabrd_(integer *m, integer *n, integer *nb, doublereal * a, integer *lda, doublereal *d__, doublereal *e, doublereal *tauq, doublereal *taup, doublereal *x, integer *ldx, doublereal *y, integer *ldy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlabrd inputs: m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldx %" FLA_IS ", ldy %" FLA_IS "",*m, *n, *nb, *lda, *ldx, *ldy);
   
-    extern int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda, doublereal *d__, doublereal *e, doublereal *tauq, doublereal *taup, doublereal *x, integer *ldx, doublereal *y, integer *ldy);
+    extern void fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda, doublereal *d__, doublereal *e, doublereal *tauq, doublereal *taup, doublereal *x, integer *ldx, doublereal *y, integer *ldy);
     
-    int ret_val = fla_dlabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
+    fla_dlabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
     AOCL_DTL_TRACE_LOG_EXIT
-    return ret_val;
+    return;
 
 }
 
-int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda, doublereal *d__, doublereal *e, doublereal *tauq, doublereal *taup, doublereal *x, integer *ldx, doublereal *y, integer *ldy)
+void fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda, doublereal *d__, doublereal *e, doublereal *tauq, doublereal *taup, doublereal *x, integer *ldx, doublereal *y, integer *ldy)
 {
     /* System generated locals */
     integer a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3, i__4, i__5;
@@ -283,7 +240,7 @@ int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda
     integer i__;
     int thread_id, actual_num_threads;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -325,7 +282,7 @@ int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda
     /* Function Body */
     if(*m <= 0 || *n <= 0)
     {
-        return 0;
+        return;
     }
 
 #ifdef FLA_OPENMP_MULTITHREADING
@@ -557,7 +514,7 @@ int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda
             }
         }
     }
-    return 0;
+    return;
     /* End of DLABRD */
 }
 /* dlabrd_ */

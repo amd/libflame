@@ -105,9 +105,7 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlar2v_(aocl_int_t *n, doublereal *x, doublereal *y, doublereal *z__, aocl_int_t *incx,
-             doublereal *c__, doublereal *s, aocl_int_t *incc)
+void dlar2v_(integer *n, doublereal *x, doublereal *y, doublereal *z__, integer *incx, doublereal *c__, doublereal *s, integer *incc)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlar2v inputs: n %" FLA_IS ", incx %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incc);
@@ -164,6 +162,6 @@ void dlar2v_(aocl_int_t *n, doublereal *x, doublereal *y, doublereal *z__, aocl_
     }
     /* End of DLAR2V */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dlar2v_ */

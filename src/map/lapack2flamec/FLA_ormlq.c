@@ -16,8 +16,8 @@
 #include "FLA_lapack2flame_return_defs.h"
 #include "FLA_lapack2flame_util_defs.h"
 
-extern int sormlq_fla(char* side, char* trans, integer* m, integer* n, integer* k, real* a, integer* lda, real* tau, real* c__, integer* ldc, real* work, integer* lwork, integer* info);
-extern int dormlq_fla(char* side, char* trans, integer* m, integer* n, integer* k, doublereal* a, integer* lda, doublereal* tau, doublereal* c__, integer* ldc, doublereal* work, integer* lwork, integer* info);
+extern void sormlq_fla(char* side, char* trans, integer* m, integer* n, integer* k, real* a, integer* lda, real* tau, real* c__, integer* ldc, real* work, integer* lwork, integer* info);
+extern void dormlq_fla(char* side, char* trans, integer* m, integer* n, integer* k, doublereal* a, integer* lda, doublereal* tau, doublereal* c__, integer* ldc, doublereal* work, integer* lwork, integer* info);
 /*
   DORMLQ overwrites the general real M-by-N matrix C with
   SIDE = 'L' SIDE = 'R'
@@ -34,7 +34,7 @@ extern int dormlq_fla(char* side, char* trans, integer* m, integer* n, integer* 
 */
 
 #define LAPACK_ormlq(prefix, name)                                      \
-  int F77_ ## prefix ## name ## lq( char* side,                         \
+  void F77_ ## prefix ## name ## lq( char* side,                         \
                                     char* trans,                        \
                                     integer* m,                             \
                                     integer* n,                             \
@@ -238,7 +238,7 @@ LAPACK_ormlq(s, orm)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
         sormlq_fla(side, trans,
@@ -249,7 +249,7 @@ LAPACK_ormlq(s, orm)
             buff_w, lwork,
             info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 #endif
 }
@@ -276,7 +276,7 @@ LAPACK_ormlq(d, orm)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
         dormlq_fla(side, trans,
@@ -287,7 +287,7 @@ LAPACK_ormlq(d, orm)
             buff_w, lwork,
             info);
         AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
     }
 #endif
 }
@@ -315,7 +315,7 @@ LAPACK_ormlq(c, unm)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-        return fla_error;
+        return;
 }
 LAPACK_ormlq(z, unm)
 {
@@ -339,12 +339,12 @@ LAPACK_ormlq(z, unm)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 
 #define LAPACK_orml2(prefix, name)                                      \
-  int F77_ ## prefix ## name ## l2( char* side,                         \
+  void F77_ ## prefix ## name ## l2( char* side,                         \
                                     char* trans,                        \
                                     integer* m,                             \
                                     integer* n,                             \
@@ -377,7 +377,7 @@ LAPACK_orml2(s, orm)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_orml2(d, orm)
 {
@@ -401,7 +401,7 @@ LAPACK_orml2(d, orm)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-        return fla_error;
+        return;
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
@@ -427,7 +427,7 @@ LAPACK_orml2(c, unm)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_orml2(z, unm)
 { 
@@ -451,7 +451,7 @@ LAPACK_orml2(z, unm)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 

@@ -151,9 +151,7 @@ if a diagonal is smaller */
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slag2_(real *a, aocl_int_t *lda, real *b, aocl_int_t *ldb, real *safmin, real *scale1,
-            real *scale2, real *wr1, real *wr2, real *wi)
+void slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *scale1, real *scale2, real *wr1, real *wr2, real * wi)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slag2(a, lda, b, ldb, safmin, scale1, scale2, wr1, wr2, wi);
@@ -440,7 +438,6 @@ void aocl_lapack_slag2(real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, r
         }
     }
     /* End of SLAG2 */
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* slag2_ */

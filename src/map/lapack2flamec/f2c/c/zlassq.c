@@ -125,7 +125,7 @@
 /* > \ingroup lassq */
 /* ===================================================================== */
 /* Subroutine */
-int zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scl, doublereal *sumsq)
+void zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scl, doublereal *sumsq)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlassq inputs: n %" FLA_IS ", incx %" FLA_IS ", scl %lf, sumsq %lf", *n, *incx, *scl, *sumsq);
@@ -164,7 +164,7 @@ int zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scl, double
     /* Quick return if possible */
     if (disnan_(scl) || disnan_(sumsq)) {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*sumsq == 0.) {
         *scl = 1.;
@@ -175,7 +175,7 @@ int zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scl, double
     }
     if (*n <= 0) {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the sum of squares in 3 accumulators: */
     /* abig -- sums of squares scaled down to avoid overflow */
@@ -299,6 +299,6 @@ int zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scl, double
         *sumsq = amed;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* zlassq_ */

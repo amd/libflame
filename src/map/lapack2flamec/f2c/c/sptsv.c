@@ -109,9 +109,7 @@
 /* > \ingroup realPTsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sptsv_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *b, aocl_int_t *ldb,
-            aocl_int_t *info)
+void sptsv_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -164,7 +162,7 @@ void sptsv_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *b, aocl_i
         i__1 = -(*info);
         xerbla_("SPTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the L*D*L**T (or U**T*D*U) factorization of A. */
     aocl_lapack_spttrf(n, &d__[1], &e[1], info);
@@ -174,7 +172,7 @@ void sptsv_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *b, aocl_i
         aocl_lapack_spttrs(n, nrhs, &d__[1], &e[1], &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPTSV */
 }
 /* sptsv_ */

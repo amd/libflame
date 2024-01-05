@@ -177,7 +177,7 @@ void dlae2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *rt1, doub
         *rt2 = rt * -.5;
     }
     AOCL_DTL_TRACE_EXIT_INDENT
-    return 0;
+    return;
     /* End of DLAE2 */
 }
 /* dlae2_ */

@@ -163,9 +163,7 @@ and second, applying a diagonal similarity transformation */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgebal_(char *job, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ilo, aocl_int_t *ihi,
-             real *scale, aocl_int_t *info)
+void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer *ihi, real *scale, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgebal(job, n, a, lda, ilo, ihi, scale, info);
@@ -196,8 +194,11 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     real c__, f, g;
     aocl_int64_t i__, j, k, l;
     real r__, s, ca, ra;
-    aocl_int64_t ica, ira;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer ica, ira, iexc;
+    extern real snrm2_(integer *, real *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *);
     real sfmin1, sfmin2, sfmax1, sfmax2;
     extern real slamch_(char *);
     extern /* Subroutine */
@@ -249,7 +250,7 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     {
         i__1 = -(*info);
         xerbla_("SGEBAL", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick returns. */
     if(*n == 0)
@@ -433,7 +434,7 @@ L180: /* Computing MIN */
             *info = -3;
             i__2 = -(*info);
             xerbla_("SGEBAL", &i__2, (ftnlen)6);
-            return 0;
+            return;
         }
         f /= 2.f;
         c__ /= 2.f;
@@ -522,7 +523,6 @@ L190:
     }
     *ilo = k;
     *ihi = l;
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEBAL */
 }

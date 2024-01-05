@@ -206,9 +206,7 @@ v(i+1:n) is stored on exit in A(i+1:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, real *a, aocl_int_t *lda, real *e,
-             real *tau, real *w, aocl_int_t *ldw)
+void slatrd_(char *uplo, integer *n, integer *nb, real *a, integer *lda, real *e, real *tau, real *w, integer *ldw)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slatrd(uplo, n, nb, a, lda, e, tau, w, ldw);
@@ -234,7 +232,9 @@ void aocl_lapack_slatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, real *a, 
     /* Local variables */
     aocl_int64_t i__, iw;
     real alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), saxpy_( integer *, real *, real *, integer *, real *, integer *), ssymv_( char *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -268,7 +268,6 @@ void aocl_lapack_slatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, real *a, 
     /* Function Body */
     if(*n <= 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lsame_(uplo, "U", 1, 1))
@@ -398,7 +397,6 @@ void aocl_lapack_slatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, real *a, 
             /* L20: */
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATRD */
 }

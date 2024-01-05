@@ -324,11 +324,7 @@ S and */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dtrsen_(char *job, char *compq, logical *select, aocl_int_t *n, doublereal *t, aocl_int_t *ldt,
-             doublereal *q, aocl_int_t *ldq, doublereal *wr, doublereal *wi, aocl_int_t *m,
-             doublereal *s, doublereal *sep, doublereal *work, aocl_int_t *lwork, aocl_int_t *iwork,
-             aocl_int_t *liwork, aocl_int_t *info)
+void dtrsen_(char *job, char *compq, logical *select, integer *n, doublereal *t, integer *ldt, doublereal *q, integer *ldq, doublereal *wr, doublereal *wi, integer *m, doublereal *s, doublereal *sep, doublereal *work, integer *lwork, integer *iwork, integer * liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtrsen inputs: job %c, compq %c, n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*job, *compq, *n, *ldt, *ldq, *lwork, *liwork);
@@ -351,13 +347,17 @@ void dtrsen_(char *job, char *compq, logical *select, aocl_int_t *n, doublereal 
     logical wantq, wants;
     doublereal rnorm;
     extern /* Subroutine */
-    int dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     extern doublereal dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical wantbh;
-    aocl_int64_t liwmin;
+    extern /* Subroutine */
+    void dtrexc_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *);
+    integer liwmin;
     logical wantsp, lquery;
+    extern /* Subroutine */
+    void dtrsyl_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -505,12 +505,12 @@ void dtrsen_(char *job, char *compq, logical *select, aocl_int_t *n, doublereal 
         i__1 = -(*info);
         xerbla_("DTRSEN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if(*m == *n || *m == 0)
@@ -646,7 +646,7 @@ L40: /* Store the output eigenvalues in WR and WI. */
     work[1] = (doublereal) lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTRSEN */
 }
 /* dtrsen_ */

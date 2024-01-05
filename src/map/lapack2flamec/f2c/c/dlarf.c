@@ -130,9 +130,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlarf_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, aocl_int_t *incv,
-            doublereal *tau, doublereal *c__, aocl_int_t *ldc, doublereal *work)
+void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarf inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *incv, *ldc);
@@ -146,20 +144,13 @@ void dlarf_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, aocl_int_t 
     integer i__1, j;
 #endif
     logical applyleft;
-#ifdef FLA_ENABLE_AMD_OPT
-    extern void fla_dlarf_small_incv1_simd(aocl_int64_t lastv, aocl_int64_t lastc, double *c__,
-                                           aocl_int64_t ldc, double *v, double tau, double *work);
-#if !FLA_ENABLE_AOCL_BLAS
-#endif
-    void fla_dlarf_left_tuning_params(aocl_int64_t m, aocl_int64_t n, FLA_Bool * use_blocked_flag,
-                                      aocl_int64_t * nthreads);
-    void fla_dlarf_right_tuning_params(aocl_int64_t m, aocl_int64_t n, aocl_int64_t * block_size,
-                                       aocl_int64_t * nthreads);
-#endif
-#if !FLA_ENABLE_AOCL_BLAS
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-#endif
-    aocl_int64_t lastc, lastv;
+    extern /* Subroutine */
+    void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    integer lastc, lastv;
+    extern integer iladlc_(integer *, integer *, doublereal *, integer *), iladlr_(integer *, integer *, doublereal *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -358,7 +349,7 @@ void dlarf_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, aocl_int_t 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARF */
 }
 /* dlarf_ */

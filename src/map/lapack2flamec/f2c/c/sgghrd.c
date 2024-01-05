@@ -213,10 +213,7 @@ LDZ >= 1 otherwise. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgghrd_(char *compq, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, real *a,
-             aocl_int_t *lda, real *b, aocl_int_t *ldb, real *q, aocl_int_t *ldq, real *z__,
-             aocl_int_t *ldz, aocl_int_t *info)
+void sgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, real *a, integer *lda, real *b, integer *ldb, real *q, integer *ldq, real *z__, integer *ldz, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgghrd(compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z__, ldz, info);
@@ -257,13 +254,13 @@ void aocl_lapack_sgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
     real temp;
     integer jrow;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icompq;
     extern /* Subroutine */
-    int slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *);
+    void slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *);
     integer icompz;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -381,7 +378,7 @@ void aocl_lapack_sgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
     {
         i__1 = -(*info);
         xerbla_("SGGHRD", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Initialize Q and Z if desired. */
     if(icompq == 3)
@@ -395,7 +392,6 @@ void aocl_lapack_sgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
     /* Quick return if possible */
     if(*n <= 1)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Zero out lower triangle of B */
@@ -450,7 +446,6 @@ void aocl_lapack_sgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
         }
         /* L40: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGGHRD */
 }

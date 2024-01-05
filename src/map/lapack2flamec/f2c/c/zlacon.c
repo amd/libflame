@@ -109,8 +109,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlacon_(aocl_int_t *n, dcomplex *v, dcomplex *x, doublereal *est, aocl_int_t *kase)
+void zlacon_(integer *n, doublecomplex *v, doublecomplex *x, doublereal *est, integer *kase)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlacon inputs: n %" FLA_IS ", est %lf, kase %" FLA_IS "",*n, *est, *kase);
@@ -129,7 +128,7 @@ void zlacon_(aocl_int_t *n, dcomplex *v, dcomplex *x, doublereal *est, aocl_int_
     doublereal absxi;
     integer jlast;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern integer izmax1_(integer *, doublecomplex *, integer *);
     extern doublereal dzsum1_(integer *, doublecomplex *, integer *), dlamch_( char *);
     doublereal safmin, altsgn, estold;
@@ -176,7 +175,7 @@ void zlacon_(aocl_int_t *n, dcomplex *v, dcomplex *x, doublereal *est, aocl_int_
         *kase = 1;
         jump = 1;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     switch(jump)
     {
@@ -231,7 +230,7 @@ L20:
     *kase = 2;
     jump = 2;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (JUMP = 2) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L40:
@@ -253,7 +252,7 @@ L50:
     *kase = 1;
     jump = 3;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (JUMP = 3) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L70:
@@ -291,7 +290,7 @@ L70:
     *kase = 2;
     jump = 4;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (JUMP = 4) */
     /* X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L90:
@@ -320,7 +319,7 @@ L100:
     *kase = 1;
     jump = 5;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (JUMP = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L120:
@@ -333,7 +332,7 @@ L120:
 L130:
     *kase = 0;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLACON */
 }
 /* zlacon_ */

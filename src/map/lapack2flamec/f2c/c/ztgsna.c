@@ -317,12 +317,7 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ztgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, dcomplex *a,
-             aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb, dcomplex *vl,
-             aocl_int_t *ldvl, dcomplex *vr, aocl_int_t *ldvr, doublereal *s, doublereal *dif,
-             aocl_int_t *mm, aocl_int_t *m, dcomplex *work, aocl_int_t *lwork,
-             aocl_int_t *iwork, aocl_int_t *info)
+void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *vl, integer *ldvl, doublecomplex *vr, integer * ldvr, doublereal *s, doublereal *dif, integer *mm, integer *m, doublecomplex *work, integer *lwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztgsna inputs: job %c, howmny %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", m %" FLA_IS "",*job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *m);
@@ -340,21 +335,30 @@ void ztgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, dcomplex *
     dcomplex yhax, yhbx;
     aocl_int64_t ilst;
     doublereal rnrm, scale;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t lwmin;
+    extern logical lsame_(char *, char *);
+    extern /* Double Complex */
+    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    integer lwmin;
+    extern /* Subroutine */
+    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical wants;
     dcomplex dummy[1];
     extern doublereal dlapy2_(doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlabad_(doublereal *, doublereal *);
+    void dlabad_(doublereal *, doublereal *);
     doublecomplex dummy1[1];
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_( char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical wantbh, wantdf, somcon;
+    extern /* Subroutine */
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztgexc_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, integer *);
+    doublereal smlnum;
     logical lquery;
-    /* -- LAPACK computational routine -- */
+    extern /* Subroutine */
+    void ztgsyl_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, integer *, integer *);
+    /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -478,18 +482,18 @@ void ztgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, dcomplex *
         i__1 = -(*info);
         xerbla_("ZTGSNA", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     ks = 0;
     i__1 = *n;
@@ -577,7 +581,7 @@ void ztgsna_(char *job, char *howmny, logical *select, aocl_int_t *n, dcomplex *
     work[1].r = (doublereal) lwmin;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTGSNA */
 }
 /* ztgsna_ */

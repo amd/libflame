@@ -150,10 +150,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zupmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, dcomplex *ap,
-             dcomplex *tau, dcomplex *c__, aocl_int_t *ldc, dcomplex *work,
-             aocl_int_t *info)
+void zupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doublecomplex *ap, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zupmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *uplo, *trans, *m, *n, *ldc);
@@ -166,8 +163,10 @@ void zupmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
     aocl_int64_t i__, i1, i2, i3, ic, jc, ii, mi, ni, nq;
     dcomplex aii;
     logical left;
-    dcomplex taui;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    doublecomplex taui;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -243,13 +242,13 @@ void zupmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
         i__1 = -(*info);
         xerbla_("ZUPMTR", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(upper)
     {
@@ -406,7 +405,7 @@ void zupmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZUPMTR */
 }
 /* zupmtr_ */

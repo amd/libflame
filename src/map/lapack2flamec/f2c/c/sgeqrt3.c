@@ -124,14 +124,14 @@ the elements below the diagonal are not used. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgeqrt3_(integer *m, integer *n, real *a, integer *lda, real *t, integer *ldt, integer *info)
+void sgeqrt3_(integer *m, integer *n, real *a, integer *lda, real *t, integer *ldt, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2;
     /* Local variables */
     integer i__, j, i1, j1, n1, n2, iinfo;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -177,7 +177,7 @@ int sgeqrt3_(integer *m, integer *n, real *a, integer *lda, real *t, integer *ld
     {
         i__1 = -(*info);
         xerbla_("SGEQRT3", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -258,7 +258,7 @@ int sgeqrt3_(integer *m, integer *n, real *a, integer *lda, real *t, integer *ld
         T = [T1 T3] */
         /* [ 0 R2 ] [ 0 T2] */
     }
-    return 0;
+    return;
     /* End of SGEQRT3 */
 }
 /* sgeqrt3_ */

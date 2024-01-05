@@ -224,12 +224,7 @@ is largest */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlar1v_(aocl_int_t *n, aocl_int_t *b1, aocl_int_t *bn, doublereal *lambda, doublereal *d__,
-             doublereal *l, doublereal *ld, doublereal *lld, doublereal *pivmin, doublereal *gaptol,
-             dcomplex *z__, logical *wantnc, aocl_int_t *negcnt, doublereal *ztz,
-             doublereal *mingma, aocl_int_t *r__, aocl_int_t *isuppz, doublereal *nrminv,
-             doublereal *resid, doublereal *rqcorr, doublereal *work)
+void zlar1v_(integer *n, integer *b1, integer *bn, doublereal *lambda, doublereal *d__, doublereal *l, doublereal *ld, doublereal * lld, doublereal *pivmin, doublereal *gaptol, doublecomplex *z__, logical *wantnc, integer *negcnt, doublereal *ztz, doublereal *mingma, integer *r__, integer *isuppz, doublereal *nrminv, doublereal *resid, doublereal *rqcorr, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlar1v inputs: n %" FLA_IS ", b1 %" FLA_IS ", bn %" FLA_IS ", lambda %lf, r__ %" FLA_IS "",*n, *b1, *bn, *lambda, *r__);
@@ -631,7 +626,7 @@ L60:
     *resid = f2c_dabs(*mingma) * *nrminv;
     *rqcorr = *mingma * tmp;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAR1V */
 }
 /* zlar1v_ */

@@ -312,10 +312,7 @@ static integer c__49 = 49;
 /* > of Matrix Analysis, volume 23, pages 948--973, 2002. */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dhseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
-             doublereal *h__, aocl_int_t *ldh, doublereal *wr, doublereal *wi, doublereal *z__,
-             aocl_int_t *ldz, doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
+void dhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *wr, doublereal *wi, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dhseqr inputs: job %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",*job, *compz, *n, *ilo, *ihi, *ldh, *ldz, *lwork);
@@ -336,7 +333,7 @@ void dhseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
     doublereal workl[49];
     logical wantt, wantz;
     extern /* Subroutine */
-    int dlaqr0_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlahqr_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+    void dlaqr0_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlahqr_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -427,14 +424,14 @@ void dhseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
         i__1 = -(*info);
         xerbla_("DHSEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(*n == 0)
     {
         /* ==== Quick return in case N = 0;
         nothing to do. ==== */
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
@@ -447,7 +444,7 @@ void dhseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
         d__1 = (doublereal) fla_max(1,*n);
         work[1] = fla_max(d__1,work[1]);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else
     {
@@ -477,7 +474,7 @@ void dhseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
             wr[*ilo] = h__[*ilo + *ilo * h_dim1];
             wi[*ilo] = 0.;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* ==== DLAHQR/DLAQR0 crossover point ==== */
         nmin = ilaenv_(&c__12, "DHSEQR", ch__1, n, ilo, ihi, lwork);
@@ -542,6 +539,6 @@ void dhseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
     }
     /* ==== End of DHSEQR ==== */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dhseqr_ */

@@ -284,7 +284,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, complex *a, integer *lda, complex *b, integer *ldb, real *tola, real *tolb, integer *k, integer *l, complex *u, integer *ldu, complex *v, integer *ldv, complex *q, integer *ldq, integer *iwork, real *rwork, complex *tau, complex *work, integer * lwork, integer *info)
+void cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, complex *a, integer *lda, complex *b, integer *ldb, real *tola, real *tolb, integer *k, integer *l, complex *u, integer *ldu, complex *v, integer *ldv, complex *q, integer *ldq, integer *iwork, real *rwork, complex *tau, complex *work, integer * lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -306,7 +306,7 @@ int cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     extern logical lsame_(char *, char *);
     logical wantq, wantu, wantv;
     extern /* Subroutine */
-    int cgeqp3_(integer *, integer *, complex *, integer *, integer *, complex *, complex *, integer *, real *, integer *), cgeqr2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), cgerq2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), cung2r_( integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), cunmr2_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clapmt_(logical *, integer *, integer *, complex *, integer *, integer *);
+    void cgeqp3_(integer *, integer *, complex *, integer *, integer *, complex *, complex *, integer *, real *, integer *), cgeqr2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), cgerq2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), cung2r_( integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), cunmr2_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clapmt_(logical *, integer *, integer *, complex *, integer *, integer *);
     logical forwrd;
     integer lwkopt;
     logical lquery;
@@ -442,12 +442,12 @@ int cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
         i__1 = -(*info);
         xerbla_("CGGSVP3", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* QR with column pivoting of B: B*P = V*( S11 S12 ) */
     /* ( 0 0 ) */
@@ -702,7 +702,7 @@ int cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     work[1].r = q__1.r;
     work[1].i = q__1.i; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGGSVP3 */
 }
 /* cggsvp3_ */

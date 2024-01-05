@@ -197,10 +197,7 @@ the corresponding */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m, aocl_int_t *n,
-             aocl_int_t *k, scomplex *v, aocl_int_t *ldv, scomplex *t, aocl_int_t *ldt, scomplex *c__,
-             aocl_int_t *ldc, scomplex *work, aocl_int_t *ldwork)
+void clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, complex *v, integer *ldv, complex *t, integer *ldt, complex *c__, integer *ldc, complex *work, integer *ldwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -216,8 +213,12 @@ void clarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
     integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5;
     complex q__1, q__2;
     /* Local variables */
-    aocl_int64_t i__, j;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j;
+    extern /* Subroutine */
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), clacgv_(integer *, complex *, integer *);
     char transt[1];
     /* -- LAPACK auxiliary routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -257,7 +258,7 @@ void clarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
     if(*m <= 0 || *n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(lsame_(trans, "N", 1, 1))
     {
@@ -796,7 +797,7 @@ void clarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLARFB */
 }
 /* clarfb_ */

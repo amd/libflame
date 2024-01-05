@@ -217,7 +217,7 @@ static integer c_n1 = -1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int ssysv_rk_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, real *e, integer *ipiv, real *b, integer *ldb, real * work, integer *lwork, integer *info)
+void ssysv_rk_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, real *e, integer *ipiv, real *b, integer *ldb, real * work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ssysv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ipiv %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ipiv, *ldb);
@@ -225,7 +225,7 @@ int ssysv_rk_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, rea
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int ssytrs_3_(char *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), ssytrf_rk_(char *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
+    void ssytrs_3_(char *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), ssytrf_rk_(char *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -304,12 +304,12 @@ int ssysv_rk_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, rea
         i__1 = -(*info);
         xerbla_("SSYSV_RK ", &i__1, (ftnlen)9);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the factorization A = P*U*D*(U**T)*(P**T) or */
     /* A = P*U*D*(U**T)*(P**T). */
@@ -321,7 +321,7 @@ int ssysv_rk_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, rea
     }
     work[1] = (real) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SSYSV_RK */
 }
 /* ssysv_rk__ */

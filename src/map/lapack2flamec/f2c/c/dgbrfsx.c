@@ -437,7 +437,7 @@ defaults */
 /* > \ingroup doubleGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, integer *nrhs, doublereal *ab, integer *ldab, doublereal *afb, integer *ldafb, integer *ipiv, doublereal *r__, doublereal *c__, doublereal *b, integer *ldb, doublereal *x, integer * ldx, doublereal *rcond, doublereal *berr, integer *n_err_bnds__, doublereal *err_bnds_norm__, doublereal *err_bnds_comp__, integer * nparams, doublereal *params, doublereal *work, integer *iwork, integer *info)
+void dgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, integer *nrhs, doublereal *ab, integer *ldab, doublereal *afb, integer *ldafb, integer *ipiv, doublereal *r__, doublereal *c__, doublereal *b, integer *ldb, doublereal *x, integer * ldx, doublereal *rcond, doublereal *berr, integer *n_err_bnds__, doublereal *err_bnds_norm__, doublereal *err_bnds_comp__, integer * nparams, doublereal *params, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgbrfsx inputs: trans %c, equed %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",*trans, *equed, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldx, *n_err_bnds__, *nparams);
@@ -456,14 +456,14 @@ int dgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
     extern doublereal dla_gbrcond_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal cwise_wrong__;
     extern /* Subroutine */
-    int dla_gbrfsx_extended_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, logical *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, logical *, integer *);
+    void dla_gbrfsx_extended_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, logical *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, logical *, integer *);
     char norm[1];
     logical ignore_cwise__;
     extern logical lsame_(char *, char *);
     doublereal anorm;
     extern doublereal dlangb_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *), dlamch_(char *);
     extern /* Subroutine */
-    int dgbcon_(char *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dgbcon_(char *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical colequ, notran, rowequ;
     extern integer ilaprec_(char *);
     integer ithresh, n_norms__;
@@ -626,7 +626,7 @@ int dgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
         i__1 = -(*info);
         xerbla_("DGBRFSX", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || *nrhs == 0)
@@ -655,7 +655,7 @@ int dgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
             }
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Default to failure. */
     *rcond = 0.;
@@ -808,7 +808,7 @@ int dgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGBRFSX */
 }
 /* dgbrfsx_ */

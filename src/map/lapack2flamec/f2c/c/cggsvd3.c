@@ -347,7 +347,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer *p, integer *k, integer *l, complex *a, integer * lda, complex *b, integer *ldb, real *alpha, real *beta, complex *u, integer *ldu, complex *v, integer *ldv, complex *q, integer *ldq, complex *work, integer *lwork, real *rwork, integer *iwork, integer * info)
+void cggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer *p, integer *k, integer *l, complex *a, integer * lda, complex *b, integer *ldb, real *alpha, real *beta, complex *u, integer *ldu, complex *v, integer *ldv, complex *q, integer *ldq, complex *work, integer *lwork, real *rwork, integer *iwork, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -373,18 +373,18 @@ int cggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer
     real anorm, bnorm;
     logical wantq;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     logical wantu, wantv;
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *), slamch_(char *);
     extern /* Subroutine */
-    int ctgsja_(char *, char *, char *, integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, real *, real *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void ctgsja_(char *, char *, char *, integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, real *, real *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
     integer ncycle;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int cggsvp3_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, real *, complex *, complex *, integer *, integer *);
+    void cggsvp3_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, real *, complex *, complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -500,12 +500,12 @@ int cggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer
         i__1 = -(*info);
         xerbla_("CGGSVD3", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the Frobenius norm of matrices A and B */
     anorm = clange_("1", m, n, &a[a_offset], lda, &rwork[1]);
@@ -565,7 +565,7 @@ int cggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer
     work[1].r = q__1.r;
     work[1].i = q__1.i; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGGSVD3 */
 }
 /* cggsvd3_ */

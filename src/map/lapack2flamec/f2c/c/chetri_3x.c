@@ -160,7 +160,7 @@ the matrix is singular and its */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int chetri_3x_(char *uplo, integer *n, complex *a, integer * lda, complex *e, integer *ipiv, complex *work, integer *nb, integer * info)
+void chetri_3x_(char *uplo, integer *n, complex *a, integer * lda, complex *e, integer *ipiv, complex *work, integer *nb, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -181,7 +181,7 @@ int chetri_3x_(char *uplo, integer *n, complex *a, integer * lda, complex *e, in
     void c_div(complex *, complex *, complex *), r_cnjg(complex *, complex *);
     /* Local variables */
     extern /* Subroutine */
-    int cheswapr_(char *, integer *, complex *, integer *, integer *, integer *);
+    void cheswapr_(char *, integer *, complex *, integer *, integer *, integer *);
     complex d__;
     integer i__, j, k;
     real t, ak;
@@ -190,17 +190,17 @@ int chetri_3x_(char *uplo, integer *n, complex *a, integer * lda, complex *e, in
     integer invd;
     complex akkp1;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+    void ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     complex u01_i_j__, u11_i_j__;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icount;
     extern /* Subroutine */
-    int ctrtri_(char *, char *, integer *, complex *, integer *, integer *);
+    void ctrtri_(char *, char *, integer *, complex *, integer *, integer *);
     complex u01_ip1_j__, u11_ip1_j__;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -253,12 +253,12 @@ int chetri_3x_(char *uplo, integer *n, complex *a, integer * lda, complex *e, in
         i__1 = -(*info);
         xerbla_("CHETRI_3X", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Workspace got Non-diag elements of D */
     i__1 = *n;
@@ -283,7 +283,7 @@ int chetri_3x_(char *uplo, integer *n, complex *a, integer * lda, complex *e, in
             if (ipiv[*info] > 0 && (a[i__1].r == 0.f && a[i__1].i == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
         }
     }
@@ -299,7 +299,7 @@ int chetri_3x_(char *uplo, integer *n, complex *a, integer * lda, complex *e, in
             if (ipiv[*info] > 0 && (a[i__2].r == 0.f && a[i__2].i == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
         }
     }
@@ -1055,7 +1055,7 @@ int chetri_3x_(char *uplo, integer *n, complex *a, integer * lda, complex *e, in
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHETRI_3X */
 }
 /* chetri_3x__ */

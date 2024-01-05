@@ -275,13 +275,7 @@ static aocl_int64_t c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlasda_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *sqre,
-             doublereal *d__, doublereal *e, doublereal *u, aocl_int_t *ldu, doublereal *vt,
-             aocl_int_t *k, doublereal *difl, doublereal *difr, doublereal *z__, doublereal *poles,
-             aocl_int_t *givptr, aocl_int_t *givcol, aocl_int_t *ldgcol, aocl_int_t *perm,
-             doublereal *givnum, doublereal *c__, doublereal *s, doublereal *work,
-             aocl_int_t *iwork, aocl_int_t *info)
+void dlasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, doublereal *d__, doublereal *e, doublereal *u, integer *ldu, doublereal *vt, integer *k, doublereal *difl, doublereal *difr, doublereal *z__, doublereal *poles, integer *givptr, integer *givcol, integer *ldgcol, integer *perm, doublereal *givnum, doublereal *c__, doublereal *s, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasda inputs: icompq %" FLA_IS ", smlsiz %" FLA_IS ", n %" FLA_IS ", sqre %" FLA_IS ", ldu %" FLA_IS ", ldgcol %" FLA_IS "",*icompq, *smlsiz, *n, *sqre, *ldu, *ldgcol);
@@ -299,13 +293,13 @@ void dlasda_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
     doublereal alpha;
     integer inode, ndiml, ndimr, idxqi, itemp;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer sqrei;
     extern /* Subroutine */
-    int dlasd6_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+    void dlasd6_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     integer nwork1, nwork2;
     extern /* Subroutine */
-    int dlasdq_(char *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *), dlaset_( char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlasdq_(char *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *), dlaset_( char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer smlszp;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -391,7 +385,7 @@ void dlasda_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
         i__1 = -(*info);
         xerbla_("DLASDA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     m = *n + *sqre;
     /* If the input matrix is too small, call DLASDQ to find the SVD. */
@@ -407,7 +401,7 @@ void dlasda_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
             dlasdq_("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldu, &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Book-keeping and set up the computation tree. */
     inode = 1;
@@ -468,7 +462,7 @@ void dlasda_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
         if(*info != 0)
         {
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         i__2 = nl;
         for(j = 1; j <= i__2; ++j)
@@ -511,7 +505,7 @@ void dlasda_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
         if(*info != 0)
         {
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         i__2 = nr;
         for(j = 1; j <= i__2; ++j)
@@ -592,14 +586,14 @@ void dlasda_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *
             if(*info != 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L40: */
         }
         /* L50: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASDA */
 }
 /* dlasda_ */

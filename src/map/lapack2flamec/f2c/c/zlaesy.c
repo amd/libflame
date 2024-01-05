@@ -115,8 +115,7 @@ static aocl_int64_t c__2 = 2;
 /* > \ingroup complex16SYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
-             dcomplex *rt2, dcomplex *evscal, dcomplex *cs1, dcomplex *sn1)
+void zlaesy_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublecomplex *rt1, doublecomplex *rt2, doublecomplex *evscal, doublecomplex *cs1, doublecomplex *sn1)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
@@ -269,7 +268,7 @@ void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
         }
     }
     AOCL_DTL_TRACE_EXIT_INDENT
-    return 0;
+    return;
     /* End of ZLAESY */
 }
 /* zlaesy_ */

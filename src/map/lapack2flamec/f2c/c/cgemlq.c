@@ -164,7 +164,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, complex *a, integer *lda, complex *t, integer *tsize, complex *c__, integer *ldc, complex *work, integer *lwork, integer * info)
+void cgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, complex *a, integer *lda, complex *t, integer *tsize, complex *c__, integer *ldc, complex *work, integer *lwork, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -181,7 +181,7 @@ int cgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, complex
     real r__1;
     /* Local variables */
     extern /* Subroutine */
-    int clamswlq_(char *, char *, integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer * );
+    void clamswlq_(char *, char *, integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer * );
     integer mb, nb, mn, lw;
     logical left, tran;
     extern logical lsame_(char *, char *);
@@ -190,7 +190,7 @@ int cgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, complex
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, lquery;
     extern /* Subroutine */
-    int cgemlqt_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
+    void cgemlqt_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -286,12 +286,12 @@ int cgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, complex
         i__1 = -(*info);
         xerbla_("CGEMLQ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Computing MIN */
@@ -299,7 +299,7 @@ int cgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, complex
     if (fla_min(i__1,*k) == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Computing MAX */
     i__1 = fla_max(*m,*n);
@@ -315,7 +315,7 @@ int cgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, complex
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGEMLQ */
 }
 /* cgemlq_ */

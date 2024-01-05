@@ -163,9 +163,7 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void chfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k, real *alpha,
-            scomplex *a, aocl_int_t *lda, real *beta, scomplex *c__)
+void chfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *alpha, complex *a, integer *lda, real *beta, complex *c__)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -185,7 +183,7 @@ void chfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k,
     scomplex cbeta;
     logical normaltransr;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *, complex *, integer *);
     extern logical lsame_(char *, char *);
     integer nrowa;
     logical lower;
@@ -262,7 +260,7 @@ void chfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k,
         i__1 = -info;
         xerbla_("CHFRK ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     /* The quick return case: ((ALPHA.EQ.0).AND.(BETA.NE.ZERO)) is not */
@@ -270,7 +268,7 @@ void chfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k,
     if(*n == 0 || (*alpha == 0.f || *k == 0) && *beta == 1.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(*alpha == 0.f && *beta == 0.f)
     {
@@ -282,7 +280,7 @@ void chfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k,
             c__[i__2].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     q__1.real = *alpha;
     q__1.imag = 0.f; // , expr subst
@@ -533,7 +531,7 @@ void chfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k,
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHFRK */
 }
 /* chfrk_ */

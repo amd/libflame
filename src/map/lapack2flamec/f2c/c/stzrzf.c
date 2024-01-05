@@ -150,9 +150,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void stzrzf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, real *work,
-             aocl_int_t *lwork, aocl_int_t *info)
+void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -168,13 +166,15 @@ void stzrzf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, 
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int slarzb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+    void slarzb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
     integer lwkmin, ldwork;
     extern /* Subroutine */
-    int slarzt_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
+    void slarzt_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
     integer lwkopt;
     logical lquery;
-    /* -- LAPACK computational routine -- */
+    extern /* Subroutine */
+    void slatrz_(integer *, integer *, integer *, real *, integer *, real *, real *);
+    /* -- LAPACK computational routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -240,18 +240,18 @@ void stzrzf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, 
         i__1 = -(*info);
         xerbla_("STZRZF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*m == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if(*m == *n)
     {
@@ -262,7 +262,7 @@ void stzrzf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, 
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     nbmin = 2;
     nx = 1;
@@ -346,7 +346,7 @@ void stzrzf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, 
     }
     work[1] = (real) lwkopt;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of STZRZF */
 }
 /* stzrzf_ */

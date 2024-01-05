@@ -153,9 +153,7 @@ the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void spbstf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ldab,
-             aocl_int_t *info)
+void spbstf_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -171,8 +169,12 @@ void spbstf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ld
     /* Local variables */
     aocl_int64_t j, m, km;
     real ajj;
-    aocl_int64_t kld;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer kld;
+    extern /* Subroutine */
+    void ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -225,13 +227,13 @@ void spbstf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ld
         i__1 = -(*info);
         xerbla_("SPBSTF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Computing MAX */
     i__1 = 1;
@@ -346,11 +348,11 @@ void spbstf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ld
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 L50:
     *info = j;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPBSTF */
 }
 /* spbstf_ */

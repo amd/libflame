@@ -159,9 +159,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dspsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *ap, aocl_int_t *ipiv,
-            doublereal *b, aocl_int_t *ldb, aocl_int_t *info)
+void dspsv_(char *uplo, integer *n, integer *nrhs, doublereal *ap, integer *ipiv, doublereal *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dspsv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *ldb);
@@ -217,7 +215,7 @@ void dspsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *ap, aocl_in
         i__1 = -(*info);
         xerbla_("DSPSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
     aocl_lapack_dsptrf(uplo, n, &ap[1], &ipiv[1], info);
@@ -227,7 +225,7 @@ void dspsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *ap, aocl_in
         aocl_lapack_dsptrs(uplo, n, nrhs, &ap[1], &ipiv[1], &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSPSV */
 }
 /* dspsv_ */

@@ -167,10 +167,7 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_int_t *incx1,
-              scomplex *x2, aocl_int_t *incx2, scomplex *q1, aocl_int_t *ldq1, scomplex *q2,
-              aocl_int_t *ldq2, scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+void cunbdb6_(integer *m1, integer *m2, integer *n, complex * x1, integer *incx1, complex *x2, integer *incx2, complex *q1, integer *ldq1, complex *q2, integer *ldq2, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cunbdb6 inputs: m1 %" FLA_IS ", m2 %" FLA_IS ", n %" FLA_IS ", incx1 %" FLA_IS ", incx2 %" FLA_IS ", ldq1 %" FLA_IS ", ldq2 %" FLA_IS "",*m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2);
@@ -183,7 +180,7 @@ void cunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
     integer i__, ix;
     real scl, eps, ssq, norm;
     extern /* Subroutine */
-    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), classq_( integer *, complex *, integer *, real *, real *);
@@ -256,7 +253,7 @@ void cunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
         i__1 = -(*info);
         xerbla_("CUNBDB6", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     eps = slamch_("Precision");
     /* First, project X onto the orthogonal complement of Q's column */
@@ -295,7 +292,7 @@ void cunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
     if (norm_new__ >= norm * .01f)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (norm_new__ <= *n * eps * norm)
     {
@@ -320,7 +317,7 @@ void cunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
             x2[i__3].i = 0.f; // , expr subst
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     norm = norm_new__;
     i__1 = *n;
@@ -380,7 +377,7 @@ void cunbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, scomplex *x1, aocl_
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CUNBDB6 */
 }
 /* cunbdb6_ */

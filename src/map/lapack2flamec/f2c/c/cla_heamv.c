@@ -172,9 +172,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cla_heamv_(aocl_int_t *uplo, aocl_int_t *n, real *alpha, scomplex *a, aocl_int_t *lda,
-                scomplex *x, aocl_int_t *incx, real *beta, real *y, aocl_int_t *incy)
+void cla_heamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda, complex *x, integer *incx, real *beta, real *y, integer *incy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -257,13 +255,13 @@ void cla_heamv_(aocl_int_t *uplo, aocl_int_t *n, real *alpha, scomplex *a, aocl_
     {
         xerbla_("CHEMV ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if(*n == 0 || *alpha == 0.f && *beta == 1.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set up the start points in X and Y. */
     if(*incx > 0)
@@ -508,7 +506,7 @@ void cla_heamv_(aocl_int_t *uplo, aocl_int_t *n, real *alpha, scomplex *a, aocl_
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLA_HEAMV */
 }
 /* cla_heamv__ */

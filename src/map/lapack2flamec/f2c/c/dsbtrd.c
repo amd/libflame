@@ -171,10 +171,7 @@ if VECT = 'N' or 'V', then Q need not be set. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dsbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab,
-             aocl_int_t *ldab, doublereal *d__, doublereal *e, doublereal *q, aocl_int_t *ldq,
-             doublereal *work, aocl_int_t *info)
+void dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab, doublereal *d__, doublereal *e, doublereal *q, integer *ldq, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsbtrd inputs: vect %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", ldq %" FLA_IS "",*vect, *uplo, *n, *kd, *ldab, *ldq);
@@ -184,14 +181,16 @@ void dsbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *
     aocl_int64_t i__, j, k, l, i2, j1, j2, nq, nr, kd1, ibl, iqb, kdn, jin, nrt, kdm1, inca, jend,
         lend, jinc, incx, last;
     doublereal temp;
-    aocl_int64_t j1end, j1inc, iqend;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+    integer j1end, j1inc, iqend;
+    extern logical lsame_(char *, char *);
     logical initq, wantq, upper;
     extern /* Subroutine */
-    int dlar2v_(integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dlar2v_(integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer iqaend;
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlargv_( integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlartv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlargv_( integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlartv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -261,13 +260,13 @@ void dsbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *
         i__1 = -(*info);
         xerbla_("DSBTRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize Q to the unit matrix, if needed */
     if(initq)
@@ -741,7 +740,7 @@ void dsbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSBTRD */
 }
 /* dsbtrd_ */

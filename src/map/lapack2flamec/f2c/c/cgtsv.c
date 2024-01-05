@@ -119,9 +119,7 @@
 /* > \ingroup complexGTsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cgtsv_(aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__, scomplex *du, scomplex *b,
-            aocl_int_t *ldb, aocl_int_t *info)
+void cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -193,12 +191,12 @@ void cgtsv_(aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__, scompl
         i__1 = -(*info);
         xerbla_("CGTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *n - 1;
     for(k = 1; k <= i__1; ++k)
@@ -215,7 +213,7 @@ void cgtsv_(aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__, scompl
                 /* solution can not be found. */
                 *info = k;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
         }
         else /* if(complicated condition) */
@@ -326,7 +324,7 @@ void cgtsv_(aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__, scompl
     {
         *info = *n;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Back solve with the matrix U from the factorization. */
     i__1 = *nrhs;
@@ -374,7 +372,7 @@ void cgtsv_(aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__, scompl
         /* L50: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGTSV */
 }
 /* cgtsv_ */

@@ -273,7 +273,7 @@ the routine */
 /* > \ingroup gges */
 /* ===================================================================== */
 /* Subroutine */
-int cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, integer *n, complex *a, integer *lda, complex *b, integer * ldb, integer *sdim, complex *alpha, complex *beta, complex *vsl, integer *ldvsl, complex *vsr, integer *ldvsr, complex *work, integer * lwork, real *rwork, logical *bwork, integer *info)
+void cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, integer *n, complex *a, integer *lda, complex *b, integer * ldb, integer *sdim, complex *alpha, complex *beta, complex *vsl, integer *ldvsl, complex *vsr, integer *ldvsr, complex *work, integer * lwork, real *rwork, logical *bwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -302,18 +302,29 @@ int cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, integer *n, com
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t ileft, icols;
     logical cursl, ilvsl, ilvsr;
-    aocl_int64_t irwrk, irows;
+    integer irwrk, irows;
+    extern /* Subroutine */
+    void cggbak_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, complex *, integer *, integer *), cggbal_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, real *, real *, real *, integer *), slabad_(real *, real *);
+    extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
+    extern /* Subroutine */
+    void cgghrd_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *), clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
     logical ilascl, ilbscl;
+    extern /* Subroutine */
+    void cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
-    aocl_int64_t ijobvl, iright, ijobvr;
+    extern /* Subroutine */
+    void chgeqz_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *), ctgsen_(integer *, logical *, logical *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, integer *, real *, real *, real *, complex *, integer *, integer *, integer *, integer *);
+    integer ijobvl, iright, ijobvr;
     real anrmto;
     aocl_int64_t lwkmin;
     logical lastsl;
     real bnrmto;
+    extern /* Subroutine */
+    void cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     real smlnum;
     logical wantst, lquery;
     aocl_int64_t lwkopt;
@@ -466,19 +477,19 @@ int cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, integer *n, com
         i__1 = -(*info);
         xerbla_("CGGES ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *sdim = 0;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = slamch_("P");
@@ -668,7 +679,7 @@ L30:
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGGES */
 }
 /* cgges_ */

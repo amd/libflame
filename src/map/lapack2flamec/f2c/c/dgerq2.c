@@ -121,9 +121,7 @@ v(1:n-k+i-1) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dgerq2_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *tau,
-             doublereal *work, aocl_int_t *info)
+void dgerq2_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgerq2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
@@ -133,7 +131,7 @@ void dgerq2_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doubl
     aocl_int64_t i__, k;
     doublereal aii;
     extern /* Subroutine */
-    int dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -178,7 +176,7 @@ void dgerq2_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doubl
         i__1 = -(*info);
         xerbla_("DGERQ2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     k = fla_min(*m,*n);
     for (i__ = k;
@@ -201,7 +199,7 @@ void dgerq2_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doubl
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGERQ2 */
 }
 /* dgerq2_ */

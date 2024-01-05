@@ -171,9 +171,7 @@ for 1 <= j <= N, column j of the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slatdf_(aocl_int_t *ijob, aocl_int_t *n, real *z__, aocl_int_t *ldz, real *rhs, real *rdsum,
-             real *rdscal, aocl_int_t *ipiv, aocl_int_t *jpiv)
+void slatdf_(integer *ijob, integer *n, real *z__, integer * ldz, real *rhs, real *rdsum, real *rdscal, integer *ipiv, integer * jpiv)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slatdf(ijob, n, z__, ldz, rhs, rdsum, rdscal, ipiv, jpiv);
@@ -204,10 +202,16 @@ void aocl_lapack_slatdf(aocl_int64_t *ijob, aocl_int64_t *n, real *z__, aocl_int
     aocl_int64_t info;
     real temp;
     real work[32];
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
     real pmone;
     real sminu;
     integer iwork[8];
+    extern /* Subroutine */
+    void scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
     real splus;
+    extern /* Subroutine */
+    void sgesc2_(integer *, real *, integer *, real *, integer *, integer *, real *), sgecon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), slassq_(integer *, real *, integer *, real *, real *), slaswp_( integer *, real *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -341,7 +345,6 @@ void aocl_lapack_slatdf(aocl_int64_t *ijob, aocl_int64_t *n, real *z__, aocl_int
         /* Compute the sum of squares */
         aocl_lapack_slassq(n, &rhs[1], &c__1, rdscal, rdsum);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATDF */
 }

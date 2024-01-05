@@ -409,7 +409,7 @@ defaults */
 /* > \ingroup complexGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer * ipiv, real *r__, real *c__, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *berr, integer *n_err_bnds__, real * err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real * params, complex *work, real *rwork, integer *info)
+void cgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer * ipiv, real *r__, real *c__, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *berr, integer *n_err_bnds__, real * err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real * params, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -435,7 +435,7 @@ int cgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, complex *a, i
     integer prec_type__, trans_type__;
     real cwise_wrong__;
     extern /* Subroutine */
-    int cla_gerfsx_extended_(integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, logical *, real *, complex *, integer *, complex *, integer *, real *, integer *, real *, real *, complex *, real *, complex *, real *, real *, integer *, real *, real *, logical *, integer *);
+    void cla_gerfsx_extended_(integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, logical *, real *, complex *, integer *, complex *, integer *, real *, integer *, real *, real *, complex *, real *, complex *, real *, real *, integer *, real *, real *, logical *, integer *);
     char norm[1];
     logical ignore_cwise__;
     extern real cla_gercond_c_(char *, integer *, complex *, integer *, complex *, integer *, integer *, real *, logical *, integer *, complex *, real *);
@@ -443,7 +443,7 @@ int cgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, complex *a, i
     real anorm;
     extern real cla_gercond_x_(char *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, real *), clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int cgecon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *);
+    void cgecon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -601,7 +601,7 @@ int cgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, complex *a, i
         i__1 = -(*info);
         xerbla_("CGERFSX", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || *nrhs == 0)
@@ -630,7 +630,7 @@ int cgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, complex *a, i
             }
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Default to failure. */
     *rcond = 0.f;
@@ -783,7 +783,7 @@ int cgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, complex *a, i
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGERFSX */
 }
 /* cgerfsx_ */

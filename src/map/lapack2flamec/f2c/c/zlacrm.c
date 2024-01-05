@@ -114,9 +114,7 @@ B is N by N and real;
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlacrm_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *b,
-             aocl_int_t *ldb, dcomplex *c__, aocl_int_t *ldc, doublereal *rwork)
+void zlacrm_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *b, integer *ldb, doublecomplex *c__, integer *ldc, doublereal *rwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlacrm inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS "",*m, *n, *lda, *ldb, *ldc);
@@ -127,7 +125,9 @@ void zlacrm_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doubler
     /* Builtin functions */
     double d_imag(dcomplex *);
     /* Local variables */
-    aocl_int64_t i__, j, l;
+    integer i__, j, l;
+    extern /* Subroutine */
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -162,7 +162,7 @@ void zlacrm_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doubler
     if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
@@ -223,7 +223,7 @@ void zlacrm_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doubler
         /* L80: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLACRM */
 }
 /* zlacrm_ */

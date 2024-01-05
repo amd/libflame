@@ -230,7 +230,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab, doublereal *d__, doublereal *e, doublereal *hous, integer *lhous, doublereal *work, integer *lwork, integer *info)
+void dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab, doublereal *d__, doublereal *e, doublereal *hous, integer *lhous, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytrd_sb2st inputs: stage1 %c, vect %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", lhous %" FLA_IS ", lwork %" FLA_IS "", *stage1, *vect, *uplo, *n, *kd, *ldab, *lhous, *lwork);
@@ -343,12 +343,12 @@ int dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd,
         i__1 = -(*info);
         xerbla_("DSYTRD_SB2ST", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
@@ -356,7 +356,7 @@ int dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd,
         hous[1] = 1.;
         work[1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine pointer position */
     ldv = *kd + ib;
@@ -412,7 +412,7 @@ int dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd,
         hous[1] = 1.;
         work[1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Case KD=1: */
     /* The matrix is already Tridiagonal. We have to make diagonal */
@@ -458,7 +458,7 @@ int dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd,
         hous[1] = 1.;
         work[1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Main code start here. */
     /* Reduce the symmetric band of A to a tridiagonal matrix. */
@@ -649,7 +649,7 @@ int dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd,
     hous[1] = (doublereal)lhmin;
     work[1] = (doublereal)lwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYTRD_SB2ST */
 }
 /* dsytrd_sb2st__ */

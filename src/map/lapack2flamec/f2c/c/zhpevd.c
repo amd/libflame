@@ -205,11 +205,7 @@ i */
 /* > \ingroup complex16OTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zhpevd_(char *jobz, char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *w,
-             dcomplex *z__, aocl_int_t *ldz, dcomplex *work, aocl_int_t *lwork,
-             doublereal *rwork, aocl_int_t *lrwork, aocl_int_t *iwork, aocl_int_t *liwork,
-             aocl_int_t *info)
+void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *work, integer *lwork, doublereal *rwork, integer * lrwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhpevd inputs: jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",*jobz, *uplo, *n, *ldz);
@@ -224,6 +220,8 @@ void zhpevd_(char *jobz, char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *w,
     doublereal anrm;
     aocl_int64_t imax;
     doublereal rmin, rmax;
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo, lwmin, llrwk, llwrk;
@@ -234,10 +232,19 @@ void zhpevd_(char *jobz, char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *w,
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_( integer *, doublereal *, doublecomplex *, integer *);
     doublereal bignum;
-    aocl_int64_t indtau;
-    aocl_int64_t indrwk, indwrk, liwmin, lrwmin;
+    integer indtau;
+    extern /* Subroutine */
+    void dsterf_(integer *, doublereal *, doublereal *, integer *);
+    extern doublereal zlanhp_(char *, char *, integer *, doublecomplex *, doublereal *);
+    extern /* Subroutine */
+    void zstedc_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *, integer *);
+    integer indrwk, indwrk, liwmin, lrwmin;
     doublereal smlnum;
+    extern /* Subroutine */
+    void zhptrd_(char *, integer *, doublecomplex *, doublereal *, doublereal *, doublecomplex *, integer *);
     logical lquery;
+    extern /* Subroutine */
+    void zupmtr_(char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -335,18 +342,18 @@ void zhpevd_(char *jobz, char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *w,
         i__1 = -(*info);
         xerbla_("ZHPEVD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -358,7 +365,7 @@ void zhpevd_(char *jobz, char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *w,
             z__[i__1].imag = 0.; // , expr subst
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -425,7 +432,7 @@ void zhpevd_(char *jobz, char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *w,
     rwork[1] = (doublereal) lrwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHPEVD */
 }
 /* zhpevd_ */

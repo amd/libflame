@@ -388,7 +388,7 @@ i+1}
 /* > \ingroup doubleSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal * af, integer *ldaf, integer *ipiv, logical *colequ, doublereal *c__, doublereal *b, integer *ldb, doublereal *y, integer *ldy, doublereal * berr_out__, integer *n_norms__, doublereal *err_bnds_norm__, doublereal *err_bnds_comp__, doublereal *res, doublereal *ayb, doublereal *dy, doublereal *y_tail__, doublereal *rcond, integer * ithresh, doublereal *rthresh, doublereal *dz_ub__, logical * ignore_cwise__, integer *info)
+void dla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal * af, integer *ldaf, integer *ipiv, logical *colequ, doublereal *c__, doublereal *b, integer *ldb, doublereal *y, integer *ldy, doublereal * berr_out__, integer *n_norms__, doublereal *err_bnds_norm__, doublereal *err_bnds_comp__, doublereal *res, doublereal *ayb, doublereal *dy, doublereal *y_tail__, doublereal *rcond, integer * ithresh, doublereal *rthresh, doublereal *dz_ub__, logical * ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dla_syrfsx_extended inputs: prec_type__ %" FLA_IS ", uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldy %" FLA_IS ", n_norms__ %" FLA_IS ", ithresh %" FLA_IS "",*prec_type__, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldy, *n_norms__, *ithresh);
@@ -400,15 +400,15 @@ int dla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *
     integer i__, j;
     logical incr_prec__;
     extern /* Subroutine */
-    int dla_syamv_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dla_syamv_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     doublereal prev_dz_z__, yk, final_dx_x__;
     extern /* Subroutine */
-    int dla_wwaddw_(integer *, doublereal *, doublereal *, doublereal *);
+    void dla_wwaddw_(integer *, doublereal *, doublereal *, doublereal *);
     doublereal final_dz_z__, prevnormdx;
     integer cnt;
     doublereal dyk, eps, incr_thresh__, dx_x__, dz_z__;
     extern /* Subroutine */
-    int dla_lin_berr_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *);
+    void dla_lin_berr_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *);
     doublereal ymin;
     integer y_prec_state__;
     extern /* Subroutine */
@@ -419,17 +419,17 @@ int dla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *
     int blas_dsymv2_x_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer * );
     doublereal dxrat, dzrat;
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-    int dsymv_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dsymv_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     doublereal normx, normy;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal normdx;
     extern /* Subroutine */
-    int dsytrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dsytrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     doublereal hugeval;
     extern integer ilauplo_(char *);
     integer x_state__, z_state__;
@@ -515,7 +515,7 @@ int dla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *
         i__1 = -(*info);
         xerbla_("DLA_SYRFSX_EXTENDED", &i__1, (ftnlen)19);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     eps = dlamch_("Epsilon");
     hugeval = dlamch_("Overflow");
@@ -789,7 +789,7 @@ L666: /* Set final_* when cnt hits ithresh. */
         /* End of loop for each RHS. */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dla_syrfsx_extended__ */
 #endif

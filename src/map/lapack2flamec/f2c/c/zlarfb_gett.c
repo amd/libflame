@@ -384,7 +384,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublecomplex *t, integer *ldt, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *work, integer * ldwork)
+void zlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublecomplex *t, integer *ldt, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *work, integer * ldwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarfb_gett inputs: ident %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", ldt %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "", *ident, *m, *n, *k, *ldt, *lda, *ldb);
@@ -396,7 +396,7 @@ int zlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublecomplex 
     logical lnotident;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -432,7 +432,7 @@ int zlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublecomplex 
     if (*m < 0 || *n <= 0 || *k == 0 || *k > *n)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     lnotident = ! lsame_(ident, "I");
     /* ------------------------------------------------------------------ */
@@ -615,7 +615,7 @@ int zlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublecomplex 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLARFB_GETT */
 }
 /* zlarfb_gett__ */

@@ -182,10 +182,7 @@ static aocl_int64_t c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlahef_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dcomplex *a,
-                  aocl_int_t *lda, aocl_int_t *ipiv, dcomplex *w, aocl_int_t *ldw,
-                  aocl_int_t *info)
+void zlahef_rook_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *w, integer *ldw, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlahef_rook inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldw %" FLA_IS "",*uplo, *n, *nb, *lda, *ldw);
@@ -207,11 +204,20 @@ void zlahef_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dco
     doublereal alpha;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal dtemp, sfmin;
-    aocl_int64_t itemp;
-    aocl_int64_t kstep;
+    integer itemp;
+    extern /* Subroutine */
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    integer kstep;
+    extern /* Subroutine */
+    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal absakk;
+    extern /* Subroutine */
+    void zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal colmax;
+    extern /* Subroutine */
+    void zlacgv_(integer *, doublecomplex *, integer *) ;
+    extern integer izamax_(integer *, doublecomplex *, integer *);
     doublereal rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -1315,7 +1321,7 @@ void zlahef_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dco
         *kb = k - 1;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAHEF_ROOK */
 }
 /* zlahef_rook__ */

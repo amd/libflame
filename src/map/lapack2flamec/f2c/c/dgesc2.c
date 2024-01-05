@@ -104,7 +104,7 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-int dgesc2_(integer *n, doublereal *a, integer *lda, doublereal *rhs, integer *ipiv, integer *jpiv, doublereal *scale)
+void dgesc2_(integer *n, doublereal *a, integer *lda, doublereal *rhs, integer *ipiv, integer *jpiv, doublereal *scale)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgesc2 inputs: n %" FLA_IS ", lda %" FLA_IS "",*n, *lda);
@@ -115,12 +115,12 @@ int dgesc2_(integer *n, doublereal *a, integer *lda, doublereal *rhs, integer *i
     integer i__, j;
     doublereal eps, temp;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dlabad_(doublereal *, doublereal *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *), dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     doublereal bignum;
     extern /* Subroutine */
-    int dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
+    void dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
     doublereal smlnum;
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -204,7 +204,7 @@ int dgesc2_(integer *n, doublereal *a, integer *lda, doublereal *rhs, integer *i
     i__1 = *n - 1;
     dlaswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &jpiv[1], &c_n1);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGESC2 */
 }
 /* dgesc2_ */

@@ -191,11 +191,7 @@ LDC >= 1 if NCC = 0. */
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int_t *kl,
-             aocl_int_t *ku, real *ab, aocl_int_t *ldab, real *d__, real *e, real *q,
-             aocl_int_t *ldq, real *pt, aocl_int_t *ldpt, real *c__, aocl_int_t *ldc, real *work,
-             aocl_int_t *info)
+void sgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integer *ku, real *ab, integer *ldab, real *d__, real * e, real *q, integer *ldq, real *pt, integer *ldpt, real *c__, integer *ldc, real *work, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgbbrd(vect, m, n, ncc, kl, ku, ab, ldab, d__, e, q, ldq, pt, ldpt, c__, ldc, work,
@@ -237,8 +233,10 @@ void aocl_lapack_sgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     real ra, rb, rc;
     aocl_int64_t kk, ml, mn, nr, mu;
     real rs;
-    aocl_int64_t kb1, ml0, mu0, klm, kun, nrt, klu1, inca;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer kb1, ml0, mu0, klm, kun, nrt, klu1, inca;
+    extern /* Subroutine */
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    extern logical lsame_(char *, char *);
     logical wantb, wantc;
     aocl_int64_t minmn;
     logical wantq;
@@ -333,7 +331,7 @@ void aocl_lapack_sgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     {
         i__1 = -(*info);
         xerbla_("SGBBRD", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Initialize Q and P**T to the unit matrix, if needed */
     if(wantq)
@@ -347,7 +345,6 @@ void aocl_lapack_sgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     /* Quick return if possible. */
     if(*m == 0 || *n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     minmn = fla_min(*m,*n);
@@ -670,7 +667,6 @@ void aocl_lapack_sgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
             /* L150: */
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGBBRD */
 }

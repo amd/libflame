@@ -127,9 +127,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlarf_(char *side, aocl_int_t *m, aocl_int_t *n, dcomplex *v, aocl_int_t *incv,
-            dcomplex *tau, dcomplex *c__, aocl_int_t *ldc, dcomplex *work)
+void zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, doublecomplex *tau, doublecomplex *c__, integer * ldc, doublecomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarf inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *incv, *ldc);
@@ -140,14 +138,12 @@ void zlarf_(char *side, aocl_int_t *m, aocl_int_t *n, dcomplex *v, aocl_int_t *i
     /* Local variables */
     aocl_int64_t i__;
     logical applyleft;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t lastc;
-#if FLA_ENABLE_AMD_OPT
-    void fla_zlarf_left_invc1_opt(aocl_int64_t m, aocl_int64_t n, dcomplex * a_buff,
-                                  aocl_int64_t ldr, dcomplex * v, dcomplex * ntau,
-                                  dcomplex * work);
-#endif
-    aocl_int64_t lastv;
+    extern logical lsame_(char *, char *);
+    integer lastc;
+    extern /* Subroutine */
+    void zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    integer lastv;
+    extern integer ilazlc_(integer *, integer *, doublecomplex *, integer *), ilazlr_(integer *, integer *, doublecomplex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -300,7 +296,7 @@ void zlarf_(char *side, aocl_int_t *m, aocl_int_t *n, dcomplex *v, aocl_int_t *i
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLARF */
 }
 /* zlarf_ */

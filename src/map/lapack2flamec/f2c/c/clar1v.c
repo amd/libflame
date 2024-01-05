@@ -224,11 +224,7 @@ is largest */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clar1v_(aocl_int_t *n, aocl_int_t *b1, aocl_int_t *bn, real *lambda, real *d__, real *l,
-             real *ld, real *lld, real *pivmin, real *gaptol, scomplex *z__, logical *wantnc,
-             aocl_int_t *negcnt, real *ztz, real *mingma, aocl_int_t *r__, aocl_int_t *isuppz,
-             real *nrminv, real *resid, real *rqcorr, real *work)
+void clar1v_(integer *n, integer *b1, integer *bn, real * lambda, real *d__, real *l, real *ld, real *lld, real *pivmin, real * gaptol, complex *z__, logical *wantnc, integer *negcnt, real *ztz, real *mingma, integer *r__, integer *isuppz, real *nrminv, real * resid, real *rqcorr, real *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -638,7 +634,7 @@ L60:
     *resid = f2c_abs(*mingma) * *nrminv;
     *rqcorr = *mingma * tmp;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAR1V */
 }
 /* clar1v_ */

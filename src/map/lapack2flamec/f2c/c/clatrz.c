@@ -134,9 +134,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clatrz_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, scomplex *a, aocl_int_t *lda, scomplex *tau,
-             scomplex *work)
+void clatrz_(integer *m, integer *n, integer *l, complex *a, integer *lda, complex *tau, complex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -157,7 +155,7 @@ void clatrz_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, scomplex *a, aocl_int_
     integer i__;
     complex alpha;
     extern /* Subroutine */
-    int clarz_(char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex * ), clarfg_(integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *);
+    void clarz_(char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex * ), clarfg_(integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -187,7 +185,7 @@ void clatrz_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, scomplex *a, aocl_int_
     if(*m == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if(*m == *n)
     {
@@ -200,7 +198,7 @@ void clatrz_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, scomplex *a, aocl_int_
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     for(i__ = *m; i__ >= 1; --i__)
     {
@@ -229,7 +227,7 @@ void clatrz_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, scomplex *a, aocl_int_
         /* L20: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLATRZ */
 }
 /* clatrz_ */

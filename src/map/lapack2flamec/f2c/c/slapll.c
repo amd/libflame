@@ -97,8 +97,7 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slapll_(aocl_int_t *n, real *x, aocl_int_t *incx, real *y, aocl_int_t *incy, real *ssmin)
+void slapll_(integer *n, real *x, integer *incx, real *y, integer *incy, real *ssmin)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slapll(n, x, incx, y, incy, ssmin);
@@ -122,9 +121,10 @@ void aocl_lapack_slapll(aocl_int64_t *n, real *x, aocl_int64_t *incx, real *y, a
     /* Local variables */
     real c__, a11, a12, a22, tau;
     extern /* Subroutine */
-        void
-        slas2_(real *, real *, real *, real *, real *);
+    void slas2_(real *, real *, real *, real *, real *) ;
     real ssmax;
+    extern /* Subroutine */
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -151,7 +151,6 @@ void aocl_lapack_slapll(aocl_int64_t *n, real *x, aocl_int64_t *incx, real *y, a
     if(*n <= 1)
     {
         *ssmin = 0.f;
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the QR factorization of the N-by-2 matrix ( X Y ) */
@@ -166,7 +165,6 @@ void aocl_lapack_slapll(aocl_int64_t *n, real *x, aocl_int64_t *incx, real *y, a
     a22 = y[*incy + 1];
     /* Compute the SVD of 2-by-2 Upper triangular matrix. */
     slas2_(&a11, &a12, &a22, ssmin, &ssmax);
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAPLL */
 }

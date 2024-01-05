@@ -219,7 +219,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zhetrd_2stage_(char *vect, char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *d__, doublereal *e, doublecomplex *tau, doublecomplex *hous2, integer *lhous2, doublecomplex *work, integer *lwork, integer *info)
+void zhetrd_2stage_(char *vect, char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *d__, doublereal *e, doublecomplex *tau, doublecomplex *hous2, integer *lhous2, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetrd inputs: vect %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lhous2 %" FLA_IS "",*vect, *uplo, *n, *lda, *lhous2);
@@ -228,10 +228,10 @@ int zhetrd_2stage_(char *vect, char *uplo, integer *n, doublecomplex *a, integer
     /* Local variables */
     integer ib, kd, ldab;
     extern /* Subroutine */
-    int zhetrd_he2hb_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
+    void zhetrd_he2hb_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
     extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zhetrd_hb2st_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zhetrd_hb2st_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     integer lwrk, wpos;
     extern logical lsame_(char *, char *);
     integer abpos, lhmin, lwmin;
@@ -313,12 +313,12 @@ int zhetrd_2stage_(char *vect, char *uplo, integer *n, doublecomplex *a, integer
         i__1 = -(*info);
         xerbla_("ZHETRD_2STAGE", &i__1, (ftnlen)13);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
@@ -326,7 +326,7 @@ int zhetrd_2stage_(char *vect, char *uplo, integer *n, doublecomplex *a, integer
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine pointer position */
     ldab = kd + 1;
@@ -339,7 +339,7 @@ int zhetrd_2stage_(char *vect, char *uplo, integer *n, doublecomplex *a, integer
         i__1 = -(*info);
         xerbla_("ZHETRD_HE2HB", &i__1, (ftnlen)12);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     zhetrd_hb2st_("Y", vect, uplo, n, &kd, &work[abpos], &ldab, &d__[1], &e[ 1], &hous2[1], lhous2, &work[wpos], &lwrk, info);
     if (*info != 0)
@@ -347,14 +347,14 @@ int zhetrd_2stage_(char *vect, char *uplo, integer *n, doublecomplex *a, integer
         i__1 = -(*info);
         xerbla_("ZHETRD_HB2ST", &i__1, (ftnlen)12);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     hous2[1].r = (doublereal) lhmin;
     hous2[1].i = 0.; // , expr subst
     work[1].r = (doublereal) lwmin;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHETRD_2STAGE */
 }
 /* zhetrd_2stage__ */

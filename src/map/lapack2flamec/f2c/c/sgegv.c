@@ -311,8 +311,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgegv_(char *jobvl, char *jobvr, aocl_int_t *n, real *a, aocl_int_t *lda, real *b, aocl_int_t *ldb, real *alphar, real *alphai, real *beta, real *vl, aocl_int_t *ldvl, real *vr, aocl_int_t *ldvr, real *work, aocl_int_t *lwork, aocl_int_t *info)
+void sgegv_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b, integer *ldb, real *alphar, real *alphai, real *beta, real *vl, integer *ldvl, real *vr, integer *ldvr, real *work, integer *lwork, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgegv(jobvl, jobvr, n, a, lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr, ldvr, work, lwork, info);
@@ -356,25 +355,33 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t ileft, iinfo, icols, iwork, irows;
     real salfai;
+    extern /* Subroutine */
+    void sggbak_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, integer * ), sggbal_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, real *, real *, integer *);
     real salfar;
     real safmin;
     extern /* Subroutine */
-    int sgghrd_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
+    void sgghrd_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
     real safmax;
     char chtemp[1];
     logical ldumma[1];
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ijobvl, iright;
     logical ilimit;
-    aocl_int64_t ijobvr;
+    extern /* Subroutine */
+    void sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    integer ijobvr;
+    extern /* Subroutine */
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), stgevc_( char *, char *, logical *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *);
     real onepls;
     integer lwkmin;
     extern /* Subroutine */
-    int shgeqz_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, integer *), sorgqr_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    void shgeqz_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, integer *), sorgqr_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
     integer lwkopt;
     logical lquery;
+    extern /* Subroutine */
+    void sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -505,17 +512,15 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
     {
         i__1 = -(*info);
         xerbla_("SGEGV ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants */
@@ -542,7 +547,6 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
         if(iinfo != 0)
         {
             *info = *n + 10;
-            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -564,7 +568,6 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
         if(iinfo != 0)
         {
             *info = *n + 10;
-            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -978,8 +981,7 @@ void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
         /* L110: */
     }
 L120:
-    work[1] = (real)lwkopt;
-    AOCL_DTL_TRACE_LOG_EXIT
+    work[1] = (real) lwkopt;
     return;
     /* End of SGEGV */
 }

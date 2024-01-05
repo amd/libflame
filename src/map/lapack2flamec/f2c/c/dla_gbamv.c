@@ -179,10 +179,7 @@
 /* > \ingroup doubleGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dla_gbamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku,
-                doublereal *alpha, doublereal *ab, aocl_int_t *ldab, doublereal *x,
-                aocl_int_t *incx, doublereal *beta, doublereal *y, aocl_int_t *incy)
+void dla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, doublereal *alpha, doublereal *ab, integer * ldab, doublereal *x, integer *incx, doublereal *beta, doublereal *y, integer *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dla_gbamv inputs: trans %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*trans, *m, *n, *kl, *ku, *ldab, *incx, *incy);
@@ -267,13 +264,13 @@ void dla_gbamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl,
     {
         xerbla_("DLA_GBAMV ", &info, (ftnlen)10);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if(*m == 0 || *n == 0 || *alpha == 0. && *beta == 1.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set LENX and LENY, the lengths of the vectors x and y, and set */
     /* up the start points in X and Y. */
@@ -493,7 +490,7 @@ void dla_gbamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl,
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLA_GBAMV */
 }
 /* dla_gbamv__ */

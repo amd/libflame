@@ -150,10 +150,7 @@ V is set to the */
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void claein_(logical *rightv, logical *noinit, aocl_int_t *n, scomplex *h__, aocl_int_t *ldh,
-             scomplex *w, scomplex *v, scomplex *b, aocl_int_t *ldb, real *rwork, real *eps3,
-             real *smlnum, aocl_int_t *info)
+void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer *ldh, complex *w, complex *v, complex *b, integer *ldb, real *rwork, real *eps3, real *smlnum, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -182,7 +179,7 @@ void claein_(logical *rightv, logical *noinit, aocl_int_t *n, scomplex *h__, aoc
     extern /* Complex */
     void cladiv_f2c_(complex *, complex *, complex *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *), clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *, real *, integer *);
+    void csscal_(integer *, real *, complex *, integer *), clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *, real *, integer *);
     extern real scasum_(integer *, complex *, integer *);
     char normin[1];
     real nrmsml, growto;
@@ -477,7 +474,7 @@ L120: /* Normalize eigenvector. */
     r__3 = 1.f / ((r__1 = v[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&v[i__]), f2c_abs(r__2)));
     csscal_(n, &r__3, &v[1], &c__1);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAEIN */
 }
 /* claein_ */

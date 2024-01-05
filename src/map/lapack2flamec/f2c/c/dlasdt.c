@@ -100,9 +100,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlasdt_(aocl_int_t *n, aocl_int_t *lvl, aocl_int_t *nd, aocl_int_t *inode, aocl_int_t *ndiml,
-             aocl_int_t *ndimr, aocl_int_t *msub)
+void dlasdt_(integer *n, integer *lvl, integer *nd, integer * inode, integer *ndiml, integer *ndimr, integer *msub)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasdt inputs: n %" FLA_IS ", msub %" FLA_IS "",*n, *msub);
@@ -170,7 +168,7 @@ void dlasdt_(aocl_int_t *n, aocl_int_t *lvl, aocl_int_t *nd, aocl_int_t *inode, 
     }
     *nd = (llst << 1) - 1;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASDT */
 }
 /* dlasdt_ */

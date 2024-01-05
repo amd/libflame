@@ -136,25 +136,7 @@ static doublereal c_b8 = 1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dtzrqf_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *tau, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dtzrqf(m, n, a, lda, tau, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dtzrqf(&m_64, &n_64, a, &lda_64, tau, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_dtzrqf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *tau,
-             aocl_int64_t *info)
+void dtzrqf_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
@@ -162,7 +144,7 @@ void aocl_lapack_dtzrqf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
     /* Local variables */
     integer i__, k, m1;
     extern /* Subroutine */
-    int dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlarfg_( integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlarfg_( integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -205,7 +187,7 @@ void aocl_lapack_dtzrqf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_in
     {
         i__1 = -(*info);
         xerbla_("DTZRQF", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Perform the factorization. */
     if(*m == 0)

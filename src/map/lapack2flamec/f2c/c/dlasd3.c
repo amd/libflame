@@ -218,12 +218,7 @@ the second */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlasd3_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, doublereal *d__,
-             doublereal *q, aocl_int_t *ldq, doublereal *dsigma, doublereal *u, aocl_int_t *ldu,
-             doublereal *u2, aocl_int_t *ldu2, doublereal *vt, aocl_int_t *ldvt, doublereal *vt2,
-             aocl_int_t *ldvt2, aocl_int_t *idxc, aocl_int_t *ctot, doublereal *z__,
-             aocl_int_t *info)
+void dlasd3_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__, doublereal *q, integer *ldq, doublereal *dsigma, doublereal *u, integer *ldu, doublereal *u2, integer *ldu2, doublereal *vt, integer *ldvt, doublereal *vt2, integer *ldvt2, integer *idxc, integer *ctot, doublereal *z__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasd3 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", k %" FLA_IS ", ldq %" FLA_IS ", ldu %" FLA_IS ", ldu2 %" FLA_IS ", ldvt %" FLA_IS ", ldvt2 %" FLA_IS ", idxc %" FLA_IS ", ctot %" FLA_IS "",*nl, *nr, *sqre, *k, *ldq, *ldu, *ldu2, *ldvt, *ldvt2, *idxc, *ctot);
@@ -240,14 +235,14 @@ void dlasd3_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, do
     doublereal temp;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer ctemp;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer ktemp;
     extern doublereal dlamc3_(doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlasd4_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlasd4_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -336,7 +331,7 @@ void dlasd3_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, do
         i__1 = -(*info);
         xerbla_("DLASD3", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*k == 1)
@@ -357,7 +352,7 @@ void dlasd3_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, do
             }
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Modify values DSIGMA(i) to make sure all DSIGMA(i)-DSIGMA(j) can */
     /* be computed with high relative accuracy (barring over/underflow). */
@@ -400,7 +395,7 @@ void dlasd3_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, do
         if(*info != 0)
         {
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* L30: */
     }
@@ -507,7 +502,7 @@ L100:
     {
         dgemm_("N", "N", k, &m, k, &c_b13, &q[q_offset], ldq, &vt2[vt2_offset], ldvt2, &c_b26, &vt[vt_offset], ldvt);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     ktemp = ctot[1] + 1;
     aocl_blas_dgemm("N", "N", k, &nlp1, &ktemp, &c_b12, &q[q_dim1 + 1], ldq, &vt2[vt2_dim1 + 1],
@@ -539,7 +534,7 @@ L100:
     ctemp = ctot[2] + 1 + ctot[3];
     dgemm_("N", "N", k, &nrp1, &ctemp, &c_b13, &q[ktemp * q_dim1 + 1], ldq, & vt2[ktemp + nlp2 * vt2_dim1], ldvt2, &c_b26, &vt[nlp2 * vt_dim1 + 1], ldvt);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASD3 */
 }
 /* dlasd3_ */

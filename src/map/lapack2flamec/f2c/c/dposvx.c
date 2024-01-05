@@ -304,12 +304,7 @@ if EQUED = 'Y', */
 /* > \ingroup doublePOsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dposvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a,
-             aocl_int_t *lda, doublereal *af, aocl_int_t *ldaf, char *equed, doublereal *s,
-             doublereal *b, aocl_int_t *ldb, doublereal *x, aocl_int_t *ldx, doublereal *rcond,
-             doublereal *ferr, doublereal *berr, doublereal *work, aocl_int_t *iwork,
-             aocl_int_t *info)
+void dposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a, integer *lda, doublereal *af, integer *ldaf, char *equed, doublereal *s, doublereal *b, integer *ldb, doublereal * x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal * berr, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dposvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx);
@@ -326,10 +321,17 @@ void dposvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
-    aocl_int64_t infequ;
+    extern /* Subroutine */
+    void dpocon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+    integer infequ;
+    extern doublereal dlansy_(char *, char *, integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */
+    void dlaqsy_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, char *), dpoequ_(integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *), dporfs_( char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dpotrf_(char *, integer *, doublereal *, integer *, integer *);
     doublereal smlnum;
+    extern /* Subroutine */
+    void dpotrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -463,7 +465,7 @@ void dposvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal
         i__1 = -(*info);
         xerbla_("DPOSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(equil)
     {
@@ -501,7 +503,7 @@ void dposvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal
         {
             *rcond = 0.;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -543,7 +545,7 @@ void dposvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPOSVX */
 }
 /* dposvx_ */

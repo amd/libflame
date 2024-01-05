@@ -177,21 +177,26 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chetd2_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *d__, real *e,
-                scomplex *tau, aocl_int64_t *info)
+void chetd2_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tau, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     real r__1;
     scomplex q__1, q__2, q__3, q__4;
     /* Local variables */
-    aocl_int64_t i__;
-    scomplex taui;
-    scomplex alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__;
+    complex taui;
+    extern /* Subroutine */
+    void cher2_(char *, integer *, complex *, complex * , integer *, complex *, integer *, complex *, integer *);
+    complex alpha;
+    extern /* Complex */
+    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void chemv_(char *, integer *, complex *, complex * , integer *, complex *, integer *, complex *, complex *, integer * ), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -239,7 +244,7 @@ void chetd2_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, rea
     {
         i__1 = -(*info);
         xerbla_("CHETD2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n <= 0)

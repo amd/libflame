@@ -176,9 +176,7 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cunmtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n, scomplex *a,
-                aocl_int64_t *lda, scomplex *tau, scomplex *c__, aocl_int64_t *ldc, scomplex *work,
-                aocl_int64_t *lwork, aocl_int64_t *info)
+void cunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
@@ -196,7 +194,7 @@ void cunmtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int cunmql_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), cunmqr_fla(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void cunmql_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), cunmqr_fla(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -315,7 +313,7 @@ void cunmtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
     {
         i__2 = -(*info);
         xerbla_("CUNMTR", &i__2, (ftnlen)6);
-        return 0;
+        return;
     }
     else if(lquery)
     {
@@ -324,8 +322,8 @@ void cunmtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || nq == 1)
     {
-        work[1].real = 1.f;
-        work[1].imag = 0.f; // , expr subst
+        work[1].r = 1.f;
+        work[1].i = 0.f; // , expr subst
         return;
     }
     if(left)
@@ -362,8 +360,8 @@ void cunmtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
         cunmqr_fla(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1],
                    &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     }
-    work[1].real = (real)lwkopt;
-    work[1].imag = 0.f; // , expr subst
+    work[1].r = (real) lwkopt;
+    work[1].i = 0.f; // , expr subst
     return;
     /* End of CUNMTR */
 }

@@ -303,7 +303,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, integer *ihi, real *a, integer *lda, real *b, integer *ldb, real *alphar, real *alphai, real *beta, real *q, integer *ldq, real *z__, integer *ldz, real *work, integer *lwork, integer *rec, integer *info)
+void slaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, integer *ihi, real *a, integer *lda, real *b, integer *ldb, real *alphar, real *alphai, real *beta, real *q, integer *ldq, real *z__, integer *ldz, real *work, integer *lwork, integer *rec, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaqz0 inputs: wants %c, wantq %c, wantz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", rec %" FLA_IS "",*wants, *wantq, *wantz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz, *rec);
@@ -327,13 +327,13 @@ int slaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     real temp, swap;
     integer n_undeflated__;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     extern logical lsame_(char *, char *);
     integer iiter;
     real bnorm;
     integer maxit, rcost, istop, itemp1, itemp2;
     extern /* Subroutine */
-    int slaqz3_(logical *, logical *, logical *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *), slaqz4_( logical *, logical *, logical *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), slabad_(real *, real *);
+    void slaqz3_(logical *, logical *, logical *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *), slaqz4_( logical *, logical *, logical *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), slabad_(real *, real *);
     integer nibble, nblock;
     extern real slamch_(char *);
     real safmin;
@@ -345,7 +345,7 @@ int slaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     char jbcmpz[3];
     extern real slanhs_(char *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *), shgeqz_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, integer *);
+    void slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *), shgeqz_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, integer *);
     integer iwantq, iwants, istart;
     real smlnum;
     integer istopm, iwantz, istart2;
@@ -474,14 +474,14 @@ int slaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
         i__1 = -(*info);
         xerbla_("SLAQZ0", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 0)
     {
         work[1] = 1.f;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get the parameters */
     *(unsigned char *)jbcmpz = *(unsigned char *)wants;
@@ -514,7 +514,7 @@ int slaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     {
         shgeqz_(wants, wantq, wantz, n, ilo, ihi, &a[a_offset], lda, &b[ b_offset], ldb, &alphar[1], &alphai[1], &beta[1], &q[q_offset], ldq, &z__[z_offset], ldz, &work[1], lwork, info);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Find out required workspace */
     /* Workspace query to slaqz3 */
@@ -536,7 +536,7 @@ int slaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     {
         work[1] = (real) lworkreq;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*lwork < lworkreq)
     {
@@ -546,7 +546,7 @@ int slaqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     {
         xerbla_("SLAQZ0", info, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize Q and Z */
     if (iwantq == 3)
@@ -843,6 +843,6 @@ L80:
     shgeqz_(wants, wantq, wantz, n, ilo, ihi, &a[a_offset], lda, &b[b_offset], ldb, &alphar[1], &alphai[1], &beta[1], &q[q_offset], ldq, &z__[ z_offset], ldz, &work[1], lwork, &norm_info__);
     *info = norm_info__;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* slaqz0_ */

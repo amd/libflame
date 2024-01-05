@@ -150,10 +150,7 @@ V is set to the */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlaein_(logical *rightv, logical *noinit, aocl_int_t *n, dcomplex *h__, aocl_int_t *ldh,
-             dcomplex *w, dcomplex *v, dcomplex *b, aocl_int_t *ldb,
-             doublereal *rwork, doublereal *eps3, doublereal *smlnum, aocl_int_t *info)
+void zlaein_(logical *rightv, logical *noinit, integer *n, doublecomplex *h__, integer *ldh, doublecomplex *w, doublecomplex *v, doublecomplex *b, integer *ldb, doublereal *rwork, doublereal *eps3, doublereal *smlnum, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaein inputs: n %" FLA_IS ", ldh %" FLA_IS ", ldb %" FLA_IS "",*n, *ldh, *ldb);
@@ -171,10 +168,16 @@ void zlaein_(logical *rightv, logical *noinit, aocl_int_t *n, dcomplex *h__, aoc
     doublereal scale;
     char trans[1];
     doublereal rtemp, rootn, vnorm;
+    extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
+    extern /* Subroutine */
+    void zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+    extern integer izamax_(integer *, doublecomplex *, integer *);
     extern /* Double Complex */
     void zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
     char normin[1];
     doublereal nrmsml;
+    extern /* Subroutine */
+    void zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *);
     doublereal growto;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -467,7 +470,7 @@ L120: /* Normalize eigenvector. */
     d__3 = 1. / ((d__1 = v[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&v[i__]), f2c_dabs( d__2)));
     zdscal_(n, &d__3, &v[1], &c__1);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAEIN */
 }
 /* zlaein_ */

@@ -107,9 +107,7 @@ the strictly upper */
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlaset_(char *uplo, aocl_int_t *m, aocl_int_t *n, doublereal *alpha, doublereal *beta,
-             doublereal *a, aocl_int_t *lda)
+void dlaset_(char *uplo, integer *m, integer *n, doublereal * alpha, doublereal *beta, doublereal *a, integer *lda)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaset inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*uplo, *m, *n, *lda);
@@ -202,7 +200,7 @@ void dlaset_(char *uplo, aocl_int_t *m, aocl_int_t *n, doublereal *alpha, double
         /* L70: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASET */
 }
 /* dlaset_ */

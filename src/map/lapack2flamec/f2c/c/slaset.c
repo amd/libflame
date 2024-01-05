@@ -107,9 +107,7 @@ the strictly upper */
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slaset_(char *uplo, aocl_int_t *m, aocl_int_t *n, real *alpha, real *beta, real *a,
-             aocl_int_t *lda)
+void slaset_(char *uplo, integer *m, integer *n, real *alpha, real *beta, real *a, integer *lda)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -206,7 +204,7 @@ void slaset_(char *uplo, aocl_int_t *m, aocl_int_t *n, real *alpha, real *beta, 
         /* L70: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASET */
 }
 /* slaset_ */

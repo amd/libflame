@@ -259,8 +259,7 @@ LDQ >= 1 otherwise. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sggsvp_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, aocl_int_t *n, real *a, aocl_int_t *lda, real *b, aocl_int_t *ldb, real *tola, real *tolb, aocl_int_t *k, aocl_int_t *l, real *u, aocl_int_t *ldu, real *v, aocl_int_t *ldv, real *q, aocl_int_t *ldq, aocl_int_t *iwork, real *tau, real *work, aocl_int_t *info)
+void sggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, real *a, integer *lda, real *b, integer *ldb, real *tola, real *tolb, integer *k, integer *l, real *u, integer *ldu, real *v, integer *ldv, real *q, integer *ldq, integer *iwork, real * tau, real *work, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sggsvp(jobu, jobv, jobq, m, p, n, a, lda, b, ldb, tola, tolb, k, l, u, ldu, v, ldv, q, ldq, iwork, tau, work, info);
@@ -305,7 +304,7 @@ void aocl_lapack_sggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical wantq, wantu, wantv;
     extern /* Subroutine */
-    int sgeqr2_(integer *, integer *, real *, integer *, real *, real *, integer *), sgerq2_(integer *, integer *, real *, integer *, real *, real *, integer *), sorg2r_(integer *, integer *, integer *, real *, integer *, real *, real *, integer * ), sorm2r_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), sormr2_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgeqpf_( integer *, integer *, real *, integer *, integer *, real *, real *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slapmt_( logical *, integer *, integer *, real *, integer *, integer *);
+    void sgeqr2_(integer *, integer *, real *, integer *, real *, real *, integer *), sgerq2_(integer *, integer *, real *, integer *, real *, real *, integer *), sorg2r_(integer *, integer *, integer *, real *, integer *, real *, real *, integer * ), sorm2r_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), sormr2_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgeqpf_( integer *, integer *, real *, integer *, integer *, real *, real *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slapmt_( logical *, integer *, integer *, real *, integer *, integer *);
     logical forwrd;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -401,7 +400,7 @@ void aocl_lapack_sggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     {
         i__1 = -(*info);
         xerbla_("SGGSVP", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* QR with column pivoting of B: B*P = V*( S11 S12 ) */
     /* ( 0 0 ) */
@@ -621,7 +620,6 @@ void aocl_lapack_sggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
             /* L140: */
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGGSVP */
 }

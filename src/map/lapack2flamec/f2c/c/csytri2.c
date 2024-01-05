@@ -120,7 +120,7 @@ the matrix is singular and its */
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int csytri2_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, complex *work, integer *lwork, integer *info)
+void csytri2_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -136,7 +136,7 @@ int csytri2_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, c
     integer a_dim1, a_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int csytri2x_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+    void csytri2x_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     extern logical lsame_(char *, char *);
     integer nbmax;
     logical upper;
@@ -144,7 +144,7 @@ int csytri2_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, c
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int csytri_(char *, integer *, complex *, integer *, integer *, complex *, integer *);
+    void csytri_(char *, integer *, complex *, integer *, integer *, complex *, integer *);
     logical lquery;
     integer minsize;
     /* -- LAPACK computational routine (version 3.8.0) -- */
@@ -206,19 +206,19 @@ int csytri2_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, c
         i__1 = -(*info);
         xerbla_("CSYTRI2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         work[1].r = (real) minsize;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (nbmax >= *n)
     {
@@ -229,7 +229,7 @@ int csytri2_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, c
         csytri2x_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], &nbmax, info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYTRI2 */
 }
 /* csytri2_ */

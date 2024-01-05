@@ -119,9 +119,7 @@ the unit diagonal elements of L are not stored. */
 /* > \ingroup realGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgesv_(aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *lda, aocl_int_t *ipiv, real *b,
-            aocl_int_t *ldb, aocl_int_t *info)
+void sgesv_(integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real *b, integer *ldb, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgesv(n, nrhs, a, lda, ipiv, b, ldb, info);
@@ -195,7 +193,7 @@ void aocl_lapack_sgesv(aocl_int64_t *n, aocl_int64_t *nrhs, real *a, aocl_int64_
     {
         i__1 = -(*info);
         xerbla_("SGESV ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Compute the LU factorization of A. */
     aocl_lapack_sgetrf(n, n, &a[a_offset], lda, &ipiv[1], info);
@@ -205,7 +203,6 @@ void aocl_lapack_sgesv(aocl_int64_t *n, aocl_int64_t *nrhs, real *a, aocl_int64_
         aocl_lapack_sgetrs("No transpose", n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
                            info);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGESV */
 }

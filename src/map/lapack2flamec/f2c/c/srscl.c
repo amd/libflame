@@ -78,8 +78,7 @@
 /* > \ingroup rscl */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void srscl_(aocl_int_t *n, real *sa, real *sx, aocl_int_t *incx)
+void srscl_(integer *n, real *sa, real *sx, integer *incx)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_srscl(n, sa, sx, incx);
@@ -98,6 +97,8 @@ void aocl_lapack_srscl(aocl_int64_t *n, real *sa, real *sx, aocl_int64_t *incx)
     real mul, cden;
     logical done;
     real cnum, cden1, cnum1;
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *), slabad_(real *, real *);
     extern real slamch_(char *);
     real bignum, smlnum;
     /* -- LAPACK auxiliary routine -- */
@@ -133,7 +134,7 @@ void aocl_lapack_srscl(aocl_int64_t *n, real *sa, real *sx, aocl_int64_t *incx)
     if(*n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = slamch_("S");
@@ -171,7 +172,7 @@ L10:
         goto L10;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SRSCL */
 }
 /* srscl_ */

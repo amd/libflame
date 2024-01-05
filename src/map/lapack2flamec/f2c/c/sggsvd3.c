@@ -342,7 +342,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer *p, integer *k, integer *l, real *a, integer *lda, real *b, integer *ldb, real *alpha, real *beta, real *u, integer * ldu, real *v, integer *ldv, real *q, integer *ldq, real *work, integer *lwork, integer *iwork, integer *info)
+void sggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer *p, integer *k, integer *l, real *a, integer *lda, real *b, integer *ldb, real *alpha, real *beta, real *u, integer * ldu, real *v, integer *ldv, real *q, integer *ldq, real *work, integer *lwork, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2;
@@ -357,7 +357,7 @@ int sggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer
     real anorm, bnorm;
     logical wantq;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     logical wantu, wantv;
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     integer ncycle;
@@ -366,7 +366,7 @@ int sggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int sggsvp3_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, real *, real *, integer *, integer *);
+    void sggsvp3_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, real *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -477,11 +477,11 @@ int sggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer
     {
         i__1 = -(*info);
         xerbla_("SGGSVD3", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     if (lquery)
     {
-        return 0;
+        return;
     }
     /* Compute the Frobenius norm of matrices A and B */
     anorm = slange_("1", m, n, &a[a_offset], lda, &work[1]);
@@ -538,7 +538,7 @@ int sggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer
         /* L20: */
     }
     work[1] = (real) lwkopt;
-    return 0;
+    return;
     /* End of SGGSVD3 */
 }
 /* sggsvd3_ */

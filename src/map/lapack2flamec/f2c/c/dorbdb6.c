@@ -155,10 +155,7 @@ static doublereal c_b13 = -1.;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dorbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, doublereal *x1, aocl_int_t *incx1,
-              doublereal *x2, aocl_int_t *incx2, doublereal *q1, aocl_int_t *ldq1, doublereal *q2,
-              aocl_int_t *ldq2, doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
+void dorbdb6_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *incx1, doublereal *x2, integer *incx2, doublereal *q1, integer *ldq1, doublereal *q2, integer *ldq2, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dorbdb6 inputs: m1 %" FLA_IS ", m2 %" FLA_IS ", n %" FLA_IS ", incx1 %" FLA_IS ", incx2 %" FLA_IS ", ldq1 %" FLA_IS ", ldq2 %" FLA_IS ", lwork %" FLA_IS "",*m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2, *lwork);
@@ -171,7 +168,7 @@ void dorbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, doublereal *x1, aoc
     integer i__, ix;
     doublereal scl, eps, ssq, norm;
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlassq_( integer *, doublereal *, integer *, doublereal *, doublereal *);
@@ -244,7 +241,7 @@ void dorbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, doublereal *x1, aoc
         i__1 = -(*info);
         xerbla_("DORBDB6", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     eps = dlamch_("Precision");
     /* First, project X onto the orthogonal complement of Q's column */
@@ -280,7 +277,7 @@ void dorbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, doublereal *x1, aoc
     if (norm_new__ >= norm * .01)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (norm_new__ <= *n * eps * norm)
     {
@@ -301,7 +298,7 @@ void dorbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, doublereal *x1, aoc
             x2[ix] = 0.;
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     norm = norm_new__;
     i__1 = *n;
@@ -352,7 +349,7 @@ void dorbdb6_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, doublereal *x1, aoc
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DORBDB6 */
 }
 /* dorbdb6_ */

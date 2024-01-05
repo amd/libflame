@@ -297,9 +297,7 @@ K=N/2. If */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_int_t *m,
-            aocl_int_t *n, scomplex *alpha, scomplex *a, scomplex *b, aocl_int_t *ldb)
+void ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integer *m, integer *n, complex *alpha, complex *a, complex *b, integer *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -317,11 +315,13 @@ void ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
     /* Local variables */
     aocl_int64_t i__, j, k, m1, m2, n1, n2, info;
     logical normaltransr;
+    extern /* Subroutine */
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     logical lside;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
     extern /* Subroutine */
-    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical misodd, nisodd, notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -392,13 +392,13 @@ void ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
         i__1 = -info;
         xerbla_("CTFSM ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return when ( (N.EQ.0).OR.(M.EQ.0) ) */
     if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return when ALPHA.EQ.(0E+0,0E+0) */
     if(alpha->real == 0.f && alpha->imag == 0.f)
@@ -417,7 +417,7 @@ void ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
             /* L20: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(lside)
     {
@@ -1021,7 +1021,7 @@ void ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTFSM */
 }
 /* ctfsm_ */

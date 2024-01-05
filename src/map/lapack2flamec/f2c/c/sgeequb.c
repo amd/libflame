@@ -140,9 +140,7 @@
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgeequb_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *r__, real *c__,
-              real *rowcnd, real *colcnd, real *amax, aocl_int_t *info)
+void sgeequb_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgeequb(m, n, a, lda, r__, c__, rowcnd, colcnd, amax, info);
@@ -220,7 +218,7 @@ void aocl_lapack_sgeequb(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t
     {
         i__1 = -(*info);
         xerbla_("SGEEQUB", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if(*m == 0 || *n == 0)
@@ -228,7 +226,6 @@ void aocl_lapack_sgeequb(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t
         *rowcnd = 1.f;
         *colcnd = 1.f;
         *amax = 0.f;
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. Assume SMLNUM is a power of the radix. */
@@ -293,7 +290,6 @@ void aocl_lapack_sgeequb(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t
             if(r__[i__] == 0.f)
             {
                 *info = i__;
-                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L50: */
@@ -368,7 +364,6 @@ void aocl_lapack_sgeequb(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t
             if(c__[j] == 0.f)
             {
                 *info = *m + j;
-                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L110: */
@@ -390,7 +385,6 @@ void aocl_lapack_sgeequb(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t
         /* Compute COLCND = fla_min(C(J)) / fla_max(C(J)). */
         *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEEQUB */
 }

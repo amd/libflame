@@ -280,7 +280,7 @@ IBLOCK(i)=1 if eigenvalue */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, doublereal *l, doublereal *pivmin, integer *isplit, integer *m, integer *dol, integer *dou, doublereal *minrgp, doublereal *rtol1, doublereal *rtol2, doublereal *w, doublereal *werr, doublereal *wgap, integer *iblock, integer *indexw, doublereal *gers, doublereal *z__, integer *ldz, integer *isuppz, doublereal *work, integer *iwork, integer *info)
+void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, doublereal *l, doublereal *pivmin, integer *isplit, integer *m, integer *dol, integer *dou, doublereal *minrgp, doublereal *rtol1, doublereal *rtol2, doublereal *w, doublereal *werr, doublereal *wgap, integer *iblock, integer *indexw, doublereal *gers, doublereal *z__, integer *ldz, integer *isuppz, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarrv inputs: n %" FLA_IS ", isplit %" FLA_IS ", m %" FLA_IS ", dol %" FLA_IS ", dou %" FLA_IS ", iblock %" FLA_IS ", indexw %" FLA_IS ", ldz %" FLA_IS "",*n, *isplit, *m, *dol, *dou, *iblock, *indexw, *ldz);
@@ -304,7 +304,7 @@ int dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, doubler
     doublereal bstw;
     integer itmp1;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     integer indld;
     doublereal fudge;
     integer idone;
@@ -314,12 +314,12 @@ int dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, doubler
     logical eskip;
     doublereal right;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer nclus, zfrom;
     doublereal rqtol;
     integer iindc1, iindc2;
     extern /* Subroutine */
-    int dlar1v_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, logical *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlar1v_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, logical *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *);
     logical stp2ii;
     doublereal lambda;
     extern doublereal dlamch_(char *);
@@ -328,18 +328,18 @@ int dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, doubler
     integer indlld;
     doublereal sgndef, mingma;
     extern /* Subroutine */
-    int dlarrb_(integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+    void dlarrb_(integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
     integer oldien, oldncl, wbegin;
     doublereal spdiam;
     integer negcnt;
     extern /* Subroutine */
-    int dlarrf_(integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
+    void dlarrf_(integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
     integer oldcls;
     doublereal savgap;
     integer ndepth;
     doublereal ssigma;
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+    void dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     logical usedbs;
     integer iindwk, offset;
     doublereal gaptol;
@@ -396,7 +396,7 @@ int dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, doubler
 	if (*m > *n)
 	   *info = -4;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* The first N entries of WORK are reserved for the eigenvalues */
     indld = *n + 1;
@@ -570,7 +570,7 @@ L40:
             {
                 *info = -2;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* breadth first processing of the current level of the representation */
             /* tree: OLDNCL = number of clusters on current level */
@@ -664,7 +664,7 @@ L40:
                     {
                         *info = -1;
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     /* We also recompute the extremal gaps. W holds all eigenvalues */
                     /* of the unshifted matrix and must be used for computation */
@@ -845,7 +845,7 @@ L40:
                         {
                             *info = -2;
                             AOCL_DTL_TRACE_LOG_EXIT
-                            return 0;
+                            return;
                         }
                     }
                     else
@@ -958,7 +958,7 @@ L120: /* Check if bisection should be used to refine eigenvalue */
                             {
                                 *info = -3;
                                 AOCL_DTL_TRACE_LOG_EXIT
-                                return 0;
+                                return;
                             }
                             lambda = work[windex];
                             /* Reset twist index from inaccurate LAMBDA to */
@@ -1066,7 +1066,7 @@ L120: /* Check if bisection should be used to refine eigenvalue */
                             {
                                 *info = 5;
                                 AOCL_DTL_TRACE_LOG_EXIT
-                                return 0;
+                                return;
                             }
                         }
                         else
@@ -1161,7 +1161,7 @@ L170:
         ;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARRV */
 }
 /* dlarrv_ */

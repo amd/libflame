@@ -173,11 +173,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ztprfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrhs,
-             dcomplex *ap, dcomplex *b, aocl_int_t *ldb, dcomplex *x,
-             aocl_int_t *ldx, doublereal *ferr, doublereal *berr, dcomplex *work,
-             doublereal *rwork, aocl_int_t *info)
+void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, doublecomplex *ap, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztprfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *trans, *diag, *n, *nrhs, *ldb, *ldx);
@@ -199,6 +195,8 @@ void ztprfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     logical upper;
+    extern /* Subroutine */
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztpmv_( char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
@@ -284,7 +282,7 @@ void ztprfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
         i__1 = -(*info);
         xerbla_("ZTPRFS", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -297,7 +295,7 @@ void ztprfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
             /* L10: */
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(notran)
     {
@@ -630,7 +628,7 @@ void ztprfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
         /* L250: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTPRFS */
 }
 /* ztprfs_ */

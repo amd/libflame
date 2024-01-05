@@ -96,7 +96,7 @@ static complex c_b5 =
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int clarfgp_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau)
+void clarfgp_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -120,14 +120,14 @@ int clarfgp_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau
     integer knt;
     real beta;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *);
     real alphi, alphr, xnorm;
     extern real scnrm2_(integer *, complex *, integer *), slapy2_(real *, real *), slapy3_(real *, real *, real *);
     extern /* Complex */
     void cladiv_f2c_(complex *, complex *, complex *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *);
+    void csscal_(integer *, real *, complex *, integer *);
     real bignum, smlnum;
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -156,7 +156,7 @@ int clarfgp_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau
     {
         tau->r = 0.f, tau->i = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *n - 1;
     xnorm = scnrm2_(&i__1, &x[1], incx);
@@ -347,7 +347,7 @@ L10:
         alpha->r = beta, alpha->i = 0.f;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLARFGP */
 }
 /* clarfgp_ */

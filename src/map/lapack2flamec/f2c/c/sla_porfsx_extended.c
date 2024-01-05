@@ -388,13 +388,7 @@ i+1}
 /* > \ingroup realPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, real *a,
-                          integer *lda, real *af, integer *ldaf, logical *colequ, real *c__,
-                          real *b, integer *ldb, real *y, integer *ldy, real *berr_out__,
-                          integer *n_norms__, real *err_bnds_norm__, real *err_bnds_comp__,
-                          real *res, real *ayb, real *dy, real *y_tail__, real *rcond,
-                          integer *ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__,
-                          integer *info)
+void sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *af, integer * ldaf, logical *colequ, real *c__, real *b, integer *ldb, real *y, integer *ldy, real *berr_out__, integer *n_norms__, real * err_bnds_norm__, real *err_bnds_comp__, real *res, real *ayb, real * dy, real *y_tail__, real *rcond, integer *ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sla_porfsx_extended inputs: uplo %c ,n %" FLA_IS ",nrhs %" FLA_IS
@@ -411,18 +405,15 @@ void sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     integer i__, j;
     logical incr_prec__;
     extern /* Subroutine */
-        void
-        sla_syamv_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-                   real *, integer *);
+    void sla_syamv_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     real prev_dz_z__, yk, final_dx_x__, final_dz_z__;
     extern /* Subroutine */
-        void
-        sla_wwaddw_(integer *, real *, real *, real *);
+    void sla_wwaddw_(integer *, real *, real *, real * );
     real prevnormdx;
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__, ymin;
     extern /* Subroutine */
-    int sla_lin_berr_(integer *, integer *, integer *, real *, real *, real *);
+    void sla_lin_berr_(integer *, integer *, integer *, real *, real *, real *);
     integer y_prec_state__, uplo2;
     extern /* Subroutine */
         int
@@ -434,15 +425,11 @@ void sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     int blas_ssymv2_x_(integer *, integer *, real *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *), scopy_(integer *, real *, integer *, real *, integer *);
     real normx, normy;
     extern /* Subroutine */
-        void
-        saxpy_(integer *, real *, real *, integer *, real *, integer *),
-        ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *,
-               integer *);
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *), ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     extern real slamch_(char *);
     real normdx;
     extern /* Subroutine */
-        void
-        spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+    void spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     real hugeval;
     extern integer ilauplo_(char *);
     integer x_state__, z_state__;
@@ -494,7 +481,6 @@ void sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     /* Function Body */
     if(*info != 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     eps = slamch_("Epsilon");
@@ -760,7 +746,6 @@ void sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         sla_lin_berr_(n, n, &c__1, &res[1], &ayb[1], &berr_out__[j]);
         /* End of loop for each RHS. */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* sla_porfsx_extended__ */

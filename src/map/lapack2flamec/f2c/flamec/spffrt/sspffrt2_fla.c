@@ -5,7 +5,7 @@
 
 #include "FLA_f2c.h"
 
-extern integer sspr_(char *, integer *, real *, real *, integer *, real *);
+extern void sspr_(char *, integer *, real *, real *, integer *, real *);
 
 /*! @brief Partial LDL' factorization without pivoting
     *

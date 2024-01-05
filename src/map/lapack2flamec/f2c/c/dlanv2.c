@@ -114,7 +114,7 @@ static doublereal c_b6 = 1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlanv2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doublereal *rt1r, doublereal *rt1i, doublereal *rt2r, doublereal *rt2i, doublereal *cs, doublereal *sn)
+void dlanv2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doublereal *rt1r, doublereal *rt1i, doublereal *rt2r, doublereal *rt2i, doublereal *cs, doublereal *sn)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     doublereal d__1, d__2;
@@ -299,7 +299,7 @@ L10:
         *rt2i = -(*rt1i);
     }
     AOCL_DTL_TRACE_EXIT_INDENT
-    return 0;
+    return;
     /* End of DLANV2 */
 }
 /* dlanv2_ */

@@ -407,13 +407,7 @@ i+1}
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, scomplex *a,
-                          integer *lda, scomplex *af, integer *ldaf, integer *ipiv, logical *colequ,
-                          real *c__, scomplex *b, integer *ldb, scomplex *y, integer *ldy,
-                          real *berr_out__, integer *n_norms__, real *err_bnds_norm__,
-                          real *err_bnds_comp__, scomplex *res, real *ayb, scomplex *dy,
-                          scomplex *y_tail__, real *rcond, integer *ithresh, real *rthresh,
-                          real *dz_ub__, logical *ignore_cwise__, integer *info)
+void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer *ipiv, logical *colequ, real *c__, complex *b, integer *ldb, complex *y, integer *ldy, real *berr_out__, integer * n_norms__, real *err_bnds_norm__, real *err_bnds_comp__, complex *res, real *ayb, complex *dy, complex *y_tail__, real *rcond, integer * ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -437,18 +431,15 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     integer i__, j;
     logical incr_prec__;
     extern /* Subroutine */
-        void
-        cla_syamv_(integer *, integer *, real *, scomplex *, integer *, scomplex *, integer *, real *,
-                   real *, integer *);
+    void cla_syamv_(integer *, integer *, real *, complex *, integer *, complex *, integer *, real *, real *, integer *);
     real prev_dz_z__, yk, final_dx_x__;
     extern /* Subroutine */
-        void
-        cla_wwaddw_(integer *, scomplex *, scomplex *, scomplex *);
+    void cla_wwaddw_(integer *, complex *, complex *, complex *);
     real final_dz_z__, prevnormdx;
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__;
     extern /* Subroutine */
-    int cla_lin_berr_(integer *, integer *, integer *, complex *, real *, real *);
+    void cla_lin_berr_(integer *, integer *, integer *, complex *, real *, real *);
     real ymin;
     integer y_prec_state__;
     extern /* Subroutine */
@@ -462,20 +453,17 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         ccopy_(integer *, scomplex *, integer *, scomplex *, integer *);
     real dxrat, dzrat;
     extern /* Subroutine */
-        void
-        caxpy_(integer *, scomplex *, scomplex *, integer *, scomplex *, integer *);
+    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int csymv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * );
+    void csymv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * );
     real normx, normy;
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real normdx;
     extern /* Subroutine */
-        void
-        csytrs_(char *, integer *, integer *, scomplex *, integer *, integer *, scomplex *, integer *,
-                integer *);
+    void csytrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     real hugeval;
     extern integer ilauplo_(char *);
     integer x_state__, z_state__;
@@ -565,7 +553,7 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         i__1 = -(*info);
         xerbla_("CLA_SYRFSX_EXTENDED", &i__1, (ftnlen)19);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     eps = slamch_("Epsilon");
     hugeval = slamch_("Overflow");
@@ -838,7 +826,7 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         /* End of loop for each RHS. */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* cla_syrfsx_extended__ */
 #endif

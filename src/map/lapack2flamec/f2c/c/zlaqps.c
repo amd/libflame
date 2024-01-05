@@ -173,11 +173,7 @@ static aocl_int64_t c__1 = 1;
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlaqps_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, aocl_int_t *nb, aocl_int_t *kb,
-             dcomplex *a, aocl_int_t *lda, aocl_int_t *jpvt, dcomplex *tau,
-             doublereal *vn1, doublereal *vn2, dcomplex *auxv, dcomplex *f,
-             aocl_int_t *ldf)
+void zlaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, doublecomplex *a, integer *lda, integer *jpvt, doublecomplex *tau, doublereal *vn1, doublereal *vn2, doublecomplex * auxv, doublecomplex *f, integer *ldf)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqps inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", nb %" FLA_IS ", kb %" FLA_IS ", lda %" FLA_IS ", ldf %" FLA_IS "",*m, *n, *offset, *nb, *kb, *lda, *ldf);
@@ -195,10 +191,15 @@ void zlaqps_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, aocl_int_t *nb, a
     dcomplex akk;
     aocl_int64_t pvt;
     doublereal temp, temp2, tol3z;
-    aocl_int64_t itemp;
-    extern doublereal dlamch_(char *);
-    aocl_int64_t lsticc;
-    aocl_int64_t lastrk;
+    integer itemp;
+    extern /* Subroutine */
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_( char *);
+    extern integer idamax_(integer *, doublereal *, integer *);
+    integer lsticc;
+    extern /* Subroutine */
+    void zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    integer lastrk;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -418,7 +419,7 @@ L60:
         goto L60;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAQPS */
 }
 /* zlaqps_ */

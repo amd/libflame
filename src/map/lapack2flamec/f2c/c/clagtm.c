@@ -141,9 +141,7 @@ otherwise, */
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clagtm_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *alpha, scomplex *dl, scomplex *d__,
-             scomplex *du, scomplex *x, aocl_int_t *ldx, real *beta, scomplex *b, aocl_int_t *ldb)
+void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, complex *d__, complex *du, complex *x, integer * ldx, real *beta, complex *b, integer *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -196,7 +194,7 @@ void clagtm_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *alpha, scomplex
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Multiply B by BETA if BETA.NE.1. */
     if(*beta == 0.f)
@@ -733,7 +731,7 @@ void clagtm_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *alpha, scomplex
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAGTM */
 }
 /* clagtm_ */

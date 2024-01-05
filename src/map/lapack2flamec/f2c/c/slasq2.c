@@ -100,7 +100,7 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slasq2_(integer *n, real *z__, integer *info)
+void slasq2_(integer *n, real *z__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slasq2 inputs: n %" FLA_IS "",*n);
@@ -132,7 +132,7 @@ int slasq2_(integer *n, real *z__, integer *info)
     real tempe, tempq;
     integer ttype;
     extern /* Subroutine */
-    int slasq3_(integer *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, logical *, integer *, real *, real *, real *, real *, real *, real *, real *);
+    void slasq3_(integer *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, logical *, integer *, real *, real *, real *, real *, real *, real *, real *);
     real deemin;
     extern real slamch_(char *);
     integer iwhila, iwhilb;
@@ -175,12 +175,12 @@ int slasq2_(integer *n, real *z__, integer *info)
         *info = -1;
         xerbla_("SLASQ2", &c__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*n == 1)
     {
@@ -191,7 +191,7 @@ int slasq2_(integer *n, real *z__, integer *info)
             xerbla_("SLASQ2", &c__2, (ftnlen)6);
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*n == 2)
     {
@@ -201,21 +201,21 @@ int slasq2_(integer *n, real *z__, integer *info)
             *info = -201;
             xerbla_("SLASQ2", &c__2, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else if (z__[2] < 0.f)
         {
             *info = -202;
             xerbla_("SLASQ2", &c__2, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else if (z__[3] < 0.f)
         {
             *info = -203;
             xerbla_("SLASQ2", &c__2, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else if (z__[3] > z__[1])
         {
@@ -243,7 +243,7 @@ int slasq2_(integer *n, real *z__, integer *info)
         z__[2] = z__[3];
         z__[6] = z__[2] + z__[1];
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check for negative data and compute sums of q's and e's. */
     z__[*n * 2] = 0.f;
@@ -262,14 +262,14 @@ int slasq2_(integer *n, real *z__, integer *info)
             *info = -(k + 200);
             xerbla_("SLASQ2", &c__2, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else if (z__[k + 1] < 0.f)
         {
             *info = -(k + 201);
             xerbla_("SLASQ2", &c__2, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         d__ += z__[k];
         e += z__[k + 1];
@@ -292,7 +292,7 @@ int slasq2_(integer *n, real *z__, integer *info)
         *info = -((*n << 1) + 199);
         xerbla_("SLASQ2", &c__2, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     d__ += z__[(*n << 1) - 1];
     /* Computing fla_max */
@@ -314,7 +314,7 @@ int slasq2_(integer *n, real *z__, integer *info)
         slasrt_("D", n, &z__[1], &iinfo);
         z__[(*n << 1) - 1] = d__;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     trace = d__ + e;
     /* Check for zero data. */
@@ -322,7 +322,7 @@ int slasq2_(integer *n, real *z__, integer *info)
     {
         z__[(*n << 1) - 1] = 0.f;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check whether the machine is IEEE conformable. */
     /* IEEE = ( ILAENV( 10, 'SLASQ2', 'N', 1, 2, 3, 4 ).EQ.1 ) */
@@ -471,7 +471,7 @@ int slasq2_(integer *n, real *z__, integer *info)
         {
             *info = 1;
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Find last unreduced submatrix's top index I0, find QMAX and */
         /* EMIN. Find Gershgorin-type bound if Q's much greater than E's. */
@@ -683,14 +683,14 @@ L145:
             }
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
         /* end IWHILB */
 L150: /* L160: */
         ;
     }
     *info = 3;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* end IWHILA */
 L170: /* Move q's to the front. */
     i__1 = *n;
@@ -720,7 +720,7 @@ L170: /* Move q's to the front. */
     z__[(*n << 1) + 4] = (real) ndiv / (real) (i__1 * i__1);
     z__[(*n << 1) + 5] = nfail * 100.f / (real) iter;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SLASQ2 */
 }
 /* slasq2_ */

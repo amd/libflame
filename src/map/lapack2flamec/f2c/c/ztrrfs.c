@@ -180,11 +180,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ztrrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a,
-             aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb, dcomplex *x, aocl_int_t *ldx,
-             doublereal *ferr, doublereal *berr, dcomplex *work, doublereal *rwork,
-             aocl_int_t *info)
+void ztrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztrrfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *trans, *diag, *n, *nrhs, *lda, *ldb, *ldx);
@@ -205,7 +201,7 @@ void ztrrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztrmv_( char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlacn2_( integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztrmv_( char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlacn2_( integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
@@ -297,7 +293,7 @@ void ztrrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
         i__1 = -(*info);
         xerbla_("ZTRRFS", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -310,7 +306,7 @@ void ztrrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
             /* L10: */
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(notran)
     {
@@ -631,7 +627,7 @@ void ztrrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
         /* L250: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTRRFS */
 }
 /* ztrrfs_ */

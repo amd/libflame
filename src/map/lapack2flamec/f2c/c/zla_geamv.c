@@ -169,10 +169,7 @@
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zla_geamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, doublereal *alpha,
-                dcomplex *a, aocl_int_t *lda, dcomplex *x, aocl_int_t *incx,
-                doublereal *beta, doublereal *y, aocl_int_t *incy)
+void zla_geamv_(integer *trans, integer *m, integer *n, doublereal *alpha, doublecomplex *a, integer *lda, doublecomplex *x, integer *incx, doublereal *beta, doublereal *y, integer *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_geamv inputs: trans %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *trans, *m, *n, *lda, *incx, *incy);
@@ -253,13 +250,13 @@ void zla_geamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, doublereal *alp
     {
         xerbla_("ZLA_GEAMV ", &info, (ftnlen)10);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if(*m == 0 || *n == 0 || *alpha == 0. && *beta == 1.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set LENX and LENY, the lengths of the vectors x and y, and set */
     /* up the start points in X and Y. */
@@ -469,7 +466,7 @@ void zla_geamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, doublereal *alp
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLA_GEAMV */
 }
 /* zla_geamv__ */

@@ -115,9 +115,7 @@ the matrix is singular and its */
 /* > \ingroup complexHEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void chetri_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
-             scomplex *work, aocl_int_t *info)
+void chetri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -147,7 +145,7 @@ void chetri_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
     VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * ), ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
+    void chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * ), ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
     integer kstep;
     logical upper;
     extern /* Subroutine */
@@ -199,13 +197,13 @@ void chetri_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
         i__1 = -(*info);
         xerbla_("CHETRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if(upper)
@@ -217,7 +215,7 @@ void chetri_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
             if(ipiv[*info] > 0 && (a[i__1].real == 0.f && a[i__1].imag == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L10: */
         }
@@ -232,7 +230,7 @@ void chetri_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
             if(ipiv[*info] > 0 && (a[i__2].real == 0.f && a[i__2].imag == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L20: */
         }
@@ -589,7 +587,7 @@ void chetri_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
     L80:;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHETRI */
 }
 /* chetri_ */

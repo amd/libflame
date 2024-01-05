@@ -214,9 +214,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ztfttr_(char *transr, char *uplo, aocl_int_t *n, dcomplex *arf, dcomplex *a,
-             aocl_int_t *lda, aocl_int_t *info)
+void ztfttr_(char *transr, char *uplo, integer *n, doublecomplex *arf, doublecomplex *a, integer *lda, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztfttr inputs: transr %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*transr, *uplo, *n, *lda);
@@ -283,7 +281,7 @@ void ztfttr_(char *transr, char *uplo, aocl_int_t *n, dcomplex *arf, dcomplex *a
         i__1 = -(*info);
         xerbla_("ZTFTTR", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n <= 1)
@@ -303,7 +301,7 @@ void ztfttr_(char *transr, char *uplo, aocl_int_t *n, dcomplex *arf, dcomplex *a
             }
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Size of array ARF(1:2,0:nt-1) */
     nt = *n * (*n + 1) / 2;
@@ -677,7 +675,7 @@ void ztfttr_(char *transr, char *uplo, aocl_int_t *n, dcomplex *arf, dcomplex *a
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTFTTR */
 }
 /* ztfttr_ */

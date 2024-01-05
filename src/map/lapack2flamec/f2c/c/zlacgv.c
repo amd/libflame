@@ -69,8 +69,7 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlacgv_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx)
+void zlacgv_(integer *n, doublecomplex *x, integer *incx)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlacgv inputs: n %" FLA_IS ", incx %%" FLA_IS "",*n, *incx);
@@ -129,7 +128,7 @@ void zlacgv_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx)
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLACGV */
 }
 /* zlacgv_ */

@@ -565,12 +565,7 @@ defaults */
 /* > \ingroup realGBsolve */
 /* ===================================================================== */
 /* Subroutine */
-void sgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integer *nrhs,
-              real *ab, integer *ldab, real *afb, integer *ldafb, integer *ipiv, char *equed,
-              real *r__, real *c__, real *b, integer *ldb, real *x, integer *ldx, real *rcond,
-              real *rpvgrw, real *berr, integer *n_err_bnds__, real *err_bnds_norm__,
-              real *err_bnds_comp__, integer *nparams, real *params, real *work, integer *iwork,
-              integer *info)
+void sgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, integer *nrhs, real *ab, integer *ldab, real *afb, integer *ldafb, integer *ipiv, char *equed, real *r__, real *c__, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real * rpvgrw, real *berr, integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real *params, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgbsvxx inputs: fact %c ,trans %c ,n %" FLA_IS ",kl %" FLA_IS ",ku %" FLA_IS
@@ -594,9 +589,7 @@ void sgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
     real colcnd;
     extern real slamch_(char *);
     extern /* Subroutine */
-        void
-        slaqgb_(integer *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                real *, real *, real *, char *);
+    void slaqgb_(integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, char *);
     logical nofact;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -604,27 +597,15 @@ void sgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
     integer infequ;
     logical colequ;
     extern /* Subroutine */
-        void
-        sgbtrf_(integer *, integer *, integer *, integer *, real *, integer *, integer *,
-                integer *),
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void sgbtrf_(integer *, integer *, integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     real rowcnd;
     logical notran;
     extern /* Subroutine */
-        void
-        sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *,
-                real *, integer *, integer *);
+    void sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     real smlnum;
     logical rowequ;
     extern /* Subroutine */
-        void
-        slascl2_(integer *, integer *, real *, real *, integer *),
-        sgbequb_(integer *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                 real *, real *, real *, integer *),
-        sgbrfsx_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *,
-                 real *, integer *, integer *, real *, real *, real *, integer *, real *, integer *,
-                 real *, real *, integer *, real *, real *, integer *, real *, real *, integer *,
-                 integer *);
+    void slascl2_(integer *, integer *, real *, real *, integer *), sgbequb_(integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *), sgbrfsx_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -808,7 +789,7 @@ void sgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
     {
         i__1 = -(*info);
         xerbla_("SGBSVXX", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     if(equil)
     {
@@ -877,8 +858,7 @@ void sgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
             /* Pivot in column INFO is exactly 0 */
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
-            *rpvgrw = sla_gbrpvgrw_(n, kl, ku, info, &ab[ab_offset], ldab, &afb[afb_offset], ldafb);
-            AOCL_DTL_TRACE_LOG_EXIT
+            *rpvgrw = sla_gbrpvgrw_(n, kl, ku, info, &ab[ab_offset], ldab, & afb[afb_offset], ldafb);
             return;
         }
     }
@@ -902,7 +882,6 @@ void sgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
     {
         slascl2_(n, nrhs, &r__[1], &x[x_offset], ldx);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGBSVXX */
 }

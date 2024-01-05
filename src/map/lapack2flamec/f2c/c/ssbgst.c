@@ -162,10 +162,7 @@ LDX >= 1 otherwise. */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ssbgst_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *kb, real *ab,
-             aocl_int_t *ldab, real *bb, aocl_int_t *ldbb, real *x, aocl_int_t *ldx, real *work,
-             aocl_int_t *info)
+void ssbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, real *ab, integer *ldab, real *bb, integer *ldbb, real * x, integer *ldx, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -185,14 +182,18 @@ void ssbgst_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *
     real ra1;
     aocl_int64_t j1t, j2t;
     real bii;
-    aocl_int64_t kbt, nrt, inca;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer kbt, nrt, inca;
+    extern /* Subroutine */
+    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *), srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
     logical upper, wantx;
     extern /* Subroutine */
-    int slar2v_(integer *, real *, real *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void slar2v_(integer *, real *, real *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical update;
     extern /* Subroutine */
-    int slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *), slargv_(integer *, real *, integer *, real *, integer *, real *, integer *), slartv_(integer *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *), slargv_(integer *, real *, integer *, real *, integer *, real *, integer *), slartv_(integer *, real *, integer *, real *, integer *, real *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -268,13 +269,13 @@ void ssbgst_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *
         i__1 = -(*info);
         xerbla_("SSBGST", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     inca = *ldab * ka1;
     /* Initialize X to the unit matrix, if needed */
@@ -1103,7 +1104,7 @@ L490:
             if(*ka == 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             goto L490;
         }
@@ -1114,7 +1115,7 @@ L490:
         if(i__ < 2)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     if(i__ < m - kbt)

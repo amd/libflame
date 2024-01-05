@@ -124,16 +124,16 @@
  /* > */
  /* ===================================================================== */
  /* Subroutine */
- int sgeqr2p_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *info) {
+ void sgeqr2p_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *info) {
  /* System generated locals */
  integer a_dim1, a_offset, i__1, i__2, i__3;
  /* Local variables */
  integer i__, k;
  extern /* Subroutine */
- int slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+ void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
  real aii;
  extern /* Subroutine */
- int slarfgp_(integer *, real *, real *, integer *, real *);
+ void slarfgp_(integer *, real *, real *, integer *, real *);
  /* -- LAPACK computational routine -- */
  /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
  /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -172,7 +172,7 @@
  if (*info != 0) {
  i__1 = -(*info);
  xerbla_("SGEQR2P", &i__1, (ftnlen)7);
- return 0;
+ return;
  }
  k = fla_min(*m,*n);
  i__1 = k;
@@ -195,7 +195,7 @@
  }
  /* L10: */
  }
- return 0;
+ return;
  /* End of SGEQR2P */
  }
  /* sgeqr2p_ */

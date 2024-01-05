@@ -134,7 +134,7 @@ static integer c_n1 = -1;
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zsytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *tb, integer *ltb, integer *ipiv, integer *ipiv2, doublecomplex *b, integer *ldb, integer *info)
+void zsytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *tb, integer *ltb, integer *ipiv, integer *ipiv2, doublecomplex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsytrs_aa_2stage inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ltb %" FLA_IS ", ldb %" FLA_IS "", *uplo, *n, *nrhs, *lda, *ltb, *ldb);
@@ -145,7 +145,7 @@ int zsytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, i
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
+    void ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -207,13 +207,13 @@ int zsytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, i
         i__1 = -(*info);
         xerbla_("ZSYTRS_AA_2STAGE", &i__1, (ftnlen)16);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Read NB and compute LDTB */
     nb = (integer) tb[1].r;
@@ -267,7 +267,7 @@ int zsytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, i
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSYTRS_AA_2STAGE */
 }
 /* zsytrs_aa_2stage__ */

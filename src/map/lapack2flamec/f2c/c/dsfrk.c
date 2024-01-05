@@ -161,9 +161,7 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dsfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k, doublereal *alpha,
-            doublereal *a, aocl_int_t *lda, doublereal *beta, doublereal *c__)
+void dsfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, doublereal *a, integer *lda, doublereal *beta, doublereal *c__)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsfrk inputs: transr %c, uplo %c, trans %c, n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",*transr, *uplo, *trans, *n, *k, *lda);
@@ -172,11 +170,13 @@ void dsfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k,
     /* Local variables */
     aocl_int64_t j, n1, n2, nk, info;
     logical normaltransr;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t nrowa;
+    extern /* Subroutine */
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *);
+    integer nrowa;
     logical lower;
     extern /* Subroutine */
-    int dsyrk_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dsyrk_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd, notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -247,7 +247,7 @@ void dsfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k,
         i__1 = -info;
         xerbla_("DSFRK ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     /* The quick return case: ((ALPHA.EQ.0).AND.(BETA.NE.ZERO)) is not */
@@ -255,7 +255,7 @@ void dsfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k,
     if(*n == 0 || (*alpha == 0. || *k == 0) && *beta == 1.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*alpha == 0. && *beta == 0.)
     {
@@ -265,7 +265,7 @@ void dsfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k,
             c__[j] = 0.;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* C is N-by-N. */
     /* If N is odd, set NISODD = .TRUE., and N1 and N2. */
@@ -514,7 +514,7 @@ void dsfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k,
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSFRK */
 }
 /* dsfrk_ */

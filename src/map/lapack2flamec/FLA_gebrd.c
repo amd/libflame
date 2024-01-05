@@ -29,7 +29,7 @@
 extern TLS_CLASS_SPEC fla_bidiagut_t *fla_bidiagut_cntl_plain;
 
 #define LAPACK_gebrd(prefix)                                                          \
-    int F77_##prefix##gebrd(integer *m,                                               \
+    void F77_##prefix##gebrd(integer *m,                                               \
                             integer *n,                                               \
                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A, \
                             PREFIX2LAPACK_REALDEF(prefix) * buff_d,                   \
@@ -169,7 +169,7 @@ LAPACK_gebrd(s)
             fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_gebrd(d)
 {
@@ -192,7 +192,7 @@ LAPACK_gebrd(d)
             fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
@@ -217,7 +217,7 @@ LAPACK_gebrd(c)
             fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_gebrd(z)
 {
@@ -240,12 +240,12 @@ LAPACK_gebrd(z)
             fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 
 #define LAPACK_gebd2(prefix)                                                          \
-    int F77_##prefix##gebd2(integer *m,                                               \
+    void F77_##prefix##gebd2(integer *m,                                               \
                             integer *n,                                               \
                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A, \
                             PREFIX2LAPACK_REALDEF(prefix) * buff_d,                   \
@@ -276,7 +276,7 @@ LAPACK_gebd2(s)
             fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_gebd2(d)
 {
@@ -298,7 +298,7 @@ LAPACK_gebd2(d)
             fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
@@ -323,7 +323,7 @@ LAPACK_gebd2(c)
             fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_gebd2(z)
 {
@@ -346,7 +346,7 @@ LAPACK_gebd2(z)
             fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 

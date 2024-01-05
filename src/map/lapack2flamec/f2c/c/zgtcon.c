@@ -140,10 +140,7 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complex16GTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zgtcon_(char *norm, aocl_int_t *n, dcomplex *dl, dcomplex *d__, dcomplex *du,
-             dcomplex *du2, aocl_int_t *ipiv, doublereal *anorm, doublereal *rcond,
-             dcomplex *work, aocl_int_t *info)
+void zgtcon_(char *norm, integer *n, doublecomplex *dl, doublecomplex *d__, doublecomplex *du, doublecomplex *du2, integer * ipiv, doublereal *anorm, doublereal *rcond, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgtcon inputs: norm %c, n %" FLA_IS "",*norm, *n);
@@ -155,11 +152,11 @@ void zgtcon_(char *norm, aocl_int_t *n, dcomplex *dl, dcomplex *d__, dcomplex *d
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     extern /* Subroutine */
-    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
     extern /* Subroutine */
-    int zgttrs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zgttrs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -210,7 +207,7 @@ void zgtcon_(char *norm, aocl_int_t *n, dcomplex *dl, dcomplex *d__, dcomplex *d
         i__1 = -(*info);
         xerbla_("ZGTCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.;
@@ -218,12 +215,12 @@ void zgtcon_(char *norm, aocl_int_t *n, dcomplex *dl, dcomplex *d__, dcomplex *d
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(*anorm == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check that D(1:N) is non-zero. */
     i__1 = *n;
@@ -233,7 +230,7 @@ void zgtcon_(char *norm, aocl_int_t *n, dcomplex *dl, dcomplex *d__, dcomplex *d
         if(d__[i__2].real == 0. && d__[i__2].imag == 0.)
         {
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* L10: */
     }
@@ -270,7 +267,7 @@ L20:
         *rcond = 1. / ainvnm / *anorm;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGTCON */
 }
 /* zgtcon_ */

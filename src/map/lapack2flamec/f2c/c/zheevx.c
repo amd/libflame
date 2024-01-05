@@ -255,12 +255,7 @@ the routine */
 /* > \ingroup complex16HEeigen */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zheevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
-             doublereal *vl, doublereal *vu, aocl_int_t *il, aocl_int_t *iu, doublereal *abstol,
-             aocl_int_t *m, doublereal *w, dcomplex *z__, aocl_int_t *ldz, dcomplex *work,
-             aocl_int_t *lwork, doublereal *rwork, aocl_int_t *iwork, aocl_int_t *ifail,
-             aocl_int_t *info)
+void zheevx_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m, doublereal * w, doublecomplex *z__, integer *ldz, doublecomplex *work, integer * lwork, doublereal *rwork, integer *iwork, integer *ifail, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zheevr inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", vl %lf, vu %lf, abstol %lf, ldz %" FLA_IS ", lwork %" FLA_IS "", *jobz, *range, *uplo, *n, *lda, *il, *iu, *vl, *vu, *abstol, *ldz);
@@ -277,12 +272,18 @@ void zheevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *a, ao
     aocl_int64_t imax;
     doublereal rmin, rmax;
     logical test;
-    aocl_int64_t itmp1, indee;
+    integer itmp1, indee;
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     char order[1];
+    extern /* Subroutine */
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical lower, wantz;
+    extern /* Subroutine */
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     logical alleig, indeig;
     aocl_int64_t iscale, indibl;
@@ -292,13 +293,24 @@ void zheevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *a, ao
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_( integer *, doublereal *, doublecomplex *, integer *);
     doublereal abstll, bignum;
-    aocl_int64_t indiwk, indisp, indtau;
-    aocl_int64_t indrwk, indwrk;
-    aocl_int64_t lwkmin;
-    aocl_int64_t llwork, nsplit;
+    extern doublereal zlanhe_(char *, char *, integer *, doublecomplex *, integer *, doublereal *);
+    integer indiwk, indisp, indtau;
+    extern /* Subroutine */
+    void dsterf_(integer *, doublereal *, doublereal *, integer *), dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    integer indrwk, indwrk;
+    extern /* Subroutine */
+    void zhetrd_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, integer *, integer *);
+    integer lwkmin;
+    extern /* Subroutine */
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    integer llwork, nsplit;
     doublereal smlnum;
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    void zstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
+    extern /* Subroutine */
+    void zsteqr_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublereal *, integer *), zungtr_(char *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *), zunmtr_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -422,19 +434,19 @@ void zheevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *a, ao
         i__1 = -(*info);
         xerbla_("ZHEEVX", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -462,7 +474,7 @@ void zheevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *a, ao
             z__[i__1].imag = 0.; // , expr subst
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -659,7 +671,7 @@ L40:
     work[1].r = (doublereal) lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHEEVX */
 }
 /* zheevx_ */

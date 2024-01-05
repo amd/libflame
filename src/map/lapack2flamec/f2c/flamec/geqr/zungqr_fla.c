@@ -129,22 +129,20 @@ the routine */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
-                aocl_int64_t *lda, dcomplex *tau, dcomplex *work, aocl_int64_t *lwork,
-                aocl_int64_t *info)
+void zungqr_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex * work, integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
     integer i__, j, l, ib, nb, ki, kk, nx, iws, nbmin, iinfo;
     extern /* Subroutine */
-    int zung2r_fla(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zung2r_fla(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer ldwork;
     extern /* Subroutine */
-    int zlarft_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zlarft_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -205,7 +203,7 @@ void zungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
     {
         i__1 = -(*info);
         xerbla_("ZUNGQR", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if(lquery)
     {
@@ -214,8 +212,8 @@ void zungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
     /* Quick return if possible */
     if(*n <= 0)
     {
-        work[1].real = 1.;
-        work[1].imag = 0.; // , expr subst
+        work[1].r = 1.;
+        work[1].i = 0.; // , expr subst
         return;
     }
     nbmin = 2;
@@ -326,8 +324,8 @@ void zungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
             /* L50: */
         }
     }
-    work[1].real = (doublereal)iws;
-    work[1].imag = 0.; // , expr subst
+    work[1].r = (doublereal) iws;
+    work[1].i = 0.; // , expr subst
     return;
     /* End of ZUNGQR */
 }

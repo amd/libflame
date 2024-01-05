@@ -119,8 +119,7 @@ static doublereal c_b16 = -1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dpptrf_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *info)
+void dpptrf_(char *uplo, integer *n, doublereal *ap, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpptrf inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
@@ -132,10 +131,13 @@ void dpptrf_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *info)
     /* Local variables */
     aocl_int64_t j, jc, jj;
     doublereal ajj;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
+    extern /* Subroutine */
+    void dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *), dscal_(integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -175,13 +177,13 @@ void dpptrf_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *info)
         i__1 = -(*info);
         xerbla_("DPPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(upper)
     {
@@ -245,7 +247,7 @@ L30:
     *info = j;
 L40:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPPTRF */
 }
 /* dpptrf_ */

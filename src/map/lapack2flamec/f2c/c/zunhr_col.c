@@ -263,7 +263,7 @@ INB-by-M}
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int zunhr_col_(integer *m, integer *n, integer *nb, doublecomplex *a, integer *lda, doublecomplex *t, integer *ldt, doublecomplex *d__, integer *info)
+void zunhr_col_(integer *m, integer *n, integer *nb, doublecomplex *a, integer *lda, doublecomplex *t, integer *ldt, doublecomplex *d__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zunhr_col inputs : m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS "", *m, *n, *nb, *lda, *ldt);
@@ -274,10 +274,10 @@ int zunhr_col_(integer *m, integer *n, integer *nb, doublecomplex *a, integer *l
     /* Local variables */
     integer nplusone, i__, j, jb, jnb;
     extern /* Subroutine */
-    int zlaunhr_col_getrfnp_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zlaunhr_col_getrfnp_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer iinfo;
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer jbtemp1, jbtemp2;
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -340,13 +340,13 @@ int zunhr_col_(integer *m, integer *n, integer *nb, doublecomplex *a, integer *l
         i__1 = -(*info);
         xerbla_("ZUNHR_COL", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* On input, the M-by-N matrix A contains the unitary */
     /* M-by-N matrix Q_in. */
@@ -467,7 +467,7 @@ int zunhr_col_(integer *m, integer *n, integer *nb, doublecomplex *a, integer *l
         ztrsm_("R", "L", "C", "U", &jnb, &jnb, &c_b1, &a[jb + jb * a_dim1], lda, &t[jb * t_dim1 + 1], ldt);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZUNHR_COL */
 }
 /* zunhr_col__ */

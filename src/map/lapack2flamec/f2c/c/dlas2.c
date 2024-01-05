@@ -185,7 +185,7 @@ void dlas2_(doublereal *f, doublereal *g, doublereal *h__, doublereal *ssmin, do
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAS2 */
 }
 /* dlas2_ */

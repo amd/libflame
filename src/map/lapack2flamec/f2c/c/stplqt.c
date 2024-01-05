@@ -176,7 +176,7 @@ that is, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int stplqt_(integer *m, integer *n, integer *l, integer *mb, real *a, integer *lda, real *b, integer *ldb, real *t, integer *ldt, real *work, integer *info)
+void stplqt_(integer *m, integer *n, integer *l, integer *mb, real *a, integer *lda, real *b, integer *ldb, real *t, integer *ldt, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -252,13 +252,13 @@ int stplqt_(integer *m, integer *n, integer *l, integer *mb, real *a, integer *l
         i__1 = -(*info);
         xerbla_("STPLQT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *m;
     i__2 = *mb;
@@ -291,7 +291,7 @@ int stplqt_(integer *m, integer *n, integer *l, integer *mb, real *a, integer *l
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of STPLQT */
 }
 /* stplqt_ */

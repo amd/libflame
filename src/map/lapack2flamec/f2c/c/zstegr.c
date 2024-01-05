@@ -252,12 +252,7 @@ the */
 /* > Christof Voemel, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zstegr_(char *jobz, char *range, aocl_int_t *n, doublereal *d__, doublereal *e, doublereal *vl,
-             doublereal *vu, aocl_int_t *il, aocl_int_t *iu, doublereal *abstol, aocl_int_t *m,
-             doublereal *w, dcomplex *z__, aocl_int_t *ldz, aocl_int_t *isuppz,
-             doublereal *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork,
-             aocl_int_t *info)
+void zstegr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m, doublereal *w, doublecomplex *z__, integer *ldz, integer *isuppz, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zstegr inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", m %" FLA_IS ", ldz %" FLA_IS "",*jobz, *range, *n, *il, *iu, *m, *ldz);
@@ -265,6 +260,8 @@ void zstegr_(char *jobz, char *range, aocl_int_t *n, doublereal *d__, doublereal
     aocl_int64_t z_dim1, z_offset;
     /* Local variables */
     logical tryrac;
+    extern /* Subroutine */
+    void zstemr_(char *, char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, doublereal *, doublecomplex *, integer *, integer *, integer *, logical *, doublereal *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -295,6 +292,6 @@ void zstegr_(char *jobz, char *range, aocl_int_t *n, doublereal *d__, doublereal
     zstemr_(jobz, range, n, &d__[1], &e[1], vl, vu, il, iu, m, &w[1], &z__[ z_offset], ldz, n, &isuppz[1], &tryrac, &work[1], lwork, &iwork[1], liwork, info);
     /* End of ZSTEGR */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* zstegr_ */

@@ -135,9 +135,7 @@
 /* > \ingroup doubleGEauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlaqge_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *r__,
-             doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, char *equed)
+void dlaqge_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqge inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
@@ -175,7 +173,7 @@ void dlaqge_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doubl
     {
         *(unsigned char *)equed = 'N';
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize LARGE and SMALL. */
     small_val = dlamch_("Safe minimum") / dlamch_("Precision");
@@ -240,7 +238,7 @@ void dlaqge_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doubl
         *(unsigned char *)equed = 'B';
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAQGE */
 }
 /* dlaqge_ */

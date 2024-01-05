@@ -178,7 +178,7 @@ i off-diagonal elements of an intermediate */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ssyevd_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void ssyevd_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ssyevd inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "", *jobz, *uplo, *n, *lda, *lwork);
@@ -196,7 +196,7 @@ int ssyevd_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, 
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     integer lwmin, liopt;
     logical lower, wantz;
     integer indwk2, llwrk2, iscale;
@@ -207,19 +207,19 @@ int ssyevd_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, 
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
     integer indtau;
     extern /* Subroutine */
-    int sstedc_(char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void sstedc_(char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer indwrk, liwmin;
     extern /* Subroutine */
-    int ssterf_(integer *, real *, real *, integer *);
+    void ssterf_(integer *, real *, real *, integer *);
     extern real slansy_(char *, char *, integer *, real *, integer *, real *);
     integer llwork;
     real smlnum;
     logical lquery;
     extern /* Subroutine */
-    int sormtr_(char *, char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), ssytrd_(char *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *);
+    void sormtr_(char *, char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), ssytrd_(char *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *);
     extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -314,18 +314,18 @@ int ssyevd_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, 
         i__1 = -(*info);
         xerbla_("SSYEVD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -335,7 +335,7 @@ int ssyevd_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, 
             a[a_dim1 + 1] = 1.f;
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -392,7 +392,7 @@ int ssyevd_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, 
     work[1] =  sroundup_lwork(&lopt);
     iwork[1] = liopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SSYEVD */
 }
 /* ssyevd_ */

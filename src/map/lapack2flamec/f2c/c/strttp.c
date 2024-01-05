@@ -100,8 +100,7 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void strttp_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, real *ap, aocl_int_t *info)
+void strttp_(char *uplo, integer *n, real *a, integer *lda, real *ap, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_strttp(uplo, n, a, lda, ap, info);
@@ -172,7 +171,7 @@ void aocl_lapack_strttp(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
     {
         i__1 = -(*info);
         xerbla_("STRTTP", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     if(lower)
     {
@@ -202,7 +201,6 @@ void aocl_lapack_strttp(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STRTTP */
 }

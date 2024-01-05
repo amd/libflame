@@ -250,10 +250,7 @@ IHI <= IHIZ <= N. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void claqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
-             scomplex *h__, aocl_int_t *ldh, scomplex *w, aocl_int_t *iloz, aocl_int_t *ihiz,
-             scomplex *z__, aocl_int_t *ldz, scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+void claqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, complex *h__, integer *ldh, complex *w, integer *iloz, integer *ihiz, complex *z__, integer *ldz, complex * work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -274,16 +271,21 @@ void claqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
     /* Local variables */
     aocl_int64_t i__, k;
     real s;
-    scomplex aa, bb, cc, dd;
-    aocl_int64_t ld, nh, it, ks, kt, ku, kv, ls, ns, nw;
-    scomplex tr2, det;
-    aocl_int64_t inf, kdu, nho, nve, kwh, nsr, nwr, kwv, ndec, ndfl, kbot, nmin;
-    scomplex swap;
-    aocl_int64_t ktop;
-    scomplex zdum[1] /* was [1][1] */
-        ;
-    aocl_int64_t kacc22, itmax, nsmax, nwmax, kwtop;
-    aocl_int64_t nibble;
+    complex aa, bb, cc, dd;
+    integer ld, nh, it, ks, kt, ku, kv, ls, ns, nw;
+    complex tr2, det;
+    integer inf, kdu, nho, nve, kwh, nsr, nwr, kwv, ndec, ndfl, kbot, nmin;
+    complex swap;
+    integer ktop;
+    complex zdum[1] /* was [1][1] */
+    ;
+    integer kacc22, itmax, nsmax, nwmax, kwtop;
+    extern /* Subroutine */
+    void claqr2_(logical *, logical *, integer *, integer *, integer *, integer *, complex *, integer *, integer *, integer *, complex *, integer *, integer *, integer *, complex *, complex *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *), claqr5_(logical *, logical *, integer *, integer *, integer *, integer *, integer *, complex *, complex *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, integer *, complex *, integer *);
+    integer nibble;
+    extern /* Subroutine */
+    void clahqr_(logical *, logical *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     char jbcmpz[2];
     scomplex rtdisc;
     aocl_int64_t nwupbd;
@@ -343,7 +345,7 @@ void claqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n <= 15)
     {
@@ -424,7 +426,7 @@ void claqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
             work[1].r = q__1.r;
             work[1].i = q__1.i; // , expr subst
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         /* ==== CLAHQR/CLAQR0 crossover point ==== */
         nmin = ilaenv_(&c__12, "CLAQR4", jbcmpz, n, ilo, ihi, lwork);
@@ -815,6 +817,6 @@ void claqr4_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aoc
     work[1].imag = q__1.imag; // , expr subst
     /* ==== End of CLAQR4 ==== */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* claqr4_ */

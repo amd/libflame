@@ -385,7 +385,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int clarfb_gett_(char *ident, integer *m, integer *n, integer *k, complex *t, integer *ldt, complex *a, integer *lda, complex *b, integer *ldb, complex *work, integer *ldwork)
+void clarfb_gett_(char *ident, integer *m, integer *n, integer *k, complex *t, integer *ldt, complex *a, integer *lda, complex *b, integer *ldb, complex *work, integer *ldwork)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5;
@@ -394,10 +394,10 @@ int clarfb_gett_(char *ident, integer *m, integer *n, integer *k, complex *t, in
     integer i__, j;
     logical lnotident;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -432,7 +432,7 @@ int clarfb_gett_(char *ident, integer *m, integer *n, integer *k, complex *t, in
     /* Function Body */
     if (*m < 0 || *n <= 0 || *k == 0 || *k > *n)
     {
-        return 0;
+        return;
     }
     lnotident = ! lsame_(ident, "I");
     /* ------------------------------------------------------------------ */
@@ -614,7 +614,7 @@ int clarfb_gett_(char *ident, integer *m, integer *n, integer *k, complex *t, in
             a[i__3].i = q__1.i; // , expr subst
         }
     }
-    return 0;
+    return;
     /* End of CLARFB_GETT */
 }
 /* clarfb_gett__ */

@@ -109,9 +109,7 @@
 /* > \ingroup doublePTsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dptsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, doublereal *b,
-            aocl_int_t *ldb, aocl_int_t *info)
+void dptsv_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dptsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
@@ -160,7 +158,7 @@ void dptsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, dou
         i__1 = -(*info);
         xerbla_("DPTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the L*D*L**T (or U**T*D*U) factorization of A. */
     aocl_lapack_dpttrf(n, &d__[1], &e[1], info);
@@ -170,7 +168,7 @@ void dptsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, dou
         aocl_lapack_dpttrs(n, nrhs, &d__[1], &e[1], &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPTSV */
 }
 /* dptsv_ */

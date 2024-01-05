@@ -135,7 +135,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zpstf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *piv, integer *rank, doublereal *tol, doublereal *work, integer *info)
+void zpstf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *piv, integer *rank, doublereal *tol, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpstf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", tol %lf",*uplo, *n, *lda, *tol);
@@ -155,19 +155,19 @@ int zpstf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *piv
     doublereal dtemp;
     integer itemp;
     extern /* Subroutine */
-    int zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     doublereal dstop;
     logical upper;
     doublecomplex ztemp;
     extern /* Subroutine */
-    int zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_( integer *, doublereal *, doublecomplex *, integer *);
     extern integer dmaxloc_(doublereal *, integer *);
     extern /* Subroutine */
-    int zlacgv_(integer *, doublecomplex *, integer *) ;
+    void zlacgv_(integer *, doublecomplex *, integer *) ;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -215,13 +215,13 @@ int zpstf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *piv
         i__1 = -(*info);
         xerbla_("ZPSTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize PIV */
     i__1 = *n;
@@ -494,7 +494,7 @@ L190: /* Rank is number of steps completed. Set INFO = 1 to signal */
     *info = 1;
     AOCL_DTL_TRACE_LOG_EXIT
 L200:
-    return 0;
+    return;
     /* End of ZPSTF2 */
 }
 /* zpstf2_ */

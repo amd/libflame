@@ -206,9 +206,7 @@ v(i+1:n) is stored on exit in A(i+1:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, dcomplex *a, aocl_int_t *lda,
-             doublereal *e, dcomplex *tau, dcomplex *w, aocl_int_t *ldw)
+void zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda, doublereal *e, doublecomplex *tau, doublecomplex *w, integer *ldw)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlatrd inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldw %" FLA_IS "",*uplo, *n, *nb, *lda, *ldw);
@@ -217,9 +215,15 @@ void zlatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, dcomplex *a, aocl_int_t 
     doublereal d__1;
     dcomplex z__1, z__2, z__3, z__4;
     /* Local variables */
-    aocl_int64_t i__, iw;
-    dcomplex alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, iw;
+    doublecomplex alpha;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+    extern /* Double Complex */
+    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    extern /* Subroutine */
+    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zhemv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -254,7 +258,7 @@ void zlatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, dcomplex *a, aocl_int_t 
     if(*n <= 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(lsame_(uplo, "U", 1, 1))
     {
@@ -464,7 +468,7 @@ void zlatrd_(char *uplo, aocl_int_t *n, aocl_int_t *nb, dcomplex *a, aocl_int_t 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLATRD */
 }
 /* zlatrd_ */

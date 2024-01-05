@@ -155,7 +155,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int claqz1_(logical *ilq, logical *ilz, integer *k, integer * istartm, integer *istopm, integer *ihi, complex *a, integer *lda, complex *b, integer *ldb, integer *nq, integer *qstart, complex *q, integer *ldq, integer *nz, integer *zstart, complex *z__, integer * ldz)
+void claqz1_(logical *ilq, logical *ilz, integer *k, integer * istartm, integer *istopm, integer *ihi, complex *a, integer *lda, complex *b, integer *ldb, integer *nq, integer *qstart, complex *q, integer *ldq, integer *nz, integer *zstart, complex *z__, integer * ldz)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1;
@@ -166,7 +166,7 @@ int claqz1_(logical *ilq, logical *ilz, integer *k, integer * istartm, integer *
     real c__;
     complex s, temp;
     extern /* Subroutine */
-    int crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *), clartg_(complex *, complex *, real *, complex *, complex *);
+    void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *), clartg_(complex *, complex *, real *, complex *, complex *);
     /* Arguments */
     /* Parameters */
     /* Local variables */
@@ -242,6 +242,6 @@ int claqz1_(logical *ilq, logical *ilz, integer *k, integer * istartm, integer *
         }
     }
     /* End of CLAQZ1 */
-    return 0;
+    return;
 }
 /* claqz1_ */

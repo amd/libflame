@@ -85,8 +85,7 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slascl2_(aocl_int_t *m, aocl_int_t *n, real *d__, real *x, aocl_int_t *ldx)
+void slascl2_(integer *m, integer *n, real *d__, real *x, integer *ldx)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slascl2(m, n, d__, x, ldx);
@@ -134,7 +133,6 @@ void aocl_lapack_slascl2(aocl_int64_t *m, aocl_int64_t *n, real *d__, real *x, a
             x[i__ + j * x_dim1] *= d__[i__];
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* slascl2_ */

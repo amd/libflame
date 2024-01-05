@@ -170,10 +170,7 @@ the routine */
 /* > \ingroup doubleSYsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dsysv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_int_t *lda,
-            aocl_int_t *ipiv, doublereal *b, aocl_int_t *ldb, doublereal *work, aocl_int_t *lwork,
-            aocl_int_t *info)
+void dsysv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv, doublereal *b, integer *ldb, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsysv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb, *lwork);
@@ -185,6 +182,8 @@ void dsysv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_int
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dsytrf_( char *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
+    extern /* Subroutine */
+    void dsytrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dsytrs2_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -258,12 +257,12 @@ void dsysv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_int
         i__1 = -(*info);
         xerbla_("DSYSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
     aocl_lapack_dsytrf(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
@@ -284,7 +283,7 @@ void dsysv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_int
     }
     work[1] = (doublereal) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYSV */
 }
 /* dsysv_ */

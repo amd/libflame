@@ -181,11 +181,7 @@ static doublereal c_b19 = -1.;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dtrrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a,
-             aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, doublereal *x, aocl_int_t *ldx,
-             doublereal *ferr, doublereal *berr, doublereal *work, aocl_int_t *iwork,
-             aocl_int_t *info)
+void dtrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer * ldb, doublereal *x, integer *ldx, doublereal *ferr, doublereal *berr, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtrrfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *trans, *diag, *n, *nrhs, *lda, *ldb, *ldx);
@@ -201,7 +197,11 @@ void dtrrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
     doublereal safe1, safe2;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
+    extern /* Subroutine */
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
+    extern /* Subroutine */
+    void dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *), dtrsv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *), dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
@@ -289,7 +289,7 @@ void dtrrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
         i__1 = -(*info);
         xerbla_("DTRRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -302,7 +302,7 @@ void dtrrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
             /* L10: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(notran)
     {
@@ -584,7 +584,7 @@ void dtrrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
         /* L250: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTRRFS */
 }
 /* dtrrfs_ */

@@ -349,11 +349,7 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup realGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *lda,
-             real *af, aocl_int_t *ldaf, aocl_int_t *ipiv, char *equed, real *r__, real *c__,
-             real *b, aocl_int_t *ldb, real *x, aocl_int_t *ldx, real *rcond, real *ferr,
-             real *berr, real *work, aocl_int_t *iwork, aocl_int_t *info)
+void sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, integer *ipiv, char *equed, real *r__, real *c__, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgesvx(fact, trans, n, nrhs, a, lda, af, ldaf, ipiv, equed, r__, c__, b, ldb, x,
@@ -398,14 +394,19 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     real colcnd;
     logical nofact;
     extern /* Subroutine */
-    int slaqge_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, char *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgecon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
+    void slaqge_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, char *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgecon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
     real bignum;
     aocl_int64_t infequ;
     logical colequ;
     extern /* Subroutine */
-    int sgeequ_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *), sgerfs_( char *, integer *, integer *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), sgetrf_(integer *, integer *, real *, integer *, integer *, integer *);
+    void sgeequ_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *), sgerfs_( char *, integer *, integer *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), sgetrf_(integer *, integer *, real *, integer *, integer *, integer *);
     real rowcnd;
+    extern /* Subroutine */
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     logical notran;
+    extern real slantr_(char *, char *, char *, integer *, integer *, real *, integer *, real *);
+    extern /* Subroutine */
+    void sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     real smlnum;
     logical rowequ;
     real rpvgrw;
@@ -576,7 +577,7 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     {
         i__1 = -(*info);
         xerbla_("SGESVX", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     if(equil)
     {
@@ -645,7 +646,6 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
             }
             work[1] = rpvgrw;
             *rcond = 0.f;
-            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -730,7 +730,6 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
         *info = *n + 1;
     }
     work[1] = rpvgrw;
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGESVX */
 }

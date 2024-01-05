@@ -171,9 +171,7 @@ if VECT = 'N' or 'V', then Q need not be set. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void chbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab, aocl_int_t *ldab,
-             real *d__, real *e, scomplex *q, aocl_int_t *ldq, scomplex *work, aocl_int_t *info)
+void chbtrd_(char *vect, char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *d__, real *e, complex *q, integer * ldq, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -197,17 +195,21 @@ void chbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab
     scomplex t;
     aocl_int64_t i2, j1, j2, nq, nr, kd1, ibl, iqb, kdn, jin, nrt, kdm1, inca, jend, lend, jinc;
     real abst;
-    aocl_int64_t incx, last;
-    scomplex temp;
-    aocl_int64_t j1end, j1inc;
-    aocl_int64_t iqend;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer incx, last;
+    complex temp;
+    extern /* Subroutine */
+    void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
+    integer j1end, j1inc;
+    extern /* Subroutine */
+    void cscal_(integer *, complex *, complex *, integer *);
+    integer iqend;
+    extern logical lsame_(char *, char *);
     logical initq, wantq, upper;
     extern /* Subroutine */
-    int clar2v_(integer *, complex *, complex *, complex *, integer *, real *, complex *, integer *), clacgv_( integer *, complex *, integer *);
+    void clar2v_(integer *, complex *, complex *, complex *, integer *, real *, complex *, integer *), clacgv_( integer *, complex *, integer *);
     integer iqaend;
     extern /* Subroutine */
-    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clartg_(complex *, complex *, real *, complex *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clargv_(integer *, complex *, integer *, complex *, integer *, real *, integer *), clartv_(integer *, complex *, integer *, complex *, integer *, real *, complex *, integer *);
+    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clartg_(complex *, complex *, real *, complex *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clargv_(integer *, complex *, integer *, complex *, integer *, real *, integer *), clartv_(integer *, complex *, integer *, complex *, integer *, real *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -277,13 +279,13 @@ void chbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab
         i__1 = -(*info);
         xerbla_("CHBTRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize Q to the unit matrix, if needed */
     if(initq)
@@ -873,7 +875,7 @@ void chbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHBTRD */
 }
 /* chbtrd_ */

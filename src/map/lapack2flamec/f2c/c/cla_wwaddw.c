@@ -76,8 +76,7 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cla_wwaddw_(aocl_int_t *n, scomplex *x, scomplex *y, scomplex *w)
+void cla_wwaddw_(integer *n, complex *x, complex *y, complex *w)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -145,6 +144,6 @@ void cla_wwaddw_(aocl_int_t *n, scomplex *x, scomplex *y, scomplex *w)
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* cla_wwaddw__ */

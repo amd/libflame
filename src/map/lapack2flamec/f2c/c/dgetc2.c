@@ -102,7 +102,7 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-int dgetc2_(integer *n, doublereal *a, integer *lda, integer *ipiv, integer *jpiv, integer *info)
+void dgetc2_(integer *n, doublereal *a, integer *lda, integer *ipiv, integer *jpiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgetc2 inputs: n %" FLA_IS ", lda %" FLA_IS "",*n, *lda);
@@ -114,10 +114,10 @@ int dgetc2_(integer *n, doublereal *a, integer *lda, integer *ipiv, integer *jpi
     doublereal eps;
     integer ipv, jpv;
     extern /* Subroutine */
-    int dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal smin, xmax;
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dlabad_(doublereal *, doublereal *);
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     doublereal bignum, smlnum;
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
@@ -155,7 +155,7 @@ int dgetc2_(integer *n, doublereal *a, integer *lda, integer *ipiv, integer *jpi
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set constants to control overflow */
     eps = dlamch_("P");
@@ -173,7 +173,7 @@ int dgetc2_(integer *n, doublereal *a, integer *lda, integer *ipiv, integer *jpi
             a[a_dim1 + 1] = smlnum;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Factorize A using complete pivoting. */
     /* Set pivots less than SMIN to SMIN. */
@@ -250,7 +250,7 @@ int dgetc2_(integer *n, doublereal *a, integer *lda, integer *ipiv, integer *jpi
     ipiv[*n] = *n;
     jpiv[*n] = *n;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGETC2 */
 }
 /* dgetc2_ */

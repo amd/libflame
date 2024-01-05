@@ -125,9 +125,7 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup realGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgtts2_(aocl_int_t *itrans, aocl_int_t *n, aocl_int_t *nrhs, real *dl, real *d__, real *du,
-             real *du2, aocl_int_t *ipiv, real *b, aocl_int_t *ldb)
+void sgtts2_(integer *itrans, integer *n, integer *nrhs, real *dl, real *d__, real *du, real *du2, integer *ipiv, real *b, integer * ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -166,7 +164,7 @@ void sgtts2_(aocl_int_t *itrans, aocl_int_t *n, aocl_int_t *nrhs, real *dl, real
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(*itrans == 0)
     {
@@ -320,6 +318,6 @@ void sgtts2_(aocl_int_t *itrans, aocl_int_t *n, aocl_int_t *nrhs, real *dl, real
     }
     /* End of SGTTS2 */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* sgtts2_ */

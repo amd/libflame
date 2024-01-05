@@ -169,7 +169,7 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgeqr_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t, integer *tsize, doublereal *work, integer *lwork, integer *info)
+void dgeqr_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t, integer *tsize, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgeqr inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", tsize %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *lda, *tsize, *lwork);
@@ -183,11 +183,11 @@ int dgeqr_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t, 
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int dgeqrt_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dgeqrt_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     logical lminws, lquery;
     integer mintsz;
     extern /* Subroutine */
-    int dlatsqr_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dlatsqr_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. -- */
@@ -350,18 +350,18 @@ int dgeqr_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t, 
         i__1 = -(*info);
         xerbla_("DGEQR", &i__1, (ftnlen)5);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* The QR Decomposition */
     if (*m <= *n || mb <= *n || mb >= *m)
@@ -377,7 +377,7 @@ int dgeqr_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t, 
     i__2 = nb * *n; // , expr subst
     work[1] = (doublereal) fla_max(i__1,i__2);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGEQR */
 }
 /* dgeqr_ */

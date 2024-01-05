@@ -198,9 +198,7 @@ static doublereal c_b10 = 1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dpftrs_(char *transr, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a,
-             doublereal *b, aocl_int_t *ldb, aocl_int_t *info)
+void dpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, doublereal *a, doublereal *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpftrs inputs: transr %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*transr, *uplo, *n, *nrhs, *ldb);
@@ -208,7 +206,9 @@ void dpftrs_(char *transr, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublere
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
     logical normaltransr;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void dtfsm_(char *, char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     logical lower;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -266,13 +266,13 @@ void dpftrs_(char *transr, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublere
         i__1 = -(*info);
         xerbla_("DPFTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* start execution: there are two triangular solves */
     if(lower)
@@ -286,7 +286,7 @@ void dpftrs_(char *transr, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublere
         aocl_lapack_dtfsm(transr, "L", uplo, "N", "N", n, nrhs, &c_b10, a, &b[b_offset], ldb);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPFTRS */
 }
 /* dpftrs_ */

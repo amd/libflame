@@ -124,7 +124,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16HEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zhetrs_aa_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *work, integer *lwork, integer *info)
+void zhetrs_aa_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetrs_aa inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb);
@@ -135,7 +135,7 @@ int zhetrs_aa_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgtsv_(integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_(integer *, doublecomplex *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgtsv_(integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_(integer *, doublecomplex *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
@@ -205,7 +205,7 @@ int zhetrs_aa_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
         i__1 = -(*info);
         xerbla_("ZHETRS_AA", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
@@ -213,13 +213,13 @@ int zhetrs_aa_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
         work[1].r = (doublereal) lwkopt;
         work[1].i = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -336,7 +336,7 @@ int zhetrs_aa_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHETRS_AA */
 }
 /* zhetrs_aa__ */

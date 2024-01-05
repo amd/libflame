@@ -136,9 +136,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ctrcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, scomplex *a, aocl_int_t *lda,
-             real *rcond, scomplex *work, real *rwork, aocl_int_t *info)
+void ctrcon_(char *norm, char *uplo, char *diag, integer *n, complex *a, integer *lda, real *rcond, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -162,12 +160,16 @@ void ctrcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, scomplex *a, aoc
     integer isave[3];
     real anorm;
     logical upper;
+    extern /* Subroutine */
+    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     real xnorm;
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern real clantr_(char *, char *, char *, integer *, integer *, complex *, integer *, real *);
     real ainvnm;
+    extern /* Subroutine */
+    void clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *, real *, integer *), csrscl_(integer *, real *, complex *, integer *);
     logical onenrm;
     char normin[1];
     real smlnum;
@@ -235,14 +237,14 @@ void ctrcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, scomplex *a, aoc
         i__1 = -(*info);
         xerbla_("CTRCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     *rcond = 0.f;
     smlnum = slamch_("Safe minimum") * (real) fla_max(1,*n);
@@ -302,7 +304,7 @@ void ctrcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, scomplex *a, aoc
     }
 L20:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTRCON */
 }
 /* ctrcon_ */

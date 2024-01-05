@@ -301,13 +301,7 @@ the routine */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zhegvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t *n,
-             dcomplex *a, aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb, doublereal *vl,
-             doublereal *vu, aocl_int_t *il, aocl_int_t *iu, doublereal *abstol, aocl_int_t *m,
-             doublereal *w, dcomplex *z__, aocl_int_t *ldz, dcomplex *work,
-             aocl_int_t *lwork, doublereal *rwork, aocl_int_t *iwork, aocl_int_t *ifail,
-             aocl_int_t *info)
+void zhegvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublereal *vl, doublereal *vu, integer *il, integer * iu, doublereal *abstol, integer *m, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *work, integer *lwork, doublereal *rwork, integer *iwork, integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhegvx inputs: itype %" FLA_IS ", jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", m %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",*itype, *jobz, *range, *uplo, *n, *lda, *ldb, *il, *iu, *m, *ldz, *lwork);
@@ -318,14 +312,18 @@ void zhegvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     char trans[1];
     logical upper, wantz;
+    extern /* Subroutine */
+    void ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     logical alleig, indeig, valeig;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zhegst_(integer *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zheevx_(char *, char *, char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *);
+    void zhegst_(integer *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zheevx_(char *, char *, char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *);
     integer lwkopt;
     logical lquery;
+    extern /* Subroutine */
+    void zpotrf_(char *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -448,19 +446,19 @@ void zhegvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
         i__1 = -(*info);
         xerbla_("ZHEGVX", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of B. */
     aocl_lapack_zpotrf(uplo, n, &b[b_offset], ldb, info);
@@ -468,7 +466,7 @@ void zhegvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     {
         *info = *n + *info;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     aocl_lapack_zhegst(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
@@ -518,7 +516,7 @@ void zhegvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     work[1].r = (doublereal) lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHEGVX */
 }
 /* zhegvx_ */

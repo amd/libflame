@@ -118,9 +118,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slarfx_(char *side, aocl_int_t *m, aocl_int_t *n, real *v, real *tau, real *c__,
-             aocl_int_t *ldc, real *work)
+void slarfx_(char *side, integer *m, integer *n, real *v, real *tau, real *c__, integer *ldc, real *work)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slarfx(side, m, n, v, tau, c__, ldc, work);
@@ -144,7 +142,9 @@ void aocl_lapack_slarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, r
     /* Local variables */
     aocl_int64_t j;
     real t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10, sum;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -172,7 +172,6 @@ void aocl_lapack_slarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, r
     /* Function Body */
     if(*tau == 0.f)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lsame_(side, "L", 1, 1))
@@ -750,7 +749,6 @@ void aocl_lapack_slarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, r
         goto L410;
     }
 L410:
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARFX */
 }

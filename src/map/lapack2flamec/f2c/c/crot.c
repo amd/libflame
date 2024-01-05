@@ -98,9 +98,7 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void crot_(aocl_int_t *n, scomplex *cx, aocl_int_t *incx, scomplex *cy, aocl_int_t *incy, real *c__,
-           scomplex *s)
+void crot_(integer *n, complex *cx, integer *incx, complex * cy, integer *incy, real *c__, complex *s)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -139,7 +137,7 @@ void crot_(aocl_int_t *n, scomplex *cx, aocl_int_t *incx, scomplex *cy, aocl_int
     if(*n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(*incx == 1 && *incy == 1)
     {
@@ -186,7 +184,7 @@ void crot_(aocl_int_t *n, scomplex *cx, aocl_int_t *incx, scomplex *cy, aocl_int
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* Code for both increments equal to 1 */
 L20:
 	sr = s->r;
@@ -215,6 +213,6 @@ L20:
         /* L30: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* crot_ */

@@ -127,10 +127,10 @@ int lapack_sorglq(integer *m, integer *n, integer *k, real *a, integer *lda, rea
     int lapack_sorgl2(integer *, integer *, integer *, real *, integer *, real *, real *, integer *);
     integer ib, nb, ki, kk, nx;
     extern /* Subroutine */
-    int slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
+    void slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
     integer iws;

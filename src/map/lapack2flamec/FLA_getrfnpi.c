@@ -49,7 +49,7 @@ extern void DTL_Trace(
 		const int8 *pi8Message);
 
 #define LAPACK_getrfnpi(prefix)                                                       \
-  int F77_ ## prefix ## getrfnpi( integer* m,                                             \
+  void F77_ ## prefix ## getrfnpi( integer* m,                                             \
                                   integer* n,                                             \
                                   integer* nfact,                                         \
                                   PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
@@ -111,7 +111,7 @@ LAPACK_getrfnpi(s)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_getrfnpi(d)
 {
@@ -130,7 +130,7 @@ LAPACK_getrfnpi(d)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_getrfnpi(c)
 {
@@ -149,7 +149,7 @@ LAPACK_getrfnpi(c)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_getrfnpi(z)
 {
@@ -168,7 +168,7 @@ LAPACK_getrfnpi(z)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 

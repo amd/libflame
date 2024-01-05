@@ -149,10 +149,7 @@
 /* > \ingroup unbdb5 */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sorbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, real *x1, aocl_int_t *incx1, real *x2,
-              aocl_int_t *incx2, real *q1, aocl_int_t *ldq1, real *q2, aocl_int_t *ldq2, real *work,
-              aocl_int_t *lwork, aocl_int_t *info)
+void sorbdb5_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, real *x2, integer *incx2, real *q1, integer *ldq1, real *q2, integer *ldq2, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -239,7 +236,7 @@ void sorbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, real *x1, aocl_int_
         i__1 = -(*info);
         xerbla_("SORBDB5", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     eps = slamch_("Precision");
     /* Project X onto the orthogonal complement of Q if X is nonzero */
@@ -251,7 +248,7 @@ void sorbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, real *x1, aocl_int_
     if(norm > (*n * eps))
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Project each standard basis vector e_1,...,e_M1 in turn, stopping */
     /* when a nonzero projection is found */
@@ -274,7 +271,7 @@ void sorbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, real *x1, aocl_int_
         if(aocl_blas_snrm2(m1, &x1[1], incx1) != 0.f || aocl_blas_snrm2(m2, &x2[1], incx2) != 0.f)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Project each standard basis vector e_(M1+1),...,e_(M1+M2) in turn, */
@@ -298,11 +295,11 @@ void sorbdb5_(aocl_int_t *m1, aocl_int_t *m2, aocl_int_t *n, real *x1, aocl_int_
         if(aocl_blas_snrm2(m1, &x1[1], incx1) != 0.f || aocl_blas_snrm2(m2, &x2[1], incx2) != 0.f)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SORBDB5 */
 }
 /* sorbdb5_ */

@@ -389,7 +389,7 @@ defaults */
 /* > \ingroup doublePOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dporfsx_(char *uplo, char *equed, integer *n, integer * nrhs, doublereal *a, integer *lda, doublereal *af, integer *ldaf, doublereal *s, doublereal *b, integer *ldb, doublereal *x, integer * ldx, doublereal *rcond, doublereal *berr, integer *n_err_bnds__, doublereal *err_bnds_norm__, doublereal *err_bnds_comp__, integer * nparams, doublereal *params, doublereal *work, integer *iwork, integer *info)
+void dporfsx_(char *uplo, char *equed, integer *n, integer * nrhs, doublereal *a, integer *lda, doublereal *af, integer *ldaf, doublereal *s, doublereal *b, integer *ldb, doublereal *x, integer * ldx, doublereal *rcond, doublereal *berr, integer *n_err_bnds__, doublereal *err_bnds_norm__, doublereal *err_bnds_comp__, integer * nparams, doublereal *params, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dporfsx inputs: uplo %c, equed %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",*uplo, *equed, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *n_err_bnds__, *nparams);
@@ -406,7 +406,7 @@ int dporfsx_(char *uplo, char *equed, integer *n, integer * nrhs, doublereal *a,
     extern doublereal dla_porcond_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal cwise_wrong__;
     extern /* Subroutine */
-    int dla_porfsx_extended_(integer *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, logical *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, logical *, integer *);
+    void dla_porfsx_extended_(integer *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, logical *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, logical *, integer *);
     char norm[1];
     logical ignore_cwise__;
     extern logical lsame_(char *, char *);
@@ -564,7 +564,7 @@ int dporfsx_(char *uplo, char *equed, integer *n, integer * nrhs, doublereal *a,
         i__1 = -(*info);
         xerbla_("DPORFSX", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || *nrhs == 0)
@@ -593,7 +593,7 @@ int dporfsx_(char *uplo, char *equed, integer *n, integer * nrhs, doublereal *a,
             }
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Default to failure. */
     *rcond = 0.;
@@ -728,7 +728,7 @@ int dporfsx_(char *uplo, char *equed, integer *n, integer * nrhs, doublereal *a,
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPORFSX */
 }
 /* dporfsx_ */

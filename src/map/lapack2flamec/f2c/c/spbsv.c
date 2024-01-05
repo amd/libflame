@@ -161,9 +161,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void spbsv_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, real *ab, aocl_int_t *ldab,
-            real *b, aocl_int_t *ldb, aocl_int_t *info)
+void spbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, real *ab, integer *ldab, real *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -232,7 +230,7 @@ void spbsv_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, real *a
         i__1 = -(*info);
         xerbla_("SPBSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the Cholesky factorization A = U**T*U or A = L*L**T. */
     aocl_lapack_spbtrf(uplo, n, kd, &ab[ab_offset], ldab, info);
@@ -242,7 +240,7 @@ void spbsv_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, real *a
         aocl_lapack_spbtrs(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPBSV */
 }
 /* spbsv_ */

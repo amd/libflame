@@ -116,9 +116,7 @@ the matrix is singular and its */
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void csytri_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
-             scomplex *work, aocl_int_t *info)
+void csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -136,16 +134,22 @@ void csytri_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
     /* Builtin functions */
     void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    scomplex d__;
-    aocl_int64_t k;
-    scomplex t, ak;
-    aocl_int64_t kp;
-    scomplex akp1, temp, akkp1;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t kstep;
+    complex d__;
+    integer k;
+    complex t, ak;
+    integer kp;
+    complex akp1, temp, akkp1;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
+    extern /* Complex */
+    VOID cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+    extern /* Subroutine */
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
+    integer kstep;
     logical upper;
     extern /* Subroutine */
-    int csymv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void csymv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -193,13 +197,13 @@ void csytri_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
         i__1 = -(*info);
         xerbla_("CSYTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if(upper)
@@ -211,7 +215,7 @@ void csytri_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
             if(ipiv[*info] > 0 && (a[i__1].real == 0.f && a[i__1].imag == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L10: */
         }
@@ -226,7 +230,7 @@ void csytri_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
             if(ipiv[*info] > 0 && (a[i__2].real == 0.f && a[i__2].imag == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L20: */
         }
@@ -557,7 +561,7 @@ void csytri_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t
     L60:;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYTRI */
 }
 /* csytri_ */

@@ -196,7 +196,7 @@
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, doublereal *e, integer *ipiv, integer *info)
+void dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, doublereal *e, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsyconvf inputs: uplo %c, way %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *way, *n, *lda);
@@ -206,7 +206,7 @@ int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, d
     integer i__, ip;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -258,13 +258,13 @@ int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, d
         i__1 = -(*info);
         xerbla_("DSYCONVF", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -527,7 +527,7 @@ int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, d
         /* End A is LOWER */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYCONVF */
 }
 /* dsyconvf_ */

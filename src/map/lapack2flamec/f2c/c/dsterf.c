@@ -77,7 +77,7 @@ if INFO = i, then i */
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dsterf_(integer *n, doublereal *d__, doublereal *e, integer *info)
+void dsterf_(integer *n, doublereal *d__, doublereal *e, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsterf inputs: n %" FLA_IS "",*n);
@@ -97,19 +97,19 @@ int dsterf_(integer *n, doublereal *d__, doublereal *e, integer *info)
     integer lend;
     integer jtot;
     extern /* Subroutine */
-    int dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal gamma, alpha, sigma, anorm;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
     integer iscale;
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     doublereal oldgam, safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal safmax;
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlasrt_(char *, integer *, doublereal *, integer *);
+    void dlasrt_(char *, integer *, doublereal *, integer *);
     integer lendsv;
     doublereal ssfmin;
     integer nmaxit;
@@ -147,12 +147,12 @@ int dsterf_(integer *n, doublereal *d__, doublereal *e, integer *info)
         i__1 = -(*info);
         xerbla_("DSTERF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n <= 1)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine the unit roundoff for this environment. */
     eps = dlamch_("E");
@@ -479,7 +479,7 @@ L170:
     dlasrt_("I", n, &d__[1], info);
     AOCL_DTL_TRACE_LOG_EXIT
 L180:
-    return 0;
+    return;
     /* End of DSTERF */
 }
 /* dsterf_ */

@@ -132,9 +132,7 @@ i */
 /* > \ingroup realOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sspev_(char *jobz, char *uplo, aocl_int_t *n, real *ap, real *w, real *z__, aocl_int_t *ldz,
-            real *work, aocl_int_t *info)
+void sspev_(char *jobz, char *uplo, integer *n, real *ap, real *w, real *z__, integer *ldz, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -153,8 +151,10 @@ void sspev_(char *jobz, char *uplo, aocl_int_t *n, real *ap, real *w, real *z__,
     real anrm;
     aocl_int64_t imax;
     real rmin, rmax, sigma;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    extern logical lsame_(char *, char *);
+    integer iinfo;
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
     logical wantz;
     aocl_int64_t iscale;
     extern real slamch_(char *);
@@ -162,8 +162,13 @@ void sspev_(char *jobz, char *uplo, aocl_int_t *n, real *ap, real *w, real *z__,
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    aocl_int64_t indtau, indwrk;
+    integer indtau, indwrk;
+    extern real slansp_(char *, char *, integer *, real *, real *);
+    extern /* Subroutine */
+    void ssterf_(integer *, real *, real *, integer *);
     real smlnum;
+    extern /* Subroutine */
+    void sopgtr_(char *, integer *, real *, real *, real *, integer *, real *, integer *), ssptrd_(char *, integer *, real *, real *, real *, real *, integer *), ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -216,13 +221,13 @@ void sspev_(char *jobz, char *uplo, aocl_int_t *n, real *ap, real *w, real *z__,
         i__1 = -(*info);
         xerbla_("SSPEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -232,7 +237,7 @@ void sspev_(char *jobz, char *uplo, aocl_int_t *n, real *ap, real *w, real *z__,
             z__[z_dim1 + 1] = 1.f;
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -291,7 +296,7 @@ void sspev_(char *jobz, char *uplo, aocl_int_t *n, real *ap, real *w, real *z__,
         aocl_blas_sscal(&imax, &r__1, &w[1], &c__1);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSPEV */
 }
 /* sspev_ */

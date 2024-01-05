@@ -240,7 +240,7 @@ v(i+kd+2:n) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ssytrd_sy2sb_(char *uplo, integer *n, integer *kd, real *a, integer *lda, real *ab, integer *ldab, real *tau, real *work, integer *lwork, integer *info)
+void ssytrd_sy2sb_(char *uplo, integer *n, integer *kd, real *a, integer *lda, real *ab, integer *ldab, real *tau, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -257,11 +257,11 @@ int ssytrd_sy2sb_(char *uplo, integer *n, integer *kd, real *a, integer *lda, re
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer lwmin;
     logical upper;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), ssymm_(char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), ssyr2k_(char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgelqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *), ssymm_(char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), ssyr2k_(char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgelqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -334,13 +334,13 @@ int ssytrd_sy2sb_(char *uplo, integer *n, integer *kd, real *a, integer *lda, re
         i__1 = -(*info);
         xerbla_("SSYTRD_SY2SB", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         work[1] = (real) lwmin;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Copy the upper/lower portion of A into AB */
@@ -377,7 +377,7 @@ int ssytrd_sy2sb_(char *uplo, integer *n, integer *kd, real *a, integer *lda, re
         }
         work[1] = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine the pointer position for the workspace */
     ldt = *kd;
@@ -524,7 +524,7 @@ int ssytrd_sy2sb_(char *uplo, integer *n, integer *kd, real *a, integer *lda, re
     }
     work[1] = (real) lwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTRD_SY2SB */
 }
 /* ssytrd_sy2sb__ */

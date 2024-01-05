@@ -160,7 +160,7 @@ the least squares solution could not be */
 /* > \ingroup realGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int sgetsls_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integer *lda, real *b, integer *ldb, real *work, integer *lwork, integer *info)
+void sgetsls_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integer *lda, real *b, integer *ldb, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgetsls inputs: trans %c, m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*trans, *m, *n, *nrhs, *lda, *ldb);
@@ -175,25 +175,25 @@ int sgetsls_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integ
     integer brow, tszm, tszo, info2, iascl, ibscl;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sgelq_(integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
+    void sgelq_(integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
     integer maxmn;
     extern /* Subroutine */
-    int sgeqr_(integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
+    void sgeqr_(integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
     real workq[1];
     extern /* Subroutine */
-    int slabad_(real *, real *);
+    void slabad_(real *, real *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer scllen;
     real bignum;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), sgemlq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), sgemqr_( char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), sgemlq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), sgemqr_( char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
     real smlnum;
     integer wsizem, wsizeo;
     logical lquery;
     extern /* Subroutine */
-    int strtrs_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+    void strtrs_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -312,7 +312,7 @@ int sgetsls_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integ
         i__1 = -(*info);
         xerbla_("SGETSLS", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (lquery)
     {
@@ -321,7 +321,7 @@ int sgetsls_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integ
             work[1] = (real) wsizem;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*lwork < wsizeo)
     {
@@ -341,7 +341,7 @@ int sgetsls_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integ
         i__1 = fla_max(*m,*n);
         slaset_("FULL", &i__1, nrhs, &c_b23, &c_b23, &b[b_offset], ldb);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
@@ -401,7 +401,7 @@ int sgetsls_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integ
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             scllen = *n;
         }
@@ -413,7 +413,7 @@ int sgetsls_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integ
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* B(N+1:M,1:NRHS) = ZERO */
             i__1 = *nrhs;
@@ -449,7 +449,7 @@ int sgetsls_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integ
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* B(M+1:N,1:NRHS) = 0 */
             i__1 = *nrhs;
@@ -483,7 +483,7 @@ int sgetsls_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integ
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             scllen = *m;
         }
@@ -508,7 +508,7 @@ int sgetsls_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integ
 L50:
     work[1] = (real) (tszo + lwo);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SGETSLS */
 }
 /* sgetsls_ */

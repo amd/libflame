@@ -167,7 +167,7 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zgelq_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *t, integer *tsize, doublecomplex *work, integer * lwork, integer *info)
+void zgelq_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *t, integer *tsize, doublecomplex *work, integer * lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgelq inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", tsize %" FLA_IS "",*m, *n, *lda, *tsize);
@@ -181,11 +181,11 @@ int zgelq_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zgelqt_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zgelqt_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     logical lminws, lquery;
     integer mintsz;
     extern /* Subroutine */
-    int zlaswlq_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zlaswlq_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. -- */
@@ -375,18 +375,18 @@ int zgelq_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex
         i__1 = -(*info);
         xerbla_("ZGELQ", &i__1, (ftnlen)5);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* The LQ Decomposition */
     if (*n <= *m || nb <= *m || nb >= *n)
@@ -400,7 +400,7 @@ int zgelq_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex
     work[1].r = (doublereal) lwreq;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGELQ */
 }
 /* zgelq_ */

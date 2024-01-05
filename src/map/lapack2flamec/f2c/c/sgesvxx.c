@@ -545,11 +545,7 @@ defaults */
 /* > \ingroup realGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-void sgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, integer *lda, real *af,
-              integer *ldaf, integer *ipiv, char *equed, real *r__, real *c__, real *b,
-              integer *ldb, real *x, integer *ldx, real *rcond, real *rpvgrw, real *berr,
-              integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams,
-              real *params, real *work, integer *iwork, integer *info)
+void sgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, integer *ipiv, char *equed, real *r__, real *c__, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *rpvgrw, real *berr, integer * n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer * nparams, real *params, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgesvxx inputs: fact %c ,trans %c ,n %" FLA_IS ",nrhs %" FLA_IS
@@ -571,30 +567,20 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, integ
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int slaqge_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, char *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void slaqge_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, char *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer infequ;
     logical colequ;
     extern /* Subroutine */
-        void
-        sgetrf_(integer *, integer *, real *, integer *, integer *, integer *),
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void sgetrf_(integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     real rowcnd;
     logical notran;
     extern /* Subroutine */
-        void
-        sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *,
-                integer *);
+    void sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     real smlnum;
     logical rowequ;
     extern /* Subroutine */
-        void
-        slascl2_(integer *, integer *, real *, real *, integer *),
-        sgeequb_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *,
-                 integer *),
-        sgerfsx_(char *, char *, integer *, integer *, real *, integer *, real *, integer *,
-                 integer *, real *, real *, real *, integer *, real *, integer *, real *, real *,
-                 integer *, real *, real *, integer *, real *, real *, integer *, integer *);
+    void slascl2_(integer *, integer *, real *, real *, integer *), sgeequb_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *), sgerfsx_(char *, char *, integer *, integer *, real *, integer *, real *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -770,7 +756,7 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, integ
     {
         i__1 = -(*info);
         xerbla_("SGESVXX", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     if(equil)
     {
@@ -827,8 +813,7 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, integ
             /* Pivot in column INFO is exactly 0 */
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
-            *rpvgrw = sla_gerpvgrw_(n, info, &a[a_offset], lda, &af[af_offset], ldaf);
-            AOCL_DTL_TRACE_LOG_EXIT
+            *rpvgrw = sla_gerpvgrw_(n, info, &a[a_offset], lda, &af[ af_offset], ldaf);
             return;
         }
     }
@@ -852,7 +837,6 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, integ
     {
         slascl2_(n, nrhs, &r__[1], &x[x_offset], ldx);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGESVXX */
 }

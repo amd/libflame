@@ -160,9 +160,7 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgbsv_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *nrhs, real *ab,
-            aocl_int_t *ldab, aocl_int_t *ipiv, real *b, aocl_int_t *ldb, aocl_int_t *info)
+void sgbsv_(integer *n, integer *kl, integer *ku, integer * nrhs, real *ab, integer *ldab, integer *ipiv, real *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -229,7 +227,7 @@ void sgbsv_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *nrhs, rea
         i__1 = -(*info);
         xerbla_("SGBSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the LU factorization of the band matrix A. */
     aocl_lapack_sgbtrf(n, n, kl, ku, &ab[ab_offset], ldab, &ipiv[1], info);
@@ -240,7 +238,7 @@ void sgbsv_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *nrhs, rea
                            &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SGBSV */
 }
 /* sgbsv_ */

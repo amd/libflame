@@ -121,9 +121,7 @@ v(1:n-k+i-1) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgerq2_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, real *work,
-             aocl_int_t *info)
+void sgerq2_(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgerq2(m, n, a, lda, tau, work, info);
@@ -150,7 +148,7 @@ void aocl_lapack_sgerq2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     aocl_int64_t i__, k;
     real aii;
     extern /* Subroutine */
-    int slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
+    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -194,7 +192,7 @@ void aocl_lapack_sgerq2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     {
         i__1 = -(*info);
         xerbla_("SGERQ2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     k = fla_min(*m,*n);
     for (i__ = k;
@@ -216,7 +214,6 @@ void aocl_lapack_sgerq2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
         a[*m - k + i__ + (*n - k + i__) * a_dim1] = aii;
         /* L10: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGERQ2 */
 }

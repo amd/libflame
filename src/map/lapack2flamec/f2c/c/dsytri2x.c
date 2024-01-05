@@ -112,7 +112,7 @@ the matrix is singular and its */
 /* > \ingroup doubleSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work, integer *nb, integer *info)
+void dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work, integer *nb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytri2x inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", nb %" FLA_IS "",*uplo, *n, *lda, *nb);
@@ -120,7 +120,7 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
     integer a_dim1, a_offset, work_dim1, work_offset, i__1, i__2, i__3;
     /* Local variables */
     extern /* Subroutine */
-    int dsyswapr_(char *, integer *, doublereal *, integer *, integer *, integer *);
+    void dsyswapr_(char *, integer *, doublereal *, integer *, integer *, integer *);
     doublereal d__;
     integer i__, j, k;
     doublereal t, ak;
@@ -129,11 +129,11 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
     integer invd;
     doublereal akkp1;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     integer count;
     logical upper;
     doublereal u01_i_j__, u11_i_j__;
@@ -190,12 +190,12 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
         i__1 = -(*info);
         xerbla_("DSYTRI2X", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Convert A */
     /* Workspace got Non-diag elements of D */
@@ -211,7 +211,7 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
             if (ipiv[*info] > 0 && a[*info + *info * a_dim1] == 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
     }
@@ -226,7 +226,7 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
             if (ipiv[*info] > 0 && a[*info + *info * a_dim1] == 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
     }
@@ -750,7 +750,7 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYTRI2X */
 }
 /* dsytri2x_ */

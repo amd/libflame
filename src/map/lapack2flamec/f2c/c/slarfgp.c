@@ -90,7 +90,7 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
+void slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
 {
     /* System generated locals */
     integer i__1;
@@ -104,7 +104,7 @@ int slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
     real beta;
     extern real snrm2_(integer *, real *, integer *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     real xnorm;
     extern real slapy2_(real *, real *), slamch_(char *);
     real bignum, smlnum;
@@ -134,7 +134,7 @@ int slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
     if (*n <= 0)
     {
         *tau = 0.f;
-        return 0;
+        return;
     }
     i__1 = *n - 1;
     xnorm = snrm2_(&i__1, &x[1], incx);
@@ -247,7 +247,7 @@ L10:
         }
         *alpha = beta;
     }
-    return 0;
+    return;
     /* End of SLARFGP */
 }
 /* slarfgp_ */

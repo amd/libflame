@@ -172,8 +172,7 @@ v(i+k+1:n) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, scomplex *a, aocl_int_t *lda, scomplex *tau, scomplex *t, aocl_int_t *ldt, scomplex *y, aocl_int_t *ldy)
+void clahrd_(integer *n, integer *k, integer *nb, complex *a, integer *lda, complex *tau, complex *t, integer *ldt, complex *y, integer *ldy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -189,8 +188,10 @@ void clahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, scomplex *a, aocl_int
     aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, y_dim1, y_offset, i__1, i__2, i__3;
     scomplex q__1;
     /* Local variables */
-    aocl_int64_t i__;
-    scomplex ei;
+    integer i__;
+    complex ei;
+    extern /* Subroutine */
+    void cscal_(integer *, complex *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -225,7 +226,7 @@ void clahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, scomplex *a, aocl_int
     if(*n <= 1)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *nb;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -327,7 +328,7 @@ void clahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, scomplex *a, aocl_int
     a[i__1].r = ei.r;
     a[i__1].i = ei.i; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAHRD */
 }
 /* clahrd_ */

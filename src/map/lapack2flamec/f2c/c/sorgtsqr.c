@@ -165,7 +165,7 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int sorgtsqr_(integer *m, integer *n, integer *mb, integer * nb, real *a, integer *lda, real *t, integer *ldt, real *work, integer *lwork, integer *info)
+void sorgtsqr_(integer *m, integer *n, integer *mb, integer * nb, real *a, integer *lda, real *t, integer *ldt, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -177,10 +177,10 @@ int sorgtsqr_(integer *m, integer *n, integer *mb, integer * nb, real *a, intege
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2;
     /* Local variables */
     extern /* Subroutine */
-    int slamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
+    void slamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
     integer lworkopt, j, lc, lw, ldc, iinfo;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     logical lquery;
     integer nblocal;
     /* -- LAPACK computational routine (version 3.9.0) -- */
@@ -275,20 +275,20 @@ int sorgtsqr_(integer *m, integer *n, integer *mb, integer * nb, real *a, intege
         i__1 = -(*info);
         xerbla_("SORGTSQR", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         work[1] = (real) lworkopt;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         work[1] = (real) lworkopt;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* (1) Form explicitly the tall-skinny M-by-N left submatrix Q1_in */
     /* of M-by-M orthogonal matrix Q_in, which is implicitly stored in */
@@ -316,7 +316,7 @@ int sorgtsqr_(integer *m, integer *n, integer *mb, integer * nb, real *a, intege
     }
     work[1] = (real) lworkopt;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SORGTSQR */
 }
 /* sorgtsqr_ */

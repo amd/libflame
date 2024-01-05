@@ -214,10 +214,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cgelsy_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda,
-             scomplex *b, aocl_int_t *ldb, aocl_int_t *jpvt, real *rcond, aocl_int_t *rank,
-             scomplex *work, aocl_int_t *lwork, real *rwork, aocl_int_t *info)
+void cgelsy_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, complex *b, integer *ldb, integer *jpvt, real *rcond, integer *rank, complex *work, integer *lwork, real *rwork, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -240,18 +237,33 @@ void cgelsy_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_i
     scomplex c1, c2, s1, s2;
     aocl_int64_t nb, mn, nb1, nb2, nb3, nb4;
     real anrm, bnrm, smin, smax;
-    aocl_int64_t iascl, ibscl;
-    aocl_int64_t ismin, ismax;
+    integer iascl, ibscl;
+    extern /* Subroutine */
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
+    integer ismin, ismax;
+    extern /* Subroutine */
+    void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), claic1_(integer *, integer *, complex *, real *, complex *, complex *, real *, complex *, complex *);
     real wsize;
+    extern /* Subroutine */
+    void cgeqp3_(integer *, integer *, complex *, integer *, integer *, complex *, complex *, integer *, real *, integer *), slabad_(real *, real *);
+    extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
+    extern /* Subroutine */
+    void clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
+    extern /* Subroutine */
+    void cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     real sminpr, smaxpr, smlnum;
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    void cunmrz_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
-    /* -- LAPACK driver routine -- */
+    extern /* Subroutine */
+    void ctzrzf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+    /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -345,12 +357,12 @@ void cgelsy_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_i
         i__1 = -(*info);
         xerbla_("CGELSY", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Computing MIN */
@@ -359,7 +371,7 @@ void cgelsy_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_i
     {
         *rank = 0;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
@@ -559,7 +571,7 @@ L70:
     work[1].r = q__1.r;
     work[1].i = q__1.i; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGELSY */
 }
 /* cgelsy_ */

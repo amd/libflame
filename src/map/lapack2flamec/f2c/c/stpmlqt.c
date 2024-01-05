@@ -208,7 +208,7 @@ V2 is lower trapezoidal, consisting of the first L */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int stpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, integer *mb, real *v, integer *ldv, real *t, integer *ldt, real *a, integer *lda, real *b, integer *ldb, real * work, integer *info)
+void stpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, integer *mb, real *v, integer *ldv, real *t, integer *ldt, real *a, integer *lda, real *b, integer *ldb, real * work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -323,13 +323,13 @@ int stpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, intege
         i__1 = -(*info);
         xerbla_("STPMLQT", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* .. Quick return if possible .. */
     if (*m == 0 || *n == 0 || *k == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (left && notran)
     {
@@ -436,7 +436,7 @@ int stpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, intege
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of STPMLQT */
 }
 /* stpmlqt_ */

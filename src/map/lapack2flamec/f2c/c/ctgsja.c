@@ -390,12 +390,7 @@ V1**H *B13*Q1 = S1*R1, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ctgsja_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, aocl_int_t *n,
-             aocl_int_t *k, aocl_int_t *l, scomplex *a, aocl_int_t *lda, scomplex *b, aocl_int_t *ldb,
-             real *tola, real *tolb, real *alpha, real *beta, scomplex *u, aocl_int_t *ldu,
-             scomplex *v, aocl_int_t *ldv, scomplex *q, aocl_int_t *ldq, scomplex *work,
-             aocl_int_t *ncycle, aocl_int_t *info)
+void ctgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, integer *k, integer *l, complex *a, integer * lda, complex *b, integer *ldb, real *tola, real *tolb, real *alpha, real *beta, complex *u, integer *ldu, complex *v, integer *ldv, complex *q, integer *ldq, complex *work, integer *ncycle, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ctgsja inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS ", ncycle %" FLA_IS "",*jobu, *jobv, *jobq, *m, *p, *n, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq, *ncycle);
@@ -413,17 +408,21 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
     real csq, csu, csv;
     scomplex snq;
     real rwk;
-    scomplex snu, snv;
+    complex snu, snv;
+    extern /* Subroutine */
+    void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
     real gamma;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
     logical initq, initu, initv, wantq, upper;
     real error, ssmin;
     logical wantu, wantv;
     extern /* Subroutine */
-    int clags2_(logical *, real *, complex *, real *, real *, complex *, real *, real *, complex *, real *, complex *, real *, complex *), clapll_(integer *, complex *, integer *, complex *, integer *, real *), csscal_(integer *, real *, complex *, integer *);
+    void clags2_(logical *, real *, complex *, real *, real *, complex *, real *, real *, complex *, real *, complex *, real *, complex *), clapll_(integer *, complex *, integer *, complex *, integer *, real *), csscal_(integer *, real *, complex *, integer *);
     integer kcycle;
     extern /* Subroutine */
-    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slartg_(real *, real *, real *, real *, real * );
+    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slartg_(real *, real *, real *, real *, real * );
     real hugenum;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -522,7 +521,7 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, a
         i__1 = -(*info);
         xerbla_("CTGSJA", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize U, V and Q, if necessary */
     if(initu)
@@ -800,7 +799,7 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
 L100:
     *ncycle = kcycle;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CTGSJA */
 }
 /* ctgsja_ */

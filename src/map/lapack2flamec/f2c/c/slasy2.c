@@ -164,7 +164,7 @@ static const integer c__0 = 0;
 /* > \ingroup realSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slasy2_(logical *ltranl, logical *ltranr, integer *isgn, integer *n1, integer *n2, real *tl, integer *ldtl, real *tr, integer * ldtr, real *b, integer *ldb, real *scale, real *x, integer *ldx, real *xnorm, integer *info)
+void slasy2_(logical *ltranl, logical *ltranr, integer *isgn, integer *n1, integer *n2, real *tl, integer *ldtl, real *tr, integer * ldtr, real *b, integer *ldb, real *scale, real *x, integer *ldx, real *xnorm, integer *info)
 {
     /* Initialized data */
     static const integer locu12[4] =
@@ -208,7 +208,7 @@ int slasy2_(logical *ltranl, logical *ltranr, integer *isgn, integer *n1, intege
     integer ipsv, jpsv;
     logical bswap;
     extern /* Subroutine */
-    int scopy_(const integer *, real *, const integer *, real *, const integer *), sswap_(const integer *, real *, const integer *, real *, const integer * );
+    void scopy_(const integer *, real *, const integer *, real *, const integer *), sswap_(const integer *, real *, const integer *, real *, const integer * );
     logical xswap;
     extern real slamch_(char *);
     extern integer isamax_(const integer *, real *, const integer *);
@@ -258,7 +258,7 @@ int slasy2_(logical *ltranl, logical *ltranr, integer *isgn, integer *n1, intege
     /* Quick return if possible */
     if (*n1 == 0 || *n2 == 0)
     {
-        return 0;
+        return;
     }
     /* Set constants to control overflow */
     eps = slamch_("P");
@@ -294,7 +294,7 @@ L10:
     }
     x[x_dim1 + 1] = b[b_dim1 + 1] * *scale / tau1;
     *xnorm = (r__1 = x[x_dim1 + 1], f2c_abs(r__1));
-    return 0;
+    return;
     /* 1 by 2: */
     /* TL11*[X11 X12] + ISGN*[X11 X12]*op[TR11 TR12] = [B11 B12] */
     /* [TR21 TR22] */
@@ -405,7 +405,7 @@ L40: /* Solve 2 by 2 system using complete pivoting. */
         r__4 = (r__2 = x[x_dim1 + 2], f2c_abs(r__2));  // , expr subst
         *xnorm = fla_max(r__3,r__4);
     }
-    return 0;
+    return;
     /* 2 by 2: */
     /* op[TL11 TL12]*[X11 X12] +ISGN* [X11 X12]*op[TR11 TR12] = [B11 B12] */
     /* [TL21 TL22] [X21 X22] [X21 X22] [TR21 TR22] [B21 B22] */
@@ -574,7 +574,7 @@ L50: /* Computing MAX */
     r__1 = f2c_abs(tmp[0]) + f2c_abs(tmp[2]);
     r__2 = f2c_abs(tmp[1]) + f2c_abs(tmp[3]); // , expr subst
     *xnorm = fla_max(r__1,r__2);
-    return 0;
+    return;
     /* End of SLASY2 */
 }
 /* slasy2_ */

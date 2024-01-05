@@ -157,7 +157,7 @@
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *nb, real *v, integer *ldv, real *t, integer * ldt, real *c__, integer *ldc, real *work, integer *info)
+void sgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *nb, real *v, integer *ldv, real *t, integer * ldt, real *c__, integer *ldc, real *work, integer *info)
 {
     /* System generated locals */
     integer v_dim1, v_offset, c_dim1, c_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
@@ -167,7 +167,7 @@ int sgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     extern logical lsame_(char *, char *);
     logical right;
     extern /* Subroutine */
-    int slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     integer ldwork;
     /* -- LAPACK computational routine (version 3.7.0) -- */
@@ -257,12 +257,12 @@ int sgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     {
         i__1 = -(*info);
         xerbla_("SGEMQRT", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     /* .. Quick return if possible .. */
     if (*m == 0 || *n == 0 || *k == 0)
     {
-        return 0;
+        return;
     }
     if (left && tran)
     {
@@ -328,7 +328,7 @@ int sgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, intege
             slarfb_("R", "T", "F", "C", m, &i__2, &ib, &v[i__ + i__ * v_dim1], ldv, &t[i__ * t_dim1 + 1], ldt, &c__[i__ * c_dim1 + 1], ldc, &work[1], &ldwork);
         }
     }
-    return 0;
+    return;
     /* End of SGEMQRT */
 }
 /* sgemqrt_ */

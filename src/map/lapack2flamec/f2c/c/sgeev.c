@@ -185,7 +185,7 @@ the routine */
 /* > \ingroup realGEeigen */
 /* ===================================================================== */
 /* Subroutine */
-int sgeev_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *wr, real *wi, real *vl, integer *ldvl, real *vr, integer *ldvr, real *work, integer *lwork, integer *info)
+void sgeev_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *wr, real *wi, real *vl, integer *ldvl, real *vr, integer *ldvr, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3;
@@ -204,36 +204,36 @@ int sgeev_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *wr
     real anrm;
     integer ierr, itau, iwrk, nout;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     extern real snrm2_(integer *, real *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     extern real slapy2_(real *, real *);
     extern /* Subroutine */
-    int slabad_(real *, real *);
+    void slabad_(real *, real *);
     logical scalea;
     real cscale;
     extern /* Subroutine */
-    int sgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *), sgebal_(char *, integer *, real *, integer *, integer *, integer *, real *, integer *);
+    void sgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *), sgebal_(char *, integer *, real *, integer *, integer *, integer *, real *, integer *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int sgehrd_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sgehrd_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical select[1];
     real bignum;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slartg_(real *, real *, real *, real *, real *), sorghr_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), shseqr_( char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *, integer *);
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slartg_(real *, real *, real *, real *, real *), sorghr_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), shseqr_( char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *, integer *);
     integer minwrk, maxwrk;
     logical wantvl;
     real smlnum;
     integer hswork;
     logical lquery, wantvr;
     extern /* Subroutine */
-    int strevc3_(char *, char *, logical *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *);
+    void strevc3_(char *, char *, logical *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -391,16 +391,16 @@ int sgeev_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *wr
     {
         i__1 = -(*info);
         xerbla_("SGEEV ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = slamch_("P");
@@ -604,7 +604,7 @@ L50:
         }
     }
     work[1] = (real) maxwrk;
-    return 0;
+    return;
     /* End of SGEEV */
 }
 /* sgeev_ */

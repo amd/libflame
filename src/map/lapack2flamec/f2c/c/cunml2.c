@@ -154,10 +154,7 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cunml2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, scomplex *a,
-             aocl_int_t *lda, scomplex *tau, scomplex *c__, aocl_int_t *ldc, scomplex *work,
-             aocl_int_t *info)
+void cunml2_(char *side, char *trans, integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -176,10 +173,10 @@ void cunml2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     logical left;
     complex taui;
     extern /* Subroutine */
-    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
+    void clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -257,13 +254,13 @@ void cunml2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
         i__1 = -(*info);
         xerbla_("CUNML2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || *k == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(left && notran || !left && !notran)
     {
@@ -340,7 +337,7 @@ void cunml2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CUNML2 */
 }
 /* cunml2_ */

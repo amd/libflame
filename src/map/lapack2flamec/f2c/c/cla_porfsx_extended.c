@@ -400,13 +400,7 @@ i+1}
 /* > \ingroup complexPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, scomplex *a,
-                          integer *lda, scomplex *af, integer *ldaf, logical *colequ, real *c__,
-                          scomplex *b, integer *ldb, scomplex *y, integer *ldy, real *berr_out__,
-                          integer *n_norms__, real *err_bnds_norm__, real *err_bnds_comp__,
-                          scomplex *res, real *ayb, scomplex *dy, scomplex *y_tail__, real *rcond,
-                          integer *ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__,
-                          integer *info)
+void cla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *af, integer *ldaf, logical *colequ, real *c__, complex *b, integer *ldb, complex *y, integer *ldy, real *berr_out__, integer *n_norms__, real * err_bnds_norm__, real *err_bnds_comp__, complex *res, real *ayb, complex *dy, complex *y_tail__, real *rcond, integer *ithresh, real * rthresh, real *dz_ub__, logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -429,19 +423,16 @@ void cla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     real dxratmax, dzratmax;
     integer i__, j;
     extern /* Subroutine */
-        void
-        cla_heamv_(integer *, integer *, real *, scomplex *, integer *, scomplex *, integer *, real *,
-                   real *, integer *);
+    void cla_heamv_(integer *, integer *, real *, complex *, integer *, complex *, integer *, real *, real *, integer *);
     logical incr_prec__;
     real prev_dz_z__, yk, final_dx_x__;
     extern /* Subroutine */
-        void
-        cla_wwaddw_(integer *, scomplex *, scomplex *, scomplex *);
+    void cla_wwaddw_(integer *, complex *, complex *, complex *);
     real final_dz_z__, prevnormdx;
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__;
     extern /* Subroutine */
-    int cla_lin_berr_(integer *, integer *, integer *, complex *, real *, real *);
+    void cla_lin_berr_(integer *, integer *, integer *, complex *, real *, real *);
     real ymin;
     extern /* Subroutine */
     int blas_chemv_x_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
@@ -452,18 +443,15 @@ void cla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
                        integer *, scomplex *, scomplex *, integer *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * ), ccopy_(integer *, complex *, integer *, complex *, integer *);
+    void chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * ), ccopy_(integer *, complex *, integer *, complex *, integer *);
     real dxrat, dzrat;
     extern /* Subroutine */
-        void
-        caxpy_(integer *, scomplex *, scomplex *, integer *, scomplex *, integer *);
+    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     real normx, normy;
     extern real slamch_(char *);
     real normdx;
     extern /* Subroutine */
-        void
-        cpotrs_(char *, integer *, integer *, scomplex *, integer *, scomplex *, integer *,
-                integer *);
+    void cpotrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
     real hugeval;
     extern integer ilauplo_(char *);
     integer x_state__, z_state__;
@@ -520,7 +508,7 @@ void cla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     if(*info != 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     eps = slamch_("Epsilon");
     hugeval = slamch_("Overflow");
@@ -793,7 +781,7 @@ void cla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         /* End of loop for each RHS. */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* cla_porfsx_extended__ */
 #endif

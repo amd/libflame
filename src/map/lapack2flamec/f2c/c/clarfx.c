@@ -117,9 +117,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clarfx_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, scomplex *tau, scomplex *c__,
-             aocl_int_t *ldc, scomplex *work)
+void clarfx_(char *side, integer *m, integer *n, complex *v, complex *tau, complex *c__, integer *ldc, complex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -142,7 +140,7 @@ void clarfx_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, scomplex *ta
     integer j;
     complex t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10, sum;
     extern /* Subroutine */
-    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
+    void clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
     extern logical lsame_(char *, char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -174,7 +172,7 @@ void clarfx_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, scomplex *ta
     if(tau->real == 0.f && tau->imag == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(lsame_(side, "L", 1, 1))
     {
@@ -2622,7 +2620,7 @@ void clarfx_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, scomplex *ta
     }
 L410:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLARFX */
 }
 /* clarfx_ */

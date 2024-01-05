@@ -113,9 +113,7 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgesc2_(aocl_int_t *n, real *a, aocl_int_t *lda, real *rhs, aocl_int_t *ipiv, aocl_int_t *jpiv,
-             real *scale)
+void sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, integer *jpiv, real *scale)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgesc2(n, a, lda, rhs, ipiv, jpiv, scale);
@@ -139,7 +137,13 @@ void aocl_lapack_sgesc2(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *rhs, 
     /* Local variables */
     aocl_int64_t i__, j;
     real eps, temp;
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *), slabad_(real *, real *);
     extern real slamch_(char *);
+    real bignum;
+    extern integer isamax_(integer *, real *, integer *);
+    extern /* Subroutine */
+    void slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
     real smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -210,8 +214,7 @@ void aocl_lapack_sgesc2(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *rhs, 
     }
     /* Apply permutations JPIV to the solution (RHS) */
     i__1 = *n - 1;
-    aocl_lapack_slaswp(&c__1, &rhs[1], lda, &c__1, &i__1, &jpiv[1], &c_n1);
-    AOCL_DTL_TRACE_LOG_EXIT
+    slaswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &jpiv[1], &c_n1);
     return;
     /* End of SGESC2 */
 }

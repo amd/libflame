@@ -184,9 +184,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dtpttf_(char *transr, char *uplo, aocl_int_t *n, doublereal *ap, doublereal *arf,
-             aocl_int_t *info)
+void dtpttf_(char *transr, char *uplo, integer *n, doublereal *ap, doublereal *arf, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtpttf inputs: transr %c, uplo %c, n %" FLA_IS "",*transr, *uplo, *n);
@@ -240,13 +238,13 @@ void dtpttf_(char *transr, char *uplo, aocl_int_t *n, doublereal *ap, doublereal
         i__1 = -(*info);
         xerbla_("DTPTTF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -259,7 +257,7 @@ void dtpttf_(char *transr, char *uplo, aocl_int_t *n, doublereal *ap, doublereal
             arf[0] = ap[0];
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Size of array ARF(0:NT-1) */
     /* Set N1 and N2 depending on LOWER */
@@ -550,7 +548,7 @@ void dtpttf_(char *transr, char *uplo, aocl_int_t *n, doublereal *ap, doublereal
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTPTTF */
 }
 /* dtpttf_ */

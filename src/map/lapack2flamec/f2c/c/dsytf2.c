@@ -190,9 +190,7 @@ static aocl_int64_t c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dsytf2_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *ipiv,
-             aocl_int_t *info)
+void dsytf2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -206,10 +204,16 @@ void dsytf2_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
     doublereal t, r1, d11, d12, d21, d22;
     aocl_int64_t kk, kp;
     doublereal wk, wkm1, wkp1;
-    aocl_int64_t imax, jmax;
+    integer imax, jmax;
+    extern /* Subroutine */
+    void dsyr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     doublereal alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t kstep;
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    integer kstep;
     logical upper;
     doublereal absakk;
     extern logical disnan_(doublereal *);
@@ -263,7 +267,7 @@ void dsytf2_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
         i__1 = -(*info);
         xerbla_("DSYTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.) + 1.) / 8.;
@@ -603,7 +607,7 @@ void dsytf2_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
     }
 L70:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYTF2 */
 }
 /* dsytf2_ */

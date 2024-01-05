@@ -115,8 +115,7 @@ static aocl_int64_t c__2 = 2;
 /* > \ingroup complexSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void claesy_(scomplex *a, scomplex *b, scomplex *c__, scomplex *rt1, scomplex *rt2, scomplex *evscal,
-             scomplex *cs1, scomplex *sn1)
+void claesy_(complex *a, complex *b, complex *c__, complex * rt1, complex *rt2, complex *evscal, complex *cs1, complex *sn1)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
@@ -269,7 +268,7 @@ void claesy_(scomplex *a, scomplex *b, scomplex *c__, scomplex *rt1, scomplex *r
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAESY */
 }
 /* claesy_ */

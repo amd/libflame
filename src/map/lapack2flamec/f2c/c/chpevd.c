@@ -194,7 +194,7 @@ i */
 /* > \ingroup complexOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int chpevd_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z__, integer *ldz, complex *work, integer *lwork, real *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info)
+void chpevd_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z__, integer *ldz, complex *work, integer *lwork, real *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -220,29 +220,29 @@ int chpevd_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     integer lwmin, llrwk, llwrk;
     logical wantz;
     integer iscale;
     extern real clanhp_(char *, char *, integer *, complex *, real *);
     extern /* Subroutine */
-    int cstedc_(char *, integer *, real *, real *, complex *, integer *, complex *, integer *, real *, integer *, integer *, integer *, integer *);
+    void cstedc_(char *, integer *, real *, real *, complex *, integer *, complex *, integer *, real *, integer *, integer *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *);
+    void csscal_(integer *, real *, complex *, integer *);
     real safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer indtau;
     extern /* Subroutine */
-    int chptrd_(char *, integer *, complex *, real *, real *, complex *, integer *);
+    void chptrd_(char *, integer *, complex *, real *, real *, complex *, integer *);
     integer indrwk, indwrk, liwmin;
     extern /* Subroutine */
-    int ssterf_(integer *, real *, real *, integer *);
+    void ssterf_(integer *, real *, real *, integer *);
     integer lrwmin;
     extern /* Subroutine */
-    int cupmtr_(char *, char *, char *, integer *, integer *, complex *, complex *, complex *, integer *, complex *, integer *);
+    void cupmtr_(char *, char *, char *, integer *, integer *, complex *, complex *, complex *, integer *, complex *, integer *);
     real smlnum;
     logical lquery;
     /* -- LAPACK driver routine (version 3.7.0) -- */
@@ -342,18 +342,18 @@ int chpevd_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z
         i__1 = -(*info);
         xerbla_("CHPEVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -365,7 +365,7 @@ int chpevd_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z
             z__[i__1].i = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -430,7 +430,7 @@ int chpevd_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z
     rwork[1] = (real) lrwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHPEVD */
 }
 /* chpevd_ */

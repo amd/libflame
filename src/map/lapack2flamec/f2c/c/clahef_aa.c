@@ -142,7 +142,7 @@ static integer c__1 = 1;
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int clahef_aa_(char *uplo, integer *j1, integer *m, integer *nb, complex *a, integer *lda, integer *ipiv, complex *h__, integer * ldh, complex *work)
+void clahef_aa_(char *uplo, integer *j1, integer *m, integer *nb, complex *a, integer *lda, integer *ipiv, complex *h__, integer * ldh, complex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -164,13 +164,13 @@ int clahef_aa_(char *uplo, integer *j1, integer *m, integer *nb, complex *a, int
     integer j, k, i1, k1, i2, mj;
     complex piv, alpha;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), clacgv_(integer *, complex *, integer *);
+    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), clacgv_(integer *, complex *, integer *);
     extern integer icamax_(integer *, complex *, integer *);
     extern /* Subroutine */
-    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
+    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -547,7 +547,7 @@ L40:
         ;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAHEF_AA */
 }
 /* clahef_aa__ */

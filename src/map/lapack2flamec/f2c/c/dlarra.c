@@ -122,7 +122,7 @@ E(N) need not be set. */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int dlarra_(integer *n, doublereal *d__, doublereal *e, doublereal *e2, doublereal *spltol, doublereal *tnrm, integer *nsplit, integer *isplit, integer *info)
+void dlarra_(integer *n, doublereal *d__, doublereal *e, doublereal *e2, doublereal *spltol, doublereal *tnrm, integer *nsplit, integer *isplit, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarra inputs: n %" FLA_IS "",*n);
@@ -161,7 +161,7 @@ int dlarra_(integer *n, doublereal *d__, doublereal *e, doublereal *e2, doublere
     if (*n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute splitting points */
     *nsplit = 1;
@@ -206,7 +206,7 @@ int dlarra_(integer *n, doublereal *d__, doublereal *e, doublereal *e2, doublere
     }
     isplit[*nsplit] = *n;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARRA */
 }
 /* dlarra_ */

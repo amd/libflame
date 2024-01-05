@@ -129,9 +129,7 @@ ILO=1 and IHI=0, if N=0. */
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dgebak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
-             doublereal *scale, aocl_int_t *m, doublereal *v, aocl_int_t *ldv, aocl_int_t *info)
+void dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doublereal *scale, integer *m, doublereal *v, integer * ldv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgebak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", m %" FLA_IS ", ldv %" FLA_IS "",*job, *side, *n, *ilo, *ihi, *m, *ldv);
@@ -140,8 +138,12 @@ void dgebak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *
     /* Local variables */
     aocl_int64_t i__, k;
     doublereal s;
-    aocl_int64_t ii;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer ii;
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical leftv;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -210,23 +212,23 @@ void dgebak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *
         i__1 = -(*info);
         xerbla_("DGEBAK", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*m == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(lsame_(job, "N", 1, 1))
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*ilo == *ihi)
     {
@@ -310,7 +312,7 @@ L30:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGEBAK */
 }
 /* dgebak_ */

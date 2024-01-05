@@ -116,9 +116,7 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zptcon_(aocl_int_t *n, doublereal *d__, dcomplex *e, doublereal *anorm, doublereal *rcond,
-             doublereal *rwork, aocl_int_t *info)
+void zptcon_(integer *n, doublereal *d__, doublecomplex *e, doublereal *anorm, doublereal *rcond, doublereal *rwork, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zptcon inputs: n %" FLA_IS ", anorm %lf",*n, *anorm);
@@ -174,7 +172,7 @@ void zptcon_(aocl_int_t *n, doublereal *d__, dcomplex *e, doublereal *anorm, dou
         i__1 = -(*info);
         xerbla_("ZPTCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.;
@@ -182,12 +180,12 @@ void zptcon_(aocl_int_t *n, doublereal *d__, dcomplex *e, doublereal *anorm, dou
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(*anorm == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check that D(1:N) is positive. */
     i__1 = *n;
@@ -196,7 +194,7 @@ void zptcon_(aocl_int_t *n, doublereal *d__, dcomplex *e, doublereal *anorm, dou
         if(d__[i__] <= 0.)
         {
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* L10: */
     }
@@ -228,7 +226,7 @@ void zptcon_(aocl_int_t *n, doublereal *d__, dcomplex *e, doublereal *anorm, dou
         *rcond = 1. / ainvnm / *anorm;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPTCON */
 }
 /* zptcon_ */

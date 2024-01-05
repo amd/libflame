@@ -125,9 +125,7 @@ ILO=1 and IHI=0, if N=0. */
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgebak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, real *scale,
-             aocl_int_t *m, real *v, aocl_int_t *ldv, aocl_int_t *info)
+void sgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real *scale, integer *m, real *v, integer *ldv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgebak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", m %" FLA_IS ", ldv %" FLA_IS "",*job, *side, *n, *ilo, *ihi, *m, *ldv);
@@ -136,11 +134,13 @@ void sgebak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *
     /* Local variables */
     aocl_int64_t i__, k;
     real s;
-    aocl_int64_t ii;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer ii;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
     logical leftv;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sswap_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical rightv;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -205,23 +205,23 @@ void sgebak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *
         i__1 = -(*info);
         xerbla_("SGEBAK", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*m == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(lsame_(job, "N", 1, 1))
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*ilo == *ihi)
     {
@@ -305,7 +305,7 @@ L30:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SGEBAK */
 }
 /* sgebak_ */

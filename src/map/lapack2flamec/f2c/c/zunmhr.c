@@ -176,11 +176,7 @@ the routine */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ilo,
-             aocl_int_t *ihi, dcomplex *a, aocl_int_t *lda, dcomplex *tau,
-             dcomplex *c__, aocl_int_t *ldc, dcomplex *work, aocl_int_t *lwork,
-             aocl_int_t *info)
+void zunmhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex * work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zunmhr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "", *side, *trans, *m, *n, *ilo, *ihi, *lda, *ldc, *lwork);
@@ -201,7 +197,7 @@ void zunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -300,12 +296,12 @@ void zunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
         i__2 = -(*info);
         xerbla_("ZUNMHR", &i__2, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || nh == 0)
@@ -313,7 +309,7 @@ void zunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(left)
     {
@@ -333,7 +329,7 @@ void zunmhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     work[1].r = (doublereal) lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZUNMHR */
 }
 /* zunmhr_ */

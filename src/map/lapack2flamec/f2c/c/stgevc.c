@@ -302,10 +302,7 @@ static logical c_false = FALSE_;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void stgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *s, aocl_int_t *lds,
-             real *p, aocl_int_t *ldp, real *vl, aocl_int_t *ldvl, real *vr, aocl_int_t *ldvr,
-             aocl_int_t *mm, aocl_int_t *m, real *work, aocl_int_t *info)
+void stgevc_(char *side, char *howmny, logical *select, integer *n, real *s, integer *lds, real *p, integer *ldp, real *vl, integer *ldvl, real *vr, integer *ldvr, integer *mm, integer *m, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -325,10 +322,10 @@ void stgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *s, 
         ;
     aocl_int64_t ibeg, ieig, iend;
     real dmin__, temp, xmax, sump[4] /* was [2][2] */
-        ,
-        sums[4] /* was [2][2] */
-        ,
-        cim2a, cim2b, cre2a, cre2b;
+    , sums[4] /* was [2][2] */
+    , cim2a, cim2b, cre2a, cre2b;
+    extern /* Subroutine */
+    void slag2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *);
     real temp2, bdiag[2], acoef, scale;
     logical ilall;
     aocl_int64_t iside;
@@ -340,10 +337,14 @@ void stgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *s, 
     logical compl;
     real anorm, bnorm;
     logical compr;
+    extern /* Subroutine */
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), slaln2_(logical *, integer *, integer *, real *, real *, real *, integer *, real *, real *, real *, integer *, real *, real *, real *, integer *, real *, real *, integer *);
     real temp2i, temp2r;
     logical ilabad, ilbbad;
     real acoefa, bcoefa, cimaga, cimagb;
     logical ilback;
+    extern /* Subroutine */
+    void slabad_(real *, real *);
     real bcoefi, ascale, bscale, creala, crealb, bcoefr;
     extern real slamch_(char *);
     real salfar, safmin;
@@ -351,8 +352,10 @@ void stgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *s, 
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real xscale, bignum;
     logical ilcomp, ilcplx;
-    aocl_int64_t ihwmny;
-    /* -- LAPACK computational routine -- */
+    extern /* Subroutine */
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    integer ihwmny;
+    /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -462,7 +465,7 @@ void stgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *s, 
         i__1 = -(*info);
         xerbla_("STGEVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Count the number of eigenvectors to be computed */
     if(!ilall)
@@ -553,14 +556,14 @@ void stgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *s, 
         i__1 = -(*info);
         xerbla_("STGEVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = im;
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Machine Constants */
     safmin = slamch_("Safe minimum");
@@ -764,7 +767,7 @@ void stgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *s, 
                 {
                     *info = je;
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 /* Scale to avoid over/underflow */
                 acoefa = f2c_abs(acoef);
@@ -1183,7 +1186,7 @@ L160:
                 {
                     *info = je - 1;
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 /* Scale to avoid over/underflow */
                 acoefa = f2c_abs(acoef);
@@ -1507,7 +1510,7 @@ L160:
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of STGEVC */
 }
 /* stgevc_ */

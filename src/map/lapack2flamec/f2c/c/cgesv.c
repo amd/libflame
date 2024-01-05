@@ -119,9 +119,7 @@ the unit diagonal elements of L are not stored. */
 /* > \ingroup complexGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cgesv_(aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
-            scomplex *b, aocl_int_t *ldb, aocl_int_t *info)
+void cgesv_(integer *n, integer *nrhs, complex *a, integer * lda, integer *ipiv, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -137,7 +135,7 @@ void cgesv_(aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda, aocl_
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int cgetrf_(integer *, integer *, complex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+    void cgetrf_(integer *, integer *, complex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -184,7 +182,7 @@ void cgesv_(aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda, aocl_
         i__1 = -(*info);
         xerbla_("CGESV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the LU factorization of A. */
     aocl_lapack_cgetrf(n, n, &a[a_offset], lda, &ipiv[1], info);
@@ -195,7 +193,7 @@ void cgesv_(aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda, aocl_
                            info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGESV */
 }
 /* cgesv_ */

@@ -121,9 +121,7 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup realGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgttrf_(aocl_int_t *n, real *dl, real *d__, real *du, real *du2, aocl_int_t *ipiv,
-             aocl_int_t *info)
+void sgttrf_(integer *n, real *dl, real *d__, real *du, real * du2, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -171,13 +169,13 @@ void sgttrf_(aocl_int_t *n, real *dl, real *d__, real *du, real *du2, aocl_int_t
         i__1 = -(*info);
         xerbla_("SGTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize IPIV(i) = i and DU2(I) = 0 */
     i__1 = *n;
@@ -256,7 +254,7 @@ void sgttrf_(aocl_int_t *n, real *dl, real *d__, real *du, real *du2, aocl_int_t
     }
 L50:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SGTTRF */
 }
 /* sgttrf_ */

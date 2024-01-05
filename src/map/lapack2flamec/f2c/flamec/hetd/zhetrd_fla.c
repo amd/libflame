@@ -198,9 +198,7 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zhetrd_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, doublereal *d__,
-                doublereal *e, dcomplex *tau, dcomplex *work, aocl_int64_t *lwork,
-                aocl_int64_t *info)
+void zhetrd_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *d__, doublereal *e, doublecomplex *tau, doublecomplex *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
@@ -211,10 +209,10 @@ void zhetrd_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dou
     aocl_int64_t nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
-    int zhetd2_fla(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zher2k_(char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zhetd2_fla(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zher2k_(char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zlatrd_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, doublecomplex *, integer *);
+    void zlatrd_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, doublecomplex *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -278,7 +276,7 @@ void zhetrd_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dou
     {
         i__1 = -(*info);
         xerbla_("ZHETRD", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if(lquery)
     {
@@ -287,8 +285,8 @@ void zhetrd_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dou
     /* Quick return if possible */
     if(*n == 0)
     {
-        work[1].real = 1.;
-        work[1].imag = 0.; // , expr subst
+        work[1].r = 1.;
+        work[1].i = 0.; // , expr subst
         return;
     }
     nx = *n;
@@ -412,8 +410,8 @@ void zhetrd_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dou
         i__1 = *n - i__ + 1;
         zhetd2_fla(uplo, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], &tau[i__], &iinfo);
     }
-    work[1].real = (doublereal)lwkopt;
-    work[1].imag = 0.; // , expr subst
+    work[1].r = (doublereal) lwkopt;
+    work[1].i = 0.; // , expr subst
     return;
     /* End of ZHETRD */
 }

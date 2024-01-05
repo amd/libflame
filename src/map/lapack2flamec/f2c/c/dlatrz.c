@@ -134,9 +134,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlatrz_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, doublereal *a, aocl_int_t *lda,
-             doublereal *tau, doublereal *work)
+void dlatrz_(integer *m, integer *n, integer *l, doublereal * a, integer *lda, doublereal *tau, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlatrz inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS "",*m, *n, *l, *lda);
@@ -145,7 +143,7 @@ void dlatrz_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, doublereal *a, aocl_in
     /* Local variables */
     integer i__;
     extern /* Subroutine */
-    int dlarz_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dlarz_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -174,7 +172,7 @@ void dlatrz_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, doublereal *a, aocl_in
     if(*m == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(*m == *n)
     {
@@ -185,7 +183,7 @@ void dlatrz_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, doublereal *a, aocl_in
             /* L10: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     for(i__ = *m; i__ >= 1; --i__)
     {
@@ -202,7 +200,7 @@ void dlatrz_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, doublereal *a, aocl_in
         /* L20: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLATRZ */
 }
 /* dlatrz_ */

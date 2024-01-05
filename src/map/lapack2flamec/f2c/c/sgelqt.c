@@ -114,14 +114,14 @@ the elements above the diagonal */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgelqt_(integer *m, integer *n, integer *mb, real *a, integer *lda, real *t, integer *ldt, real *work, integer *info)
+void sgelqt_(integer *m, integer *n, integer *mb, real *a, integer *lda, real *t, integer *ldt, real *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
     integer i__, k, ib, iinfo;
     extern /* Subroutine */
-    int slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgelqt3_( integer *, integer *, real *, integer *, real *, integer *, integer *);
+    void slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgelqt3_( integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -172,13 +172,13 @@ int sgelqt_(integer *m, integer *n, integer *mb, real *a, integer *lda, real *t,
     {
         i__1 = -(*info);
         xerbla_("SGELQT", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     k = fla_min(*m,*n);
     if (k == 0)
     {
-        return 0;
+        return;
     }
     /* Blocked loop of length K */
     i__1 = k;
@@ -202,7 +202,7 @@ int sgelqt_(integer *m, integer *n, integer *mb, real *a, integer *lda, real *t,
             slarfb_("R", "N", "F", "R", &i__3, &i__4, &ib, &a[i__ + i__ * a_dim1], lda, &t[i__ * t_dim1 + 1], ldt, &a[i__ + ib + i__ * a_dim1], lda, &work[1], &i__5);
         }
     }
-    return 0;
+    return;
     /* End of SGELQT */
 }
 /* sgelqt_ */

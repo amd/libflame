@@ -118,19 +118,18 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlarfx_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, doublereal *tau,
-             doublereal *c__, aocl_int_t *ldc, doublereal *work)
+void dlarfx_(char *side, integer *m, integer *n, doublereal * v, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarfx inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *ldc);
     /* System generated locals */
     aocl_int64_t c_dim1, c_offset, i__1;
     /* Local variables */
-    aocl_int64_t j;
-    doublereal t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10,
-        sum;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer j;
+    doublereal t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10, sum;
+    extern /* Subroutine */
+    void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+    extern logical lsame_(char *, char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -159,7 +158,7 @@ void dlarfx_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, doublereal
     if(*tau == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(lsame_(side, "L", 1, 1))
     {
@@ -737,7 +736,7 @@ void dlarfx_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, doublereal
     }
 L410:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARFX */
 }
 /* dlarfx_ */

@@ -117,9 +117,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dppcon_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *anorm, doublereal *rcond,
-             doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
+void dppcon_(char *uplo, integer *n, doublereal *ap, doublereal *anorm, doublereal *rcond, doublereal *work, integer * iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dppcon inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
@@ -131,7 +129,11 @@ void dppcon_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *anorm, doubl
     doublereal scale;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
+    extern /* Subroutine */
+    void drscl_(integer *, doublereal *, doublereal *, integer *);
     logical upper;
+    extern /* Subroutine */
+    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal scalel;
     doublereal scaleu;
@@ -187,7 +189,7 @@ void dppcon_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *anorm, doubl
         i__1 = -(*info);
         xerbla_("DPPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.;
@@ -195,12 +197,12 @@ void dppcon_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *anorm, doubl
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(*anorm == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     smlnum = dlamch_("Safe minimum");
     /* Estimate the 1-norm of the inverse. */
@@ -250,7 +252,7 @@ L10:
     }
 L20:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPPCON */
 }
 /* dppcon_ */

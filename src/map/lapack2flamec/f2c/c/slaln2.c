@@ -218,7 +218,7 @@
 /* causing few netlib tests to fail */
 #pragma STDC FP_CONTRACT OFF
 
-int slaln2_(logical *ltrans, integer *na, integer *nw, real * smin, real *ca, real *a, integer *lda, real *d1, real *d2, real *b, integer *ldb, real *wr, real *wi, real *x, integer *ldx, real *scale, real *xnorm, integer *info)
+void slaln2_(logical *ltrans, integer *na, integer *nw, real * smin, real *ca, real *a, integer *lda, real *d1, real *d2, real *b, integer *ldb, real *wr, real *wi, real *x, integer *ldx, real *scale, real *xnorm, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slaln2(ltrans, na, nw, smin, ca, a, lda, d1, d2, b, ldb, wr, wi, x, ldx, scale,
@@ -283,7 +283,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
     extern real slamch_(char *);
     real bignum;
     extern /* Subroutine */
-    int sladiv_(real *, real *, real *, real *, real *, real *);
+    void sladiv_(real *, real *, real *, real *, real *, real *);
     real smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -440,7 +440,6 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
                 x[x_dim1 + 2] = temp * b[b_dim1 + 2];
                 *xnorm = temp * bnorm;
                 *info = 1;
-                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* Gaussian elimination with complete pivoting. */
@@ -548,7 +547,6 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
                 x[(x_dim1 << 1) + 2] = temp * b[(b_dim1 << 1) + 2];
                 *xnorm = temp * bnorm;
                 *info = 1;
-                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* Gaussian elimination with complete pivoting. */
@@ -674,7 +672,6 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLALN2 */
 }

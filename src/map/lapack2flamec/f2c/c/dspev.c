@@ -132,9 +132,7 @@ i */
 /* > \ingroup doubleOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dspev_(char *jobz, char *uplo, aocl_int_t *n, doublereal *ap, doublereal *w, doublereal *z__,
-            aocl_int_t *ldz, doublereal *work, aocl_int_t *info)
+void dspev_(char *jobz, char *uplo, integer *n, doublereal * ap, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dspev inputs: jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",*jobz, *uplo, *n, *ldz);
@@ -149,6 +147,8 @@ void dspev_(char *jobz, char *uplo, aocl_int_t *n, doublereal *ap, doublereal *w
     doublereal anrm;
     aocl_int64_t imax;
     doublereal rmin, rmax;
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
@@ -159,8 +159,13 @@ void dspev_(char *jobz, char *uplo, aocl_int_t *n, doublereal *ap, doublereal *w
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
-    aocl_int64_t indtau;
-    aocl_int64_t indwrk;
+    extern doublereal dlansp_(char *, char *, integer *, doublereal *, doublereal *);
+    integer indtau;
+    extern /* Subroutine */
+    void dsterf_(integer *, doublereal *, doublereal *, integer *);
+    integer indwrk;
+    extern /* Subroutine */
+    void dopgtr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsptrd_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     doublereal smlnum;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -214,13 +219,13 @@ void dspev_(char *jobz, char *uplo, aocl_int_t *n, doublereal *ap, doublereal *w
         i__1 = -(*info);
         xerbla_("DSPEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -230,7 +235,7 @@ void dspev_(char *jobz, char *uplo, aocl_int_t *n, doublereal *ap, doublereal *w
             z__[z_dim1 + 1] = 1.;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -289,7 +294,7 @@ void dspev_(char *jobz, char *uplo, aocl_int_t *n, doublereal *ap, doublereal *w
         aocl_blas_dscal(&imax, &d__1, &w[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSPEV */
 }
 /* dspev_ */

@@ -162,10 +162,7 @@ LDX >= 1 otherwise. */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dsbgst_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *kb, doublereal *ab,
-             aocl_int_t *ldab, doublereal *bb, aocl_int_t *ldbb, doublereal *x, aocl_int_t *ldx,
-             doublereal *work, aocl_int_t *info)
+void dsbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, doublereal *ab, integer *ldab, doublereal *bb, integer * ldbb, doublereal *x, integer *ldx, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsbgst inputs: vect %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS ", ldab %" FLA_IS ", ldbb %" FLA_IS ", ldx %" FLA_IS "",*vect, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldx);
@@ -183,12 +180,14 @@ void dsbgst_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *
     doublereal bii;
     integer kbt, nrt, inca;
     extern /* Subroutine */
-    int dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *), dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *), dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     logical upper, wantx;
     extern /* Subroutine */
-    int dlar2v_(integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlargv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dlar2v_(integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlargv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     logical update;
+    extern /* Subroutine */
+    void dlartv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -264,13 +263,13 @@ void dsbgst_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *
         i__1 = -(*info);
         xerbla_("DSBGST", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     inca = *ldab * ka1;
     /* Initialize X to the unit matrix, if needed */
@@ -1099,7 +1098,7 @@ L490:
             if(*ka == 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             goto L490;
         }
@@ -1110,7 +1109,7 @@ L490:
         if(i__ < 2)
         {
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     if(i__ < m - kbt)

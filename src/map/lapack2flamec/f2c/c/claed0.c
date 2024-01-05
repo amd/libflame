@@ -145,9 +145,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void claed0_(aocl_int_t *qsiz, aocl_int_t *n, real *d__, real *e, scomplex *q, aocl_int_t *ldq,
-             scomplex *qstore, aocl_int_t *ldqs, real *rwork, aocl_int_t *iwork, aocl_int_t *info)
+void claed0_(integer *qsiz, integer *n, real *d__, real *e, complex *q, integer *ldq, complex *qstore, integer *ldqs, real *rwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -170,23 +168,23 @@ void claed0_(aocl_int_t *qsiz, aocl_int_t *n, real *d__, real *e, scomplex *q, a
     real temp;
     integer curr, iperm;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
     integer indxq, iwrem;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     integer iqptr;
     extern /* Subroutine */
-    int claed7_(integer *, integer *, integer *, integer *, integer *, integer *, real *, complex *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, real *, complex *, real *, integer *, integer *);
+    void claed7_(integer *, integer *, integer *, integer *, integer *, integer *, real *, complex *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, real *, complex *, real *, integer *, integer *);
     integer tlvls;
     extern /* Subroutine */
-    int clacrm_(integer *, integer *, complex *, integer *, real *, integer *, complex *, integer *, real *);
+    void clacrm_(integer *, integer *, complex *, integer *, real *, integer *, complex *, integer *, real *);
     integer igivcl;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer igivnm, submat, curprb, subpbs, igivpt, curlvl, matsiz, iprmpt, smlsiz;
     extern /* Subroutine */
-    int ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
+    void ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -247,13 +245,13 @@ void claed0_(aocl_int_t *qsiz, aocl_int_t *n, real *d__, real *e, scomplex *q, a
         i__1 = -(*info);
         xerbla_("CLAED0", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     smlsiz = aocl_lapack_ilaenv(&c__9, "CLAED0", " ", &c__0, &c__0, &c__0, &c__0);
     /* Determine the size and placement of the submatrices, and save in */
@@ -353,7 +351,7 @@ L10:
         {
             *info = submat * (*n + 1) + submat + matsiz - 1;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         k = 1;
         i__2 = iwork[i__ + 1];
@@ -404,7 +402,7 @@ L80:
             {
                 *info = submat * (*n + 1) + submat + matsiz - 1;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             iwork[i__ / 2 + 1] = iwork[i__ + 2];
             /* L90: */
@@ -426,7 +424,7 @@ L80:
     }
     scopy_(n, &rwork[1], &c__1, &d__[1], &c__1);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAED0 */
 }
 /* claed0_ */

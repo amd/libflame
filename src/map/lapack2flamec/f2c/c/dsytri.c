@@ -116,9 +116,7 @@ the matrix is singular and its */
 /* > \ingroup doubleSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dsytri_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *ipiv,
-             doublereal *work, aocl_int_t *info)
+void dsytri_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytri inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -132,11 +130,13 @@ void dsytri_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
     aocl_int64_t kp;
     doublereal akp1;
     doublereal temp, akkp1;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t kstep;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    integer kstep;
     logical upper;
     extern /* Subroutine */
-    int dsymv_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dsymv_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -184,13 +184,13 @@ void dsytri_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
         i__1 = -(*info);
         xerbla_("DSYTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if(upper)
@@ -201,7 +201,7 @@ void dsytri_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
             if(ipiv[*info] > 0 && a[*info + *info * a_dim1] == 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L10: */
         }
@@ -215,7 +215,7 @@ void dsytri_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
             if(ipiv[*info] > 0 && a[*info + *info * a_dim1] == 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L20: */
         }
@@ -404,7 +404,7 @@ void dsytri_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int
     L60:;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYTRI */
 }
 /* dsytri_ */

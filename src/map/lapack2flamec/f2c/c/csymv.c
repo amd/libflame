@@ -152,9 +152,7 @@
 /* > \ingroup complexSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void csymv_(char *uplo, aocl_int_t *n, scomplex *alpha, scomplex *a, aocl_int_t *lda, scomplex *x,
-            aocl_int_t *incx, scomplex *beta, scomplex *y, aocl_int_t *incy)
+void csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, complex *x, integer *incx, complex *beta, complex *y, integer *incy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -228,13 +226,13 @@ void csymv_(char *uplo, aocl_int_t *n, scomplex *alpha, scomplex *a, aocl_int_t 
     {
         xerbla_("CSYMV ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if(*n == 0 || alpha->real == 0.f && alpha->imag == 0.f && (beta->real == 1.f && beta->imag == 0.f))
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set up the start points in X and Y. */
     if(*incx > 0)
@@ -322,7 +320,7 @@ void csymv_(char *uplo, aocl_int_t *n, scomplex *alpha, scomplex *a, aocl_int_t 
     if(alpha->real == 0.f && alpha->imag == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(lsame_(uplo, "U", 1, 1))
     {
@@ -557,7 +555,7 @@ void csymv_(char *uplo, aocl_int_t *n, scomplex *alpha, scomplex *a, aocl_int_t 
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYMV */
 }
 /* csymv_ */

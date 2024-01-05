@@ -135,7 +135,7 @@ static real c_b22 = 0.f;
 /* > \ingroup realSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int slasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, real *a, integer *lda, integer *ipiv, real *h__, integer *ldh, real *work)
+void slasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, real *a, integer *lda, integer *ipiv, real *h__, integer *ldh, real *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -150,10 +150,10 @@ int slasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, real *a, intege
     real piv, alpha;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_( integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_( integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    void slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -450,7 +450,7 @@ L40:
         ;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASYF_AA */
 }
 /* slasyf_aa__ */

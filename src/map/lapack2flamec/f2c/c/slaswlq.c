@@ -157,7 +157,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slaswlq_(integer *m, integer *n, integer *mb, integer * nb, real *a, integer *lda, real *t, integer *ldt, real *work, integer *lwork, integer *info)
+void slaswlq_(integer *m, integer *n, integer *mb, integer * nb, real *a, integer *lda, real *t, integer *ldt, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaswlq inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *mb, *nb, *lda, *ldt, *lwork);
@@ -169,7 +169,7 @@ int slaswlq_(integer *m, integer *n, integer *mb, integer * nb, real *a, integer
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgelqt_( integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *);
     logical lquery;
     extern /* Subroutine */
-    int stplqt_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+    void stplqt_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. -- */
@@ -235,25 +235,25 @@ int slaswlq_(integer *m, integer *n, integer *mb, integer * nb, real *a, integer
         i__1 = -(*info);
         xerbla_("SLASWLQ", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* The LQ Decomposition */
     if (*m >= *n || *nb <= *m || *nb >= *n)
     {
         sgelqt_(m, n, mb, &a[a_offset], lda, &t[t_offset], ldt, &work[1], info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     kk = (*n - *m) % (*nb - *m);
     ii = *n - kk + 1;
@@ -278,7 +278,7 @@ int slaswlq_(integer *m, integer *n, integer *mb, integer * nb, real *a, integer
     }
     work[1] = (real) (*m * *mb);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SLASWLQ */
 }
 /* slaswlq_ */

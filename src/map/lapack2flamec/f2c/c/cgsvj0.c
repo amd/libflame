@@ -206,7 +206,7 @@ static real c_b27 = 1.f;
 /* > drmac@math.hr. Thank you. */
 /* ===================================================================== */
 /* Subroutine */
-int cgsvj0_(char *jobv, integer *m, integer *n, complex *a, integer *lda, complex *d__, real *sva, integer *mv, complex *v, integer *ldv, real *eps, real *sfmin, real *tol, integer *nsweep, complex *work, integer *lwork, integer *info)
+void cgsvj0_(char *jobv, integer *m, integer *n, complex *a, integer *lda, complex *d__, real *sva, integer *mv, complex *v, integer *ldv, real *eps, real *sfmin, real *tol, integer *nsweep, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -238,7 +238,7 @@ int cgsvj0_(char *jobv, integer *m, integer *n, complex *a, integer *lda, comple
     real aaqq;
     integer ierr;
     extern /* Subroutine */
-    int crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
+    void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
     complex ompq;
     real aapp0, aapq1, temp1;
     extern /* Complex */
@@ -247,19 +247,19 @@ int cgsvj0_(char *jobv, integer *m, integer *n, complex *a, integer *lda, comple
     extern logical lsame_(char *, char *);
     real theta, small_val;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
     logical applv, rsvec;
     extern /* Subroutine */
-    int caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical rotok;
     extern real scnrm2_(integer *, complex *, integer *);
     extern /* Subroutine */
-    int clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer ijblsk, swband;
     extern integer isamax_(integer *, real *, integer *);
     integer blskip;
     extern /* Subroutine */
-    int classq_(integer *, complex *, integer *, real *, real *);
+    void classq_(integer *, complex *, integer *, real *, real *);
     real mxaapq, thsign, mxsinj;
     integer emptsw, notrot, iswrot, lkahead;
     real rootbig, rooteps;
@@ -350,7 +350,7 @@ int cgsvj0_(char *jobv, integer *m, integer *n, complex *a, integer *lda, comple
         i__1 = -(*info);
         xerbla_("CGSVJ0", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (rsvec)
     {
@@ -1157,7 +1157,7 @@ L1995: /* Sort the vector SVA() of column norms. */
         /* L5991: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* .. */
     /* .. END OF CGSVJ0 */
     /* .. */

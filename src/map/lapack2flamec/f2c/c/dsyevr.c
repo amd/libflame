@@ -332,12 +332,7 @@ the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dsyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda,
-             doublereal *vl, doublereal *vu, aocl_int_t *il, aocl_int_t *iu, doublereal *abstol,
-             aocl_int_t *m, doublereal *w, doublereal *z__, aocl_int_t *ldz, aocl_int_t *isuppz,
-             doublereal *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork,
-             aocl_int_t *info)
+void dsyevr_(char *jobz, char *range, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *vl, doublereal *vu, integer * il, integer *iu, doublereal *abstol, integer *m, doublereal *w, doublereal *z__, integer *ldz, integer *isuppz, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsyevr inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*jobz, *range, *uplo, *n, *lda, *il, *iu, *ldz, *lwork, *liwork);
@@ -353,13 +348,17 @@ void dsyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, doublereal *a, 
     doublereal anrm;
     aocl_int64_t imax;
     doublereal rmin, rmax;
-    aocl_int64_t inddd, indee;
+    integer inddd, indee;
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     char order[1];
-    aocl_int64_t indwk;
-    aocl_int64_t lwmin;
+    integer indwk;
+    extern /* Subroutine */
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    integer lwmin;
     logical lower, wantz;
     extern doublereal dlamch_(char *);
     logical alleig, indeig;
@@ -370,13 +369,22 @@ void dsyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, doublereal *a, 
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal abstll, bignum;
-    aocl_int64_t indtau, indisp;
-    aocl_int64_t indiwo, indwkn;
-    aocl_int64_t liwmin;
+    integer indtau, indisp;
+    extern /* Subroutine */
+    void dstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *), dsterf_(integer *, doublereal *, doublereal *, integer *);
+    integer indiwo, indwkn;
+    extern doublereal dlansy_(char *, char *, integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */
+    void dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dstemr_(char *, char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, integer *, logical *, doublereal *, integer *, integer *, integer *, integer *);
+    integer liwmin;
     logical tryrac;
-    aocl_int64_t llwrkn, llwork, nsplit;
+    extern /* Subroutine */
+    void dormtr_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    integer llwrkn, llwork, nsplit;
     doublereal smlnum;
-    aocl_int64_t lwkopt;
+    extern /* Subroutine */
+    void dsytrd_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -501,12 +509,12 @@ void dsyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, doublereal *a, 
         i__1 = -(*info);
         xerbla_("DSYEVR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = 0;
@@ -514,7 +522,7 @@ void dsyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, doublereal *a, 
     {
         work[1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -539,7 +547,7 @@ void dsyevr_(char *jobz, char *range, char *uplo, aocl_int_t *n, doublereal *a, 
             isuppz[2] = 1;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -757,7 +765,7 @@ L30:
     work[1] = (doublereal) lwkopt;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYEVR */
 }
 /* dsyevr_ */

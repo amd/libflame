@@ -154,10 +154,7 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dormr2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a,
-             aocl_int_t *lda, doublereal *tau, doublereal *c__, aocl_int_t *ldc, doublereal *work,
-             aocl_int_t *info)
+void dormr2_(char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal * c__, integer *ldc, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dormr2 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *k, *lda, *ldc);
@@ -168,7 +165,7 @@ void dormr2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     doublereal aii;
     logical left;
     extern /* Subroutine */
-    int dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -249,13 +246,13 @@ void dormr2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
         i__1 = -(*info);
         xerbla_("DORMR2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || *k == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(left && !notran || !left && notran)
     {
@@ -300,7 +297,7 @@ void dormr2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DORMR2 */
 }
 /* dormr2_ */

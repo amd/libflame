@@ -93,8 +93,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cpptri_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *info)
+void cpptri_(char *uplo, integer *n, complex *ap, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -113,11 +112,17 @@ void cpptri_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *info)
     /* Local variables */
     aocl_int64_t j, jc, jj;
     real ajj;
-    aocl_int64_t jjn;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer jjn;
+    extern /* Subroutine */
+    void chpr_(char *, integer *, real *, complex *, integer *, complex *);
+    extern /* Complex */
+    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), ctptri_(char *, char *, integer *, complex *, integer *);
+    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), ctptri_(char *, char *, integer *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -157,20 +162,20 @@ void cpptri_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *info)
         i__1 = -(*info);
         xerbla_("CPPTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Invert the triangular Cholesky factor U or L. */
     aocl_lapack_ctptri(uplo, "Non-unit", n, &ap[1], info);
     if(*info > 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(upper)
     {
@@ -217,7 +222,7 @@ void cpptri_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *info)
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPPTRI */
 }
 /* cpptri_ */

@@ -177,10 +177,7 @@ static doublereal c_b16 = 0.;
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlaqps_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, aocl_int_t *nb, aocl_int_t *kb,
-             doublereal *a, aocl_int_t *lda, aocl_int_t *jpvt, doublereal *tau, doublereal *vn1,
-             doublereal *vn2, doublereal *auxv, doublereal *f, aocl_int_t *ldf)
+void dlaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, doublereal *a, integer *lda, integer *jpvt, doublereal *tau, doublereal *vn1, doublereal *vn2, doublereal *auxv, doublereal *f, integer *ldf)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqps inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldf %" FLA_IS "",*m, *n, *offset, *nb, *lda, *ldf);
@@ -196,9 +193,16 @@ void dlaqps_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, aocl_int_t *nb, a
     aocl_int64_t pvt;
     doublereal temp;
     doublereal temp2, tol3z;
-    aocl_int64_t itemp;
+    extern /* Subroutine */
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    integer itemp;
+    extern /* Subroutine */
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
-    aocl_int64_t lsticc, lastrk;
+    extern /* Subroutine */
+    void dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+    extern integer idamax_(integer *, doublereal *, integer *);
+    integer lsticc, lastrk;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -395,7 +399,7 @@ L40:
         goto L40;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAQPS */
 }
 /* dlaqps_ */

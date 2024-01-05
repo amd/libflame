@@ -144,9 +144,7 @@ the blocks are not swapped and T and Q are */
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slaexc_(logical *wantq, aocl_int_t *n, real *t, aocl_int_t *ldt, real *q, aocl_int_t *ldq,
-             aocl_int_t *j1, aocl_int_t *n1, aocl_int_t *n2, real *work, aocl_int_t *info)
+void slaexc_(logical *wantq, integer *n, real *t, integer * ldt, real *q, integer *ldq, integer *j1, integer *n1, integer *n2, real *work, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slaexc(wantq, n, t, ldt, q, ldq, j1, n1, n2, work, info);
@@ -189,13 +187,17 @@ void aocl_lapack_slaexc(logical *wantq, aocl_int64_t *n, real *t, aocl_int64_t *
     real cs, t11, t22, t33, sn, wi1, wi2, wr1, wr2, eps, tau, tau1, tau2;
     aocl_int64_t ierr;
     real temp;
+    extern /* Subroutine */
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     real scale, dnorm, xnorm;
     extern /* Subroutine */
-    int slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *), slasy2_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, integer *, real *, integer *);
+    void slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *), slasy2_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, integer *, real *, integer *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int slarfg_(integer *, real *, real *, integer *, real *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slartg_(real *, real *, real *, real *, real *);
+    void slarfg_(integer *, real *, real *, integer *, real *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slartg_(real *, real *, real *, real *, real *);
     real thresh;
+    extern /* Subroutine */
+    void slarfx_(char *, integer *, integer *, real *, real *, real *, integer *, real *);
     real smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -232,12 +234,10 @@ void aocl_lapack_slaexc(logical *wantq, aocl_int64_t *n, real *t, aocl_int64_t *
     /* Quick return if possible */
     if(*n == 0 || *n1 == 0 || *n2 == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*j1 + *n1 > *n)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     j2 = *j1 + 1;
@@ -452,12 +452,10 @@ void aocl_lapack_slaexc(logical *wantq, aocl_int64_t *n, real *t, aocl_int64_t *
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* Exit with INFO = 1 if swap was rejected. */
 L50:
     *info = 1;
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAEXC */
 }

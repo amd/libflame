@@ -154,9 +154,7 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sorml2_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real *a,
-                aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc, real *work,
-                aocl_int64_t *info)
+void sorml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
@@ -166,7 +164,7 @@ void sorml2_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     logical left;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -243,7 +241,7 @@ void sorml2_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     {
         i__1 = -(*info);
         xerbla_("SORML2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || *k == 0)

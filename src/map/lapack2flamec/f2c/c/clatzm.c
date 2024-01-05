@@ -150,8 +150,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clatzm_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, aocl_int_t *incv, scomplex *tau, scomplex *c1, scomplex *c2, aocl_int_t *ldc, scomplex *work)
+void clatzm_(char *side, integer *m, integer *n, complex *v, integer *incv, complex *tau, complex *c1, complex *c2, integer *ldc, complex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -167,7 +166,11 @@ void clatzm_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, aocl_int_t *
     aocl_int64_t c1_dim1, c1_offset, c2_dim1, c2_offset, i__1;
     scomplex q__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    void cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), clacgv_(integer *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -199,7 +202,7 @@ void clatzm_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, aocl_int_t *
     if (fla_min(*m,*n) == 0 || tau->r == 0.f && tau->i == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(lsame_(side, "L", 1, 1))
     {
@@ -237,7 +240,7 @@ void clatzm_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, aocl_int_t *
         aocl_blas_cgerc(m, &i__1, &q__1, &work[1], &c__1, &v[1], incv, &c2[c2_offset], ldc);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLATZM */
 }
 /* clatzm_ */

@@ -86,6 +86,8 @@ set(NEGATIVE_TEST_CASES "ggevx sdcz A V V B 10 10 10 10 10 -1 1 --einfo=-1"
             "geevx cz B V V B 10 10 10 -10 -1 1 --einfo=-12"
             "geevx sd B V V B 10 10 10 10 1 1 --einfo=-21"
             "geevx cz B V V B 10 10 10 10 1 1 --einfo=-20"
+	    "ggevx sd B V V B 10 10 10 10 10 3 1 --einfo=-26"
+	    "ggevx cz B V V B 10 10 10 10 10 3 1 --einfo=-25"
             "geev sdcz A V 10 10 10 10 -1 1 --einfo=-1"
             "geev sdcz V A 10 10 10 10 -1 1 --einfo=-2"
             "geev sdcz V V -10 10 10 10 -1 1 --einfo=-3"
@@ -175,6 +177,17 @@ set(NEGATIVE_TEST_CASES "ggevx sdcz A V V B 10 10 10 10 10 -1 1 --einfo=-1"
             "syevx sdcz V A U 10 15 100.0 20.0 1 3 -1 5 -1 1 --einfo=-15"
             "syevx sdcz V A U 10 15 100.0 20.0 1 3 -1 12 10 1 --einfo=-17")
 
+set(CORNER_TEST_CASES "ggevx sdcz B V V B 0 10 10 10 10 -1 1 --einfo=0"
+	    "geqrf sdcz 0 0 2 1 1 --einfo=0"
+	    "geqrf sdcz 1 0 2 1 1 --einfo=0"
+	    "geqrf sdcz 0 1 2 1 1 --einfo=0"
+	    "gesv sdcz 0 10 10 10 1 --einfo=0"
+	    "gesv sdcz 0 0 10 10 1 --einfo=0"
+	    "gesv sdcz 1 0 10 10 1 --einfo=0"
+	    "gerqf sdcz 0 0 2 1 1 --einfo=0"
+	    "gerqf sdcz 1 0 2 1 1 --einfo=0"
+	    "gerqf sdcz 0 1 2 1 1 --einfo=0")
+
 set(TEST_NUM 1)
 foreach(neg_test_cases IN LISTS NEGATIVE_TEST_CASES)
     # this line splits entire string into separate arguments as ctest requres the arguments to be passed separately rather than a single string
@@ -184,3 +197,13 @@ foreach(neg_test_cases IN LISTS NEGATIVE_TEST_CASES)
     set_tests_properties(${TEST_NAME} PROPERTIES FAIL_REGULAR_EXPRESSION "FAIL;No test was run, give valid arguments")
 MATH(EXPR TEST_NUM "${TEST_NUM}+1")
 endforeach()
+
+foreach(corner_test_cases IN LISTS CORNER_TEST_CASES)
+    # this line splits entire string into separate arguments as ctest requres the arguments to be passed separately rather than a single string
+    string(REPLACE " " ";" COMMANDLINE_PARAMS ${corner_test_cases})
+    set(TEST_NAME CORNER_TEST_CASE_${TEST_NUM} )
+    add_test(${TEST_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME} ${COMMANDLINE_PARAMS})
+    set_tests_properties(${TEST_NAME} PROPERTIES FAIL_REGULAR_EXPRESSION "FAIL;No test was run, give valid arguments")
+MATH(EXPR TEST_NUM "${TEST_NUM}+1")
+endforeach()
+

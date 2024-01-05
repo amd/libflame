@@ -111,4 +111,4 @@ add_subdirectory(src)
 add_subdirectory(validate_src)
 
 include(main_ctest.cmake)
-include(negative_test.cmake)
+include(conformance_test.cmake)

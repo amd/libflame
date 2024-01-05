@@ -175,10 +175,7 @@ and second, applying a diagonal similarity */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cggbal_(char *job, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b, aocl_int_t *ldb,
-             aocl_int_t *ilo, aocl_int_t *ihi, real *lscale, real *rscale, real *work,
-             aocl_int_t *info)
+void cggbal_(char *job, integer *n, complex *a, integer *lda, complex *b, integer *ldb, integer *ilo, integer *ihi, real *lscale, real *rscale, real *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cggbal inputs: job %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS "",*job, *n, *lda, *ldb, *ilo, *ihi);
@@ -201,14 +198,20 @@ void cggbal_(char *job, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b
     aocl_int64_t irab, lrab;
     real basl, cmax;
     real coef2, coef5, gamma, alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
     real sfmin;
+    extern /* Subroutine */
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
     real sfmax;
-    aocl_int64_t iflow, kount;
+    integer iflow, kount;
+    extern /* Subroutine */
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *);
     real pgamma;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lsfmin, lsfmax;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -268,7 +271,7 @@ void cggbal_(char *job, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b
         i__1 = -(*info);
         xerbla_("CGGBAL", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
@@ -276,7 +279,7 @@ void cggbal_(char *job, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b
         *ilo = 1;
         *ihi = *n;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -285,7 +288,7 @@ void cggbal_(char *job, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b
         lscale[1] = 1.f;
         rscale[1] = 1.f;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(lsame_(job, "N", 1, 1))
     {
@@ -299,7 +302,7 @@ void cggbal_(char *job, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b
             /* L10: */
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     k = 1;
     l = *n;
@@ -439,12 +442,12 @@ L190:
             /* L195: */
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*ilo == *ihi)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Balance the submatrix in rows ILO to IHI. */
     nr = *ihi - *ilo + 1;
@@ -698,7 +701,7 @@ L350:
         /* L380: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CGGBAL */
 }
 /* cggbal_ */

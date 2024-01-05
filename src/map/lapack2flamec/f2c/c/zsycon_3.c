@@ -155,7 +155,7 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int zsycon_3_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *e, integer *ipiv, doublereal *anorm, doublereal *rcond, doublecomplex *work, integer *info)
+void zsycon_3_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *e, integer *ipiv, doublereal *anorm, doublereal *rcond, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsycon_3 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -163,13 +163,13 @@ int zsycon_3_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomp
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     extern /* Subroutine */
-    int zsytrs_3_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zsytrs_3_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     integer i__, kase;
     extern logical lsame_(char *, char *);
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -225,7 +225,7 @@ int zsycon_3_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomp
         i__1 = -(*info);
         xerbla_("ZSYCON_3", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.;
@@ -233,12 +233,12 @@ int zsycon_3_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomp
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*anorm <= 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if (upper)
@@ -252,7 +252,7 @@ int zsycon_3_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomp
             if (ipiv[i__] > 0 && (a[i__1].r == 0. && a[i__1].i == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
     }
@@ -268,7 +268,7 @@ int zsycon_3_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomp
             if (ipiv[i__] > 0 && (a[i__2].r == 0. && a[i__2].i == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
     }
@@ -288,7 +288,7 @@ L30:
         *rcond = 1. / ainvnm / *anorm;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSYCON_3 */
 }
 /* zsycon_3__ */

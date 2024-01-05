@@ -104,9 +104,7 @@ if INFO>0, the content of */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlat2s_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, real *sa, aocl_int_t *ldsa,
-             aocl_int_t *info)
+void dlat2s_(char *uplo, integer *n, doublereal *a, integer * lda, real *sa, integer *ldsa, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlat2s inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS "",*uplo, *n, *lda, *ldsa);
@@ -183,7 +181,7 @@ void dlat2s_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, real *sa
     }
 L50:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAT2S */
 }
 /* dlat2s_ */

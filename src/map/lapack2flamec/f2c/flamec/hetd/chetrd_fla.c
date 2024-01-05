@@ -198,8 +198,7 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chetrd_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *d__, real *e,
-                scomplex *tau, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
+void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tau, complex *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
@@ -210,7 +209,7 @@ void chetrd_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, rea
     aocl_int64_t nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
-    int chetd2_fla(char *, integer *, complex *, integer *, real *, real *, complex *, integer *), cher2k_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, real *, complex *, integer *), clatrd_(char *, integer *, integer *, complex *, integer *, real *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void chetd2_fla(char *, integer *, complex *, integer *, real *, real *, complex *, integer *), cher2k_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, real *, complex *, integer *), clatrd_(char *, integer *, integer *, complex *, integer *, real *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
@@ -275,7 +274,7 @@ void chetrd_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, rea
     {
         i__1 = -(*info);
         xerbla_("CHETRD", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if(lquery)
     {
@@ -284,8 +283,8 @@ void chetrd_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, rea
     /* Quick return if possible */
     if(*n == 0)
     {
-        work[1].real = 1.f;
-        work[1].imag = 0.f; // , expr subst
+        work[1].r = 1.f;
+        work[1].i = 0.f; // , expr subst
         return;
     }
     nx = *n;
@@ -409,8 +408,8 @@ void chetrd_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, rea
         i__1 = *n - i__ + 1;
         chetd2_fla(uplo, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], &tau[i__], &iinfo);
     }
-    work[1].real = (real)lwkopt;
-    work[1].imag = 0.f; // , expr subst
+    work[1].r = (real) lwkopt;
+    work[1].i = 0.f; // , expr subst
     return;
     /* End of CHETRD */
 }

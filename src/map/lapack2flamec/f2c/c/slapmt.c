@@ -99,8 +99,7 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slapmt_(logical *forwrd, aocl_int_t *m, aocl_int_t *n, real *x, aocl_int_t *ldx, aocl_int_t *k)
+void slapmt_(logical *forwrd, integer *m, integer *n, real *x, integer *ldx, integer *k)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slapmt(forwrd, m, n, x, ldx, k);
@@ -143,7 +142,6 @@ void aocl_lapack_slapmt(logical *forwrd, aocl_int64_t *m, aocl_int64_t *n, real 
     /* Function Body */
     if(*n <= 1)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *n;
@@ -218,7 +216,6 @@ void aocl_lapack_slapmt(logical *forwrd, aocl_int64_t *m, aocl_int64_t *n, real 
             ;
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAPMT */
 }

@@ -78,8 +78,7 @@
 /* > \ingroup rscl */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zdrscl_(aocl_int_t *n, doublereal *sa, dcomplex *sx, aocl_int_t *incx)
+void zdrscl_(integer *n, doublereal *sa, doublecomplex *sx, integer *incx)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_zdrscl(n, sa, sx, incx);
@@ -98,7 +97,11 @@ void aocl_lapack_zdrscl(aocl_int64_t *n, doublereal *sa, dcomplex *sx, aocl_int6
     doublereal mul, cden;
     logical done;
     doublereal cnum, cden1, cnum1;
+    extern /* Subroutine */
+    void dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    void zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal bignum, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -130,7 +133,7 @@ void aocl_lapack_zdrscl(aocl_int64_t *n, doublereal *sa, dcomplex *sx, aocl_int6
     if(*n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = dlamch_("S");
@@ -168,7 +171,7 @@ L10:
         goto L10;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZDRSCL */
 }
 /* zdrscl_ */

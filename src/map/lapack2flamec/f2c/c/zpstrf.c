@@ -138,7 +138,7 @@ static doublereal c_b30 = 1.;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *piv, integer *rank, doublereal *tol, doublereal *work, integer *info)
+void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *piv, integer *rank, doublereal *tol, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpstrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", tol %lf",*uplo, *n, *lda, *tol);
@@ -158,24 +158,24 @@ int zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *piv
     doublereal dtemp;
     integer itemp;
     extern /* Subroutine */
-    int zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     doublereal dstop;
     logical upper;
     doublecomplex ztemp;
     extern /* Subroutine */
-    int zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int zpstf2_(char *, integer *, doublecomplex *, integer *, integer *, integer *, doublereal *, doublereal *, integer *);
+    void zpstf2_(char *, integer *, doublecomplex *, integer *, integer *, integer *, doublereal *, doublereal *, integer *);
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+    void zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     extern integer dmaxloc_(doublereal *, integer *);
     extern /* Subroutine */
-    int zlacgv_(integer *, doublecomplex *, integer *) ;
+    void zlacgv_(integer *, doublecomplex *, integer *) ;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -223,13 +223,13 @@ int zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *piv
         i__1 = -(*info);
         xerbla_("ZPSTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get block size */
     nb = ilaenv_(&c__1, "ZPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
@@ -562,7 +562,7 @@ L220: /* Rank is the number of steps completed. Set INFO = 1 to signal */
     *info = 1;
     AOCL_DTL_TRACE_LOG_EXIT
 L230:
-    return 0;
+    return;
     /* End of ZPSTRF */
 }
 /* zpstrf_ */

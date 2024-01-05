@@ -108,9 +108,7 @@
 /* > \ingroup complex16POcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zpoequb_(aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *s, doublereal *scond,
-              doublereal *amax, aocl_int_t *info)
+void zpoequb_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doublereal *scond, doublereal *amax, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpoequb inputs: n %" FLA_IS ", lda %" FLA_IS "",*n, *lda);
@@ -167,7 +165,7 @@ void zpoequb_(aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *s, double
         i__1 = -(*info);
         xerbla_("ZPOEQUB", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if(*n == 0)
@@ -175,7 +173,7 @@ void zpoequb_(aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *s, double
         *scond = 1.;
         *amax = 0.;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     base = dlamch_("B");
     tmp = -.5 / log(base);
@@ -210,7 +208,7 @@ void zpoequb_(aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *s, double
             {
                 *info = i__;
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L20: */
         }
@@ -230,7 +228,7 @@ void zpoequb_(aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *s, double
         *scond = sqrt(smin) / sqrt(*amax);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPOEQUB */
 }
 /* zpoequb_ */

@@ -114,9 +114,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void csptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, aocl_int_t *ipiv, scomplex *b,
-             aocl_int_t *ldb, aocl_int_t *info)
+void csptrs_(char *uplo, integer *n, integer *nrhs, complex * ap, integer *ipiv, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -139,11 +137,11 @@ void csptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, aocl_int
     integer kc, kp;
     complex akm1, bkm1, akm1k;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     complex denom;
     extern /* Subroutine */
-    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
+    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -197,13 +195,13 @@ void csptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, aocl_int
         i__1 = -(*info);
         xerbla_("CSPTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(upper)
     {
@@ -534,7 +532,7 @@ void csptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, aocl_int
     L100:;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSPTRS */
 }
 /* csptrs_ */

@@ -197,10 +197,7 @@ the corresponding */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m, aocl_int_t *n,
-             aocl_int_t *k, real *v, aocl_int_t *ldv, real *t, aocl_int_t *ldt, real *c__,
-             aocl_int_t *ldc, real *work, aocl_int_t *ldwork)
+void slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, real *v, integer *ldv, real *t, integer *ldt, real *c__, integer *ldc, real *work, integer * ldwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -212,8 +209,10 @@ void slarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
     aocl_int64_t c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
         i__2;
     /* Local variables */
-    aocl_int64_t i__, j;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *);
     char transt[1];
     /* -- LAPACK auxiliary routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -251,7 +250,7 @@ void slarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
     if(*m <= 0 || *n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(lsame_(trans, "N", 1, 1))
     {
@@ -695,7 +694,7 @@ void slarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLARFB */
 }
 /* slarfb_ */

@@ -128,9 +128,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup gecon */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zgecon_(char *norm, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *anorm,
-             doublereal *rcond, dcomplex *work, doublereal *rwork, aocl_int_t *info)
+void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal *anorm, doublereal *rcond, doublecomplex * work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgecon inputs: norm %c, n %" FLA_IS ", lda %" FLA_IS "",*norm, *n, *lda);
@@ -148,15 +146,20 @@ void zgecon_(char *norm, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal
     doublereal scale;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
+    extern /* Subroutine */
+    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
+    extern /* Subroutine */
+    void zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
     char normin[1];
     doublereal smlnum;
-    doublereal hugeval;
-    /* -- LAPACK computational routine -- */
+    extern /* Subroutine */
+    void zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *);
+    /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -213,7 +216,7 @@ void zgecon_(char *norm, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal
         i__1 = -(*info);
         xerbla_("ZGECON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.;
@@ -221,12 +224,12 @@ void zgecon_(char *norm, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(*anorm == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     smlnum = dlamch_("Safe minimum");
     /* Estimate the norm of inv(A). */
@@ -297,7 +300,7 @@ L10:
     AOCL_DTL_TRACE_LOG_EXIT
 L20:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGECON */
 }
 /* zgecon_ */

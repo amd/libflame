@@ -5,7 +5,7 @@
 
 #include "FLA_f2c.h"
 
-extern int zspr_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+extern void zspr_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
 extern void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
 extern void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
 

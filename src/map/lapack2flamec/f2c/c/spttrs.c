@@ -107,9 +107,7 @@ static aocl_int64_t c_n1 = -1;
 /* > \ingroup realPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void spttrs_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *b, aocl_int_t *ldb,
-             aocl_int_t *info)
+void spttrs_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -122,7 +120,7 @@ void spttrs_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *b, aocl_
     /* Local variables */
     integer j, jb, nb;
     extern /* Subroutine */
-    int sptts2_(integer *, integer *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sptts2_(integer *, integer *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -168,13 +166,13 @@ void spttrs_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *b, aocl_
         i__1 = -(*info);
         xerbla_("SPTTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine the number of right-hand sides to solve at a time. */
     if(*nrhs == 1)
@@ -206,7 +204,7 @@ void spttrs_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *b, aocl_
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPTTRS */
 }
 /* spttrs_ */

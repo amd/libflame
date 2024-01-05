@@ -136,9 +136,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ztrcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
-             doublereal *rcond, dcomplex *work, doublereal *rwork, aocl_int_t *info)
+void ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, integer *lda, doublereal *rcond, doublecomplex * work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztrcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "",*norm, *uplo, *diag, *n, *lda);
@@ -155,14 +153,20 @@ void ztrcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, dcomplex *a, aoc
     doublereal anorm;
     logical upper;
     doublereal xnorm;
+    extern /* Subroutine */
+    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
+    extern /* Subroutine */
+    void zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
     char normin[1];
     doublereal smlnum;
     logical nounit;
+    extern /* Subroutine */
+    void zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -226,14 +230,14 @@ void ztrcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, dcomplex *a, aoc
         i__1 = -(*info);
         xerbla_("ZTRCON", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *rcond = 1.;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     *rcond = 0.;
     smlnum = dlamch_("Safe minimum") * (doublereal) fla_max(1,*n);
@@ -293,7 +297,7 @@ void ztrcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, dcomplex *a, aoc
     }
 L20:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTRCON */
 }
 /* ztrcon_ */

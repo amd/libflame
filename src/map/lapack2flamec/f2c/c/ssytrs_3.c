@@ -154,7 +154,7 @@ static real c_b9 = 1.f;
 /* > \endverbatim */
 /* ==================================================================== */
 /* Subroutine */
-int ssytrs_3_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, real *e, integer *ipiv, real *b, integer *ldb, integer *info)
+void ssytrs_3_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, real *e, integer *ipiv, real *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -173,10 +173,10 @@ int ssytrs_3_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, rea
     extern logical lsame_(char *, char *);
     real denom;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *), strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sswap_(integer *, real *, integer *, real *, integer *), strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -234,13 +234,13 @@ int ssytrs_3_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, rea
         i__1 = -(*info);
         xerbla_("SSYTRS_3", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -386,7 +386,7 @@ int ssytrs_3_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, rea
         /* END Lower */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTRS_3 */
 }
 /* ssytrs_3__ */

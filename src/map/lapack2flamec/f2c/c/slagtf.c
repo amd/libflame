@@ -151,9 +151,7 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slagtf_(aocl_int_t *n, real *a, real *lambda, real *b, real *c__, real *tol, real *d__,
-             aocl_int_t *in, aocl_int_t *info)
+void slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, real *d__, integer *in, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slagtf(n, a, lambda, b, c__, tol, d__, in, info);
@@ -214,11 +212,10 @@ void aocl_lapack_slagtf(aocl_int64_t *n, real *a, real *lambda, real *b, real *c
         *info = -1;
         i__1 = -(*info);
         xerbla_("SLAGTF", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     a[1] -= *lambda;
@@ -229,7 +226,6 @@ void aocl_lapack_slagtf(aocl_int64_t *n, real *a, real *lambda, real *b, real *c
         {
             in[1] = 1;
         }
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     eps = slamch_("Epsilon");
@@ -302,7 +298,6 @@ void aocl_lapack_slagtf(aocl_int64_t *n, real *a, real *lambda, real *b, real *c
     {
         in[*n] = (aocl_int_t)(*n);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAGTF */
 }

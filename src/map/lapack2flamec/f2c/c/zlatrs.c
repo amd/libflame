@@ -231,7 +231,7 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, doublecomplex *a, integer *lda, doublecomplex *x, doublereal *scale, doublereal *cnorm, integer *info)
+void zlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, doublecomplex *a, integer *lda, doublecomplex *x, doublereal *scale, doublereal *cnorm, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlatrs inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *trans, *diag, *normin, *n, *lda);
@@ -252,7 +252,7 @@ int zlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, doub
     doublecomplex tjjs;
     doublereal xmax, grow;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     doublereal tscal;
     doublecomplex uscal;
@@ -264,7 +264,7 @@ int zlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, doub
     extern /* Double Complex */
     VOID zdotu_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern /* Subroutine */
-    int zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsv_( char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsv_( char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
@@ -342,14 +342,14 @@ int zlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, doub
         i__1 = -(*info);
         xerbla_("ZLATRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *scale = 1.;
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine machine dependent parameters to control overflow. */
     smlnum = dlamch_("Safe minimum") / dlamch_("Precision");
@@ -505,7 +505,7 @@ int zlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, doub
                 /* entry. Rely on TRSV to propagate Inf and NaN. */
                 ztrsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
     }
@@ -1363,7 +1363,7 @@ L210:
         dscal_(n, &d__1, &cnorm[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLATRS */
 }
 /* zlatrs_ */

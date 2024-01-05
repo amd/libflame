@@ -162,7 +162,7 @@ the */
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *tb, integer *ltb, integer *ipiv, integer *ipiv2, doublecomplex *work, integer *lwork, integer *info)
+void zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *tb, integer *ltb, integer *ipiv, integer *ipiv2, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsytrf_aa_2stage inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ltb %" FLA_IS ", lwork %" FLA_IS "", *uplo, *n, *lda, *ltb, *lwork);
@@ -176,13 +176,13 @@ int zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, do
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zgbtrf_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, integer *), zgetrf_(integer *, integer *, doublecomplex *, integer *, integer *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+    void zgbtrf_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, integer *), zgetrf_(integer *, integer *, doublecomplex *, integer *, integer *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
     logical tquery, wquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -242,7 +242,7 @@ int zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, do
         i__1 = -(*info);
         xerbla_("ZSYTRF_AA_2STAGE", &i__1, (ftnlen)16);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Answer the query */
     nb = ilaenv_(&c__1, "ZSYTRF_AA_2STAGE", uplo, n, &c_n1, &c_n1, &c_n1);
@@ -264,13 +264,13 @@ int zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, do
     if (tquery || wquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine the number of the block size */
     ldtb = *ltb / *n;
@@ -750,7 +750,7 @@ int zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, do
     /* Factor the band matrix */
     zgbtrf_(n, n, &nb, &nb, &tb[1], &ldtb, &ipiv2[1], info);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSYTRF_AA_2STAGE */
 }
 /* zsytrf_aa_2stage__ */

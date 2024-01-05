@@ -105,9 +105,7 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slar2v_(aocl_int_t *n, real *x, real *y, real *z__, aocl_int_t *incx, real *c__, real *s,
-             aocl_int_t *incc)
+void slar2v_(integer *n, real *x, real *y, real *z__, integer *incx, real *c__, real *s, integer *incc)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slar2v(n, x, y, z__, incx, c__, s, incc);
@@ -178,7 +176,6 @@ void aocl_lapack_slar2v(aocl_int64_t *n, real *x, real *y, real *z__, aocl_int64
         /* L10: */
     }
     /* End of SLAR2V */
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* slar2v_ */

@@ -100,9 +100,7 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dtpttr_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *a, aocl_int_t *lda,
-             aocl_int_t *info)
+void dtpttr_(char *uplo, integer *n, doublereal *ap, doublereal *a, integer *lda, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtpttr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -158,7 +156,7 @@ void dtpttr_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *a, aocl_int_
         i__1 = -(*info);
         xerbla_("DTPTTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(lower)
     {
@@ -189,7 +187,7 @@ void dtpttr_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *a, aocl_int_
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTPTTR */
 }
 /* dtpttr_ */

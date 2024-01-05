@@ -175,9 +175,7 @@ the routine */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dormtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n,
-                doublereal *a, aocl_int64_t *lda, doublereal *tau, doublereal *c__,
-                aocl_int64_t *ldc, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
+void dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau, doublereal * c__, integer *ldc, doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
@@ -195,7 +193,7 @@ void dormtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int dormql_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dormql_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -313,7 +311,7 @@ void dormtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
     {
         i__2 = -(*info);
         xerbla_("DORMTR", &i__2, (ftnlen)6);
-        return 0;
+        return;
     }
     else if(lquery)
     {
@@ -359,7 +357,7 @@ void dormtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
         dormqr_fla(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1],
                    &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     }
-    work[1] = (doublereal)lwkopt;
+    work[1] = (doublereal) lwkopt;
     return;
     /* End of DORMTR */
 }

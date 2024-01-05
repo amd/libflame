@@ -120,9 +120,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zpbtrs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, dcomplex *ab,
-             aocl_int_t *ldab, dcomplex *b, aocl_int_t *ldb, aocl_int_t *info)
+void zpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, doublecomplex *ab, integer *ldab, doublecomplex *b, integer * ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpbtrs inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *kd, *nrhs, *ldab, *ldb);
@@ -134,7 +132,7 @@ void zpbtrs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, dcompl
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
     extern /* Subroutine */
-    int ztbsv_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ztbsv_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -193,13 +191,13 @@ void zpbtrs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, dcompl
         i__1 = -(*info);
         xerbla_("ZPBTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(upper)
     {
@@ -232,7 +230,7 @@ void zpbtrs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, dcompl
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPBTRS */
 }
 /* zpbtrs_ */

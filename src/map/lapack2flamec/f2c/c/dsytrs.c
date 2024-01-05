@@ -120,9 +120,7 @@ static doublereal c_b19 = 1.;
 /* > \ingroup doubleSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dsytrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_int_t *lda,
-             aocl_int_t *ipiv, doublereal *b, aocl_int_t *ldb, aocl_int_t *info)
+void dsytrs_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv, doublereal *b, integer * ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb);
@@ -134,9 +132,15 @@ void dsytrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_in
     doublereal ak, bk;
     aocl_int64_t kp;
     doublereal akm1, bkm1;
+    extern /* Subroutine */
+    void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal akm1k;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *);
     doublereal denom;
+    extern /* Subroutine */
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -196,13 +200,13 @@ void dsytrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_in
         i__1 = -(*info);
         xerbla_("DSYTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(upper)
     {
@@ -442,7 +446,7 @@ void dsytrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_in
     L100:;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYTRS */
 }
 /* dsytrs_ */

@@ -141,10 +141,7 @@
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zgeequb_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *r__,
-              doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax,
-              aocl_int_t *info)
+void zgeequb_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgeequb inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
@@ -210,7 +207,7 @@ void zgeequb_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, double
         i__1 = -(*info);
         xerbla_("ZGEEQUB", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if(*m == 0 || *n == 0)
@@ -219,7 +216,7 @@ void zgeequb_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, double
         *colcnd = 1.;
         *amax = 0.;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. Assume SMLNUM is a power of the radix. */
     smlnum = dlamch_("S");
@@ -285,7 +282,7 @@ void zgeequb_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, double
             {
                 *info = i__;
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L50: */
         }
@@ -361,7 +358,7 @@ void zgeequb_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, double
             {
                 *info = *m + j;
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L110: */
         }
@@ -383,7 +380,7 @@ void zgeequb_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, double
         *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGEEQUB */
 }
 /* zgeequb_ */

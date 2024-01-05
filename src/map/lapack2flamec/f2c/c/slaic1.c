@@ -132,9 +132,7 @@ static real c_b5 = 1.f;
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slaic1_(aocl_int_t *job, aocl_int_t *j, real *x, real *sest, real *w, real *gamma,
-             real *sestpr, real *s, real *c__)
+void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma, real *sestpr, real *s, real *c__)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -201,7 +199,7 @@ void slaic1_(aocl_int_t *job, aocl_int_t *j, real *x, real *sest, real *w, real 
                 *sestpr = s1 * tmp;
             }
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         else if(absgam <= eps * absest)
         {
@@ -212,7 +210,7 @@ void slaic1_(aocl_int_t *job, aocl_int_t *j, real *x, real *sest, real *w, real 
             s2 = absalp / tmp;
             *sestpr = tmp * sqrt(s1 * s1 + s2 * s2);
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         else if(absalp <= eps * absest)
         {
@@ -231,7 +229,7 @@ void slaic1_(aocl_int_t *job, aocl_int_t *j, real *x, real *sest, real *w, real 
                 *sestpr = s1;
             }
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         else if(absest <= eps * absalp || absest <= eps * absgam)
         {
@@ -254,7 +252,7 @@ void slaic1_(aocl_int_t *job, aocl_int_t *j, real *x, real *sest, real *w, real 
                 *c__ = r_sign(&c_b5, gamma) / *c__;
             }
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         else
         {
@@ -278,7 +276,7 @@ void slaic1_(aocl_int_t *job, aocl_int_t *j, real *x, real *sest, real *w, real 
             *c__ = cosine / tmp;
             *sestpr = sqrt(t + 1.f) * absest;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     else if(*job == 2)
@@ -308,7 +306,7 @@ void slaic1_(aocl_int_t *job, aocl_int_t *j, real *x, real *sest, real *w, real 
             *s /= tmp;
             *c__ /= tmp;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         else if(absgam <= eps * absest)
         {
@@ -316,7 +314,7 @@ void slaic1_(aocl_int_t *job, aocl_int_t *j, real *x, real *sest, real *w, real 
             *c__ = 1.f;
             *sestpr = absgam;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         else if(absalp <= eps * absest)
         {
@@ -335,7 +333,7 @@ void slaic1_(aocl_int_t *job, aocl_int_t *j, real *x, real *sest, real *w, real 
                 *sestpr = s2;
             }
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         else if(absest <= eps * absalp || absest <= eps * absgam)
         {
@@ -358,7 +356,7 @@ void slaic1_(aocl_int_t *job, aocl_int_t *j, real *x, real *sest, real *w, real 
                 *s = -r_sign(&c_b5, gamma) / *s;
             }
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         else
         {
@@ -402,11 +400,11 @@ void slaic1_(aocl_int_t *job, aocl_int_t *j, real *x, real *sest, real *w, real 
             *s = sine / tmp;
             *c__ = cosine / tmp;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLAIC1 */
 }
 /* slaic1_ */

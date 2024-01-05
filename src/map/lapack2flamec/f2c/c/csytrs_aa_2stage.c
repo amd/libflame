@@ -134,7 +134,7 @@ static integer c_n1 = -1;
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int csytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *tb, integer *ltb, integer *ipiv, integer *ipiv2, complex *b, integer *ldb, integer *info)
+void csytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *tb, integer *ltb, integer *ipiv, integer *ipiv2, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -152,7 +152,7 @@ int csytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, complex *a, integer
     integer nb, ldtb;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+    void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgbtrs_( char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
@@ -217,13 +217,13 @@ int csytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, complex *a, integer
         i__1 = -(*info);
         xerbla_("CSYTRS_AA_2STAGE", &i__1, (ftnlen)16);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Read NB and compute LDTB */
     nb = (integer) tb[1].r;
@@ -277,7 +277,7 @@ int csytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, complex *a, integer
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYTRS_AA_2STAGE */
 }
 /* csytrs_aa_2stage__ */

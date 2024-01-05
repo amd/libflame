@@ -118,9 +118,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cpocon_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *anorm, real *rcond,
-             scomplex *work, real *rwork, aocl_int_t *info)
+void cpocon_(char *uplo, integer *n, complex *a, integer *lda, real *anorm, real *rcond, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -143,12 +141,17 @@ void cpocon_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *anor
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     logical upper;
+    extern /* Subroutine */
+    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
+    extern integer icamax_(integer *, complex *, integer *);
     real scalel;
     extern real slamch_(char *);
     real scaleu;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
+    extern /* Subroutine */
+    void clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *, real *, integer *), csrscl_(integer *, real *, complex *, integer *);
     char normin[1];
     real smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -208,7 +211,7 @@ void cpocon_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *anor
         i__1 = -(*info);
         xerbla_("CPOCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.f;
@@ -216,12 +219,12 @@ void cpocon_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *anor
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if(*anorm == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     smlnum = slamch_("Safe minimum");
     /* Estimate the 1-norm of inv(A). */
@@ -272,7 +275,7 @@ L10:
     }
 L20:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPOCON */
 }
 /* cpocon_ */

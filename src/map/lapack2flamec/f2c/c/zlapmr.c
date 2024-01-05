@@ -99,9 +99,7 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlapmr_(logical *forwrd, aocl_int_t *m, aocl_int_t *n, dcomplex *x, aocl_int_t *ldx,
-             aocl_int_t *k)
+void zlapmr_(logical *forwrd, integer *m, integer *n, doublecomplex *x, integer *ldx, integer *k)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlapmr inputs: m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS ", k %" FLA_IS "",*m, *n, *ldx, *k);
@@ -131,7 +129,7 @@ void zlapmr_(logical *forwrd, aocl_int_t *m, aocl_int_t *n, dcomplex *x, aocl_in
     if(*m <= 1)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *m;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -220,7 +218,7 @@ void zlapmr_(logical *forwrd, aocl_int_t *m, aocl_int_t *n, dcomplex *x, aocl_in
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAPMT */
 }
 /* zlapmr_ */

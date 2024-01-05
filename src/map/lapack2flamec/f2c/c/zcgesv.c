@@ -200,7 +200,7 @@ the unit diagonal elements of L are not stored. */
 /* > \ingroup complex16GEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int zcgesv_(integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublecomplex *work, complex *swork, doublereal *rwork, integer *iter, integer *info)
+void zcgesv_(integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublecomplex *work, complex *swork, doublereal *rwork, integer *iter, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zcgesv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*n, *nrhs, *lda, *ldb, *ldx);
@@ -216,16 +216,16 @@ int zcgesv_(integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *
     doublereal rnrm, xnrm;
     integer ptsx, iiter;
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), clag2z_( integer *, integer *, complex *, integer *, doublecomplex *, integer *, integer *), zlag2c_(integer *, integer *, doublecomplex *, integer *, complex *, integer *, integer *);
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), clag2z_( integer *, integer *, complex *, integer *, doublecomplex *, integer *, integer *), zlag2c_(integer *, integer *, doublecomplex *, integer *, complex *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int cgetrf_(integer *, integer *, complex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void cgetrf_(integer *, integer *, complex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     extern /* Subroutine */
-    int cgetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+    void cgetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     extern integer izamax_(integer *, doublecomplex *, integer *);
     extern /* Subroutine */
-    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgetrf_(integer *, integer *, doublecomplex *, integer *, integer *, integer *), zgetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgetrf_(integer *, integer *, doublecomplex *, integer *, integer *, integer *), zgetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -293,13 +293,13 @@ int zcgesv_(integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *
         i__1 = -(*info);
         xerbla_("ZCGESV", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if (N.EQ.0). */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Skip single precision iterative refinement if a priori slower */
     /* than double precision factorization. */
@@ -365,7 +365,7 @@ int zcgesv_(integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *
     /* stopping criterion. We are good to exit. */
     *iter = 0;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 L10:
     for (iiter = 1;
             iiter <= 30;
@@ -414,7 +414,7 @@ L10:
         /* stopping criterion, we are good to exit. */
         *iter = iiter;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
 L20: /* L30: */
         ;
     }
@@ -429,12 +429,12 @@ L40: /* Single-precision iterative refinement failed to converge to a */
     if (*info != 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     zlacpy_("All", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
     zgetrs_("No transpose", n, nrhs, &a[a_offset], lda, &ipiv[1], &x[x_offset], ldx, info);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZCGESV. */
 }
 /* zcgesv_ */

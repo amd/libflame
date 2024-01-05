@@ -117,8 +117,7 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void stptri_(char *uplo, char *diag, aocl_int_t *n, real *ap, aocl_int_t *info)
+void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -131,10 +130,12 @@ void stptri_(char *uplo, char *diag, aocl_int_t *n, real *ap, aocl_int_t *info)
     /* Local variables */
     aocl_int64_t j, jc, jj;
     real ajj;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    int stpmv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void stpmv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer jclast;
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -180,7 +181,7 @@ void stptri_(char *uplo, char *diag, aocl_int_t *n, real *ap, aocl_int_t *info)
         i__1 = -(*info);
         xerbla_("STPTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check for singularity if non-unit. */
     if(nounit)
@@ -195,7 +196,7 @@ void stptri_(char *uplo, char *diag, aocl_int_t *n, real *ap, aocl_int_t *info)
                 if(ap[jj] == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 /* L10: */
             }
@@ -209,7 +210,7 @@ void stptri_(char *uplo, char *diag, aocl_int_t *n, real *ap, aocl_int_t *info)
                 if(ap[jj] == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 jj = jj + *n - *info + 1;
                 /* L20: */
@@ -272,7 +273,7 @@ void stptri_(char *uplo, char *diag, aocl_int_t *n, real *ap, aocl_int_t *info)
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of STPTRI */
 }
 /* stptri_ */

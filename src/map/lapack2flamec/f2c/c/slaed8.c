@@ -238,12 +238,7 @@ static aocl_int64_t c__1 = 1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slaed8_(aocl_int_t *icompq, aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz, real *d__, real *q,
-             aocl_int_t *ldq, aocl_int_t *indxq, real *rho, aocl_int_t *cutpnt, real *z__,
-             real *dlambda, real *q2, aocl_int_t *ldq2, real *w, aocl_int_t *perm,
-             aocl_int_t *givptr, aocl_int_t *givcol, real *givnum, aocl_int_t *indxp,
-             aocl_int_t *indx, aocl_int_t *info)
+void slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, real *q, integer *ldq, integer *indxq, real *rho, integer *cutpnt, real *z__, real *dlamda, real *q2, integer *ldq2, real *w, integer *perm, integer *givptr, integer *givcol, real * givnum, integer *indxp, integer *indx, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slaed8(icompq, k, n, qsiz, d__, q, ldq, indxq, rho, cutpnt, z__, dlambda, q2, ldq2,
@@ -292,13 +287,15 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
     real s, t;
     aocl_int64_t k2, n1, n2, jp, n1p1;
     real eps, tau, tol;
-    aocl_int64_t jlam, imax, jmax;
+    integer jlam, imax, jmax;
+    extern /* Subroutine */
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *), sscal_(integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer * );
     extern real slapy2_(real *, real *), slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int slamrg_(integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void slamrg_(integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -367,7 +364,7 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
     {
         i__1 = -(*info);
         xerbla_("SLAED8", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Need to initialize GIVPTR to O here in case of quick exit */
     /* to prevent an unspecified code behavior (usually sigfault) */
@@ -377,7 +374,6 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     n1 = *cutpnt;
@@ -452,7 +448,6 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
             }
             aocl_lapack_slacpy("A", qsiz, n, &q2[q2_dim1 + 1], ldq2, &q[q_dim1 + 1], ldq);
         }
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* If there are multiple eigenvalues then the problem deflates. Here */
@@ -607,7 +602,6 @@ L110: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
                                &q[(*k + 1) * q_dim1 + 1], ldq);
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAED8 */
 }

@@ -253,11 +253,7 @@ here the magnitude of a scomplex number */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void chsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t *n, scomplex *h__,
-             aocl_int_t *ldh, scomplex *w, scomplex *vl, aocl_int_t *ldvl, scomplex *vr,
-             aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m, scomplex *work, real *rwork,
-             aocl_int_t *ifaill, aocl_int_t *ifailr, aocl_int_t *info)
+void chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n, complex *h__, integer *ldh, complex *w, complex * vl, integer *ldvl, complex *vr, integer *ldvr, integer *mm, integer * m, complex *work, real *rwork, integer *ifaill, integer *ifailr, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -285,7 +281,7 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t 
     logical leftv, bothv;
     real hnorm;
     extern /* Subroutine */
-    int claein_(logical *, logical *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, real *, real *, real *, integer *);
+    void claein_(logical *, logical *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, real *, real *, real *, integer *);
     extern real slamch_(char *), clanhs_(char *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -392,13 +388,13 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t 
         i__1 = -(*info);
         xerbla_("CHSEIN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set machine-dependent constants. */
     unfl = slamch_("Safe minimum");
@@ -471,7 +467,7 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t 
                 {
                     *info = -6;
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 else if(hnorm > 0.f)
                 {
@@ -564,7 +560,7 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t 
         /* L100: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHSEIN */
 }
 /* chsein_ */

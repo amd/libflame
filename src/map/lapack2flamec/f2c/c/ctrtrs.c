@@ -138,9 +138,7 @@ static scomplex c_b2 = {1.f, 0.f};
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ctrtrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a,
-             aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, aocl_int_t *info)
+void ctrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, complex *a, integer *lda, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -157,7 +155,7 @@ void ctrtrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
     /* Local variables */
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -223,13 +221,13 @@ void ctrtrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
         i__1 = -(*info);
         xerbla_("CTRTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check for singularity. */
     if(nounit)
@@ -241,7 +239,7 @@ void ctrtrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
             if(a[i__2].real == 0.f && a[i__2].imag == 0.f)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L10: */
         }
@@ -250,7 +248,7 @@ void ctrtrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrh
     /* Solve A * x = b, A**T * x = b, or A**H * x = b. */
     ctrsm_("Left", uplo, trans, diag, n, nrhs, &c_b2, &a[a_offset], lda, &b[ b_offset], ldb);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTRTRS */
 }
 /* ctrtrs_ */

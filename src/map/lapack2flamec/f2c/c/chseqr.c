@@ -303,10 +303,7 @@ static integer c__49 = 49;
 /* > of Matrix Analysis, volume 23, pages 948--973, 2002. */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void chseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, scomplex *h__,
-             aocl_int_t *ldh, scomplex *w, scomplex *z__, aocl_int_t *ldz, scomplex *work,
-             aocl_int_t *lwork, aocl_int_t *info)
+void chseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, complex *h__, integer *ldh, complex *w, complex *z__, integer *ldz, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("chseqr inputs: job %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldz %" FLA_IS "",*job, *compz, *n, *ilo, *ihi, *ldh, *ldz);
@@ -319,15 +316,17 @@ void chseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
     /* Subroutine */
 
     /* Local variables */
-    scomplex hl[2401] /* was [49][49] */
-        ;
-    aocl_int64_t kbot, nmin;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    complex hl[2401] /* was [49][49] */
+    ;
+    integer kbot, nmin;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
     logical initz;
     scomplex workl[49];
     logical wantt, wantz;
     extern /* Subroutine */
-    int claqr0_(logical *, logical *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, integer *), clahqr_(logical *, logical *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void claqr0_(logical *, logical *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, integer *), clahqr_(logical *, logical *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -419,14 +418,14 @@ void chseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
         i__1 = -(*info);
         xerbla_("CHSEQR", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(*n == 0)
     {
         /* ==== Quick return in case N = 0;
         nothing to do. ==== */
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
@@ -444,7 +443,7 @@ void chseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
         work[1].r = q__1.r;
         work[1].i = q__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else
     {
@@ -475,7 +474,7 @@ void chseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
             w[i__1].r = h__[i__2].r;
             w[i__1].i = h__[i__2].i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* ==== CLAHQR/CLAQR0 crossover point ==== */
         nmin = ilaenv_(&c__12, "CHSEQR", ch__1, n, ilo, ihi, lwork);
@@ -546,6 +545,6 @@ void chseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t 
     }
     /* ==== End of CHSEQR ==== */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* chseqr_ */

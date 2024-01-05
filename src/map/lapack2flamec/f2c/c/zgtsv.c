@@ -119,9 +119,7 @@
 /* > \ingroup complex16GTsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zgtsv_(aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl, dcomplex *d__,
-            dcomplex *du, dcomplex *b, aocl_int_t *ldb, aocl_int_t *info)
+void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, doublecomplex *du, doublecomplex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgtsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
@@ -186,12 +184,12 @@ void zgtsv_(aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl, dcomplex *d__,
         i__1 = -(*info);
         xerbla_("ZGTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *n - 1;
     for(k = 1; k <= i__1; ++k)
@@ -208,7 +206,7 @@ void zgtsv_(aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl, dcomplex *d__,
                 /* solution can not be found. */
                 *info = k;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
         else /* if(complicated condition) */
@@ -319,7 +317,7 @@ void zgtsv_(aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl, dcomplex *d__,
     {
         *info = *n;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Back solve with the matrix U from the factorization. */
     i__1 = *nrhs;
@@ -367,7 +365,7 @@ void zgtsv_(aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl, dcomplex *d__,
         /* L50: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGTSV */
 }
 /* zgtsv_ */

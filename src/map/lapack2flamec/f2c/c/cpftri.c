@@ -215,8 +215,7 @@ k=N/2. IF TRANSR = 'C' then RFP is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cpftri_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *info)
+void cpftri_(char *transr, char *uplo, integer *n, complex *a, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -233,11 +232,17 @@ void cpftri_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *i
     /* Local variables */
     aocl_int64_t k, n1, n2;
     logical normaltransr;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    void cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     logical lower;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
+    extern /* Subroutine */
+    void clauum_(char *, integer *, complex *, integer *, integer *), ctftri_(char *, char *, char *, integer *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -278,20 +283,20 @@ void cpftri_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *i
         i__1 = -(*info);
         xerbla_("CPFTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Invert the triangular Cholesky factor U or L. */
     aocl_lapack_ctftri(transr, uplo, "N", n, a, info);
     if(*info > 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* If N is odd, set NISODD = .TRUE. */
     /* If N is even, set K = N/2 and NISODD = .FALSE. */
@@ -434,7 +439,7 @@ void cpftri_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *i
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPFTRI */
 }
 /* cpftri_ */

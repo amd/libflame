@@ -180,9 +180,7 @@ static doublereal c_b9 = 1.;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, doublereal *a,
-             aocl_int_t *lda, aocl_int_t *ipiv, doublereal *w, aocl_int_t *ldw, aocl_int_t *info)
+void dlasyf_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a, integer *lda, integer *ipiv, doublereal *w, integer * ldw, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasyf inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldw %" FLA_IS "",*uplo, *n, *nb, *lda, *ldw);
@@ -197,10 +195,10 @@ void dlasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, doublere
     aocl_int64_t jb, jj, kk, jp, kp, kw, kkw, imax, jmax;
     doublereal alpha;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer kstep;
     doublereal absakk;
     doublereal colmax, rowmax;
@@ -803,7 +801,7 @@ void dlasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, doublere
         *kb = k - 1;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASYF */
 }
 /* dlasyf_ */

@@ -398,13 +398,7 @@ i+1}
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sla_gerfsx_extended_(integer *prec_type__, integer *trans_type__, integer *n, integer *nrhs,
-                          real *a, integer *lda, real *af, integer *ldaf, integer *ipiv,
-                          logical *colequ, real *c__, real *b, integer *ldb, real *y, integer *ldy,
-                          real *berr_out__, integer *n_norms__, real *errs_n__, real *errs_c__,
-                          real *res, real *ayb, real *dy, real *y_tail__, real *rcond,
-                          integer *ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__,
-                          integer *info)
+void sla_gerfsx_extended_(integer *prec_type__, integer * trans_type__, integer *n, integer *nrhs, real *a, integer *lda, real * af, integer *ldaf, integer *ipiv, logical *colequ, real *c__, real *b, integer *ldb, real *y, integer *ldy, real *berr_out__, integer * n_norms__, real *errs_n__, real *errs_c__, real *res, real *ayb, real *dy, real *y_tail__, real *rcond, integer *ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sla_gerfsx_extended inputs: n %" FLA_IS ",nrhs %" FLA_IS ",lda %" FLA_IS
@@ -419,37 +413,30 @@ void sla_gerfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
     real dxratmax, dzratmax;
     integer i__, j;
     extern /* Subroutine */
-        void
-        sla_geamv_(integer *, integer *, integer *, real *, real *, integer *, real *, integer *,
-                   real *, real *, integer *);
+    void sla_geamv_(integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     logical incr_prec__;
     real prev_dz_z__, yk, final_dx_x__, final_dz_z__;
     extern /* Subroutine */
-        void
-        sla_wwaddw_(integer *, real *, real *, real *);
+    void sla_wwaddw_(integer *, real *, real *, real * );
     real prevnormdx;
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__, ymin;
     extern /* Subroutine */
-    int sla_lin_berr_(integer *, integer *, integer *, real *, real *, real *), blas_sgemv_x_(integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    void sla_lin_berr_(integer *, integer *, integer *, real *, real *, real *), blas_sgemv_x_(integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, integer *);
     integer y_prec_state__;
     extern /* Subroutine */
     int blas_sgemv2_x_(integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     real dxrat, dzrat;
     char trans[1];
     extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     real normx, normy;
     extern /* Subroutine */
-        void
-        saxpy_(integer *, real *, real *, integer *, real *, integer *);
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     real normdx;
     extern /* Subroutine */
-        void
-        sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *,
-                integer *);
+    void sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     extern /* Character */
         void
         chla_transtype_(char *, integer *);
@@ -502,7 +489,6 @@ void sla_gerfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
     /* Function Body */
     if(*info != 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     chla_transtype_(ch__1, trans_type__);
@@ -776,7 +762,6 @@ void sla_gerfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
         sla_lin_berr_(n, n, &c__1, &res[1], &ayb[1], &berr_out__[j]);
         /* End of loop for each RHS. */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* sla_gerfsx_extended__ */

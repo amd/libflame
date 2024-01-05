@@ -84,8 +84,7 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slasrt_(char *id, aocl_int_t *n, real *d__, aocl_int_t *info)
+void slasrt_(char *id, integer *n, real *d__, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -156,13 +155,13 @@ void slasrt_(char *id, aocl_int_t *n, real *d__, aocl_int_t *info)
         i__1 = -(*info);
         xerbla_("SLASRT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n <= 1)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     stkpnt = 1;
     stack[0] = 1;
@@ -355,7 +354,7 @@ L10:
         goto L10;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASRT */
 }
 /* slasrt_ */

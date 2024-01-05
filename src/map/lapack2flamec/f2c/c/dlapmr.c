@@ -99,9 +99,7 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlapmr_(logical *forwrd, aocl_int_t *m, aocl_int_t *n, doublereal *x, aocl_int_t *ldx,
-             aocl_int_t *k)
+void dlapmr_(logical *forwrd, integer *m, integer *n, doublereal *x, integer *ldx, integer *k)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlapmr inputs: forward %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS ", k %" FLA_IS "",* forwrd , * m, *n, *ldx, *k);
@@ -131,7 +129,7 @@ void dlapmr_(logical *forwrd, aocl_int_t *m, aocl_int_t *n, doublereal *x, aocl_
     if(*m <= 1)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *m;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -206,7 +204,7 @@ void dlapmr_(logical *forwrd, aocl_int_t *m, aocl_int_t *n, doublereal *x, aocl_
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAPMT */
 }
 /* dlapmr_ */

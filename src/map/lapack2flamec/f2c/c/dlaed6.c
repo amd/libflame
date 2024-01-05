@@ -127,7 +127,7 @@ otherwise it is between d(1) and d(2). See */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlaed6_(integer *kniter, logical *orgati, doublereal * rho, doublereal *d__, doublereal *z__, doublereal *finit, doublereal * tau, integer *info)
+void dlaed6_(integer *kniter, logical *orgati, doublereal * rho, doublereal *d__, doublereal *z__, doublereal *finit, doublereal * tau, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaed6 inputs: kniter %" FLA_IS ", orgati %" FLA_IS ", rho %lf", *kniter, *orgati, *rho);
@@ -455,7 +455,7 @@ L60: /* Undo scaling */
         *tau *= sclinv;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAED6 */
 }
 /* dlaed6_ */

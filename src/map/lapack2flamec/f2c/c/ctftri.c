@@ -225,8 +225,7 @@ If UPLO = 'L' the RFP A contains the nt */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, aocl_int_t *info)
+void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -244,11 +243,15 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
     /* Local variables */
     aocl_int64_t k, n1, n2;
     logical normaltransr;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     logical lower;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
+    extern /* Subroutine */
+    void ctrtri_(char *, char *, integer *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -294,13 +297,13 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
         i__1 = -(*info);
         xerbla_("CTFTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* If N is odd, set NISODD = .TRUE. */
     /* If N is even, set K = N/2 and NISODD = .FALSE. */
@@ -340,7 +343,7 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 q__1.real = -1.f;
                 q__1.imag = -0.f; // , expr subst
@@ -353,7 +356,7 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 ctrmm_("L", "U", "C", diag, &n2, &n1, &c_b1, &a[*n], n, &a[n1], n);
             }
@@ -366,7 +369,7 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 q__1.real = -1.f;
                 q__1.imag = -0.f; // , expr subst
@@ -379,7 +382,7 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 aocl_blas_ctrmm("R", "U", "N", diag, &n1, &n2, &c_b1, &a[n1], n, a, n);
             }
@@ -395,7 +398,7 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 q__1.real = -1.f;
                 q__1.imag = -0.f; // , expr subst
@@ -408,7 +411,7 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 aocl_blas_ctrmm("R", "L", "C", diag, &n1, &n2, &c_b1, &a[1], &n1, &a[n1 * n1], &n1);
             }
@@ -420,7 +423,7 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 q__1.real = -1.f;
                 q__1.imag = -0.f; // , expr subst
@@ -433,7 +436,7 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 aocl_blas_ctrmm("L", "L", "N", diag, &n2, &n1, &c_b1, &a[n1 * n2], &n2, a, &n2);
             }
@@ -455,7 +458,7 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 q__1.real = -1.f;
                 q__1.imag = -0.f; // , expr subst
@@ -471,7 +474,7 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
@@ -487,7 +490,7 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 q__1.real = -1.f;
                 q__1.imag = -0.f; // , expr subst
@@ -503,7 +506,7 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
@@ -523,7 +526,7 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 q__1.real = -1.f;
                 q__1.imag = -0.f; // , expr subst
@@ -536,7 +539,7 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 aocl_blas_ctrmm("R", "L", "C", diag, &k, &k, &c_b1, a, &k, &a[k * (k + 1)], &k);
             }
@@ -550,7 +553,7 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 q__1.real = -1.f;
                 q__1.imag = -0.f; // , expr subst
@@ -563,14 +566,14 @@ void ctftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, scomplex *a, a
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 aocl_blas_ctrmm("L", "L", "N", diag, &k, &k, &c_b1, &a[k * k], &k, a, &k);
             }
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTFTRI */
 }
 /* ctftri_ */

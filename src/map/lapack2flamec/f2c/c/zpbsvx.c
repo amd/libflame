@@ -343,12 +343,7 @@ if EQUED = 'Y', */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs,
-             dcomplex *ab, aocl_int_t *ldab, dcomplex *afb, aocl_int_t *ldafb,
-             char *equed, doublereal *s, dcomplex *b, aocl_int_t *ldb, dcomplex *x,
-             aocl_int_t *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr,
-             dcomplex *work, doublereal *rwork, aocl_int_t *info)
+void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *ab, integer *ldab, doublecomplex *afb, integer *ldafb, char *equed, doublereal *s, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal * ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpbsvx inputs: fact %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *kd, *nrhs, *ldab, *ldafb, *ldb, *ldx);
@@ -364,6 +359,8 @@ void zpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal scond, anorm;
     logical equil, rcequ, upper;
+    extern /* Subroutine */
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
@@ -371,11 +368,13 @@ void zpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
     extern doublereal zlanhb_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     doublereal bignum;
     extern /* Subroutine */
-    int zlaqhb_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, char *);
+    void zlaqhb_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, char *);
     integer infequ;
     extern /* Subroutine */
-    int zpbcon_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zpbequ_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, integer *), zpbrfs_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zpbtrf_(char *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zpbcon_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zpbequ_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, integer *), zpbrfs_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zpbtrf_(char *, integer *, integer *, doublecomplex *, integer *, integer *);
     doublereal smlnum;
+    extern /* Subroutine */
+    void zpbtrs_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -514,7 +513,7 @@ void zpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
         i__1 = -(*info);
         xerbla_("ZPBSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(equil)
     {
@@ -584,7 +583,7 @@ void zpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
         {
             *rcond = 0.;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -632,7 +631,7 @@ void zpbsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPBSVX */
 }
 /* zpbsvx_ */

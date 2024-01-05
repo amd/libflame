@@ -118,7 +118,7 @@
 /* > \ingroup lassq */
 /* ===================================================================== */
 /* Subroutine */
-int slassq_(integer *n, real *x, integer *incx, real *scl, real *sumsq)
+void slassq_(integer *n, real *x, integer *incx, real *scl, real *sumsq)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slassq inputs: n %" FLA_IS ", incx %" FLA_IS "",*n, *incx);
@@ -148,7 +148,7 @@ int slassq_(integer *n, real *x, integer *incx, real *scl, real *sumsq)
     /* .. */
     /* Quick return if possible */
     if (*scl != *scl || *sumsq != *sumsq) {
-        return 0;
+        return;
     }
     if (*sumsq == 0.f) {
         *scl = 1.f;
@@ -158,7 +158,7 @@ int slassq_(integer *n, real *x, integer *incx, real *scl, real *sumsq)
         *sumsq = 0.f;
     }
     if (*n <= 0) {
-        return 0;
+        return;
     }
     /* Compute the sum of squares in 3 accumulators: */
     /* abig -- sums of squares scaled down to avoid overflow */
@@ -262,6 +262,6 @@ int slassq_(integer *n, real *x, integer *incx, real *scl, real *sumsq)
         *sumsq = amed;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* slassq_ */

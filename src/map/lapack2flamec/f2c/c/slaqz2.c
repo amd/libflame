@@ -156,7 +156,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slaqz2_(logical *ilq, logical *ilz, integer *k, integer * istartm, integer *istopm, integer *ihi, real *a, integer *lda, real * b, integer *ldb, integer *nq, integer *qstart, real *q, integer *ldq, integer *nz, integer *zstart, real *z__, integer *ldz)
+void slaqz2_(logical *ilq, logical *ilz, integer *k, integer * istartm, integer *istopm, integer *ihi, real *a, integer *lda, real * b, integer *ldb, integer *nq, integer *qstart, real *q, integer *ldq, integer *nz, integer *zstart, real *z__, integer *ldz)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaqz2 inputs: k %" FLA_IS ", istartm %" FLA_IS ", istopm %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", nq %" FLA_IS ", qstart %" FLA_IS ", ldq %" FLA_IS ", nz %" FLA_IS ", zstart %" FLA_IS ", ldz %" FLA_IS "",*k, *istartm, *istopm, *ihi, *lda, *ldb, *nq, *qstart, *ldq, *nz, *zstart, *ldz);
@@ -168,7 +168,7 @@ int slaqz2_(logical *ilq, logical *ilz, integer *k, integer * istartm, integer *
     integer i__, j;
     real c1, c2, s1, s2, temp;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *), slartg_(real *, real *, real *, real *, real *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *), slartg_(real *, real *, real *, real *, real *);
     /* Arguments */
     /* Parameters */
     /* Local variables */
@@ -312,6 +312,6 @@ int slaqz2_(logical *ilq, logical *ilz, integer *k, integer * istartm, integer *
     }
     /* End of SLAQZ2 */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* slaqz2_ */

@@ -224,10 +224,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realPTsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sptsvx_(char *fact, aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *df, real *ef,
-             real *b, aocl_int_t *ldb, real *x, aocl_int_t *ldx, real *rcond, real *ferr,
-             real *berr, real *work, aocl_int_t *info)
+void sptsvx_(char *fact, integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -240,13 +237,15 @@ void sptsvx_(char *fact, aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, re
     /* Local variables */
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real anorm;
+    extern /* Subroutine */
+    void scopy_(integer *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slacpy_( char *, integer *, integer *, real *, integer *, real *, integer * );
     extern real slanst_(char *, integer *, real *, real *);
     extern /* Subroutine */
-    int sptcon_(integer *, real *, real *, real *, real *, real *, integer *), sptrfs_(integer *, integer *, real *, real *, real *, real *, real *, integer *, real *, integer *, real *, real *, real *, integer *), spttrf_(integer *, real *, real *, integer *), spttrs_(integer *, integer *, real *, real *, real *, integer *, integer *);
+    void sptcon_(integer *, real *, real *, real *, real *, real *, integer *), sptrfs_(integer *, integer *, real *, real *, real *, real *, real *, integer *, real *, integer *, real *, real *, real *, integer *), spttrf_(integer *, real *, real *, integer *), spttrs_(integer *, integer *, real *, real *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -310,7 +309,7 @@ void sptsvx_(char *fact, aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, re
         i__1 = -(*info);
         xerbla_("SPTSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(nofact)
     {
@@ -327,7 +326,7 @@ void sptsvx_(char *fact, aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, re
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -347,7 +346,7 @@ void sptsvx_(char *fact, aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, re
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPTSVX */
 }
 /* sptsvx_ */

@@ -143,7 +143,7 @@
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sgemlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *mb, real *v, integer *ldv, real *t, integer * ldt, real *c__, integer *ldc, real *work, integer *info)
+void sgemlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *mb, real *v, integer *ldv, real *t, integer * ldt, real *c__, integer *ldc, real *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgemlqt inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", mb %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *k, *mb, *ldv, *ldt, *ldc);
@@ -155,7 +155,7 @@ int sgemlqt_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     extern logical lsame_(char *, char *);
     logical right;
     extern /* Subroutine */
-    int slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     integer ldwork;
     /* -- LAPACK computational routine -- */
@@ -245,13 +245,13 @@ int sgemlqt_(char *side, char *trans, integer *m, integer *n, integer *k, intege
         i__1 = -(*info);
         xerbla_("SGEMLQT", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* .. Quick return if possible .. */
     if (*m == 0 || *n == 0 || *k == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (left && notran)
     {
@@ -318,7 +318,7 @@ int sgemlqt_(char *side, char *trans, integer *m, integer *n, integer *k, intege
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SGEMLQT */
 }
 /* sgemlqt_ */

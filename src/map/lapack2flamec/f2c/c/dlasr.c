@@ -194,9 +194,7 @@
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlasr_(char *side, char *pivot, char *direct, aocl_int_t *m, aocl_int_t *n, doublereal *c__,
-            doublereal *s, doublereal *a, aocl_int_t *lda)
+void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doublereal *c__, doublereal *s, doublereal *a, integer * lda)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasr inputs: side %c, pivot %c, direct %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*side, *pivot, *direct, *m, *n, *lda);
@@ -266,13 +264,13 @@ void dlasr_(char *side, char *pivot, char *direct, aocl_int_t *m, aocl_int_t *n,
     {
         xerbla_("DLASR ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(lsame_(side, "L", 1, 1))
     {
@@ -609,7 +607,7 @@ void dlasr_(char *side, char *pivot, char *direct, aocl_int_t *m, aocl_int_t *n,
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASR */
 }
 /* dlasr_ */

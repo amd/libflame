@@ -99,9 +99,7 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slargv_(aocl_int_t *n, real *x, aocl_int_t *incx, real *y, aocl_int_t *incy, real *c__,
-             aocl_int_t *incc)
+void slargv_(integer *n, real *x, integer *incx, real *y, integer *incy, real *c__, integer *incc)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slargv(n, x, incx, y, incy, c__, incc);
@@ -192,7 +190,6 @@ void aocl_lapack_slargv(aocl_int64_t *n, real *x, aocl_int64_t *incx, real *y, a
         ix += *incx;
         /* L10: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARGV */
 }

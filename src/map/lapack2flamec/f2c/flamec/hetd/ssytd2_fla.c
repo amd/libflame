@@ -176,19 +176,21 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ssytd2_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *d__, real *e,
-                real *tau, aocl_int64_t *info)
+void ssytd2_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *e, real *tau, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
     aocl_int64_t i__;
     real taui;
+    extern real sdot_(integer *, real *, integer *, real *, integer *);
+    extern /* Subroutine */
+    void ssyr2_(char *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
     real alpha;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
     extern /* Subroutine */
-    int saxpy_(integer *, real *, real *, integer *, real *, integer *), ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *), ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -236,7 +238,7 @@ void ssytd2_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *d
     {
         i__1 = -(*info);
         xerbla_("SSYTD2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n <= 0)

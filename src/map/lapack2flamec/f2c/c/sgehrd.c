@@ -165,7 +165,7 @@ v(i+2:ihi) is stored on */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgehrd_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info)
+void sgehrd_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
@@ -174,7 +174,7 @@ int sgehrd_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real 
     real ei;
     integer nb, nh, nx, iwt, nbmin, iinfo;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), sgehd2_(integer *, integer *, integer *, real *, integer *, real *, real *, integer * ), slahr2_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), sgehd2_(integer *, integer *, integer *, real *, integer *, real *, real *, integer * ), slahr2_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
@@ -243,11 +243,11 @@ int sgehrd_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real 
     {
         i__1 = -(*info);
         xerbla_("SGEHRD", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Set elements 1:ILO-1 and IHI:N-1 of TAU to zero */
     i__1 = *ilo - 1;
@@ -271,7 +271,7 @@ int sgehrd_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real 
     if (nh <= 1)
     {
         work[1] = 1.f;
-        return 0;
+        return;
     }
     /* Determine the block size */
     /* Computing MIN */
@@ -365,7 +365,7 @@ int sgehrd_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real 
     /* Use unblocked code to reduce the rest of the matrix */
     sgehd2_(n, &i__, ihi, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
     work[1] = (real) lwkopt;
-    return 0;
+    return;
     /* End of SGEHRD */
 }
 /* sgehrd_ */

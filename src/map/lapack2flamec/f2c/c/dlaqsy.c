@@ -127,9 +127,7 @@
 /* > \ingroup doubleSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlaqsy_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *s,
-             doublereal *scond, doublereal *amax, char *equed)
+void dlaqsy_(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *s, doublereal *scond, doublereal *amax, char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqsy inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -168,7 +166,7 @@ void dlaqsy_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublere
     {
         *(unsigned char *)equed = 'N';
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize LARGE and SMALL. */
     small_val = dlamch_("Safe minimum") / dlamch_("Precision");
@@ -216,7 +214,7 @@ void dlaqsy_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublere
         *(unsigned char *)equed = 'Y';
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAQSY */
 }
 /* dlaqsy_ */

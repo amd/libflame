@@ -306,38 +306,37 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dhgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info)
+void dhgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dhgeqz inputs: job %c, compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",*job, *compq, *compz, *n, *ilo, *ihi, *ldh, *ldt, *ldq, *ldz, *lwork);
 
     extern fla_context global_context;
-    extern int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info);
-    extern int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info);
+    extern void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info);
+    extern void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info);
 
     /* Initialize global context data */
     aocl_fla_init();
 
-    int retval = 0;
 #if FLA_ENABLE_AMD_OPT
     if (global_context.is_avx2)
     {
-      retval = fla_dhgeqz_opt(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alphar, alphai, beta, q, ldq, z__, ldz, work, lwork, info);
+      fla_dhgeqz_opt(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alphar, alphai, beta, q, ldq, z__, ldz, work, lwork, info);
     }
     else
     {
-      retval = fla_dhgeqz_native(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alphar, alphai, beta, q, ldq, z__, ldz, work, lwork, info);
+      fla_dhgeqz_native(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alphar, alphai, beta, q, ldq, z__, ldz, work, lwork, info);
     }
 #else
-      retval = fla_dhgeqz_native(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alphar, alphai, beta, q, ldq, z__, ldz, work, lwork, info);
+      fla_dhgeqz_native(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alphar, alphai, beta, q, ldq, z__, ldz, work, lwork, info);
 #endif
 
     AOCL_DTL_TRACE_LOG_EXIT
-    return retval;
+    return;
 }
 
 #if FLA_ENABLE_AMD_OPT
-int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info)
+void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4;
@@ -361,7 +360,7 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
     logical ilz;
     doublereal ulp, sqr, szi, szr, ad11l, ad12l, ad21l, ad22l, ad32l, wabs, atol, btol, temp;
     extern
-    int dlag2_( doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlag2_( doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal temp2, s1inv, scale;
     extern logical lsame_(char *, char *);
     integer iiter, ilast, jiter;
@@ -370,18 +369,18 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
     doublereal tempi, tempr;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlapy3_(doublereal *, doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     logical ilazr2;
     doublereal ascale, bscale;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     extern doublereal dlanhs_(char *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+    void dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-    int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal safmax;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -543,17 +542,17 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
     {
         i__1 = -(*info);
         xerbla_("DHGEQZ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 0)
     {
         work[1] = 1.;
-        return 0;
+        return;
     }
     /* Initialize Q and Z */
     if (icompq == 3)
@@ -1588,12 +1587,12 @@ L380: /* Set Eigenvalues 1:ILO-1 */
     /* Exit (other than argument error) -- return optimal workspace size */
 L420:
     work[1] = (doublereal) (*n);
-    return 0;
+    return;
     /* End of DHGEQZ */
 }
 #endif
 
-int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info)
+void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4;
@@ -1617,7 +1616,7 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
     logical ilz;
     doublereal ulp, sqr, szi, szr, ad11l, ad12l, ad21l, ad22l, ad32l, wabs, atol, btol, temp;
     extern
-    int dlag2_( doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlag2_( doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal temp2, s1inv, scale;
     extern logical lsame_(char *, char *);
     integer iiter, ilast, jiter;
@@ -1626,19 +1625,19 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
     doublereal tempi, tempr;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlapy3_(doublereal *, doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     logical ilazr2;
-    extern int drot_(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer *incy, doublereal *c__, doublereal *s);
+    extern void drot_(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer *incy, doublereal *c__, doublereal *s);
     doublereal ascale, bscale;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     extern doublereal dlanhs_(char *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+    void dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-    int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal safmax;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -1798,17 +1797,17 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
     {
         i__1 = -(*info);
         xerbla_("DHGEQZ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 0)
     {
         work[1] = 1.;
-        return 0;
+        return;
     }
     /* Initialize Q and Z */
     if (icompq == 3)
@@ -2884,7 +2883,7 @@ L380: /* Set Eigenvalues 1:ILO-1 */
     /* Exit (other than argument error) -- return optimal workspace size */
 L420:
     work[1] = (doublereal) (*n);
-    return 0;
+    return;
     /* End of DHGEQZ */
 }
 /* dhgeqz_ */

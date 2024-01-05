@@ -208,10 +208,7 @@ VT(NL+2:M, NL+2:M)**T contains */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slasd1_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, real *d__, real *alpha, real *beta,
-             real *u, aocl_int_t *ldu, real *vt, aocl_int_t *ldvt, aocl_int_t *idxq,
-             aocl_int_t *iwork, real *work, aocl_int_t *info)
+void slasd1_(integer *nl, integer *nr, integer *sqre, real * d__, real *alpha, real *beta, real *u, integer *ldu, real *vt, integer *ldvt, integer *idxq, integer *iwork, real *work, integer * info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slasd1(nl, nr, sqre, d__, alpha, beta, u, ldu, vt, ldvt, idxq, iwork, work, info);
@@ -245,7 +242,7 @@ void aocl_lapack_slasd1(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     /* Local variables */
     integer i__, k, m, n, n1, n2, iq, iz, iu2, ldq, idx, ldu2, ivt2, idxc, idxp, ldvt2;
     extern /* Subroutine */
-    int slasd2_(integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, integer *, integer *), slasd3_(integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *);
+    void slasd2_(integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, integer *, integer *), slasd3_(integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *);
     integer isigma;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slascl_( char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
@@ -299,7 +296,7 @@ void aocl_lapack_slasd1(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     {
         i__1 = -(*info);
         xerbla_("SLASD1", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     n = *nl + *nr + 1;
     m = n + *sqre;
@@ -346,7 +343,6 @@ void aocl_lapack_slasd1(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
                        &iwork[coltyp], &work[iz], info);
     if(*info != 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Unscale. */
@@ -354,8 +350,7 @@ void aocl_lapack_slasd1(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     /* Prepare the IDXQ sorting permutation. */
     n1 = k;
     n2 = n - k;
-    aocl_lapack_slamrg(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
-    AOCL_DTL_TRACE_LOG_EXIT
+    slamrg_(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
     return;
     /* End of SLASD1 */
 }

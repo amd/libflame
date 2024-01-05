@@ -114,7 +114,7 @@ static real c_b6 = 1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slanv2_(real *a, real *b, real *c__, real *d__, real * rt1r, real *rt1i, real *rt2r, real *rt2i, real *cs, real *sn)
+void slanv2_(real *a, real *b, real *c__, real *d__, real * rt1r, real *rt1i, real *rt2r, real *rt2i, real *cs, real *sn)
 {
     AOCL_DTL_TRACE_LOG_INIT
     real r__1, r__2;
@@ -297,7 +297,7 @@ L10:
         *rt2i = -(*rt1i);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SLANV2 */
 }
 /* slanv2_ */

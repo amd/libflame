@@ -189,10 +189,7 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ztgex2_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
-             dcomplex *b, aocl_int_t *ldb, dcomplex *q, aocl_int_t *ldq,
-             dcomplex *z__, aocl_int_t *ldz, aocl_int_t *j1, aocl_int_t *info)
+void ztgex2_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *q, integer *ldq, doublecomplex *z__, integer *ldz, integer *j1, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztgex2 inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", j1 %" FLA_IS "",*n, *lda, *ldb, *ldq, *ldz, *j1);
@@ -215,15 +212,17 @@ void ztgex2_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
     doublecomplex sq, sz;
     doublereal eps, sum;
     logical weak;
-    dcomplex cdum, work[8];
+    doublecomplex cdum, work[8];
+    extern /* Subroutine */
+    void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
     doublereal scale;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
     doublereal smlnum;
     logical strong;
     extern /* Subroutine */
-    int zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
+    void zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     doublereal thresha, threshb;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -265,7 +264,7 @@ void ztgex2_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
     if(*n <= 1)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     m = 2;
     weak = FALSE_;
@@ -453,12 +452,12 @@ void ztgex2_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_in
     }
     /* Exit with INFO = 0 if swap was successfully performed. */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* Exit with INFO = 1 if swap was rejected. */
 L20:
     *info = 1;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTGEX2 */
 }
 /* ztgex2_ */

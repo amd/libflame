@@ -191,9 +191,7 @@ static aocl_int64_t c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ssytf2_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ipiv,
-             aocl_int_t *info)
+void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -211,11 +209,17 @@ void ssytf2_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ip
     real t, r1, d11, d12, d21, d22;
     aocl_int64_t kk, kp;
     real wk, wkm1, wkp1;
-    aocl_int64_t imax, jmax;
+    integer imax, jmax;
+    extern /* Subroutine */
+    void ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
     real alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t kstep;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
+    integer kstep;
     logical upper;
+    extern /* Subroutine */
+    void sswap_(integer *, real *, integer *, real *, integer *);
     real absakk;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -270,7 +274,7 @@ void ssytf2_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ip
         i__1 = -(*info);
         xerbla_("SSYTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.f) + 1.f) / 8.f;
@@ -610,7 +614,7 @@ void ssytf2_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ip
     }
 L70:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTF2 */
 }
 /* ssytf2_ */

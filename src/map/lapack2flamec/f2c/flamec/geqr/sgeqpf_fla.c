@@ -132,7 +132,7 @@ v(i+1:m) is stored on exit in A(i+1:m,i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgeqpf_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, real *tau, real *work, integer *info)
+void sgeqpf_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, real *tau, real *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -147,10 +147,10 @@ int sgeqpf_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, rea
     extern real snrm2_(integer *, real *, integer *);
     real tol3z;
     extern /* Subroutine */
-    int slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
+    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
     integer itemp;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *), sgeqr2_(integer *, integer *, real *, integer *, real *, real *, integer *), sorm2r_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *);
+    void sswap_(integer *, real *, integer *, real *, integer *), sgeqr2_(integer *, integer *, real *, integer *, real *, real *, integer *), sorm2r_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_( integer *, real *, real *, integer *, real *);
@@ -200,7 +200,7 @@ int sgeqpf_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, rea
     {
         i__1 = -(*info);
         xerbla_("SGEQPF", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     mn = fla_min(*m,*n);
     tol3z = sqrt(slamch_("Epsilon"));
@@ -337,7 +337,7 @@ int sgeqpf_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, rea
             /* L40: */
         }
     }
-    return 0;
+    return;
     /* End of SGEQPF */
 }
 /* sgeqpf_ */

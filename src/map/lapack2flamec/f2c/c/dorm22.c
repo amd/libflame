@@ -155,7 +155,7 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integer *n2, doublereal *q, integer *ldq, doublereal * c__, integer *ldc, doublereal *work, integer *lwork, integer *info)
+void dorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integer *n2, doublereal *q, integer *ldq, doublereal * c__, integer *ldc, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dorm22 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", n1 %" FLA_IS ", n2 %" FLA_IS ", ldq %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "",*side, *trans, *m, *n, *n1, *n2, *ldq, *ldc, *lwork);
@@ -165,10 +165,10 @@ int dorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
     integer i__, nb, nq, nw, len;
     logical left;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlacpy_( char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlacpy_( char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     integer ldwork, lwkopt;
     logical lquery;
@@ -267,19 +267,19 @@ int dorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
         i__1 = -(*info);
         xerbla_("DORM22", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
         work[1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Degenerate cases (N1 = 0 or N2 = 0) are handled using DTRMM. */
     if (*n1 == 0)
@@ -287,14 +287,14 @@ int dorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
         dtrmm_(side, "Upper", trans, "Non-Unit", m, n, &c_b10, &q[q_offset], ldq, &c__[c_offset], ldc);
         work[1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*n2 == 0)
     {
         dtrmm_(side, "Lower", trans, "Non-Unit", m, n, &c_b10, &q[q_offset], ldq, &c__[c_offset], ldc);
         work[1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the largest chunk size available from the workspace. */
     /* Computing MAX */
@@ -417,7 +417,7 @@ int dorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
     }
     work[1] = (doublereal) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DORM22 */
 }
 /* dorm22_ */

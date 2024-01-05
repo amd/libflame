@@ -154,9 +154,7 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cunml2_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
-                scomplex *a, aocl_int64_t *lda, scomplex *tau, scomplex *c__, aocl_int64_t *ldc,
-                scomplex *work, aocl_int64_t *info)
+void cunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3;
@@ -169,10 +167,10 @@ void cunml2_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     logical left;
     complex taui;
     extern /* Subroutine */
-    int clarf_(char *, integer *, integer *, complex * , integer *, complex *, complex *, integer *, complex *);
+    void clarf_(char *, integer *, integer *, complex * , integer *, complex *, complex *, integer *, complex *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -249,7 +247,7 @@ void cunml2_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     {
         i__1 = -(*info);
         xerbla_("CUNML2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || *k == 0)

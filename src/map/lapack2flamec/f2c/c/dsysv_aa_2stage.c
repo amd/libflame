@@ -177,7 +177,7 @@ the */
 /* > \ingroup doubleSYsolve */
 /* ===================================================================== */
 /* Subroutine */
-int dsysv_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *tb, integer *ltb, integer * ipiv, integer *ipiv2, doublereal *b, integer *ldb, doublereal *work, integer *lwork, integer *info)
+void dsysv_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *tb, integer *ltb, integer * ipiv, integer *ipiv2, doublereal *b, integer *ldb, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsysv_aa_2stage inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ltb %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ltb, *ldb, *lwork);
@@ -185,7 +185,7 @@ int dsysv_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublereal *a, integ
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int dsytrf_aa_2stage_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *, integer *), dsytrs_aa_2stage_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *, integer *);
+    void dsytrf_aa_2stage_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *, integer *), dsytrs_aa_2stage_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *, integer *);
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
@@ -265,12 +265,12 @@ int dsysv_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublereal *a, integ
         i__1 = -(*info);
         xerbla_("DSYSV_AA_2STAGE", &i__1, (ftnlen)15);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (wquery || tquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the factorization A = U**T*T*U or A = L*T*L**T. */
     dsytrf_aa_2stage_(uplo, n, &a[a_offset], lda, &tb[1], ltb, &ipiv[1], & ipiv2[1], &work[1], lwork, info);
@@ -281,7 +281,7 @@ int dsysv_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublereal *a, integ
     }
     work[1] = (doublereal) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYSV_AA_2STAGE */
 }
 /* dsysv_aa_2stage__ */

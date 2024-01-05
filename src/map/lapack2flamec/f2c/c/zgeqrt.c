@@ -128,7 +128,7 @@ the elements below the diagonal */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zgeqrt_(integer *m, integer *n, integer *nb, doublecomplex *a, integer *lda, doublecomplex *t, integer *ldt, doublecomplex *work, integer *info)
+void zgeqrt_(integer *m, integer *n, integer *nb, doublecomplex *a, integer *lda, doublecomplex *t, integer *ldt, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgeqrt inputs: m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS "",*m, *n, *nb, *lda, *ldt);
@@ -189,14 +189,14 @@ int zgeqrt_(integer *m, integer *n, integer *nb, doublecomplex *a, integer *lda,
         i__1 = -(*info);
         xerbla_("ZGEQRT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     k = fla_min(*m,*n);
     if (k == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Blocked loop of length K */
     i__1 = k;
@@ -229,7 +229,7 @@ int zgeqrt_(integer *m, integer *n, integer *nb, doublecomplex *a, integer *lda,
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGEQRT */
 }
 /* zgeqrt_ */

@@ -201,7 +201,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dorbdb4_(integer *m, integer *p, integer *q, doublereal * x11, integer *ldx11, doublereal *x21, integer *ldx21, doublereal * theta, doublereal *phi, doublereal *taup1, doublereal *taup2, doublereal *tauq1, doublereal *phantom, doublereal *work, integer * lwork, integer *info)
+void dorbdb4_(integer *m, integer *p, integer *q, doublereal * x11, integer *ldx11, doublereal *x21, integer *ldx21, doublereal * theta, doublereal *phi, doublereal *taup1, doublereal *taup2, doublereal *tauq1, doublereal *phantom, doublereal *work, integer * lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dorbdb4 inputs: m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldx11 %" FLA_IS ", ldx21 %" FLA_IS ", lwork %" FLA_IS "",*m, *p, *q, *ldx11, *ldx21, *lwork);
@@ -217,19 +217,19 @@ int dorbdb4_(integer *m, integer *p, integer *q, doublereal * x11, integer *ldx1
     doublereal s;
     integer childinfo;
     extern /* Subroutine */
-    int drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
     integer ilarf, llarf;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     extern /* Subroutine */
-    int dorbdb5_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dorbdb5_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer iorbdb5, lorbdb5;
     extern /* Subroutine */
-    int dlarfgp_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dlarfgp_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -322,12 +322,12 @@ int dorbdb4_(integer *m, integer *p, integer *q, doublereal * x11, integer *ldx1
         i__1 = -(*info);
         xerbla_("DORBDB4", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Reduce columns 1, ..., M-Q of X11 and X21 */
     i__1 = *m - *q;
@@ -438,7 +438,7 @@ int dorbdb4_(integer *m, integer *p, integer *q, doublereal * x11, integer *ldx1
         dlarf_("R", &i__2, &i__3, &x21[*m - *q + i__ - *p + i__ * x21_dim1], ldx21, &tauq1[i__], &x21[*m - *q + i__ - *p + 1 + i__ * x21_dim1], ldx21, &work[ilarf]);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DORBDB4 */
 }
 /* dorbdb4_ */

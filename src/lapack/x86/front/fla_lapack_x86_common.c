@@ -34,7 +34,7 @@ int fla_drot(integer *n,
     }
     return 0;
 }
-int fla_zrot(integer *n,
+void fla_zrot(integer *n,
              doublecomplex *cx, integer *incx,
              doublecomplex *cy, integer *incy,
              doublereal *c__, doublecomplex *s)
@@ -43,7 +43,7 @@ int fla_zrot(integer *n,
     {
         fla_zrot_avx2(n, cx, incx, cy, incy, c__, s);
     }
-    return 0;
+    return;
 }
 /* complex vector scaling when increment is 1 and specific threshold */
 int fla_zscal(integer *n, doublecomplex *alpha,
@@ -63,7 +63,7 @@ int fla_zscal(integer *n, doublecomplex *alpha,
     return 0;
 }
 /* scales a vector by a constant when threshold <= 128 */
-int fla_dscal(integer *n, doublereal *da, doublereal *dx, integer *incx)
+void fla_dscal(integer *n, doublereal *da, doublereal *dx, integer *incx)
 {
     /* Initialize global context data */
     aocl_fla_init();
@@ -75,7 +75,7 @@ int fla_dscal(integer *n, doublereal *da, doublereal *dx, integer *incx)
     {
         dscal_(n, da, dx, incx);
     }
-    return 0;
+    return;
 }
 /* Double QR (DGEQRF) for small sizes */
 int fla_dgeqrf_small(integer *m, integer *n,
@@ -89,7 +89,7 @@ int fla_dgeqrf_small(integer *m, integer *n,
     return 0;
 }
 /* real vector scaling when increment is 1 */
-int fla_sscal(integer *n, real *alpha, real *x, integer *incx)
+void fla_sscal(integer *n, real *alpha, real *x, integer *incx)
 {
     /* Take AVX path only for increment equal to 1 */
     if (*incx == 1 && global_context.is_avx2)
@@ -100,10 +100,10 @@ int fla_sscal(integer *n, real *alpha, real *x, integer *incx)
     {
         sscal_(n, (real *)alpha, (real *)x, incx);
     }
-    return 0;
+    return;
 }
 /* Rank 1 Operation */
-int fla_sger(integer *m, integer *n, real *alpha, real *x,
+void fla_sger(integer *m, integer *n, real *alpha, real *x,
              integer *incx, real *y, integer *incy,
              real *a, integer *lda)
 {
@@ -111,7 +111,7 @@ int fla_sger(integer *m, integer *n, real *alpha, real *x,
     {
         fla_sger_avx2(m, n, alpha, x, incx, y, incy, a, lda);
     }
-    return 0;
+    return;
 }
 
 /* LU factorization.

@@ -87,8 +87,7 @@ if k < N, the factorization could not */
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void spttrf_(aocl_int_t *n, real *d__, real *e, aocl_int_t *info)
+void spttrf_(integer *n, real *d__, real *e, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -133,13 +132,13 @@ void spttrf_(aocl_int_t *n, real *d__, real *e, aocl_int_t *info)
         i__1 = -(*info);
         xerbla_("SPTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the L*D*L**T (or U**T*D*U) factorization of A. */
     i4 = (*n - 1) % 4;
@@ -206,7 +205,7 @@ void spttrf_(aocl_int_t *n, real *d__, real *e, aocl_int_t *info)
     }
 L30:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPTTRF */
 }
 /* spttrf_ */

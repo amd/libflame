@@ -148,8 +148,7 @@ v(i+1:m) is stored on exit in A(i+1:m,i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cgeqpf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *jpvt, scomplex *tau, scomplex *work, real *rwork, aocl_int_t *info)
+void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, complex *tau, complex *work, real *rwork, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -171,13 +170,13 @@ void cgeqpf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_in
     aocl_int64_t pvt;
     real temp, temp2, tol3z;
     extern /* Subroutine */
-    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), cswap_(integer *, complex *, integer *, complex *, integer *);
+    void clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), cswap_(integer *, complex *, integer *, complex *, integer *);
     integer itemp;
     extern /* Subroutine */
-    int cgeqr2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgeqr2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern real scnrm2_(integer *, complex *, integer *);
     extern /* Subroutine */
-    int cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *);
+    void cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -230,7 +229,7 @@ void cgeqpf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_in
         i__1 = -(*info);
         xerbla_("CGEQPF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     mn = fla_min(*m,*n);
     tol3z = sqrt(slamch_("Epsilon"));
@@ -369,7 +368,7 @@ void cgeqpf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_in
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGEQPF */
 }
 /* cgeqpf_ */

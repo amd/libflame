@@ -268,10 +268,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ctrsen_(char *job, char *compq, logical *select, aocl_int_t *n, scomplex *t, aocl_int_t *ldt,
-             scomplex *q, aocl_int_t *ldq, scomplex *w, aocl_int_t *m, real *s, real *sep,
-             scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, integer *ldt, complex *q, integer *ldq, complex *w, integer *m, real *s, real *sep, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -298,12 +295,18 @@ void ctrsen_(char *job, char *compq, logical *select, aocl_int_t *n, scomplex *t
     aocl_int64_t lwmin;
     logical wantq, wants;
     real rnorm;
+    extern /* Subroutine */
+    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     real rwork[1];
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical wantbh;
+    extern /* Subroutine */
+    void ctrexc_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, integer *);
     logical wantsp;
+    extern /* Subroutine */
+    void ctrsyl_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *);
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -409,12 +412,12 @@ void ctrsen_(char *job, char *compq, logical *select, aocl_int_t *n, scomplex *t
         i__1 = -(*info);
         xerbla_("CTRSEN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*m == *n || *m == 0)
@@ -504,7 +507,7 @@ L40: /* Copy reordered eigenvalues to W. */
     work[1].r = (real) lwmin;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTRSEN */
 }
 /* ctrsen_ */

@@ -207,11 +207,7 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup realGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *dl, real *d__, real *du, real *dlf,
-             real *df, real *duf, real *du2, aocl_int_t *ipiv, real *b, aocl_int_t *ldb, real *x,
-             aocl_int_t *ldx, real *ferr, real *berr, real *work, aocl_int_t *iwork,
-             aocl_int_t *info)
+void sgtrfs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *du, real *dlf, real *df, real *duf, real *du2, integer *ipiv, real *b, integer *ldb, real *x, integer *ldx, real * ferr, real *berr, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -229,9 +225,10 @@ void sgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *dl, real *d__, 
     real eps;
     aocl_int64_t kase;
     real safe1, safe2;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int_t isave[3]; 
-    aocl_int64_t count;
+    extern logical lsame_(char *, char *);
+    integer isave[3], count;
+    extern /* Subroutine */
+    void scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
@@ -239,6 +236,8 @@ void sgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *dl, real *d__, 
     logical notran;
     char transn[1], transt[1];
     real lstres;
+    extern /* Subroutine */
+    void sgttrs_(char *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -309,7 +308,7 @@ void sgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *dl, real *d__, 
         i__1 = -(*info);
         xerbla_("SGTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -322,7 +321,7 @@ void sgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *dl, real *d__, 
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(notran)
     {
@@ -511,7 +510,7 @@ void sgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *dl, real *d__, 
         /* L110: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SGTRFS */
 }
 /* sgtrfs_ */

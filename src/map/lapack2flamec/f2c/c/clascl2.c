@@ -86,8 +86,7 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clascl2_(aocl_int_t *m, aocl_int_t *n, real *d__, scomplex *x, aocl_int_t *ldx)
+void clascl2_(integer *m, integer *n, real *d__, complex *x, integer *ldx)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -138,6 +137,6 @@ void clascl2_(aocl_int_t *m, aocl_int_t *n, real *d__, scomplex *x, aocl_int_t *
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* clascl2_ */

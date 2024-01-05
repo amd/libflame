@@ -113,9 +113,7 @@ static doublereal c_b11 = 1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlacon_(aocl_int_t *n, doublereal *v, doublereal *x, aocl_int_t *isgn, doublereal *est,
-             aocl_int_t *kase)
+void dlacon_(integer *n, doublereal *v, doublereal *x, integer *isgn, doublereal *est, integer *kase)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlacon inputs: n %" FLA_IS ", kase %" FLA_IS "",*n, *kase);
@@ -134,7 +132,7 @@ void dlacon_(aocl_int_t *n, doublereal *v, doublereal *x, aocl_int_t *isgn, doub
     extern doublereal dasum_(integer *, doublereal *, integer *);
     integer jlast;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     doublereal altsgn, estold;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -175,7 +173,7 @@ void dlacon_(aocl_int_t *n, doublereal *v, doublereal *x, aocl_int_t *isgn, doub
         *kase = 1;
         jump = 1;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     switch(jump)
     {
@@ -213,7 +211,7 @@ L20:
     *kase = 2;
     jump = 2;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (JUMP = 2) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L40:
@@ -231,7 +229,7 @@ L50:
     *kase = 1;
     jump = 3;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (JUMP = 3) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L70:
@@ -265,7 +263,7 @@ L90: /* TEST FOR CYCLING. */
     *kase = 2;
     jump = 4;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (JUMP = 4) */
     /* X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L110:
@@ -289,7 +287,7 @@ L120:
     *kase = 1;
     jump = 5;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (JUMP = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L140:
@@ -302,7 +300,7 @@ L140:
 L150:
     *kase = 0;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLACON */
 }
 /* dlacon_ */

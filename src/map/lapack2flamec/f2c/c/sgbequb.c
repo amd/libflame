@@ -154,10 +154,7 @@
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgbequb_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, real *ab,
-              aocl_int_t *ldab, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax,
-              aocl_int_t *info)
+void sgbequb_(integer *m, integer *n, integer *kl, integer * ku, real *ab, integer *ldab, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgbequb(m, n, kl, ku, ab, ldab, r__, c__, rowcnd, colcnd, amax, info);
@@ -249,7 +246,7 @@ void aocl_lapack_sgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
     {
         i__1 = -(*info);
         xerbla_("SGBEQUB", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if(*m == 0 || *n == 0)
@@ -257,7 +254,6 @@ void aocl_lapack_sgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
         *rowcnd = 1.f;
         *colcnd = 1.f;
         *amax = 0.f;
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. Assume SMLNUM is a power of the radix. */
@@ -329,7 +325,6 @@ void aocl_lapack_sgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
             if(r__[i__] == 0.f)
             {
                 *info = i__;
-                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L50: */
@@ -410,7 +405,6 @@ void aocl_lapack_sgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
             if(c__[j] == 0.f)
             {
                 *info = *m + j;
-                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L110: */
@@ -432,7 +426,6 @@ void aocl_lapack_sgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
         /* Compute COLCND = fla_min(C(J)) / fla_max(C(J)). */
         *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGBEQUB */
 }

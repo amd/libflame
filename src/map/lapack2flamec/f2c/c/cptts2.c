@@ -108,9 +108,7 @@
 /* > \ingroup complexPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cptts2_(aocl_int_t *iuplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e, scomplex *b,
-             aocl_int_t *ldb)
+void cptts2_(integer *iuplo, integer *n, integer *nrhs, real * d__, complex *e, complex *b, integer *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -129,7 +127,9 @@ void cptts2_(aocl_int_t *iuplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scom
     /* Builtin functions */
     void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    aocl_int64_t i__, j;
+    integer i__, j;
+    extern /* Subroutine */
+    void csscal_(integer *, real *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -162,7 +162,7 @@ void cptts2_(aocl_int_t *iuplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scom
             aocl_blas_csscal(nrhs, &r__1, &b[b_offset], ldb);
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(*iuplo == 1)
     {
@@ -377,7 +377,7 @@ void cptts2_(aocl_int_t *iuplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scom
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPTTS2 */
 }
 /* cptts2_ */

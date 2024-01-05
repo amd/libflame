@@ -134,9 +134,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slatrz_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, real *a, aocl_int_t *lda, real *tau,
-             real *work)
+void slatrz_(integer *m, integer *n, integer *l, real *a, integer *lda, real *tau, real *work)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slatrz(m, n, l, a, lda, tau, work);
@@ -161,7 +159,7 @@ void aocl_lapack_slatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, real 
     /* Local variables */
     integer i__;
     extern /* Subroutine */
-    int slarz_(char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), slarfg_(integer *, real *, real *, integer *, real *);
+    void slarz_(char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -189,7 +187,6 @@ void aocl_lapack_slatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, real 
     /* Function Body */
     if(*m == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*m == *n)
@@ -200,7 +197,6 @@ void aocl_lapack_slatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, real 
             tau[i__] = 0.f;
             /* L10: */
         }
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     for(i__ = *m; i__ >= 1; --i__)
@@ -217,7 +213,6 @@ void aocl_lapack_slatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, real 
                           &tau[i__], &a[i__ * a_dim1 + 1], lda, &work[1]);
         /* L20: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATRZ */
 }

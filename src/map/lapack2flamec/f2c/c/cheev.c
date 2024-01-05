@@ -143,9 +143,7 @@ i */
 /* > \ingroup heev */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cheev_(char *jobz, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *w,
-            scomplex *work, aocl_int_t *lwork, real *rwork, aocl_int_t *info)
+void cheev_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, real *w, complex *work, integer *lwork, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -169,18 +167,27 @@ void cheev_(char *jobz, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda,
     real anrm;
     aocl_int64_t imax;
     real rmin, rmax, sigma;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    extern logical lsame_(char *, char *);
+    integer iinfo;
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
     logical lower, wantz;
-    aocl_int64_t iscale;
+    extern real clanhe_(char *, char *, integer *, complex *, integer *, real *);
+    integer iscale;
+    extern /* Subroutine */
+    void clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
     extern real slamch_(char *);
+    extern /* Subroutine */
+    void chetrd_(char *, integer *, complex *, integer *, real *, real *, complex *, complex *, integer *, integer *);
     real safmin;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    aocl_int64_t indtau, indwrk;
-    aocl_int64_t llwork;
+    integer indtau, indwrk;
+    extern /* Subroutine */
+    void csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *), cungtr_(char *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), ssterf_(integer *, real *, real *, integer *);
+    integer llwork;
     real smlnum;
     aocl_int64_t lwkopt;
     logical lquery;
@@ -254,18 +261,18 @@ void cheev_(char *jobz, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda,
         i__1 = -(*info);
         xerbla_("CHEEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -280,7 +287,7 @@ void cheev_(char *jobz, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda,
             a[i__1].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -344,7 +351,7 @@ void cheev_(char *jobz, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda,
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHEEV */
 }
 /* cheev_ */

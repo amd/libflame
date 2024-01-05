@@ -265,12 +265,7 @@ and if */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slalsa_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *nrhs, real *b,
-             aocl_int_t *ldb, real *bx, aocl_int_t *ldbx, real *u, aocl_int_t *ldu, real *vt,
-             aocl_int_t *k, real *difl, real *difr, real *z__, real *poles, aocl_int_t *givptr,
-             aocl_int_t *givcol, aocl_int_t *ldgcol, aocl_int_t *perm, real *givnum, real *c__,
-             real *s, real *work, aocl_int_t *iwork, aocl_int_t *info)
+void slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *b, integer *ldb, real *bx, integer *ldbx, real * u, integer *ldu, real *vt, integer *k, real *difl, real *difr, real * z__, real *poles, integer *givptr, integer *givcol, integer *ldgcol, integer *perm, real *givnum, real *c__, real *s, real *work, integer * iwork, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slalsa(icompq, smlsiz, n, nrhs, b, ldb, bx, ldbx, u, ldu, vt, k, difl, difr, z__,
@@ -317,10 +312,10 @@ void aocl_lapack_slalsa(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t
     /* Local variables */
     integer i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1, nlvl, sqre, inode, ndiml;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer ndimr;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), slals0_(integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *), slals0_(integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -416,7 +411,7 @@ void aocl_lapack_slalsa(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t
     {
         i__1 = -(*info);
         xerbla_("SLALSA", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Book-keeping and setting up the computation tree. */
     inode = 1;
@@ -590,7 +585,6 @@ L50: /* First now go through the right singular vector matrices of all */
         /* L80: */
     }
 L90:
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLALSA */
 }

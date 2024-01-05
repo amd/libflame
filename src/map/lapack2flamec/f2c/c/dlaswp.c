@@ -101,7 +101,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlaswp_(integer *n, doublereal *a, integer *lda, integer *k1, integer *k2, integer *ipiv, integer *incx)
+void dlaswp_(integer *n, doublereal *a, integer *lda, integer *k1, integer *k2, integer *ipiv, integer *incx)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaswp inputs: n %" FLA_IS ", lda %" FLA_IS ", k1 %" FLA_IS ", k2 %" FLA_IS ", incx %" FLA_IS "",*n, *lda, *k1, *k2, *incx);
@@ -147,7 +147,7 @@ int dlaswp_(integer *n, doublereal *a, integer *lda, integer *k1, integer *k2, i
     else
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     n32 = *n / 32 << 5;
     if (n32 != 0)
@@ -213,7 +213,7 @@ int dlaswp_(integer *n, doublereal *a, integer *lda, integer *k1, integer *k2, i
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASWP */
 }
 /* dlaswp_ */

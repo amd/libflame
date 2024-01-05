@@ -158,7 +158,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int chb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, integer *ed, integer *sweep, integer *n, integer * nb, integer *ib, complex *a, integer *lda, complex *v, complex *tau, integer *ldvt, complex *work)
+void chb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, integer *ed, integer *sweep, integer *n, integer * nb, integer *ib, complex *a, integer *lda, complex *v, complex *tau, integer *ldvt, complex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -182,9 +182,9 @@ int chb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int clarfg_(integer *, complex *, complex *, integer *, complex *);
+    void clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern /* Subroutine */
-    int clarfx_(char *, integer *, integer *, complex *, complex *, complex *, integer *, complex *), clarfy_( char *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
+    void clarfx_(char *, integer *, integer *, complex *, complex *, complex *, integer *, complex *), clarfy_( char *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
     integer ofdpos, taupos;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -424,7 +424,7 @@ int chb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* END OF CHB2ST_KERNELS */
 }
 /* chb2st_kernels__ */

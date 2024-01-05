@@ -121,7 +121,7 @@
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int slarrc_(char *jobt, integer *n, real *vl, real *vu, real *d__, real *e, real *pivmin, integer *eigcnt, integer *lcnt, integer * rcnt, integer *info)
+void slarrc_(char *jobt, integer *n, real *vl, real *vu, real *d__, real *e, real *pivmin, integer *eigcnt, integer *lcnt, integer * rcnt, integer *info)
 {
     /* System generated locals */
     integer i__1;
@@ -156,7 +156,7 @@ int slarrc_(char *jobt, integer *n, real *vl, real *vu, real *d__, real *e, real
     /* Quick return if possible */
     if (*n <= 0)
     {
-        return 0;
+        return;
     }
     *lcnt = 0;
     *rcnt = 0;
@@ -249,7 +249,7 @@ int slarrc_(char *jobt, integer *n, real *vl, real *vu, real *d__, real *e, real
         }
     }
     *eigcnt = *rcnt - *lcnt;
-    return 0;
+    return;
     /* end of SLARRC */
 }
 /* slarrc_ */

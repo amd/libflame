@@ -22,9 +22,11 @@ int fla_zscal(integer *n, doublecomplex *alpha,
 int fla_dgeqrf_small(integer *m, integer *n,
             doublereal *a, integer *lda,
             doublereal *tau, doublereal *work);
-int fla_sscal(integer *n, real *alpha,
+void fla_dscal(integer *n, doublereal *alpha,
+            doublereal *x, integer *incx);
+void fla_sscal(integer *n, real *alpha,
             real *x, integer *incx);
-int fla_sger(integer *m, integer *n, real *alpha,
+void fla_sger(integer *m, integer *n, real *alpha,
              real *x, integer *incx, real *y, 
              integer *incy, real *a, integer *lda);
 int fla_zgetrf_small_simd(integer *m, integer *n,

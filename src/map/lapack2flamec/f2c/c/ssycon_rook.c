@@ -140,9 +140,7 @@ static aocl_int64_t c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ssycon_rook_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ipiv,
-                  real *anorm, real *rcond, real *work, aocl_int_t *iwork, aocl_int_t *info)
+void ssycon_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, real *anorm, real *rcond, real *work, integer * iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -153,12 +151,14 @@ void ssycon_rook_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
-    aocl_int64_t i__, kase;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, kase;
+    extern /* Subroutine */
+    void ssytrs_rook_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    extern logical lsame_(char *, char *);
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    int slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -214,7 +214,7 @@ void ssycon_rook_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_
         i__1 = -(*info);
         xerbla_("SSYCON_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.f;
@@ -222,12 +222,12 @@ void ssycon_rook_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if(*anorm <= 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if(upper)
@@ -238,7 +238,7 @@ void ssycon_rook_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_
             if(ipiv[i__] > 0 && a[i__ + i__ * a_dim1] == 0.f)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L10: */
         }
@@ -252,7 +252,7 @@ void ssycon_rook_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_
             if(ipiv[i__] > 0 && a[i__ + i__ * a_dim1] == 0.f)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L20: */
         }
@@ -273,7 +273,7 @@ L30:
         *rcond = 1.f / ainvnm / *anorm;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYCON_ROOK */
 }
 /* ssycon_rook__ */

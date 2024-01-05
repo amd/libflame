@@ -187,9 +187,7 @@ static real c_b10 = 1.f;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slasyf_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, real *a,
-                  aocl_int_t *lda, aocl_int_t *ipiv, real *w, aocl_int_t *ldw, aocl_int_t *info)
+void slasyf_rook_(char *uplo, integer *n, integer *nb, integer *kb, real *a, integer *lda, integer *ipiv, real *w, integer * ldw, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slasyf_rook(uplo, n, nb, kb, a, lda, ipiv, w, ldw, info);
@@ -228,11 +226,17 @@ void aocl_lapack_slasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
     logical done;
     aocl_int64_t imax, jmax;
     real alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     real sfmin;
-    aocl_int64_t itemp;
-    aocl_int64_t kstep;
+    integer itemp;
+    extern /* Subroutine */
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    integer kstep;
     real stemp;
+    extern /* Subroutine */
+    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
     real absakk;
     extern real slamch_(char *);
     real colmax, rowmax;
@@ -905,7 +909,6 @@ void aocl_lapack_slasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
         /* Set KB to the number of columns factorized */
         *kb = k - 1;
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASYF_ROOK */
 }

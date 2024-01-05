@@ -163,9 +163,7 @@ and second, applying a diagonal similarity transformation */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dgebal_(char *job, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *ilo,
-             aocl_int_t *ihi, doublereal *scale, aocl_int_t *info)
+void dgebal_(char *job, integer *n, doublereal *a, integer * lda, integer *ilo, integer *ihi, doublereal *scale, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgebal inputs: job %c, n %" FLA_IS ", lda %" FLA_IS "",*job, *n, *lda);
@@ -176,8 +174,13 @@ void dgebal_(char *job, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_
     doublereal c__, f, g;
     aocl_int64_t i__, j, k, l;
     doublereal r__, s, ca, ra;
-    aocl_int64_t ica, ira;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer ica, ira, iexc;
+    extern doublereal dnrm2_(integer *, doublereal *, integer *);
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal sfmin1, sfmin2, sfmax1, sfmax2;
     extern doublereal dlamch_(char *);
     extern logical disnan_(doublereal *);
@@ -228,7 +231,7 @@ void dgebal_(char *job, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_
         i__1 = -(*info);
         xerbla_("DGEBAL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick returns. */
     if(*n == 0)
@@ -397,7 +400,7 @@ L160: /* Computing MAX */
             i__2 = -(*info);
             xerbla_("DGEBAL", &i__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         f *= 2.;
         c__ *= 2.;
@@ -503,7 +506,7 @@ L190:
     *ilo = k;
     *ihi = l;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGEBAL */
 }
 /* dgebal_ */

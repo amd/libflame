@@ -159,7 +159,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slatsqr_(integer *m, integer *n, integer *mb, integer * nb, real *a, integer *lda, real *t, integer *ldt, real *work, integer *lwork, integer *info)
+void slatsqr_(integer *m, integer *n, integer *mb, integer * nb, real *a, integer *lda, real *t, integer *ldt, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slatsqr inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *mb, *nb, *lda, *ldt, *lwork);
@@ -171,7 +171,7 @@ int slatsqr_(integer *m, integer *n, integer *mb, integer * nb, real *a, integer
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgeqrt_( integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *);
     logical lquery;
     extern /* Subroutine */
-    int stpqrt_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+    void stpqrt_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. -- */
@@ -237,25 +237,25 @@ int slatsqr_(integer *m, integer *n, integer *mb, integer * nb, real *a, integer
         i__1 = -(*info);
         xerbla_("SLATSQR", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* The QR Decomposition */
     if (*mb <= *n || *mb >= *m)
     {
         sgeqrt_(m, n, nb, &a[a_offset], lda, &t[t_offset], ldt, &work[1], info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     kk = (*m - *n) % (*mb - *n);
     ii = *m - kk + 1;
@@ -280,7 +280,7 @@ int slatsqr_(integer *m, integer *n, integer *mb, integer * nb, real *a, integer
     }
     work[1] = (real) (*n * *nb);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SLATSQR */
 }
 /* slatsqr_ */

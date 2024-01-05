@@ -178,10 +178,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void csprfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, scomplex *afp,
-             aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, scomplex *x, aocl_int_t *ldx, real *ferr,
-             real *berr, scomplex *work, real *rwork, aocl_int_t *info)
+void csprfs_(char *uplo, integer *n, integer *nrhs, complex * ap, complex *afp, integer *ipiv, complex *b, integer *ldb, complex *x, integer *ldx, real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -211,16 +208,20 @@ void csprfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, scomplex
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     integer count;
     extern /* Subroutine */
-    int cspmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *, integer *);
+    void cspmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *, integer *);
     logical upper;
+    extern /* Subroutine */
+    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real lstres;
+    extern /* Subroutine */
+    void csptrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -290,7 +291,7 @@ void csprfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, scomplex
         i__1 = -(*info);
         xerbla_("CSPRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -303,7 +304,7 @@ void csprfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, scomplex
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* NZ = maximum number of nonzero elements in each row of A, plus 1 */
     nz = *n + 1;
@@ -521,7 +522,7 @@ void csprfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, scomplex
         /* L140: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSPRFS */
 }
 /* csprfs_ */

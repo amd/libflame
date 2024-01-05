@@ -103,9 +103,7 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clag2z_(aocl_int_t *m, aocl_int_t *n, scomplex *sa, aocl_int_t *ldsa, dcomplex *a,
-             aocl_int_t *lda, aocl_int_t *info)
+void clag2z_(integer *m, integer *n, complex *sa, integer * ldsa, doublecomplex *a, integer *lda, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -157,7 +155,7 @@ void clag2z_(aocl_int_t *m, aocl_int_t *n, scomplex *sa, aocl_int_t *ldsa, dcomp
         /* L20: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAG2Z */
 }
 /* clag2z_ */

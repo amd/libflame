@@ -220,9 +220,7 @@ static dcomplex c_b1 = {1., 0.};
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zpftrs_(char *transr, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a,
-             dcomplex *b, aocl_int_t *ldb, aocl_int_t *info)
+void zpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, doublecomplex *a, doublecomplex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpftrs inputs: transr %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*transr, *uplo, *n, *nrhs, *ldb);
@@ -234,7 +232,7 @@ void zpftrs_(char *transr, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
     extern /* Subroutine */
-    int ztfsm_(char *, char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ztfsm_(char *, char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -289,13 +287,13 @@ void zpftrs_(char *transr, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex
         i__1 = -(*info);
         xerbla_("ZPFTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* start execution: there are two triangular solves */
     if(lower)
@@ -309,7 +307,7 @@ void zpftrs_(char *transr, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex
         aocl_lapack_ztfsm(transr, "L", uplo, "N", "N", n, nrhs, &c_b1, a, &b[b_offset], ldb);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPFTRS */
 }
 /* zpftrs_ */

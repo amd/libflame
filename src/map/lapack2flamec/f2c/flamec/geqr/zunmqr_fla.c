@@ -174,9 +174,7 @@ the routine */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zunmqr_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
-                dcomplex *a, aocl_int64_t *lda, dcomplex *tau, dcomplex *c__,
-                aocl_int64_t *ldc, dcomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
+void zunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
@@ -193,13 +191,15 @@ void zunmqr_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     extern logical lsame_(char *, char *);
     integer nbmin, iinfo;
     extern /* Subroutine */
-    int zunm2r_fla(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zunm2r_fla(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     logical notran;
-    aocl_int64_t ldwork;
-    aocl_int64_t lwkopt;
+    integer ldwork;
+    extern /* Subroutine */
+    void zlarft_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -297,7 +297,7 @@ void zunmqr_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     {
         i__1 = -(*info);
         xerbla_("ZUNMQR", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if(lquery)
     {
@@ -306,8 +306,8 @@ void zunmqr_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || *k == 0)
     {
-        work[1].real = 1.;
-        work[1].imag = 0.; // , expr subst
+        work[1].r = 1.;
+        work[1].i = 0.; // , expr subst
         return;
     }
     nbmin = 2;
@@ -391,8 +391,8 @@ void zunmqr_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
             /* L10: */
         }
     }
-    work[1].real = (doublereal)lwkopt;
-    work[1].imag = 0.; // , expr subst
+    work[1].r = (doublereal) lwkopt;
+    work[1].i = 0.; // , expr subst
     return;
     /* End of ZUNMQR */
 }

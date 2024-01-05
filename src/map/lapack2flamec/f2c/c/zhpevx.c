@@ -243,11 +243,7 @@ if RANGE = 'V', the exact value of M */
 /* > \ingroup hpevx */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zhpevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *vl,
-             doublereal *vu, aocl_int_t *il, aocl_int_t *iu, doublereal *abstol, aocl_int_t *m,
-             doublereal *w, dcomplex *z__, aocl_int_t *ldz, dcomplex *work,
-             doublereal *rwork, aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
+void zhpevx_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *ap, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *work, doublereal * rwork, integer *iwork, integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhpevx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", m %" FLA_IS ", ldz %" FLA_IS "",*jobz, *range, *uplo, *n, *il, *iu, *m, *ldz);
@@ -264,12 +260,18 @@ void zhpevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *ap, d
     aocl_int64_t imax;
     doublereal rmin, rmax;
     logical test;
-    aocl_int64_t itmp1, indee;
+    integer itmp1, indee;
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t iinfo;
     char order[1];
+    extern /* Subroutine */
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical wantz;
+    extern /* Subroutine */
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     logical alleig, indeig;
     aocl_int64_t iscale;
@@ -278,10 +280,15 @@ void zhpevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *ap, d
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_( integer *, doublereal *, doublecomplex *, integer *);
     doublereal abstll, bignum;
-    aocl_int64_t indiwk, indisp, indtau;
-    aocl_int64_t indrwk, indwrk, nsplit;
+    integer indiwk, indisp, indtau;
+    extern /* Subroutine */
+    void dsterf_(integer *, doublereal *, doublereal *, integer *), dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    extern doublereal zlanhp_(char *, char *, integer *, doublecomplex *, doublereal *);
+    integer indrwk, indwrk, nsplit;
     doublereal smlnum;
-    /* -- LAPACK driver routine -- */
+    extern /* Subroutine */
+    void zhptrd_(char *, integer *, doublecomplex *, doublereal *, doublereal *, doublecomplex *, integer *), zstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *), zsteqr_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublereal *, integer *), zupgtr_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zupmtr_(char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+    /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -366,14 +373,14 @@ void zhpevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *ap, d
         i__1 = -(*info);
         xerbla_("ZHPEVX", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -397,7 +404,7 @@ void zhpevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, dcomplex *ap, d
             z__[i__1].imag = 0.; // , expr subst
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -578,7 +585,7 @@ L20:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHPEVX */
 }
 /* zhpevx_ */

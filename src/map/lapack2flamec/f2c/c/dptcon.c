@@ -115,9 +115,7 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dptcon_(aocl_int_t *n, doublereal *d__, doublereal *e, doublereal *anorm, doublereal *rcond,
-             doublereal *work, aocl_int_t *info)
+void dptcon_(integer *n, doublereal *d__, doublereal *e, doublereal *anorm, doublereal *rcond, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dptcon inputs: n %" FLA_IS "",*n);
@@ -170,7 +168,7 @@ void dptcon_(aocl_int_t *n, doublereal *d__, doublereal *e, doublereal *anorm, d
         i__1 = -(*info);
         xerbla_("DPTCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.;
@@ -178,12 +176,12 @@ void dptcon_(aocl_int_t *n, doublereal *d__, doublereal *e, doublereal *anorm, d
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(*anorm == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check that D(1:N) is positive. */
     i__1 = *n;
@@ -192,7 +190,7 @@ void dptcon_(aocl_int_t *n, doublereal *d__, doublereal *e, doublereal *anorm, d
         if(d__[i__] <= 0.)
         {
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* L10: */
     }
@@ -224,7 +222,7 @@ void dptcon_(aocl_int_t *n, doublereal *d__, doublereal *e, doublereal *anorm, d
         *rcond = 1. / ainvnm / *anorm;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPTCON */
 }
 /* dptcon_ */

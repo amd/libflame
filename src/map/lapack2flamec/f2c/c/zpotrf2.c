@@ -102,7 +102,7 @@ static doublereal c_b12 = 1.;
 /* > \ingroup complex16POcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *info)
+void zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpotrf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -117,10 +117,10 @@ int zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *in
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
+    void zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -169,13 +169,13 @@ int zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *in
         i__1 = -(*info);
         xerbla_("ZPOTRF2", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* N=1 case */
     if (*n == 1)
@@ -187,7 +187,7 @@ int zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *in
         {
             *info = 1;
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Factor */
         i__1 = a_dim1 + 1;
@@ -206,7 +206,7 @@ int zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *in
         {
             *info = iinfo;
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Compute the Cholesky factorization A = U**H*U */
         if (upper)
@@ -220,7 +220,7 @@ int zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *in
             {
                 *info = iinfo + n1;
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* Compute the Cholesky factorization A = L*L**H */
         }
@@ -235,12 +235,12 @@ int zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *in
             {
                 *info = iinfo + n1;
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPOTRF2 */
 }
 /* zpotrf2_ */

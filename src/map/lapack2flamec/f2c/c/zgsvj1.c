@@ -224,7 +224,7 @@ static doublereal c_b18 = 1.;
 /* > Zlatko Drmac (Zagreb, Croatia) */
 /* ===================================================================== */
 /* Subroutine */
-int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, integer *lda, doublecomplex *d__, doublereal *sva, integer *mv, doublecomplex *v, integer *ldv, doublereal *eps, doublereal *sfmin, doublereal *tol, integer *nsweep, doublecomplex * work, integer *lwork, integer *info)
+void zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, integer *lda, doublecomplex *d__, doublereal *sva, integer *mv, doublecomplex *v, integer *ldv, doublereal *eps, doublereal *sfmin, doublereal *tol, integer *nsweep, doublecomplex * work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgsvj1 inputs: jobv %c, m %" FLA_IS ", n %" FLA_IS ", n1 %" FLA_IS ", lda %" FLA_IS ", mv %" FLA_IS ", ldv %" FLA_IS ", nsweep %" FLA_IS "",*jobv, *m, *n, *n1, *lda, *mv, *ldv, *nsweep);
@@ -249,7 +249,7 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
     integer nblr, ierr;
     doublecomplex ompq;
     extern /* Subroutine */
-    int zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
+    void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
     doublereal aapp0, aapq1, temp1, apoaq, aqoap;
     extern logical lsame_(char *, char *);
     doublereal theta, small_val;
@@ -258,7 +258,7 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
     VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     logical rotok;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
@@ -266,10 +266,10 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
     integer ijblsk, swband, blskip;
     doublereal mxaapq;
     extern /* Subroutine */
-    int zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *);
     doublereal thsign, mxsinj;
     extern /* Subroutine */
-    int zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
+    void zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     integer emptsw, notrot, iswrot;
     doublereal rootbig, rooteps;
     integer rowskip;
@@ -361,7 +361,7 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
         i__1 = -(*info);
         xerbla_("ZGSVJ1", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (rsvec)
     {
@@ -838,7 +838,7 @@ L1995: /* Sort the vector SVA() of column norms. */
         /* L5991: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* .. */
     /* .. END OF ZGSVJ1 */
     /* .. */

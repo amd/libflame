@@ -191,10 +191,7 @@ the least squares solution could not be */
 /* > \ingroup gels */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a,
-            aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb, dcomplex *work,
-            aocl_int_t *lwork, aocl_int_t *info)
+void zgels_(char *trans, integer *m, integer *n, integer * nrhs, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgels inputs: trans %c, m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*trans, *m, *n, *nrhs, *lda, *ldb);
@@ -211,15 +208,22 @@ void zgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomple
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     aocl_int64_t wsize;
     doublereal rwork[1];
+    extern /* Subroutine */
+    void dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer scllen;
     doublereal bignum;
+    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
+    extern /* Subroutine */
+    void zgelqf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer * ), zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *), zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *), zlaset_( char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
     doublereal smlnum;
     logical lquery;
-    /* -- LAPACK driver routine -- */
+    extern /* Subroutine */
+    void zunmlq_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), ztrtrs_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -349,12 +353,12 @@ void zgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomple
         i__1 = -(*info);
         xerbla_("ZGELS ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Computing MIN */
@@ -364,7 +368,7 @@ void zgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomple
         i__1 = fla_max(*m,*n);
         zlaset_("Full", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = dlamch_("S") / dlamch_("P");
@@ -429,7 +433,7 @@ void zgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomple
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             scllen = *n;
         }
@@ -442,7 +446,7 @@ void zgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomple
             if(*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* B(N+1:M,1:NRHS) = ZERO */
             i__1 = *nrhs;
@@ -480,7 +484,7 @@ void zgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomple
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* B(M+1:N,1:NRHS) = 0 */
             i__1 = *nrhs;
@@ -517,7 +521,7 @@ void zgels_(char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, dcomple
             if(*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             scllen = *m;
         }
@@ -544,7 +548,7 @@ L50:
     work[1].r = d__1;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGELS */
 }
 /* zgels_ */

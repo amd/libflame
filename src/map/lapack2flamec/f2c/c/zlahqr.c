@@ -188,7 +188,7 @@ elements i+1:ihi of W contain */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zlahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, doublecomplex *h__, integer *ldh, doublecomplex *w, integer *iloz, integer *ihiz, doublecomplex *z__, integer *ldz, integer *info)
+void zlahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, doublecomplex *h__, integer *ldh, doublecomplex *w, integer *iloz, integer *ihiz, doublecomplex *z__, integer *ldz, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlahqr inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS "",*n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz);
@@ -224,15 +224,15 @@ int zlahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *i
     doublecomplex temp;
     integer kdefl;
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     integer itmax;
     doublereal rtemp;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     doublereal safmin, safmax;
     extern /* Subroutine */
-    int zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    void zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     extern /* Double Complex */
     void zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
     doublereal smlnum;
@@ -276,7 +276,7 @@ int zlahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *i
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*ilo == *ihi)
     {
@@ -285,7 +285,7 @@ int zlahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *i
         w[i__1].r = h__[i__2].r;
         w[i__1].i = h__[i__2].i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ==== clear out the trash ==== */
     i__1 = *ihi - 3;
@@ -881,7 +881,7 @@ L70: /* Single-shift QR step */
     /* Failure to converge in remaining number of iterations */
     *info = i__;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 L140: /* H(I,I-1) is negligible: one eigenvalue has converged. */
     i__1 = i__;
     i__2 = i__ + i__ * h_dim1;
@@ -894,7 +894,7 @@ L140: /* H(I,I-1) is negligible: one eigenvalue has converged. */
     goto L30;
 L150:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAHQR */
 }
 /* zlahqr_ */

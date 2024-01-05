@@ -179,10 +179,7 @@ in this case a minimum norm solution is returned. */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slalsd_(char *uplo, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e,
-             real *b, aocl_int_t *ldb, real *rcond, aocl_int_t *rank, real *work, aocl_int_t *iwork,
-             aocl_int_t *info)
+void slalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ldb, real *rcond, integer *rank, real *work, integer *iwork, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slalsd(uplo, smlsiz, n, nrhs, d__, e, b, ldb, rcond, rank, work, iwork, info);
@@ -230,21 +227,24 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     real rcnd;
     integer perm, nsub, nlvl, sqre, bxst;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer poles, sizei, nsize;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     integer nwork, icmpq1, icmpq2;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int slasda_(integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slalsa_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    void slasda_(integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slalsa_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
     integer givcol;
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slartg_(real *, real *, real *, real *, real * ), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    void slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slartg_(real *, real *, real *, real *, real * ), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     real orgnrm;
-    aocl_int64_t givnum;
-    aocl_int64_t givptr, smlszp;
+    integer givnum;
+    extern real slanst_(char *, integer *, real *, real *);
+    extern /* Subroutine */
+    void slasrt_(char *, integer *, real *, integer *);
+    integer givptr, smlszp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -292,7 +292,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     {
         i__1 = -(*info);
         xerbla_("SLALSD", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     eps = slamch_("Epsilon");
     /* Set up the tolerance. */
@@ -308,7 +308,6 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     /* Quick return if possible. */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*n == 1)
@@ -323,7 +322,6 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
             slascl_("G", &c__0, &c__0, &d__[1], &c_b11, &c__1, nrhs, &b[ b_offset], ldb, info);
             d__[1] = f2c_abs(d__[1]);
         }
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Rotate the matrix if it is lower bidiagonal. */
@@ -371,8 +369,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     orgnrm = aocl_lapack_slanst("M", n, &d__[1], &e[1]);
     if(orgnrm == 0.f)
     {
-        aocl_lapack_slaset("A", n, nrhs, &c_b6, &c_b6, &b[b_offset], ldb);
-        AOCL_DTL_TRACE_LOG_EXIT
+        slaset_("A", n, nrhs, &c_b6, &c_b6, &b[b_offset], ldb);
         return;
     }
     aocl_lapack_slascl("G", &c__0, &c__0, &orgnrm, &c_b11, n, &c__1, &d__[1], n, info);
@@ -387,7 +384,6 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                            &b[b_offset], ldb, &work[nwork], info);
         if(*info != 0)
         {
-            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         tol = rcnd * (r__1 = d__[isamax_(n, &d__[1], &c__1)], f2c_abs(r__1));
@@ -410,10 +406,9 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                         &work[nwork], n);
         aocl_lapack_slacpy("A", n, nrhs, &work[nwork], n, &b[b_offset], ldb);
         /* Unscale. */
-        aocl_lapack_slascl("G", &c__0, &c__0, &c_b11, &orgnrm, n, &c__1, &d__[1], n, info);
-        aocl_lapack_slasrt("D", n, &d__[1], info);
-        aocl_lapack_slascl("G", &c__0, &c__0, &orgnrm, &c_b11, n, nrhs, &b[b_offset], ldb, info);
-        AOCL_DTL_TRACE_LOG_EXIT
+        slascl_("G", &c__0, &c__0, &c_b11, &orgnrm, n, &c__1, &d__[1], n, info);
+        slasrt_("D", n, &d__[1], info);
+        slascl_("G", &c__0, &c__0, &orgnrm, &c_b11, n, nrhs, &b[b_offset], ldb, info);
         return;
     }
     /* Book-keeping and setting up some constants. */
@@ -499,7 +494,6 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                                    &work[nwork], info);
                 if(*info != 0)
                 {
-                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 aocl_lapack_slacpy("A", &nsize, nrhs, &b[st + b_dim1], ldb, &work[bx + st1], n);
@@ -515,7 +509,6 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                                    &work[s + st1], &work[nwork], &iwork[iwk], info);
                 if(*info != 0)
                 {
-                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 bxst = bx + st1;
@@ -527,7 +520,6 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                                    &work[s + st1], &work[nwork], &iwork[iwk], info);
                 if(*info != 0)
                 {
-                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
             }
@@ -583,17 +575,15 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                                &work[s + st1], &work[nwork], &iwork[iwk], info);
             if(*info != 0)
             {
-                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
         }
         /* L80: */
     }
     /* Unscale and sort the singular values. */
-    aocl_lapack_slascl("G", &c__0, &c__0, &c_b11, &orgnrm, n, &c__1, &d__[1], n, info);
-    aocl_lapack_slasrt("D", n, &d__[1], info);
-    aocl_lapack_slascl("G", &c__0, &c__0, &orgnrm, &c_b11, n, nrhs, &b[b_offset], ldb, info);
-    AOCL_DTL_TRACE_LOG_EXIT
+    slascl_("G", &c__0, &c__0, &c_b11, &orgnrm, n, &c__1, &d__[1], n, info);
+    slasrt_("D", n, &d__[1], info);
+    slascl_("G", &c__0, &c__0, &orgnrm, &c_b11, n, nrhs, &b[b_offset], ldb, info);
     return;
     /* End of SLALSD */
 }

@@ -102,9 +102,7 @@ if UPLO = 'L', only the lower */
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlacpy_(char *uplo, aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda,
-             doublereal *b, aocl_int_t *ldb)
+void dlacpy_(char *uplo, integer *m, integer *n, doublereal * a, integer *lda, doublereal *b, integer *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlacpy inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *m, *n, *lda, *ldb);
@@ -224,7 +222,7 @@ void dlacpy_(char *uplo, aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLACPY */
 }
 /* dlacpy_ */

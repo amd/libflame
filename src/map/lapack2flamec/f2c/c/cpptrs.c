@@ -107,9 +107,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cpptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, scomplex *b, aocl_int_t *ldb,
-             aocl_int_t *info)
+void cpptrs_(char *uplo, integer *n, integer *nrhs, complex * ap, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -128,7 +126,7 @@ void cpptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, scomplex
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
     extern /* Subroutine */
-    int ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -177,13 +175,13 @@ void cpptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, scomplex
         i__1 = -(*info);
         xerbla_("CPPTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(upper)
     {
@@ -216,7 +214,7 @@ void cpptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, scomplex
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPPTRS */
 }
 /* cpptrs_ */

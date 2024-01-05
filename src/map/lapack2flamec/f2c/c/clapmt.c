@@ -99,9 +99,7 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clapmt_(logical *forwrd, aocl_int_t *m, aocl_int_t *n, scomplex *x, aocl_int_t *ldx,
-             aocl_int_t *k)
+void clapmt_(logical *forwrd, integer *m, integer *n, complex *x, integer *ldx, integer *k)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -139,7 +137,7 @@ void clapmt_(logical *forwrd, aocl_int_t *m, aocl_int_t *n, scomplex *x, aocl_in
     if(*n <= 1)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -228,7 +226,7 @@ void clapmt_(logical *forwrd, aocl_int_t *m, aocl_int_t *n, scomplex *x, aocl_in
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAPMT */
 }
 /* clapmt_ */

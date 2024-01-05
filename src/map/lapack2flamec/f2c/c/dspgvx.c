@@ -265,11 +265,7 @@ if RANGE = 'V', the exact value of M */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dspgvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t *n, doublereal *ap,
-             doublereal *bp, doublereal *vl, doublereal *vu, aocl_int_t *il, aocl_int_t *iu,
-             doublereal *abstol, aocl_int_t *m, doublereal *w, doublereal *z__, aocl_int_t *ldz,
-             doublereal *work, aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
+void dspgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, doublereal *ap, doublereal *bp, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *iwork, integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dspgvx inputs: itype %" FLA_IS ", jobz %c, range %c, uplo %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", m %" FLA_IS ", ldz %" FLA_IS ", ifail %" FLA_IS "",*itype, *jobz, *range, *uplo, *n, *il, *iu, *ldz);
@@ -280,6 +276,8 @@ void dspgvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     char trans[1];
     logical upper;
+    extern /* Subroutine */
+    void dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *), dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
     logical wantz, alleig, indeig, valeig;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dpptrf_( char *, integer *, doublereal *, integer *), dspgst_( integer *, char *, integer *, doublereal *, doublereal *, integer *), dspevx_(char *, char *, char *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *);
@@ -372,14 +370,14 @@ void dspgvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
         i__1 = -(*info);
         xerbla_("DSPGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of B. */
     aocl_lapack_dpptrf(uplo, n, &bp[1], info);
@@ -387,7 +385,7 @@ void dspgvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     aocl_lapack_dspgst(itype, uplo, n, &ap[1], &bp[1], info);
@@ -442,7 +440,7 @@ void dspgvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSPGVX */
 }
 /* dspgvx_ */

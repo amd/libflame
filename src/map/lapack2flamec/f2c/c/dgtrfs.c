@@ -207,12 +207,7 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup doubleGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doublereal *d__,
-             doublereal *du, doublereal *dlf, doublereal *df, doublereal *duf, doublereal *du2,
-             aocl_int_t *ipiv, doublereal *b, aocl_int_t *ldb, doublereal *x, aocl_int_t *ldx,
-             doublereal *ferr, doublereal *berr, doublereal *work, aocl_int_t *iwork,
-             aocl_int_t *info)
+void dgtrfs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublereal *du, doublereal *dlf, doublereal *df, doublereal *duf, doublereal *du2, integer *ipiv, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal * ferr, doublereal *berr, doublereal *work, integer *iwork, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgtrfs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*trans, *n, *nrhs, *ldb, *ldx);
@@ -228,13 +223,21 @@ void dgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doubl
     doublereal safe1, safe2;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    aocl_int64_t count;
+    extern /* Subroutine */
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    integer count;
+    extern /* Subroutine */
+    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
+    extern /* Subroutine */
+    void dlagtm_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transn[1];
+    extern /* Subroutine */
+    void dgttrs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     char transt[1];
     doublereal lstres;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -307,7 +310,7 @@ void dgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doubl
         i__1 = -(*info);
         xerbla_("DGTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -320,7 +323,7 @@ void dgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doubl
             /* L10: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(notran)
     {
@@ -509,7 +512,7 @@ void dgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doubl
         /* L110: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGTRFS */
 }
 /* dgtrfs_ */

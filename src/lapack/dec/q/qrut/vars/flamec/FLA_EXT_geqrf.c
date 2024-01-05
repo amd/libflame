@@ -11,8 +11,8 @@
 #define ssign( x ) ( (x) < 0.0F ? -1.0F : 1.0F )
 #define dsign( x ) ( (x) < 0.0  ? -1.0  : 1.0  )
 
-int slarf_(char *, integer *, integer *, float *, integer *, float *, float *, integer *, float *);
-int dlarf_(char *, integer *, integer *, double *, integer *, double *, double *, integer *, double *);
+void slarf_(char *, integer *, integer *, float *, integer *, float *, float *, integer *, float *);
+void dlarf_(char *, integer *, integer *, double *, integer *, double *, double *, integer *, double *);
 
 FLA_Error FLA_EXT_Househ2_l_ops( integer  m_x2,
                                  float*   chi_1,

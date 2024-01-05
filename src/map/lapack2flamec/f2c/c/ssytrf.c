@@ -182,9 +182,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ssytrf_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ipiv, real *work,
-             aocl_int_t *lwork, aocl_int_t *info)
+void ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -200,10 +198,10 @@ void ssytrf_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ip
     aocl_int64_t nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
-    int ssytf2_(char *, integer *, real *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ssytf2_(char *, integer *, real *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int slasyf_(char *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    void slasyf_(char *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -265,12 +263,12 @@ void ssytrf_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ip
         i__1 = -(*info);
         xerbla_("SSYTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     nbmin = 2;
     ldwork = *n;
@@ -385,7 +383,7 @@ void ssytrf_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ip
 L40:
     work[1] = (real) lwkopt;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTRF */
 }
 /* ssytrf_ */

@@ -90,8 +90,7 @@ the array */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlaruv_(aocl_int_t *iseed, aocl_int_t *n, doublereal *x)
+void dlaruv_(integer *iseed, integer *n, doublereal *x)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaruv inputs: iseed %" FLA_IS ", n %" FLA_IS "",*iseed, *n);
@@ -190,7 +189,7 @@ void dlaruv_(aocl_int_t *iseed, aocl_int_t *n, doublereal *x)
     iseed[3] = it3;
     iseed[4] = it4;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARUV */
 }
 /* dlaruv_ */

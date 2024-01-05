@@ -149,9 +149,7 @@ v(i+2:ihi) is stored on */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgehd2_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, real *a, aocl_int_t *lda, real *tau,
-             real *work, aocl_int_t *info)
+void sgehd2_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real *tau, real *work, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgehd2(n, ilo, ihi, a, lda, tau, work, info);
@@ -181,7 +179,7 @@ void aocl_lapack_sgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, r
     aocl_int64_t i__;
     real aii;
     extern /* Subroutine */
-    int slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
+    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -229,7 +227,7 @@ void aocl_lapack_sgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, r
     {
         i__1 = -(*info);
         xerbla_("SGEHD2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     i__1 = *ihi - 1;
     for(i__ = *ilo; i__ <= i__1; ++i__)
@@ -253,7 +251,6 @@ void aocl_lapack_sgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, r
         a[i__ + 1 + i__ * a_dim1] = aii;
         /* L10: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEHD2 */
 }

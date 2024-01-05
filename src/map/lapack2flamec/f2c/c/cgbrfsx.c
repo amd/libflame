@@ -436,7 +436,7 @@ defaults */
 /* > \ingroup complexGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, integer *nrhs, complex *ab, integer *ldab, complex * afb, integer *ldafb, integer *ipiv, real *r__, real *c__, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *berr, integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real *params, complex *work, real *rwork, integer * info)
+void cgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, integer *nrhs, complex *ab, integer *ldab, complex * afb, integer *ldafb, integer *ipiv, real *r__, real *c__, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *berr, integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real *params, complex *work, real *rwork, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -462,7 +462,7 @@ int cgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
     integer prec_type__, trans_type__;
     real cwise_wrong__;
     extern /* Subroutine */
-    int cla_gbrfsx_extended_(integer *, integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, logical *, real *, complex *, integer *, complex *, integer *, real *, integer *, real *, real *, complex *, real *, complex *, real *, real *, integer *, real *, real *, logical *, integer *);
+    void cla_gbrfsx_extended_(integer *, integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, logical *, real *, complex *, integer *, complex *, integer *, real *, integer *, real *, real *, complex *, real *, complex *, real *, real *, integer *, real *, real *, logical *, integer *);
     char norm[1];
     logical ignore_cwise__;
     extern real cla_gbrcond_c_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, real *, logical *, integer *, complex *, real *);
@@ -470,7 +470,7 @@ int cgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
     real anorm;
     extern real cla_gbrcond_x_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, real *), clangb_(char *, integer *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int cgbcon_(char *, integer *, integer *, integer *, complex *, integer *, integer *, real *, real *, complex *, real *, integer *);
+    void cgbcon_(char *, integer *, integer *, integer *, complex *, integer *, integer *, real *, real *, complex *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -636,7 +636,7 @@ int cgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
         i__1 = -(*info);
         xerbla_("CGBRFSX", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || *nrhs == 0)
@@ -665,7 +665,7 @@ int cgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
             }
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Default to failure. */
     *rcond = 0.f;
@@ -818,7 +818,7 @@ int cgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGBRFSX */
 }
 /* cgbrfsx_ */

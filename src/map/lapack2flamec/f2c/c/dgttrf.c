@@ -121,9 +121,7 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup doubleGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dgttrf_(aocl_int_t *n, doublereal *dl, doublereal *d__, doublereal *du, doublereal *du2,
-             aocl_int_t *ipiv, aocl_int_t *info)
+void dgttrf_(integer *n, doublereal *dl, doublereal *d__, doublereal *du, doublereal *du2, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgttrf inputs: n %" FLA_IS "",*n);
@@ -167,13 +165,13 @@ void dgttrf_(aocl_int_t *n, doublereal *dl, doublereal *d__, doublereal *du, dou
         i__1 = -(*info);
         xerbla_("DGTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize IPIV(i) = i and DU2(I) = 0 */
     i__1 = *n;
@@ -252,7 +250,7 @@ void dgttrf_(aocl_int_t *n, doublereal *dl, doublereal *d__, doublereal *du, dou
     }
 L50:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGTTRF */
 }
 /* dgttrf_ */

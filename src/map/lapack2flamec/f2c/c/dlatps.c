@@ -233,9 +233,7 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dlatps_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, doublereal *ap,
-             doublereal *x, doublereal *scale, doublereal *cnorm, aocl_int_t *info)
+void dlatps_(char *uplo, char *trans, char *diag, char * normin, integer *n, doublereal *ap, doublereal *x, doublereal *scale, doublereal *cnorm, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlatps inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS "", *uplo, *trans, *normin, *n);
@@ -249,10 +247,17 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, d
     doublereal xbnd;
     aocl_int64_t imax;
     doublereal tmax, tjjs, xmax, grow, sumj;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *);
     doublereal tscal, uscal;
-    aocl_int64_t jlast;
+    extern doublereal dasum_(integer *, doublereal *, integer *);
+    integer jlast;
+    extern /* Subroutine */
+    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
+    extern /* Subroutine */
+    void dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
@@ -318,13 +323,13 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, d
         i__1 = -(*info);
         xerbla_("DLATPS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine machine dependent parameters to control overflow. */
     smlnum = dlamch_("Safe minimum") / dlamch_("Precision");
@@ -867,7 +872,7 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, d
         aocl_blas_dscal(n, &d__1, &cnorm[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLATPS */
 }
 /* dlatps_ */

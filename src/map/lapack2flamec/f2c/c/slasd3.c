@@ -218,11 +218,7 @@ the second */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slasd3_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, real *d__, real *q,
-             aocl_int_t *ldq, real *dsigma, real *u, aocl_int_t *ldu, real *u2, aocl_int_t *ldu2,
-             real *vt, aocl_int_t *ldvt, real *vt2, aocl_int_t *ldvt2, aocl_int_t *idxc,
-             aocl_int_t *ctot, real *z__, aocl_int_t *info)
+void slasd3_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, real *q, integer *ldq, real *dsigma, real *u, integer * ldu, real *u2, integer *ldu2, real *vt, integer *ldvt, real *vt2, integer *ldvt2, integer *idxc, integer *ctot, real *z__, integer * info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slasd3(nl, nr, sqre, k, d__, q, ldq, dsigma, u, ldu, u2, ldu2, vt, ldvt, vt2, ldvt2,
@@ -271,13 +267,13 @@ void aocl_lapack_slasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     extern real snrm2_(integer *, real *, integer *);
     integer ctemp;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer ktemp;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     extern real slamc3_(real *, real *);
     extern /* Subroutine */
-    int slasd4_(integer *, integer *, real *, real *, real *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void slasd4_(integer *, integer *, real *, real *, real *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -365,7 +361,7 @@ void aocl_lapack_slasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     {
         i__1 = -(*info);
         xerbla_("SLASD3", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*k == 1)
@@ -385,8 +381,32 @@ void aocl_lapack_slasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
                 /* L10: */
             }
         }
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
+    }
+    /* Modify values DSIGMA(i) to make sure all DSIGMA(i)-DSIGMA(j) can */
+    /* be computed with high relative accuracy (barring over/underflow). */
+    /* This is a problem on machines without a guard digit in */
+    /* add/subtract (Cray XMP, Cray YMP, Cray C 90 and Cray 2). */
+    /* The following code replaces DSIGMA(I) by 2*DSIGMA(I)-DSIGMA(I), */
+    /* which on any of these machines zeros out the bottommost */
+    /* bit of DSIGMA(I) if it is 1;
+    this makes the subsequent */
+    /* subtractions DSIGMA(I)-DSIGMA(J) unproblematic when cancellation */
+    /* occurs. On binary machines with a guard digit (almost all */
+    /* machines) it does not change DSIGMA(I) at all. On hexadecimal */
+    /* and decimal machines with a guard digit, it slightly */
+    /* changes the bottommost bits of DSIGMA(I). It does not account */
+    /* for hexadecimal or decimal machines without guard digits */
+    /* (we know of none). We use a subroutine call to compute */
+    /* 2*DSIGMA(I) to prevent optimizing compilers from eliminating */
+    /* this code. */
+    i__1 = *k;
+    for (i__ = 1;
+            i__ <= i__1;
+            ++i__)
+    {
+        dsigma[i__] = slamc3_(&dsigma[i__], &dsigma[i__]) - dsigma[i__];
+        /* L20: */
     }
     /* Keep a copy of Z. */
     aocl_blas_scopy(k, &z__[1], &c__1, &q[q_offset], &c__1);
@@ -403,7 +423,6 @@ void aocl_lapack_slasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
         /* If the zero finder fails, report the convergence failure. */
         if(*info != 0)
         {
-            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         /* L30: */
@@ -510,7 +529,7 @@ L100:
     if(*k == 2)
     {
         sgemm_("N", "N", k, &m, k, &c_b13, &q[q_offset], ldq, &vt2[vt2_offset], ldvt2, &c_b26, &vt[vt_offset], ldvt);
-        return 0;
+        return;
     }
     ktemp = ctot[1] + 1;
     aocl_blas_sgemm("N", "N", k, &nlp1, &ktemp, &c_b12, &q[q_dim1 + 1], ldq, &vt2[vt2_dim1 + 1],
@@ -540,9 +559,7 @@ L100:
         }
     }
     ctemp = ctot[2] + 1 + ctot[3];
-    aocl_blas_sgemm("N", "N", k, &nrp1, &ctemp, &c_b12, &q[ktemp * q_dim1 + 1], ldq,
-                    &vt2[ktemp + nlp2 * vt2_dim1], ldvt2, &c_b25, &vt[nlp2 * vt_dim1 + 1], ldvt);
-    AOCL_DTL_TRACE_LOG_EXIT
+    sgemm_("N", "N", k, &nrp1, &ctemp, &c_b13, &q[ktemp * q_dim1 + 1], ldq, & vt2[ktemp + nlp2 * vt2_dim1], ldvt2, &c_b26, &vt[nlp2 * vt_dim1 + 1], ldvt);
     return;
     /* End of SLASD3 */
 }

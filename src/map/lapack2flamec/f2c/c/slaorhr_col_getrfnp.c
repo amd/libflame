@@ -140,7 +140,7 @@ the unit diagonal elements of L are not stored. */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int slaorhr_col_getrfnp_(integer *m, integer *n, real *a, integer *lda, real *d__, integer *info)
+void slaorhr_col_getrfnp_(integer *m, integer *n, real *a, integer *lda, real *d__, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -153,10 +153,10 @@ int slaorhr_col_getrfnp_(integer *m, integer *n, real *a, integer *lda, real *d_
     /* Local variables */
     integer j, jb, nb;
     extern /* Subroutine */
-    int slaorhr_col_getrfnp2_(integer *, integer *, real *, integer *, real *, integer *);
+    void slaorhr_col_getrfnp2_(integer *, integer *, real *, integer *, real *, integer *);
     integer iinfo;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -203,13 +203,13 @@ int slaorhr_col_getrfnp_(integer *m, integer *n, real *a, integer *lda, real *d_
         i__1 = -(*info);
         xerbla_("SLAORHR_COL_GETRFNP", &i__1, (ftnlen)19);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine the block size for this environment. */
     nb = ilaenv_(&c__1, "SLAORHR_COL_GETRFNP", " ", m, n, &c_n1, &c_n1);
@@ -249,7 +249,7 @@ int slaorhr_col_getrfnp_(integer *m, integer *n, real *a, integer *lda, real *d_
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLAORHR_COL_GETRFNP */
 }
 /* slaorhr_col_getrfnp__ */

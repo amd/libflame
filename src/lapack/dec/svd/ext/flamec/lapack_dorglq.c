@@ -125,7 +125,9 @@
  /* Local variables */
  integer i__, j, l, ib, nb, ki, kk, nx, iws, nbmin, iinfo;
  extern /* Subroutine */
- int lapack_dorgl2(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+ void dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+ extern 
+ int lapack_dorgl2(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
  extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
  integer ldwork, lwkopt;
  logical lquery;

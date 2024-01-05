@@ -222,11 +222,7 @@ i */
 /* > \ingroup complex16OTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zhbevd_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab,
-             aocl_int_t *ldab, doublereal *w, dcomplex *z__, aocl_int_t *ldz,
-             dcomplex *work, aocl_int_t *lwork, doublereal *rwork, aocl_int_t *lrwork,
-             aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
+void zhbevd_(char *jobz, char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *work, integer *lwork, doublereal *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhbevd inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", ldz %" FLA_IS "",*jobz, *uplo, *n, *kd, *ldab, *ldz);
@@ -241,11 +237,15 @@ void zhbevd_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab
     doublereal anrm;
     aocl_int64_t imax;
     doublereal rmin, rmax;
-    aocl_int64_t llwk2;
+    integer llwk2;
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
-    aocl_int64_t lwmin;
+    extern logical lsame_(char *, char *);
+    integer iinfo;
+    extern /* Subroutine */
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    integer lwmin;
     logical lower;
     aocl_int64_t llrwk;
     logical wantz;
@@ -257,8 +257,12 @@ void zhbevd_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
-    aocl_int64_t indwrk, liwmin;
-    aocl_int64_t lrwmin;
+    extern /* Subroutine */
+    void dsterf_(integer *, doublereal *, doublereal *, integer *), zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *), zstedc_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *, integer *), zhbtrd_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *);
+    integer indwrk, liwmin;
+    extern /* Subroutine */
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    integer lrwmin;
     doublereal smlnum;
     logical lquery;
     /* -- LAPACK driver routine (version 3.4.0) -- */
@@ -371,18 +375,18 @@ void zhbevd_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab
         i__1 = -(*info);
         xerbla_("ZHBEVD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -395,7 +399,7 @@ void zhbevd_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab
             z__[i__1].imag = 0.; // , expr subst
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -468,7 +472,7 @@ void zhbevd_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab
     rwork[1] = (doublereal) lrwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHBEVD */
 }
 /* zhbevd_ */

@@ -159,10 +159,7 @@ static real c_b11 = 1.f;
 /* > \ingroup realPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sptrfs_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *df, real *ef, real *b,
-             aocl_int_t *ldb, real *x, aocl_int_t *ldx, real *ferr, real *berr, real *work,
-             aocl_int_t *info)
+void sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -178,13 +175,17 @@ void sptrfs_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *df, real
     real s, bi, cx, dx, ex;
     aocl_int64_t ix, nz;
     real eps, safe1, safe2;
-    aocl_int64_t count;
+    integer count;
+    extern /* Subroutine */
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real lstres;
+    extern /* Subroutine */
+    void spttrs_(integer *, integer *, real *, real *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -243,7 +244,7 @@ void sptrfs_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *df, real
         i__1 = -(*info);
         xerbla_("SPTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -256,7 +257,7 @@ void sptrfs_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *df, real
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* NZ = maximum number of nonzero elements in each row of A, plus 1 */
     nz = 4;
@@ -415,7 +416,7 @@ void sptrfs_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *df, real
         /* L90: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPTRFS */
 }
 /* sptrfs_ */

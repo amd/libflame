@@ -129,15 +129,14 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, aocl_int64_t *lda,
-                scomplex *tau, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
+void cungqr_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer * info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
     integer i__, j, l, ib, nb, ki, kk, nx, iws, nbmin, iinfo;
     extern /* Subroutine */
-    int cung2r_fla(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), clarfb_( char *, char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), clarft_( char *, char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void cung2r_fla(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), clarfb_( char *, char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), clarft_( char *, char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
@@ -199,7 +198,7 @@ void cungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, 
     {
         i__1 = -(*info);
         xerbla_("CUNGQR", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if(lquery)
     {
@@ -208,8 +207,8 @@ void cungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, 
     /* Quick return if possible */
     if(*n <= 0)
     {
-        work[1].real = 1.f;
-        work[1].imag = 0.f; // , expr subst
+        work[1].r = 1.f;
+        work[1].i = 0.f; // , expr subst
         return;
     }
     nbmin = 2;
@@ -320,8 +319,8 @@ void cungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, 
             /* L50: */
         }
     }
-    work[1].real = (real)iws;
-    work[1].imag = 0.f; // , expr subst
+    work[1].r = (real) iws;
+    work[1].i = 0.f; // , expr subst
     return;
     /* End of CUNGQR */
 }

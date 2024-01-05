@@ -107,9 +107,7 @@
 /* > \ingroup realPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void spoequ_(aocl_int_t *n, real *a, aocl_int_t *lda, real *s, real *scond, real *amax,
-             aocl_int_t *info)
+void spoequ_(integer *n, real *a, integer *lda, real *s, real *scond, real *amax, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -166,7 +164,7 @@ void spoequ_(aocl_int_t *n, real *a, aocl_int_t *lda, real *s, real *scond, real
         i__1 = -(*info);
         xerbla_("SPOEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
@@ -174,7 +172,7 @@ void spoequ_(aocl_int_t *n, real *a, aocl_int_t *lda, real *s, real *scond, real
         *scond = 1.f;
         *amax = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Find the minimum and maximum diagonal elements. */
     s[1] = a[a_dim1 + 1];
@@ -204,7 +202,7 @@ void spoequ_(aocl_int_t *n, real *a, aocl_int_t *lda, real *s, real *scond, real
             {
                 *info = i__;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L20: */
         }
@@ -223,7 +221,7 @@ void spoequ_(aocl_int_t *n, real *a, aocl_int_t *lda, real *s, real *scond, real
         *scond = sqrt(smin) / sqrt(*amax);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPOEQU */
 }
 /* spoequ_ */

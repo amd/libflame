@@ -294,7 +294,7 @@ IBLOCK(i)=1 if eigenvalue */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *d__, doublereal *e, doublereal *e2, doublereal *rtol1, doublereal *rtol2, doublereal * spltol, integer *nsplit, integer *isplit, integer *m, doublereal *w, doublereal *werr, doublereal *wgap, integer *iblock, integer *indexw, doublereal *gers, doublereal *pivmin, doublereal *work, integer * iwork, integer *info)
+void dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *d__, doublereal *e, doublereal *e2, doublereal *rtol1, doublereal *rtol2, doublereal * spltol, integer *nsplit, integer *isplit, integer *m, doublereal *w, doublereal *werr, doublereal *wgap, integer *iblock, integer *indexw, doublereal *gers, doublereal *pivmin, doublereal *work, integer * iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarre inputs: range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS "",*range, *n, *il, *iu);
@@ -325,27 +325,27 @@ int dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *il
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical norep;
     extern /* Subroutine */
-    int dlasq2_(integer *, doublereal *, integer *);
+    void dlasq2_(integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     integer ibegin;
     logical forceb;
     integer irange;
     doublereal sgndef;
     extern /* Subroutine */
-    int dlarra_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *), dlarrb_(integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlarrc_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *);
+    void dlarra_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *), dlarrb_(integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlarrc_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *);
     integer wbegin;
     extern /* Subroutine */
-    int dlarrd_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dlarrd_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     doublereal safmin, spdiam;
     extern /* Subroutine */
-    int dlarrk_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
+    void dlarrk_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
     logical usedqd;
     doublereal clwdth, isleft;
     extern /* Subroutine */
-    int dlarnv_(integer *, integer *, integer *, doublereal *);
+    void dlarnv_(integer *, integer *, integer *, doublereal *);
     doublereal isrght, bsrtol, dpivot;
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -393,7 +393,7 @@ int dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *il
     if (*n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Decode RANGE */
     if (lsame_(range, "A"))
@@ -433,7 +433,7 @@ int dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *il
         /* store the shift for the initial RRR, which is zero in this case */
         e[1] = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* General case: tridiagonal matrix of order > 1 */
     /* Init WERR, WGAP. Compute Gerschgorin intervals and spectral diameter. */
@@ -506,7 +506,7 @@ int dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *il
         {
             *info = -1;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Make sure that the entries M+1 to N in W, WERR, IBLOCK, INDEXW are 0 */
         i__1 = *n;
@@ -638,7 +638,7 @@ L21:
             {
                 *info = -1;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* Computing MAX */
             d__2 = gl;
@@ -649,7 +649,7 @@ L21:
             {
                 *info = -1;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* Computing MIN */
             d__2 = gu;
@@ -895,7 +895,7 @@ L21:
         /* found in MAXTRY iterations. */
         *info = 2;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
 L83: /* At this point, we have found an initial base representation */
         /* T - SIGMA I = L D L^T with not too much element growth. */
         /* Store the shift. */
@@ -969,7 +969,7 @@ L83: /* At this point, we have found an initial base representation */
             {
                 *info = -4;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* DLARRB computes all gaps correctly except for the last one */
             /* Record distance to VU/GU */
@@ -1023,7 +1023,7 @@ L83: /* At this point, we have found an initial base representation */
                 /* gap is in WORK(N+1) */
                 *info = -5;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             else
             {
@@ -1037,7 +1037,7 @@ L83: /* At this point, we have found an initial base representation */
                     {
                         *info = -6;
                         AOCL_DTL_TRACE_LOG_EXIT
-                        return 0;
+                        return;
                     }
                     /* L149: */
                 }
@@ -1103,7 +1103,7 @@ L170:
         ;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* end of DLARRE */
 }
 /* dlarre_ */

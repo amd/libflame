@@ -163,8 +163,7 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void csptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, aocl_int_t *info)
+void csptrf_(char *uplo, integer *n, complex *ap, integer * ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -184,16 +183,22 @@ void csptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, aocl_int
     double sqrt(doublereal), r_imag(scomplex *);
     void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    aocl_int64_t i__, j, k;
-    scomplex t, r1, d11, d12, d21, d22;
-    aocl_int64_t kc, kk, kp;
-    scomplex wk;
-    aocl_int64_t kx, knc, kpc, npp;
-    scomplex wkm1, wkp1;
-    aocl_int64_t imax, jmax;
+    integer i__, j, k;
+    complex t, r1, d11, d12, d21, d22;
+    integer kc, kk, kp;
+    complex wk;
+    integer kx, knc, kpc, npp;
+    complex wkm1, wkp1;
+    integer imax, jmax;
+    extern /* Subroutine */
+    void cspr_(char *, integer *, complex *, complex *, integer *, complex *);
     real alpha;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t kstep;
+    extern /* Subroutine */
+    void cscal_(integer *, complex *, complex *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
+    integer kstep;
     logical upper;
     real absakk;
     extern integer icamax_(integer *, complex *, integer *);
@@ -245,7 +250,7 @@ void csptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, aocl_int
         i__1 = -(*info);
         xerbla_("CSPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.f) + 1.f) / 8.f;
@@ -797,7 +802,7 @@ L10:
     }
 L110:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSPTRF */
 }
 /* csptrf_ */

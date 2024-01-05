@@ -174,7 +174,7 @@ v(i+k+1:n) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slahr2_(integer *n, integer *k, integer *nb, real *a, integer *lda, real *tau, real *t, integer *ldt, real *y, integer *ldy)
+void slahr2_(integer *n, integer *k, integer *nb, real *a, integer *lda, real *tau, real *t, integer *ldt, real *y, integer *ldy)
 {
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, y_dim1, y_offset, i__1, i__2, i__3;
@@ -183,7 +183,7 @@ int slahr2_(integer *n, integer *k, integer *nb, real *a, integer *lda, real *ta
     integer i__;
     real ei;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *), slarfg_( integer *, real *, real *, integer *, real *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *), slarfg_( integer *, real *, real *, integer *, real *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -218,7 +218,7 @@ int slahr2_(integer *n, integer *k, integer *nb, real *a, integer *lda, real *ta
     ei = 0;
     if (*n <= 1)
     {
-        return 0;
+        return;
     }
     i__1 = *nb;
     for (i__ = 1;
@@ -299,7 +299,7 @@ int slahr2_(integer *n, integer *k, integer *nb, real *a, integer *lda, real *ta
         sgemm_("NO TRANSPOSE", "NO TRANSPOSE", k, nb, &i__1, &c_b5, &a[(*nb + 2) * a_dim1 + 1], lda, &a[*k + 1 + *nb + a_dim1], lda, &c_b5, &y[y_offset], ldy);
     }
     strmm_("RIGHT", "Upper", "NO TRANSPOSE", "NON-UNIT", k, nb, &c_b5, &t[ t_offset], ldt, &y[y_offset], ldy);
-    return 0;
+    return;
     /* End of SLAHR2 */
 }
 /* slahr2_ */

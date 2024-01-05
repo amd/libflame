@@ -206,7 +206,7 @@ i */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int chbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *w, complex *z__, integer *ldz, complex *work, integer *lwork, real *rwork, integer * info)
+void chbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *w, complex *z__, integer *ldz, complex *work, integer *lwork, real *rwork, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -227,7 +227,7 @@ int chbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, 
     integer ib;
     real eps;
     extern /* Subroutine */
-    int chetrd_hb2st_(char *, char *, char *, integer *, integer *, complex *, integer *, real *, real *, complex *, integer *, complex *, integer *, integer *);
+    void chetrd_hb2st_(char *, char *, char *, integer *, integer *, complex *, integer *, real *, real *, complex *, integer *, complex *, integer *, integer *);
     integer inde;
     extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real anrm;
@@ -236,7 +236,7 @@ int chbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, 
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     integer lhtrd, lwmin;
     logical lower;
     integer lwtrd;
@@ -244,7 +244,7 @@ int chbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, 
     extern real clanhb_(char *, char *, integer *, integer *, complex *, integer *, real *);
     integer iscale;
     extern /* Subroutine */
-    int clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
+    void clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
@@ -252,7 +252,7 @@ int chbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, 
     real bignum;
     integer indwrk, indrwk;
     extern /* Subroutine */
-    int csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *), ssterf_(integer *, real *, real *, integer *);
+    void csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *), ssterf_(integer *, real *, real *, integer *);
     integer llwork;
     real smlnum;
     logical lquery;
@@ -344,18 +344,18 @@ int chbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, 
         i__1 = -(*info);
         xerbla_("CHBEV_2STAGE ", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -376,7 +376,7 @@ int chbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, 
             z__[i__1].i = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -443,7 +443,7 @@ int chbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, 
     work[1].r = (real) lwmin;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHBEV_2STAGE */
 }
 /* chbev_2stage__ */

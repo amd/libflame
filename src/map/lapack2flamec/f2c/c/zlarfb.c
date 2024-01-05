@@ -197,10 +197,7 @@ the corresponding */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zlarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m, aocl_int_t *n,
-             aocl_int_t *k, dcomplex *v, aocl_int_t *ldv, dcomplex *t, aocl_int_t *ldt,
-             dcomplex *c__, aocl_int_t *ldc, dcomplex *work, aocl_int_t *ldwork)
+void zlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, doublecomplex *v, integer *ldv, doublecomplex *t, integer *ldt, doublecomplex *c__, integer * ldc, doublecomplex *work, integer *ldwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarfb inputs: side %c, trans %c, direct %c, storev %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS ", ldc %" FLA_IS ", ldwork %" FLA_IS "",*side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc, *ldwork);
@@ -209,8 +206,10 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
     integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5;
     doublecomplex z__1, z__2;
     /* Local variables */
-    aocl_int64_t i__, j;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlacgv_(integer *, doublecomplex *, integer *);
     char transt[1];
     /* -- LAPACK auxiliary routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -250,7 +249,7 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
     if(*m <= 0 || *n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(lsame_(trans, "N", 1, 1))
     {
@@ -765,7 +764,7 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m,
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLARFB */
 }
 /* zlarfb_ */

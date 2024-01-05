@@ -126,7 +126,7 @@ the elements below the diagonal are not used. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgeqrt2_(integer *m, integer *n, complex *a, integer * lda, complex *t, integer *ldt, integer *info)
+void cgeqrt2_(integer *m, integer *n, complex *a, integer * lda, complex *t, integer *ldt, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -147,10 +147,10 @@ int cgeqrt2_(integer *m, integer *n, complex *a, integer * lda, complex *t, inte
     integer i__, k;
     complex aii;
     extern /* Subroutine */
-    int cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
+    void cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
     complex alpha;
     extern /* Subroutine */
-    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -197,7 +197,7 @@ int cgeqrt2_(integer *m, integer *n, complex *a, integer * lda, complex *t, inte
         i__1 = -(*info);
         xerbla_("CGEQRT2", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     k = fla_min(*m,*n);
     i__1 = k;
@@ -274,6 +274,6 @@ int cgeqrt2_(integer *m, integer *n, complex *a, integer * lda, complex *t, inte
     }
     /* End of CGEQRT2 */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* cgeqrt2_ */

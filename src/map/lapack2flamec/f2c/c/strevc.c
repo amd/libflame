@@ -231,10 +231,7 @@ here the magnitude of a scomplex number */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, aocl_int_t *ldt,
-             real *vl, aocl_int_t *ldvl, real *vr, aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m,
-             real *work, aocl_int_t *info)
+void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, integer *ldt, real *vl, integer *ldvl, real *vr, integer *ldvr, integer *mm, integer *m, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -260,13 +257,21 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
     real vmax;
     aocl_int64_t jnxt;
     real scale;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
     real remax;
     logical leftv;
+    extern /* Subroutine */
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     logical bothv;
     real vcrit;
     logical somev;
+    extern /* Subroutine */
+    void scopy_(integer *, real *, integer *, real *, integer *);
     real xnorm;
+    extern /* Subroutine */
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *), slaln2_(logical *, integer *, integer *, real *, real *, real *, integer *, real *, real *, real *, integer *, real *, real *, real *, integer *, real *, real *, integer *), slabad_(real *, real *);
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -402,13 +407,13 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
         i__1 = -(*info);
         xerbla_("STREVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set the constants to control overflow. */
     unfl = slamch_("Safe minimum");
@@ -1236,7 +1241,7 @@ void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, 
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of STREVC */
 }
 /* strevc_ */

@@ -149,8 +149,7 @@ static real c_b5 = 1.f;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slatzm_(char *side, aocl_int_t *m, aocl_int_t *n, real *v, aocl_int_t *incv, real *tau, real *c1, real *c2, aocl_int_t *ldc, real *work)
+void slatzm_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c1, real *c2, integer *ldc, real * work)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slatzm(side, m, n, v, incv, tau, c1, c2, ldc, work);
@@ -175,7 +174,11 @@ void aocl_lapack_slatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, a
     aocl_int64_t c1_dim1, c1_offset, c2_dim1, c2_offset, i__1;
     real r__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -206,7 +209,6 @@ void aocl_lapack_slatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, a
     /* Function Body */
     if (fla_min(*m,*n) == 0 || *tau == 0.f)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lsame_(side, "L", 1, 1))
@@ -238,7 +240,6 @@ void aocl_lapack_slatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, a
         r__1 = -(*tau);
         aocl_blas_sger(m, &i__1, &r__1, &work[1], &c__1, &v[1], incv, &c2[c2_offset], ldc);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATZM */
 }

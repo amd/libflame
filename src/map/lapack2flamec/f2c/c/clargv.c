@@ -113,9 +113,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clargv_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, scomplex *y, aocl_int_t *incy, real *c__,
-             aocl_int_t *incc)
+void clargv_(integer *n, complex *x, integer *incx, complex * y, integer *incy, real *c__, integer *incc)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("clargv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incy, *incc);
@@ -423,7 +421,7 @@ void clargv_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, scomplex *y, aocl_int
         /* L60: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CLARGV */
 }
 /* clargv_ */

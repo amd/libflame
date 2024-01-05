@@ -187,11 +187,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs,
-             dcomplex *ab, aocl_int_t *ldab, dcomplex *b, aocl_int_t *ldb,
-             dcomplex *x, aocl_int_t *ldx, doublereal *ferr, doublereal *berr,
-             dcomplex *work, doublereal *rwork, aocl_int_t *info)
+void ztbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integer *nrhs, doublecomplex *ab, integer *ldab, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal * rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztbrfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb, *ldx);
@@ -212,6 +208,8 @@ void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     logical upper;
+    extern /* Subroutine */
+    void ztbmv_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztbsv_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_( integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
@@ -307,7 +305,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
         i__1 = -(*info);
         xerbla_("ZTBRFS", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -320,7 +318,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
             /* L10: */
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(notran)
     {
@@ -681,7 +679,7 @@ void ztbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd,
         /* L250: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTBRFS */
 }
 /* ztbrfs_ */

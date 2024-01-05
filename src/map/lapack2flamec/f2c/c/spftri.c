@@ -192,8 +192,7 @@ k=N/2. IF TRANSR = 'T' then RFP is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void spftri_(char *transr, char *uplo, aocl_int_t *n, real *a, aocl_int_t *info)
+void spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_spftri(transr, uplo, n, a, info);
@@ -219,8 +218,10 @@ void aocl_lapack_spftri(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
     extern /* Subroutine */
-    int strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
+    extern /* Subroutine */
+    void slauum_(char *, integer *, real *, integer *, integer *), stftri_(char *, char *, char *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -260,19 +261,17 @@ void aocl_lapack_spftri(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
     {
         i__1 = -(*info);
         xerbla_("SPFTRI", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Invert the triangular Cholesky factor U or L. */
     aocl_lapack_stftri(transr, uplo, "N", n, a, info);
     if(*info > 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* If N is odd, set NISODD = .TRUE. */
@@ -415,7 +414,6 @@ void aocl_lapack_spftri(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
             }
         }
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SPFTRI */
 }

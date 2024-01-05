@@ -106,7 +106,7 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-int zgetc2_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, integer *jpiv, integer *info)
+void zgetc2_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, integer *jpiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgetc2 inputs: n %" FLA_IS ", lda %" FLA_IS "",*n, *lda);
@@ -123,7 +123,7 @@ int zgetc2_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, integer *
     integer ipv, jpv;
     doublereal smin, xmax;
     extern /* Subroutine */
-    int zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
+    void zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     doublereal bignum, smlnum;
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
@@ -161,7 +161,7 @@ int zgetc2_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, integer *
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set constants to control overflow */
     eps = dlamch_("P");
@@ -183,7 +183,7 @@ int zgetc2_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, integer *
             a[i__1].i = z__1.i; // , expr subst
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Factorize A using complete pivoting. */
     /* Set pivots less than SMIN to SMIN */
@@ -271,7 +271,7 @@ int zgetc2_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, integer *
     ipiv[*n] = *n;
     jpiv[*n] = *n;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGETC2 */
 }
 /* zgetc2_ */

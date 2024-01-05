@@ -90,8 +90,7 @@ the array */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slaruv_(aocl_int_t *iseed, aocl_int_t *n, real *x)
+void slaruv_(integer *iseed, integer *n, real *x)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -194,7 +193,7 @@ void slaruv_(aocl_int_t *iseed, aocl_int_t *n, real *x)
     iseed[3] = it3;
     iseed[4] = it4;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLARUV */
 }
 /* slaruv_ */

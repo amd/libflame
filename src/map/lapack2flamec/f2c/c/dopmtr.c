@@ -150,9 +150,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dopmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, doublereal *ap,
-             doublereal *tau, doublereal *c__, aocl_int_t *ldc, doublereal *work, aocl_int_t *info)
+void dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doublereal *ap, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dopmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *uplo, *trans, *m, *n, *ldc);
@@ -162,7 +160,9 @@ void dopmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
     aocl_int64_t i__, i1, i2, i3, ic, jc, ii, mi, ni, nq;
     doublereal aii;
     logical left;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+    extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -238,13 +238,13 @@ void dopmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
         i__1 = -(*info);
         xerbla_("DOPMTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(upper)
     {
@@ -365,7 +365,7 @@ void dopmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DOPMTR */
 }
 /* dopmtr_ */

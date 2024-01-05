@@ -240,7 +240,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, complex *a, integer *lda, complex *b, integer *ldb, complex *q, integer *ldq, complex *z__, integer *ldz, complex *work, integer *lwork, integer *info)
+void cgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, complex *a, integer *lda, complex *b, integer *ldb, complex *q, integer *ldq, complex *z__, integer *ldz, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cgghd3 inputs: compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS "",*compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
@@ -260,27 +260,27 @@ int cgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, c
     integer cola, jcol, ierr;
     complex temp;
     extern /* Subroutine */
-    int crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
+    void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
     integer jrow, topq, ppwo;
     complex temp1, temp2, temp3;
     integer kacc22;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     integer nbmin;
     extern /* Subroutine */
-    int cunm22_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void cunm22_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
     complex ctemp;
     integer nblst;
     logical initq, wantq;
     extern /* Subroutine */
-    int ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *);
+    void ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *);
     logical initz, wantz;
     char compq2[1], compz2[1];
     extern /* Subroutine */
-    int cgghrd_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clartg_(complex *, complex *, real *, complex *, complex *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
+    void cgghrd_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clartg_(complex *, complex *, real *, complex *, complex *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -380,12 +380,12 @@ int cgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, c
         i__1 = -(*info);
         xerbla_("CGGHD3", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize Q and Z if desired. */
     if (initq)
@@ -410,7 +410,7 @@ int cgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, c
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine the blocksize. */
     nbmin = ilaenv_(&c__2, "CGGHD3", " ", n, ilo, ihi, &c_n1);
@@ -1320,7 +1320,7 @@ int cgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, c
     work[1].r = q__1.r;
     work[1].i = q__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CGGHD3 */
 }
 /* cgghd3_ */

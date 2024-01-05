@@ -277,12 +277,7 @@ and entries in the second half */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slasd2_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, real *d__, real *z__,
-             real *alpha, real *beta, real *u, aocl_int_t *ldu, real *vt, aocl_int_t *ldvt,
-             real *dsigma, real *u2, aocl_int_t *ldu2, real *vt2, aocl_int_t *ldvt2,
-             aocl_int_t *idxp, aocl_int_t *idx, aocl_int_t *idxc, aocl_int_t *idxq,
-             aocl_int_t *coltyp, aocl_int_t *info)
+void slasd2_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, real *z__, real *alpha, real *beta, real *u, integer * ldu, real *vt, integer *ldvt, real *dsigma, real *u2, integer *ldu2, real *vt2, integer *ldvt2, integer *idxp, integer *idx, integer *idxc, integer *idxq, integer *coltyp, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slasd2(nl, nr, sqre, k, d__, z__, alpha, beta, u, ldu, vt, ldvt, dsigma, u2, ldu2,
@@ -329,12 +324,18 @@ void aocl_lapack_slasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     real z1;
     aocl_int64_t ct, jp;
     real eps, tau, tol;
-    aocl_int64_t psm[4], nlp1, nlp2, idxi, idxj, ctot[4];
-    aocl_int64_t idxjp, jprev;
+    integer psm[4], nlp1, nlp2, idxi, idxj, ctot[4];
+    extern /* Subroutine */
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    integer idxjp, jprev;
+    extern /* Subroutine */
+    void scopy_(integer *, real *, integer *, real *, integer *);
     extern real slapy2_(real *, real *), slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slamrg_( integer *, integer *, real *, integer *, integer *, integer *);
     real hlftol;
+    extern /* Subroutine */
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -416,7 +417,7 @@ void aocl_lapack_slasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     {
         i__1 = -(*info);
         xerbla_("SLASD2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     nlp1 = *nl + 1;
     nlp2 = *nl + 2;
@@ -733,7 +734,6 @@ L120: /* Count up the total number of the various types of columns, then */
         coltyp[j] = (aocl_int_t)(ctot[j - 1]);
         /* L190: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASD2 */
 }

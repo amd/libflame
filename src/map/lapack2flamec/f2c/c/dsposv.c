@@ -189,7 +189,7 @@ static integer c__1 = 1;
 /* > \ingroup doublePOsolve */
 /* ===================================================================== */
 /* Subroutine */
-int dsposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal * x, integer *ldx, doublereal *work, real *swork, integer *iter, integer *info)
+void dsposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal * x, integer *ldx, doublereal *work, real *swork, integer *iter, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsposv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb, *ldx);
@@ -207,14 +207,14 @@ int dsposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, 
     extern logical lsame_(char *, char *);
     integer iiter;
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsymm_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlag2s_(integer *, integer *, doublereal *, integer *, real *, integer *, integer *), slag2d_(integer *, integer *, real *, integer *, doublereal *, integer *, integer *), dlat2s_(char *, integer *, doublereal *, integer *, real *, integer *, integer *);
+    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsymm_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlag2s_(integer *, integer *, doublereal *, integer *, real *, integer *, integer *), slag2d_(integer *, integer *, real *, integer *, doublereal *, integer *, integer *), dlat2s_(char *, integer *, doublereal *, integer *, real *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal dlansy_(char *, char *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    int dpotrf_(char *, integer *, doublereal *, integer *, integer *), dpotrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), spotrf_(char *, integer *, real *, integer *, integer *), spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+    void dpotrf_(char *, integer *, doublereal *, integer *, integer *), dpotrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), spotrf_(char *, integer *, real *, integer *, integer *), spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -280,13 +280,13 @@ int dsposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, 
         i__1 = -(*info);
         xerbla_("DSPOSV", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if (N.EQ.0). */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Skip single precision iterative refinement if a priori slower */
     /* than double precision factorization. */
@@ -350,7 +350,7 @@ int dsposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, 
     /* stopping criterion. We are good to exit. */
     *iter = 0;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 L10:
     for (iiter = 1;
             iiter <= 30;
@@ -397,7 +397,7 @@ L10:
         /* stopping criterion, we are good to exit. */
         *iter = iiter;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
 L20: /* L30: */
         ;
     }
@@ -412,12 +412,12 @@ L40: /* Single-precision iterative refinement failed to converge to a */
     if (*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     dlacpy_("All", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
     dpotrs_(uplo, n, nrhs, &a[a_offset], lda, &x[x_offset], ldx, info);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSPOSV. */
 }
 /* dsposv_ */

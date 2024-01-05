@@ -109,9 +109,11 @@ real clanht_(char *norm, aocl_int_t *n, real *d__, scomplex *e)
     real sum, scale;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real anorm;
+    extern /* Subroutine */
+    void classq_(integer *, complex *, integer *, real *, real *);
     extern logical sisnan_(real *);
     extern /* Subroutine */
-    int slassq_(integer *, real *, integer *, real *, real *);
+    void slassq_(integer *, real *, integer *, real *, real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

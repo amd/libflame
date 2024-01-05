@@ -372,12 +372,7 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup doubleGBsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku,
-             aocl_int_t *nrhs, doublereal *ab, aocl_int_t *ldab, doublereal *afb, aocl_int_t *ldafb,
-             aocl_int_t *ipiv, char *equed, doublereal *r__, doublereal *c__, doublereal *b,
-             aocl_int_t *ldb, doublereal *x, aocl_int_t *ldx, doublereal *rcond, doublereal *ferr,
-             doublereal *berr, doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
+void dgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, doublereal *ab, integer *ldab, doublereal *afb, integer *ldafb, integer *ipiv, char *equed, doublereal *r__, doublereal *c__, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgbsvx inputs: fact %c, trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx);
@@ -391,14 +386,23 @@ void dgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
     char norm[1];
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal rcmin, rcmax, anorm;
+    extern /* Subroutine */
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical equil;
-    extern doublereal dlamch_(char *);
+    extern doublereal dlangb_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *), dlamch_(char *);
+    extern /* Subroutine */
+    void dlaqgb_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *), dgbcon_(char *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     doublereal colcnd;
+    extern doublereal dlantb_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */
+    void dgbequ_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dgbrfs_( char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dgbtrf_(integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, integer *);
     logical nofact;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
-    aocl_int64_t infequ;
+    extern /* Subroutine */
+    void dgbtrs_(char *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    integer infequ;
     logical colequ;
     doublereal rowcnd;
     logical notran;
@@ -581,7 +585,7 @@ void dgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
         i__1 = -(*info);
         xerbla_("DGBSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(equil)
     {
@@ -693,7 +697,7 @@ void dgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
             work[1] = rpvgrw;
             *rcond = 0.;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A and the */
@@ -781,7 +785,7 @@ void dgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
     }
     work[1] = rpvgrw;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGBSVX */
 }
 /* dgbsvx_ */

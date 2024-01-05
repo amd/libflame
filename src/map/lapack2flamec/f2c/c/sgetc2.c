@@ -102,7 +102,7 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-int sgetc2_(integer *n, real *a, integer *lda, integer *ipiv, integer *jpiv, integer *info)
+void sgetc2_(integer *n, real *a, integer *lda, integer *ipiv, integer *jpiv, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -112,10 +112,10 @@ int sgetc2_(integer *n, real *a, integer *lda, integer *ipiv, integer *jpiv, int
     real eps;
     integer ipv, jpv;
     extern /* Subroutine */
-    int sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
+    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
     real smin, xmax;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *), slabad_(real *, real *);
+    void sswap_(integer *, real *, integer *, real *, integer *), slabad_(real *, real *);
     extern real slamch_(char *);
     real bignum, smlnum;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
@@ -152,7 +152,7 @@ int sgetc2_(integer *n, real *a, integer *lda, integer *ipiv, integer *jpiv, int
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     /* Set constants to control overflow */
     eps = slamch_("P");
@@ -169,7 +169,7 @@ int sgetc2_(integer *n, real *a, integer *lda, integer *ipiv, integer *jpiv, int
             *info = 1;
             a[a_dim1 + 1] = smlnum;
         }
-        return 0;
+        return;
     }
     /* Factorize A using complete pivoting. */
     /* Set pivots less than SMIN to SMIN. */
@@ -245,7 +245,7 @@ int sgetc2_(integer *n, real *a, integer *lda, integer *ipiv, integer *jpiv, int
     /* Set last pivots to N */
     ipiv[*n] = *n;
     jpiv[*n] = *n;
-    return 0;
+    return;
     /* End of SGETC2 */
 }
 /* sgetc2_ */

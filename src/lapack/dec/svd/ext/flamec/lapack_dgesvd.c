@@ -278,9 +278,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
               doublereal *);
   integer bdspac;
   extern /* Subroutine */
-      int
-      lapack_dgelqf(integer *, integer *, doublereal *, integer *, doublereal *,
-                    doublereal *, integer *, integer *),
+      void
       dlascl_(char *, integer *, integer *, doublereal *, doublereal *,
               integer *, integer *, doublereal *, integer *, integer *),
       dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *,
@@ -288,7 +286,11 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
       dlacpy_(char *, integer *, integer *, doublereal *, integer *,
               doublereal *, integer *),
       dlaset_(char *, integer *, integer *, doublereal *, doublereal *,
-              doublereal *, integer *),
+              doublereal *, integer *);
+  extern /* Subroutine */
+      int
+      lapack_dgelqf(integer *, integer *, doublereal *, integer *, doublereal *,
+                    doublereal *, integer *, integer *),
       lapack_dbdsqr(char *, integer *, integer *, integer *, integer *,
                     doublereal *, doublereal *, doublereal *, integer *,
                     doublereal *, integer *, doublereal *, integer *,

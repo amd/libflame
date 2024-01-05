@@ -163,10 +163,7 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup doubleOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dspgv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, doublereal *ap,
-            doublereal *bp, doublereal *w, doublereal *z__, aocl_int_t *ldz, doublereal *work,
-            aocl_int_t *info)
+void dspgv_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *ap, doublereal *bp, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dspgv inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",*itype, *jobz, *uplo, *n, *ldz);
@@ -176,9 +173,11 @@ void dspgv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, doublereal
     integer j, neig;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dspev_(char *, char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dspev_(char *, char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     char trans[1];
     logical upper;
+    extern /* Subroutine */
+    void dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *), dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
     logical wantz;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dpptrf_( char *, integer *, doublereal *, integer *), dspgst_( integer *, char *, integer *, doublereal *, doublereal *, integer *);
@@ -236,13 +235,13 @@ void dspgv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, doublereal
         i__1 = -(*info);
         xerbla_("DSPGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of B. */
     aocl_lapack_dpptrf(uplo, n, &bp[1], info);
@@ -250,7 +249,7 @@ void dspgv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, doublereal
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     aocl_lapack_dspgst(itype, uplo, n, &ap[1], &bp[1], info);
@@ -305,7 +304,7 @@ void dspgv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, doublereal
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSPGV */
 }
 /* dspgv_ */

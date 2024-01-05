@@ -120,9 +120,7 @@ static real c_b19 = 1.f;
 /* > \ingroup realSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ssytrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *lda,
-             aocl_int_t *ipiv, real *b, aocl_int_t *ldb, aocl_int_t *info)
+void ssytrs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -138,12 +136,16 @@ void ssytrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *l
     real ak, bk;
     aocl_int64_t kp;
     real akm1, bkm1;
+    extern /* Subroutine */
+    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
     real akm1k;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real denom;
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sswap_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -200,13 +202,13 @@ void ssytrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *l
         i__1 = -(*info);
         xerbla_("SSYTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(upper)
     {
@@ -446,7 +448,7 @@ void ssytrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *l
     L100:;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTRS */
 }
 /* ssytrs_ */

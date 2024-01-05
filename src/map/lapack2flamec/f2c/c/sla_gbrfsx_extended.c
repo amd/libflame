@@ -412,13 +412,7 @@ i+1}
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *n, integer *kl,
-                          integer *ku, integer *nrhs, real *ab, integer *ldab, real *afb,
-                          integer *ldafb, integer *ipiv, logical *colequ, real *c__, real *b,
-                          integer *ldb, real *y, integer *ldy, real *berr_out__, integer *n_norms__,
-                          real *err_bnds_norm__, real *err_bnds_comp__, real *res, real *ayb,
-                          real *dy, real *y_tail__, real *rcond, integer *ithresh, real *rthresh,
-                          real *dz_ub__, logical *ignore_cwise__, integer *info)
+void sla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer *n, integer *kl, integer *ku, integer *nrhs, real *ab, integer *ldab, real *afb, integer *ldafb, integer *ipiv, logical *colequ, real *c__, real *b, integer *ldb, real *y, integer * ldy, real *berr_out__, integer *n_norms__, real *err_bnds_norm__, real *err_bnds_comp__, real *res, real *ayb, real *dy, real *y_tail__, real *rcond, integer *ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sla_gbrfsx_extended inputs: n %" FLA_IS ",kl %" FLA_IS ",ku %" FLA_IS
@@ -435,34 +429,29 @@ void sla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
     real dxratmax, dzratmax;
     integer i__, j, m;
     extern /* Subroutine */
-    int sla_gbamv_(integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sla_gbamv_(integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     logical incr_prec__;
     real prev_dz_z__, yk, final_dx_x__, final_dz_z__;
     extern /* Subroutine */
-        void
-        sla_wwaddw_(integer *, real *, real *, real *);
+    void sla_wwaddw_(integer *, real *, real *, real * );
     real prevnormdx;
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__, ymin;
     extern /* Subroutine */
-    int sla_lin_berr_(integer *, integer *, integer *, real *, real *, real *), blas_sgbmv_x_(integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    void sla_lin_berr_(integer *, integer *, integer *, real *, real *, real *), blas_sgbmv_x_(integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, integer *);
     integer y_prec_state__;
     extern /* Subroutine */
     int blas_sgbmv2_x_(integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *), sgbmv_(char *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     real dxrat, dzrat;
     char trans[1];
     extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     real normx, normy;
     extern /* Subroutine */
-        void
-        saxpy_(integer *, real *, real *, integer *, real *, integer *);
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        void
-        sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *,
-                real *, integer *, integer *);
+    void sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     real normdx;
     extern /* Character */
         void
@@ -516,7 +505,6 @@ void sla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
     /* Function Body */
     if(*info != 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     chla_transtype_(ch__1, trans_type__);
@@ -792,7 +780,6 @@ void sla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
         sla_lin_berr_(n, n, &c__1, &res[1], &ayb[1], &berr_out__[j]);
         /* End of loop for each RHS */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* sla_gbrfsx_extended__ */

@@ -141,9 +141,7 @@ v(1:m-k+i-1) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void sgeqlf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, real *work,
-             aocl_int_t *lwork, aocl_int_t *info)
+void sgeqlf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgeqlf(m, n, a, lda, tau, work, lwork, info);
@@ -172,10 +170,10 @@ void aocl_lapack_sgeqlf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     /* Local variables */
     integer i__, k, ib, nb, ki, kk, mu, nu, nx, iws, nbmin, iinfo;
     extern /* Subroutine */
-    int sgeql2_(integer *, integer *, real *, integer *, real *, real *, integer *), slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sgeql2_(integer *, integer *, real *, integer *, real *, real *, integer *), slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
+    void slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -239,17 +237,15 @@ void aocl_lapack_sgeqlf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     {
         i__1 = -(*info);
         xerbla_("SGEQLF", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(k == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     nbmin = 2;
@@ -330,8 +326,7 @@ void aocl_lapack_sgeqlf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     {
         aocl_lapack_sgeql2(&mu, &nu, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
     }
-    work[1] = aocl_lapack_sroundup_lwork(&iws);
-    AOCL_DTL_TRACE_LOG_EXIT
+    work[1] = (real) iws;
     return;
     /* End of SGEQLF */
 }

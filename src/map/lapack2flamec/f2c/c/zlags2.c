@@ -143,7 +143,7 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3, doublereal *b1, doublecomplex *b2, doublereal *b3, doublereal *csu, doublecomplex *snu, doublereal *csv, doublecomplex * snv, doublereal *csq, doublecomplex *snq)
+void zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3, doublereal *b1, doublecomplex *b2, doublereal *b3, doublereal *csu, doublecomplex *snu, doublereal *csv, doublecomplex * snv, doublereal *csq, doublecomplex *snq)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
@@ -161,7 +161,7 @@ int zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3, 
     doublecomplex ua11, ua12, ua21, ua22, vb11, vb12, vb21, vb22;
     doublereal csl, csr, snl, snr, aua11, aua12, aua21, aua22, avb12, avb11, avb21, avb22, ua11r, ua22r, vb11r, vb22r;
     extern /* Subroutine */
-    int dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *) ;
+    void dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *) ;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -555,7 +555,7 @@ int zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3, 
         }
     }
     AOCL_DTL_TRACE_EXIT_INDENT
-    return 0;
+    return;
     /* End of ZLAGS2 */
 }
 /* zlags2_ */

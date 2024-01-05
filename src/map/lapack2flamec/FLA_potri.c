@@ -31,7 +31,7 @@
 */
 
 #define LAPACK_potri(prefix)                                    \
-  int F77_ ## prefix ## potri( char* uplo,                      \
+  void F77_ ## prefix ## potri( char* uplo,                      \
                                integer*  n,                         \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, \
                                integer*  ldim_A,                         \
@@ -80,7 +80,7 @@ LAPACK_potri(s)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_potri(d)
 {
@@ -99,7 +99,7 @@ LAPACK_potri(d)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_potri(c)
 {
@@ -118,7 +118,7 @@ LAPACK_potri(c)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_potri(z)
 {
@@ -137,7 +137,7 @@ LAPACK_potri(z)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 #endif

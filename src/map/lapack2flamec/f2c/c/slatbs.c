@@ -245,9 +245,7 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void slatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, aocl_int_t *kd,
-             real *ab, aocl_int_t *ldab, real *x, real *scale, real *cnorm, aocl_int_t *info)
+void slatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *kd, real *ab, integer *ldab, real *x, real *scale, real *cnorm, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slatbs(uplo, trans, diag, normin, n, kd, ab, ldab, x, scale, cnorm, info);
@@ -283,11 +281,15 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
     aocl_int64_t imax;
     real tmax, tjjs;
     real xmax, grow, sumj;
-    aocl_int64_t maind;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer maind;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void sscal_(integer *, real *, real *, integer *);
     real tscal, uscal;
     aocl_int64_t jlast;
     logical upper;
+    extern /* Subroutine */
+    void stbsv_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -361,12 +363,11 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
     {
         i__1 = -(*info);
         xerbla_("SLATBS", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine machine dependent parameters to control overflow. */
@@ -934,7 +935,6 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
         r__1 = 1.f / tscal;
         aocl_blas_sscal(n, &r__1, &cnorm[1], &c__1);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATBS */
 }

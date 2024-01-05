@@ -189,10 +189,7 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ctgex2_(logical *wantq, logical *wantz, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b,
-             aocl_int_t *ldb, scomplex *q, aocl_int_t *ldq, scomplex *z__, aocl_int_t *ldz,
-             aocl_int_t *j1, aocl_int_t *info)
+void ctgex2_(logical *wantq, logical *wantz, integer *n, complex *a, integer *lda, complex *b, integer *ldb, complex *q, integer *ldq, complex *z__, integer *ldz, integer *j1, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ctgex2 inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", j1 %" FLA_IS "",*n, *lda, *ldb, *ldq, *ldz, *j1);
@@ -215,12 +212,14 @@ void ctgex2_(logical *wantq, logical *wantz, aocl_int_t *n, scomplex *a, aocl_in
     complex sq, sz;
     real eps, sum;
     logical weak;
-    scomplex cdum;
-    scomplex work[8];
+    complex cdum;
+    extern /* Subroutine */
+    void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
+    complex work[8];
     real scale;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), clartg_(complex *, complex *, real *, complex *, complex *), classq_(integer *, complex *, integer *, real *, real *);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), clartg_(complex *, complex *, real *, complex *, complex *), classq_(integer *, complex *, integer *, real *, real *);
     real smlnum;
     logical strong;
     real thresha, threshb;
@@ -264,7 +263,7 @@ void ctgex2_(logical *wantq, logical *wantz, aocl_int_t *n, scomplex *a, aocl_in
     if(*n <= 1)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     m = 2;
     weak = FALSE_;
@@ -450,12 +449,12 @@ void ctgex2_(logical *wantq, logical *wantz, aocl_int_t *n, scomplex *a, aocl_in
     }
     /* Exit with INFO = 0 if swap was successfully performed. */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* Exit with INFO = 1 if swap was rejected. */
 L20:
     *info = 1;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CTGEX2 */
 }
 /* ctgex2_ */

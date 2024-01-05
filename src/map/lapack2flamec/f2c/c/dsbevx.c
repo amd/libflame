@@ -263,12 +263,7 @@ if RANGE = 'V', the exact value of M */
 /* > \ingroup doubleOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dsbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab,
-             aocl_int_t *ldab, doublereal *q, aocl_int_t *ldq, doublereal *vl, doublereal *vu,
-             aocl_int_t *il, aocl_int_t *iu, doublereal *abstol, aocl_int_t *m, doublereal *w,
-             doublereal *z__, aocl_int_t *ldz, doublereal *work, aocl_int_t *iwork,
-             aocl_int_t *ifail, aocl_int_t *info)
+void dsbevx_(char *jobz, char *range, char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab, doublereal *q, integer * ldq, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *iwork, integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsbevx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", ldq %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",*jobz, *range, *uplo, *n, *kd, *ldab, *ldq, *il, *iu, *ldz);
@@ -285,24 +280,43 @@ void dsbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
     aocl_int64_t imax;
     doublereal rmin, rmax;
     logical test;
-    aocl_int64_t itmp1, indee;
+    integer itmp1, indee;
+    extern /* Subroutine */
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t iinfo;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    integer iinfo;
     char order[1];
+    extern /* Subroutine */
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical lower, wantz;
     extern doublereal dlamch_(char *);
     logical alleig, indeig;
-    aocl_int64_t iscale, indibl;
+    integer iscale, indibl;
+    extern /* Subroutine */
+    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    extern doublereal dlansb_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *);
     logical valeig;
+    extern /* Subroutine */
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal abstll, bignum;
-    aocl_int64_t indisp;
-    aocl_int64_t indiwo;
-    aocl_int64_t indwrk;
-    aocl_int64_t nsplit;
+    extern /* Subroutine */
+    void dsbtrd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    integer indisp;
+    extern /* Subroutine */
+    void dstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *), dsterf_(integer *, doublereal *, doublereal *, integer *);
+    integer indiwo;
+    extern /* Subroutine */
+    void dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    integer indwrk;
+    extern /* Subroutine */
+    void dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    integer nsplit;
     doublereal smlnum;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -407,14 +421,14 @@ void dsbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
         i__1 = -(*info);
         xerbla_("DSBEVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(*n == 1)
     {
@@ -443,7 +457,7 @@ void dsbevx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *kd,
             }
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -633,7 +647,7 @@ L30:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSBEVX */
 }
 /* dsbevx_ */

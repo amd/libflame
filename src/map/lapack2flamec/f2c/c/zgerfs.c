@@ -183,11 +183,7 @@ for 1<=i<=N, row i of the */
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_t *lda,
-             dcomplex *af, aocl_int_t *ldaf, aocl_int_t *ipiv, dcomplex *b,
-             aocl_int_t *ldb, dcomplex *x, aocl_int_t *ldx, doublereal *ferr, doublereal *berr,
-             dcomplex *work, doublereal *rwork, aocl_int_t *info)
+void zgerfs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *af, integer *ldaf, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgerfs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
@@ -206,9 +202,10 @@ void zgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int
     doublereal eps;
     aocl_int64_t kase;
     doublereal safe1, safe2;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int_t isave[3];
-    aocl_int64_t count;
+    extern logical lsame_(char *, char *);
+    integer isave[3], count;
+    extern /* Subroutine */
+    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
@@ -216,6 +213,8 @@ void zgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int
     logical notran;
     char transn[1], transt[1];
     doublereal lstres;
+    extern /* Subroutine */
+    void zgetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -297,7 +296,7 @@ void zgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int
         i__1 = -(*info);
         xerbla_("ZGERFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
@@ -310,7 +309,7 @@ void zgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int
             /* L10: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(notran)
     {
@@ -522,7 +521,7 @@ void zgerfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int
         /* L140: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGERFS */
 }
 /* zgerfs_ */

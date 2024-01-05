@@ -171,9 +171,7 @@ if VECT = 'N' or 'V', then Q need not be set. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void ssbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ldab,
-             real *d__, real *e, real *q, aocl_int_t *ldq, real *work, aocl_int_t *info)
+void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *d__, real *e, real *q, integer *ldq, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -187,11 +185,13 @@ void ssbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, ao
     aocl_int64_t i__, j, k, l, i2, j1, j2, nq, nr, kd1, ibl, iqb, kdn, jin, nrt, kdm1, inca, jend,
         lend, jinc, incx, last;
     real temp;
-    aocl_int64_t j1end, j1inc, iqend;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern /* Subroutine */
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    integer j1end, j1inc, iqend;
+    extern logical lsame_(char *, char *);
     logical initq, wantq, upper;
     extern /* Subroutine */
-    int slar2v_(integer *, real *, real *, real *, integer *, real *, real *, integer *);
+    void slar2v_(integer *, real *, real *, real *, integer *, real *, real *, integer *);
     integer iqaend;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slaset_( char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *), slargv_( integer *, real *, integer *, real *, integer *, real *, integer * ), slartv_(integer *, real *, integer *, real *, integer *, real *, real *, integer *);
@@ -264,13 +264,13 @@ void ssbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, ao
         i__1 = -(*info);
         xerbla_("SSBTRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize Q to the unit matrix, if needed */
     if(initq)
@@ -744,7 +744,7 @@ void ssbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, ao
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSBTRD */
 }
 /* ssbtrd_ */

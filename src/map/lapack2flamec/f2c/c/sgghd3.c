@@ -232,7 +232,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, real *a, integer *lda, real *b, integer *ldb, real *q, integer *ldq, real *z__, integer *ldz, real *work, integer *lwork, integer *info)
+void sgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, real *a, integer *lda, real *b, integer *ldb, real *q, integer *ldq, real *z__, integer *ldz, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
@@ -249,26 +249,26 @@ int sgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, r
     real temp;
     integer jrow, topq, ppwo;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     real temp1, temp2, temp3;
     integer kacc22;
     extern logical lsame_(char *, char *);
     integer nbmin;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer nblst;
     logical initq;
     extern /* Subroutine */
-    int sorm22_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
+    void sorm22_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
     logical wantq, initz, wantz;
     extern /* Subroutine */
-    int strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *);
+    void strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *);
     char compq2[1], compz2[1];
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int sgghrd_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void sgghrd_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
@@ -362,11 +362,11 @@ int sgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, r
     {
         i__1 = -(*info);
         xerbla_("SGGHD3", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Initialize Q and Z if desired. */
     if (initq)
@@ -389,7 +389,7 @@ int sgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, r
     if (nh <= 1)
     {
         work[1] = 1.f;
-        return 0;
+        return;
     }
     /* Determine the blocksize. */
     nbmin = ilaenv_(&c__2, "SGGHD3", " ", n, ilo, ihi, &c_n1);
@@ -1046,7 +1046,7 @@ int sgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, r
         sgghrd_(compq2, compz2, n, &jcol, ihi, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &ierr);
     }
     work[1] = (real) lwkopt;
-    return 0;
+    return;
     /* End of SGGHD3 */
 }
 /* sgghd3_ */

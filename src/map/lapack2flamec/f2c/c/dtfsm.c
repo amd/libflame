@@ -276,9 +276,7 @@ K=N/2. If */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dtfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_int_t *m,
-            aocl_int_t *n, doublereal *alpha, doublereal *a, doublereal *b, aocl_int_t *ldb)
+void dtfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integer *m, integer *n, doublereal *alpha, doublereal *a, doublereal *b, integer *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtfsm inputs: transr %c, side %c, uplo %c, trans %c, diag %c, m %" FLA_IS ", n %" FLA_IS ", ldb %" FLA_IS "",*transr, *side, *uplo, *trans, *diag, *m, *n, *ldb);
@@ -287,11 +285,13 @@ void dtfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
     /* Local variables */
     aocl_int64_t i__, j, k, m1, m2, n1, n2, info;
     logical normaltransr;
+    extern /* Subroutine */
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     logical lside;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
     extern /* Subroutine */
-    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical misodd, nisodd, notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -362,13 +362,13 @@ void dtfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
         i__1 = -info;
         xerbla_("DTFSM ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return when ( (N.EQ.0).OR.(M.EQ.0) ) */
     if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return when ALPHA.EQ.(0D+0) */
     if(*alpha == 0.)
@@ -385,7 +385,7 @@ void dtfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
             /* L20: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(lside)
     {
@@ -928,7 +928,7 @@ void dtfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, aocl_
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTFSM */
 }
 /* dtfsm_ */

@@ -121,7 +121,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16HEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, integer *info)
+void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
@@ -132,11 +132,11 @@ int zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, integer
     doublecomplex ct;
     doublereal akk, bkk;
     extern /* Subroutine */
-    int zher2_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zher2_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztrmv_( char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *), zlacgv_(integer *, doublecomplex *, integer *);
+    void zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztrmv_( char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *), zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -191,7 +191,7 @@ int zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, integer
     {
         i__1 = -(*info);
         xerbla_("ZHEGS2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     if (*itype == 1)
     {
@@ -367,7 +367,7 @@ int zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, integer
             }
         }
     }
-    return 0;
+    return;
     /* End of ZHEGS2 */
 }
 /* zhegs2_ */

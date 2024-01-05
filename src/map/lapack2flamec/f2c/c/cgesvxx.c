@@ -545,11 +545,7 @@ defaults */
 /* > \ingroup complexGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-void cgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, scomplex *a, integer *lda,
-              scomplex *af, integer *ldaf, integer *ipiv, char *equed, real *r__, real *c__,
-              scomplex *b, integer *ldb, scomplex *x, integer *ldx, real *rcond, real *rpvgrw,
-              real *berr, integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__,
-              integer *nparams, real *params, scomplex *work, real *rwork, integer *info)
+void cgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer * ipiv, char *equed, real *r__, real *c__, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *rpvgrw, real *berr, integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real *params, complex *work, real *rwork, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -573,27 +569,23 @@ void cgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, scomplex *a, i
     real rcmin, rcmax;
     logical equil;
     extern /* Subroutine */
-        void
-        claqge_(integer *, integer *, scomplex *, integer *, real *, real *, real *, real *, real *,
-                char *);
+    void claqge_(integer *, integer *, complex *, integer *, real *, real *, real *, real *, real *, char *) ;
     real colcnd;
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int cgetrf_(integer *, integer *, complex *, integer *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void cgetrf_(integer *, integer *, complex *, integer *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer infequ;
     logical colequ;
     extern /* Subroutine */
-        void
-        cgetrs_(char *, integer *, integer *, scomplex *, integer *, integer *, scomplex *, integer *,
-                integer *);
+    void cgetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     real rowcnd;
     logical notran;
     real smlnum;
     logical rowequ;
     extern /* Subroutine */
-    int clascl2_(integer *, integer *, real *, complex *, integer *), cgeequb_(integer *, integer *, complex *, integer *, real *, real *, real *, real *, real *, integer *), cgerfsx_(char *, char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, real *, real *, complex *, integer *, complex *, integer *, real *, real *, integer *, real *, real *, integer *, real *, complex *, real *, integer *);
+    void clascl2_(integer *, integer *, real *, complex *, integer *), cgeequb_(integer *, integer *, complex *, integer *, real *, real *, real *, real *, real *, integer *), cgerfsx_(char *, char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, real *, real *, complex *, integer *, complex *, integer *, real *, real *, integer *, real *, real *, integer *, real *, complex *, real *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -770,7 +762,7 @@ void cgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, scomplex *a, i
         i__1 = -(*info);
         xerbla_("CGESVXX", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(equil)
     {
@@ -829,7 +821,7 @@ void cgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, scomplex *a, i
             /* leading rank-deficient INFO columns of A. */
             *rpvgrw = cla_gerpvgrw_(n, info, &a[a_offset], lda, &af[ af_offset], ldaf);
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the reciprocal pivot growth factor RPVGRW. */
@@ -853,7 +845,7 @@ void cgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, scomplex *a, i
         clascl2_(n, nrhs, &r__[1], &x[x_offset], ldx);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGESVXX */
 }
 /* cgesvxx_ */

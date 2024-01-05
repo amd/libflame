@@ -110,8 +110,7 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clacon_(aocl_int_t *n, scomplex *v, scomplex *x, real *est, aocl_int_t *kase)
+void clacon_(integer *n, complex *v, complex *x, real *est, integer *kase)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -138,7 +137,7 @@ void clacon_(aocl_int_t *n, scomplex *v, scomplex *x, real *est, aocl_int_t *kas
     real absxi;
     integer jlast;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
     extern integer icmax1_(integer *, complex *, integer *);
     extern real scsum1_(integer *, complex *, integer *), slamch_(char *);
     real safmin, altsgn, estold;
@@ -185,7 +184,7 @@ void clacon_(aocl_int_t *n, scomplex *v, scomplex *x, real *est, aocl_int_t *kas
         *kase = 1;
         jump = 1;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     switch(jump)
     {
@@ -240,7 +239,7 @@ L20:
     *kase = 2;
     jump = 2;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* ................ ENTRY (JUMP = 2) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L40:
@@ -262,7 +261,7 @@ L50:
     *kase = 1;
     jump = 3;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* ................ ENTRY (JUMP = 3) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L70:
@@ -300,7 +299,7 @@ L70:
     *kase = 2;
     jump = 4;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* ................ ENTRY (JUMP = 4) */
     /* X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L90:
@@ -329,7 +328,7 @@ L100:
     *kase = 1;
     jump = 5;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* ................ ENTRY (JUMP = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L120:
@@ -342,7 +341,7 @@ L120:
 L130:
     *kase = 0;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLACON */
 }
 /* clacon_ */

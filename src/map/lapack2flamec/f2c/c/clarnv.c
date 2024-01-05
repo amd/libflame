@@ -91,8 +91,7 @@ the array */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void clarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, scomplex *x)
+void clarnv_(integer *idist, integer *iseed, integer *n, complex *x)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("clarnv inputs: idist %" FLA_IS ", iseed %" FLA_IS ", n %" FLA_IS "",*idist, *iseed, *n);
@@ -108,7 +107,7 @@ void clarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, scomplex *x)
     real u[128];
     integer il, iv;
     extern /* Subroutine */
-    int slaruv_(integer *, integer *, real *);
+    void slaruv_(integer *, integer *, real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -234,7 +233,7 @@ void clarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, scomplex *x)
         /* L60: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CLARNV */
 }
 /* clarnv_ */

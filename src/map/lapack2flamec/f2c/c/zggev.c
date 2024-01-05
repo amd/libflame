@@ -220,11 +220,7 @@ the routine */
 /* > \ingroup ggev */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zggev_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
-            dcomplex *b, aocl_int_t *ldb, dcomplex *alpha, dcomplex *beta,
-            dcomplex *vl, aocl_int_t *ldvl, dcomplex *vr, aocl_int_t *ldvr,
-            dcomplex *work, aocl_int_t *lwork, doublereal *rwork, aocl_int_t *info)
+void zggev_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *alpha, doublecomplex *beta, doublecomplex *vl, integer *ldvl, doublecomplex *vr, integer *ldvr, doublecomplex *work, integer *lwork, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zggev inputs: jobvl %c, jobvr %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", lwork %" FLA_IS "", *jobvl, *jobvr, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);
@@ -243,12 +239,14 @@ void zggev_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
     aocl_int64_t ierr, itau;
     doublereal temp;
     logical ilvl, ilvr;
-    aocl_int64_t iwrk;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
-    aocl_int64_t ileft, icols, irwrk, irows;
+    integer iwrk;
+    extern logical lsame_(char *, char *);
+    integer ileft, icols, irwrk, irows;
+    extern /* Subroutine */
+    void dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int zggbak_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublecomplex *, integer *, integer *), zggbal_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+    void zggbak_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublecomplex *, integer *, integer *), zggbal_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     logical ilascl, ilbscl;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -256,15 +254,24 @@ void zggev_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
     logical ldumma[1];
     char chtemp[1];
     doublereal bignum;
-    aocl_int64_t ijobvl, iright;
-    aocl_int64_t ijobvr;
+    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
+    integer ijobvl, iright;
+    extern /* Subroutine */
+    void zgghrd_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer * ), zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *);
+    integer ijobvr;
+    extern /* Subroutine */
+    void zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer * );
     doublereal anrmto;
     aocl_int64_t lwkmin;
     doublereal bnrmto;
+    extern /* Subroutine */
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), ztgevc_( char *, char *, logical *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublecomplex *, doublereal *, integer *), zhgeqz_(char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *);
     doublereal smlnum;
     aocl_int64_t lwkopt;
     logical lquery;
-    /* -- LAPACK driver routine -- */
+    extern /* Subroutine */
+    void zungqr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *), zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -410,18 +417,18 @@ void zggev_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
         i__1 = -(*info);
         xerbla_("ZGGEV ", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = dlamch_("E") * dlamch_("B");
@@ -676,7 +683,7 @@ L70:
     work[1].r = (doublereal) lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGGEV */
 }
 /* zggev_ */

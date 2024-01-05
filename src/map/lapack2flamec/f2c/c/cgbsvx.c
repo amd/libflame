@@ -373,12 +373,7 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup complexGBsolve */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku,
-             aocl_int_t *nrhs, scomplex *ab, aocl_int_t *ldab, scomplex *afb, aocl_int_t *ldafb,
-             aocl_int_t *ipiv, char *equed, real *r__, real *c__, scomplex *b, aocl_int_t *ldb,
-             scomplex *x, aocl_int_t *ldx, real *rcond, real *ferr, real *berr, scomplex *work,
-             real *rwork, aocl_int_t *info)
+void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, complex *ab, integer *ldab, complex *afb, integer *ldafb, integer *ipiv, char *equed, real *r__, real *c__, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -403,14 +398,26 @@ void cgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
     char norm[1];
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real rcmin, rcmax, anorm;
+    extern /* Subroutine */
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
     logical equil;
+    extern real clangb_(char *, integer *, integer *, integer *, complex *, integer *, real *);
+    extern /* Subroutine */
+    void claqgb_(integer *, integer *, integer *, integer *, complex *, integer *, real *, real *, real *, real *, real *, char *), cgbcon_(char *, integer *, integer *, integer *, complex *, integer *, integer *, real *, real *, complex *, real *, integer *);
     real colcnd;
+    extern real clantb_(char *, char *, char *, integer *, integer *, complex *, integer *, real *);
+    extern /* Subroutine */
+    void cgbequ_(integer *, integer *, integer *, integer *, complex *, integer *, real *, real *, real *, real *, real *, integer *);
     extern real slamch_(char *);
+    extern /* Subroutine */
+    void cgbrfs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), cgbtrf_(integer *, integer *, integer *, integer *, complex *, integer *, integer *, integer *);
     logical nofact;
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    aocl_int64_t infequ;
+    extern /* Subroutine */
+    void cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+    integer infequ;
     logical colequ;
     real rowcnd;
     logical notran;
@@ -596,7 +603,7 @@ void cgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
         i__1 = -(*info);
         xerbla_("CGBSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(equil)
     {
@@ -720,7 +727,7 @@ void cgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
             rwork[1] = rpvgrw;
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A and the */
@@ -820,7 +827,7 @@ void cgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t 
     }
     rwork[1] = rpvgrw;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGBSVX */
 }
 /* cgbsvx_ */

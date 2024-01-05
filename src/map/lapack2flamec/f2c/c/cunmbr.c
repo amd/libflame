@@ -199,10 +199,7 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cunmbr_(char *vect, char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k,
-             scomplex *a, aocl_int_t *lda, scomplex *tau, scomplex *c__, aocl_int_t *ldc,
-             scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+void cunmbr_(char *vect, char *side, char *trans, integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *lwork, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cunmbr inputs: vect %c, side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*vect, *side, *trans, *m, *n, *k, *lda, *ldc);
@@ -221,8 +218,10 @@ void cunmbr_(char *vect, char *side, char *trans, aocl_int_t *m, aocl_int_t *n, 
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     logical notran;
+    extern /* Subroutine */
+    void cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     logical applyq;
     char transt[1];
     aocl_int64_t lwkopt;
@@ -362,18 +361,18 @@ void cunmbr_(char *vect, char *side, char *trans, aocl_int_t *m, aocl_int_t *n, 
         i__1 = -(*info);
         xerbla_("CUNMBR", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if(lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if(applyq)
     {
@@ -447,7 +446,7 @@ void cunmbr_(char *vect, char *side, char *trans, aocl_int_t *m, aocl_int_t *n, 
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CUNMBR */
 }
 /* cunmbr_ */

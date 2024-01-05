@@ -172,10 +172,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void cunmr3_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, aocl_int_t *l,
-             scomplex *a, aocl_int_t *lda, scomplex *tau, scomplex *c__, aocl_int_t *ldc,
-             scomplex *work, aocl_int_t *info)
+void cunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -194,7 +191,7 @@ void cunmr3_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
     complex taui;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int clarz_(char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clarz_(char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -274,13 +271,13 @@ void cunmr3_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
         i__1 = -(*info);
         xerbla_("CUNMR3", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || *k == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if(left && !notran || !left && notran)
     {
@@ -340,7 +337,7 @@ void cunmr3_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CUNMR3 */
 }
 /* cunmr3_ */
